@@ -11,6 +11,7 @@ from pathlib import Path
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.data.html import Exposure
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline import (
     ATTRIBUTION,
+    DELAY_METADATA,
     _append_versions,
 )
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
@@ -133,7 +134,7 @@ def retain_captures(root: Path, *, now=None, retention_days=365, apply=False) ->
                     {
                         "as_of_date": latest["as_of_date"],
                         "attribution": ATTRIBUTION,
-                        "delayed_public_display": True,
+                        **DELAY_METADATA,
                         "metric": "naaim_number",
                         "value": latest["values"]["naaim_number"],
                     },
@@ -221,6 +222,7 @@ def health_report(root: Path, *, now=None, max_capture_age_days=14) -> dict:
         reasons.append("publication_unavailable")
 
     return {
+        **DELAY_METADATA,
         "healthy": not reasons,
         "reasons": reasons,
         "last_capture_at": latest_capture.isoformat().replace("+00:00", "Z")

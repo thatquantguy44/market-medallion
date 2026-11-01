@@ -18,6 +18,15 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.source import 
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
 
 ATTRIBUTION = "Source: NAAIM Exposure Index® (National Association of Active Investment Managers)."
+DELAY_METADATA = {
+    "display_name": "NAAIM Exposure Index — 3-month-delayed public data",
+    "delayed_public_display": True,
+    "provider_delay_months": 3,
+    "delay_notice": (
+        "NAAIM delays this public feed by three months. The observation date is as_of_date; "
+        "a recent capture does not mean current-week data. Internal research only."
+    ),
+}
 
 
 def _atomic_bytes(path: Path, payload: bytes) -> None:
@@ -157,12 +166,14 @@ def ingest(
             {
                 "as_of_date": latest.as_of_date,
                 "attribution": ATTRIBUTION,
-                "delayed_public_display": True,
+                **DELAY_METADATA,
                 "metric": "naaim_number",
                 "value": str(latest.naaim_number),
             },
         )
     return {
+        **DELAY_METADATA,
+        "latest_as_of_date": latest.as_of_date,
         "capture_id": capture_id,
         "inserted_versions": inserted_versions,
         "row_count": len(observations),

@@ -21,7 +21,7 @@ class NaaimDelayedConfig(dg.Config):
 @dg.asset(
     group_name="naaim",
     description=(
-        "Explicitly permission-gated delayed NAAIM capture with 365-day source-owned retention"
+        "NAAIM Exposure Index — 3-month-delayed public data; internal research, 365-day retention"
     ),
     retry_policy=dg.RetryPolicy(max_retries=2, delay=30),
 )
@@ -40,6 +40,11 @@ def naaim_delayed_capture(
     )
     return dg.MaterializeResult(
         metadata={
+            "display_name": result["display_name"],
+            "delayed_public_display": result["delayed_public_display"],
+            "provider_delay_months": result["provider_delay_months"],
+            "delay_notice": result["delay_notice"],
+            "latest_as_of_date": result["latest_as_of_date"],
             "run_id": result["run_id"],
             "rows": result["row_count"],
             "new_versions": result["inserted_versions"],

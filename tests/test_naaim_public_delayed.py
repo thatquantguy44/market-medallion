@@ -14,6 +14,16 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.operations imp
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline import ingest, run_live
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.source import fetch_table
 
+DELAY_LABELS = {
+    "display_name": "NAAIM Exposure Index — 3-month-delayed public data",
+    "delayed_public_display": True,
+    "provider_delay_months": 3,
+    "delay_notice": (
+        "NAAIM delays this public feed by three months. The observation date is as_of_date; "
+        "a recent capture does not mean current-week data. Internal research only."
+    ),
+}
+
 
 def test_parse_table_preserves_every_verified_public_metric_and_date():
     payload = Path("tests/fixtures/naaim/delayed_table.html").read_bytes()
@@ -119,11 +129,11 @@ def test_local_ingest_archives_the_fixture_and_publishes_attributed_delayed_late
     assert (tmp_path / "bronze" / result["capture_id"] / "payload.html").read_bytes() == payload
     assert receipt["permission_reference"] == "naaim-permission-2026-10-31"
     assert latest == {
+        **DELAY_LABELS,
         "as_of_date": "2025-01-08",
         "attribution": (
             "Source: NAAIM Exposure Index® (National Association of Active Investment Managers)."
         ),
-        "delayed_public_display": True,
         "metric": "naaim_number",
         "value": "71.25",
     }
@@ -227,6 +237,8 @@ def test_run_live_uses_injected_transport_and_preserves_the_permission_gate(tmp_
     )
 
     assert result["row_count"] == 2
+    assert result["latest_as_of_date"] == "2025-01-08"
+    assert {key: result[key] for key in DELAY_LABELS} == DELAY_LABELS
 
 
 def test_local_health_report_uses_capture_freshness_not_delayed_observation_age(tmp_path):
@@ -238,6 +250,7 @@ def test_local_health_report_uses_capture_freshness_not_delayed_observation_age(
         max_capture_age_days=14,
     )
     assert empty == {
+        **DELAY_LABELS,
         "healthy": False,
         "reasons": ["no_captures", "publication_unavailable"],
         "last_capture_at": None,
@@ -259,6 +272,7 @@ def test_local_health_report_uses_capture_freshness_not_delayed_observation_age(
         max_capture_age_days=14,
     )
     assert healthy == {
+        **DELAY_LABELS,
         "healthy": True,
         "reasons": [],
         "last_capture_at": "2026-11-01T17:00:00Z",
@@ -353,6 +367,7 @@ def test_retention_keeps_only_last_365_days_and_rebuilds_local_state(tmp_path):
     ]
     latest = json.loads((tmp_path / "gold" / "latest.json").read_text())
     assert latest["value"] == "72.25"
+    assert {key: latest[key] for key in DELAY_LABELS} == DELAY_LABELS
 
 
 def test_daily_schedule_is_stopped_and_requires_explicit_runtime_acknowledgement(

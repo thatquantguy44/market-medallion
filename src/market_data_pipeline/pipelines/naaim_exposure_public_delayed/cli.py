@@ -1,4 +1,4 @@
-"""Manual, bounded entry point for the delayed NAAIM research feed."""
+"""NAAIM Exposure Index: 3-month-delayed public data for internal research."""
 
 import argparse
 import json

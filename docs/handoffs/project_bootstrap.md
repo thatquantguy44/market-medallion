@@ -140,6 +140,15 @@ contract and no connector:
   documented query parameters, with CSV schema/result completeness/terms still
   to verify.
 
+## NAAIM delayed-feed presentation
+
+On 2026-11-01 the user confirmed continuing with the public feed's three-month
+lag. Gold latest, capture/health CLI responses and Dagster materialization
+metadata now identify it as **NAAIM Exposure Index — 3-month-delayed public
+data**, with `provider_delay_months: 3` and a human-readable notice. Observation
+dates remain separate from capture freshness. Daily capture and 365-day
+retention continue within the existing internal-research scope.
+
 ## Next work
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo

@@ -30,6 +30,17 @@ scrape the provider's public website itself.
 
 ## Active implementation target — delayed public research only
 
+The user confirmed continuing with the delayed feed on 2026-11-01. The display
+name is **NAAIM Exposure Index — 3-month-delayed public data**. Gold latest,
+CLI capture/health responses and Dagster materialization metadata explicitly
+state `provider_delay_months: 3` and carry a human-readable `delay_notice`.
+`as_of_date` (or `latest_as_of_date` in operational responses) identifies the
+observation. Capture freshness measures acquisition health only; it does not
+mean current-week data. NAAIM imposes the source delay; the pipeline adds none.
+These additive labels do not change provider values, observed revisions,
+365-day capture retention, internal-research scope or access permissions.
+
+
 The user selected a distinct, **three-month-delayed**, internal research
 capability: `naaim-exposure-public-delayed` in the future package
 `naaim_exposure_public_delayed`. It is not the licensed-current-data pipeline
