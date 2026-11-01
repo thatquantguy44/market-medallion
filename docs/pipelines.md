@@ -8,6 +8,8 @@ this repository. The [research roadmap](roadmap.md) retains source-selection
 rationale, access reviews and the original 14-addition inventory. Numbered specs
 define contracts; [handoffs](handoffs/project_bootstrap.md) record pickup details.
 A draft spec or proposed package name does not mean a connector exists.
+The [Dagster job and schedule register](deployment/dagster_jobs.md) is the
+canonical operational inventory.
 
 ## Current build sequence and status
 
@@ -26,7 +28,7 @@ invented-fixture plan, not a live connector or schedule.
 | Pipeline ID | Purpose | Status | Package under `src/market_data_pipeline/pipelines/` | Contract / evidence | Next scoped work |
 | --- | --- | --- | --- | --- | --- |
 | `aaii-investor-sentiment` | Weekly investor sentiment shares and bull/bear spread | Implemented locally; recurring acquisition gated | [`aaii/`](../src/market_data_pipeline/pipelines/aaii/) | [Spec 002](../specs/spec002/README.md), [Spec 003](../specs/spec003/README.md), [checkpoint](handoffs/aaii_checkpoint.md), [runbook](deployment/aaii_runbook.md) | Review/merge completion; establish recurring access and production operations before scheduling. |
-| `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for internal research | Local Bronze/Silver/delayed-latest slice, manual smoke, local health check and stopped daily Dagster schedule verified; each scheduled run retains 365 days | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md) | Document the oral daily/365-day authorization in writing, configure the three required runtime environment values, then deliberately enable the stopped schedule; do not add a warehouse or QuantMeridian integration. |
+| `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for internal research | Local Bronze/Silver/delayed-latest slice, manual smoke, health check and locally enabled daily Dagster schedule verified; each scheduled run retains 365 days; outputs explicitly label the 3-month provider delay | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md), [job register](deployment/dagster_jobs.md) | Document the oral daily/365-day authorization in writing; keep the local service available and do not add a warehouse or QuantMeridian integration. |
 | `cboe-published-put-call-ratios` | Cboe-labelled daily total, index and equity put/call ratios | Draft provider contract; connector absent | Proposed `cboe_put_call_ratios/`; absent | [Spec 009](../specs/spec009/README.md) | First among the new proposals: verify terms, date selection, source shape and historical continuity; then create invented fixtures. |
 | `nasdaq-daily-market-breadth` | Nasdaq Trader daily advances, declines and unchanged counts | Draft provider contract; connector absent | Proposed `nasdaq_daily_market_breadth/`; absent | [Spec 010](../specs/spec010/README.md) | Second: verify coverage by year, eligible universe, terms and file stability; then create invented fixtures. |
 | `occ-options-volume-query` | Filtered OCC options put/call volume query results | Draft provider contract; connector absent | Proposed `occ_options_volume_query/`; absent | [Spec 008](../specs/spec008/README.md) | Third: verify query schema, result completeness, terms, rate/history limits and selected-population semantics; then create invented fixtures. |

@@ -1,0 +1,7 @@
+# Copy to ignored config/naaim-delayed.yml after loading the corresponding .env.
+# This is an explicit manual Dagster run configuration, not a schedule switch.
+ops:
+  naaim_delayed_capture:
+    config:
+      root: data/naaim-exposure-public-delayed
+      permission_reference: '<nonsecret NAAIM permission reference>'

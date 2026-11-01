@@ -19,10 +19,18 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
+NAAIM remains **3-month-delayed public data for internal research**. Daily
+capture checks for updates to that delayed feed. Read the observation's
+`as_of_date` alongside its value; recent capture time describes pipeline health,
+not current-week positioning. CLI output, Gold latest and Dagster metadata
+include an explicit delay label and `provider_delay_months: 3`.
+
 ## Pipeline organization
 
 [The master pipeline register](docs/pipelines.md) tracks all implemented, planned,
 draft and candidate pipelines, their package locations, specs and next work.
+[The Dagster job and schedule register](docs/deployment/dagster_jobs.md) tracks
+the operational jobs, schedule state and activation controls.
 Each implemented pipeline owns a subfolder of `src/market_data_pipeline/pipelines/`.
 AAII lives in `pipelines/aaii/`, including its parsers, warehouse/publishers,
 configuration, operations, CLI and Dagster definitions. Provider-independent file/YAML helpers

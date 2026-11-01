@@ -23,3 +23,4 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.dagster_defs i
 )
 
 defs = dg.Definitions.merge(aaii_defs, naaim_defs)
+del aaii_defs, naaim_defs
