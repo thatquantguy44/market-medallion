@@ -51,10 +51,10 @@ def test_dagster_job_materializes_fixture(tmp_path):
     from market_data_pipeline.orchestration.dagster_defs import defs as repository_defs
     from market_data_pipeline.pipelines.aaii.dagster_defs import aaii_sentiment, defs
 
-    assert repository_defs is defs
+    assert repository_defs is not defs
 
-    dagster.Definitions.validate_loadable(defs)
-    job = defs.resolve_job_def("aaii_sentiment_job")
+    dagster.Definitions.validate_loadable(repository_defs)
+    job = repository_defs.resolve_job_def("aaii_sentiment_job")
     result = job.execute_in_process(
         run_config={
             "ops": {
@@ -71,3 +71,8 @@ def test_dagster_job_materializes_fixture(tmp_path):
     assert result.asset_materializations_for_node("aaii_sentiment")
     assert aaii_sentiment.key.path == ["aaii_sentiment"]
     assert defs.schedules[0].default_status == dagster.DefaultScheduleStatus.STOPPED
+    assert {schedule.name for schedule in repository_defs.schedules} == {
+        "aaii_thursday_local_import",
+        "aaii_weekly_live",
+        "naaim_delayed_daily_live",
+    }

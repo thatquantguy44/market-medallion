@@ -14,7 +14,10 @@ verified backup/restore. The local PostgreSQL warehouse contains 2,046 reported
 dates through October 22, 2026; three invalid historical rows are quarantined.
 Recurring AAII acquisition permission remains unverified, so both schedules stay
 stopped. Databricks publishing is implemented but has not been live-tested.
-CFTC is the next separate pipeline branch; other connectors remain planned.
+CFTC has a verified provider contract but remains unimplemented. NAAIM's delayed
+public research feed has an initial fixture-backed local slice; an explicit
+permission reference is required for any live request. Other connectors remain
+planned.
 
 ## Pipeline organization
 

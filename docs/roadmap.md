@@ -1,6 +1,6 @@
 # Master research roadmap and source backlog
 
-Last updated: 2026-10-30. This is the canonical backlog for source selection;
+Last updated: 2026-11-01. This is the canonical backlog for source selection;
 the [master handoff](handoffs/project_bootstrap.md) records the current pickup
 point. AAII has a completed local CSV/XLS pipeline, bounded live acquisition,
 historical backfill and verified recovery. Recurring acquisition remains gated. Other sources remain unimplemented. Research uses are hypotheses,
@@ -106,8 +106,11 @@ Persist original payloads, observation dates, verified publication dates when
 known, retrieval timestamps, first-seen versions, and corrections. Free viewing
 or downloading does not establish redistribution permission.
 
-CFTC TFF futures-only is the next separate pipeline branch after AAII review.
-Verify its official provider contract and write a new numbered spec before coding.
+CFTC TFF futures-only now has a separate provider contract in Spec 006. The user
+selected NAAIM's delayed public research feed as the next source under review in
+Spec 007. Its initial fixture-backed local slice is implemented; an explicit
+permission reference remains required for a live request. A future QuantMeridian
+route remains commercially gated.
 
 ## Platform growth
 
@@ -119,18 +122,21 @@ Keep this project's
 catalogs, schemas, secrets, job names, and deployment targets independent of the
 FRED project.
 
-## New pipeline specifications — 2026-10-30
+## New pipeline specifications
 
-The user requested two additional research capabilities. Their draft contracts
-are in the [specification index](../specs/README.md); neither connector has been
-implemented by this specification work. These additions do not replace the
-original 14-source inventory or change the current AAII completion and existing
-CFTC/FINRA/OFR priorities.
+The user requested six additional research capabilities. Their draft contracts
+are in the [specification index](../specs/README.md); none has an implemented
+connector except the restricted local NAAIM delayed-public slice. These additions
+do not replace the original 14-source inventory.
 
 | Backlog ID | Specification | Proposed scope and acquisition status |
 | --- | --- | --- |
 | `ecb-fx-reference` | [Spec 004: daily official FX reference rates](../specs/spec004/README.md) | ECB first, with explicit orientation, same-date crosses and observed revisions. Official documentation reviewed; live schema/connector not verified. Bank of Canada and BIS are deferred provider alternatives. |
 | `company-web-traffic` | [Spec 005: company/competitor web traffic estimates](../specs/spec005/README.md) | Free-first source feasibility and offline contract; no suitable free recurring visits feed verified. Similarweb is an optional paid candidate, with budget, account coverage and retention rights unresolved. DNS rankings remain a separate proxy candidate. |
+| `naaim-exposure-public-delayed` | [Spec 007: NAAIM Exposure Index](../specs/spec007/README.md) | Selected for delayed public-display research only. A local Bronze/Silver/delayed-latest slice and one bounded manual smoke run are verified; an explicit permission reference remains required for every live request. It cannot supply QuantMeridian. |
+| `cboe-published-put-call-ratios` | [Spec 009: Cboe published daily ratios](../specs/spec009/README.md) | First discovery priority among the three new proposals. Public daily labels are observed; date selection, terms, historical continuity and a source-shaped contract remain unverified. |
+| `nasdaq-daily-market-breadth` | [Spec 010: Nasdaq Trader breadth counts](../specs/spec010/README.md) | Second discovery priority. The 2026 file has Advances, Declines and Unchanged fields; historic coverage, universe meaning, terms and schema continuity remain unverified. |
+| `occ-options-volume-query` | [Spec 008: OCC options put/call volume](../specs/spec008/README.md) | Third discovery priority. The batch CSV parameter interface is documented; live schema, history/result limits, terms and scope aggregation remain unverified. |
 
 User-confirmed preferences: daily official reference rates; company/competitor
 traffic estimates; prefer free sources and document the paid option. Keep

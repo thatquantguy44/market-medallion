@@ -2,7 +2,7 @@
 
 Start with the [master handoff](handoffs/project_bootstrap.md), then the
 [AAII checkpoint](handoffs/aaii_checkpoint.md) for current implementation,
-local service/data state and the next scoped CFTC task.
+local service/data state and the next scoped source task.
 
 - [Master pipeline register](pipelines.md): implementation status and ownership.
 - [Specification index](../specs/README.md): accepted scopes and future contracts.
@@ -10,6 +10,6 @@ local service/data state and the next scoped CFTC task.
 - [Verification](development/verification.md): test/build evidence and operational limits.
 
 AAII is implemented locally; recurring acquisition and production deployment
-remain gated. FX scope is specified and web traffic remains a draft; neither
-connector is implemented. Review/merge the completion branch before starting
-CFTC on a separate branch.
+remain gated. CFTC has a provider contract and web traffic remains a draft;
+neither connector is implemented. NAAIM's delayed public research feed is the
+current access-gated source review; see [Spec 007](../specs/spec007/README.md).
