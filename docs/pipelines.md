@@ -1,25 +1,38 @@
 # Master pipeline register
 
-Updated: 2026-10-31, America/New_York.
+Updated: 2026-11-01, America/New_York.
 
 This is the master index for **pipeline ownership, implementation status and
-next work**. It tracks all 20 concrete pipelines/candidates currently recorded
-in this repository. The [research roadmap](roadmap.md) retains source-selection
+next work**. It tracks all concrete pipelines/candidates currently recorded in
+this repository. The [research roadmap](roadmap.md) retains source-selection
 rationale, access reviews and the original 14-addition inventory. Numbered specs
 define contracts; [handoffs](handoffs/project_bootstrap.md) record pickup details.
 A draft spec or proposed package name does not mean a connector exists.
+The [Dagster job and schedule register](deployment/dagster_jobs.md) is the
+canonical operational inventory.
 
 ## Current build sequence and status
 
-AAII is the only implemented pipeline. Its local completion and package cleanup
-merged through PR #2. CFTC TFF futures-only provider-contract discovery is active
-on `spec006-cftc-tff`; no CFTC package or connector exists. The FX and web-traffic drafts do not silently
-change the CFTC → FINRA short-sale volume → OFR STFM sequence.
+AAII is the only fully implemented pipeline. Its local completion and package
+cleanup merged through PR #2. CFTC TFF futures-only has a reviewed provider
+contract but no package or connector. NAAIM's delayed public research feed has
+a local, manual-only slice; written permission evidence remains an operational
+gate. The FX, web-traffic, OCC, Cboe and Nasdaq drafts do not silently change
+the backlog.
+
+The provisional **discovery** order among the three new options/breadth
+proposals is Cboe published ratios → Nasdaq daily breadth → OCC granular
+volumes. A delivery at this stage means an approved provider contract and
+invented-fixture plan, not a live connector or schedule.
 
 | Pipeline ID | Purpose | Status | Package under `src/market_data_pipeline/pipelines/` | Contract / evidence | Next scoped work |
 | --- | --- | --- | --- | --- | --- |
 | `aaii-investor-sentiment` | Weekly investor sentiment shares and bull/bear spread | Implemented locally; recurring acquisition gated | [`aaii/`](../src/market_data_pipeline/pipelines/aaii/) | [Spec 002](../specs/spec002/README.md), [Spec 003](../specs/spec003/README.md), [checkpoint](handoffs/aaii_checkpoint.md), [runbook](deployment/aaii_runbook.md) | Review/merge completion; establish recurring access and production operations before scheduling. |
-| `cftc-cot` | Trader positioning, starting with TFF futures-only | Provider contract drafted; connector absent | Proposed `cftc_tff/`; absent | [Spec 006](../specs/spec006/README.md), [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#cftc) | Review Spec 006's TFF futures-only contract, then add invented offline fixtures and a source-owned local vertical slice. |
+| `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for internal research | Local Bronze/Silver/delayed-latest slice, manual smoke, health check and locally enabled daily Dagster schedule verified; each scheduled run retains 365 days; outputs explicitly label the 3-month provider delay | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md), [job register](deployment/dagster_jobs.md) | Document the oral daily/365-day authorization in writing; keep the local service available and do not add a warehouse or QuantMeridian integration. |
+| `cboe-published-put-call-ratios` | Cboe-labelled daily total, index and equity put/call ratios | Draft provider contract; connector absent | Proposed `cboe_put_call_ratios/`; absent | [Spec 009](../specs/spec009/README.md) | First among the new proposals: verify terms, date selection, source shape and historical continuity; then create invented fixtures. |
+| `nasdaq-daily-market-breadth` | Nasdaq Trader daily advances, declines and unchanged counts | Draft provider contract; connector absent | Proposed `nasdaq_daily_market_breadth/`; absent | [Spec 010](../specs/spec010/README.md) | Second: verify coverage by year, eligible universe, terms and file stability; then create invented fixtures. |
+| `occ-options-volume-query` | Filtered OCC options put/call volume query results | Draft provider contract; connector absent | Proposed `occ_options_volume_query/`; absent | [Spec 008](../specs/spec008/README.md) | Third: verify query schema, result completeness, terms, rate/history limits and selected-population semantics; then create invented fixtures. |
+| `cftc-cot` | Trader positioning, starting with TFF futures-only | Provider contract drafted; connector absent | Proposed `cftc_tff/`; absent | [Spec 006](../specs/spec006/README.md), [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#cftc) | Retain the reviewed TFF contract; begin fixtures and a source-owned vertical slice when reprioritized. |
 | `finra-short-sale-volume` | Facility-scoped short-sale volume and matched denominators | Planned | Proposed `finra_short_sale_volume/`; absent | [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#finra) | Confirm current extraction route, scope, terms and fixtures after CFTC. |
 | `ofr-stfm` | Short-term funding and repo measures | Planned | Proposed `ofr_stfm/`; absent | [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#ofr) | Select series from metadata and verify provenance/units before implementation. |
 | `ecb-fx-reference` | Daily official FX reference rates, ECB first | Existing MacroMedallion coverage confirmed; no local connector | Proposed `fx_reference_rates/`; absent and deferred | [Spec 004](../specs/spec004/README.md), [overlap/gap review](reviews/spec004_macro_medallion/README.md): all nine currencies already stored upstream | Keep ECB ingestion in MacroMedallion; prioritize captured revisions/as-of/replay, exact values/metadata, then FX Gold outputs there. |

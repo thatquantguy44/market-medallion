@@ -12,6 +12,7 @@ dist/
 .env.*
 !.env.example
 config/config.yaml
+config/naaim-delayed.yml
 /data/
 /artifacts/
 .dagster/

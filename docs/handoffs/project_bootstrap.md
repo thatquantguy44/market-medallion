@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-10-30.
+Last updated: 2026-11-01.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -14,8 +14,31 @@ Existing PostgreSQL, roles, Docker projects/volumes and data are preserved.
 implemented on `feature/pipeline-completion`: offline XLS/Dagster integration,
 weekly bounds/retries/status, historical backfill, backups/restore and retention.
 Read [the AAII checkpoint](aaii_checkpoint.md) for evidence and operating limits.
-The user selected CFTC on a separate subsequent branch. Recurring AAII permission,
-production orchestration/alerts and live Databricks verification remain open.
+The user selected CFTC on a separate subsequent branch and its provider contract
+is now recorded in Spec 006. NAAIM Exposure Index has a local delayed-public
+research slice in Spec 007. Recurring AAII permission, production orchestration/alerts
+and live Databricks verification remain open.
+
+On 2026-11-01, the user reported oral NAAIM permission by phone. The current
+NAAIM slice records that only as a nonsecret, user-confirmed manual-run
+reference; scope, frequency, retention, transformations, redistribution and
+QuantMeridian terms have not been supplied in writing. A local read-only health
+check now covers capture freshness, version retention and output availability.
+The user then confirmed daily automated pulls and 365-day retention. A 10:00
+America/New_York Dagster schedule is enabled in the local instance, but the user
+selected manual operation: it evaluates only while an operator runs local
+`dagster dev`. A restart-at-login LaunchAgent is documented but deliberately not
+installed; revisit only on request. Keep downstream distribution disabled until
+provider terms are documented.
+
+**New-source discovery queue:** The user added three separate potential
+pipelines on 2026-11-01: Cboe published daily put/call ratios (Spec 009),
+Nasdaq Trader daily advances/declines/unchanged breadth counts (Spec 010), and
+OCC filtered options put/call volumes (Spec 008). Their provisional discovery
+order is **Cboe → Nasdaq → OCC**. For each, the next delivery is a reviewed
+provider/access/schema contract and invented-fixture plan—not a live connector,
+bulk history, schedule or product output. This queue does not displace the
+NAAIM written-permission evidence prerequisite or the reviewed CFTC contract.
 
 The user subsequently authorized pipeline-owned source folders and a master
 pipeline document. AAII now lives under `src/market_data_pipeline/pipelines/aaii/`; common
@@ -28,7 +51,9 @@ is accepted; the [completed overlap/gap review](../reviews/spec004_macro_medalli
 confirms all nine ECB FX currencies already exist in MacroMedallion. Keep ingestion
 owned there and prioritize temporal correctness, exact values/metadata and FX Gold
 outputs. No local FX connector is implemented. Web-traffic source selection
-remains draft. These specifications do not change the CFTC-first follow-on priority.
+remains draft. Spec 007 implements only NAAIM's permission-gated, delayed
+public-research slice; it does not authorize subscription, API use, scheduling
+or QuantMeridian integration.
 
 The workflow library is now a complete local snapshot at `agents/agent-skills/`,
 pinned by `agents/agent-skills.lock.json` to revision
@@ -66,10 +91,11 @@ uses, limitations, and stable backlog IDs for all 14 additions.
 
 ## Retained source inventory
 
-Current sequence: AAII first at the user's request, then the remaining Spec 001
-sources (CFTC positioning → FINRA short-sale volume → OFR Short-term Funding
-Monitor) remain planned. SEC fails-to-deliver remains a candidate extension.
-See the [source catalog](../catalog/README.md) for those original four sources.
+Current sequence: AAII is implemented locally; CFTC has a provider contract;
+NAAIM Exposure Index has a manual-only local delayed-research slice. The remaining
+Spec 001 sources (CFTC positioning → FINRA short-sale volume → OFR Short-term
+Funding Monitor) remain planned, as does SEC fails-to-deliver. See the
+[source catalog](../catalog/README.md) for those original four sources.
 
 Additional positioning and market-structure candidates:
 
@@ -103,7 +129,38 @@ Company insider filings and filing-event metadata also remain future themes.
 The other additions are a research backlog; connector access and functionality
 have not been validated by live extraction. All 14 IDs remain in the roadmap.
 
+Additional options and breadth candidates, each with its own numbered source
+contract and no connector:
+
+- `cboe-published-put-call-ratios`: [Spec 009](../../specs/spec009/README.md),
+  first discovery priority; public daily labelled ratios, with terms/date/history
+  contract still to verify.
+- `nasdaq-daily-market-breadth`: [Spec 010](../../specs/spec010/README.md),
+  second; 2026 advances/declines/unchanged fields observed, with history/universe
+  contract still to verify.
+- `occ-options-volume-query`: [Spec 008](../../specs/spec008/README.md), third;
+  documented query parameters, with CSV schema/result completeness/terms still
+  to verify.
+
+## NAAIM delayed-feed presentation
+
+On 2026-11-01 the user confirmed continuing with the public feed's three-month
+lag. Gold latest, capture/health CLI responses and Dagster materialization
+metadata now identify it as **NAAIM Exposure Index — 3-month-delayed public
+data**, with `provider_delay_months: 3` and a human-readable notice. Observation
+dates remain separate from capture freshness. Daily capture and 365-day
+retention continue within the existing internal-research scope.
+
 ## Next work
+
+**Next-agent pickup point:** Read [the Dagster job register](../deployment/dagster_jobs.md)
+and [Spec 007](../../specs/spec007/README.md). Keep NAAIM in the selected manual
+operation model; do not install a durable service. The remaining non-code NAAIM
+gates are written provider confirmation and a user-selected backup/alert
+destination. Once those are pending or resolved, the next source-development
+task is Spec 009: Cboe published put/call-ratio provider-contract review,
+followed by Spec 010 then Spec 008. Start each on a fresh branch after the
+current PR is merged.
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo
 and use `docs/deployment/aaii_runbook.md` for PostgreSQL, Dagster, Parquet, replay,
@@ -128,11 +185,15 @@ The persistent service is unchanged: localhost 55438, database
 project `additional-market-data-live`. Settings are ignored `config/config.yaml`
 and `.env`. No new provider request or recurring schedule was enabled.
 
-Next source: AAII merged through PR #2. CFTC TFF futures-only provider-contract
-discovery is active on `spec006-cftc-tff`; [Spec 006](../../specs/spec006/README.md)
-records the verified official endpoint, schema, timing, access and revision
-boundaries. Preserve provider-specific grain; CFTC remains unimplemented pending
-review, invented offline fixtures and a source-owned vertical slice.
+Next source: AAII merged through PR #2. CFTC TFF futures-only has a verified
+provider contract in [Spec 006](../../specs/spec006/README.md), but no connector.
+The user selected NAAIM's delayed public research capability on
+`spec007-naaim-exposure`; [Spec 007](../../specs/spec007/README.md) records its
+weekly methodology and the explicit live-permission boundary. Preserve
+provider-specific grain. Its local Bronze/Silver/delayed-latest slice, one
+bounded manual smoke request and read-only health check are verified; retain
+written permission evidence before a schedule, persistence expansion or
+downstream use. QuantMeridian remains a separate Program Partner/API scope.
 Next AAII operational work: establish recurring acquisition permission and reuse
 terms before scheduling; deploy durable workers, external monitoring/alerts and
 off-machine backups as appropriate. Live Delta requires a selected workspace.
