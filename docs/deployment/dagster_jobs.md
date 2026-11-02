@@ -14,7 +14,7 @@ Schedule state is runtime state, so recheck it before assuming a job will run.
 | --- | --- | --- | --- | --- | --- | --- |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_thursday_local_import` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Local file only; no provider request. |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_weekly_live` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Requires `MARKET_MEDALLION_CONFIG` and `operations.scheduled_live_access: true`; provider entitlement remains separately required. |
-| NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | Running locally | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
+| NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | Enabled in the local instance; evaluates only while the manually started Dagster service is running | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
 
 No other Dagster jobs or schedules are defined in the repository. A schedule
 being listed or enabled does not establish provider rights, start a persistent
@@ -48,6 +48,15 @@ Daily polling does not remove NAAIM's three-month source delay.
 
 ## Local operation
 
+### Decision: manual local operation
+
+On 2026-11-01, the user selected **manual local operation** rather than a
+restart-at-login LaunchAgent or a hosted service. Start the command below when
+daily NAAIM automation is intended to run; stopping the process, logging out or
+rebooting pauses schedule evaluation. Revisit a durable service only after the
+user requests it. The tracked LaunchAgent template is retained for that future
+review and is not installed locally.
+
 Load the ignored local environment and inspect schedule state:
 
 ```bash
@@ -67,6 +76,16 @@ set +a
 DAGSTER_HOME="$PWD/.dagster" .venv/bin/dagster dev \
   -m market_data_pipeline.orchestration.dagster_defs
 ```
+
+For a future restart-at-login review on macOS, install the tracked LaunchAgent template
+after replacing `__PROJECT_ROOT__` with the absolute checkout path. The service
+uses `scripts/run_local_dagster.sh`, sources ignored `.env`, writes ignored local
+logs under `data/dagster/`, and binds only to `127.0.0.1`. Do not install a
+second instance while a manually launched `dagster dev` process is running.
+If the checkout remains under macOS's privacy-protected `Documents` location,
+the LaunchAgent may be unable to read it; move the durable checkout to a
+non-protected development path or grant the service's host process the required
+Full Disk Access before installing the agent.
 
 Start or stop a particular schedule deliberately:
 

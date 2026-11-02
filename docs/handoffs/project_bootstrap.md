@@ -25,9 +25,11 @@ reference; scope, frequency, retention, transformations, redistribution and
 QuantMeridian terms have not been supplied in writing. A local read-only health
 check now covers capture freshness, version retention and output availability.
 The user then confirmed daily automated pulls and 365-day retention. A 10:00
-America/New_York Dagster schedule is implemented but stopped by default; it
-requires an explicit runtime acknowledgement, root and permission reference.
-Keep downstream distribution disabled until provider terms are documented.
+America/New_York Dagster schedule is enabled in the local instance, but the user
+selected manual operation: it evaluates only while an operator runs local
+`dagster dev`. A restart-at-login LaunchAgent is documented but deliberately not
+installed; revisit only on request. Keep downstream distribution disabled until
+provider terms are documented.
 
 **New-source discovery queue:** The user added three separate potential
 pipelines on 2026-11-01: Cboe published daily put/call ratios (Spec 009),
@@ -150,6 +152,15 @@ dates remain separate from capture freshness. Daily capture and 365-day
 retention continue within the existing internal-research scope.
 
 ## Next work
+
+**Next-agent pickup point:** Read [the Dagster job register](../deployment/dagster_jobs.md)
+and [Spec 007](../../specs/spec007/README.md). Keep NAAIM in the selected manual
+operation model; do not install a durable service. The remaining non-code NAAIM
+gates are written provider confirmation and a user-selected backup/alert
+destination. Once those are pending or resolved, the next source-development
+task is Spec 009: Cboe published put/call-ratio provider-contract review,
+followed by Spec 010 then Spec 008. Start each on a fresh branch after the
+current PR is merged.
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo
 and use `docs/deployment/aaii_runbook.md` for PostgreSQL, Dagster, Parquet, replay,
