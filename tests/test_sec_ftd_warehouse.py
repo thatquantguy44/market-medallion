@@ -35,6 +35,7 @@ def test_root_and_database_identity_survive_reopen(tmp_path):
     with SQLiteWarehouse(root, SETTINGS) as warehouse:
         identity = warehouse.identity
         assert warehouse.select_facts() == []
+        assert warehouse.count_facts() == 0
         assert warehouse.select_coverage() == []
     with SQLiteWarehouse(root, SETTINGS) as reopened:
         assert reopened.identity == identity

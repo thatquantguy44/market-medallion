@@ -284,6 +284,9 @@ class SQLiteWarehouse:
         )
         return [self.schemas["coverage"].decode(dict(row), "sqlite") for row in rows]
 
+    def count_facts(self) -> int:
+        return self.connection.execute("SELECT count(*) FROM sec_ftd_gold").fetchone()[0]
+
     def select_runs(self):
         return [
             self.schemas["audit"].decode(dict(row), "sqlite")

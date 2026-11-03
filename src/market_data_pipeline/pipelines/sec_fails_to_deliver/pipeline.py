@@ -225,7 +225,7 @@ def gold(config_path: Path, *, limit: int) -> dict:
         raise ValueError("SEC FTD warehouse does not exist")
     with SQLiteWarehouse(config.root, config.storage) as warehouse:
         rows = warehouse.select_facts(limit=limit)
-        count = warehouse.connection.execute("SELECT count(*) FROM sec_ftd_gold").fetchone()[0]
+        count = warehouse.count_facts()
         return {
             "pipeline": "sec-fails-to-deliver",
             "knowledge_mode": "CURRENT_VINTAGE",
