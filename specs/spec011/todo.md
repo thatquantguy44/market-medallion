@@ -1,9 +1,9 @@
 # Spec011 implementation tasks
 
 **Status:** T01 documentary review recorded; T02 complete for two approved local
-September2026 archives; T03 parser complete with rejected-input storage pending.
+September2026 archives; T03 bounded parser and rejected-input retention complete.
 T18 portable types/serialization are complete for both source packages.
-Next: T04 Bronze/SQLite/audit, including remaining T03 rejected-input retention.
+T04 immutable Bronze/SQLite/audit/Gold is complete. Next: T05 revisions/withdrawals.
 PostgreSQL/Databricks adapters and live parity in T19–T22 remain unimplemented.
 **Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
@@ -51,14 +51,14 @@ fixture headers match admitted evidence. **Likely files:** source manifest,
 
 **Dependencies:** T02. **Scope:** M. **Requirements:** R02,R03,N01,N02.
 
-- [ ] Reject traversal, duplicate member, corrupt ZIP, excessive expansion and
+- [x] Reject traversal, duplicate member, corrupt ZIP, excessive expansion and
   HTML challenge files while retaining original rejected payload provenance.
 - [x] Parse typed date/CUSIP/count/decimal tokens without guessing or coercion.
 - [x] Validate duplicate keys and selected-period containment before promotion.
 
-**Progress:** bounded pure parser rejects the listed ZIP/input hazards. Raw
-rejection persistence belongs to the upcoming Bronze slice and remains open;
-this parser does not write files or certify wider source coverage.
+**Evidence:** parser hazards fail before fact promotion and T04 archives original
+bounded rejected payloads. Oversized raw inputs retain a bounded explicitly
+incomplete prefix, never a fabricated original hash. See the runbook for limits.
 
 **Verify:** A01/A02 adversarial pytest fixtures; invalid input yields no fact
 promotion. **Likely files:** parser, archive adapter, focused tests, two fixtures.
@@ -107,15 +107,28 @@ integration evidence remains T19–T22. See
 
 **Dependencies:** T03,T18. **Scope:** M. **Requirements:** R02,R03,R07,R12,N03.
 
-- [ ] Archive original input/receipt, typed rows and run/partition completeness.
-- [ ] Persist SQLite facts with source/regime identity and publish initial Gold.
-- [ ] Use the T18 normalized warehouse boundary and exact types; no SQLite-only
+- [x] Archive original input/receipt, typed rows and run/partition completeness.
+- [x] Persist SQLite facts with source/regime identity and publish initial Gold.
+- [x] Use the T18 normalized warehouse boundary and exact types; no SQLite-only
   queries or implicit float conversion may leak into transforms or selection.
-- [ ] Distinguish source absent, rejected and successful/empty partition states.
+- [x] Distinguish source absent, rejected and successful/empty partition states.
 
 **Verify:** invented fixture round trip/reopen matches values and original bytes;
 wrong namespace/regime cannot share a table contract. **Likely files:** pipeline,
 Bronze adapter, SQLite adapter, integration tests, package init.
+
+**Complete:** immutable capture/receipt, contract-bound SQLite adapter, transactional
+facts/coverage/audit and database-backed Gold, exposed by configured `run` and
+bounded `gold`. Real September import reopened with 117,025 unique facts; an
+unchanged third capture inserted zero facts. Failed/missing/unsupported-empty
+and oversized inputs are distinct; changed/overlapping replacements are retained
+but blocked until T05. Root mismatch and clock regression fail before capture.
+Mid-insert and receipt-tampering regressions prove no partial fact promotion.
+Full suite **316 passed, 2 existing PostgreSQL skips**; lint/changed format/build
+pass. Ignored evidence: `data/sec_ftd/t04-verification.json`.
+[Runbook](../../docs/deployment/sec_ftd_runbook.md). PostgreSQL stays the configured
+operational default but is explicitly unavailable until T19; no fallback or new
+service/schedule was enabled. Parquet/publication recovery remains T07.
 
 ## S11-T05 — Preserve FTD revisions and withdrawals
 

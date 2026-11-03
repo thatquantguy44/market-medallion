@@ -5,11 +5,12 @@
 Specs011–015. The older catalog below preserves original source rationale;
 its former priority labels are superseded by that program. Full source
 contracts/plans/tasks now exist for SEC FTD + Reg SHO, FINRA short volume,
-FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. No connector for
-those sources has been implemented. Spec011 has an offline SEC
-parser/manifest/local inspection slice reconciled against two approved
+FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. Spec011 now has
+a local SEC Bronze/SQLite/audit/Gold slice; later connectors remain planned.
+Its parser/manifest/local inspection slice reconciles two approved
 September2026 archives. T18 type contracts/serialization are implemented for both
-source packages; next is Bronze/SQLite/audit and root binding.
+source packages; T03/T04 SEC Bronze/SQLite/audit/Gold are complete. Next is
+observed revisions/reversions and withdrawals.
 PostgreSQL and Databricks are required Spec011 targets, not implemented yet.
 NAAIM remains paused.
 

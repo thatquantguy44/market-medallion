@@ -46,9 +46,11 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next task: S11-T04 Bronze/SQLite/audit and contract/root binding** in
-[Spec011 tasks](../../specs/spec011/todo.md), including T03
-rejected-input raw retention. On 2026-11-03 the user required PostgreSQL and
+**Exact next task: S11-T05 observed revisions/reversions and withdrawals** in
+[Spec011 tasks](../../specs/spec011/todo.md). T03/T04 are complete: immutable
+bounded Bronze, root-bound SQLite facts/coverage/audit and database Gold, with
+configured `run` and bounded `gold`. Changed replacements are retained and
+rejected until T05, preserving earlier facts. On 2026-11-03 the user required PostgreSQL and
 Databricks compatibility too: R12/A14/A15 and T19–T22 require source-owned
 warehouse/Delta adapters and actual integration parity before G2. These are
 planned, not implemented or live-verified. Pin exact numeric text, checked
@@ -64,10 +66,19 @@ warehouse Protocols. Exact codecs pass actual SQLite/Parquet round trips,
 native PostgreSQL bindings, configurable decimal limits and Spark schema tests.
 The SEC parser preserves original numeric tokens. All117,025 approved September
 observations pass numeric/date preflight; ignored report:
-`data/sec_ftd/storage-types-202609.json`. Full suite **283 passed, 2 existing
-opt-in PostgreSQL skips**; Ruff, changed-file format and sdist/wheel build pass.
-Next add T04 root/contract binding, immutable Bronze and persistence. Type tests
-do not establish live PostgreSQL/Delta parity; T19–T22 remain open.
+`data/sec_ftd/storage-types-202609.json`. T04 also imports all 117,025 facts
+into isolated `data/sec_fails_to_deliver/t04-verification`, with ignored config
+`config/sec_fails_to_deliver/t04-verification.local.yml`. Reopen, exact trailer
+totals, all three Bronze captures and an unchanged repeat (zero new facts) pass.
+First-seen is actual November3 acquisition completion; population coverage
+remains PARTIAL/NOT_CERTIFIED. Full suite **316 passed, 2 existing opt-in
+PostgreSQL skips**; Ruff, changed-file format and sdist/wheel build pass.
+Evidence: `data/sec_ftd/t04-verification.json` and
+[the local runbook](../deployment/sec_ftd_runbook.md). PostgreSQL remains the
+operational default but T19 is required before its first run; no fallback is
+used. Delta/live acquisition/Parquet publication remain absent. T19–T22 live
+backend parity remains open. Interrupted STARTED captures remain visible; do
+not recreate a missing/mismatched bound store or claim automatic replay.
 Preserve unknown publication/retrieval clocks and actual ingestion
 first-seen. Inputs/report stay ignored in `data/sec_ftd/`; commands, hashes and
 coverage limits are in the [source checkpoint](../../specs/spec011/source_review.md).
@@ -77,10 +88,10 @@ Each numbered directory owns its
 [program roadmap](../securities_finance/roadmap.md) tracks delivery gates and
 the [common contract](../securities_finance/contract.md) supplies lineage,
 knowledge-clock, revision/removal, replay, export and manual-operation rules.
-The SEC source package contains an offline parser/config/inspection entrypoint
-and storage type contracts; the threshold package contains normalized storage
-types only. The other four source packages are absent. Persistence, live acquisition
-adapters, exchange processing and new jobs remain unimplemented. Do not claim
+The SEC source package contains parser/config/inspection, type contracts and
+local SQLite ingestion/Gold; the threshold package contains normalized storage
+types only. The other four source packages are absent. PostgreSQL/Delta,
+live acquisition, exchange processing and new jobs remain unimplemented. Do not claim
 source access, historic coverage or consumer features from fixture tests.
 CFTC, Cboe, Nasdaq breadth, OCC, OFR and other
 existing candidates remain queued behind this user-selected sequence.
@@ -228,8 +239,8 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T04 Bronze/SQLite/audit, root/contract binding and remaining T03
-rejected-input retention. T18 is complete for both source packages.
+Continue S11-T05 observed corrections/reversions, withdrawals and cutoff selection.
+T03/T04 are complete for local SEC ingestion; T18 is complete for both packages.
 T19–T22 PostgreSQL/Delta implementation
 and actual integration evidence are required before Spec011 G2.
 The T02 September sample reconciliation is complete. Older recommendations below are historical context;

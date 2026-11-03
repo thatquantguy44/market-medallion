@@ -13,8 +13,8 @@ and neither low adoption nor predictive value has been established.
 The user's 2026-11-03 direction selects these five deliveries in order,
 superseding older next-source recommendations below. The first delivery groups
 SEC FTD and exchange Reg SHO history while keeping separate source packages.
-The first offline SEC parser/manifest/local inspection slice is implemented;
-both approved September2026 SEC archives reconcile. Persistent ingestion,
+The SEC local Bronze/SQLite/audit/Gold slice is implemented and reopened with
+both approved September2026 archives. Observed revisions, PostgreSQL/Delta,
 exchange conformance and the remaining research deliveries are open.
 
 | Order | Delivery / spec | Plan | Canonical tasks | Research milestone |
@@ -30,8 +30,8 @@ Read the [capability map](securities_finance/README.md),
 [program plan](securities_finance/plan.md),
 [coordination tasks](securities_finance/todo.md) and
 [delivery roadmap/readiness ledger](securities_finance/roadmap.md).
-**Continue at S11-T04 Bronze/SQLite/audit and root binding** after completed T18
-types/serialization for both sources. Include T03 rejected-input retention.
+**Continue at S11-T05 observed revisions/reversions and withdrawals** after
+completed T03/T04 local Bronze/SQLite/audit/Gold and T18 type contracts.
 Spec011 requires PostgreSQL/Databricks
 adapters and actual integration parity before G2;
 [checkpoint](../specs/spec011/source_review.md). Research delivery

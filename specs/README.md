@@ -16,7 +16,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [008](spec008/README.md) | occ-options-volume-query | Draft OCC options put/call-volume query contract. Filtered scope, CSV schema, terms, history and rate behavior require review; no connector implemented. |
 | [009](spec009/README.md) | cboe-published-put-call-ratios | Draft Cboe published daily put/call-ratio contract. Date-selection, history, terms and source shape require review; no connector implemented. |
 | [010](spec010/README.md) | nasdaq-daily-market-breadth | Draft Nasdaq Trader advances/declines/unchanged-count contract. Year coverage, universe semantics, terms and source shape require review; no connector implemented. |
-| [011](spec011/README.md) | settlement-stress | First: SEC FTD plus Nasdaq/NYSE Reg SHO. September samples reconcile and T18 types/serialization are complete for both sources. Next T04 persistence/root binding. PostgreSQL/Databricks compatibility required before G2; no warehouse, exchange adapter or job yet. |
+| [011](spec011/README.md) | settlement-stress | First: SEC FTD plus Nasdaq/NYSE Reg SHO. T18 types and T03/T04 local SEC Bronze/SQLite/audit/Gold complete, verified with 117,025 September facts. Next T05 revisions. PostgreSQL/Delta, exchange adapters and jobs remain open. |
 | [012](spec012/README.md) | finra-short-sale-volume | Second: facility-scoped daily short volume, included short-exempt subset and matching reported denominators. Full planning set; connector absent. |
 | [013](spec013/README.md) | finra-otc-transparency | Third: delayed weekly ATS/non-ATS security/participant activity, tier/coverage-safe metrics. Full planning set; connector absent. |
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
@@ -35,8 +35,8 @@ so the five workstreams preserve all six source families discussed. Read the
 
 Each numbered spec owns `README.md`, `data_contract.md`, `plan.md` and `todo.md`.
 Spec011 now has a first offline SEC slice and [source-review checkpoint](spec011/source_review.md).
-Continue **S11-T04** Bronze/SQLite/audit/root binding and T03 rejected-input
-retention after completed T18 type contracts and
+Continue **S11-T05** observed revisions/reversions and withdrawals after completed
+T03/T04 local SEC persistence, T18 type contracts and
 the successful September sample reconciliation. Later source tasks remain unchecked; no new job, live acquisition
 adapter or consumer module exists. The source sequence supersedes older discovery priorities;
 the following historical choices remain context, not a competing next-build

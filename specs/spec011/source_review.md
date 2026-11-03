@@ -156,8 +156,8 @@ neither command writes pipeline data or calls a provider. Success explicitly
 reports `provider_conformance: UNVERIFIED`: no independent origin authentication
 is performed. Successful inspection additionally reports `profile_conformance:
 MATCHED`, validated trailer totals and `source_coverage: NOT_CERTIFIED`. Future
-`run`, health/replay/export, SQLite,
-Parquet and Dagster are not implemented by this checkpoint.
+health/replay/export, PostgreSQL, Parquet publication and Dagster remain absent.
+T04 now implements `run` and bounded `gold` for explicitly selected SQLite roots.
 
 The subsequent T18 configuration foundation adds a strict source-owned
 `config.py`, `validate-config` and configured partition inspection. Settings
@@ -196,11 +196,38 @@ ignored `data/sec_ftd/storage-types-202609.json`. No warehouse write, new source
 request, completeness certification or first-seen assignment occurred. Live
 engine parity is still required in T19–T22.
 
-**Next:** S11-T04 immutable Bronze/SQLite/audit and contract/root binding.
+## T04 persistent local checkpoint
+
+T03/T04 now retain immutable bounded capture receipts, original input/manifest
+and storage settings, and bind a SQLite warehouse to source/regime/backend,
+storage contract and record-schema versions. Typed facts, coverage and terminal
+audit commit atomically; initial Gold is the database view. Failed, missing,
+unsupported-empty and oversized input are distinct. Full rejected inputs inside
+the capture budget remain unchanged; oversized raw files retain a flagged prefix
+and no invented original hash. Coverage schema is `sec-ftd-coverage/2` to admit
+unknown hashes for failed/unavailable captures; complete states require a hash.
+
+The isolated ignored config `config/sec_fails_to_deliver/t04-verification.local.yml`
+uses `data/sec_fails_to_deliver/t04-verification`, never the PostgreSQL default.
+Actual September imports persist 117,025 unique facts over 21 observed settlement
+labels, with 663 missing prices. Both source trailer quantity totals reconcile.
+A third unchanged capture inserts zero facts, and all three Bronze captures
+verify after reopening. First-seen is actual November3 acquisition completion,
+not September. Aggregate evidence is `data/sec_ftd/t04-verification.json`.
+Population coverage remains PARTIAL/NOT_CERTIFIED.
+
+The complete suite now passes **316 tests, 2 existing PostgreSQL skips**. Tests
+include SQL rollback after a mid-insert failure, receipt-metadata tampering,
+clock regression, contract/root mismatch, unsafe ZIP retention, changed/overlap
+rejection, numeric overflow and actual CLI invocation. Ruff, changed-file format
+and source/wheel builds pass. See the [runbook](../../docs/deployment/sec_ftd_runbook.md).
+No provider request, PostgreSQL connection, Delta publication or schedule was run.
+
+**Next:** S11-T05 observed corrections/reversions, withdrawals and cutoff selection.
 The user's subsequent compatibility requirement is recorded in R12/A14/A15:
 PostgreSQL warehouse and Databricks Delta delivery/parity are required before
-G2 in T19–T22. No backend adapter or engine verification exists yet. Include original rejected-input
-retention to finish the remaining S11-T03 item; preserve unknown clocks and
+G2 in T19–T22. No PostgreSQL/Delta adapter or engine verification exists yet.
+T03 rejected-input retention is complete; preserve unknown clocks and
 coverage limitations. S11-T02 sample conformance is complete for these two
 archives only. Full Spec011/G2, exchange rights/conformance and persistent
 publication remain open. NAAIM remains paused.

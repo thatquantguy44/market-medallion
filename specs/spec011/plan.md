@@ -2,8 +2,8 @@
 
 **State:** initial SEC parser/manifest/inspection implemented and reconciled
 against two approved September2026 archives. T18 portable types/serialization
-are complete for both sources. Next: T04 Bronze/SQLite/audit, root binding and
-T03 rejected-input provenance.
+are complete for both sources. T03/T04 complete immutable Bronze, root-bound
+SQLite facts/coverage/audit and database Gold. Next: T05 observed revisions.
 PostgreSQL and Databricks are required delivery targets, not implemented yet.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
@@ -50,20 +50,24 @@ SEC FTD's implemented runtime-config entrypoint is
 Databricks publication until configured. See
 [the decision/setup guide](../../config/sec_fails_to_deliver/README.md).
 Configurable precision/scale identifies a storage contract. Schema generation
-and representability checks are implemented in T18; root binding remains T04.
+and representability checks are implemented in T18; T04 enforces SQLite root binding.
 Both source `storage.py` modules declare normalized schemas and warehouse
 Protocols. Shared field codecs have two concrete source users. SQLite/Parquet
-round trips and native PostgreSQL bindings are tested; actual warehouse and
+round trips and native PostgreSQL bindings are tested; PostgreSQL server and
 Spark/Delta integrations remain T19–T22.
 
-Each source owns `io/warehouse.py` (normalized operations), SQLite/PostgreSQL
-adapters and `io/databricks.py` (snapshot publication). Do not import AAII's
+Each source owns its warehouse boundary and SQLite/PostgreSQL/Delta adapters.
+SEC T04 uses `bronze.py`, `warehouse.py` and `pipeline.py`; threshold persistence
+and the future Delta publishers remain separate source-owned modules. Do not import AAII's
 provider-specific storage schema or require Spark for ordinary local imports.
 The [portable data contract](data_contract.md#9-storage-and-platform-compatibility)
 defines required exact-text values, checked numeric projections and UTC/date
 types. SQLite must not dictate the logical model or force float/int64 coercion.
 
-Proposed future commands, **not implemented yet**:
+Current tested SEC commands are in the
+[runbook](../../docs/deployment/sec_ftd_runbook.md); `run --config ... --partition ...`
+and `gold --config ... --limit ...` use an explicitly selected SQLite config.
+The older interface sketches below are **not implemented**:
 
 ```bash
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver run \

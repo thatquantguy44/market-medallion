@@ -1,13 +1,13 @@
 # Settlement facts and threshold membership contract
 
-**State:** normalized design proposal; source facts explicitly noted below.
+**State:** normalized types and SEC SQLite slice implemented; later adapters planned.
 **Date:** 2026-11-03. Inherits [C01–C11](../../docs/securities_finance/contract.md).
 T18's normalized type contracts and serialization are implemented for both source
 packages. The parser implements the six-column/trailer local profile version2,
 reconciled against two approved September2026 archives after an unsuccessful
 HTTP request. See the [source checkpoint](source_review.md) for sample hashes,
-explicit bounds, trailer checks and coverage limitations. Persistence remains
-unimplemented.
+explicit bounds, trailer checks and coverage limitations. T04 implements SEC
+SQLite persistence; PostgreSQL/Delta and threshold persistence remain planned.
 
 ## 1. Provider structures and grains
 
@@ -172,7 +172,8 @@ required for Spec011, for both SEC FTD and exchange-threshold packages. SQLite
 remains the offline development backend. PostgreSQL is an alternative operational
 warehouse; Databricks consumes a validated committed snapshot into Delta. This
 does not require Spark in the parser or make Databricks a local ingestion backend.
-These adapters do not exist yet; R12/A14/A15 are delivery gates.
+The SEC SQLite adapter is implemented; PostgreSQL/Delta adapters remain absent.
+R12/A14/A15 still gate full backend compatibility.
 
 | Logical value | SQLite | PostgreSQL | Parquet / Databricks Delta |
 | --- | --- | --- | --- |
@@ -261,15 +262,20 @@ conversion are enforced contract rules. A SHA-256 `storage_contract_id` includes
 the pipeline and storage settings, excludes connection/path settings and must
 be bound to the durable root by T04. Changing precision/scale requires a distinct
 storage identity or an explicit migration; the loader alone does not enforce
-persisted root binding. T18 Arrow/Spark schemas and serialization round trips
-are complete; actual warehouse and Delta adapters are still absent.
+persisted root binding. T04 now enforces that binding for SQLite. T18 Arrow/Spark
+schemas and serialization round trips are complete; PostgreSQL and Delta
+adapters remain absent.
 
 Implemented commands are `validate-config --config ...` and
 `inspect --config ... --partition ...`. Config-mode inspection selects exactly
 one configured manifest/input pair, with no conflicting input override. Existing
 `--manifest ... --input ...` inspection remains available. Both paths preserve
-provider bytes/semantics and make no request. Configuration validation reports
-that warehouse/Delta implementations and source-manifest checks have not run.
+provider bytes/semantics and make no request. Configuration validation performs
+no warehouse/Delta I/O or source-manifest checks; its backend capability flag
+describes implemented code, not a tested connection.
+T04 additionally supplies configured `run` and bounded `gold` commands for
+explicitly selected SQLite roots; `validate-config` reports the selected backend's
+implementation capability without opening it.
 
 ## 11. Implemented T18 record schemas and serialization
 
@@ -284,7 +290,7 @@ No core/type-contract import requires Arrow or Spark; Arrow loads on request.
 
 | Source | Versioned record schemas | Identity and key fields |
 | --- | --- | --- |
-| SEC FTD | `sec-ftd-facts/1`, `sec-ftd-coverage/1`, `sec-ftd-audit/1`, `sec-ftd-publications/1` | Source/dataset/reporting regime; settlement date/CUSIP for facts; partition/version/run/capture sequence for lineage |
+| SEC FTD | `sec-ftd-facts/1`, `sec-ftd-coverage/2`, `sec-ftd-audit/1`, `sec-ftd-publications/1` | Source/dataset/reporting regime; settlement date/CUSIP for facts; partition/version/run/capture sequence for lineage |
 | Thresholds | `reg-sho-membership/1`, `reg-sho-coverage/1`, `reg-sho-audit/1`, `reg-sho-publications/1` | Dataset; independent provider/market/list date/raw symbol/rule family for membership; partition/version/run/capture sequence for lineage |
 
 `storage_schemas(settings)` for FTD consumes the pipeline config. Threshold
@@ -325,9 +331,50 @@ Both warehouse Protocols pin transactional capture-sequence allocation, run
 recording, atomic facts/membership + coverage + audit promotion, cutoff selection
 and publication-journal operations. Future adapters must preserve equal-clock
 capture ordering and validate all records before commit. The Protocols supply
-no persistence, revision generation, query engine or crash recovery.
+no persistence, revision generation, query engine or crash recovery themselves.
+T04's source-owned SQLite adapter implements the local capture/current-selection
+subset; observed-as-of remains T05 and publication operations remain T07.
 
 T18 evidence is real SQLite/Parquet serialization plus native PostgreSQL binding
 and explicit Spark schema tests. Actual PostgreSQL server and Spark/Delta parity
 remain required in A14/A15 and T19–T22. Historical first-seen clocks, new source
 coverage and warehouse readiness are not inferred from these tests.
+
+## 12. T04 bounded persistence decisions
+
+The first concrete adapter is SQLite, used through the T18 source-owned boundary.
+PostgreSQL remains the configured operational default; selecting it before T19
+fails before input/root I/O, with no fallback to SQLite. Databricks stays disabled.
+
+Each attempt reserves an ordered capture/run, writes immutable original manifest
+and storage settings plus a capture receipt, and retains bounded input bytes
+before parsing. Complete payloads have their original SHA-256. Oversized inputs
+retain at most archive-limit+1 bytes as an explicitly incomplete capture, with a
+captured-prefix hash and unknown original hash. Missing files have no fabricated
+payload/hash. Coverage `raw_sha256` therefore becomes nullable for unavailable
+or failed captures in `sec-ftd-coverage/2`; COMPLETE states require a real hash.
+Version1 was type-only; no persisted version1 warehouse was migrated.
+
+The root and database bind one dataset/regime, backend, warehouse ID, storage
+contract and record-schema versions. Reject incompatible or unbound nonempty
+roots before input capture. A single-root writer lock and SQLite transaction
+serialize run allocation and atomic facts/coverage/audit promotion. Bronze is
+durable before promotion; initial Gold is a database-backed selection, not the
+Parquet/current-pointer publisher planned in T07. Interrupted STARTED attempts
+remain visible for recovery; they do not imply fact promotion or success.
+
+A valid local file imports reported facts with MATCHED validation and PARTIAL
+population coverage: trailers do not certify the settlement calendar/universe.
+Missing files produce UNAVAILABLE coverage; rejected inputs produce FAILED
+coverage and no fact promotion. Header-only/zero-row archives remain unsupported
+and are rejected distinctly. An unchanged payload may be recaptured without
+new facts. Until T05, changed replacements and overlapping accepted partitions
+are retained/audited but rejected; they cannot overwrite history or withdraw rows.
+
+T04 passes its focused cases and the full suite of 316 tests (2 existing opt-in
+PostgreSQL skips), plus actual September ingestion/reopen and unchanged recapture.
+The store has 117,025 unique facts, 663 missing prices and 21 observed settlement dates; original trailer
+quantity sums reconcile. First-seen is actual November3 acquisition completion,
+with separate acquisition-start clocks in Bronze. No PostgreSQL/Delta engine
+was touched. See the [runbook](../../docs/deployment/sec_ftd_runbook.md) and
+ignored `data/sec_ftd/t04-verification.json`. Next is T05 observed revisions.

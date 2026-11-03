@@ -5,8 +5,8 @@ and NAAIM settings. The implemented loader validates configuration without
 connecting to PostgreSQL/Databricks or reading secrets. `inspect` can select an
 approved local file entirely from this config. T18's exact numeric projections,
 SQL bindings, Arrow schemas and Spark schema descriptions are implemented.
-Warehouse persistence and Delta publication are **not implemented yet**; type
-tests are not evidence of live backend compatibility.
+T04 implements SQLite persistence and database Gold. PostgreSQL/Delta adapters
+are **not implemented yet**; type tests are not live backend compatibility evidence.
 
 ```text
 config/sec_fails_to_deliver/
@@ -21,7 +21,7 @@ config/sec_fails_to_deliver/
 
 | Decision | Example setting | What you need to supply or decide |
 | --- | --- | --- |
-| Initial operational warehouse | `warehouse: postgres` | PostgreSQL is recommended; `sqlite` is available for the first offline persistence loop when delivered. Neither SEC storage adapter exists yet. |
+| Initial operational warehouse | `warehouse: postgres` | User selected PostgreSQL; its adapter remains T19. Explicit `sqlite` selects the delivered T04 local slice; there is no fallback. |
 | Pipeline-owned durable root | `../../data/sec_fails_to_deliver/postgres` | Keep this local path or choose a mounted durable directory. Use a distinct root for another backend/warehouse identity. |
 | PostgreSQL namespace | database `market_medallion`, schema `sec_ftd`, user `sec_ftd_writer` | These are illustrative names, not provisioned objects. Set your actual host, port, database, login, optional role, schema and SSL mode. |
 | Databricks publication | `enabled: false` | Leave disabled until a catalog, schema and writable `/Volumes/<catalog>/<schema>/<volume>/...` staging path are available. Publication later runs in an authenticated Spark session. |
@@ -32,8 +32,8 @@ config/sec_fails_to_deliver/
 Decimal38/12 is a starting recommendation, not a statement that every historical
 price fits. The implemented codecs preflight actual values against this config
 and reject a value needing rounding or overflow. Schema changes alter the
-`storage_contract_id`; future persistence must reject a conflicting contract on
-an existing root. That guard is still part of T04, not implemented by validation.
+`storage_contract_id`; T04 persistence rejects a conflicting contract on an
+existing root. Validation alone still performs no root/database I/O.
 
 Operational choices live in YAML. CUSIPs as strings, source date labels, UTC
 knowledge clocks, exact numeric text and rejected lossy conversion are enforced
@@ -91,8 +91,11 @@ Unknown/duplicate YAML keys, literal passwords/tokens, malformed types, invalid
 numeric ranges and unsupported identifiers fail before input/service I/O.
 SQL namespaces/table prefix currently use simple lowercase identifiers up to63
 characters. Enabled Databricks settings must include all three target fields.
-`run`, PostgreSQL connections, root-binding enforcement
-and Delta publication remain in [Spec011 tasks](../../specs/spec011/todo.md).
+T04 adds configured `run` and bounded `gold`; see the
+[local runbook](../../docs/deployment/sec_ftd_runbook.md). The example's PostgreSQL
+selection deliberately errors before input/root I/O until T19; use an explicit
+SQLite local config for T04. PostgreSQL connections, Delta publication,
+observed revisions and replay remain in [Spec011 tasks](../../specs/spec011/todo.md).
 
 ## Implemented storage types
 
@@ -109,3 +112,10 @@ example profile. Ignored aggregate evidence is
 historical first-seen clocks. See the
 [storage contract](../../specs/spec011/data_contract.md#11-implemented-t18-record-schemas-and-serialization)
 for field semantics and the remaining live backend verification requirements.
+
+T04 also imports both approved archives into an isolated SQLite verification
+root, retaining 117,025 facts with actual November 3 first-seen clocks. The ignored
+config is `t04-verification.local.yml`; data lives under
+`data/sec_fails_to_deliver/t04-verification`. An unchanged repeat adds zero facts.
+Aggregate evidence is `data/sec_ftd/t04-verification.json`. This does not change
+the PostgreSQL operational default or enable Databricks.

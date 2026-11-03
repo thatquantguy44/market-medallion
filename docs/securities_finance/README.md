@@ -85,7 +85,8 @@ All committed test examples use invented values and identifiers. Spec011's
 [source checkpoint](../../specs/spec011/source_review.md) records the actual
 offline tests and successful reconciliation of two approved September2026 SEC
 archives after an earlier HTTP403. T18 type contracts and serialization pass for
-both sources. Next is S11-T04 Bronze/SQLite/audit and root binding; exchange
+both sources. T03/T04 now persist local SEC Bronze/SQLite/audit/Gold, with 117,025
+September facts verified after reopening. Next is S11-T05 observed revisions; exchange
 conformance and full delivery remain open.
 
 The plans assume Python 3.12, the existing manifest-driven medallion layout,

@@ -25,11 +25,12 @@ FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary
 dealers** (Specs011–015). Spec011 has an initial offline SEC FTD parser/manifest
 and local inspection command, reconciled against both approved September2026
 archives. T18 portable storage types and serialization are complete for both
-source packages. Continue at S11-T04 Bronze/SQLite/audit and root binding.
-Spec011 also requires PostgreSQL and Databricks Delta
-adapters/parity tests before delivery. Include
-rejected-input retention. Ingestion/persistence/jobs and later
-sources are not yet implemented. NAAIM is **paused** and its
+source packages. T03/T04 local Bronze/SQLite/audit/Gold are implemented and
+reopened with 117,025 September facts. Continue at S11-T05 observed revisions.
+Spec011 still requires PostgreSQL/Databricks adapters and live parity, Parquet,
+source acquisition, exchange adapters and research exports. See the
+[SEC FTD runbook](docs/deployment/sec_ftd_runbook.md). No new job is implemented.
+NAAIM is **paused** and its
 daily schedule was stopped on 2026-11-03; see the master handoff before any resume.
 
 NAAIM remains **3-month-delayed public data for internal research**. Daily
@@ -53,7 +54,8 @@ See [the package layout and import migration guide](docs/development/pipeline_la
 SEC FTD has its own [configuration folder and decision guide](config/sec_fails_to_deliver/README.md).
 Its `validate-config` and config-based local `inspect` commands are implemented;
 PostgreSQL is the selected default and Databricks publication stays disabled
-until configured. SEC storage adapters are still pending under Spec011.
+until configured. SEC SQLite ingestion/Gold are implemented; PostgreSQL and
+Delta adapters remain pending under Spec011.
 
 ## Run the first slice
 
