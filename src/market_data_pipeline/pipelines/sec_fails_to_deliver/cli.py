@@ -1,8 +1,11 @@
-"""Validate the offline SEC FTD profile or inspect one bounded local archive."""
+"""Validate, inspect or ingest one explicitly configured local SEC FTD archive."""
 
 import argparse
 import json
+import sqlite3
 import sys
+from datetime import date
+from decimal import Decimal
 from pathlib import Path
 
 from market_data_pipeline.pipelines.sec_fails_to_deliver.config import load_config
@@ -11,6 +14,15 @@ from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
     SCHEMA_VERSION,
     load_manifest,
 )
+from market_data_pipeline.pipelines.sec_fails_to_deliver.pipeline import gold, run
+
+
+def _json_value(value):
+    if isinstance(value, Decimal):
+        return format(value, "f")
+    if isinstance(value, date):
+        return value.isoformat()
+    raise TypeError("unsupported SEC FTD output type")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -28,6 +40,13 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--manifest", type=Path, required=True)
     config_command = commands.add_parser("validate-config")
     config_command.add_argument("--config", type=Path, required=True)
+    for name in ("run", "gold"):
+        command = commands.add_parser(name)
+        command.add_argument("--config", type=Path, required=True)
+        if name == "run":
+            command.add_argument("--partition", required=True)
+        else:
+            command.add_argument("--limit", type=int, required=True)
     arguments = parser.parse_args(argv)
     if arguments.command == "inspect":
         if arguments.config and (not arguments.partition or arguments.input):
@@ -35,6 +54,14 @@ def main(argv: list[str] | None = None) -> int:
         if arguments.manifest and (not arguments.input or arguments.partition):
             parser.error("manifest inspection requires --input and no --partition")
     try:
+        if arguments.command in ("run", "gold"):
+            result = (
+                run(arguments.config, arguments.partition)
+                if arguments.command == "run"
+                else gold(arguments.config, limit=arguments.limit)
+            )
+            print(json.dumps(result, sort_keys=True, default=_json_value))
+            return 0 if arguments.command == "gold" or result["status"] == "SUCCEEDED" else 1
         if arguments.command == "validate-config":
             config = load_config(arguments.config)
             print(
@@ -47,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
                         "storage_contract_id": config.storage.contract_id,
                         "partition_ids": sorted(config.partitions),
                         "manifests_validated": False,
-                        "storage_implemented": False,
+                        "storage_implemented": config.warehouse == "sqlite",
                         "delta_implemented": False,
                     },
                     sort_keys=True,
@@ -88,6 +115,9 @@ def main(argv: list[str] | None = None) -> int:
                     "member_sha256": archive.member_sha256,
                 }
             )
+    except sqlite3.DatabaseError:
+        print(json.dumps({"error": "local SEC FTD warehouse is unavailable"}), file=sys.stderr)
+        return 1
     except OSError:
         print(json.dumps({"error": "local input is unavailable"}), file=sys.stderr)
         return 1
