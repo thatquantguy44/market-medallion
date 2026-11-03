@@ -2,9 +2,10 @@
 
 import argparse
 import json
+import re
 import sqlite3
 import sys
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 
@@ -23,6 +24,20 @@ def _json_value(value):
     if isinstance(value, date):
         return value.isoformat()
     raise TypeError("unsupported SEC FTD output type")
+
+
+def _as_of(value):
+    if not re.fullmatch(
+        r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,6})?(?:Z|[+-][0-9]{2}:[0-9]{2})",
+        value,
+    ):
+        raise argparse.ArgumentTypeError(
+            "as-of requires an ISO timestamp with timezone and at most microseconds"
+        )
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("invalid as-of timestamp") from exc
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -47,6 +62,13 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--partition", required=True)
         else:
             command.add_argument("--limit", type=int, required=True)
+            command.add_argument("--as-of", type=_as_of)
+            command.add_argument(
+                "--as-of-sequence",
+                type=int,
+                help="inclusive capture-sequence bound at the exact --as-of timestamp",
+            )
+            command.add_argument("--include-withdrawn", action="store_true")
     arguments = parser.parse_args(argv)
     if arguments.command == "inspect":
         if arguments.config and (not arguments.partition or arguments.input):
@@ -58,7 +80,13 @@ def main(argv: list[str] | None = None) -> int:
             result = (
                 run(arguments.config, arguments.partition)
                 if arguments.command == "run"
-                else gold(arguments.config, limit=arguments.limit)
+                else gold(
+                    arguments.config,
+                    limit=arguments.limit,
+                    as_of=arguments.as_of,
+                    as_of_sequence=arguments.as_of_sequence,
+                    include_withdrawn=arguments.include_withdrawn,
+                )
             )
             print(json.dumps(result, sort_keys=True, default=_json_value))
             return 0 if arguments.command == "gold" or result["status"] == "SUCCEEDED" else 1

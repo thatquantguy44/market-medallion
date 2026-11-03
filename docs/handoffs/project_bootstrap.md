@@ -46,11 +46,13 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next task: S11-T05 observed revisions/reversions and withdrawals** in
-[Spec011 tasks](../../specs/spec011/todo.md). T03/T04 are complete: immutable
-bounded Bronze, root-bound SQLite facts/coverage/audit and database Gold, with
-configured `run` and bounded `gold`. Changed replacements are retained and
-rejected until T05, preserving earlier facts. On 2026-11-03 the user required PostgreSQL and
+**Exact next task: S11-T06 deterministic offline replay** in
+[Spec011 tasks](../../specs/spec011/todo.md). T03–T05 are complete: immutable
+Bronze, SQLite facts/coverage/audit, observed corrections and reversions,
+evidence-gated withdrawals and cutoff-selectable Gold. Replay must preserve
+original clocks, capture order and admission outcomes, including historical
+rejections, and use archived evidence rather than live config paths.
+On 2026-11-03 the user required PostgreSQL and
 Databricks compatibility too: R12/A14/A15 and T19–T22 require source-owned
 warehouse/Delta adapters and actual integration parity before G2. These are
 planned, not implemented or live-verified. Pin exact numeric text, checked
@@ -79,6 +81,11 @@ operational default but T19 is required before its first run; no fallback is
 used. Delta/live acquisition/Parquet publication remain absent. T19–T22 live
 backend parity remains open. Interrupted STARTED captures remain visible; do
 not recreate a missing/mismatched bound store or claim automatic replay.
+T05 extends that checkpoint: **346 passed, 2 skipped**; a fourth unchanged
+capture leaves 117,025 fact versions, four audits and PARTIAL real coverage.
+Receipt2 archives optional reviewed completeness evidence and reads legacy
+receipt1. Corrections/reversions, cutoff queries and evidence-gated withdrawals
+are implemented. Ignored evidence: `data/sec_ftd/t05-verification.json`.
 Preserve unknown publication/retrieval clocks and actual ingestion
 first-seen. Inputs/report stay ignored in `data/sec_ftd/`; commands, hashes and
 coverage limits are in the [source checkpoint](../../specs/spec011/source_review.md).
@@ -239,7 +246,7 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T05 observed corrections/reversions, withdrawals and cutoff selection.
+Continue S11-T06 offline replay with original admission outcomes.
 T03/T04 are complete for local SEC ingestion; T18 is complete for both packages.
 T19–T22 PostgreSQL/Delta implementation
 and actual integration evidence are required before Spec011 G2.

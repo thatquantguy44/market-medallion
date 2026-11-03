@@ -368,8 +368,9 @@ population coverage: trailers do not certify the settlement calendar/universe.
 Missing files produce UNAVAILABLE coverage; rejected inputs produce FAILED
 coverage and no fact promotion. Header-only/zero-row archives remain unsupported
 and are rejected distinctly. An unchanged payload may be recaptured without
-new facts. Until T05, changed replacements and overlapping accepted partitions
-are retained/audited but rejected; they cannot overwrite history or withdraw rows.
+new facts. At the T04 checkpoint, changed replacements and overlapping accepted
+partitions were retained/audited but rejected. T05 below supersedes the changed-row
+restriction; overlapping partition scopes remain rejected.
 
 T04 passes its focused cases and the full suite of 316 tests (2 existing opt-in
 PostgreSQL skips), plus actual September ingestion/reopen and unchanged recapture.
@@ -377,4 +378,31 @@ The store has 117,025 unique facts, 663 missing prices and 21 observed settlemen
 quantity sums reconcile. First-seen is actual November3 acquisition completion,
 with separate acquisition-start clocks in Bronze. No PostgreSQL/Delta engine
 was touched. See the [runbook](../../docs/deployment/sec_ftd_runbook.md) and
-ignored `data/sec_ftd/t04-verification.json`. Next is T05 observed revisions.
+ignored `data/sec_ftd/t04-verification.json`. T05 is delivered below; next is T06 replay.
+
+## 13. T05 observed-revision decisions
+
+Accept changed rows from validated partial captures without treating omissions
+as withdrawals. Compare each incoming observation against the latest version
+of its native key, not every previously seen content hash. A correction and a
+reversion each create a fresh version with current capture lineage; unchanged
+facts retain their original version/first-seen. Keep the T04 content-hash recipe
+(including exact numeric source tokens) so existing roots do not acquire false
+versions solely from a code upgrade. Formatting changes to retained source
+tokens remain observable attribute revisions.
+
+Timestamp cutoffs are inclusive, timezone aware and applied before ranking
+versions, to both facts and coverage. An optional sequence cutoff refines captures
+at the exact timestamp; omitting it includes all captures at that timestamp.
+Rank withdrawals before excluding them from ordinary Gold so old facts cannot
+resurrect. Expose withdrawn states explicitly when requested.
+
+Withdrawal requires a reviewed completeness sidecar for the exact archive,
+member and partition, with a validated settlement-date inventory and source,
+calendar and review references. The configured sidecar is archived unchanged
+and hashed in receipt version2; legacy version1 captures remain readable.
+No sidecar means PARTIAL and no withdrawals. A partial/failed capture cannot
+authorize removal; contradictory supplied evidence rejects promotion. These
+are scoped, operator-reviewed assertions, not automatic external verification
+of the references or a certification of the entire security/history universe.
+The approved real September inputs retain their current uncertified scope.

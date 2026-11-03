@@ -55,7 +55,12 @@ def archive_capture(
     settings: StorageConfig,
     input_path: Path,
     clock=None,
+    coverage_evidence: bytes | None = None,
 ) -> tuple[dict, bytes | None]:
+    if coverage_evidence is not None and (
+        not isinstance(coverage_evidence, bytes) or len(coverage_evidence) > 65536
+    ):
+        raise ValueError("completeness evidence must fit its 64 KiB capture budget")
     manifest = parse_manifest(manifest_payload)
     if not re.fullmatch(r"[0-9a-f]{32}", run_id) or type(sequence) is not int or sequence < 1:
         raise ValueError("capture requires a safe run ID and positive sequence")
@@ -67,6 +72,8 @@ def archive_capture(
     _write_once(directory / "manifest.yml", manifest_payload)
     profile = (json.dumps(asdict(settings), sort_keys=True, indent=2) + "\n").encode()
     _write_once(directory / "storage.json", profile)
+    if coverage_evidence is not None:
+        _write_once(directory / "coverage-evidence.json", coverage_evidence)
     try:
         if not Path(input_path).is_file():
             raise OSError("source is not a regular local file")
@@ -80,7 +87,10 @@ def archive_capture(
     if payload is not None:
         _write_once(directory / "payload.bin", payload)
     receipt = {
-        "receipt_version": "sec-ftd-capture/1",
+        "receipt_version": "sec-ftd-capture/2",
+        "coverage_evidence_sha256": _digest(coverage_evidence)
+        if coverage_evidence is not None
+        else None,
         "run_id": run_id,
         "capture_sequence": sequence,
         "captured_at": captured_clock,
@@ -114,8 +124,19 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
     """Validate complete or explicitly incomplete capture artifacts, without replay."""
     try:
         receipt = json.loads(_read_bounded(directory / "receipt.json", 65536))
-        if receipt["receipt_version"] != "sec-ftd-capture/1":
+        if receipt["receipt_version"] not in ("sec-ftd-capture/1", "sec-ftd-capture/2"):
             raise ValueError("unsupported receipt")
+        proof = directory / "coverage-evidence.json"
+        proof_hash = (
+            receipt["coverage_evidence_sha256"]
+            if receipt["receipt_version"] == "sec-ftd-capture/2"
+            else None
+        )
+        if proof_hash is not None:
+            if _digest(_read_bounded(proof, 65536)) != proof_hash:
+                raise ValueError("completeness evidence digest mismatch")
+        elif proof.exists():
+            raise ValueError("unexpected completeness evidence in capture")
         if (
             not re.fullmatch(r"[0-9a-f]{32}", receipt["run_id"])
             or directory.name != receipt["run_id"]

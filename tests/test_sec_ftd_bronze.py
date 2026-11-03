@@ -1,6 +1,7 @@
 """T04 exact capture bytes, bounded rejected inputs and immutable provenance."""
 
 import hashlib
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -99,3 +100,24 @@ def test_invalid_manifest_fails_before_input_or_capture_writes(tmp_path):
             input_path=tmp_path / "missing.zip",
         )
     assert not (tmp_path / "root").exists()
+
+
+def test_legacy_version1_receipt_remains_readable(tmp_path):
+    path = tmp_path / "input.zip"
+    path.write_bytes(b"invented")
+    receipt, _ = capture(tmp_path, path)
+    directory = tmp_path / "root/bronze" / receipt["run_id"]
+    receipt["receipt_version"] = "sec-ftd-capture/1"
+    receipt.pop("coverage_evidence_sha256")
+    (directory / "receipt.json").write_text(json.dumps(receipt))
+    assert load_capture(directory)[1] == b"invented"
+
+
+def test_completeness_artifact_tampering_is_detected(tmp_path):
+    path = tmp_path / "input.zip"
+    path.write_bytes(b"invented")
+    receipt, _ = capture(tmp_path, path, coverage_evidence=b'{"invented":"proof"}')
+    directory = tmp_path / "root/bronze" / receipt["run_id"]
+    (directory / "coverage-evidence.json").write_bytes(b"modified")
+    with pytest.raises(ValueError):
+        load_capture(directory)

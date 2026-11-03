@@ -9,6 +9,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from market_data_pipeline.pipelines.sec_fails_to_deliver.bronze import archive_capture, load_capture
+from market_data_pipeline.pipelines.sec_fails_to_deliver.completeness import parse_evidence
 from market_data_pipeline.pipelines.sec_fails_to_deliver.config import load_config
 from market_data_pipeline.pipelines.sec_fails_to_deliver.data import parse_archive
 from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
@@ -16,6 +17,7 @@ from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
     parse_manifest,
 )
 from market_data_pipeline.pipelines.sec_fails_to_deliver.storage import IDENTITY
+from market_data_pipeline.pipelines.sec_fails_to_deliver.versions import knowledge_cutoff
 from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import SQLiteWarehouse
 from market_data_pipeline.shared.files import utc_timestamp
 
@@ -77,6 +79,12 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
     with selected.manifest.open("rb") as stream:
         manifest_payload = stream.read(65537)
     manifest = parse_manifest(manifest_payload)
+    evidence_payload = None
+    evidence = None
+    if selected.coverage_evidence is not None:
+        with selected.coverage_evidence.open("rb") as stream:
+            evidence_payload = stream.read(65537)
+        evidence = parse_evidence(evidence_payload, manifest)
     now = clock or (lambda: datetime.now(UTC))
     captured_at = datetime.fromisoformat(utc_timestamp(now()))
     run_id = uuid.uuid4().hex
@@ -112,6 +120,7 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                 settings=config.storage,
                 input_path=selected.input,
                 clock=now,
+                coverage_evidence=evidence_payload,
             )
             captured_at = datetime.fromisoformat(receipt["captured_at"])
             started["captured_at"] = captured_at
@@ -133,6 +142,12 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
             else:
                 stage = "parse"
                 parsed = parse_archive(payload, manifest)
+                if evidence is not None:
+                    stage = "coverage"
+                    evidence.validate(
+                        raw_sha256=parsed.raw_sha256, observed_dates=parsed.observed_dates
+                    )
+                    coverage_state = "COMPLETE"
                 receipt["member_sha256"] = parsed.member_sha256
                 facts = [_fact(row, receipt, captured_at) for row in parsed.observations]
         except (ValueError, OSError) as exc:
@@ -145,6 +160,8 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                     if str(exc).startswith("empty file")
                     else "INVALID_ARCHIVE"
                 )
+            elif stage == "coverage":
+                error_code = "COVERAGE_EVIDENCE_INVALID"
             else:
                 error_code = "CAPTURE_INTEGRITY_FAILED"
         raw_hash = receipt["raw_sha256"] if receipt else None
@@ -156,7 +173,9 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                 "period_start": manifest.period_start,
                 "period_end": manifest.period_end,
                 "coverage_state": outcome,
-                "expected_date_count": None,
+                "expected_date_count": len(evidence.expected_dates)
+                if evidence is not None
+                else None,
                 "observed_date_count": len(parsed.observed_dates) if parsed else 0,
                 "received_row_count": len(parsed.observations) if parsed else 0,
                 "trailer_record_count": len(parsed.observations) if parsed else None,
@@ -189,12 +208,20 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                 facts if status == "SUCCEEDED" else [],
                 coverage(coverage_state, status == "SUCCEEDED"),
                 audit,
+                evidence=evidence,
+                capture={
+                    "raw_member": receipt["member_name"],
+                    "member_sha256": parsed.member_sha256,
+                    "parser_version": SCHEMA_VERSION,
+                }
+                if parsed is not None and receipt is not None
+                else None,
             )
         except (ValueError, sqlite3.DatabaseError) as exc:
             status, coverage_state = "REJECTED", "FAILED"
             error_code = (
                 str(exc)
-                if str(exc) in ("REVISION_REQUIRES_T05", "OVERLAPPING_PARTITION")
+                if str(exc) == "OVERLAPPING_PARTITION"
                 else "STORAGE_VALIDATION_FAILED"
             )
             if isinstance(exc, sqlite3.DatabaseError):
@@ -216,7 +243,16 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
         }
 
 
-def gold(config_path: Path, *, limit: int) -> dict:
+def gold(
+    config_path: Path,
+    *,
+    limit: int,
+    as_of: datetime | None = None,
+    as_of_sequence: int | None = None,
+    include_withdrawn: bool = False,
+) -> dict:
+    clock = knowledge_cutoff(as_of, as_of_sequence)
+    as_of = datetime.fromisoformat(clock) if clock is not None else None
     config = _runtime(config_path)
     if (
         not (config.root / ".warehouse.json").is_file()
@@ -224,13 +260,16 @@ def gold(config_path: Path, *, limit: int) -> dict:
     ):
         raise ValueError("SEC FTD warehouse does not exist")
     with SQLiteWarehouse(config.root, config.storage) as warehouse:
-        rows = warehouse.select_facts(limit=limit)
-        count = warehouse.count_facts()
+        cutoff = {"as_of": as_of, "as_of_sequence": as_of_sequence}
+        rows = warehouse.select_facts(limit=limit, include_withdrawn=include_withdrawn, **cutoff)
+        count = warehouse.count_facts(include_withdrawn=include_withdrawn, **cutoff)
         return {
             "pipeline": "sec-fails-to-deliver",
-            "knowledge_mode": "CURRENT_VINTAGE",
+            "knowledge_mode": "OBSERVED_AS_OF" if as_of is not None else "CURRENT_VINTAGE",
+            "as_of": as_of,
+            "as_of_sequence": as_of_sequence,
             "source_coverage": "NOT_CERTIFIED",
             "row_count": count,
             "rows": rows,
-            "coverage": warehouse.select_coverage(),
+            "coverage": warehouse.select_coverage(**cutoff),
         }

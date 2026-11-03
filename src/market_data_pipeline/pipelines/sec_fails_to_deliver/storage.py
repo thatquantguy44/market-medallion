@@ -7,6 +7,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Protocol
 
+from market_data_pipeline.pipelines.sec_fails_to_deliver.completeness import CompletenessEvidence
 from market_data_pipeline.pipelines.sec_fails_to_deliver.config import StorageConfig
 from market_data_pipeline.shared.storage_types import Column, RecordSchema
 
@@ -205,10 +206,28 @@ class Warehouse(Protocol):
         facts: Sequence[Mapping[str, object]],
         coverage: Mapping[str, object],
         audit: Mapping[str, object],
+        *,
+        evidence: CompletenessEvidence | None = None,
+        capture: Mapping[str, object] | None = None,
     ) -> int: ...
-    def select_facts(self, *, as_of: datetime | None = None) -> Sequence[dict]: ...
-    def count_facts(self) -> int: ...
-    def select_coverage(self, *, as_of: datetime | None = None) -> Sequence[dict]: ...
+    def select_facts(
+        self,
+        *,
+        as_of: datetime | None = None,
+        as_of_sequence: int | None = None,
+        include_withdrawn: bool = False,
+        limit: int | None = None,
+    ) -> Sequence[dict]: ...
+    def count_facts(
+        self,
+        *,
+        as_of: datetime | None = None,
+        as_of_sequence: int | None = None,
+        include_withdrawn: bool = False,
+    ) -> int: ...
+    def select_coverage(
+        self, *, as_of: datetime | None = None, as_of_sequence: int | None = None
+    ) -> Sequence[dict]: ...
     def select_runs(self) -> Sequence[dict]: ...
     def record_publication(self, row: Mapping[str, object]) -> None: ...
     def pending_publications(self) -> Sequence[dict]: ...

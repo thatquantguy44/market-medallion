@@ -133,17 +133,18 @@ def test_missing_rejected_empty_and_oversized_inputs_have_distinct_durable_outco
         assert (capture / "payload.bin").read_bytes() == source.read_bytes()
 
 
-def test_storage_rejection_rolls_back_all_facts_and_preserves_previous_gold(tmp_path):
+def test_valid_correction_is_observed_without_overwriting_previous_version(tmp_path):
     path, source = configured(tmp_path)
     first = invoke(path)
     source.write_bytes(bundle(FIXTURE.replace(b"12.3400", b"12.3500")))
-    rejected = invoke(path)
-    assert rejected["error_code"] == "REVISION_REQUIRES_T05"
+    corrected = invoke(path)
+    assert corrected["status"] == "SUCCEEDED" and corrected["inserted_versions"] == 1
     config = load_config(path)
     with SQLiteWarehouse(config.root, config.storage) as warehouse:
-        assert {r["run_id"] for r in warehouse.select_facts()} == {first["run_id"]}
-        assert warehouse.select_facts()[0]["prior_close_price"] == Decimal("12.34")
-        assert warehouse.select_runs()[-1]["status"] == "REJECTED"
+        assert warehouse.select_facts()[0]["run_id"] == corrected["run_id"]
+        assert warehouse.select_facts()[1]["run_id"] == first["run_id"]
+        assert warehouse.select_facts()[0]["prior_close_price"] == Decimal("12.35")
+        assert warehouse.connection.execute("SELECT count(*) FROM sec_ftd_facts").fetchone()[0] == 3
 
 
 def test_mid_insert_database_failure_rolls_back_facts_and_success_audit_together(tmp_path):

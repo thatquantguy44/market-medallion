@@ -30,8 +30,8 @@ Read the [capability map](securities_finance/README.md),
 [program plan](securities_finance/plan.md),
 [coordination tasks](securities_finance/todo.md) and
 [delivery roadmap/readiness ledger](securities_finance/roadmap.md).
-**Continue at S11-T05 observed revisions/reversions and withdrawals** after
-completed T03/T04 local Bronze/SQLite/audit/Gold and T18 type contracts.
+**Continue at S11-T06 deterministic offline replay** after completed T03–T05
+local persistence, observed revisions, cutoff Gold, gated withdrawals and T18 types.
 Spec011 requires PostgreSQL/Databricks
 adapters and actual integration parity before G2;
 [checkpoint](../specs/spec011/source_review.md). Research delivery

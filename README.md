@@ -25,8 +25,9 @@ FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary
 dealers** (Specs011–015). Spec011 has an initial offline SEC FTD parser/manifest
 and local inspection command, reconciled against both approved September2026
 archives. T18 portable storage types and serialization are complete for both
-source packages. T03/T04 local Bronze/SQLite/audit/Gold are implemented and
-reopened with 117,025 September facts. Continue at S11-T05 observed revisions.
+source packages. T03–T05 local Bronze/SQLite/audit/Gold, observed revisions,
+cutoff queries and gated withdrawals are implemented, with 117,025 September
+facts. Continue at S11-T06 offline replay.
 Spec011 still requires PostgreSQL/Databricks adapters and live parity, Parquet,
 source acquisition, exchange adapters and research exports. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md). No new job is implemented.

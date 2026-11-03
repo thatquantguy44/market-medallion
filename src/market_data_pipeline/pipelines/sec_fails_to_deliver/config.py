@@ -102,6 +102,7 @@ class StorageConfig:
 class PartitionConfig:
     manifest: Path
     input: Path
+    coverage_evidence: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -190,10 +191,16 @@ def load_config(path: Path) -> RuntimeConfig:
     partitions = {}
     for name, settings in raw_partitions.items():
         _identifier(name, "partition name")
-        settings = _object(settings, {"manifest", "input"}, "partition")
+        if isinstance(settings, dict) and "coverage_evidence" in settings:
+            settings = _object(settings, {"manifest", "input", "coverage_evidence"}, "partition")
+        else:
+            settings = _object(settings, {"manifest", "input"}, "partition")
         partitions[name] = PartitionConfig(
             _path(settings["manifest"], path.parent, "partition.manifest"),
             _path(settings["input"], path.parent, "partition.input"),
+            _path(settings["coverage_evidence"], path.parent, "partition.coverage_evidence")
+            if settings.get("coverage_evidence") is not None
+            else None,
         )
     return RuntimeConfig(
         root,

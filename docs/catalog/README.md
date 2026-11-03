@@ -9,8 +9,8 @@ FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. Spec011 now has
 a local SEC Bronze/SQLite/audit/Gold slice; later connectors remain planned.
 Its parser/manifest/local inspection slice reconciles two approved
 September2026 archives. T18 type contracts/serialization are implemented for both
-source packages; T03/T04 SEC Bronze/SQLite/audit/Gold are complete. Next is
-observed revisions/reversions and withdrawals.
+source packages; T03–T05 SEC persistence, observed revisions, cutoff Gold and
+evidence-gated withdrawals are complete. Next is S11-T06 offline replay.
 PostgreSQL and Databricks are required Spec011 targets, not implemented yet.
 NAAIM remains paused.
 

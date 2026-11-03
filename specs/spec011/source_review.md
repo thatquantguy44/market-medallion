@@ -223,7 +223,37 @@ rejection, numeric overflow and actual CLI invocation. Ruff, changed-file format
 and source/wheel builds pass. See the [runbook](../../docs/deployment/sec_ftd_runbook.md).
 No provider request, PostgreSQL connection, Delta publication or schedule was run.
 
-**Next:** S11-T05 observed corrections/reversions, withdrawals and cutoff selection.
+**Next:** S11-T06 deterministic offline replay.
+
+## T05 observed corrections checkpoint
+
+T05 preserves corrections, reversions and reappearance after withdrawal by
+comparing each key with its latest version. Unchanged captures add no fact
+versions. Gold supports inclusive aware UTC cutoffs with optional equal-clock
+capture sequence; facts and coverage share that cutoff. Withdrawals are ranked
+before filtering, preventing an older reported value from resurfacing.
+
+PARTIAL omissions never withdraw facts. Optional strict, bounded reviewed JSON
+must match the selected manifest, exact ZIP digest and observed date inventory
+before COMPLETE file-scoped replacement can withdraw absent keys. References
+are operator-reviewed assertions rather than automatically authenticated proof.
+The evidence bytes and digest are retained in receipt2; legacy receipt1 remains
+readable. Complete-empty certification is not supported by this profile.
+
+The existing isolated September store remains compatible. A fourth unchanged
+capture adds zero versions: 117,025 total fact versions, four audits, three
+receipt1 captures and one receipt2 capture. No proof was supplied and real
+coverage remains PARTIAL/NOT_CERTIFIED. A cutoff before the first capture returns
+zero facts; the first capture selects 50,332. Ignored aggregate evidence is
+`data/sec_ftd/t05-verification.json`. No real corrections/withdrawals were
+manufactured and no provider requests or schedules were added.
+
+The full offline suite passes **346 tests, 2 existing opt-in PostgreSQL skips**.
+Invented regression fixtures cover A→B→A, equal-clock sequences, partial omissions,
+withdrawal/reappearance, coverage-only upgrades, invalid proof, receipt tampering
+and transactional rollback. Ruff and package builds pass. PostgreSQL/Delta
+engine verification remains open. T06 must replay original clocks, sequence,
+archived evidence and original admission outcomes, including T04 rejections.
 The user's subsequent compatibility requirement is recorded in R12/A14/A15:
 PostgreSQL warehouse and Databricks Delta delivery/parity are required before
 G2 in T19–T22. No PostgreSQL/Delta adapter or engine verification exists yet.

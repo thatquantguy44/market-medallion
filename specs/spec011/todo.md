@@ -3,7 +3,7 @@
 **Status:** T01 documentary review recorded; T02 complete for two approved local
 September2026 archives; T03 bounded parser and rejected-input retention complete.
 T18 portable types/serialization are complete for both source packages.
-T04 immutable Bronze/SQLite/audit/Gold is complete. Next: T05 revisions/withdrawals.
+T05 observed revisions and evidence-gated withdrawals are complete. Next: T06 offline replay.
 PostgreSQL/Databricks adapters and live parity in T19–T22 remain unimplemented.
 **Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
@@ -121,8 +121,9 @@ Bronze adapter, SQLite adapter, integration tests, package init.
 facts/coverage/audit and database-backed Gold, exposed by configured `run` and
 bounded `gold`. Real September import reopened with 117,025 unique facts; an
 unchanged third capture inserted zero facts. Failed/missing/unsupported-empty
-and oversized inputs are distinct; changed/overlapping replacements are retained
-but blocked until T05. Root mismatch and clock regression fail before capture.
+and oversized inputs are distinct. At the T04 checkpoint, changed/overlapping
+replacements were retained but rejected; T05 now admits validated corrections.
+Overlapping partition scopes remain rejected. Root mismatch and clock regression fail before capture.
 Mid-insert and receipt-tampering regressions prove no partial fact promotion.
 Full suite **316 passed, 2 existing PostgreSQL skips**; lint/changed format/build
 pass. Ignored evidence: `data/sec_ftd/t04-verification.json`.
@@ -134,12 +135,19 @@ service/schedule was enabled. Parquet/publication recovery remains T07.
 
 **Dependencies:** T04. **Scope:** M. **Requirements:** R06,R07,N01.
 
-- [ ] Persist sequence-ordered corrections, reversions and first-seen timestamps.
-- [ ] Mark row withdrawal only after a validated complete partition replacement.
-- [ ] Keep unchanged fact version counts stable and coverage versions separate.
+- [x] Persist sequence-ordered corrections, reversions and first-seen timestamps.
+- [x] Mark row withdrawal only after a validated complete partition replacement.
+- [x] Keep unchanged fact version counts stable and coverage versions separate.
 
 **Verify:** A05 at before/equal/after capture cutoffs; partial replacement cannot
 withdraw a row. **Likely files:** version model, warehouse, selection, tests.
+
+**Evidence:** 346 tests passed, 2 skipped; lint and package builds passed.
+Invented fixtures cover corrections, reversions, equal-clock capture cutoffs,
+partial omissions, scoped withdrawals, reappearance and transaction rollback.
+The existing September SQLite root remains compatible: 117,025 fact versions,
+four audit runs, and zero new versions on an unchanged repeat capture. Real
+September coverage remains PARTIAL; no completeness evidence was supplied.
 
 ## S11-T06 — Replay FTD without network
 
@@ -148,6 +156,9 @@ withdraw a row. **Likely files:** version model, warehouse, selection, tests.
 - [ ] Replay original receipts/members in persisted capture sequence order.
 - [ ] Reproduce equal-clock corrections and original version first-seen clocks.
 - [ ] Require empty destination and explicit supported parser/schema versions.
+- [ ] Replay archived completeness evidence from receipt versions 1/2, preserving
+  the original audit/admission outcome. Never re-admit a historically rejected
+  capture under newer correction rules or consult a live evidence file.
 
 **Verify:** A09 same normalized versions/history/Gold after clean replay;
 transport stub fails if invoked. **Likely files:** replay module, receipt model,

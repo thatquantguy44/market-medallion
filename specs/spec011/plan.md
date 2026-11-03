@@ -3,7 +3,8 @@
 **State:** initial SEC parser/manifest/inspection implemented and reconciled
 against two approved September2026 archives. T18 portable types/serialization
 are complete for both sources. T03/T04 complete immutable Bronze, root-bound
-SQLite facts/coverage/audit and database Gold. Next: T05 observed revisions.
+SQLite facts/coverage/audit and database Gold. T05 observed revisions, cutoff
+queries and evidence-gated withdrawals are complete. Next: T06 offline replay.
 PostgreSQL and Databricks are required delivery targets, not implemented yet.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.

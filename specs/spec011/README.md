@@ -7,7 +7,8 @@ and local `validate`/`inspect` commands implemented; two approved September2026
 archives reconcile under profile version2. T18 portable storage types and
 serialization are complete for both source packages. T03/T04 now deliver immutable
 bounded captures, root-bound SQLite facts/audit/coverage, database Gold and
-configured `run`/`gold` commands. Next: T05 revisions/withdrawals. PostgreSQL and
+configured `run`/`gold` commands, observed revisions and gated withdrawals.
+Next: T06 offline replay. PostgreSQL and
 Databricks compatibility remain required delivery work; live acquisition,
 research exports, exchange adapters and Dagster remain unimplemented.
 
@@ -162,10 +163,10 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Start **S11-T05** in [todo.md](todo.md): observed corrections, reversions,
-coverage-qualified withdrawals and cutoff selection. T03/T04 are complete;
-until T05, changed replacements are captured and rejected without overwriting
-Gold. The [local runbook](../../docs/deployment/sec_ftd_runbook.md) records tested
+Start **S11-T06** in [todo.md](todo.md): deterministic network-free replay into
+an empty destination with original clocks, capture order and admission outcomes.
+T03–T05 are complete, including corrections, reversions, cutoff queries and
+evidence-gated withdrawals. The [local runbook](../../docs/deployment/sec_ftd_runbook.md) records tested
 commands and September ingestion evidence. Broader history, exchange contracts
 and G2 remain open.
 T19–T22 deliver the required PostgreSQL and Databricks adapters and parity tests;

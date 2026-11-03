@@ -94,8 +94,17 @@ characters. Enabled Databricks settings must include all three target fields.
 T04 adds configured `run` and bounded `gold`; see the
 [local runbook](../../docs/deployment/sec_ftd_runbook.md). The example's PostgreSQL
 selection deliberately errors before input/root I/O until T19; use an explicit
-SQLite local config for T04. PostgreSQL connections, Delta publication,
-observed revisions and replay remain in [Spec011 tasks](../../specs/spec011/todo.md).
+SQLite local config. T05 adds observed revisions and cutoff queries. PostgreSQL
+connections, Delta publication and replay remain in [Spec011 tasks](../../specs/spec011/todo.md).
+
+Each partition optionally names `coverage_evidence`, relative to this YAML's
+directory. Omission or null retains PARTIAL coverage. Supply reviewed JSON only
+when the exact archive hash, member, date inventory and complete-file evidence
+have been checked. This enables file-scoped COMPLETE coverage and withdrawals;
+it does not certify the source's entire history. The exact JSON contract and
+Gold cutoff flags are in the [runbook](../../docs/deployment/sec_ftd_runbook.md).
+Evidence references are operator assertions, not automatically verified links.
+Keep local proof outside Git, for example under ignored `data/sec_ftd/`.
 
 ## Implemented storage types
 

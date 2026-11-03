@@ -9,6 +9,10 @@ from pathlib import Path
 
 from market_data_pipeline.pipelines.sec_fails_to_deliver.config import StorageConfig
 from market_data_pipeline.pipelines.sec_fails_to_deliver.storage import IDENTITY, storage_schemas
+from market_data_pipeline.pipelines.sec_fails_to_deliver.versions import (
+    knowledge_cutoff,
+    withdrawals,
+)
 from market_data_pipeline.shared.files import atomic_json, writer_lock
 
 TABLES = {name: f"sec_ftd_{name}" for name in ("facts", "coverage", "audit", "publications")}
@@ -173,7 +177,7 @@ class SQLiteWarehouse:
             raise ValueError("capture clock regressed; ambiguous knowledge ordering")
         self._insert("audit", row)
 
-    def promote_partition(self, facts, coverage, audit) -> int:
+    def promote_partition(self, facts, coverage, audit, *, evidence=None, capture=None) -> int:
         coverage = self.schemas["coverage"].normalize(coverage)
         audit = self.schemas["audit"].normalize(audit)
         if audit["status"] == "STARTED" or audit["row_count"] != len(facts):
@@ -201,14 +205,6 @@ class SQLiteWarehouse:
                     "received_row_count"
                 ] != len(facts):
                     raise ValueError("successful capture requires matched row coverage")
-                previous = self.connection.execute(
-                    "SELECT raw_sha256 FROM sec_ftd_coverage "
-                    "WHERE partition_id=? AND validation_state='MATCHED' "
-                    "ORDER BY capture_sequence DESC LIMIT 1",
-                    (coverage["partition_id"],),
-                ).fetchone()
-                if previous and previous[0] != coverage["raw_sha256"]:
-                    raise ValueError("REVISION_REQUIRES_T05")
                 overlap = self.connection.execute(
                     "SELECT 1 FROM sec_ftd_coverage "
                     "WHERE partition_id<>? AND validation_state='MATCHED' "
@@ -221,17 +217,29 @@ class SQLiteWarehouse:
                 ).fetchone()
                 if overlap:
                     raise ValueError("OVERLAPPING_PARTITION")
+                selected, _ = self._selected_query("facts", include_withdrawn=True)
                 existing = {
-                    (r[0], r[1]): r[2]
+                    (r["settlement_date"], r["cusip"]): r
                     for r in self.connection.execute(
-                        "SELECT settlement_date,cusip,content_hash "
-                        "FROM sec_ftd_facts WHERE partition_id=?",
+                        f"SELECT * FROM ({selected}) WHERE partition_id=?",
                         (coverage["partition_id"],),
                     )
                 }
                 keys = set()
+                normalized = []
                 for row in facts:
                     row = self.schemas["facts"].normalize(row)
+                    if (
+                        row["row_state"] != "REPORTED"
+                        or not coverage["period_start"]
+                        <= row["settlement_date"]
+                        <= coverage["period_end"]
+                        or row["first_seen_at"] != audit["captured_at"]
+                        or row["raw_sha256"] != coverage["raw_sha256"]
+                        or row["raw_sha256"] != audit["raw_sha256"]
+                    ):
+                        raise ValueError("reported observation contradicts its capture/scope")
+                    normalized.append(row)
                     key = (row["settlement_date"].isoformat(), row["cusip"])
                     if key in keys or (
                         row["run_id"],
@@ -241,13 +249,21 @@ class SQLiteWarehouse:
                         raise ValueError("duplicate fact or inconsistent capture lineage")
                     keys.add(key)
                     if key in existing:
-                        if existing[key] != row["content_hash"]:
-                            raise ValueError("REVISION_REQUIRES_T05")
+                        if (
+                            existing[key]["content_hash"] != row["content_hash"]
+                            or existing[key]["row_state"] != row["row_state"]
+                        ):
+                            self._insert("facts", row)
+                            inserted += 1
                     else:
                         self._insert("facts", row)
                         inserted += 1
-                if previous and set(existing) != keys:
-                    raise ValueError("REVISION_REQUIRES_T05")
+                previous = [
+                    self.schemas["facts"].decode(dict(row), "sqlite") for row in existing.values()
+                ]
+                for row in withdrawals(previous, normalized, coverage, audit, capture, evidence):
+                    self._insert("facts", row)
+                    inserted += 1
             self._insert("coverage", coverage)
             values = self.schemas["audit"].encode(audit, "sqlite")
             self.connection.execute(
@@ -258,34 +274,66 @@ class SQLiteWarehouse:
             )
             return inserted
 
-    def select_facts(self, *, as_of: datetime | None = None, limit: int | None = None):
-        if as_of is not None:
-            raise ValueError("observed-as-of selection is delivered in T05")
-        query = "SELECT * FROM sec_ftd_gold ORDER BY settlement_date,cusip"
+    def _selected_query(self, name, *, as_of=None, as_of_sequence=None, include_withdrawn=False):
+        clock = knowledge_cutoff(as_of, as_of_sequence)
+        if type(include_withdrawn) is not bool:
+            raise ValueError("include_withdrawn must be boolean")
+        predicate = ""
         parameters = ()
+        if clock is not None:
+            predicate = " WHERE first_seen_at<=?"
+            parameters = (clock,)
+            if as_of_sequence is not None:
+                predicate = " WHERE (first_seen_at<? OR (first_seen_at=? AND capture_sequence<=?))"
+                parameters = (clock, clock, as_of_sequence)
+        columns = ",".join(c.name for c in self.schemas[name].columns)
+        keys = (
+            "source,dataset,reporting_regime,settlement_date,cusip"
+            if name == "facts"
+            else "partition_id"
+        )
+        state = " AND row_state='REPORTED'" if name == "facts" and not include_withdrawn else ""
+        return (
+            f"SELECT {columns} FROM (SELECT *,ROW_NUMBER() OVER(PARTITION BY {keys} "
+            f"ORDER BY first_seen_at DESC,capture_sequence DESC) AS rank FROM {TABLES[name]}"
+            f"{predicate}) WHERE rank=1{state}",
+            parameters,
+        )
+
+    def select_facts(
+        self,
+        *,
+        as_of: datetime | None = None,
+        as_of_sequence: int | None = None,
+        include_withdrawn: bool = False,
+        limit: int | None = None,
+    ):
+        query, parameters = self._selected_query(
+            "facts", as_of=as_of, as_of_sequence=as_of_sequence, include_withdrawn=include_withdrawn
+        )
+        query += " ORDER BY settlement_date,cusip"
         if limit is not None:
             if type(limit) is not int or not 1 <= limit <= 1000:
                 raise ValueError("Gold limit must be in [1,1000]")
             query += " LIMIT ?"
-            parameters = (limit,)
+            parameters = (*parameters, limit)
         return [
             self.schemas["facts"].decode(dict(row), "sqlite")
             for row in self.connection.execute(query, parameters)
         ]
 
-    def select_coverage(self, *, as_of=None):
-        if as_of is not None:
-            raise ValueError("observed-as-of selection is delivered in T05")
-        columns = ",".join(c.name for c in self.schemas["coverage"].columns)
-        rows = self.connection.execute(
-            f"SELECT {columns} FROM (SELECT *,ROW_NUMBER() OVER("
-            "PARTITION BY partition_id ORDER BY first_seen_at DESC,capture_sequence DESC) "
-            "AS rank FROM sec_ftd_coverage) WHERE rank=1 ORDER BY partition_id"
+    def select_coverage(self, *, as_of=None, as_of_sequence=None):
+        query, parameters = self._selected_query(
+            "coverage", as_of=as_of, as_of_sequence=as_of_sequence
         )
+        rows = self.connection.execute(query + " ORDER BY partition_id", parameters)
         return [self.schemas["coverage"].decode(dict(row), "sqlite") for row in rows]
 
-    def count_facts(self) -> int:
-        return self.connection.execute("SELECT count(*) FROM sec_ftd_gold").fetchone()[0]
+    def count_facts(self, *, as_of=None, as_of_sequence=None, include_withdrawn=False) -> int:
+        query, parameters = self._selected_query(
+            "facts", as_of=as_of, as_of_sequence=as_of_sequence, include_withdrawn=include_withdrawn
+        )
+        return self.connection.execute(f"SELECT count(*) FROM ({query})", parameters).fetchone()[0]
 
     def select_runs(self):
         return [
