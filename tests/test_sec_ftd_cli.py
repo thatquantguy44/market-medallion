@@ -13,7 +13,7 @@ MANIFEST = Path("manifests/sec-fails-to-deliver.yml")
 def test_validate_requires_no_data_input_and_reports_unverified_conformance(capsys):
     assert main(["validate", "--manifest", str(MANIFEST)]) == 0
     result = json.loads(capsys.readouterr().out)
-    assert result["schema_version"] == "sec-ftd-six-column/1"
+    assert result["schema_version"] == "sec-ftd-six-column/2"
     assert result["provider_conformance"] == "UNVERIFIED"
 
 
@@ -30,6 +30,9 @@ def test_inspect_reads_a_bounded_local_archive_without_claiming_source_coverage(
     result = json.loads(capsys.readouterr().out)
     assert result["row_count"] == 2
     assert result["observed_date_count"] == 2
+    assert result["trailers_validated"] is True
+    assert result["quantity_fails_total"] == 2**70 + 125
+    assert result["profile_conformance"] == "MATCHED"
     assert result["provider_conformance"] == "UNVERIFIED"
     assert result["source_coverage"] == "NOT_CERTIFIED"
     assert "FIX.A" not in json.dumps(result)

@@ -1,7 +1,7 @@
-"""Pure parsers for the documented SEC FTD six-column profile.
+"""Pure parsers for the locally reconciled SEC FTD six-column/trailer profile.
 
-The physical provider archive is not yet verified. No network, extraction to
-disk, persistence or complete-source-coverage assertion occurs in this module.
+No network, extraction to disk, persistence or complete-source-coverage
+assertion occurs in this module. Conformance evidence is limited to local samples.
 SEC field semantics: https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data
 ZIP handling: https://docs.python.org/3.12/library/zipfile.html#zipfile-objects
 """
@@ -85,6 +85,8 @@ def _parse_stream(stream: BinaryIO, manifest: Manifest) -> tuple[tuple[Observati
     digest = hashlib.sha256()
     total_bytes = 0
     line_number = 0
+    trailer_state = 0
+    total_quantity = 0
     while raw := stream.readline(manifest.max_record_bytes + 1):
         total_bytes += len(raw)
         line_number += 1
@@ -105,7 +107,19 @@ def _parse_stream(stream: BinaryIO, manifest: Manifest) -> tuple[tuple[Observati
         fields = text.split("|")
         if line_number == 1:
             if tuple(fields) != HEADER:
-                raise ValueError("SEC FTD header differs from the documentary profile")
+                raise ValueError("SEC FTD header differs from the source profile")
+            continue
+        if trailer_state == 2:
+            raise ValueError("unexpected record after SEC FTD trailers")
+        if trailer_state == 1:
+            if text != f"Trailer total quantity of shares {total_quantity}":
+                raise ValueError("missing, malformed or mismatched SEC FTD quantity trailer")
+            trailer_state = 2
+            continue
+        if text.startswith("Trailer"):
+            if text != f"Trailer record count {len(observations)}":
+                raise ValueError("malformed or mismatched SEC FTD record-count trailer")
+            trailer_state = 1
             continue
         if len(observations) >= manifest.max_rows:
             raise ValueError("row resource limit exceeded")
@@ -115,13 +129,16 @@ def _parse_stream(stream: BinaryIO, manifest: Manifest) -> tuple[tuple[Observati
             raise ValueError(f"row {line_number}: duplicate settlement-date/CUSIP key")
         keys.add(key)
         observations.append(observation)
+        total_quantity += observation.quantity_fails
     if not observations:
         raise ValueError("empty file cannot establish a complete SEC FTD partition")
+    if trailer_state != 2:
+        raise ValueError("missing SEC FTD trailers")
     return tuple(observations), digest.hexdigest()
 
 
 def parse_pipe(payload: bytes, manifest: Manifest) -> tuple[Observation, ...]:
-    """Parse one bounded documentary-profile file; preserve source row order."""
+    """Parse one bounded source-profile file; validate both terminal totals."""
     if not isinstance(payload, bytes):
         raise ValueError("pipe payload must be bytes")
     if len(payload) > manifest.max_expanded_bytes:

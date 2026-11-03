@@ -11,14 +11,14 @@ import yaml
 from market_data_pipeline.shared.yaml import UniqueLoader
 
 SOURCE_URL = "https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data"
-SCHEMA_VERSION = "sec-ftd-six-column/1"
+SCHEMA_VERSION = "sec-ftd-six-column/2"
 HEADER = ("SETTLEMENT DATE", "CUSIP", "SYMBOL", "QUANTITY (FAILS)", "DESCRIPTION", "PRICE")
 ACCESS = {
     "method": "local-file-only",
     "source_url": SOURCE_URL,
     "terms_url": "https://www.sec.gov/about/privacy-information",
     "automation": "disabled",
-    "conformance": "documentary-only",
+    "conformance": "local-sample-reconciled",
 }
 
 
@@ -51,11 +51,12 @@ class Manifest:
         start, end = self.period_start, self.period_end
         if type(start) is not date or type(end) is not date:
             raise ValueError("partition bounds require date labels")
-        if start < date(2009, 7, 1) or start.day not in (1, 16):
+        if start < date(2009, 7, 1) or start.day not in (1, 15, 16):
             raise ValueError("partition must use the semi-monthly regime beginning July 2009")
-        last = 15 if start.day == 1 else calendar.monthrange(start.year, start.month)[1]
-        if end != date(start.year, start.month, last):
-            raise ValueError("partition must select exactly one calendar half-month")
+        last = calendar.monthrange(start.year, start.month)[1]
+        allowed_ends = (14, 15) if start.day == 1 else (last,)
+        if (end.year, end.month) != (start.year, start.month) or end.day not in allowed_ends:
+            raise ValueError("partition requires explicit supported semi-monthly bounds")
         if (
             not isinstance(self.member_name, str)
             or len(self.member_name) > 128

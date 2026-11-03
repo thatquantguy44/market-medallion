@@ -100,7 +100,12 @@ def test_empty_or_header_only_input_is_not_certified_as_a_complete_partition(pay
 
 def test_rejects_duplicate_keys_even_when_payloads_are_identical():
     with pytest.raises(ValueError, match="duplicate"):
-        parse_pipe(FIXTURE + FIXTURE.splitlines(keepends=True)[1], load_manifest(MANIFEST))
+        parse_pipe(
+            FIXTURE.replace(
+                b"Trailer record", FIXTURE.splitlines(keepends=True)[1] + b"Trailer record"
+            ),
+            load_manifest(MANIFEST),
+        )
 
 
 @pytest.mark.parametrize(
@@ -232,3 +237,46 @@ def test_unhashable_yaml_key_is_rejected_as_invalid_configuration(tmp_path):
     path.write_text("? [unhashable, key]\n: value\n")
     with pytest.raises(ValueError, match="YAML"):
         load_manifest(path)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        b"\n".join(FIXTURE.splitlines()[:-2]) + b"\n",
+        b"\n".join(FIXTURE.splitlines()[:-1]) + b"\n",
+        FIXTURE.replace(b"Trailer record count 2", b"Trailer record count 3"),
+        FIXTURE.replace(b"1180591620717411303549", b"1180591620717411303550"),
+        FIXTURE.replace(b"Trailer record count 2", b"Trailer record count -2"),
+        FIXTURE + b"Trailer record count 2\n",
+        FIXTURE + FIXTURE.splitlines(keepends=True)[1],
+        FIXTURE.replace(b"Trailer record count 2\n", b""),
+        FIXTURE.replace(b"Trailer record count 2", b"Trailer total quantity of shares 2"),
+    ],
+)
+def test_rejects_missing_mismatched_malformed_or_nonterminal_trailers(payload):
+    with pytest.raises(ValueError, match="trailer"):
+        parse_pipe(payload, load_manifest(MANIFEST))
+
+
+def test_source_trailers_do_not_consume_fact_row_budget():
+    rows = parse_pipe(FIXTURE, replace(load_manifest(MANIFEST), max_rows=2))
+    assert len(rows) == 2
+
+
+def test_explicit_observed_september_bounds_accept_day_15_in_second_archive():
+    value = yaml.safe_load(MANIFEST.read_text())
+    value["partition"] = {"start": "2026-09-15", "end": "2026-09-30"}
+    value["member_name"] = "cnsfails202609b.txt"
+    payload = FIXTURE.replace(b"20261001", b"20260915").replace(b"20261015", b"20260930")
+    rows = parse_archive(bundle(payload, name=value["member_name"]), manifest_from_dict(value))
+    assert rows.observed_dates == (date(2026, 9, 15), date(2026, 9, 30))
+
+
+def test_explicit_observed_september_first_archive_ends_day_14():
+    manifest = replace(
+        load_manifest(MANIFEST), period_start=date(2026, 9, 1), period_end=date(2026, 9, 14)
+    )
+    payload = FIXTURE.replace(b"20261001", b"20260901").replace(b"20261015", b"20260914")
+    assert len(parse_pipe(payload, manifest)) == 2
+    with pytest.raises(ValueError, match="partition"):
+        parse_pipe(payload.replace(b"20260914", b"20260915"), manifest)

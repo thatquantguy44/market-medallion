@@ -40,9 +40,12 @@ def main(argv: list[str] | None = None) -> int:
             result.update(
                 {
                     "file_validation": "PASSED",
+                    "profile_conformance": "MATCHED",
                     "source_coverage": "NOT_CERTIFIED",
                     "row_count": len(archive.observations),
                     "observed_date_count": len(archive.observed_dates),
+                    "quantity_fails_total": sum(row.quantity_fails for row in archive.observations),
+                    "trailers_validated": True,
                     "raw_sha256": archive.raw_sha256,
                     "member_sha256": archive.member_sha256,
                 }

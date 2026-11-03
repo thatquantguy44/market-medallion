@@ -1,0 +1,29 @@
+source: sec
+dataset: sec-fails-to-deliver
+schema_version: sec-ftd-six-column/2
+reporting_regime: semi-monthly-2009+
+format: zip-pipe
+encoding: ascii
+header:
+  - SETTLEMENT DATE
+  - CUSIP
+  - SYMBOL
+  - QUANTITY (FAILS)
+  - DESCRIPTION
+  - PRICE
+partition:
+  start: '2026-09-15'
+  end: '2026-09-30'
+# Explicit bounds reconciled against the approved local September 2026 file.
+member_name: cnsfails202609b.txt
+limits:
+  archive_bytes: 8388608
+  expanded_bytes: 67108864
+  rows: 500000
+  record_bytes: 4096
+access:
+  method: local-file-only
+  source_url: https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data
+  terms_url: https://www.sec.gov/about/privacy-information
+  automation: disabled
+  conformance: local-sample-reconciled

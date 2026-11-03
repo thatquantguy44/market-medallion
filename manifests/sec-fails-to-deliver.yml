@@ -1,6 +1,6 @@
 source: sec
 dataset: sec-fails-to-deliver
-schema_version: sec-ftd-six-column/1
+schema_version: sec-ftd-six-column/2
 reporting_regime: semi-monthly-2009+
 format: zip-pipe
 encoding: ascii
@@ -14,7 +14,7 @@ header:
 partition:
   start: '2026-10-01'
   end: '2026-10-15'
-# Explicit candidate member name; physical source conformance is still pending.
+# Example partition; actual September samples use their separate observed bounds.
 member_name: cnsfails202610a.txt
 limits:
   archive_bytes: 8388608
@@ -26,4 +26,4 @@ access:
   source_url: https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data
   terms_url: https://www.sec.gov/about/privacy-information
   automation: disabled
-  conformance: documentary-only
+  conformance: local-sample-reconciled
