@@ -20,7 +20,8 @@ missing, malformed, duplicated or nonterminal trailers block acceptance. They
 are integrity metadata, excluded from facts and fact-row budgets.
 
 Proposed FTD fact key: `(dataset, reporting_regime, settlement_date, cusip)`.
-Both September samples prove uniqueness within their observed scope. A conflicting duplicate is a blocked
+Both September samples prove uniqueness within their observed scope. A conflicting
+duplicate is a blocked
 partition, not an instruction to sum quantities. An identical duplicate can be
 diagnosed and rejected unless an explicit schema contract permits deduplication.
 Source symbol/description stay attributes with revision history.
@@ -162,3 +163,75 @@ Reject duplicate dates/keys, malformed source identity, ambiguous unit/mapping
 or changed required schema. Do not leave a prior artifact looking freshly
 generated after failure. Retain its actual old generation time plus health
 failure evidence; consumers decide whether dated prior results are usable.
+
+## 9. Storage and platform compatibility
+
+**Owner requirement, 2026-11-03:** PostgreSQL and Databricks compatibility are
+required for Spec011, for both SEC FTD and exchange-threshold packages. SQLite
+remains the offline development backend. PostgreSQL is an alternative operational
+warehouse; Databricks consumes a validated committed snapshot into Delta. This
+does not require Spark in the parser or make Databricks a local ingestion backend.
+These adapters do not exist yet; R12/A14/A15 are delivery gates.
+
+| Logical value | SQLite | PostgreSQL | Parquet / Databricks Delta |
+| --- | --- | --- | --- |
+| CUSIP, symbol, source/partition/version IDs, hashes and raw tokens | TEXT | TEXT | STRING; no numeric identifier inference |
+| Settlement/list date | Validated ISO date text | DATE | Explicit DATE |
+| Known knowledge/publication clock | Canonical UTC timestamp text | TIMESTAMPTZ | Explicit UTC timestamp schema and UTC Spark session; unknown remains null |
+| Capture sequence, row positions and bounded metadata counts | INTEGER with explicit range checks | BIGINT with explicit range checks | Explicit signed 64-bit type with matching checks |
+| Exact FTD quantity / price | Lossless integer/decimal text, decoded to Python int/Decimal | Unconstrained NUMERIC plus exact source text | Exact text plus declared DECIMAL projections only when lossless and representable |
+| Missing-price/coverage/withdrawal state | Explicit state/reason text | Explicit state/reason text | STRING; SQL null alone cannot encode all states |
+
+FTD quantities are not restricted to int64 by the source contract. Do not use
+SQLite REAL, PostgreSQL floating point, Spark DOUBLE or implicit casts for
+balances/prices. Preserve exact source numeric tokens alongside normalized
+values, including price scale. PostgreSQL NUMERIC and Databricks DECIMAL have
+different representable limits; Databricks precision is at most 38. See official
+[PostgreSQL numeric types](https://www.postgresql.org/docs/current/datatype-numeric.html)
+and [Databricks decimal types](https://docs.databricks.com/aws/en/sql/language-manual/data-types/decimal-type),
+reviewed 2026-11-03.
+
+T18 must pin versioned numeric precision/scale and explicit Arrow/Spark schemas
+before storage code. Canonical exact-text fields remain available in every
+backend. A value outside a required numeric projection's range/scale blocks
+that publication with a sanitized diagnostic and preserved Bronze; it must
+never become a rounded number or an unexplained null. Integer values above
+int64 but within the selected decimal range must round-trip. Tests include
+decimal38 boundaries, a 39-digit overflow and a price needing excess scale.
+No schema inference or automatic Delta schema evolution is permitted.
+
+Warehouse configuration selects `sqlite` or `postgres`; each root is bound to
+one backend/warehouse identity. PostgreSQL schema/role and Databricks
+catalog/schema/staging location are explicit source-owned settings. Environment
+variable references supply credentials; checked-in examples contain no secrets.
+Do not reuse AAII tables, data roots, advisory-lock identities or runtime
+credentials by importing its adapters. Migration between roots uses a validated
+replay/export with original capture lineage, never changing a bound root in place.
+
+Both warehouse adapters implement the same normalized transaction/query boundary:
+fact revisions, partition coverage, audit, pending publication and capture sequence.
+PostgreSQL commits related state in one transaction and serializes writers for
+the same pipeline identity. All values use parameterized SQL; configured SQL
+identifiers are separately validated. Backend errors cannot promote facts or
+claim a successful generation. Test concurrent/retried captures and rollback.
+
+Delta publication uses committed, hashed, explicitly typed Parquet snapshots in
+a configured Unity Catalog staging volume. Validate source/regime/schema,
+row counts, unique version keys and exact numeric representability before writes.
+Use idempotent revision-key publication with source-owned table names; see
+[Delta MERGE](https://docs.databricks.com/aws/en/delta/merge). Keep original
+capture_sequence for equal-clock ordering. Recompute current/as-of selection
+from preserved revisions and coverage, including withdrawals.
+
+Individual Delta table commits do not establish a coherent multi-table delivery.
+Pin immutable table versions in a generation manifest and expose a generation
+only after facts, coverage and audit all verify. A failed attempt keeps the
+prior generation current; a retry is idempotent. Consumer views/readers must
+honor that generation rather than selecting each table's latest independently.
+
+SQLite/PostgreSQL parity requires an actual dedicated PostgreSQL integration
+run. Delta compatibility requires an actual Spark/Delta or Databricks round trip,
+in addition to offline schema/SQL and failure-injection tests. Record engine
+versions and whether a Databricks workspace smoke ran; skipped tests or mocked
+Spark calls alone do not establish compatibility. Deploying a cloud workspace
+or enabling schedules remains separate from implementation acceptance.

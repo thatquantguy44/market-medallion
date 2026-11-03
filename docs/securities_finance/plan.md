@@ -1,8 +1,10 @@
 # Program implementation plan
 
 **State:** Spec011 offline SEC parser/manifest/inspection implemented;
-two approved September2026 SEC archives reconciled. Next: T04 Bronze/SQLite/audit
-and T03 rejected-input retention. Exchange conformance and later deliveries
+two approved September2026 SEC archives reconciled. Next: T18 portable
+storage/schema, then T04 Bronze/SQLite/audit and T03 rejected-input retention.
+Spec011 requires PostgreSQL/Databricks delivery and parity tests in T18–T22.
+Exchange conformance and later deliveries
 remain planned. See [checkpoint](../../specs/spec011/source_review.md).
 **Canonical source tasks:** `specs/spec011/todo.md` through
 `specs/spec015/todo.md`. [Program coordination tasks](todo.md) own only the
@@ -16,8 +18,10 @@ milestone tracking and combined reporting work.
    differences and turn absent rows into misleading zeroes.
 2. Treat each later source as independent. Delivery priority does not require
    importing a predecessor's storage adapter or adopting AAII's schema.
-3. Preserve the existing medallion stack and pure-Python transforms. SQLite and
-   Parquet support research use without provisioning another local service.
+3. Preserve the existing medallion stack and pure-Python transforms. Design
+   portable exact types before the SQLite/Parquet development slice. Spec011
+   must also deliver PostgreSQL and Databricks adapters with actual integration
+   evidence before G2; cloud provisioning remains separate.
 4. Preserve capture knowledge explicitly. Historical observations are useful
    for description; leakage-free historical knowledge is claimed only where
    actual availability evidence supports it.

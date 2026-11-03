@@ -176,7 +176,10 @@ missing/wrong/reordered/nonterminal trailers and explicit September bounds.
 Both real `inspect` commands pass, and the independent all-field comparison
 passes for all 117,025 observations.
 
-**Next:** S11-T04 immutable Bronze/SQLite/audit. Include original rejected-input
+**Next:** S11-T18 portable storage/schema, then S11-T04 immutable Bronze/SQLite/audit.
+The user's subsequent compatibility requirement is recorded in R12/A14/A15:
+PostgreSQL warehouse and Databricks Delta delivery/parity are required before
+G2 in T19–T22. No backend adapter or engine verification exists yet. Include original rejected-input
 retention to finish the remaining S11-T03 item; preserve unknown clocks and
 coverage limitations. S11-T02 sample conformance is complete for these two
 archives only. Full Spec011/G2, exchange rights/conformance and persistent

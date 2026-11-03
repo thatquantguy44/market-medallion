@@ -43,6 +43,12 @@ and **stopped** orchestration definitions; actual schedule activation is G3.
 The source task lists' final delivery checkpoints close G2 after these code and
 evidence tasks pass. Creating a stopped definition does not start a service.
 
+Spec011 G2 also requires R12/A14/A15: PostgreSQL warehouse parity and Databricks
+Delta publication for both source packages, verified with actual PostgreSQL and
+Spark/Delta or Databricks integrations. T18 pins portable types before T04;
+T19–T22 deliver adapters and tests. Cloud workspace deployment is separate, and
+skipped/mocked integrations cannot establish backend compatibility.
+
 A source can complete real-source conformance using approved actual local files
 when remote acquisition is unresolved, provided provenance and selected scope
 are validated and the owner explicitly accepts that local mode. Only dependent
@@ -122,7 +128,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
-| 011 | Open: exchange gates | Offline parser/sample check complete; storage pending | Not started | Not started | Deferred | T02 reconciles both approved September2026 SEC archives; next T04 Bronze/SQLite/audit and T03 rejected-input retention |
+| 011 | Open: exchange gates | Offline parser/sample check complete; storage pending | Not started; PostgreSQL/Delta required | Not started | Deferred | Next T18 portable types, then T04 Bronze/SQLite/audit; T19–T22 backend delivery/parity required |
 | 012 | Open | Not started | Not started | Not started | Deferred | Await011; resolve free-route use/retention scope |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |

@@ -2,7 +2,8 @@
 
 **Status:** T01 documentary review recorded; T02 complete for two approved local
 September2026 archives; T03 parser complete with rejected-input storage pending.
-Next: T04 Bronze/SQLite/audit. Later tasks remain planned.
+Next: T18 portable storage/schema contract, then T04 Bronze/SQLite/audit.
+PostgreSQL and Databricks requirements are planned in T18–T22, not implemented.
 **Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
@@ -67,12 +68,31 @@ promotion. **Likely files:** parser, archive adapter, focused tests, two fixture
 - [x] Documentary-profile A01/A02 parser components and manifest tests pass offline.
 - [x] No acquisition adapter or schedule was enabled by fixture work.
 
+## S11-T18 — Pin the portable storage contract before persistence
+
+**Dependencies:** T02. **Scope:** M. **Requirements:** R03,R07,R12,N01.
+
+- [ ] Pin versioned normalized records/warehouse operations and explicit SQL,
+  Arrow and Spark field types for each source, retaining independent source grains.
+- [ ] Preserve exact numeric text; select checked decimal precision/scale and
+  overflow policy without float or int64 coercion of FTD balances.
+- [ ] Add invented serialization round trips for leading-zero IDs, counts above
+  int64, decimal38/39-digit limits, price scale, UTC clocks and unknown nulls.
+
+**Verify:** A14/A15 schema tests compare normalized values across serialization
+boundaries; lossy numeric projections fail before publication. No Spark dependency
+is needed to import the pure-Python core. **Likely files:** data contract,
+source-owned storage models/schema modules, focused schema tests. Implement
+source-specific schema modules separately if the slice exceeds five files.
+
 ## S11-T04 — Deliver one local FTD medallion partition
 
-**Dependencies:** T03. **Scope:** M. **Requirements:** R02,R03,R07,N03.
+**Dependencies:** T03,T18. **Scope:** M. **Requirements:** R02,R03,R07,R12,N03.
 
 - [ ] Archive original input/receipt, typed rows and run/partition completeness.
 - [ ] Persist SQLite facts with source/regime identity and publish initial Gold.
+- [ ] Use the T18 normalized warehouse boundary and exact types; no SQLite-only
+  queries or implicit float conversion may leak into transforms or selection.
 - [ ] Distinguish source absent, rejected and successful/empty partition states.
 
 **Verify:** invented fixture round trip/reopen matches values and original bytes;
@@ -119,6 +139,68 @@ warehouse helper, replay tests.
 **Verify:** A10 failure injections at staging/commit/finalize/pointer transitions;
 reopening uses either coherent old or coherent completed new snapshot.
 **Likely files:** publisher, pipeline, recovery helper, publication tests.
+
+## S11-T19 — Deliver the SEC FTD PostgreSQL adapter
+
+**Dependencies:** T07,T18. **Scope:** M. **Requirements:** R03,R06,R07,R12,N03.
+
+- [ ] Implement source-owned PostgreSQL schema/transactions, writer serialization,
+  warehouse identity and sanitized environment-based connection configuration.
+- [ ] Run the same capture/revision/reversion/withdrawal/replay/cutoff cases as
+  SQLite, including exact quantities/prices, failed promotion and equal clocks.
+- [ ] Test rollback, concurrent/retried captures and wrong schema/root identity
+  against a dedicated disposable PostgreSQL database; preserve existing stores.
+
+**Verify:** A14 actual SQLite/PostgreSQL normalized parity, with engine version
+and test evidence recorded. **Likely files:** PostgreSQL adapter, source config,
+connection example, backend-contract tests, PostgreSQL integration tests.
+
+## S11-T20 — Deliver the threshold PostgreSQL adapter
+
+**Dependencies:** T11,T18. **Scope:** M. **Requirements:** R04,R06,R07,R12,N03.
+
+- [ ] Implement the threshold-owned PostgreSQL adapter/configuration independently
+  of FTD tables, preserving provider/market/list-date/rule and coverage identity.
+- [ ] Prove SQLite/PostgreSQL membership, coverage, episode, cutoff and replay
+  parity for complete-empty, failed lists, corrections and withdrawals.
+- [ ] Verify isolated schema/root identity, rollback and writer serialization
+  against a dedicated PostgreSQL test database.
+
+**Verify:** A14 actual backend parity; missing lists never become empty/exit
+events. **Likely files:** threshold PostgreSQL adapter, source config/example,
+shared contract cases within tests, PostgreSQL integration tests.
+
+## S11-T21 — Publish SEC FTD snapshots to Databricks Delta
+
+**Dependencies:** T07,T18,T19. **Scope:** M. **Requirements:** R03,R06,R07,R12,N02.
+
+- [ ] Add source-owned explicit-schema snapshot validation and Unity Catalog
+  Delta publication; preserve exact values, version IDs, capture sequence and audit.
+- [ ] Reject decimal overflow/scale loss before writes; publish coherent pinned
+  facts/coverage/audit generations with idempotent retries and failure recovery.
+- [ ] Supply a configured staging/target example and actual Spark/Delta or
+  Databricks round-trip tests; record whether a workspace smoke ran.
+
+**Verify:** A15 exact field equality, repeated publish adds no revisions, and
+failure between table commits keeps the prior consumer generation selected.
+**Likely files:** FTD Delta publisher, publication tests, engine integration tests,
+source-named notebook/example, runbook. Cloud provisioning is separate.
+
+## S11-T22 — Publish threshold snapshots to Databricks Delta
+
+**Dependencies:** T11,T18,T20. **Scope:** M. **Requirements:** R04,R06,R07,R12,N02.
+
+- [ ] Add a threshold-owned Delta publisher for membership, coverage, episodes
+  and audit with explicit types and independent provider/market identity.
+- [ ] Preserve revision/withdrawal/cutoff behavior and coherent pinned generations
+  across retry, failed publication and complete-empty/missing-list inputs.
+- [ ] Supply target/staging configuration and actual Spark/Delta or Databricks
+  round-trip tests, including repeated publication and observed ordering.
+
+**Verify:** A15 normalized membership/coverage/episode equality with the source
+snapshot; partial publication never advances current state. **Likely files:**
+threshold Delta publisher, publication tests, engine integration tests,
+source-named notebook/example, runbook.
 
 ## S11-T08 — Pin Nasdaq list and coverage contract
 
@@ -248,14 +330,16 @@ Dagster tests. Runtime activation is a separate owner decision.
 
 ## S11-T17 — Reconcile and close the research delivery
 
-**Dependencies:** T01–T13,T15–T16; T14 only for the optional joined projection.
+**Dependencies:** T01–T13,T15–T16,T18–T22; T14 only for the optional joined projection.
 G3 schedule activation/G4 consumer UI are not required.
-**Scope:** M. **Requirements:** R01,R11,N01–N04.
+**Scope:** M. **Requirements:** R01,R11,R12,N01–N04.
 
 - [ ] Compare selected real permitted source partitions or approved local files
   against parsed counts/values/coverage; record actual exclusions and evidence.
 - [ ] Run focused/full offline tests, lint, format and package checks; ensure
-  all A01–A13 criteria have concrete evidence or explicit unresolved status.
+  all A01–A15 criteria have concrete evidence or explicit unresolved status.
+- [ ] Record actual PostgreSQL parity and Spark/Delta or Databricks integration
+  evidence for both sources. Skipped integrations do not close R12/A14/A15.
 - [ ] Update source task evidence, pipeline register, program readiness and
   master handoff; accept G2 before beginning Spec012.
 

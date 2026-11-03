@@ -46,9 +46,15 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next task: S11-T04 Bronze/SQLite/audit** in
-[Spec011 tasks](../../specs/spec011/todo.md), including T03 rejected-input raw
-retention. Preserve unknown publication/retrieval clocks and actual ingestion
+**Exact next task: S11-T18 portable storage/schema**, then S11-T04
+Bronze/SQLite/audit in [Spec011 tasks](../../specs/spec011/todo.md), including T03
+rejected-input raw retention. On 2026-11-03 the user required PostgreSQL and
+Databricks compatibility too: R12/A14/A15 and T19–T22 require source-owned
+warehouse/Delta adapters and actual integration parity before G2. These are
+planned, not implemented or live-verified. Pin exact numeric text, checked
+decimal ranges and UTC/date types before storage; never coerce FTD balances
+to floats/int64. See [the platform contract](../../specs/spec011/data_contract.md#9-storage-and-platform-compatibility).
+Preserve unknown publication/retrieval clocks and actual ingestion
 first-seen. Inputs/report stay ignored in `data/sec_ftd/`; commands, hashes and
 coverage limits are in the [source checkpoint](../../specs/spec011/source_review.md).
 The documentary source matrix and selected first partitions are recorded.
@@ -207,7 +213,9 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T04 Bronze/SQLite/audit and remaining T03 rejected-input retention.
+Continue S11-T18 portable storage/schema, then S11-T04 Bronze/SQLite/audit and
+remaining T03 rejected-input retention. T19–T22 PostgreSQL/Delta implementation
+and actual integration evidence are required before Spec011 G2.
 The T02 September sample reconciliation is complete. Older recommendations below are historical context;
 Specs011→012→013→014→015 govern the requested next builds. The documentation
 branch is `docs/securities-finance-program` (planning commit `1b2e73b`); the

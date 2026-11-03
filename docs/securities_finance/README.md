@@ -84,12 +84,14 @@ sample, pinned schema/terms evidence and explicit decisions for remaining gaps.
 All committed test examples use invented values and identifiers. Spec011's
 [source checkpoint](../../specs/spec011/source_review.md) records the actual
 offline tests and successful reconciliation of two approved September2026 SEC
-archives after an earlier HTTP403. Next is S11-T04 Bronze/SQLite/audit; exchange
+archives after an earlier HTTP403. Next is S11-T18 portable storage/schema,
+then S11-T04 Bronze/SQLite/audit; exchange
 conformance and full delivery remain open.
 
 The plans assume Python 3.12, the existing manifest-driven medallion layout,
 offline pytest, source-owned SQLite/Parquet, atomic publication, local manual
-operation and stopped Dagster schedule definitions. PostgreSQL is an extension
-after the source semantics pass; a hosted service is not a completion
-prerequisite for the research delivery. See the common contract for what each
-research milestone must actually prove.
+operation and stopped Dagster schedule definitions. For Spec011, PostgreSQL
+warehouse parity and Databricks Delta publication are required delivery work,
+with actual engine integration evidence; neither adapter exists yet. Hosted
+cloud deployment is separate. Other specs retain their own backend scope.
+See the common contract for what each research milestone must actually prove.

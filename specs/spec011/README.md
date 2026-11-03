@@ -4,8 +4,9 @@
 [securities-finance program](../../docs/securities_finance/README.md).
 **Updated:** 2026-11-03. **Status:** initial offline SEC manifest, ZIP/pipe parser
 and local `validate`/`inspect` commands implemented; two approved September2026
-archives reconcile under profile version2. Next: T04 Bronze/SQLite/audit,
-including rejected-input retention. Acquisition, persistence, research
+archives reconcile under profile version2. Next: T18 portable storage/schema,
+then T04 Bronze/SQLite/audit including rejected-input retention. PostgreSQL and
+Databricks compatibility are required delivery work. Acquisition, persistence, research
 exports, exchange adapters and Dagster remain unimplemented.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
@@ -80,11 +81,12 @@ the age or settlement of a particular failed obligation.
 | S11-R04 | Preserve per-provider/market/list-date membership, flags, list metadata and distinct complete-empty/missing/failed outcomes. |
 | S11-R05 | Preserve natural identifiers and versioned dated mapping evidence; expose unmapped/ambiguous identity without name/symbol guesses. |
 | S11-R06 | Retain unchanged idempotency plus corrections, reversions and authoritative complete-partition row removals under capture-time knowledge. |
-| S11-R07 | Support local current-vintage and observed-as-of queries, deterministic replay, SQLite/typed Parquet and recovery at publication boundaries. |
+| S11-R07 | Support current-vintage and observed-as-of queries, deterministic replay, SQLite/PostgreSQL, typed Parquet/Delta and recovery at publication boundaries. |
 | S11-R08 | Produce scoped FTD history and threshold episodes with coverage/censoring/gap evidence, never synthetic fail age or zero-filled calendar history. |
 | S11-R09 | Publish independent bounded research artifacts; optionally produce an identified joined view using only those artifact contracts and admitted mappings. |
 | S11-R10 | Supply bounded manual acquisition/local-import commands, explicit backfill inventory, no-request health and stopped Dagster definitions after local semantics pass. |
 | S11-R11 | Reconcile a bounded permitted real sample and document measured coverage, unresolved gaps, test evidence and operational handoff. |
+| S11-R12 | Deliver SQLite and PostgreSQL warehouse adapters plus Databricks Delta publication for both source packages, with exact-value, revision, coverage and knowledge-clock parity. Backend implementation and verification are required before G2; cloud deployment is separate. |
 
 NFRs: **S11-N01** deterministic offline tests and replay; **S11-N02** configurable
 download/expansion/row/storage bounds with atomic failure; **S11-N03** sanitized
@@ -108,6 +110,8 @@ regression or NAAIM activation. Common requirements C01–C11 apply in full.
 | S11-A11 | Two source artifacts validate independently; the optional joined output lists input snapshot/mapping versions, cutoff and unmatched counts. | R09 |
 | S11-A12 | Manual CLI requires bounds; no-request health makes no request; schedule definitions stay stopped and NAAIM remains paused. | R10,N03,N04 |
 | S11-A13 | Bounded permitted sample reconciles selected source counts/values and explicitly records unavailable market/history coverage. | R01,R11 |
+| S11-A14 | The same invented capture/revision/withdrawal/replay sequence produces equal normalized facts, coverage, audit outcomes and cutoff results in SQLite and a dedicated PostgreSQL test database; leading-zero IDs, counts above int64, exact prices and unknown clocks round-trip unchanged. | R03,R06,R07,R12 |
+| S11-A15 | Explicit-schema Parquet reads and idempotent Delta publication preserve exact values, version IDs, capture ordering and coverage for both sources; an actual Spark/Delta or Databricks integration run proves repeat publication and recovery after an interrupted multi-table publication. Decimal overflow/rounding fails before advancing the consumer generation. | R03,R06,R07,R12 |
 
 The A01/A02 parser components pass invented-fixture tests and the September SEC
 samples reconcile every field and both trailers. Persistent-publication and
@@ -132,8 +136,13 @@ admitted source provides the correct denominator.
 ## Architecture, testing and boundaries
 
 Python 3.12; source-owned manifest validation, pure transforms and injected
-transport; SQLite first and typed Parquet publication; no new dependency is
-selected by this document. Core tests are proposed as
+transport; SQLite for the first offline loop, PostgreSQL as a supported warehouse
+and typed Parquet → Unity Catalog Delta as a required publishing route. Both
+source packages own their adapters. The pure-Python parser/core must import
+without Spark or Databricks installed. No new dependency is selected by this
+document. Backend types and validation are specified in
+[the data contract](data_contract.md#9-storage-and-platform-compatibility).
+Core tests are proposed as
 `tests/test_sec_fails_to_deliver.py`, `tests/test_reg_sho_thresholds.py` and
 `tests/test_settlement_stress_research.py`. Fixtures are invented and provider
 shaped; no real identifiers or provider payloads are committed as test data.
@@ -148,7 +157,10 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Implement **S11-T04** in [todo.md](todo.md): immutable original-input/manifest
-receipts, typed SQLite state, audit and initial Gold. Include rejected-input
+Start **S11-T18**, then **S11-T04**, in [todo.md](todo.md): pin the portable
+storage/schema boundary before immutable original-input/manifest receipts,
+typed SQLite state, audit and initial Gold. Include rejected-input
 retention to close the remaining T03 item. T02 is complete for the two approved
 September2026 archives; broader history, exchange contracts and G2 remain open.
+T19–T22 deliver the required PostgreSQL and Databricks adapters and parity tests;
+they are not implemented by the current parser slice.

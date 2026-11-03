@@ -122,15 +122,20 @@ documented policy. Replay preserves that sequence rather than sorting UUIDs.
 
 ## C07 — Atomic local storage and publication
 
-Prove the local end-to-end path with SQLite and typed Parquet before adding a
-warehouse service. Staging failures must not advance Gold/current pointers or
+Design portable exact types and a normalized warehouse boundary before storage;
+prove the first local loop with SQLite and typed Parquet before adding a
+warehouse service. Spec011 additionally requires PostgreSQL adapters and
+Databricks Delta publication with actual backend parity/integration evidence
+before G2; its R12/A14/A15 and data contract define that scope. Other source
+specs retain their own target requirements. Staging failures must not advance
+Gold/current pointers or
 success watermarks. Single-root locking and transactional publication prevent
 mixed old/new exports. A current pointer identifies one committed snapshot;
 consumers never glob all historical files together. Capture/audit failures are
 visible even when the previous committed snapshot remains available.
 
-SQLite and the filesystem do not share a transaction. Implement an explicit
-publication journal: stage/fsync immutable files; commit DB facts and a pending
+The selected warehouse and filesystem do not share a transaction. Implement an
+explicit publication journal: stage/fsync immutable files; commit DB facts and a pending
 snapshot record; finalize/fsync the named files and verify their manifest;
 atomically publish the current pointer; mark the journal published. Snapshot
 readers pin the same generation in DB and files. A restart under the root lock

@@ -24,7 +24,9 @@ with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
 FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary
 dealers** (Specs011–015). Spec011 has an initial offline SEC FTD parser/manifest
 and local inspection command, reconciled against both approved September2026
-archives. Continue at Spec011 task S11-T04: Bronze/SQLite/audit, including
+archives. Continue at S11-T18 portable storage/schema, then S11-T04
+Bronze/SQLite/audit. Spec011 also requires PostgreSQL and Databricks Delta
+adapters/parity tests before delivery. Include
 rejected-input retention. Ingestion/persistence/jobs and later
 sources are not yet implemented. NAAIM is **paused** and its
 daily schedule was stopped on 2026-11-03; see the master handoff before any resume.

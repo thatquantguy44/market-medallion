@@ -8,7 +8,9 @@ contracts/plans/tasks now exist for SEC FTD + Reg SHO, FINRA short volume,
 FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. No connector for
 those sources has been implemented. Spec011 has an offline SEC
 parser/manifest/local inspection slice reconciled against two approved
-September2026 archives; next is Bronze/SQLite/audit. NAAIM remains paused.
+September2026 archives; next is portable storage/schema before Bronze/SQLite/audit.
+PostgreSQL and Databricks are required Spec011 targets, not implemented yet.
+NAAIM remains paused.
 
 Researched against official provider pages on 2026-10-26. These are source
 candidates, except for AAII's implemented authorized-local-CSV slice.
