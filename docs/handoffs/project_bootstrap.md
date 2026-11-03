@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-01.
+Last updated: 2026-11-03.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -9,6 +9,20 @@ symlink for archived absolute paths and existing workspace references. Package
 distribution metadata and the request identifier use the new name. The import
 path remains `market_data_pipeline`, and both CLI names are supported.
 Existing PostgreSQL, roles, Docker projects/volumes and data are preserved.
+
+## Immediate operational priority — NAAIM paused
+
+On **2026-11-03**, the user paused NAAIM work. The local Dagster schedule
+`naaim_delayed_daily_live` has been deliberately stopped and verified as
+**STOPPED**. Do not start that schedule, run a NAAIM live capture, or refresh
+the downstream research artifact until the user explicitly asks to resume it.
+
+When resuming, first review the current artifact/report need, run the local
+no-request health check, and then start the schedule deliberately using the
+command in the [Dagster job register](../deployment/dagster_jobs.md). Keep the
+three-month delay and required NAAIM attribution intact. Configured artifact
+export after a successful capture is the first NAAIM technical task only after
+that explicit resume.
 
 **Current stopping point:** AAII's local completion scope under Spec 003 is
 implemented on `feature/pipeline-completion`: offline XLS/Dagster integration,

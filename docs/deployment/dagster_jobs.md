@@ -1,20 +1,20 @@
 # Dagster job and schedule register
 
-Updated: 2026-11-01, America/New_York. This is the canonical register for
+Updated: 2026-11-03, America/New_York. This is the canonical register for
 Dagster-owned jobs and schedules in MarketMedallion. It complements the
 [pipeline register](../pipelines.md): that register owns source scope and
 delivery status; this document owns operational execution details.
 
 ## Current local state
 
-The status below was verified in the local Dagster instance on 2026-11-01.
+The status below was verified in the local Dagster instance on 2026-11-03.
 Schedule state is runtime state, so recheck it before assuming a job will run.
 
 | Pipeline | Job | Schedule | Cadence | Local state | Data root / retention | Activation boundary |
 | --- | --- | --- | --- | --- | --- | --- |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_thursday_local_import` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Local file only; no provider request. |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_weekly_live` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Requires `MARKET_MEDALLION_CONFIG` and `operations.scheduled_live_access: true`; provider entitlement remains separately required. |
-| NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | Enabled in the local instance; evaluates only while the manually started Dagster service is running | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
+| NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | **Stopped by user decision on 2026-11-03** | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Do not restart without explicit user direction; then requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
 
 No other Dagster jobs or schedules are defined in the repository. A schedule
 being listed or enabled does not establish provider rights, start a persistent
@@ -59,6 +59,14 @@ daily NAAIM automation is intended to run; stopping the process, logging out or
 rebooting pauses schedule evaluation. Revisit a durable service only after the
 user requests it. The tracked LaunchAgent template is retained for that future
 review and is not installed locally.
+
+### Current decision: NAAIM paused
+
+On 2026-11-03, the user explicitly paused NAAIM. The local
+`naaim_delayed_daily_live` schedule is **STOPPED**. Do not run live NAAIM
+captures, start this schedule or install a durable service unless the user
+explicitly resumes NAAIM. On resumption, run the no-request health check first,
+review the delayed-artifact requirement, then deliberately start the schedule.
 
 Load the ignored local environment and inspect schedule state:
 
