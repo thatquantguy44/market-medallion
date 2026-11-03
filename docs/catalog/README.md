@@ -6,7 +6,9 @@ Specs011–015. The older catalog below preserves original source rationale;
 its former priority labels are superseded by that program. Full source
 contracts/plans/tasks now exist for SEC FTD + Reg SHO, FINRA short volume,
 FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. No connector for
-those sources has been implemented. NAAIM remains paused.
+those sources has been implemented. Spec011 now has a documentary-only SEC
+parser/manifest/local inspection slice; source conformance is pending after
+HTTP403. NAAIM remains paused.
 
 Researched against official provider pages on 2026-10-26. These are source
 candidates, except for AAII's implemented authorized-local-CSV slice.

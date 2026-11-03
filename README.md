@@ -22,8 +22,10 @@ planned.
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
 FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary
-dealers** (Specs011–015). All five deliveries are planned; no connector or job
-exists for them yet. Start at Spec011 task S11-T01. NAAIM is **paused** and its
+dealers** (Specs011–015). Spec011 has an initial offline SEC FTD parser/manifest
+and local inspection command; physical source conformance remains pending after
+HTTP403. Continue at Spec011 task S11-T02. Ingestion/persistence/jobs and later
+sources are not yet implemented. NAAIM is **paused** and its
 daily schedule was stopped on 2026-11-03; see the master handoff before any resume.
 
 NAAIM remains **3-month-delayed public data for internal research**. Daily

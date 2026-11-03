@@ -2,6 +2,10 @@
 
 **State:** normalized design proposal; source facts explicitly noted below.
 **Date:** 2026-11-03. Inherits [C01–C11](../../docs/securities_finance/contract.md).
+The initial parser implements only the documentary six-column local profile;
+actual ZIP conformance failed to proceed after an HTTP403. See the
+[source checkpoint](source_review.md) for provisional physical conventions,
+bounded selections and verified offline behavior.
 
 ## 1. Provider structures and grains
 

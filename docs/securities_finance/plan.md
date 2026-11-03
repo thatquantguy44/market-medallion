@@ -1,6 +1,8 @@
 # Program implementation plan
 
-**State:** documentation delivered for review; implementation unstarted.
+**State:** Spec011 offline SEC parser/manifest/inspection implemented;
+actual-source conformance and persistent ingestion are open. Later deliveries
+remain planned. See [checkpoint](../../specs/spec011/source_review.md).
 **Canonical source tasks:** `specs/spec011/todo.md` through
 `specs/spec015/todo.md`. [Program coordination tasks](todo.md) own only the
 milestone tracking and combined reporting work.

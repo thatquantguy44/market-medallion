@@ -1,8 +1,10 @@
 # Project handoff
 
 **Current priority:** the [five-stage securities-finance program](securities_finance/README.md)
-and [delivery roadmap](securities_finance/roadmap.md), starting with Spec011
-task S11-T01. NAAIM is paused; do not resume its capture/schedule without the
+and [delivery roadmap](securities_finance/roadmap.md). Spec011's offline SEC
+parser/manifest is implemented; continue S11-T02 physical source conformance,
+then Bronze/SQLite/audit. See its [checkpoint](../specs/spec011/source_review.md).
+NAAIM is paused; do not resume its capture/schedule without the
 user's explicit direction.
 
 Start with the [master handoff](handoffs/project_bootstrap.md), then the

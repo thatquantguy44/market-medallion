@@ -1,8 +1,9 @@
 # Delivery roadmap — securities-finance research data
 
 **Updated:** 2026-11-03. **Planning horizon:** milestone based, without invented
-completion dates or throughput estimates. All five deliveries are planned;
-no new connector or job exists yet.
+completion dates or throughput estimates. All five research deliveries remain
+open; Spec011 has an initial offline SEC parser/manifest/inspection slice.
+No new acquisition adapter or job exists yet.
 
 ## Priority and backlog relationship
 
@@ -121,7 +122,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
-| 011 | Open | Not started | Not started | Not started | Deferred | S11-T01: source/access matrix and bounded partition selection |
+| 011 | Open | Offline parser started | Not started | Not started | Deferred | S11-T01 matrix recorded; finish T02 physical conformance after HTTP403, then Bronze/SQLite |
 | 012 | Open | Not started | Not started | Not started | Deferred | Await011; resolve free-route use/retention scope |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |

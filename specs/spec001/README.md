@@ -12,7 +12,8 @@ planned; the commands below are not implemented for those providers.
 [Specs011–015 securities-finance program](../../docs/securities_finance/README.md)
 now governs next source builds. Spec011 owns SEC FTD + Reg SHO and Spec012
 refines the FINRA short-volume proposal here. Preserve this original design as
-context; start at Spec011 task S11-T01 and keep NAAIM paused.
+context; use [Spec011's checkpoint](../spec011/source_review.md) for the current
+pickup point and keep NAAIM paused.
 
 ## Objective
 

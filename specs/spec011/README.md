@@ -2,8 +2,10 @@
 
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
-**Updated:** 2026-11-03. **Status:** documentation for review; connectors,
-commands, jobs and live coverage are unimplemented.
+**Updated:** 2026-11-03. **Status:** initial offline SEC manifest, ZIP/pipe parser
+and local `validate`/`inspect` commands implemented; actual-source conformance
+is pending after a bounded HTTP403 response. Acquisition, persistence, research
+exports, exchange adapters and Dagster remain unimplemented.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
 Nasdaq/NYSE list family. **Proposed source packages:**
@@ -12,6 +14,8 @@ Nasdaq/NYSE list family. **Proposed source packages:**
 
 Read [data contract](data_contract.md), [implementation plan](plan.md),
 [tasks](todo.md) and the [common program contract](../../docs/securities_finance/contract.md).
+The [first source-review checkpoint](source_review.md) records current evidence,
+selected partitions, implemented offline behavior and remaining admission gaps.
 
 ## Objective and research users
 
@@ -104,7 +108,9 @@ regression or NAAIM activation. Common requirements C01–C11 apply in full.
 | S11-A12 | Manual CLI requires bounds; no-request health makes no request; schedule definitions stay stopped and NAAIM remains paused. | R10,N03,N04 |
 | S11-A13 | Bounded permitted sample reconciles selected source counts/values and explicitly records unavailable market/history coverage. | R01,R11 |
 
-No acceptance box is checked here because no runtime slice has been built.
+The A01/A02 documentary parser components have passing invented-fixture tests;
+source conformance and persistent-publication evidence are still open. Full
+acceptance is not claimed by the offline profile.
 
 ## Gold and consumer boundary
 
@@ -141,7 +147,8 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-**S11-T01** in [todo.md](todo.md): complete the source/access matrix and record
-the exact first bounded modern SEC partition and list-date/market selections.
-Start with that contract and source-shaped invented fixtures; there is no
-requirement to download every historical file before delivering useful research.
+Finish **S11-T02** source conformance in [todo.md](todo.md). The source/access
+matrix and selected first partitions are recorded, and offline parser/manifest
+components are tested. A real approved local SEC file or successful permitted
+request must reconcile the physical schema before profile promotion; then
+S11-T04 adds the first persistent local medallion slice.

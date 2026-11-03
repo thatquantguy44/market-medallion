@@ -1,6 +1,8 @@
 # Spec011 implementation tasks
 
-**Status:** all tasks planned and unchecked. **Updated:** 2026-11-03.
+**Status:** T01 documentary review recorded; T02/T03 offline components
+implemented, physical source conformance pending. Later tasks remain planned.
+**Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
 M=3–5 files. Split a task further if the actual change exceeds that scope.
@@ -9,11 +11,15 @@ M=3–5 files. Split a task further if the actual change exceeds that scope.
 
 **Dependencies:** none. **Scope:** S. **Requirements:** R01,R11,N03,N04.
 
-- [ ] Record route/cost/automation/retention/transform/audience evidence for SEC,
+- [x] Record route/cost/automation/retention/transform/audience evidence for SEC,
   Nasdaq and NYSE independently; identify actual unresolved restrictions.
-- [ ] Select one modern SEC semi-monthly partition and bounded list dates/markets;
+- [x] Select one modern SEC semi-monthly partition and bounded list dates/markets;
   record expected release/creation clocks, calendar basis and sample budgets.
-- [ ] Review the Nasdaq December2026 notice as a future effective-date change.
+- [x] Review the Nasdaq December2026 notice as a future effective-date change.
+
+**Evidence:** the source checkpoint records the selected October2026 partitions
+and independent unresolved source gates. This completes the documentary matrix,
+not live admission for exchange downloads. The SEC sample request returned403.
 
 **Verify:** official links and dated source/access matrix reconcile; actual
 provider-dependent work remains gated only where evidence is unresolved.
@@ -24,8 +30,12 @@ provider-dependent work remains gated only where evidence is unresolved.
 **Dependencies:** T01. **Scope:** M. **Requirements:** R01,R02,R03.
 
 - [ ] Pin observed header/member/encoding, natural-key uniqueness and period rules.
-- [ ] Validate a source-owned manifest before I/O; unknown schema fields fail.
-- [ ] Add invented leading-zero CUSIP, null-price and valid-row fixtures.
+- [x] Validate a source-owned manifest before I/O; unknown schema fields fail.
+- [x] Add invented leading-zero CUSIP, null-price and valid-row fixtures.
+
+**Progress:** documentary-only manifest/parser profile passes offline tests.
+The actual physical member/header/encoding/key profile remains unverified after
+HTTP403 and keeps the first item open. No successful source conformance is claimed.
 
 **Verify:** focused manifest tests reject unknown regime/period/type settings;
 fixture headers match admitted evidence. **Likely files:** source manifest,
@@ -37,8 +47,12 @@ fixture headers match admitted evidence. **Likely files:** source manifest,
 
 - [ ] Reject traversal, duplicate member, corrupt ZIP, excessive expansion and
   HTML challenge files while retaining original rejected payload provenance.
-- [ ] Parse typed date/CUSIP/count/decimal tokens without guessing or coercion.
-- [ ] Validate duplicate keys and selected-period containment before promotion.
+- [x] Parse typed date/CUSIP/count/decimal tokens without guessing or coercion.
+- [x] Validate duplicate keys and selected-period containment before promotion.
+
+**Progress:** bounded pure parser rejects the listed ZIP/input hazards. Raw
+rejection persistence belongs to the upcoming Bronze slice and remains open;
+this parser does not write files or certify physical provider conformance.
 
 **Verify:** A01/A02 adversarial pytest fixtures; invalid input yields no fact
 promotion. **Likely files:** parser, archive adapter, focused tests, two fixtures.
@@ -46,8 +60,8 @@ promotion. **Likely files:** parser, archive adapter, focused tests, two fixture
 ### Checkpoint 1 — Source contract and parser
 
 - [ ] Contract evidence and first selected bounds are recorded.
-- [ ] A01/A02 and focused manifest tests pass offline.
-- [ ] No runtime acquisition or schedule was enabled by fixture work.
+- [x] Documentary-profile A01/A02 parser components and manifest tests pass offline.
+- [x] No acquisition adapter or schedule was enabled by fixture work.
 
 ## S11-T04 — Deliver one local FTD medallion partition
 

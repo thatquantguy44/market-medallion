@@ -1,7 +1,8 @@
 # Securities-finance data program — five ordered deliveries
 
 **Decision date:** 2026-11-03. **Status:** comprehensive specification and
-planning set; none of these new connectors, commands or jobs is implemented.
+planning set with an initial offline Spec011 SEC parser/manifest and local
+inspection commands; ingestion connectors and jobs remain unimplemented.
 **Owner:** MarketMedallion. **Consumer:** local research and a future separately
 scoped QuantMeridian reader. **Priority:** the user's next source-build program.
 
@@ -80,7 +81,9 @@ Official provider pages and technical documentation were reviewed on
 No complete production schema, historical coverage or permission regime is
 certified by this research pass. The first tasks require a bounded provider
 sample, pinned schema/terms evidence and explicit decisions for remaining gaps.
-All test examples to be committed will use invented values and identifiers.
+All committed test examples use invented values and identifiers. Spec011's
+[source checkpoint](../../specs/spec011/source_review.md) records the actual
+offline tests and the HTTP403 that leaves physical source conformance pending.
 
 The plans assume Python 3.12, the existing manifest-driven medallion layout,
 offline pytest, source-owned SQLite/Parquet, atomic publication, local manual

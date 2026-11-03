@@ -41,16 +41,24 @@ five workstreams on 2026-11-03. The complete planning set is at
 5. [Spec015](../../specs/spec015/README.md): NY Fed primary-dealer financing,
    positions, transactions and fails.
 
-**Exact next task: S11-T01** in [Spec011 tasks](../../specs/spec011/todo.md):
-admit source/access/schema evidence and choose the first bounded modern SEC
-partition and Nasdaq/NYSE list dates/markets. Each numbered directory owns its
+**Current checkpoint:** Spec011's offline SEC parser/manifest and local
+inspection commands are implemented on `feat/spec011-sec-ftd-parser`.
+**Exact next task: finish S11-T02 source conformance** in
+[Spec011 tasks](../../specs/spec011/todo.md). The one bounded SEC sample request
+returned HTTP403. Use a permitted approved actual local file or a successful
+bounded request to reconcile member/header/encoding/date/key behavior before
+promoting the profile. See the [source checkpoint](../../specs/spec011/source_review.md).
+The documentary source matrix and selected first partitions are recorded.
+Each numbered directory owns its
 `README.md`, `data_contract.md`, `plan.md` and `todo.md`. The
 [program roadmap](../securities_finance/roadmap.md) tracks delivery gates and
 the [common contract](../securities_finance/contract.md) supplies lineage,
 knowledge-clock, revision/removal, replay, export and manual-operation rules.
-All implementation tasks remain unchecked and all six proposed source packages
-are absent. Do not claim source access, historic coverage, new jobs or consumer
-features from these documents. CFTC, Cboe, Nasdaq breadth, OCC, OFR and other
+The SEC source package contains only an offline parser and inspection entrypoint;
+the other five source packages are absent. Persistence, live acquisition
+adapters, exchange processing and new jobs remain unimplemented. Do not claim
+source access, historic coverage or consumer features from fixture tests.
+CFTC, Cboe, Nasdaq breadth, OCC, OFR and other
 existing candidates remain queued behind this user-selected sequence.
 
 **Current stopping point:** AAII's local completion scope under Spec 003 is
@@ -196,11 +204,12 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Start S11-T01 on an isolated source-specific branch after reconciling current
-main/PR state. Older next-source recommendations below are historical context;
+Continue S11-T02 actual-file conformance, followed by the remaining checkpoint
+and S11-T04 Bronze/SQLite/audit. Older next-source recommendations below are historical context;
 Specs011→012→013→014→015 govern the requested next builds. The documentation
-branch is `docs/securities-finance-program`; no source implementation or new
-schedule has been created by this planning change.
+branch is `docs/securities-finance-program` (planning commit `1b2e73b`); the
+active implementation branch is `feat/spec011-sec-ftd-parser`. No schedule
+or acquisition adapter has been enabled.
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo
 and use `docs/deployment/aaii_runbook.md` for PostgreSQL, Dagster, Parquet, replay,

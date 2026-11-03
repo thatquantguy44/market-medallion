@@ -1,6 +1,8 @@
 # Spec011 implementation plan
 
-**State:** proposed; no implementation. Canonical tasks: [todo.md](todo.md).
+**State:** initial documentary-profile SEC parser/manifest/inspection implemented;
+source conformance and persistent ingestion remain open. Canonical tasks: [todo.md](todo.md).
+See [source review and commands](source_review.md) for actual verification.
 This is the first research delivery in the [program roadmap](../../docs/securities_finance/roadmap.md).
 
 ## Vertical slices and decisions
