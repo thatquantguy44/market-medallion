@@ -2,8 +2,9 @@
 
 **Current priority:** the [five-stage securities-finance program](securities_finance/README.md)
 and [delivery roadmap](securities_finance/roadmap.md). Spec011's offline SEC
-parser/manifest is implemented; continue S11-T02 physical source conformance,
-then Bronze/SQLite/audit. See its [checkpoint](../specs/spec011/source_review.md).
+parser/manifest reconciles both approved September2026 archives. Continue
+S11-T04 Bronze/SQLite/audit, including T03 rejected-input retention. See its
+[checkpoint](../specs/spec011/source_review.md).
 NAAIM is paused; do not resume its capture/schedule without the
 user's explicit direction.
 

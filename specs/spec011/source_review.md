@@ -1,15 +1,15 @@
 # Spec011 first source-contract checkpoint
 
 **Reviewed:** 2026-11-03, America/New_York. **Branch:**
-`feat/spec011-sec-ftd-parser`. **Scope:** documentary source review and offline
-SEC manifest/parser/local-inspection slice. This is not a completed ingestion
-pipeline or a certified historical provider schema.
+`feat/spec011-sec-ftd-parser`. **Scope:** source review, offline SEC parser and
+reconciliation of two user-approved local September 2026 archives. This is not
+a completed ingestion pipeline or a certified historical provider schema.
 
 ## Source/access matrix — S11-T01
 
 | Source | Official route and evidence | Admitted for this slice | Remaining source-dependent gate |
 | --- | --- | --- | --- |
-| SEC FTD | [Catalog and field table](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data), [developer guidance](https://www.sec.gov/about/developer-resources), [site policy](https://www.sec.gov/about/privacy-information) | Documentary six-column contract, invented fixtures and local-file inspection; one bounded schema-characterization request attempted | The linked modern archive returned HTTP403. Actual member/header/encoding/full-date coverage is unverified; no acquisition adapter is enabled |
+| SEC FTD | [Catalog and field table](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data), [developer guidance](https://www.sec.gov/about/developer-resources), [site policy](https://www.sec.gov/about/privacy-information) | Six-column/trailer profile reconciled against two approved local September2026 archives; invented regression fixtures and local inspection | Earlier October request returned HTTP403. Local samples do not independently authenticate origin, establish broader date/universe coverage or enable acquisition |
 | Nasdaq thresholds | [Threshold page](https://www.nasdaqtrader.com/Trader.aspx?id=RegSHOThreshold), [copyright/use notice](https://www.nasdaqtrader.com/Trader.aspx?id=CopyDisclaimMain), [future-hours notice](https://www.nasdaqtrader.com/TraderNews.aspx?id=ETA2026-64) | Documentary review; future fixture-only implementation can proceed | Recurring collection, retained history, transforms and report audience are not admitted by the general notice; physical history/profile conformance remains open |
 | NYSE thresholds | [Date/market download page](https://www.nyse.com/regulation/regulation-sho), linked [ICE terms](https://www.ice.com/privacy-security-center/terms-of-use) | Documentary review only | Exact selected-market/date values and payload schema remain open; the general terms exclude automated extraction from their limited download permission, so an applicable allowance is required before live automation |
 
@@ -44,6 +44,51 @@ Before a later automated SEC adapter, supply a truthful operator contact and
 finite pacing configuration consistent with the then-current fair-access
 guidance. Do not treat this one request as recurring-use or distribution evidence.
 
+## Approved local reconciliation — S11-T02
+
+The user supplied `data/sec_ftd/cnsfails202609a.zip` and
+`data/sec_ftd/cnsfails202609b.zip` for reconciliation. They replace the unsuccessful
+October selection for **this SEC sample check only**. The official catalog links
+both September archives. No additional provider request was made. Local
+reconciliation ran at `2026-11-03T07:43:30.258082+00:00`; original retrieval and
+publication clocks are unknown and must stay null. This inspection time is not
+a persisted ingestion/first-seen clock.
+
+| Archive | Archive bytes | Expanded bytes | Fact rows | Observed settlement labels | Quantity trailer | Missing prices | Missing symbols |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `cnsfails202609a.zip` | 1,141,638 | 3,168,735 | 50,332 | 9 dates, Sep1–14 | 1,796,162,548 | 280 | 0 |
+| `cnsfails202609b.zip` | 1,512,400 | 4,201,778 | 66,693 | 12 dates, Sep15–30 | 2,745,043,657 | 383 | 1 |
+
+Both archives have exactly one matching `.txt` member, DEFLATE compression,
+ASCII text, exact documented header, LF terminators and a final newline. The
+longest record is 72 bytes including LF. Two final records are required:
+`Trailer record count <integer>` followed by
+`Trailer total quantity of shares <integer>`. They match independently counted
+facts and integer quantity sums in both files. These sums are integrity checks
+across settlement labels, **not** daily/new-fail measures. Both files have zero
+duplicate `(settlement_date, cusip)` keys. Every parsed field and source-row
+position was compared against an independent split of the local source text.
+Leading-zero CUSIP rows number 5,751 and 7,289 respectively; none were coerced.
+The single empty symbol stays null; all 663 `.` prices retain the missing reason.
+
+The second file includes **September15**, while the first ends September14.
+The original fixed 1–15/16–month-end assumption was incorrect for these files.
+The new manifests explicitly pin 1–14 and 15–30. Supported bounds also retain
+1–15 and 16–month-end; filename suffixes do not select bounds automatically.
+Other months must be characterized before making completeness or universal
+boundary claims. Dates remain source labels without moving a row between files.
+
+| Archive | SHA-256 of original ZIP | SHA-256 of original member |
+| --- | --- | --- |
+| `cnsfails202609a.zip` | `46c12079fe62d84278e9d06f97cfa34eb9ebef5fca709fc856a49e3257ac2f01` | `0faa3ef27c19c31dc64b2b7f85002139fa3e9ed7dbb5898b80f8abdd9344ddd0` |
+| `cnsfails202609b.zip` | `a89615d5b7fe1e8dd0fc2872406467ac71e499f0d8216ef9c0afb8cc98bdd99e` | `db3400c8ea67be63633ce47e9527f2ecdc82a4e22b206b1c9203f81852aacd88` |
+
+Original archives remain unchanged and ignored. Aggregate evidence, including
+per-date counts and manifest hashes, is in ignored
+`data/sec_ftd/reconciliation-202609.json`. No actual security rows enter Git.
+No expected settlement-calendar or security-universe inventory was supplied;
+observed dates and valid totals do not certify complete population coverage.
+
 ## Effective-date and data-meaning decisions
 
 The SEC's modern semi-monthly packaging starts July 2009; this parser excludes
@@ -62,15 +107,19 @@ no exchange scheduler or calendar assumptions.
 ## Implemented offline profile — S11-T02/T03 components
 
 Source package: `src/market_data_pipeline/pipelines/sec_fails_to_deliver/`.
-Manifest: `manifests/sec-fails-to-deliver.yml`, documentary profile
-`sec-ftd-six-column/1`, explicit `local-file-only`, automation disabled.
+Manifest: `manifests/sec-fails-to-deliver.yml`, sample-reconciled profile
+`sec-ftd-six-column/2`, explicit `local-file-only`, automation disabled.
+Version2 requires both trailers and replaces the provisional version1 profile;
+no version1 persisted pipeline data exists. The main manifest remains an October
+example, not an assertion that October was reconciled. September manifests are
+`manifests/sec-fails-to-deliver-202609a.yml` and `-202609b.yml`.
 
-Validated configuration selects exactly one modern half-month and one safe
+Validated configuration selects explicit modern semi-monthly bounds and one safe
 explicit `.txt` member. Default resource limits are 8 MiB archive, 64 MiB actual
 expanded data, 500,000 rows and 4096 bytes per record. Hard caps are 16 MiB,
 128 MiB, 2,000,000 rows and 65,536 bytes respectively. These are implementation
-budgets, not provider limits. Actual successful physical conformance is still
-required before treating those choices as sufficient for real coverage.
+budgets, not provider limits. Both local samples fit them; wider history remains
+unmeasured.
 
 Pure parsing preserves raw symbols/descriptions, exact price precision, source
 row positions and SHA-256 of original archive/member bytes. It validates strict
@@ -80,9 +129,11 @@ streams bounded records, verifies CRC through the ZIP reader, and rejects unsafe
 names, symlinks, extra/duplicate members, unsupported encryption/compression,
 inconsistent header flags, corrupted archives and resource-limit violations.
 
-The profile currently requires ASCII, LF/CRLF and a final record terminator;
-those physical conventions remain **provisional** until a real sample is
-reconciled. Header-only input is unavailable under this profile, not an asserted
+The profile requires ASCII, LF/CRLF and a final record terminator. The supplied
+samples verify ASCII/LF; CRLF acceptance has invented-fixture coverage.
+Both trailers must be terminal, ordered and exact; missing/mismatched totals,
+duplicate trailers and data after trailers fail. Header-only input is unavailable
+under this profile, not an asserted
 complete zero-fails population. Observed row dates do not establish that every
 expected settlement date or eligible security is covered.
 
@@ -92,14 +143,20 @@ Current, executable local command:
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver validate \
   --manifest manifests/sec-fails-to-deliver.yml
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver inspect \
-  --manifest manifests/sec-fails-to-deliver.yml --input /path/to/approved-local.zip
+  --manifest manifests/sec-fails-to-deliver-202609a.yml \
+  --input data/sec_ftd/cnsfails202609a.zip
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver inspect \
+  --manifest manifests/sec-fails-to-deliver-202609b.yml \
+  --input data/sec_ftd/cnsfails202609b.zip
 ```
 
 `validate` reads the manifest only. `inspect` reads at most the configured
 archive bytes plus one overflow-detection byte and prints hashes/counts;
 neither command writes pipeline data or calls a provider. Success explicitly
-reports `provider_conformance: UNVERIFIED`; inspection additionally reports
-`source_coverage: NOT_CERTIFIED`. Future `run`, health/replay/export, SQLite,
+reports `provider_conformance: UNVERIFIED`: no independent origin authentication
+is performed. Successful inspection additionally reports `profile_conformance:
+MATCHED`, validated trailer totals and `source_coverage: NOT_CERTIFIED`. Future
+`run`, health/replay/export, SQLite,
 Parquet and Dagster are not implemented by this checkpoint.
 
 ## Verification and next task
@@ -107,15 +164,20 @@ Parquet and Dagster are not implemented by this checkpoint.
 Invented fixtures and adversarial ZIPs are in the source test suite. The initial
 tests failed before the package existed. Review reproduced and fixed malformed
 YAML-key and mismatched ZIP-header handling. Focused tests, the full offline
-suite and Ruff pass; the recorded full result is **151 passed, 2 skipped**.
+suite and Ruff pass; the updated full result is **163 passed, 2 skipped**.
 The skips are the existing opt-in PostgreSQL tests. The new files pass formatting;
 repository-wide formatting reports the pre-existing NAAIM test-file format issue.
 The package sdist/wheel build and actual module `validate` command also pass.
 No unrelated formatting or runtime/schedule change was made.
 
-**Next:** finish the source-conformance portion of S11-T02 using an approved
-actual local SEC file or a successful permitted bounded request; reconcile
-member/header/encoding/row keys and dates before promoting the profile beyond
-documentary-only. Then close the remaining checkpoint and deliver S11-T04's
-immutable Bronze/SQLite/audit slice. Nasdaq/NYSE rights and physical conformance
-remain separately tracked. NAAIM remains paused.
+Characterization tests first reproduced the unsupported trailers and September15
+partition rejection. The revised profile passes 73 focused cases, including
+missing/wrong/reordered/nonterminal trailers and explicit September bounds.
+Both real `inspect` commands pass, and the independent all-field comparison
+passes for all 117,025 observations.
+
+**Next:** S11-T04 immutable Bronze/SQLite/audit. Include original rejected-input
+retention to finish the remaining S11-T03 item; preserve unknown clocks and
+coverage limitations. S11-T02 sample conformance is complete for these two
+archives only. Full Spec011/G2, exchange rights/conformance and persistent
+publication remain open. NAAIM remains paused.

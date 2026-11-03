@@ -83,7 +83,9 @@ certified by this research pass. The first tasks require a bounded provider
 sample, pinned schema/terms evidence and explicit decisions for remaining gaps.
 All committed test examples use invented values and identifiers. Spec011's
 [source checkpoint](../../specs/spec011/source_review.md) records the actual
-offline tests and the HTTP403 that leaves physical source conformance pending.
+offline tests and successful reconciliation of two approved September2026 SEC
+archives after an earlier HTTP403. Next is S11-T04 Bronze/SQLite/audit; exchange
+conformance and full delivery remain open.
 
 The plans assume Python 3.12, the existing manifest-driven medallion layout,
 offline pytest, source-owned SQLite/Parquet, atomic publication, local manual

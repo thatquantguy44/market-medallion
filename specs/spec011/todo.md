@@ -1,7 +1,8 @@
 # Spec011 implementation tasks
 
-**Status:** T01 documentary review recorded; T02/T03 offline components
-implemented, physical source conformance pending. Later tasks remain planned.
+**Status:** T01 documentary review recorded; T02 complete for two approved local
+September2026 archives; T03 parser complete with rejected-input storage pending.
+Next: T04 Bronze/SQLite/audit. Later tasks remain planned.
 **Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
@@ -19,7 +20,8 @@ M=3–5 files. Split a task further if the actual change exceeds that scope.
 
 **Evidence:** the source checkpoint records the selected October2026 partitions
 and independent unresolved source gates. This completes the documentary matrix,
-not live admission for exchange downloads. The SEC sample request returned403.
+not live admission for exchange downloads. The SEC request returned403; the user
+then supplied two September2026 archives for local conformance instead.
 
 **Verify:** official links and dated source/access matrix reconcile; actual
 provider-dependent work remains gated only where evidence is unresolved.
@@ -29,13 +31,15 @@ provider-dependent work remains gated only where evidence is unresolved.
 
 **Dependencies:** T01. **Scope:** M. **Requirements:** R01,R02,R03.
 
-- [ ] Pin observed header/member/encoding, natural-key uniqueness and period rules.
+- [x] Pin observed header/member/encoding, natural-key uniqueness and period rules.
 - [x] Validate a source-owned manifest before I/O; unknown schema fields fail.
 - [x] Add invented leading-zero CUSIP, null-price and valid-row fixtures.
 
-**Progress:** documentary-only manifest/parser profile passes offline tests.
-The actual physical member/header/encoding/key profile remains unverified after
-HTTP403 and keeps the first item open. No successful source conformance is claimed.
+**Evidence:** profile `sec-ftd-six-column/2` reconciles both approved September
+archives: 50,332 and 66,693 rows, ASCII/LF, exact header/member and both trailer
+totals, zero duplicate keys and independent all-field equality. Explicit bounds
+are Sep1–14 and Sep15–30; no universal filename-to-date split is inferred.
+See the checkpoint for hashes, commands and retained aggregate evidence.
 
 **Verify:** focused manifest tests reject unknown regime/period/type settings;
 fixture headers match admitted evidence. **Likely files:** source manifest,
@@ -52,14 +56,14 @@ fixture headers match admitted evidence. **Likely files:** source manifest,
 
 **Progress:** bounded pure parser rejects the listed ZIP/input hazards. Raw
 rejection persistence belongs to the upcoming Bronze slice and remains open;
-this parser does not write files or certify physical provider conformance.
+this parser does not write files or certify wider source coverage.
 
 **Verify:** A01/A02 adversarial pytest fixtures; invalid input yields no fact
 promotion. **Likely files:** parser, archive adapter, focused tests, two fixtures.
 
 ### Checkpoint 1 — Source contract and parser
 
-- [ ] Contract evidence and first selected bounds are recorded.
+- [x] Contract evidence and first selected bounds are recorded.
 - [x] Documentary-profile A01/A02 parser components and manifest tests pass offline.
 - [x] No acquisition adapter or schedule was enabled by fixture work.
 

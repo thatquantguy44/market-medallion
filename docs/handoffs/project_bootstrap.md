@@ -42,12 +42,15 @@ five workstreams on 2026-11-03. The complete planning set is at
    positions, transactions and fails.
 
 **Current checkpoint:** Spec011's offline SEC parser/manifest and local
-inspection commands are implemented on `feat/spec011-sec-ftd-parser`.
-**Exact next task: finish S11-T02 source conformance** in
-[Spec011 tasks](../../specs/spec011/todo.md). The one bounded SEC sample request
-returned HTTP403. Use a permitted approved actual local file or a successful
-bounded request to reconcile member/header/encoding/date/key behavior before
-promoting the profile. See the [source checkpoint](../../specs/spec011/source_review.md).
+inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
+approved local September2026 archives reconcile all 117,025 observations and
+their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
+Sep15–30 bounds; no broader completeness or provider authentication is claimed.
+**Exact next task: S11-T04 Bronze/SQLite/audit** in
+[Spec011 tasks](../../specs/spec011/todo.md), including T03 rejected-input raw
+retention. Preserve unknown publication/retrieval clocks and actual ingestion
+first-seen. Inputs/report stay ignored in `data/sec_ftd/`; commands, hashes and
+coverage limits are in the [source checkpoint](../../specs/spec011/source_review.md).
 The documentary source matrix and selected first partitions are recorded.
 Each numbered directory owns its
 `README.md`, `data_contract.md`, `plan.md` and `todo.md`. The
@@ -204,8 +207,8 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T02 actual-file conformance, followed by the remaining checkpoint
-and S11-T04 Bronze/SQLite/audit. Older next-source recommendations below are historical context;
+Continue S11-T04 Bronze/SQLite/audit and remaining T03 rejected-input retention.
+The T02 September sample reconciliation is complete. Older recommendations below are historical context;
 Specs011→012→013→014→015 govern the requested next builds. The documentation
 branch is `docs/securities-finance-program` (planning commit `1b2e73b`); the
 active implementation branch is `feat/spec011-sec-ftd-parser`. No schedule

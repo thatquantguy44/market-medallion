@@ -14,7 +14,8 @@ The user's 2026-11-03 direction selects these five deliveries in order,
 superseding older next-source recommendations below. The first delivery groups
 SEC FTD and exchange Reg SHO history while keeping separate source packages.
 The first offline SEC parser/manifest/local inspection slice is implemented;
-actual-source conformance and the remaining research deliveries are open.
+both approved September2026 SEC archives reconcile. Persistent ingestion,
+exchange conformance and the remaining research deliveries are open.
 
 | Order | Delivery / spec | Plan | Canonical tasks | Research milestone |
 | --- | --- | --- | --- | --- |
@@ -29,8 +30,8 @@ Read the [capability map](securities_finance/README.md),
 [program plan](securities_finance/plan.md),
 [coordination tasks](securities_finance/todo.md) and
 [delivery roadmap/readiness ledger](securities_finance/roadmap.md).
-**Continue at S11-T02 source conformance** after the bounded SEC request returned
-HTTP403; [checkpoint](../specs/spec011/source_review.md). Research delivery
+**Continue at S11-T04 Bronze/SQLite/audit**, including T03 rejected-input
+retention; [checkpoint](../specs/spec011/source_review.md). Research delivery
 precedes recurring schedule activation.
 NAAIM remains paused and is not restarted by this program.
 

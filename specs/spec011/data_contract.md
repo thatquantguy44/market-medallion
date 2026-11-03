@@ -2,19 +2,25 @@
 
 **State:** normalized design proposal; source facts explicitly noted below.
 **Date:** 2026-11-03. Inherits [C01–C11](../../docs/securities_finance/contract.md).
-The initial parser implements only the documentary six-column local profile;
-actual ZIP conformance failed to proceed after an HTTP403. See the
-[source checkpoint](source_review.md) for provisional physical conventions,
-bounded selections and verified offline behavior.
+The initial parser implements the six-column/trailer local profile version2,
+reconciled against two approved September2026 archives after an unsuccessful
+HTTP request. See the [source checkpoint](source_review.md) for sample hashes,
+explicit bounds, trailer checks and coverage limitations. Persistence remains
+unimplemented.
 
 ## 1. Provider structures and grains
 
-SEC documentation names these six fields; exact byte headers/encoding must be
-pinned from the admitted source file: `SETTLEMENT DATE`, `CUSIP`, `SYMBOL`,
+SEC documentation names these six fields; exact byte headers/ASCII encoding are
+pinned for the two local samples: `SETTLEMENT DATE`, `CUSIP`, `SYMBOL`,
 `QUANTITY (FAILS)`, `DESCRIPTION`, `PRICE`. Raw rows remain available in Bronze.
 
+The samples have two terminal ASCII records, in order: `Trailer record count N`
+and `Trailer total quantity of shares Q`. Both must match the parsed rows;
+missing, malformed, duplicated or nonterminal trailers block acceptance. They
+are integrity metadata, excluded from facts and fact-row budgets.
+
 Proposed FTD fact key: `(dataset, reporting_regime, settlement_date, cusip)`.
-The sample/profile must prove uniqueness. A conflicting duplicate is a blocked
+Both September samples prove uniqueness within their observed scope. A conflicting duplicate is a blocked
 partition, not an instruction to sum quantities. An identical duplicate can be
 diagnosed and rejected unless an explicit schema contract permits deduplication.
 Source symbol/description stay attributes with revision history.
@@ -58,6 +64,12 @@ Dates from a semi-monthly file must lie within its declared period. Weekend or
 holiday labels are diagnostic pending the admitted settlement calendar; do not
 silently drop or shift them. Integer overflow and nonfinite/negative prices are
 blocking validation errors under the selected format contract.
+
+Bounds are explicit configuration, never inferred from filename suffix alone.
+The reconciled September files contain Sep1–14 and Sep15–30 respectively.
+The manifest accepts starts1/15/16, with end14/15 for start1 and month-end for
+start15/16, within the same month. This bounded validation does not establish
+which split a different month uses or certify an expected settlement calendar.
 
 ## 3. Proposed normalized list and coverage fields
 

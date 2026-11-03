@@ -1,7 +1,8 @@
 # Spec011 implementation plan
 
-**State:** initial documentary-profile SEC parser/manifest/inspection implemented;
-source conformance and persistent ingestion remain open. Canonical tasks: [todo.md](todo.md).
+**State:** initial SEC parser/manifest/inspection implemented and reconciled
+against two approved September2026 archives. Next: T04 Bronze/SQLite/audit,
+including T03 rejected-input provenance. Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
 This is the first research delivery in the [program roadmap](../../docs/securities_finance/roadmap.md).
 
@@ -106,5 +107,5 @@ block native-source delivery; the gate records whether that extension shipped.
 - Identity: a full public historical security master may not be available under
   suitable rights. Independent native output is required; coverage-qualified
   joins must remain useful without an unsupported universal mapping project.
-- Retention/backfill sizes are unmeasured. Profile the admitted bounded sample
-  and select limits before a wider run; do not reuse NAAIM's policy by default.
+- September sample sizes fit the selected limits; wider history and retention
+  remain unmeasured. Do not reuse NAAIM's policy by default.

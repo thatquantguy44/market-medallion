@@ -3,8 +3,9 @@
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
 **Updated:** 2026-11-03. **Status:** initial offline SEC manifest, ZIP/pipe parser
-and local `validate`/`inspect` commands implemented; actual-source conformance
-is pending after a bounded HTTP403 response. Acquisition, persistence, research
+and local `validate`/`inspect` commands implemented; two approved September2026
+archives reconcile under profile version2. Next: T04 Bronze/SQLite/audit,
+including rejected-input retention. Acquisition, persistence, research
 exports, exchange adapters and Dagster remain unimplemented.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
@@ -38,7 +39,7 @@ not a complete data acquisition or live parser verification.
 
 | Evidence | Verified fact | Implementation uncertainty |
 | --- | --- | --- |
-| [SEC FTD page](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data) | ZIP downloads contain pipe-delimited settlement balances and six published fields | Exact byte header/member convention and completeness controls require a bounded source sample |
+| [SEC FTD page](https://www.sec.gov/data-research/sec-markets-data/fails-deliver-data) | ZIP downloads contain pipe-delimited settlement balances and six published fields; two approved local September archives verify header/member/ASCII and count/quantity trailers | Broader historical format, expected calendars and population completeness remain unverified |
 | Same SEC notes | Modern absence and pre-2008 reporting-threshold rules differ; price may be `.` | Partition/date coverage and identity universe must be proven before an absent row has meaning |
 | [SEC developer guidance](https://www.sec.gov/about/developer-resources) | Automated access must be identified/paced; published ceiling is 10 requests/second across machines | Select a lower single-process budget and correct contact configuration before network implementation |
 | [Nasdaq threshold page](https://www.nasdaqtrader.com/Trader.aspx?id=RegSHOThreshold) | Lists expose trade date, file creation time and a linked text file | Archive completeness, retention/use rights, and historical symbol identity remain to verify |
@@ -108,9 +109,9 @@ regression or NAAIM activation. Common requirements C01–C11 apply in full.
 | S11-A12 | Manual CLI requires bounds; no-request health makes no request; schedule definitions stay stopped and NAAIM remains paused. | R10,N03,N04 |
 | S11-A13 | Bounded permitted sample reconciles selected source counts/values and explicitly records unavailable market/history coverage. | R01,R11 |
 
-The A01/A02 documentary parser components have passing invented-fixture tests;
-source conformance and persistent-publication evidence are still open. Full
-acceptance is not claimed by the offline profile.
+The A01/A02 parser components pass invented-fixture tests and the September SEC
+samples reconcile every field and both trailers. Persistent-publication and
+exchange evidence remain open; full acceptance is not claimed by this slice.
 
 ## Gold and consumer boundary
 
@@ -147,8 +148,7 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Finish **S11-T02** source conformance in [todo.md](todo.md). The source/access
-matrix and selected first partitions are recorded, and offline parser/manifest
-components are tested. A real approved local SEC file or successful permitted
-request must reconcile the physical schema before profile promotion; then
-S11-T04 adds the first persistent local medallion slice.
+Implement **S11-T04** in [todo.md](todo.md): immutable original-input/manifest
+receipts, typed SQLite state, audit and initial Gold. Include rejected-input
+retention to close the remaining T03 item. T02 is complete for the two approved
+September2026 archives; broader history, exchange contracts and G2 remain open.
