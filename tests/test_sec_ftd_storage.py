@@ -236,3 +236,19 @@ assert 'pyspark' not in sys.modules
 def test_incomplete_success_and_unsafe_publication_metadata_are_rejected(name, row):
     with pytest.raises(ValueError):
         storage_schemas(SETTINGS)[name].normalize(row)
+
+
+def test_unavailable_capture_has_unknown_original_hash_without_inventing_one():
+    schema = storage_schemas(SETTINGS)["coverage"]
+    unavailable = coverage() | dict(
+        coverage_state="UNAVAILABLE",
+        validation_state="NOT_CHECKED",
+        raw_sha256=None,
+        trailer_record_count=None,
+        trailer_quantity_text=None,
+        received_row_count=0,
+        observed_date_count=0,
+    )
+    assert schema.normalize(unavailable)["raw_sha256"] is None
+    with pytest.raises(ValueError):
+        schema.normalize(unavailable | dict(coverage_state="COMPLETE", validation_state="MATCHED"))

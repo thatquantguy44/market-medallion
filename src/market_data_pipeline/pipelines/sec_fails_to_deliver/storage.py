@@ -100,6 +100,7 @@ def _validate(name: str, row: dict) -> None:
             row["validation_state"] != "MATCHED"
             or row["trailer_record_count"] != row["received_row_count"]
             or row["trailer_quantity_text"] is None
+            or row["raw_sha256"] is None
         ):
             raise ValueError("complete SEC FTD coverage requires matching trailer evidence")
         token = row["trailer_quantity_text"]
@@ -156,8 +157,9 @@ def storage_schemas(settings: StorageConfig) -> dict[str, RecordSchema]:
         "coverage": (
             *_columns(
                 "string",
-                "partition_id coverage_state validation_state version_id run_id raw_sha256",
+                "partition_id coverage_state validation_state version_id run_id",
             ),
+            *_columns("string", "raw_sha256", nullable=True),
             *_columns("date", "period_start period_end"),
             *_columns("int64", "expected_date_count trailer_record_count", nullable=True),
             *_columns("int64", "observed_date_count received_row_count capture_sequence"),
@@ -179,7 +181,7 @@ def storage_schemas(settings: StorageConfig) -> dict[str, RecordSchema]:
     }
     return {
         name: RecordSchema(
-            f"sec-ftd-{name}/1",
+            f"sec-ftd-{name}/{'2' if name == 'coverage' else '1'}",
             settings.contract_id,
             (*identity, *columns),
             lambda row, name=name: _validate(name, row),

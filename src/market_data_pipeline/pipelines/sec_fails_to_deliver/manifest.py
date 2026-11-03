@@ -119,8 +119,15 @@ def manifest_from_dict(value: object) -> Manifest:
     )
 
 
-def load_manifest(path: Path) -> Manifest:
+def parse_manifest(payload: bytes) -> Manifest:
+    if not isinstance(payload, bytes) or len(payload) > 65536:
+        raise ValueError("manifest must be UTF-8 YAML within 64 KiB")
     try:
-        return manifest_from_dict(yaml.load(Path(path).read_text(), Loader=UniqueLoader))
-    except (yaml.YAMLError, TypeError) as exc:
+        return manifest_from_dict(yaml.load(payload.decode("utf-8"), Loader=UniqueLoader))
+    except (yaml.YAMLError, TypeError, UnicodeError) as exc:
         raise ValueError("invalid YAML manifest") from exc
+
+
+def load_manifest(path: Path) -> Manifest:
+    with Path(path).open("rb") as stream:
+        return parse_manifest(stream.read(65537))
