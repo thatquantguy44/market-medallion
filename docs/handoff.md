@@ -13,5 +13,8 @@ local service/data state and the next scoped source task.
 
 AAII is implemented locally; recurring acquisition and production deployment
 remain gated. CFTC has a provider contract and web traffic remains a draft;
-neither connector is implemented. NAAIM's delayed public research feed is the
-current access-gated source review; see [Spec 007](../specs/spec007/README.md).
+neither connector is implemented. NAAIM's delayed source-owned research feed
+can now publish its local, attributed `naaim-exposure-research/1` artifact for
+the separately owned QuantMeridian research display; see
+[Spec 007](../specs/spec007/README.md). It remains a three-month-delayed local
+research capability, not a public service or current-data feed.
