@@ -32,12 +32,15 @@ and operational gates are satisfied.
 
 ### NAAIM
 
-NAAIM owns its job, asset, schedule, retention and health operations in
+NAAIM owns its job, asset, schedule, retention, health operations and local
+research export in
 `src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/`. The daily
 job creates a distinct capture event even if the provider payload is unchanged,
 then applies 365-day dry-run-tested retention. It remains limited to the
-three-month-delayed internal-research feed and cannot supply QuantMeridian.
-See [Spec 007](../../specs/spec007/README.md) for permission and scope limits.
+three-month-delayed authorized-research feed. A separate explicit CLI export
+can write a versioned local artifact for QuantMeridian; no job sends data across
+repositories and QuantMeridian never contacts NAAIM. See
+[Spec 007](../../specs/spec007/README.md) for permission and scope limits.
 
 The user confirmed retaining the lagged feed. Outputs and materialization
 metadata label it **NAAIM Exposure Index — 3-month-delayed public data** with

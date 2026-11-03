@@ -6,6 +6,9 @@ from pathlib import Path
 
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.operations import health_report
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline import run_live
+from market_data_pipeline.pipelines.naaim_exposure_public_delayed.research_export import (
+    export_research_artifact,
+)
 
 
 def main(argv=None) -> int:
@@ -26,7 +29,19 @@ def main(argv=None) -> int:
         default=14,
         help="maximum local-capture age for --check (default: 14)",
     )
+    parser.add_argument(
+        "--export-research",
+        type=Path,
+        metavar="PATH",
+        help="write the approved, attributed current-vintage research artifact to PATH",
+    )
+    parser.add_argument(
+        "--research-use-reference",
+        help="nonsecret reference to permission for the downstream research display",
+    )
     arguments = parser.parse_args(argv)
+    if arguments.check and arguments.export_research:
+        parser.error("--check and --export-research cannot be combined")
     if arguments.check:
         result = health_report(
             arguments.root,
@@ -34,6 +49,16 @@ def main(argv=None) -> int:
         )
         print(json.dumps(result, sort_keys=True))
         return 0 if result["healthy"] else 1
+    if arguments.export_research:
+        if not arguments.research_use_reference:
+            parser.error("--research-use-reference is required with --export-research")
+        result = export_research_artifact(
+            arguments.root,
+            arguments.export_research,
+            research_use_reference=arguments.research_use_reference,
+        )
+        print(json.dumps(result, sort_keys=True))
+        return 0
     if not arguments.permission_reference:
         parser.error("--permission-reference is required unless --check is used")
     result = run_live(arguments.root, permission_reference=arguments.permission_reference)
