@@ -72,6 +72,9 @@ promotion. **Likely files:** parser, archive adapter, focused tests, two fixture
 
 **Dependencies:** T02. **Scope:** M. **Requirements:** R03,R07,R12,N01.
 
+- [x] Add a dedicated SEC FTD config folder/example, strict source-owned loader
+  and no-request CLI validation; configure manifest/input selection and numeric
+  profile intent without reading secrets or claiming implemented backends.
 - [ ] Pin versioned normalized records/warehouse operations and explicit SQL,
   Arrow and Spark field types for each source, retaining independent source grains.
 - [ ] Preserve exact numeric text; select checked decimal precision/scale and
@@ -84,6 +87,14 @@ boundaries; lossy numeric projections fail before publication. No Spark dependen
 is needed to import the pure-Python core. **Likely files:** data contract,
 source-owned storage models/schema modules, focused schema tests. Implement
 source-specific schema modules separately if the slice exceeds five files.
+
+**Progress:** configuration foundation implemented; user selected PostgreSQL by
+default and Databricks disabled until configured. Example uses editable
+precision38/scale0 quantities and precision38/scale12 prices. Config fingerprint
+is implemented; root binding, actual SQL/Arrow/Spark types and numeric projection
+round trips are still open. See
+[the config guide](../../config/sec_fails_to_deliver/README.md). Current full
+offline suite: 208 passed, 2 existing opt-in PostgreSQL skips.
 
 ## S11-T04 — Deliver one local FTD medallion partition
 

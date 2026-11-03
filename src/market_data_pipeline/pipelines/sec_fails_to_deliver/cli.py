@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+from market_data_pipeline.pipelines.sec_fails_to_deliver.config import load_config
 from market_data_pipeline.pipelines.sec_fails_to_deliver.data import parse_archive
 from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
     SCHEMA_VERSION,
@@ -17,11 +18,48 @@ def main(argv: list[str] | None = None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     for name in ("validate", "inspect"):
         command = commands.add_parser(name)
-        command.add_argument("--manifest", type=Path, required=True)
         if name == "inspect":
-            command.add_argument("--input", type=Path, required=True)
+            selection = command.add_mutually_exclusive_group(required=True)
+            selection.add_argument("--manifest", type=Path)
+            selection.add_argument("--config", type=Path)
+            command.add_argument("--input", type=Path)
+            command.add_argument("--partition")
+        else:
+            command.add_argument("--manifest", type=Path, required=True)
+    config_command = commands.add_parser("validate-config")
+    config_command.add_argument("--config", type=Path, required=True)
     arguments = parser.parse_args(argv)
+    if arguments.command == "inspect":
+        if arguments.config and (not arguments.partition or arguments.input):
+            parser.error("config inspection requires --partition and no --input override")
+        if arguments.manifest and (not arguments.input or arguments.partition):
+            parser.error("manifest inspection requires --input and no --partition")
     try:
+        if arguments.command == "validate-config":
+            config = load_config(arguments.config)
+            print(
+                json.dumps(
+                    {
+                        "pipeline": "sec-fails-to-deliver",
+                        "config_validation": "PASSED",
+                        "warehouse": config.warehouse,
+                        "databricks_enabled": config.databricks.enabled,
+                        "storage_contract_id": config.storage.contract_id,
+                        "partition_ids": sorted(config.partitions),
+                        "manifests_validated": False,
+                        "storage_implemented": False,
+                        "delta_implemented": False,
+                    },
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if arguments.command == "inspect" and arguments.config:
+            config = load_config(arguments.config)
+            if arguments.partition not in config.partitions:
+                raise ValueError("partition is not present in the SEC FTD config")
+            selected = config.partitions[arguments.partition]
+            arguments.manifest, arguments.input = selected.manifest, selected.input
         manifest = load_manifest(arguments.manifest)
         result = {
             "source": "sec",

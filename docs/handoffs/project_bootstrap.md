@@ -54,6 +54,15 @@ warehouse/Delta adapters and actual integration parity before G2. These are
 planned, not implemented or live-verified. Pin exact numeric text, checked
 decimal ranges and UTC/date types before storage; never coerce FTD balances
 to floats/int64. See [the platform contract](../../specs/spec011/data_contract.md#9-storage-and-platform-compatibility).
+T18's config foundation is implemented in
+[`config/sec_fails_to_deliver/`](../../config/sec_fails_to_deliver/README.md):
+strict loader, `validate-config`, config-based local `inspect` and a semantic
+storage fingerprint. The user selected PostgreSQL by default and Databricks
+disabled until configured. Connection settings in the example are illustrative;
+do not reuse AAII credentials. Finish actual SQL/Arrow/Spark schema generation,
+representability/round-trip tests, then T04 root binding/persistence. T18 remains
+open; validation does not establish backend readiness. Full suite208 passed,
+2 existing opt-in PostgreSQL skips.
 Preserve unknown publication/retrieval clocks and actual ingestion
 first-seen. Inputs/report stay ignored in `data/sec_ftd/`; commands, hashes and
 coverage limits are in the [source checkpoint](../../specs/spec011/source_review.md).

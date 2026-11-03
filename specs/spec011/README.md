@@ -18,6 +18,9 @@ Read [data contract](data_contract.md), [implementation plan](plan.md),
 [tasks](todo.md) and the [common program contract](../../docs/securities_finance/contract.md).
 The [first source-review checkpoint](source_review.md) records current evidence,
 selected partitions, implemented offline behavior and remaining admission gaps.
+SEC FTD now has [pipeline-specific configuration](../../config/sec_fails_to_deliver/README.md)
+and no-request config validation. PostgreSQL is the user-selected default;
+Databricks stays disabled until configured. Storage adapters remain absent.
 
 ## Objective and research users
 

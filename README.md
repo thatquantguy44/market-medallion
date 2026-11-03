@@ -49,6 +49,11 @@ configuration, operations, CLI and Dagster definitions. Provider-independent fil
 live in `shared/`; root CLI/Dagster entrypoints remain supported.
 See [the package layout and import migration guide](docs/development/pipeline_layout.md).
 
+SEC FTD has its own [configuration folder and decision guide](config/sec_fails_to_deliver/README.md).
+Its `validate-config` and config-based local `inspect` commands are implemented;
+PostgreSQL is the selected default and Databricks publication stays disabled
+until configured. SEC storage adapters are still pending under Spec011.
+
 ## Run the first slice
 
 Python 3.12 is the tested baseline. From the repository root:

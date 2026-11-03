@@ -1,0 +1,38 @@
+# Copy to pipeline.local.yml and replace the illustrative connection settings.
+config_version: 1
+pipeline: sec-fails-to-deliver
+# All relative paths resolve from this YAML file's directory.
+root: ../../data/sec_fails_to_deliver/postgres
+warehouse: postgres
+postgres:
+  host: 127.0.0.1
+  port: 5432
+  database: market_medallion
+  user: sec_ftd_writer
+  role: null
+  schema: sec_ftd
+  password_env: SEC_FTD_POSTGRES_PASSWORD
+  sslmode: prefer
+  connect_timeout: 15
+databricks:
+  enabled: false
+  catalog: null
+  schema: null
+  # Future publication requires /Volumes/<catalog>/<schema>/<volume>/...
+  staging_volume: null
+  table_prefix: sec_ftd
+storage:
+  schema_version: sec-ftd-storage/1
+  quantity_precision: 38
+  price_precision: 38
+  price_scale: 12
+  timezone: UTC
+  overflow: reject
+  preserve_numeric_text: true
+partitions:
+  september_2026_a:
+    manifest: ../../manifests/sec-fails-to-deliver-202609a.yml
+    input: ../../data/sec_ftd/cnsfails202609a.zip
+  september_2026_b:
+    manifest: ../../manifests/sec-fails-to-deliver-202609b.yml
+    input: ../../data/sec_ftd/cnsfails202609b.zip

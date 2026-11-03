@@ -235,3 +235,36 @@ in addition to offline schema/SQL and failure-injection tests. Record engine
 versions and whether a Databricks workspace smoke ran; skipped tests or mocked
 Spark calls alone do not establish compatibility. Deploying a cloud workspace
 or enabling schedules remains separate from implementation acceptance.
+
+## 10. Pipeline-specific runtime configuration
+
+The SEC FTD runtime settings live in
+[`config/sec_fails_to_deliver/`](../../config/sec_fails_to_deliver/README.md).
+The checked-in `pipeline.example.yml` is copied to ignored `pipeline.local.yml`;
+an optional ignored `.env` holds the variable named by `postgres.password_env`.
+The user confirmed **PostgreSQL as default** and **Databricks disabled until
+its target is configured**. No actual connection or target has been provisioned.
+
+Runtime config version1 has explicit pipeline identity, root/backend, PostgreSQL
+settings, Delta target settings, storage profile and named manifest/input pairs.
+Relative paths resolve from the YAML's directory. Config selection is an explicit
+`--config` argument, with no inherited AAII runtime or automatic environment-file
+execution. Secrets are absent from YAML and validation output; validation reads
+neither secret values nor input/manifest files and opens no service connection.
+
+Configurable numeric projections start at quantity precision38/scale0 and price
+precision38/scale12. Precision may be1–38; price scale may be0–precision.
+These are editable recommendations for future serialization, not projections
+performed by `inspect`. UTC, exact numeric-text retention and rejected lossy
+conversion are enforced contract rules. A SHA-256 `storage_contract_id` includes
+the pipeline and storage settings, excludes connection/path settings and must
+be bound to the durable root by T04. Changing precision/scale requires a distinct
+storage identity or an explicit migration; the loader alone does not enforce
+persisted root binding. Arrow/Spark schemas and numeric round trips remain open.
+
+Implemented commands are `validate-config --config ...` and
+`inspect --config ... --partition ...`. Config-mode inspection selects exactly
+one configured manifest/input pair, with no conflicting input override. Existing
+`--manifest ... --input ...` inspection remains available. Both paths preserve
+provider bytes/semantics and make no request. Configuration validation reports
+that warehouse/Delta implementations and source-manifest checks have not run.

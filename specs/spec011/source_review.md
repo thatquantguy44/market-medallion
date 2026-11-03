@@ -159,6 +159,13 @@ MATCHED`, validated trailer totals and `source_coverage: NOT_CERTIFIED`. Future
 `run`, health/replay/export, SQLite,
 Parquet and Dagster are not implemented by this checkpoint.
 
+The subsequent T18 configuration foundation adds a strict source-owned
+`config.py`, `validate-config` and configured partition inspection. Settings
+live under [config/sec_fails_to_deliver](../../config/sec_fails_to_deliver/README.md).
+This validates runtime intent only; schema generation and backend compatibility
+remain unverified. The user selected PostgreSQL as default with Databricks
+disabled until configured. No service or schedule was started.
+
 ## Verification and next task
 
 Invented fixtures and adversarial ZIPs are in the source test suite. The initial

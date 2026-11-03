@@ -43,6 +43,14 @@ Each package grows as its slice works: `manifest.py`, `source.py`, `pipeline.py`
 Source manifests/fixtures remain separate even when a common ZIP helper is
 eventually extracted after demonstrated reuse.
 
+SEC FTD's implemented runtime-config entrypoint is
+`config/sec_fails_to_deliver/pipeline.example.yml` with a source-owned
+`config.py` loader. The user selected PostgreSQL by default and disabled
+Databricks publication until configured. See
+[the decision/setup guide](../../config/sec_fails_to_deliver/README.md).
+Configurable precision/scale identifies a storage contract; actual schema
+generation, representability checks and root binding remain T18/T04 work.
+
 Each source owns `io/warehouse.py` (normalized operations), SQLite/PostgreSQL
 adapters and `io/databricks.py` (snapshot publication). Do not import AAII's
 provider-specific storage schema or require Spark for ordinary local imports.
