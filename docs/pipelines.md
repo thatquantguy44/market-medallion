@@ -1,6 +1,6 @@
 # Master pipeline register
 
-Updated: 2026-11-02, America/New_York.
+Updated: 2026-11-03, America/New_York.
 
 This is the master index for **pipeline ownership, implementation status and
 next work**. It tracks all concrete pipelines/candidates currently recorded in
@@ -20,20 +20,28 @@ a local operational slice and a narrow, attributed current-vintage research
 artifact for the separately owned QuantMeridian local consumer. The FX,
 web-traffic, OCC, Cboe and Nasdaq drafts do not silently change the backlog.
 
-The provisional **discovery** order among the three new options/breadth
-proposals is Cboe published ratios → Nasdaq daily breadth → OCC granular
-volumes. A delivery at this stage means an approved provider contract and
-invented-fixture plan, not a live connector or schedule.
+The current user-selected build program is **Spec011 SEC FTD + Reg SHO →
+Spec012 FINRA short volume → Spec013 FINRA OTC transparency → Spec014 SEC
+N-PORT → Spec015 NY Fed primary dealers**. Full requirements/data contracts,
+plans and source tasks live in the numbered specs; the
+[program roadmap](securities_finance/roadmap.md) owns delivery gates. All six
+source packages are absent. The former Cboe → Nasdaq breadth → OCC discovery
+queue is retained but deferred behind this program. NAAIM remains paused.
 
 | Pipeline ID | Purpose | Status | Package under `src/market_data_pipeline/pipelines/` | Contract / evidence | Next scoped work |
 | --- | --- | --- | --- | --- | --- |
 | `aaii-investor-sentiment` | Weekly investor sentiment shares and bull/bear spread | Implemented locally; recurring acquisition gated | [`aaii/`](../src/market_data_pipeline/pipelines/aaii/) | [Spec 002](../specs/spec002/README.md), [Spec 003](../specs/spec003/README.md), [checkpoint](handoffs/aaii_checkpoint.md), [runbook](deployment/aaii_runbook.md) | Review/merge completion; establish recurring access and production operations before scheduling. |
 | `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for authorized research | Local Bronze/Silver/delayed-latest slice, manual smoke, health check, stopped-by-user daily Dagster schedule and versioned research export verified; each scheduled run retains 365 days; every output explicitly labels the 3-month provider delay | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md), [job register](deployment/dagster_jobs.md) | **Paused.** Do not capture or restart the schedule until the user resumes NAAIM. On resumption, automate export after a successful capture, then retain attribution/delay labels. No warehouse or public service is added. |
-| `cboe-published-put-call-ratios` | Cboe-labelled daily total, index and equity put/call ratios | Draft provider contract; connector absent | Proposed `cboe_put_call_ratios/`; absent | [Spec 009](../specs/spec009/README.md) | First among the new proposals: verify terms, date selection, source shape and historical continuity; then create invented fixtures. |
-| `nasdaq-daily-market-breadth` | Nasdaq Trader daily advances, declines and unchanged counts | Draft provider contract; connector absent | Proposed `nasdaq_daily_market_breadth/`; absent | [Spec 010](../specs/spec010/README.md) | Second: verify coverage by year, eligible universe, terms and file stability; then create invented fixtures. |
-| `occ-options-volume-query` | Filtered OCC options put/call volume query results | Draft provider contract; connector absent | Proposed `occ_options_volume_query/`; absent | [Spec 008](../specs/spec008/README.md) | Third: verify query schema, result completeness, terms, rate/history limits and selected-population semantics; then create invented fixtures. |
+| `sec-fails-to-deliver` | Security-level reported outstanding settlement failures | Specified; connector absent; delivery1 with Reg SHO | Proposed `sec_fails_to_deliver/`; absent | [Spec011](../specs/spec011/README.md), [tasks](../specs/spec011/todo.md) | **First priority S11-T01:** source/access matrix and bounded modern SEC/list-date selections. |
+| `reg-sho-thresholds` | Nasdaq/NYSE threshold membership and observed episodes | Specified; connector absent; delivery1 with SEC FTD | Proposed `reg_sho_thresholds/`; absent | [Spec011](../specs/spec011/README.md), [contract](../specs/spec011/data_contract.md) | Pin each exchange's schema, date/market/download/use contract; preserve independent coverage. |
+| `finra-short-sale-volume` | Facility-scoped short-sale volume and matched denominators | Specified; connector absent; delivery2 | Proposed `finra_short_sale_volume/`; absent | [Spec012](../specs/spec012/README.md) | After011 research delivery: resolve free-route use/retention and current facility/file schema. |
+| `finra-otc-transparency` | Delayed ATS/non-ATS weekly activity and venue concentration | Specified; connector absent; delivery3 | Proposed `finra_otc_transparency/`; absent | [Spec013](../specs/spec013/README.md) | After012: select complete weekly product/tier contracts and admit participant identity. |
+| `sec-nport` | Public fund holdings, lending and collateral disclosures | Specified; connector absent; delivery4 | Proposed `sec_nport/`; absent | [Spec014](../specs/spec014/README.md) | After013: pin archive tables, filing hierarchy and actual public disclosure regime. |
+| `nyfed-primary-dealers` | Aggregate dealer positions, transactions, financing and fails | Specified; connector absent; delivery5 | Proposed `nyfed_primary_dealers/`; absent | [Spec015](../specs/spec015/README.md) | After014: inventory overlap, select series/regime and pin units/suppression definitions. |
+| `cboe-published-put-call-ratios` | Cboe-labelled daily total, index and equity put/call ratios | Draft provider contract; connector absent; deferred | Proposed `cboe_put_call_ratios/`; absent | [Spec 009](../specs/spec009/README.md) | First in deferred options/breadth discovery queue: verify terms/date/history then fixtures. |
+| `nasdaq-daily-market-breadth` | Nasdaq Trader daily advances, declines and unchanged counts | Draft provider contract; connector absent; deferred | Proposed `nasdaq_daily_market_breadth/`; absent | [Spec 010](../specs/spec010/README.md) | Second in deferred options/breadth queue: verify year coverage, universe, terms and file stability; then fixtures. |
+| `occ-options-volume-query` | Filtered OCC options put/call volume query results | Draft provider contract; connector absent; deferred | Proposed `occ_options_volume_query/`; absent | [Spec 008](../specs/spec008/README.md) | Third in deferred options/breadth queue: verify schema/completeness, terms/history limits and selected-population semantics; then fixtures. |
 | `cftc-cot` | Trader positioning, starting with TFF futures-only | Provider contract drafted; connector absent | Proposed `cftc_tff/`; absent | [Spec 006](../specs/spec006/README.md), [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#cftc) | Retain the reviewed TFF contract; begin fixtures and a source-owned vertical slice when reprioritized. |
-| `finra-short-sale-volume` | Facility-scoped short-sale volume and matched denominators | Planned | Proposed `finra_short_sale_volume/`; absent | [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#finra) | Confirm current extraction route, scope, terms and fixtures after CFTC. |
 | `ofr-stfm` | Short-term funding and repo measures | Planned | Proposed `ofr_stfm/`; absent | [Spec 001](../specs/spec001/README.md), [catalog](catalog/README.md#ofr) | Select series from metadata and verify provenance/units before implementation. |
 | `ecb-fx-reference` | Daily official FX reference rates, ECB first | Existing MacroMedallion coverage confirmed; no local connector | Proposed `fx_reference_rates/`; absent and deferred | [Spec 004](../specs/spec004/README.md), [overlap/gap review](reviews/spec004_macro_medallion/README.md): all nine currencies already stored upstream | Keep ECB ingestion in MacroMedallion; prioritize captured revisions/as-of/replay, exact values/metadata, then FX Gold outputs there. |
 | `company-web-traffic` | Company/competitor website visit estimates | Draft; acquisition source unresolved | Proposed `company_web_traffic/`; absent | [Spec 005](../specs/spec005/README.md) | Verify a suitable free source first; paid Similarweb is an optional later decision. |
@@ -53,14 +61,10 @@ original IDs; their research detail remains in the linked roadmap sections.
 
 | Pipeline ID | Dataset / purpose | Reference |
 | --- | --- | --- |
-| `sec-fails-to-deliver` | Settlement-failure balances | [Original catalog](catalog/README.md#sec-settlement-failures), [Spec 001](../specs/spec001/README.md) |
-| `nyfed-primary-dealers` | Dealer positions, transactions and financing | [Positioning backlog](roadmap.md#additional-positioning-and-market-structure-sources) |
 | `ofr-hedge-fund-monitor` | Aggregate hedge-fund leverage, liquidity and financing | [Positioning backlog](roadmap.md#additional-positioning-and-market-structure-sources) |
-| `finra-otc-transparency` | ATS/non-ATS activity and venue concentration | [Positioning backlog](roadmap.md#additional-positioning-and-market-structure-sources) |
 | `sec-nmfp` | Money-market-fund portfolio holdings | [Positioning backlog](roadmap.md#additional-positioning-and-market-structure-sources) |
 | `dtcc-public-swaps` | Public swap transaction dissemination | [Positioning backlog](roadmap.md#additional-positioning-and-market-structure-sources) |
 | `sec-midas` | Published market-structure metrics and datasets | [Positioning backlog](roadmap.md#additional-positioning-and-market-structure-sources) |
-| `sec-nport` | Fund holdings, derivatives and securities lending | [Company/holdings backlog](roadmap.md#later-theme-company-disclosures-and-insider-activity) |
 | `fdic-bankfind` | Bank financials, branches and deposits | [Company/holdings backlog](roadmap.md#later-theme-company-disclosures-and-insider-activity) |
 | `usda-mymarketnews` | Agricultural market reports and prices | [Alternative-data backlog](roadmap.md#later-theme-broader-free-alternative-data) |
 | `stb-rail-service` | Rail service and freight congestion | [Alternative-data backlog](roadmap.md#later-theme-broader-free-alternative-data) |

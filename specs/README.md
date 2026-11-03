@@ -1,6 +1,8 @@
 # Specification index
 
-Updated: 2026-11-01. Numbers identify documents, not automatic build priority.
+Updated: 2026-11-03. Numbers identify documents, not automatic build priority.
+The current user-selected build order is **011 → 012 → 013 → 014 → 015**;
+see the [securities-finance program](../docs/securities_finance/README.md).
 
 | Spec | Capability ID | Contract and status |
 | --- | --- | --- |
@@ -10,10 +12,33 @@ Updated: 2026-11-01. Numbers identify documents, not automatic build priority.
 | [004](spec004/README.md) | fx-reference-rates | Initial scope accepted; [MacroMedallion overlap/gap review](../docs/reviews/spec004_macro_medallion/README.md) completed 2026-10-30. All nine ECB currencies already stored upstream; local connector deferred. Temporal, precision/metadata and FX Gold gaps identified. |
 | [005](spec005/README.md) | company-web-traffic | New draft: company/competitor visit estimates, free-first feasibility, optional paid Similarweb access. No connector implemented. |
 | [006](spec006/README.md) | cftc-tff-futures-only | Draft provider contract for the CFTC TFF Futures Only report. API dataset/schema, timing, identity, correction and access boundaries verified; no connector implemented. |
-| [007](spec007/README.md) | naaim-exposure-public-delayed | Local Bronze/Silver/delayed-latest slice, one manual smoke run and a read-only local health check verified for NAAIM's three-month-delayed internal research feed. Scheduling remains disabled; it cannot supply QuantMeridian. |
+| [007](spec007/README.md) | naaim-exposure-public-delayed | Local delayed feed, health, source-owned schedule and versioned local research export implemented. User paused NAAIM on 2026-11-03; schedule stopped. Local QuantMeridian artifact use is documented; public/current-data scope remains separate. |
 | [008](spec008/README.md) | occ-options-volume-query | Draft OCC options put/call-volume query contract. Filtered scope, CSV schema, terms, history and rate behavior require review; no connector implemented. |
 | [009](spec009/README.md) | cboe-published-put-call-ratios | Draft Cboe published daily put/call-ratio contract. Date-selection, history, terms and source shape require review; no connector implemented. |
 | [010](spec010/README.md) | nasdaq-daily-market-breadth | Draft Nasdaq Trader advances/declines/unchanged-count contract. Year coverage, universe semantics, terms and source shape require review; no connector implemented. |
+| [011](spec011/README.md) | settlement-stress | First: SEC FTD balances plus separately owned Nasdaq/NYSE Reg SHO threshold history. Full spec/data contract/plan/tasks; connectors absent. |
+| [012](spec012/README.md) | finra-short-sale-volume | Second: facility-scoped daily short volume, included short-exempt subset and matching reported denominators. Full planning set; connector absent. |
+| [013](spec013/README.md) | finra-otc-transparency | Third: delayed weekly ATS/non-ATS security/participant activity, tier/coverage-safe metrics. Full planning set; connector absent. |
+| [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
+| [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
+
+## Current priority: securities-finance program
+
+The user's 2026-11-03 request selects all five workstreams in the order above.
+FTD and Reg SHO are one research delivery with two independent source packages,
+so the five workstreams preserve all six source families discussed. Read the
+[capability map](../docs/securities_finance/README.md),
+[common contract](../docs/securities_finance/contract.md),
+[program plan](../docs/securities_finance/plan.md),
+[coordination tasks](../docs/securities_finance/todo.md) and
+[delivery roadmap](../docs/securities_finance/roadmap.md).
+
+Each numbered spec owns `README.md`, `data_contract.md`, `plan.md` and `todo.md`.
+All implementation tasks are unchecked. The next bounded task is **S11-T01**.
+No new source package, job, live pull or consumer module is created by this
+documentation set. The source sequence supersedes older discovery priorities;
+the following historical choices remain context, not a competing next-build
+instruction. Keep NAAIM paused unless explicitly resumed by the user.
 
 ## Capability boundaries and proposed sequence
 
@@ -27,13 +52,11 @@ MacroMedallion temporal correctness → exact values/metadata → FX-specific Go
 The existing Spec 004 contract supplies acceptance criteria for that follow-up.
 Web traffic source feasibility can proceed independently; acquisition waits for a source with suitable access and
 retention rights. Spec 006 preserves the reviewed CFTC contract. Spec 007's
-delayed-public research capability has a local slice and one manual smoke run,
-while written permission evidence remains an operational prerequisite. Among
-the three new proposals, discovery order is Spec 009 (Cboe ratios) → Spec 010
-(Nasdaq breadth) → Spec 008 (OCC volumes). This is a provider-contract
-sequence, not authorization for live acquisition or a change to the active
-NAAIM/CFTC backlog. QuantMeridian remains a separate Program Partner/API
-capability. There is no new shared-platform rebuild prerequisite.
+delayed-public research capability has a local slice and an attributed local
+QuantMeridian research artifact, and is currently paused. The former proposal
+Spec009 (Cboe ratios) → Spec010 (Nasdaq breadth) → Spec008 (OCC volumes) is
+retained as deferred discovery order. The new securities-finance sequence is
+the next source-build program. There is no shared-platform rebuild prerequisite.
 
 The user selected **daily official reference rates**, **company/competitor
 traffic estimates**, and **prefer free sources; document paid option** on

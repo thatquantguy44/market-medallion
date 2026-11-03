@@ -24,6 +24,35 @@ three-month delay and required NAAIM attribution intact. Configured artifact
 export after a successful capture is the first NAAIM technical task only after
 that explicit resume.
 
+## Next source-build priority — securities-finance program
+
+The user requested a comprehensive specification/plan/task/roadmap set for
+five workstreams on 2026-11-03. The complete planning set is at
+[docs/securities_finance/](../securities_finance/README.md). Build in this order:
+
+1. [Spec011](../../specs/spec011/README.md): SEC outstanding FTD balances plus
+   separately owned Nasdaq/NYSE Reg SHO threshold history.
+2. [Spec012](../../specs/spec012/README.md): FINRA facility-scoped daily short
+   volume and matching denominators.
+3. [Spec013](../../specs/spec013/README.md): FINRA delayed ATS/non-ATS weekly
+   venue/participant activity.
+4. [Spec014](../../specs/spec014/README.md): public SEC N-PORT fund holdings
+   and lending disclosures.
+5. [Spec015](../../specs/spec015/README.md): NY Fed primary-dealer financing,
+   positions, transactions and fails.
+
+**Exact next task: S11-T01** in [Spec011 tasks](../../specs/spec011/todo.md):
+admit source/access/schema evidence and choose the first bounded modern SEC
+partition and Nasdaq/NYSE list dates/markets. Each numbered directory owns its
+`README.md`, `data_contract.md`, `plan.md` and `todo.md`. The
+[program roadmap](../securities_finance/roadmap.md) tracks delivery gates and
+the [common contract](../securities_finance/contract.md) supplies lineage,
+knowledge-clock, revision/removal, replay, export and manual-operation rules.
+All implementation tasks remain unchecked and all six proposed source packages
+are absent. Do not claim source access, historic coverage, new jobs or consumer
+features from these documents. CFTC, Cboe, Nasdaq breadth, OCC, OFR and other
+existing candidates remain queued behind this user-selected sequence.
+
 **Current stopping point:** AAII's local completion scope under Spec 003 is
 implemented on `feature/pipeline-completion`: offline XLS/Dagster integration,
 weekly bounds/retries/status, historical backfill, backups/restore and retention.
@@ -33,26 +62,23 @@ is now recorded in Spec 006. NAAIM Exposure Index has a local delayed-public
 research slice in Spec 007. Recurring AAII permission, production orchestration/alerts
 and live Databricks verification remain open.
 
-On 2026-11-01, the user reported oral NAAIM permission by phone. The current
-NAAIM slice records that only as a nonsecret, user-confirmed manual-run
-reference; scope, frequency, retention, transformations, redistribution and
-QuantMeridian terms have not been supplied in writing. A local read-only health
-check now covers capture freshness, version retention and output availability.
-The user then confirmed daily automated pulls and 365-day retention. A 10:00
-America/New_York Dagster schedule is enabled in the local instance, but the user
-selected manual operation: it evaluates only while an operator runs local
-`dagster dev`. A restart-at-login LaunchAgent is documented but deliberately not
-installed; revisit only on request. Keep downstream distribution disabled until
-provider terms are documented.
+On 2026-11-01/02, the user confirmed NAAIM daily automated pulls, 365-day
+retention and the attributed local research-report/display scope. A local
+read-only health check and source-owned research export are implemented. The
+10:00 America/New_York schedule is now **stopped** by the 2026-11-03 pause;
+manual local operation remains the chosen service model. The LaunchAgent
+template is documented but not installed. NAAIM must not be resumed as part of
+the new securities-finance program; broader/public/current-data scope is separate.
 
 **New-source discovery queue:** The user added three separate potential
 pipelines on 2026-11-01: Cboe published daily put/call ratios (Spec 009),
 Nasdaq Trader daily advances/declines/unchanged breadth counts (Spec 010), and
 OCC filtered options put/call volumes (Spec 008). Their provisional discovery
-order is **Cboe → Nasdaq → OCC**. For each, the next delivery is a reviewed
+order was **Cboe → Nasdaq → OCC** and is now deferred behind Specs011–015.
+For each, the eventual next delivery is a reviewed
 provider/access/schema contract and invented-fixture plan—not a live connector,
 bulk history, schedule or product output. This queue does not displace the
-NAAIM written-permission evidence prerequisite or the reviewed CFTC contract.
+NAAIM pause or remove the reviewed CFTC contract.
 
 The user subsequently authorized pipeline-owned source folders and a master
 pipeline document. AAII now lives under `src/market_data_pipeline/pipelines/aaii/`; common
@@ -66,8 +92,8 @@ confirms all nine ECB FX currencies already exist in MacroMedallion. Keep ingest
 owned there and prioritize temporal correctness, exact values/metadata and FX Gold
 outputs. No local FX connector is implemented. Web-traffic source selection
 remains draft. Spec 007 implements only NAAIM's permission-gated, delayed
-public-research slice; it does not authorize subscription, API use, scheduling
-or QuantMeridian integration.
+public-research slice and attributed local QuantMeridian artifact; broader
+subscription/API/public distribution remains separately scoped and NAAIM is paused.
 
 The workflow library is now a complete local snapshot at `agents/agent-skills/`,
 pinned by `agents/agent-skills.lock.json` to revision
@@ -167,14 +193,14 @@ retention continue within the existing internal-research scope.
 
 ## Next work
 
-**Next-agent pickup point:** Read [the Dagster job register](../deployment/dagster_jobs.md)
-and [Spec 007](../../specs/spec007/README.md). Keep NAAIM in the selected manual
-operation model; do not install a durable service. The remaining non-code NAAIM
-gates are written provider confirmation and a user-selected backup/alert
-destination. Once those are pending or resolved, the next source-development
-task is Spec 009: Cboe published put/call-ratio provider-contract review,
-followed by Spec 010 then Spec 008. Start each on a fresh branch after the
-current PR is merged.
+**Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
+read the [program map](../securities_finance/README.md),
+[roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
+Start S11-T01 on an isolated source-specific branch after reconciling current
+main/PR state. Older next-source recommendations below are historical context;
+Specs011→012→013→014→015 govern the requested next builds. The documentation
+branch is `docs/securities-finance-program`; no source implementation or new
+schedule has been created by this planning change.
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo
 and use `docs/deployment/aaii_runbook.md` for PostgreSQL, Dagster, Parquet, replay,
@@ -205,18 +231,18 @@ The user selected NAAIM's delayed public research capability on
 `spec007-naaim-exposure`; [Spec 007](../../specs/spec007/README.md) records its
 weekly methodology and the explicit live-permission boundary. Preserve
 provider-specific grain. Its local Bronze/Silver/delayed-latest slice, one
-bounded manual smoke request and read-only health check are verified; retain
-written permission evidence before a schedule, persistence expansion or
-downstream use. QuantMeridian remains a separate Program Partner/API scope.
+bounded manual smoke request, health check and attributed local research export
+are verified. NAAIM is paused; wider Program Partner/API/public use remains
+separate. The securities-finance sequence above governs the next source build.
 Next AAII operational work: establish recurring acquisition permission and reuse
 terms before scheduling; deploy durable workers, external monitoring/alerts and
 off-machine backups as appropriate. Live Delta requires a selected workspace.
 Mage/Airflow wrappers remain optional; Dagster is the working orchestrator.
 
-After the initial pipeline slice, the recommended order for the new additions
-is NY Fed Primary Dealer Statistics → SEC N-MFP → FINRA ATS/non-ATS → OFR Hedge
-Fund Monitor. Keep DTCC and MIDAS queued for later evaluation. This ordering does
-not replace the current AAII-first implementation priority.
+The earlier sequence, NY Fed Primary Dealer Statistics → SEC N-MFP →
+FINRA ATS/non-ATS → OFR Hedge Fund Monitor, is superseded for next work by the
+five-stage program. Keep DTCC
+and MIDAS queued for later evaluation and retain all original source IDs.
 
 Use the roadmap's promotion checklist before implementing each candidate:
 verify access/terms, coverage and schema, publication/revision semantics, then

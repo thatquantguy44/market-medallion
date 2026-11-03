@@ -1,5 +1,10 @@
 # Project handoff
 
+**Current priority:** the [five-stage securities-finance program](securities_finance/README.md)
+and [delivery roadmap](securities_finance/roadmap.md), starting with Spec011
+task S11-T01. NAAIM is paused; do not resume its capture/schedule without the
+user's explicit direction.
+
 Start with the [master handoff](handoffs/project_bootstrap.md), then the
 [AAII checkpoint](handoffs/aaii_checkpoint.md) for current implementation,
 local service/data state and the next scoped source task.
