@@ -47,6 +47,15 @@ def test_s11_a01_preserves_identifiers_decimal_precision_large_counts_and_missin
     assert rows[1].price_missing_reason == "SOURCE_PRICE_UNAVAILABLE"
 
 
+def test_storage_lineage_preserves_original_numeric_tokens_before_projection():
+    payload = FIXTURE.replace(b"|125|", b"|000125|").replace(b"|12.3400", b"|00012.3400")
+    rows = parse_pipe(payload, load_manifest(MANIFEST))
+    assert rows[0].quantity_fails_raw == "000125"
+    assert rows[0].prior_close_price_raw == "00012.3400"
+    assert rows[0].quantity_fails == 125
+    assert rows[1].prior_close_price_raw == "."
+
+
 def test_archive_is_read_in_memory_and_returns_auditable_payload_and_member_hashes(tmp_path):
     payload = bundle()
     parsed = parse_archive(payload, load_manifest(MANIFEST))

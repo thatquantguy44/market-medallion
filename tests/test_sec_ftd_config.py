@@ -3,6 +3,7 @@
 import io
 import json
 import zipfile
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -109,6 +110,15 @@ def test_storage_contract_fingerprint_changes_only_for_semantic_settings(tmp_pat
     assert original.storage.contract_id == changed_connection.storage.contract_id
     assert original.storage.contract_id != changed_storage.storage.contract_id
     assert len(original.storage.contract_id) == 64
+
+
+@pytest.mark.parametrize(
+    "updates", [{"quantity_precision": 39}, {"price_scale": 39}, {"timezone": "local"}]
+)
+def test_storage_settings_cannot_bypass_validation_when_constructed_directly(updates):
+    settings = load_config(EXAMPLE).storage
+    with pytest.raises(ValueError):
+        replace(settings, **updates)
 
 
 def test_paths_resolve_from_config_directory_independently_of_cwd(tmp_path, monkeypatch):

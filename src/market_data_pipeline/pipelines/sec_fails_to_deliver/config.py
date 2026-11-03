@@ -78,6 +78,19 @@ class StorageConfig:
     overflow: str
     preserve_numeric_text: bool
 
+    def __post_init__(self) -> None:
+        if self.schema_version != "sec-ftd-storage/1":
+            raise ValueError("unsupported storage.schema_version")
+        _integer(self.quantity_precision, 1, 38, "storage.quantity_precision")
+        _integer(self.price_precision, 1, 38, "storage.price_precision")
+        _integer(self.price_scale, 0, self.price_precision, "storage.price_scale")
+        if (
+            self.timezone != "UTC"
+            or self.overflow != "reject"
+            or self.preserve_numeric_text is not True
+        ):
+            raise ValueError("storage requires UTC, rejected overflow and exact numeric text")
+
     @property
     def contract_id(self) -> str:
         """Semantic identity only; future storage must enforce this root binding."""
@@ -170,17 +183,6 @@ def load_config(path: Path) -> RuntimeConfig:
         raise ValueError("enabled Databricks requires catalog, schema and staging_volume")
 
     storage = _object(value["storage"], set(StorageConfig.__dataclass_fields__), "storage")
-    if storage["schema_version"] != "sec-ftd-storage/1":
-        raise ValueError("unsupported storage.schema_version")
-    _integer(storage["quantity_precision"], 1, 38, "storage.quantity_precision")
-    precision = _integer(storage["price_precision"], 1, 38, "storage.price_precision")
-    _integer(storage["price_scale"], 0, precision, "storage.price_scale")
-    if (
-        storage["timezone"] != "UTC"
-        or storage["overflow"] != "reject"
-        or storage["preserve_numeric_text"] is not True
-    ):
-        raise ValueError("storage requires UTC, rejected overflow and exact numeric text")
 
     raw_partitions = value["partitions"]
     if not isinstance(raw_partitions, dict) or not 1 <= len(raw_partitions) <= 100:

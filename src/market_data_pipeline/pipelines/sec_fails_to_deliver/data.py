@@ -30,6 +30,8 @@ class Observation:
     prior_close_price: Decimal | None
     price_missing_reason: str | None
     source_row_number: int
+    quantity_fails_raw: str
+    prior_close_price_raw: str
 
 
 @dataclass(frozen=True)
@@ -76,6 +78,8 @@ def _observation(fields: list[str], row_number: int, manifest: Manifest) -> Obse
         prior_close_price=price,
         price_missing_reason=reason,
         source_row_number=row_number,
+        quantity_fails_raw=quantity,
+        prior_close_price_raw=raw_price,
     )
 
 
