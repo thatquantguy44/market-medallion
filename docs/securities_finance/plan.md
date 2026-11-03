@@ -1,8 +1,9 @@
 # Program implementation plan
 
 **State:** Spec011 offline SEC parser/manifest/inspection implemented;
-two approved September2026 SEC archives reconciled. Next: T18 portable
-storage/schema, then T04 Bronze/SQLite/audit and T03 rejected-input retention.
+two approved September2026 SEC archives reconciled. T18 portable types and
+serialization are complete for both sources. Next: T04 Bronze/SQLite/audit,
+root/contract binding and T03 rejected-input retention.
 Spec011 requires PostgreSQL/Databricks delivery and parity tests in T18–T22.
 Exchange conformance and later deliveries
 remain planned. See [checkpoint](../../specs/spec011/source_review.md).

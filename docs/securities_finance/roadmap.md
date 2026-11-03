@@ -128,7 +128,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
-| 011 | Open: exchange gates | Offline parser/sample check complete; storage pending | Not started; PostgreSQL/Delta required | Not started | Deferred | Next T18 portable types, then T04 Bronze/SQLite/audit; T19–T22 backend delivery/parity required |
+| 011 | Open: exchange gates | Parser/sample and T18 type contracts complete; persistence pending | Not started; PostgreSQL/Delta required | Not started | Deferred | Next T04 Bronze/SQLite/audit/root binding; T19–T22 live backend parity required |
 | 012 | Open | Not started | Not started | Not started | Deferred | Await011; resolve free-route use/retention scope |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |

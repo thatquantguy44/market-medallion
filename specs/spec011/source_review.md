@@ -162,8 +162,11 @@ Parquet and Dagster are not implemented by this checkpoint.
 The subsequent T18 configuration foundation adds a strict source-owned
 `config.py`, `validate-config` and configured partition inspection. Settings
 live under [config/sec_fails_to_deliver](../../config/sec_fails_to_deliver/README.md).
-This validates runtime intent only; schema generation and backend compatibility
-remain unverified. The user selected PostgreSQL as default with Databricks
+Config validation checks runtime intent only. T18 now also implements independent
+source-owned storage schemas, native SQL bindings, exact numeric projections,
+Arrow/Parquet codecs and Spark schema descriptions for both source packages.
+Actual PostgreSQL/Delta backend compatibility remains unverified.
+The user selected PostgreSQL as default with Databricks
 disabled until configured. No service or schedule was started.
 
 ## Verification and next task
@@ -171,7 +174,7 @@ disabled until configured. No service or schedule was started.
 Invented fixtures and adversarial ZIPs are in the source test suite. The initial
 tests failed before the package existed. Review reproduced and fixed malformed
 YAML-key and mismatched ZIP-header handling. Focused tests, the full offline
-suite and Ruff pass; the updated full result is **163 passed, 2 skipped**.
+suite and Ruff pass; the parser-reconciliation result was **163 passed, 2 skipped**.
 The skips are the existing opt-in PostgreSQL tests. The new files pass formatting;
 repository-wide formatting reports the pre-existing NAAIM test-file format issue.
 The package sdist/wheel build and actual module `validate` command also pass.
@@ -183,7 +186,17 @@ missing/wrong/reordered/nonterminal trailers and explicit September bounds.
 Both real `inspect` commands pass, and the independent all-field comparison
 passes for all 117,025 observations.
 
-**Next:** S11-T18 portable storage/schema, then S11-T04 immutable Bronze/SQLite/audit.
+T18's full-suite result is **283 passed, 2 skipped**. New tests round-trip all
+eight record schemas through actual SQLite and Parquet, native PostgreSQL binding
+codecs, configured decimal bounds and explicit Spark schema descriptions. The
+tests also cover raw numeric tokens, null clocks, withdrawals, malformed success
+receipts and complete-empty/failed threshold lists. All117,025 approved September
+observations pass local numeric/date field preflight; aggregate evidence is in
+ignored `data/sec_ftd/storage-types-202609.json`. No warehouse write, new source
+request, completeness certification or first-seen assignment occurred. Live
+engine parity is still required in T19–T22.
+
+**Next:** S11-T04 immutable Bronze/SQLite/audit and contract/root binding.
 The user's subsequent compatibility requirement is recorded in R12/A14/A15:
 PostgreSQL warehouse and Databricks Delta delivery/parity are required before
 G2 in T19–T22. No backend adapter or engine verification exists yet. Include original rejected-input

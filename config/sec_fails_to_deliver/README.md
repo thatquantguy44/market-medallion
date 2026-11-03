@@ -3,9 +3,10 @@
 This folder belongs only to `sec-fails-to-deliver`. It is independent of AAII
 and NAAIM settings. The implemented loader validates configuration without
 connecting to PostgreSQL/Databricks or reading secrets. `inspect` can select an
-approved local file entirely from this config. Storage, numeric projections and
-Delta publication are **not implemented yet**; these settings establish their
-contract and are not evidence of backend compatibility.
+approved local file entirely from this config. T18's exact numeric projections,
+SQL bindings, Arrow schemas and Spark schema descriptions are implemented.
+Warehouse persistence and Delta publication are **not implemented yet**; type
+tests are not evidence of live backend compatibility.
 
 ```text
 config/sec_fails_to_deliver/
@@ -29,7 +30,7 @@ config/sec_fails_to_deliver/
 | Selected input partitions | Two approved September2026 archives | Add named manifest/input pairs. Their source manifests retain explicit dates, member name and resource budgets; there is no filename/date inference. |
 
 Decimal38/12 is a starting recommendation, not a statement that every historical
-price fits. Future publication must preflight actual values against this config
+price fits. The implemented codecs preflight actual values against this config
 and reject a value needing rounding or overflow. Schema changes alter the
 `storage_contract_id`; future persistence must reject a conflicting contract on
 an existing root. That guard is still part of T04, not implemented by validation.
@@ -90,5 +91,21 @@ Unknown/duplicate YAML keys, literal passwords/tokens, malformed types, invalid
 numeric ranges and unsupported identifiers fail before input/service I/O.
 SQL namespaces/table prefix currently use simple lowercase identifiers up to63
 characters. Enabled Databricks settings must include all three target fields.
-`run`, PostgreSQL connections, Arrow/Spark schemas, root-binding enforcement
+`run`, PostgreSQL connections, root-binding enforcement
 and Delta publication remain in [Spec011 tasks](../../specs/spec011/todo.md).
+
+## Implemented storage types
+
+The source-owned `storage_schemas(config.storage)` API provides fact, coverage,
+audit and publication record schemas. Each can normalize values, encode/decode
+SQLite and native PostgreSQL bindings, generate explicitly typed Arrow tables,
+validate a returned Arrow table and describe a Spark StructType as JSON. Exact
+quantity/price source text stays separate from numeric projections. The parser
+now retains these original tokens. No Spark installation is needed for this API.
+
+Numeric/date preflight passes all117,025 approved September rows using this
+example profile. Ignored aggregate evidence is
+`data/sec_ftd/storage-types-202609.json`. It creates no warehouse state or
+historical first-seen clocks. See the
+[storage contract](../../specs/spec011/data_contract.md#11-implemented-t18-record-schemas-and-serialization)
+for field semantics and the remaining live backend verification requirements.

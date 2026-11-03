@@ -2,7 +2,8 @@
 
 **State:** normalized design proposal; source facts explicitly noted below.
 **Date:** 2026-11-03. Inherits [C01–C11](../../docs/securities_finance/contract.md).
-The initial parser implements the six-column/trailer local profile version2,
+T18's normalized type contracts and serialization are implemented for both source
+packages. The parser implements the six-column/trailer local profile version2,
 reconciled against two approved September2026 archives after an unsuccessful
 HTTP request. See the [source checkpoint](source_review.md) for sample hashes,
 explicit bounds, trailer checks and coverage limitations. Persistence remains
@@ -254,13 +255,14 @@ neither secret values nor input/manifest files and opens no service connection.
 
 Configurable numeric projections start at quantity precision38/scale0 and price
 precision38/scale12. Precision may be1–38; price scale may be0–precision.
-These are editable recommendations for future serialization, not projections
-performed by `inspect`. UTC, exact numeric-text retention and rejected lossy
+These drive the implemented serialization codecs, not projections performed
+by `inspect`. UTC, exact numeric-text retention and rejected lossy
 conversion are enforced contract rules. A SHA-256 `storage_contract_id` includes
 the pipeline and storage settings, excludes connection/path settings and must
 be bound to the durable root by T04. Changing precision/scale requires a distinct
 storage identity or an explicit migration; the loader alone does not enforce
-persisted root binding. Arrow/Spark schemas and numeric round trips remain open.
+persisted root binding. T18 Arrow/Spark schemas and serialization round trips
+are complete; actual warehouse and Delta adapters are still absent.
 
 Implemented commands are `validate-config --config ...` and
 `inspect --config ... --partition ...`. Config-mode inspection selects exactly
@@ -268,3 +270,64 @@ one configured manifest/input pair, with no conflicting input override. Existing
 `--manifest ... --input ...` inspection remains available. Both paths preserve
 provider bytes/semantics and make no request. Configuration validation reports
 that warehouse/Delta implementations and source-manifest checks have not run.
+
+## 11. Implemented T18 record schemas and serialization
+
+Source-owned definitions live in
+[`sec_fails_to_deliver/storage.py`](../../src/market_data_pipeline/pipelines/sec_fails_to_deliver/storage.py)
+and [`reg_sho_thresholds/storage.py`](../../src/market_data_pipeline/pipelines/reg_sho_thresholds/storage.py).
+The threshold package contains normalized type contracts only, with no physical
+exchange parser, source admission or runtime configuration borrowed from SEC.
+Both use the provider-independent field codecs in
+[`shared/storage_types.py`](../../src/market_data_pipeline/shared/storage_types.py).
+No core/type-contract import requires Arrow or Spark; Arrow loads on request.
+
+| Source | Versioned record schemas | Identity and key fields |
+| --- | --- | --- |
+| SEC FTD | `sec-ftd-facts/1`, `sec-ftd-coverage/1`, `sec-ftd-audit/1`, `sec-ftd-publications/1` | Source/dataset/reporting regime; settlement date/CUSIP for facts; partition/version/run/capture sequence for lineage |
+| Thresholds | `reg-sho-membership/1`, `reg-sho-coverage/1`, `reg-sho-audit/1`, `reg-sho-publications/1` | Dataset; independent provider/market/list date/raw symbol/rule family for membership; partition/version/run/capture sequence for lineage |
+
+`storage_schemas(settings)` for FTD consumes the pipeline config. Threshold
+`storage_schemas(schema_version="reg-sho-storage/1")` pins its independent
+normalized version; its future source config must select an admitted version.
+Schema metadata contains the schema version and storage contract ID. Changes to
+field meaning/types require a version change; changing numeric settings changes
+the config contract ID. Neither automatically migrates an existing root.
+
+Each RecordSchema provides `normalize`, `sql_types`, `encode`/`decode`,
+`arrow_schema`, `arrow_table`/`read_arrow` and `spark_schema_json`. The last
+returns explicit Spark StructType JSON with field nullability; constructing a
+Spark DataFrame and enforcing a UTC session belong to the later Delta adapter.
+SQL mappings are field types/bindings, not a table installer or full DB adapter.
+PostgreSQL uses native date, UTC datetime and Decimal values with NUMERIC;
+SQLite encodes dates/clocks/decimals as lossless text. Both preserve exact
+quantity/price token columns. Arrow uses DATE32, microsecond UTC timestamps,
+int64 metadata and configured decimal128 projections; no inference or floats.
+
+SEC REPORTED facts require raw numeric tokens matching their exact projections.
+The source `.` price requires null plus `SOURCE_PRICE_UNAVAILABLE`. WITHDRAWN
+facts retain keys/version/capture lineage with null observation values and no
+invented source-row pointer. Quantity and price are therefore nullable storage
+columns, with conditional semantic checks. Source symbols and description stay
+nullable strings; original quantity/price tokens are now retained by the parser.
+Excess nonzero fractional digits/overflow fail before Arrow/SQL encoding.
+Trailing decimal zeroes can fit a projection without losing the separate exact
+token. Projection behavior is independent of the caller's Decimal precision.
+
+Threshold raw flags are an opaque JSON object of unique string tokens, not a
+guessed NYSE physical schema. Native identifiers stay strings. Coverage records
+distinguish complete-empty, incomplete, missing and failed lists; complete
+coverage requires consistent dates, count evidence when supplied and a validated
+envelope assertion. Typed assertions do not themselves prove source completeness
+or authorize collection. That remains the exchange adapters' responsibility.
+
+Both warehouse Protocols pin transactional capture-sequence allocation, run
+recording, atomic facts/membership + coverage + audit promotion, cutoff selection
+and publication-journal operations. Future adapters must preserve equal-clock
+capture ordering and validate all records before commit. The Protocols supply
+no persistence, revision generation, query engine or crash recovery.
+
+T18 evidence is real SQLite/Parquet serialization plus native PostgreSQL binding
+and explicit Spark schema tests. Actual PostgreSQL server and Spark/Delta parity
+remain required in A14/A15 and T19–T22. Historical first-seen clocks, new source
+coverage and warehouse readiness are not inferred from these tests.

@@ -4,13 +4,14 @@
 [securities-finance program](../../docs/securities_finance/README.md).
 **Updated:** 2026-11-03. **Status:** initial offline SEC manifest, ZIP/pipe parser
 and local `validate`/`inspect` commands implemented; two approved September2026
-archives reconcile under profile version2. Next: T18 portable storage/schema,
-then T04 Bronze/SQLite/audit including rejected-input retention. PostgreSQL and
+archives reconcile under profile version2. T18 portable storage types and
+serialization are complete for both source packages. Next: T04 Bronze/SQLite/audit
+including rejected-input retention. PostgreSQL and
 Databricks compatibility are required delivery work. Acquisition, persistence, research
 exports, exchange adapters and Dagster remain unimplemented.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
-Nasdaq/NYSE list family. **Proposed source packages:**
+Nasdaq/NYSE list family. **Source packages:**
 `src/market_data_pipeline/pipelines/sec_fails_to_deliver/` and
 `src/market_data_pipeline/pipelines/reg_sho_thresholds/`.
 
@@ -160,9 +161,9 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Start **S11-T18**, then **S11-T04**, in [todo.md](todo.md): pin the portable
-storage/schema boundary before immutable original-input/manifest receipts,
-typed SQLite state, audit and initial Gold. Include rejected-input
+Start **S11-T04** in [todo.md](todo.md): T18's portable records and serialization
+are implemented for both packages. Add immutable original-input/manifest receipts,
+root/contract binding, typed SQLite state, audit and initial Gold. Include rejected-input
 retention to close the remaining T03 item. T02 is complete for the two approved
 September2026 archives; broader history, exchange contracts and G2 remain open.
 T19–T22 deliver the required PostgreSQL and Databricks adapters and parity tests;

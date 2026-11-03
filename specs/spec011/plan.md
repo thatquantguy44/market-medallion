@@ -1,8 +1,9 @@
 # Spec011 implementation plan
 
 **State:** initial SEC parser/manifest/inspection implemented and reconciled
-against two approved September2026 archives. Next: T18 portable storage/schema
-contract, then T04 Bronze/SQLite/audit including T03 rejected-input provenance.
+against two approved September2026 archives. T18 portable types/serialization
+are complete for both sources. Next: T04 Bronze/SQLite/audit, root binding and
+T03 rejected-input provenance.
 PostgreSQL and Databricks are required delivery targets, not implemented yet.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
@@ -48,8 +49,12 @@ SEC FTD's implemented runtime-config entrypoint is
 `config.py` loader. The user selected PostgreSQL by default and disabled
 Databricks publication until configured. See
 [the decision/setup guide](../../config/sec_fails_to_deliver/README.md).
-Configurable precision/scale identifies a storage contract; actual schema
-generation, representability checks and root binding remain T18/T04 work.
+Configurable precision/scale identifies a storage contract. Schema generation
+and representability checks are implemented in T18; root binding remains T04.
+Both source `storage.py` modules declare normalized schemas and warehouse
+Protocols. Shared field codecs have two concrete source users. SQLite/Parquet
+round trips and native PostgreSQL bindings are tested; actual warehouse and
+Spark/Delta integrations remain T19–T22.
 
 Each source owns `io/warehouse.py` (normalized operations), SQLite/PostgreSQL
 adapters and `io/databricks.py` (snapshot publication). Do not import AAII's

@@ -2,8 +2,9 @@
 
 **Status:** T01 documentary review recorded; T02 complete for two approved local
 September2026 archives; T03 parser complete with rejected-input storage pending.
-Next: T18 portable storage/schema contract, then T04 Bronze/SQLite/audit.
-PostgreSQL and Databricks requirements are planned in T18–T22, not implemented.
+T18 portable types/serialization are complete for both source packages.
+Next: T04 Bronze/SQLite/audit, including remaining T03 rejected-input retention.
+PostgreSQL/Databricks adapters and live parity in T19–T22 remain unimplemented.
 **Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
@@ -75,11 +76,11 @@ promotion. **Likely files:** parser, archive adapter, focused tests, two fixture
 - [x] Add a dedicated SEC FTD config folder/example, strict source-owned loader
   and no-request CLI validation; configure manifest/input selection and numeric
   profile intent without reading secrets or claiming implemented backends.
-- [ ] Pin versioned normalized records/warehouse operations and explicit SQL,
+- [x] Pin versioned normalized records/warehouse operations and explicit SQL,
   Arrow and Spark field types for each source, retaining independent source grains.
-- [ ] Preserve exact numeric text; select checked decimal precision/scale and
+- [x] Preserve exact numeric text; select checked decimal precision/scale and
   overflow policy without float or int64 coercion of FTD balances.
-- [ ] Add invented serialization round trips for leading-zero IDs, counts above
+- [x] Add invented serialization round trips for leading-zero IDs, counts above
   int64, decimal38/39-digit limits, price scale, UTC clocks and unknown nulls.
 
 **Verify:** A14/A15 schema tests compare normalized values across serialization
@@ -88,13 +89,19 @@ is needed to import the pure-Python core. **Likely files:** data contract,
 source-owned storage models/schema modules, focused schema tests. Implement
 source-specific schema modules separately if the slice exceeds five files.
 
-**Progress:** configuration foundation implemented; user selected PostgreSQL by
-default and Databricks disabled until configured. Example uses editable
-precision38/scale0 quantities and precision38/scale12 prices. Config fingerprint
-is implemented; root binding, actual SQL/Arrow/Spark types and numeric projection
-round trips are still open. See
-[the config guide](../../config/sec_fails_to_deliver/README.md). Current full
-offline suite: 208 passed, 2 existing opt-in PostgreSQL skips.
+**Complete:** both source-owned `storage.py` modules define normalized records,
+SQL/native bindings, explicit Arrow and Spark StructType JSON, semantic validation
+and warehouse Protocols. Invented records round-trip through actual SQLite and
+Parquet; PostgreSQL native bindings round-trip without a server. Decimal38 limits,
+39-digit overflow, scale loss, configurable precision, UTC/date/nulls, withdrawn
+records and complete-empty/failed lists are covered. Parser raw numeric tokens
+are retained. All 117,025 approved September observations pass a numeric/date
+preflight; ignored evidence is `data/sec_ftd/storage-types-202609.json`.
+Full suite: **283 passed, 2 existing opt-in PostgreSQL skips**; Ruff, changed-file
+format and sdist/wheel build pass. These tests close T18, not the full live
+A14/A15 gates. Root binding/persistence is T04; actual PostgreSQL and Delta
+integration evidence remains T19–T22. See
+[the config guide](../../config/sec_fails_to_deliver/README.md).
 
 ## S11-T04 — Deliver one local FTD medallion partition
 

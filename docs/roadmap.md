@@ -30,8 +30,9 @@ Read the [capability map](securities_finance/README.md),
 [program plan](securities_finance/plan.md),
 [coordination tasks](securities_finance/todo.md) and
 [delivery roadmap/readiness ledger](securities_finance/roadmap.md).
-**Continue at S11-T18 portable storage/schema**, then T04 Bronze/SQLite/audit,
-including T03 rejected-input retention. Spec011 requires PostgreSQL/Databricks
+**Continue at S11-T04 Bronze/SQLite/audit and root binding** after completed T18
+types/serialization for both sources. Include T03 rejected-input retention.
+Spec011 requires PostgreSQL/Databricks
 adapters and actual integration parity before G2;
 [checkpoint](../specs/spec011/source_review.md). Research delivery
 precedes recurring schedule activation.

@@ -3,8 +3,9 @@
 **Current priority:** the [five-stage securities-finance program](securities_finance/README.md)
 and [delivery roadmap](securities_finance/roadmap.md). Spec011's offline SEC
 parser/manifest reconciles both approved September2026 archives. Continue
-S11-T18 portable storage/schema, then S11-T04 Bronze/SQLite/audit, including T03
-rejected-input retention. PostgreSQL/Databricks adapters and parity tests in
+S11-T04 Bronze/SQLite/audit and root/contract binding, including T03 rejected-input
+retention. T18 types/serialization are complete for both sources.
+PostgreSQL/Databricks adapters and parity tests in
 T19–T22 are required delivery work, not implemented yet. See its
 [checkpoint](../specs/spec011/source_review.md).
 NAAIM is paused; do not resume its capture/schedule without the
