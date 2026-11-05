@@ -223,7 +223,7 @@ rejection, numeric overflow and actual CLI invocation. Ruff, changed-file format
 and source/wheel builds pass. See the [runbook](../../docs/deployment/sec_ftd_runbook.md).
 No provider request, PostgreSQL connection, Delta publication or schedule was run.
 
-**Next:** S11-T06 deterministic offline replay.
+**Next:** S11-T07 coherent Parquet publication; T06 is verified below.
 
 ## T05 observed corrections checkpoint
 
@@ -252,8 +252,42 @@ The full offline suite passes **346 tests, 2 existing opt-in PostgreSQL skips**.
 Invented regression fixtures cover A→B→A, equal-clock sequences, partial omissions,
 withdrawal/reappearance, coverage-only upgrades, invalid proof, receipt tampering
 and transactional rollback. Ruff and package builds pass. PostgreSQL/Delta
-engine verification remains open. T06 must replay original clocks, sequence,
+engine verification remains open. T06 below replays original clocks, sequence,
 archived evidence and original admission outcomes, including T04 rejections.
+
+## T06 deterministic offline replay checkpoint
+
+Implemented source-owned `replay.py` and immutable checksummed outcome receipts
+in `outcomes.py`. Original receipt1/2, parser/record versions, payloads, proof,
+audit and coverage are validated before rebuilding. Accepted captures regenerate
+facts through the same version/warehouse boundary; each run's exact version
+count/hash must match. Historical rejection/failure is preserved without new
+admission. Legacy outcomes require reconciliation against the read-only source
+ledger; sealed outcomes plus the complete finalized capture inventory can replay
+without a source database. Missing captures/inventory block that portable route.
+
+The source stays unchanged under a shared lock/read-only snapshot. Replay uses
+bounded explicit inventory, an empty nonoverlapping destination, private sibling
+staging and atomic completed-root rename. It copies original capture IDs/clocks,
+minting only a new warehouse identity and rebuild completion time. Missing,
+damaged, unsupported or unresolved captures/outcomes prevent publication.
+The replay CLI never opens live config paths or initializes HTTP/proxy routing.
+
+Full suite: **419 passed, 2 existing opt-in PostgreSQL skips**. Invented fixtures
+cover equal clocks, A→B→A, unchanged versions, withdrawals/reappearance, rejected
+T04 replacement, source-unavailable/oversized captures, sealed archive-only
+replay, bounds, tampering, original read-only access and failure before rename.
+Ruff, package and documentation checks pass for the checkpoint.
+
+The existing four-capture September source was rebuilt into isolated
+`data/sec_fails_to_deliver/t06-verification`. Every encoded fact (117,025),
+coverage (4) and audit (4) row matches. All four legacy outcomes reconcile;
+before-first/at-first/current cutoff counts are 0/50,332/117,025. Every source
+file's SHA-256 remains unchanged. Evidence is ignored
+`data/sec_ftd/t06-verification.json`; the ignored destination config intentionally
+names unavailable live paths and CA. No provider request, PostgreSQL/Delta
+integration, extra source capture, real correction or withdrawal was invented.
+Population coverage remains PARTIAL/NOT_CERTIFIED. Next numbered task: T07.
 The user's subsequent compatibility requirement is recorded in R12/A14/A15:
 PostgreSQL warehouse and Databricks Delta delivery/parity are required before
 G2 in T19–T22. No PostgreSQL/Delta adapter or engine verification exists yet.

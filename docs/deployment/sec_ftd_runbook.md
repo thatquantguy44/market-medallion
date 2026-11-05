@@ -5,7 +5,8 @@ coverage and database-backed Gold. This is a manual research slice. PostgreSQL
 remains the selected operational default, but its adapter is T19; Delta is T21.
 Neither is silently substituted or activated. T05 adds observed corrections,
 reversions, cutoff queries and evidence-gated withdrawals. SEC HTTP acquisition,
-jobs, schedules, Parquet publication and offline replay remain future tasks.
+jobs, schedules and Parquet publication remain future tasks. T06 offline replay
+is implemented for a separate SQLite destination.
 NAAIM remains paused.
 
 ## Configuration and first local run
@@ -49,6 +50,8 @@ whether the selected backend is implemented, not whether a server is reachable.
     coverage-evidence.json # optional reviewed proof, retained exactly
     payload.bin        # absent when the source is unavailable
     receipt.json
+    outcome.json       # new T06 terminal admission/fact fingerprint receipt
+  replay.json          # completion plus pinned full capture inventory
 ```
 
 The root marker and DB bind the dataset/regime, SQLite backend, warehouse ID,
@@ -151,9 +154,56 @@ NOT_CERTIFIED even when one file scope is COMPLETE.
 Clock regression fails allocation before a new capture. A process interruption
 can leave a STARTED audit and partial/unparsed Bronze directory; this never means
 successful fact promotion. Preserve those artifacts for investigation. Automated
-resume/replay and broader recovery are later tasks. A missing DB/marker is an
+resume and broader recovery are later tasks. A missing DB/marker is an
 integrity failure, not permission to recreate an empty store. Preserve the root
-and use a separate empty destination for future validated replay/restore work.
+and use the separate-empty-destination replay below; never recreate the source.
+
+## Deterministic offline replay
+
+Copy the pipeline example to an ignored destination config, explicitly selecting
+`warehouse: sqlite`, the original storage profile, disabled Databricks and a new
+empty root. Use that destination configuration, not the source config unchanged:
+
+```bash
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver replay \
+  --source-root data/sec_fails_to_deliver/t04-verification \
+  --config config/sec_fails_to_deliver/replay.local.yml --max-captures 1000
+```
+
+`max-captures` defaults to1000 and accepts1–10000. Replay never opens configured
+live input/manifest/evidence paths, resolves proxy/DB secrets or invokes HTTP.
+It uses archived receipt1/2, exact manifest/storage/payload/proof bytes and
+supported parser/record versions, ordered by original capture sequence. It
+retains original IDs and knowledge clocks, not replay time as first-seen.
+
+New runs seal `outcome.json` after transactional promotion. This checksummed
+receipt binds the original capture receipt, audit/coverage and inserted-version
+count/hash. Older captures without it require the intact source SQLite ledger;
+replay reads it under a shared lock/read-only snapshot and writes reconciled
+outcomes only into the new root. A completed replay root also has a checksummed
+ordered inventory in `replay.json` that pins every capture/outcome and the total
+version count. With that matching full inventory and sealed outcomes, the source
+database is unnecessary. Missing inventory or any missing capture blocks replay.
+After appending new captures, use the intact ledger to produce a fresh portable
+root; an older replay inventory cannot certify the expanded history.
+Hashes detect corruption, not authenticate
+provider or operator assertions. Existing outcomes must match an available ledger.
+
+Only originally accepted captures are reparsed. Rejected/failed captures keep
+their original outcomes, including T04's REVISION_REQUIRES_T05. A missing,
+unsupported or STARTED outcome requires investigation; replay never guesses.
+An interrupted capture without valid original artifacts is also blocking.
+If promotion committed but outcome sealing failed, the original ledger can
+reconcile it; preserve that ledger rather than deleting the missing outcome.
+
+Replay verifies each regenerated run's versions and builds a new warehouse ID in
+a private sibling staging directory. It renames the completed root into place
+only after verification; failures remove only that invocation's staging root.
+Nonempty/overlapping destinations are rejected. A concurrent writer populating
+the destination prevents the rename. `replay.json` records rebuild completion;
+its generated time does not change observation knowledge. CLI exit0 means a
+faithful rebuild, even when the reported history includes rejected/failed runs.
+Parquet/pointer recovery is still T07; PostgreSQL replay requires T19.
 
 ## Verified September checkpoint
 
@@ -175,7 +225,16 @@ fourth real-store capture adds zero versions, leaving 117,025 fact versions and
 four audits (three receipt1, one receipt2). Ignored aggregate evidence is
 `data/sec_ftd/t05-verification.json`. No real withdrawals were manufactured.
 
-Next: [S11-T06](../../specs/spec011/todo.md#s11-t06--replay-ftd-without-network)
-offline replay preserving original clocks, sequence and admission outcomes. PostgreSQL
+T06 verification: **419 passed, 2 skipped**. The isolated
+`data/sec_fails_to_deliver/t06-verification` root reproduces every encoded fact,
+coverage and audit row from all four source captures. All four legacy outcomes
+are reconciled; first-capture/before-capture/current counts are50,332/0/117,025.
+All source files remain byte-for-byte unchanged. The ignored destination config
+is `config/sec_fails_to_deliver/t06-verification.local.yml`; aggregate evidence
+is `data/sec_ftd/t06-verification.json`. Configured live paths/CA are deliberately
+unavailable in that verification to prove the offline boundary.
+
+Next: [S11-T07](../../specs/spec011/todo.md#s11-t07--publish-coherent-ftd-parquet-snapshots)
+coherent Parquet snapshots and publication recovery. PostgreSQL
 and Delta engine parity, SEC acquisition and research exports remain separate
 unchecked deliveries; see the [source checkpoint](../../specs/spec011/source_review.md).

@@ -4,7 +4,8 @@
 against two approved September2026 archives. T18 portable types/serialization
 are complete for both sources. T03/T04 complete immutable Bronze, root-bound
 SQLite facts/coverage/audit and database Gold. T05 observed revisions, cutoff
-queries and evidence-gated withdrawals are complete. Next: T06 offline replay.
+queries and evidence-gated withdrawals are complete. T06 offline replay is
+verified against invented fixtures and the real September root. Next: T07 publication.
 PostgreSQL and Databricks are required delivery targets, not implemented yet.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.

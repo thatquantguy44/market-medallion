@@ -17,7 +17,7 @@ entrypoints select direct/proxy once per run, including explicit automatic
 fallback preference, NO_PROXY, timeouts and verified custom CA support. CLI and
 Dagster forward the same settings. SEC FTD accepts configuration but has no HTTP
 adapter and makes no startup probe on its local path. No provider request or
-schedule activation is part of this change. Next Spec011 work remains T06 below.
+schedule activation is part of this change. Next numbered Spec011 task is T07 below.
 
 ## Immediate operational priority — NAAIM paused
 
@@ -55,12 +55,25 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next task: S11-T06 deterministic offline replay** in
-[Spec011 tasks](../../specs/spec011/todo.md). T03–T05 are complete: immutable
-Bronze, SQLite facts/coverage/audit, observed corrections and reversions,
-evidence-gated withdrawals and cutoff-selectable Gold. Replay must preserve
-original clocks, capture order and admission outcomes, including historical
-rejections, and use archived evidence rather than live config paths.
+**Exact next numbered task: S11-T07 coherent Parquet publication** in
+[Spec011 tasks](../../specs/spec011/todo.md). T03–T06 are complete: immutable
+Bronze, SQLite persistence, revisions/withdrawals, cutoff Gold and offline replay.
+T06 preserves original clocks, sequence, IDs, terminal outcomes and archived
+proof, including historical rejections. New captures seal `outcome.json`;
+legacy captures reconcile against the read-only original ledger. Missing or
+unresolved evidence blocks replay. A private verified staging root is renamed
+into a separate empty destination with a new warehouse identity.
+
+T06 full suite: **419 passed, 2 existing opt-in PostgreSQL skips**. An isolated
+real September rebuild has identical 117,025 fact versions, four coverage rows
+and four audits, with cutoff counts 0/50,332/117,025. All source-file digests
+remain unchanged. Ignored evidence: `data/sec_ftd/t06-verification.json`; config
+`config/sec_fails_to_deliver/t06-verification.local.yml` deliberately has unusable
+live paths/CA. A finalized checksummed inventory pins every capture/outcome for
+database-free replay; missing inventory or capture blocks that route. The user
+also discussed a bounded SEC ZIP downloader as acquisition
+work after replay; it remains unimplemented and requires a source-reviewed,
+bounded manual HTTP slice. No new source requests or schedules were enabled.
 On 2026-11-03 the user required PostgreSQL and
 Databricks compatibility too: R12/A14/A15 and T19–T22 require source-owned
 warehouse/Delta adapters and actual integration parity before G2. These are
@@ -255,7 +268,7 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T06 offline replay with original admission outcomes.
+Continue S11-T07 coherent Parquet publication; T06 replay is verified.
 T03/T04 are complete for local SEC ingestion; T18 is complete for both packages.
 T19–T22 PostgreSQL/Delta implementation
 and actual integration evidence are required before Spec011 G2.

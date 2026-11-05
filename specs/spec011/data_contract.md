@@ -1,7 +1,7 @@
 # Settlement facts and threshold membership contract
 
 **State:** normalized types and SEC SQLite slice implemented; later adapters planned.
-**Date:** 2026-11-03. Inherits [C01–C11](../../docs/securities_finance/contract.md).
+**Date:** 2026-11-04. Inherits [C01–C11](../../docs/securities_finance/contract.md).
 T18's normalized type contracts and serialization are implemented for both source
 packages. The parser implements the six-column/trailer local profile version2,
 reconciled against two approved September2026 archives after an unsuccessful
@@ -333,7 +333,7 @@ and publication-journal operations. Future adapters must preserve equal-clock
 capture ordering and validate all records before commit. The Protocols supply
 no persistence, revision generation, query engine or crash recovery themselves.
 T04's source-owned SQLite adapter implements the local capture/current-selection
-subset; observed-as-of remains T05 and publication operations remain T07.
+subset; T05 adds observed-as-of, T06 adds replay and publication remains T07.
 
 T18 evidence is real SQLite/Parquet serialization plus native PostgreSQL binding
 and explicit Spark schema tests. Actual PostgreSQL server and Spark/Delta parity
@@ -378,7 +378,7 @@ The store has 117,025 unique facts, 663 missing prices and 21 observed settlemen
 quantity sums reconcile. First-seen is actual November3 acquisition completion,
 with separate acquisition-start clocks in Bronze. No PostgreSQL/Delta engine
 was touched. See the [runbook](../../docs/deployment/sec_ftd_runbook.md) and
-ignored `data/sec_ftd/t04-verification.json`. T05 is delivered below; next is T06 replay.
+ignored `data/sec_ftd/t04-verification.json`. T05/T06 are delivered below; next is T07.
 
 ## 13. T05 observed-revision decisions
 
@@ -406,3 +406,45 @@ authorize removal; contradictory supplied evidence rejects promotion. These
 are scoped, operator-reviewed assertions, not automatic external verification
 of the references or a certification of the entire security/history universe.
 The approved real September inputs retain their current uncertified scope.
+
+## 14. T06 deterministic offline replay contract
+
+Replay reads only original Bronze artifacts and original terminal outcomes.
+New captures seal `outcome.json` after database promotion, binding a checksum,
+the exact capture-receipt digest, encoded audit/coverage records, and a count/hash
+of that run's inserted fact versions. This is integrity evidence, not a signature
+or provider authentication. Legacy receipt1/2 captures without an outcome file
+require their intact source SQLite audit/coverage/fact ledger for reconciliation;
+replay never writes reconciliation files into the source. An existing outcome
+file must agree with that ledger when it is available. A completed replay root
+seals a checksummed ordered capture inventory in `replay.json`; it pins every
+run/sequence/outcome hash and total version count. That complete sealed archive
+can replay without its database. A missing/stale inventory or missing capture,
+including the final capture, blocks database-free replay. Missing/STARTED/PARTIAL outcomes,
+ambiguous sequences, unsupported versions and any contradiction fail closed.
+
+Read the source under a shared root lock and read-only database snapshot where
+available. Validate the complete bounded inventory before building a new root.
+Order strictly by persisted positive capture sequence, never UUID or directory
+order. Preserve IDs, capture/acquisition/completion clocks, original outcomes,
+coverage versions and all exact numeric tokens. Reparse only originally accepted
+captures, use archived completeness evidence, and regenerate versions through
+the normal warehouse boundary. Never re-admit a historical rejection under a
+newer rule. Verify each reconstructed run's fact count/hash against its outcome.
+
+`replay --source-root ... --config <destination.yml> --max-captures 1000` requires
+an explicitly selected SQLite destination with the same storage contract and
+Delta disabled. The destination must be empty, separate and nonoverlapping with
+the source. Build in a private sibling staging root, verify artifacts and logical
+state, then rename the completed root into place. Failure removes only this
+invocation's staging root; no partial destination is published. A new warehouse
+identity is minted while capture/version identities are retained. Source input,
+manifest and evidence paths in live YAML are never opened; no transport or
+network preflight is invoked. Parquet publication/recovery remains T07.
+
+Acceptance A09: invented corrections/reversions, equal-clock cutoffs, unchanged
+captures, complete withdrawals/reappearance, rejection/failure and receipt1/2
+replay yield equal facts, coverage, audit and Gold. Exercise missing/damaged
+artifacts/outcomes, unsupported parser/schema versions, sequence ambiguity,
+nonempty/overlapping targets and injected promotion failure. Reconcile the real
+September root into an isolated destination without changing original knowledge.

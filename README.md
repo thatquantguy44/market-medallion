@@ -27,7 +27,8 @@ and local inspection command, reconciled against both approved September2026
 archives. T18 portable storage types and serialization are complete for both
 source packages. T03–T05 local Bronze/SQLite/audit/Gold, observed revisions,
 cutoff queries and gated withdrawals are implemented, with 117,025 September
-facts. Continue at S11-T06 offline replay.
+facts. T06 offline replay now reproduces their facts, coverage and audits with
+original clocks/outcomes and an unchanged source. Continue at S11-T07 Parquet publication.
 Spec011 still requires PostgreSQL/Databricks adapters and live parity, Parquet,
 source acquisition, exchange adapters and research exports. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md). No new job is implemented.

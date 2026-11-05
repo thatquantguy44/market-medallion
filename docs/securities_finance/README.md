@@ -87,7 +87,7 @@ offline tests and successful reconciliation of two approved September2026 SEC
 archives after an earlier HTTP403. T18 type contracts and serialization pass for
 both sources. T03–T05 persist local SEC Bronze/SQLite/audit/Gold and observed
 revisions with evidence-gated withdrawals, retaining 117,025 September facts.
-Next is S11-T06 offline replay; exchange
+T06 offline replay preserves original outcomes and clocks. Next is S11-T07 publication; exchange
 conformance and full delivery remain open.
 
 The plans assume Python 3.12, the existing manifest-driven medallion layout,

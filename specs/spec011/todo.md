@@ -3,7 +3,7 @@
 **Status:** T01 documentary review recorded; T02 complete for two approved local
 September2026 archives; T03 bounded parser and rejected-input retention complete.
 T18 portable types/serialization are complete for both source packages.
-T05 observed revisions and evidence-gated withdrawals are complete. Next: T06 offline replay.
+T05 revisions and T06 deterministic offline replay are complete. Next: T07 Parquet publication.
 PostgreSQL/Databricks adapters and live parity in T19–T22 remain unimplemented.
 **Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
@@ -153,10 +153,10 @@ September coverage remains PARTIAL; no completeness evidence was supplied.
 
 **Dependencies:** T05. **Scope:** M. **Requirements:** R06,R07,N01.
 
-- [ ] Replay original receipts/members in persisted capture sequence order.
-- [ ] Reproduce equal-clock corrections and original version first-seen clocks.
-- [ ] Require empty destination and explicit supported parser/schema versions.
-- [ ] Replay archived completeness evidence from receipt versions 1/2, preserving
+- [x] Replay original receipts/members in persisted capture sequence order.
+- [x] Reproduce equal-clock corrections and original version first-seen clocks.
+- [x] Require empty destination and explicit supported parser/schema versions.
+- [x] Replay archived completeness evidence from receipt versions 1/2, preserving
   the original audit/admission outcome. Never re-admit a historically rejected
   capture under newer correction rules or consult a live evidence file.
 
@@ -164,11 +164,22 @@ September coverage remains PARTIAL; no completeness evidence was supplied.
 transport stub fails if invoked. **Likely files:** replay module, receipt model,
 warehouse helper, replay tests.
 
+**Complete:** immutable terminal outcome receipts bind original audit/coverage
+and per-run fact fingerprints. Legacy captures reconcile against the read-only
+source ledger; finalized inventories plus sealed captures replay without its database. Validation and
+private staging precede atomic publication into a separate empty root. A
+historical rejection is retained rather than reevaluated as newly acceptable.
+Full suite: **419 passed, 2 existing opt-in PostgreSQL skips**. Real September
+replay reproduces 117,025 fact versions, four coverage records and four audits;
+cutoff counts are 0 / 50,332 / 117,025 and all source-file digests are unchanged.
+Ignored evidence: `data/sec_ftd/t06-verification.json`. No network request,
+PostgreSQL/Delta activation or source-store rewrite occurred.
+
 ### Checkpoint 2 — Independent FTD research state
 
-- [ ] A05/A09 pass and modern absence remains coverage-qualified (A06).
-- [ ] Same payload, correction, reversion and withdrawal remain inspectable.
-- [ ] No interpretation claims fail age or new daily failed shares.
+- [x] A05/A09 pass and modern absence remains coverage-qualified (A06).
+- [x] Same payload, correction, reversion and withdrawal remain inspectable.
+- [x] No interpretation claims fail age or new daily failed shares.
 
 ## S11-T07 — Publish coherent FTD Parquet snapshots
 

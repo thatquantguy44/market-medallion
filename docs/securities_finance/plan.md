@@ -3,7 +3,8 @@
 **State:** Spec011 offline SEC parser/manifest/inspection implemented;
 two approved September2026 SEC archives reconciled. T18 portable types and
 serialization are complete for both sources. T03–T05 local SEC persistence,
-observed revisions, cutoff Gold and gated withdrawals are complete. Next: T06 replay.
+observed revisions, cutoff Gold and gated withdrawals are complete. T06 offline
+replay is verified. Next: T07 coherent Parquet publication.
 Spec011 requires PostgreSQL/Databricks delivery and parity tests in T18–T22.
 Exchange conformance and later deliveries
 remain planned. See [checkpoint](../../specs/spec011/source_review.md).

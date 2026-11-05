@@ -103,7 +103,12 @@ T04 adds configured `run` and bounded `gold`; see the
 [local runbook](../../docs/deployment/sec_ftd_runbook.md). The example's PostgreSQL
 selection deliberately errors before input/root I/O until T19; use an explicit
 SQLite local config. T05 adds observed revisions and cutoff queries. PostgreSQL
-connections, Delta publication and replay remain in [Spec011 tasks](../../specs/spec011/todo.md).
+connections and Delta publication remain in [Spec011 tasks](../../specs/spec011/todo.md).
+T06 adds `replay --source-root ... --config <destination.yml> --max-captures 1000`.
+The destination selects SQLite, disabled Databricks, matching storage settings
+and an empty nonoverlapping root. Configured live partition paths and network
+settings are not used during replay; original artifacts/outcomes supply them.
+See the [runbook](../../docs/deployment/sec_ftd_runbook.md) for safe reconstruction.
 
 Each partition optionally names `coverage_evidence`, relative to this YAML's
 directory. Omission or null retains PARTIAL coverage. Supply reviewed JSON only

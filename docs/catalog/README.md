@@ -10,7 +10,7 @@ a local SEC Bronze/SQLite/audit/Gold slice; later connectors remain planned.
 Its parser/manifest/local inspection slice reconciles two approved
 September2026 archives. T18 type contracts/serialization are implemented for both
 source packages; T03–T05 SEC persistence, observed revisions, cutoff Gold and
-evidence-gated withdrawals are complete. Next is S11-T06 offline replay.
+evidence-gated withdrawals and T06 offline replay are complete. Next is S11-T07 publication.
 PostgreSQL and Databricks are required Spec011 targets, not implemented yet.
 NAAIM remains paused.
 
