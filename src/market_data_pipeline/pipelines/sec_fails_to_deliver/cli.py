@@ -55,11 +55,14 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--manifest", type=Path, required=True)
     config_command = commands.add_parser("validate-config")
     config_command.add_argument("--config", type=Path, required=True)
-    for name in ("run", "gold"):
+    for name in ("run", "gold", "replay"):
         command = commands.add_parser(name)
         command.add_argument("--config", type=Path, required=True)
         if name == "run":
             command.add_argument("--partition", required=True)
+        elif name == "replay":
+            command.add_argument("--source-root", type=Path, required=True)
+            command.add_argument("--max-captures", type=int, default=1000)
         else:
             command.add_argument("--limit", type=int, required=True)
             command.add_argument("--as-of", type=_as_of)
@@ -76,18 +79,23 @@ def main(argv: list[str] | None = None) -> int:
         if arguments.manifest and (not arguments.input or arguments.partition):
             parser.error("manifest inspection requires --input and no --partition")
     try:
-        if arguments.command in ("run", "gold"):
-            result = (
-                run(arguments.config, arguments.partition)
-                if arguments.command == "run"
-                else gold(
+        if arguments.command in ("run", "gold", "replay"):
+            if arguments.command == "replay":
+                from market_data_pipeline.pipelines.sec_fails_to_deliver.replay import replay
+
+                result = replay(
+                    arguments.source_root, arguments.config, max_captures=arguments.max_captures
+                )
+            elif arguments.command == "run":
+                result = run(arguments.config, arguments.partition)
+            else:
+                result = gold(
                     arguments.config,
                     limit=arguments.limit,
                     as_of=arguments.as_of,
                     as_of_sequence=arguments.as_of_sequence,
                     include_withdrawn=arguments.include_withdrawn,
                 )
-            )
             print(json.dumps(result, sort_keys=True, default=_json_value))
             return 0 if arguments.command == "gold" or result["status"] == "SUCCEEDED" else 1
         if arguments.command == "validate-config":
