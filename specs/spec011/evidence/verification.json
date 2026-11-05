@@ -1,0 +1,25 @@
+{
+  "databricks_workspace_tested": false,
+  "delta_spark": "4.0.1",
+  "implementation_and_review_sha256": {
+    "scripts/verify_spec011_sec_samples.py": "790f18a755e41adcfad747377cbb142f3c1aef8dd49b2e17281288290166edd5",
+    "scripts/verify_spec011_threshold_samples.py": "43622f53de141565105962a8a7e1b242470731f3e5c060e4d4328c3fb3216444",
+    "src/market_data_pipeline/pipelines/reg_sho_thresholds/acquisition.py": "89ef0414834010d7aaaf4d690ab6c9d2a42930673215b31366c85b56522152cc",
+    "tests/test_reg_sho_nyse_http.py": "ba087495aa06525852226bde984bfa15db550ac82922b51830718d62279cb70f",
+    "tests/test_spec011_identity_features.py": "04341e2f54a7bb54bed832169bcfc9a9a17f199f01b94feeb927b22ae14a9a97"
+  },
+  "postgres": "postgres (PostgreSQL) 17.6",
+  "provider_requests_in_tests": 0,
+  "pytest": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 492
+  },
+  "python": "3.12.0",
+  "returncode": 0,
+  "schema_version": "spec011-t17-verification/1",
+  "spark": "4.0.1",
+  "test_database": "dedicated disposable instance; generated environment-only credentials; removed after run",
+  "verified_at": "2026-11-05T20:23:02.114203+00:00"
+}

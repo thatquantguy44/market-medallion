@@ -1,0 +1,19 @@
+{
+  "acquisition_enabled_after_capture": false,
+  "capture_count": 10,
+  "databricks_enabled": false,
+  "delta_snapshot_counts": {
+    "audit": 10,
+    "coverage": 10,
+    "episodes": 93,
+    "membership": 408
+  },
+  "delta_snapshot_id": "e686f685219be831562b308c8ba3e14e",
+  "delta_snapshot_manifest_sha256": "19a0618b6f62fada93d07536dd53d65f91c41fdb69716a58106c2c08e38175e8",
+  "export_coverage_count": 10,
+  "export_episode_count": 93,
+  "export_membership_count": 408,
+  "new_schedules_started": false,
+  "replay_status": "SUCCEEDED",
+  "source_provider_requests": 0
+}

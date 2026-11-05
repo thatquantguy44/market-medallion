@@ -87,3 +87,74 @@ def test_ftd_features_are_balance_changes_and_only_count_complete_dates():
     assert changes[1]["observation_gap_days"] == 2
     assert changes[1]["interpretation"] == "OUTSTANDING_BALANCE_CHANGE_NOT_NEW_FAILS"
     assert coverage_qualified_counts(rows, {date(2026, 9, 1)}) == {"000000001": 1}
+
+
+def test_s11_a07_overlapping_and_unknown_identifiers_do_not_choose_a_join_target():
+    common = {
+        "namespace": "nasdaq-symbol",
+        "raw_identifier": "ALFA",
+        "effective_from": date(2026, 1, 1),
+        "effective_to": None,
+        "first_seen_at": datetime(2026, 1, 2, tzinfo=UTC),
+        "status": "RESOLVED",
+    }
+    mappings = [
+        {**common, "target_security_id": "security-one", "mapping_version": "v1"},
+        {**common, "target_security_id": "security-two", "mapping_version": "v2"},
+    ]
+    overlap = resolve_identity(
+        mappings,
+        namespace="nasdaq-symbol",
+        raw_identifier="ALFA",
+        economic_date=date(2026, 6, 1),
+        knowledge_cutoff=datetime(2026, 6, 2, tzinfo=UTC),
+    )
+    assert overlap == {
+        "match_status": "AMBIGUOUS",
+        "target_security_id": None,
+        "mapping_version": None,
+    }
+    unknown = resolve_identity(
+        mappings,
+        namespace="cusip",
+        raw_identifier="000000001",
+        economic_date=date(2026, 6, 1),
+        knowledge_cutoff=datetime(2026, 6, 2, tzinfo=UTC),
+    )
+    assert unknown == {
+        "match_status": "UNRESOLVED",
+        "target_security_id": None,
+        "mapping_version": None,
+    }
+
+
+def test_s11_a08_explicit_calendar_skips_holiday_without_inventing_observations():
+    from market_data_pipeline.pipelines.reg_sho_thresholds.episodes import derive_episodes
+
+    # Invented bounded calendar: July 3 is excluded, followed by a weekend.
+    dates = [date(2026, 7, day) for day in (2, 6, 7)]
+    scope = {"provider": "nasdaq", "market": "NASDAQ"}
+    membership = [
+        {
+            **scope,
+            "raw_symbol": "ALFA",
+            "rule_family": "REG_SHO_203",
+            "row_state": "REPORTED",
+            "list_date": day,
+        }
+        for day in dates[:2]
+    ]
+    coverage = [
+        {
+            **scope,
+            "list_date": day,
+            "coverage_state": "COMPLETE" if day != dates[-1] else "COMPLETE_EMPTY",
+        }
+        for day in dates
+    ]
+    (episode,) = derive_episodes(membership, coverage, dates)
+    assert episode["observed_present_count"] == 2
+    assert episode["start_date"] == dates[0] and episode["end_date"] == dates[1]
+    assert episode["left_censored"] and episode["exit_confirmed"]
+    assert not episode["gap_before"] and not episode["gap_after"]
+    assert not episode["right_censored"]
