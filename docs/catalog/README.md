@@ -1,5 +1,17 @@
 # Market-data source catalog
 
+**Current build priority (2026-11-03):** the
+[five-stage securities-finance program](../securities_finance/README.md),
+Specs011–015. The older catalog below preserves original source rationale;
+its former priority labels are superseded by that program. Full source
+contracts/plans/tasks now exist for SEC FTD + Reg SHO, FINRA short volume,
+FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. Spec011's SEC and
+threshold research slices are implemented through SEC T21 and threshold T20.
+The SEC parser reconciles two approved September2026 archives; both packages
+have SQLite/PostgreSQL, replay and research exports. SEC Delta is locally
+verified. Next is S11-T22 threshold Delta; final provider-use acceptance remains.
+NAAIM remains paused.
+
 Researched against official provider pages on 2026-10-26. These are source
 candidates, except for AAII's implemented authorized-local-CSV slice.
 Automated provider retrieval remains unverified. “Under-utilized” is a research theme;

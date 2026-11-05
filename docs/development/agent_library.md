@@ -44,7 +44,8 @@ floating branch is configured.
 
 `agents/quantsmith.reference.json` records the provided local checkout,
 `MARKET_MEDALLION_QUANTSMITH_PATH` override, revision
-`5deea85438f6d46a8a14ddb85e3821a65fa62f4e`, original tree and hashes for 61
+`41c56458f476a6c32fa922f7b8c70bb92e4fd21e`, tree
+`9be0ada464c3a96268677d3b32e90c0be11beeb6` and hashes for 61
 selected guidance files. `python3 scripts/verify_quantsmith.py` resolves and
 checks these without fetching, checking out, installing or modifying the SDK.
 `--path` overrides the environment/default location. The pin covers adopted

@@ -18,9 +18,10 @@ expansion and downstream implementation.
 **Current evidence:** On 2026-11-01 the user reported oral NAAIM permission by
 phone. The user then confirmed daily automated pulls and 365-day retention. The
 corresponding nonsecret receipt reference is
-`user-confirmed-naaim-permission-2026-11-01`. It does not satisfy the written
-scope/frequency/retention/transformation evidence criteria above, so the
-recurring schedule and any downstream use remain disabled.
+`user-confirmed-naaim-permission-2026-11-01`. The user subsequently confirmed
+daily automated pulls, 365-day retention and the local research-report display
+scope. The enabled local schedule and separately gated local export remain
+limited to that delayed research boundary.
 
 ## Task 1: Define fixture and parser contract
 
@@ -45,16 +46,19 @@ parser are implemented. No live provider values are committed to fixtures.
 - [x] Source-owned Bronze receipts, typed Silver versions and attributed delayed
   research output work from fixtures.
 - [x] Live retrieval requires a nonsecret permission reference.
-- [x] No QuantMeridian export, schedule, bulk backfill or credential path exists.
+- [x] The source package has no credential-sharing, database or networked
+  QuantMeridian path; the explicit local artifact export is attributed,
+  delayed and current-vintage only.
 
 **Verify:** Focused tests, full suite, lint, format and package build.
 
 **Dependencies:** Task 1.
 
-**Progress:** Local immutable Bronze capture, append-only observed versions and
-an attributed delayed latest output are implemented. The manual module CLI passed
-one bounded smoke run on 2026-11-01 (131 rows); no schedule, bulk backfill,
-database adapter or QuantMeridian output exists.
+**Progress:** Local immutable Bronze capture, append-only observed versions,
+an attributed delayed latest output and a narrow current-vintage research export
+are implemented. The manual module CLI passed one bounded smoke run on
+2026-11-01 (131 rows); no bulk backfill, database adapter or networked
+QuantMeridian access exists.
 
 ## Task 3: Add local-only operational visibility
 

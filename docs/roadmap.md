@@ -1,17 +1,51 @@
 # Master research roadmap and source backlog
 
-Last updated: 2026-11-01. This is the canonical backlog for source selection;
+Last updated: 2026-11-03. This is the canonical backlog for source selection;
 the [master handoff](handoffs/project_bootstrap.md) records the current pickup
 point. AAII has a completed local CSV/XLS pipeline, bounded live acquisition,
-historical backfill and verified recovery. Recurring acquisition remains gated. Other sources remain unimplemented. Research uses are hypotheses,
+historical backfill and verified recovery. Recurring AAII acquisition remains
+gated. NAAIM has a local delayed-research slice and attributed artifact and is
+currently paused. Other sources remain unimplemented. Research uses are hypotheses,
 and neither low adoption nor predictive value has been established.
+
+## Active ordered program — securities-finance data
+
+The user's 2026-11-03 direction selects these five deliveries in order,
+superseding older next-source recommendations below. The first delivery groups
+SEC FTD and exchange Reg SHO history while keeping separate source packages.
+The SEC local Bronze/SQLite/audit/Gold slice is implemented and reopened with
+both approved September2026 archives. Observed revisions, PostgreSQL/Delta,
+exchange conformance and the remaining research deliveries are open.
+
+| Order | Delivery / spec | Plan | Canonical tasks | Research milestone |
+| --- | --- | --- | --- | --- |
+| 1 | [SEC FTD + Nasdaq/NYSE Reg SHO](../specs/spec011/README.md) | [Plan011](../specs/spec011/plan.md) | [Tasks011](../specs/spec011/todo.md) | Versioned balances/membership, honest episodes and coverage-qualified research output |
+| 2 | [FINRA daily short-sale volume](../specs/spec012/README.md) | [Plan012](../specs/spec012/plan.md) | [Tasks012](../specs/spec012/todo.md) | Scope-matched short/total volume with no exempt double-counting |
+| 3 | [FINRA ATS/non-ATS transparency](../specs/spec013/README.md) | [Plan013](../specs/spec013/plan.md) | [Tasks013](../specs/spec013/todo.md) | Delayed weekly venue/participant panel with coverage and revisions |
+| 4 | [SEC N-PORT](../specs/spec014/README.md) | [Plan014](../specs/spec014/plan.md) | [Tasks014](../specs/spec014/todo.md) | Public holdings/lending disclosures with filing-safe joins and amendment/availability evidence |
+| 5 | [NY Fed primary dealers](../specs/spec015/README.md) | [Plan015](../specs/spec015/plan.md) | [Tasks015](../specs/spec015/todo.md) | Aggregate financing/fails context with metadata and definition eras |
+
+Read the [capability map](securities_finance/README.md),
+[common contract](securities_finance/contract.md),
+[program plan](securities_finance/plan.md),
+[coordination tasks](securities_finance/todo.md) and
+[delivery roadmap/readiness ledger](securities_finance/roadmap.md).
+**Continue at S11-T22 threshold Delta publication** after completed SEC
+T03–T07/T19/T21, threshold T20 and shared T18. Spec011 still requires threshold
+Delta parity and final provider-use acceptance before G2;
+[checkpoint](../specs/spec011/source_review.md). Research delivery
+precedes recurring schedule activation.
+NAAIM remains paused and is not restarted by this program.
+
+Existing CFTC, Cboe, Nasdaq breadth, OCC, OFR and other backlog candidates remain
+below, deferred behind this program unless the user reprioritizes.
 
 ## Main scope: positioning and market structure
 
 Specs 002/003 implement AAII first with Parquet, SQLite/PostgreSQL, and Dagster.
 Spec 001 retains the broader ingestion design, with CFTC positioning,
 FINRA short-sale volume and OFR funding measures still planned. SEC settlement
-failures are a candidate extension. Build and verify one provider end to end
+failures are now selected under Spec011. Build and verify one provider end to end
 before extending coverage. Source selection and individual fields remain subject
 to provider-contract verification.
 
@@ -37,10 +71,10 @@ authentication, and free access before implementation.
 | `sec-midas` | [SEC Market Structure Analytics / MIDAS](https://www.sec.gov/featured-topics/market-structure-analytics) | Published market metrics and research datasets; market-quality analysis | Published dataset downloads | Verify each dataset's history and freshness; published extracts do not provide unrestricted access to underlying MIDAS feeds. |
 | `aaii-investor-sentiment` | [AAII Investor Sentiment Survey](https://www.aaii.com/sentiment-survey) | Weekly bullish, neutral, and bearish shares for individual investors; sentiment spread, changes, and historical-percentile research | Official survey results and [historical results/download page](https://www.aaii.com/sentimentsurvey/sent_results); access review required | Verify historical-data membership requirements, cost, permitted automation, and reuse terms; no official public API verified. Preserve survey period and actual publication time; opinion measures are not holdings or trade flows. |
 
-AAII is first at the user's request. Recommended order for the remaining additions:
+Historical recommendation, superseded by Specs011–015 for next work:
 **NY Fed Primary Dealer Statistics → SEC
 N-MFP → FINRA ATS/non-ATS → OFR Hedge Fund Monitor**. This is a prioritization
-proposal for the backlog; Spec 002 governs the current AAII-first build order.
+proposal retained for backlog context; the new five-stage program governs next work.
 Retain DTCC and MIDAS for later evaluation; do not silently drop them because
 they are outside the first implementation slice.
 
@@ -86,7 +120,8 @@ authorized-local-CSV importer, Parquet output, warehouse adapters, and a stopped
 Dagster schedule definition. A bounded official XLS download, current workbook parsing, and a four-row live
 PostgreSQL load are verified. Routine download entitlement remains unverified;
 offline fixtures are synthetic. The other **13 additions**
-remain research candidates without implemented connectors. Retain these IDs
+remain without implemented connectors; NY Fed, FINRA OTC and N-PORT now have
+full Specs015,013,014. Retain these IDs
 across future specs and handoffs.
 
 For each candidate, progress through these stages and record the evidence:
@@ -110,7 +145,8 @@ CFTC TFF futures-only now has a separate provider contract in Spec 006. The user
 selected NAAIM's delayed public research feed as the next source under review in
 Spec 007. Its initial fixture-backed local slice is implemented; an explicit
 permission reference remains required for a live request. A future QuantMeridian
-route remains commercially gated.
+route is limited to the user-confirmed attributed local research artifact.
+NAAIM is currently paused by explicit user direction.
 
 ## Platform growth
 
@@ -133,8 +169,8 @@ do not replace the original 14-source inventory.
 | --- | --- | --- |
 | `ecb-fx-reference` | [Spec 004: daily official FX reference rates](../specs/spec004/README.md) | ECB first, with explicit orientation, same-date crosses and observed revisions. Official documentation reviewed; live schema/connector not verified. Bank of Canada and BIS are deferred provider alternatives. |
 | `company-web-traffic` | [Spec 005: company/competitor web traffic estimates](../specs/spec005/README.md) | Free-first source feasibility and offline contract; no suitable free recurring visits feed verified. Similarweb is an optional paid candidate, with budget, account coverage and retention rights unresolved. DNS rankings remain a separate proxy candidate. |
-| `naaim-exposure-public-delayed` | [Spec 007: NAAIM Exposure Index](../specs/spec007/README.md) | Selected for delayed public-display research only. A local Bronze/Silver/delayed-latest slice and one bounded manual smoke run are verified; an explicit permission reference remains required for every live request. It cannot supply QuantMeridian. |
-| `cboe-published-put-call-ratios` | [Spec 009: Cboe published daily ratios](../specs/spec009/README.md) | First discovery priority among the three new proposals. Public daily labels are observed; date selection, terms, historical continuity and a source-shaped contract remain unverified. |
+| `naaim-exposure-public-delayed` | [Spec 007: NAAIM Exposure Index](../specs/spec007/README.md) | Local delayed-research slice and attributed local QuantMeridian artifact; explicit permission reference required for live requests. **Paused** on 2026-11-03; schedule stopped and no capture/export refresh until explicitly resumed. |
+| `cboe-published-put-call-ratios` | [Spec 009: Cboe published daily ratios](../specs/spec009/README.md) | First in the deferred options/breadth queue. Public daily labels observed; date selection, terms, history and source contract remain unverified. |
 | `nasdaq-daily-market-breadth` | [Spec 010: Nasdaq Trader breadth counts](../specs/spec010/README.md) | Second discovery priority. The 2026 file has Advances, Declines and Unchanged fields; historic coverage, universe meaning, terms and schema continuity remain unverified. |
 | `occ-options-volume-query` | [Spec 008: OCC options put/call volume](../specs/spec008/README.md) | Third discovery priority. The batch CSV parameter interface is documented; live schema, history/result limits, terms and scope aggregation remain unverified. |
 

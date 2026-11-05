@@ -1,0 +1,375 @@
+{
+  "schema_version": 1,
+  "inspection_date": "2026-11-04",
+  "timezone": "America/New_York",
+  "purpose": "Inspection baseline for Spec016; selected working-tree content, not a release or transferred data inventory.",
+  "runtime_data_included": false,
+  "repositories": {
+    "research_website": {
+      "repository": "https://github.com/thatquantguy44/thatquantguy44.github.io.git",
+      "head": "37c9307e86711ffadc391b6cc49079812fb09c14",
+      "working_tree_clean_at_inspection": true,
+      "files": [
+        {
+          "path": "docs/research/002_PresidentialImpact/MASTER_HANDOFF.md",
+          "sha256": "7106097b140086205857d8c14e5d28c7c2b7f68ff0dd324cd17910403335d03c",
+          "bytes": 10945
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/exact-replication-disposition.md",
+          "sha256": "0b30eb89e95a3a8ddcfbec0b6571fe62268f3ddbf9dbdc2697a5400d26c35a59",
+          "bytes": 6071
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/inherited-conditions-protocol.md",
+          "sha256": "702a422fe057baf63ab3423489af542d7ec016ca0f3cc2d094332d13f2c14d0a",
+          "bytes": 6636
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/QUALITY.md",
+          "sha256": "133bdcd136478d94b6c12db2d3c7da093f17ece77f1bfb7d9e3827030b13df4b",
+          "bytes": 2183
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/README.md",
+          "sha256": "550d53b4b166d2fd8c5e71858c4fa90d3afc5da5b8a3b021829b46b9b09ea973",
+          "bytes": 10769
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/SOURCE_DECISIONS.md",
+          "sha256": "c7bb0a22bcbcb4d7028f644b3d75fe9640a06c415818c7bb196316eb94a0935a",
+          "bytes": 7287
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/TRANSFER.md",
+          "sha256": "8179357eaac74b92fe3e62da882b32f70cea8e2b3828dfbc8558ebc41de2507b",
+          "bytes": 1297
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/__init__.py",
+          "sha256": "7cc6b0d9231066fb12496c175db03105e258ac1383eb06dbc46315236daf7f9c",
+          "bytes": 106
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/assemble.py",
+          "sha256": "d274c1fc935c2bd6c1b120a1e6655c88847c74b12ed3e4ab959544d2b2639e58",
+          "bytes": 5864
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/cli.py",
+          "sha256": "d887cba1217da5d63af09ef6ef72833243d44189cc77a25bdb73e23574d6681b",
+          "bytes": 4149
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/config.py",
+          "sha256": "cb001ddd10e3985b9209243e3b924eb90970ced7bc88552e898522938f3fee5d",
+          "bytes": 3401
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/fetch.py",
+          "sha256": "5a5aed54d808226dc41b55c5d2ed3dcc484b1b7f4ddb2067f20482577741c600",
+          "bytes": 5359
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/parsers.py",
+          "sha256": "a278d80661e6ee0bb5c86e0665be2e1a230ae58c940de9775aa429e4a0b6f2eb",
+          "bytes": 15218
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/pipeline.py",
+          "sha256": "dd5a029ed19baad50182c820b221ebad6047a69b817fdf8f199a135bba0d9a52",
+          "bytes": 11615
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/provenance.py",
+          "sha256": "49dfc9134a0d422a5b32c55b9e4bc4f356a751cd41b27c723833a9aad3d832ba",
+          "bytes": 757
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/build/lib/presidential_data_pipeline/quality.py",
+          "sha256": "cd647c3978c5c2b6957a752edbf7b3311142a5456b3f012c07c896f00442c07b",
+          "bytes": 10381
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/config/sources.toml",
+          "sha256": "da1803275ce3d1d6f26d823a51e29e34a5c45dfd2e09b5576c2aa53ef96376e8",
+          "bytes": 5991
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/pyproject.toml",
+          "sha256": "af6742599726f77d91d8ed664c452d1aa3b783217e5c20eef2cd1e7a88ed4e12",
+          "bytes": 569
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/__init__.py",
+          "sha256": "7cc6b0d9231066fb12496c175db03105e258ac1383eb06dbc46315236daf7f9c",
+          "bytes": 106
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/assemble.py",
+          "sha256": "2575b13dcead89ad279877bef8eacb56475ba3af39c7678ba6e0687c4307490a",
+          "bytes": 38138
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/cli.py",
+          "sha256": "7015686e77e8667fc2330691740d2405de8573315d9554253aaf772025326253",
+          "bytes": 11431
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/config.py",
+          "sha256": "12ec7a5641b46798db19976f290be3d3a64ac06bef021927f286a05b3a07b33b",
+          "bytes": 6290
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/fetch.py",
+          "sha256": "5a5aed54d808226dc41b55c5d2ed3dcc484b1b7f4ddb2067f20482577741c600",
+          "bytes": 5359
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/parsers.py",
+          "sha256": "52746f572adedba800639d700460480d6fca8ef55e5fec3427c18e611f7d645d",
+          "bytes": 15806
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/pipeline.py",
+          "sha256": "de0938678c09ba46c139af5173ea46f6652e77210874ddc3a47f0bc29dd1c467",
+          "bytes": 13095
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/provenance.py",
+          "sha256": "49dfc9134a0d422a5b32c55b9e4bc4f356a751cd41b27c723833a9aad3d832ba",
+          "bytes": 757
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/quality.py",
+          "sha256": "1e8377dd580cb1537cd79a277d28c9882295202ab4d918de75e60f6f57430a2f",
+          "bytes": 11198
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/src/presidential_data_pipeline/review_workbook.py",
+          "sha256": "3b083b70073ea4125bba662150fcca03bfa00f68fe9e557fcfb164ffeddd0e3e",
+          "bytes": 8886
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/tests/test_build.py",
+          "sha256": "a014b8805963ef100ca6b3858ef19a6fc2aee2acdd96963280fb992661dacc55",
+          "bytes": 24802
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/tests/test_parsers.py",
+          "sha256": "04f521c00036e82826b92742293b53d2b7e7988a1548e01962acf7a1950d7312",
+          "bytes": 6731
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/pipeline/tests/test_review_workbook.py",
+          "sha256": "96389d26493b28f2633bf330c2c81dd2caa26f524a7c764af68000079942cdb3",
+          "bytes": 4918
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/presidential-cycle-protocol.md",
+          "sha256": "dca37d736a78f0fb029a5d416290a536c32db420f74a1452671cbca3c1c58adf",
+          "bytes": 5007
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/public-series-methodology.md",
+          "sha256": "3be08ea1b9e88cff0ba471fa163d11c05b173b5c01fc16973dfd045d844efae5",
+          "bytes": 5670
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/quantmeridian-module/DATA_CONTRACT.md",
+          "sha256": "95836cc325c6c0da28e0aafda2de1741eda42f09050e80d05597714d2ee20d22",
+          "bytes": 5937
+        },
+        {
+          "path": "docs/research/002_PresidentialImpact/quantmeridian-module/SPEC.md",
+          "sha256": "9639566fe54d6a0e82e4c0cb7be60b24de057c8d27bc1ca0f58e741ce6e76a79",
+          "bytes": 13610
+        }
+      ]
+    },
+    "market_medallion": {
+      "repository": "https://github.com/thatquantguy44/market-medallion.git",
+      "head": "92d8112c604e51207d970d5480abd0c930c82de5",
+      "working_tree_clean_at_inspection": false,
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "3b9e8f718144be828b71ad783556748a5c55c6b0581371a03f29fd55fa713629",
+          "bytes": 3663
+        },
+        {
+          "path": "README.md",
+          "sha256": "155e002f18e0979d24ef935e089af399eb054444151431e4df9d8a27b47de41b",
+          "bytes": 13909
+        },
+        {
+          "path": "docs/development/outbound_http.md",
+          "sha256": "669974e6c382be18ad3fb7159417775dc70df1ea9ab09199860534ecd523cdad",
+          "bytes": 5635
+        },
+        {
+          "path": "docs/development/pipeline_layout.md",
+          "sha256": "71224430d4fdf99a647d5e47402969f361fcda60108820cc4abb22393062b803",
+          "bytes": 6215
+        },
+        {
+          "path": "docs/handoffs/project_bootstrap.md",
+          "sha256": "53acd8831d6636ba87e6c199835ce994c4a169072e852a3938fecc27837beee7",
+          "bytes": 21657
+        },
+        {
+          "path": "docs/pipelines.md",
+          "sha256": "1e25e1f4df219c3ee53724160c894e7da97753e8e412cf2e09e5d5703b418f13",
+          "bytes": 13269
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "eb2c5d526a3585e71e5644625faa02a37e6786aff9aa6fbae9246ace1abf2f95",
+          "bytes": 988
+        },
+        {
+          "path": "specs/README.md",
+          "sha256": "61f8b751306a26438192361e5a4a9cf5c7cb310e7266159e59af82acb004c698",
+          "bytes": 7766
+        },
+        {
+          "path": "src/market_data_pipeline/cli.py",
+          "sha256": "6482c40ff9929de37c168a10f6ff83b17c00e8a85f4d590485de7f333f31dd87",
+          "bytes": 149
+        },
+        {
+          "path": "src/market_data_pipeline/orchestration/dagster_defs.py",
+          "sha256": "2e7d7eab100902f4890e52febf595ccdcb88677827037294b519dac32a85cab4",
+          "bytes": 847
+        },
+        {
+          "path": "src/market_data_pipeline/shared/files.py",
+          "sha256": "2bfb97377a551fb5a842fa5f5017a2e64957e3b2d6db3128b76fe668e73d80dd",
+          "bytes": 1364
+        },
+        {
+          "path": "src/market_data_pipeline/shared/http.py",
+          "sha256": "2c1a99ff8adb0f092ef157367497f771a487715dfa2536523e8c80b3bad20866",
+          "bytes": 11081
+        },
+        {
+          "path": "src/market_data_pipeline/shared/storage_types.py",
+          "sha256": "6e4aa2ed6286e46c524196186a0e90562c5d5f3a5179bea3b0ad978961e8aba9",
+          "bytes": 8633
+        }
+      ]
+    },
+    "quantmeridian": {
+      "repository": "https://github.com/thatquantguy44/QuantMeridian.git",
+      "head": "f0b00a383f14f8439bb7c5aa961a1e199edcdab6",
+      "working_tree_clean_at_inspection": false,
+      "files": [
+        {
+          "path": "package.json",
+          "sha256": "1241ed660a02a2f8cf49b4eae982371bc5c00d1e5deb445ec61a2990d9d2ade2",
+          "bytes": 3477
+        },
+        {
+          "path": "src/app/api/sentiment/naaim/route.ts",
+          "sha256": "420213e1daf20bb66fe5baccc7a4cda1adf698391bad27d8aee2867108ea41d3",
+          "bytes": 1707
+        },
+        {
+          "path": "src/app/presidential-impact/page.tsx",
+          "sha256": "6a62b756470b94c65e5243bc39a6e54dfc822b442e6f15f63e7ac056b759ed3a",
+          "bytes": 11145
+        },
+        {
+          "path": "src/components/presidential/FigurePanel.tsx",
+          "sha256": "1f84c3407c98740891e95a22cc52d78d35c1075deb94f4246730c0fa2171c748",
+          "bytes": 1941
+        },
+        {
+          "path": "src/components/presidential/ResearchCharts.tsx",
+          "sha256": "cdb7adcbb1c9b3a87e190d89aec60a8e678d8b5a2b9dcd43ed0cb8f809649384",
+          "bytes": 15598
+        },
+        {
+          "path": "src/components/presidential/ResearchEvidence.tsx",
+          "sha256": "eadd43f8a4b53aabe0b488b92d8aff49031263f658099903e5b6bc5a7dee64f5",
+          "bytes": 3724
+        },
+        {
+          "path": "src/components/presidential/ResearchFigures.tsx",
+          "sha256": "8c99e86bd3c47e777d95158a73aa5ce4c65e754b72daf5f98e3caf646eba3534",
+          "bytes": 3697
+        },
+        {
+          "path": "src/components/presidential/ResearchInputs.tsx",
+          "sha256": "bdc0c930ece2c9a91fde7f0c31629c8650ceed9111ada544940acbf33607ce5e",
+          "bytes": 6907
+        },
+        {
+          "path": "src/components/presidential/ResearchLedger.tsx",
+          "sha256": "33f7ec92af01500918c88bba24d53c69ed727a20d3f2a3d6509e0e77eb0dd61e",
+          "bytes": 6491
+        },
+        {
+          "path": "src/lib/presidential/contracts.ts",
+          "sha256": "22104b8a96be371909b6cfcf042036a3a163723b35ae8bc057d04cb7365e7884",
+          "bytes": 4259
+        },
+        {
+          "path": "src/lib/presidential/engine.test.ts",
+          "sha256": "d17c159daa9a7b910a858fba0973658b7494468fa2d9370eaa891caa2692d2bc",
+          "bytes": 23134
+        },
+        {
+          "path": "src/lib/presidential/engine.ts",
+          "sha256": "da148acfe454f49041cd463b763572617d07194b71dd96e9a72b93c7512d7de5",
+          "bytes": 19756
+        },
+        {
+          "path": "src/lib/presidential/exports.test.ts",
+          "sha256": "270d9af0e5dbe3134336990fb1daacc048c5d4a12c38834338cc6d3198424b8e",
+          "bytes": 4085
+        },
+        {
+          "path": "src/lib/presidential/exports.ts",
+          "sha256": "7ee83feee17964cfd8a23360ba12a71cfe165b561ef7b8687289e8be3c4aa7a1",
+          "bytes": 12317
+        },
+        {
+          "path": "src/lib/presidential/fixtures.ts",
+          "sha256": "b43a88386a2478516cbeab7ddd3bab89cbc2e80a068f45c8c0d83aa26527cb68",
+          "bytes": 2849
+        },
+        {
+          "path": "src/lib/presidential/validation.ts",
+          "sha256": "1f53632e3ab8f5f7f3843c9bdb8154a4232dbf61012ad6a777da5862b8795440",
+          "bytes": 11333
+        },
+        {
+          "path": "src/lib/server/naaim/reader.ts",
+          "sha256": "4da92ae8711d923acdab6e61200820e2dcfb76a8e43e1f0742940f7f644c04ba",
+          "bytes": 1886
+        },
+        {
+          "path": "src/server/registry.ts",
+          "sha256": "b262d40244b091e981365f6914bc1797beee607a6998bad1a202f59c1ced466e",
+          "bytes": 2535
+        },
+        {
+          "path": "test/presidential-impact.spec.ts",
+          "sha256": "2c1c1a0cd669197e24345d4244aef4267ea9cb5e2978f9fe76ea9bbfbf0fbfa8",
+          "bytes": 10050
+        }
+      ]
+    }
+  },
+  "verification": {
+    "donor_offline_tests": {
+      "passed": 29,
+      "failed": 0,
+      "provider_network_used": false
+    },
+    "agent_skills_pin": "f63ec56a3cc936408d792956ae583c3c96a825bd",
+    "quantsmith_whole_checkout_verification": "FAILED_REVISION_TREE_MISMATCH",
+    "quantsmith_guidance_used": "Pinned git-show bytes individually matched registered SHA-256 digests at 5deea85438f6d46a8a14ddb85e3821a65fa62f4e"
+  }
+}

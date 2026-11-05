@@ -12,6 +12,10 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.operations imp
     retain_captures,
 )
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline import ingest, run_live
+from market_data_pipeline.pipelines.naaim_exposure_public_delayed.research_export import (
+    SCHEMA_VERSION,
+    export_research_artifact,
+)
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.source import fetch_table
 
 DELAY_LABELS = {
@@ -321,6 +325,122 @@ def test_cli_check_is_local_and_returns_a_health_based_exit_code(monkeypatch, tm
     assert json.loads(capsys.readouterr().out) == {
         "healthy": False,
         "reasons": ["capture_stale"],
+    }
+
+
+def test_research_export_is_attributed_delayed_and_current_vintage_only(tmp_path):
+    ingest(
+        Path("tests/fixtures/naaim/delayed_table.html").read_bytes(),
+        tmp_path,
+        permission_reference="naaim-permission-2026-11-01",
+        captured_at="2026-11-01T17:00:00Z",
+    )
+    ingest(
+        Path("tests/fixtures/naaim/changed_table.html").read_bytes(),
+        tmp_path,
+        permission_reference="naaim-permission-2026-11-01",
+        captured_at="2026-11-02T17:00:00Z",
+    )
+    destination = tmp_path / "exchange" / "naaim_exposure_research_v1.json"
+
+    result = export_research_artifact(
+        tmp_path,
+        destination,
+        research_use_reference="user-confirmed-naaim-report-display-2026-11-02",
+        generated_at="2026-11-02T18:00:00Z",
+    )
+
+    artifact = json.loads(destination.read_text())
+    assert result == {
+        "schema_version": SCHEMA_VERSION,
+        "destination": str(destination),
+        "observation_count": 2,
+        "latest_as_of_date": "2025-01-08",
+    }
+    assert artifact["schema_version"] == SCHEMA_VERSION
+    assert artifact["generated_at"] == "2026-11-02T18:00:00.000000Z"
+    assert artifact["provenance"] == {
+        "source": "NAAIM Exposure Index®",
+        "dataset": "naaim-exposure-index-public-delayed",
+        "attribution": (
+            "Source: NAAIM Exposure Index® (National Association of Active Investment Managers)."
+        ),
+        "authorized_research_use_reference": "user-confirmed-naaim-report-display-2026-11-02",
+        "knowledge_basis": "CURRENT_VINTAGE",
+        **DELAY_LABELS,
+    }
+    assert artifact["observations"] == [
+        {
+            "as_of_date": "2025-01-01",
+            "capture_id": artifact["observations"][0]["capture_id"],
+            "first_seen_at": "2026-11-01T17:00:00.000000Z",
+            "value": "68.50",
+        },
+        {
+            "as_of_date": "2025-01-08",
+            "capture_id": artifact["observations"][1]["capture_id"],
+            "first_seen_at": "2026-11-02T17:00:00.000000Z",
+            "value": "72.25",
+        },
+    ]
+    assert artifact["observations"][0]["capture_id"] != artifact["observations"][1]["capture_id"]
+
+
+def test_research_export_requires_explicit_authorization_and_consistent_gold(tmp_path):
+    ingest(
+        Path("tests/fixtures/naaim/delayed_table.html").read_bytes(),
+        tmp_path,
+        permission_reference="naaim-permission-2026-11-01",
+        captured_at="2026-11-01T17:00:00Z",
+    )
+    with pytest.raises(ValueError, match="research_use_reference"):
+        export_research_artifact(tmp_path, tmp_path / "export.json", research_use_reference="")
+
+    latest_path = tmp_path / "gold" / "latest.json"
+    latest = json.loads(latest_path.read_text())
+    latest["value"] = "incorrect"
+    latest_path.write_text(json.dumps(latest))
+    with pytest.raises(ValueError, match="does not match"):
+        export_research_artifact(
+            tmp_path,
+            tmp_path / "export.json",
+            research_use_reference="user-confirmed-naaim-report-display-2026-11-02",
+        )
+
+
+def test_cli_research_export_requires_its_separate_permission_reference(
+    monkeypatch, tmp_path, capsys
+):
+    destination = tmp_path / "export.json"
+    with pytest.raises(SystemExit):
+        cli.main(["--root", str(tmp_path), "--export-research", str(destination)])
+
+    monkeypatch.setattr(
+        cli,
+        "export_research_artifact",
+        lambda root, path, *, research_use_reference: {
+            "root": str(root),
+            "path": str(path),
+            "reference": research_use_reference,
+        },
+    )
+    assert (
+        cli.main(
+            [
+                "--root",
+                str(tmp_path),
+                "--export-research",
+                str(destination),
+                "--research-use-reference",
+                "user-confirmed-naaim-report-display-2026-11-02",
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capsys.readouterr().out) == {
+        "root": str(tmp_path),
+        "path": str(destination),
+        "reference": "user-confirmed-naaim-report-display-2026-11-02",
     }
 
 

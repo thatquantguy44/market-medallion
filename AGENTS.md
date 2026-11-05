@@ -48,3 +48,10 @@ acquisition, warehouse adapters, operations and Dagster assets inside that pipel
 only for provider-independent helpers. Read `docs/development/pipeline_layout.md`
 for import changes. Update the master register `docs/pipelines.md` whenever a
 pipeline's scope, package, implementation or deployment status changes.
+
+Outbound HTTP must use the run-scoped settings/client in `shared/http.py`.
+Read `docs/development/outbound_http.md`: select/probe once after provider access
+gates, reuse that client for the run, preserve source-owned retries and raw
+capture, and keep local/replay/health paths free of network probes. Future HTTP
+adapters must expose the same pipeline-owned `network` settings. Never install
+a process-global opener or log proxy URLs/credentials.

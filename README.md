@@ -19,6 +19,23 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
+**Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
+with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
+FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary
+dealers** (Specs011–015). Spec011 has an initial offline SEC FTD parser/manifest
+and local inspection command, reconciled against both approved September2026
+archives. T18 portable storage types and serialization are complete for both
+source packages. T03–T05 local Bronze/SQLite/audit/Gold, observed revisions,
+cutoff queries and gated withdrawals are implemented, with 117,025 September
+facts. T06 replay preserves facts, coverage, audits, clocks and outcomes. T07
+adds coherent typed Parquet/current-pointer recovery, and SEC T19 adds an
+actual PostgreSQL adapter with disposable-database parity evidence. Continue at
+S11-T08. Spec011 still requires threshold PostgreSQL, both Databricks adapters,
+source acquisition, exchange adapters and research exports. See the
+[SEC FTD runbook](docs/deployment/sec_ftd_runbook.md). No new job is implemented.
+NAAIM is **paused** and its
+daily schedule was stopped on 2026-11-03; see the master handoff before any resume.
+
 NAAIM remains **3-month-delayed public data for internal research**. Daily
 capture checks for updates to that delayed feed. Read the observation's
 `as_of_date` alongside its value; recent capture time describes pipeline health,
@@ -36,6 +53,12 @@ AAII lives in `pipelines/aaii/`, including its parsers, warehouse/publishers,
 configuration, operations, CLI and Dagster definitions. Provider-independent file/YAML helpers
 live in `shared/`; root CLI/Dagster entrypoints remain supported.
 See [the package layout and import migration guide](docs/development/pipeline_layout.md).
+
+SEC FTD has its own [configuration folder and decision guide](config/sec_fails_to_deliver/README.md).
+Its `validate-config` and config-based local `inspect` commands are implemented;
+PostgreSQL is the selected default and Databricks publication stays disabled
+until configured. SEC SQLite/PostgreSQL ingestion, Gold, replay and coherent
+Parquet are implemented; Delta remains pending under Spec011.
 
 ## Run the first slice
 
@@ -96,6 +119,15 @@ all snapshots duplicates history. [Architecture](docs/deployment/architecture.md
 explains transaction boundaries and storage layout.
 
 ## Database configuration and bounded live runs
+
+Outbound HTTP has [run-scoped proxy/direct configuration](docs/development/outbound_http.md).
+The `network` section in each pipeline's YAML selects automatic fallback,
+direct-only or proxy-only access. A live run probes once at startup and reuses
+the selected route for its data calls/retries. Proxy URLs come from environment
+variables or a trusted shell-loaded `.env`; `NO_PROXY`, custom CA bundles and
+timeouts are configurable. Local imports and health checks make no probe.
+AAII CLI/Dagster and NAAIM's paused live entrypoints use this client. SEC FTD
+accepts the settings for future HTTP work; its current ingestion remains local.
 
 Copy [the runtime example](config/postgres.example.yml) to ignored
 `config/config.yaml` and set host, port, database, login `user`, optional effective

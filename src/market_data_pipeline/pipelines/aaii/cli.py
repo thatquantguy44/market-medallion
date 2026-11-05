@@ -94,6 +94,7 @@ def main(argv=None) -> int:
                         end=args.end,
                         dsn=dsn,
                         max_attempts=runtime.operations.http_attempts,
+                        network=runtime.network,
                     )
                 else:
                     result = run(
@@ -116,6 +117,7 @@ def main(argv=None) -> int:
                     end=end,
                     dsn=dsn,
                     max_attempts=runtime.operations.http_attempts,
+                    network=runtime.network,
                 )
             elif args.command == "backfill":
                 from market_data_pipeline.pipelines.aaii.backfill import backfill

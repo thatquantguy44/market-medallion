@@ -1,0 +1,11 @@
+# Copy to network.local.yml; this does not enable a request or schedule.
+network:
+  mode: auto
+  preferred_route: proxy
+  fallback: true
+  proxy_url_env: null
+  no_proxy: [localhost, 127.0.0.1]
+  use_environment_no_proxy: true
+  probe_timeout_seconds: 10
+  timeout_seconds: 30
+  ca_bundle: null

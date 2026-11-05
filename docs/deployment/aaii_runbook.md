@@ -50,6 +50,12 @@ Bronze receipts for trailing failed/partial runs until the next successful expor
 ## PostgreSQL
 
 Use `--config config/config.yaml` to resolve typed runtime settings from YAML.
+The optional `network` section selects automatic startup proxy/direct fallback
+or pins one route, with NO_PROXY rules, timeouts and a config-relative CA bundle.
+The selected verified client is reused for all HTTP retries in that run; the next
+run tests again. URLs/credentials stay in the worker environment. See the
+[outbound HTTP contract](../development/outbound_http.md). Local commands do not
+probe. Startup routing failure is recorded in the transport health log.
 See `config/postgres.example.yml`: `user` is the authenticated login; optional
 `role` selects the effective PostgreSQL role through startup settings, and
 `schema` selects its search path. The login needs permission to assume that role;

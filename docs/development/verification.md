@@ -245,6 +245,26 @@ No dependencies, application code, data, schedules, external library files or
 vendored snapshot contents changed. Separate roadmap/FX/web specification drafts
 remain untouched.
 
+## QuantSmith reference refresh — 2026-11-05
+
+The reviewed local-reference pin advanced from
+`5deea85438f6d46a8a14ddb85e3821a65fa62f4e` to
+`41c56458f476a6c32fa922f7b8c70bb92e4fd21e`, tree
+`9be0ada464c3a96268677d3b32e90c0be11beeb6`. The adopted inventory remains 61
+guidance files. Only QuantSmith's root `README.md` and `agents/README.md` changed
+within that inventory; their committed diffs update catalog counts, newer FX
+workflow/harness status and the FX orchestrator listing. No routed engineering,
+pipeline, provenance, quality, database or test-role instruction changed.
+
+All selected guidance files match committed `HEAD` bytes. The external checkout's
+unrelated local securities-finance drafts remain untouched and are reported as
+`other_worktree_changes: true`; they are not hashed or adopted. The real
+QuantSmith verifier, the unchanged 188-file agent-skills verifier and all five
+fixture-based reference safety tests pass. The full offline suite is **461 passed,
+8 opt-in skips**; Ruff, formatting and source/wheel builds pass. No external
+checkout file, dependency, runtime configuration, data source, schedule or
+application code changed.
+
 
 ## Pipelines namespace — 2026-10-30 America/New_York
 

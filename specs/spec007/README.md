@@ -1,8 +1,8 @@
 # Spec 007 — NAAIM Exposure Index
 
-Status: **initial local slice, one bounded live smoke, local health check and a
-stopped daily schedule verified; explicit live permission reference remains
-required**. Created
+Status: **local operational slice, one bounded live smoke, local health check,
+daily schedule and narrow attributed research export verified; explicit live
+permission reference remains required for provider contact**. Created
 2026-10-31 on branch
 `spec007-naaim-exposure`.
 
@@ -41,22 +41,22 @@ These additive labels do not change provider values, observed revisions,
 365-day capture retention, internal-research scope or access permissions.
 
 
-The user selected a distinct, **three-month-delayed**, internal research
+The user selected a distinct, **three-month-delayed**, authorized research
 capability: `naaim-exposure-public-delayed` in the future package
 `naaim_exposure_public_delayed`. It is not the licensed-current-data pipeline
-described elsewhere in this document. It must never supply QuantMeridian,
-customer-facing displays, redistribution, a recurring schedule or a bulk
-backfill.
+described elsewhere in this document. It may supply only its explicit,
+current-vintage, attributed local research artifact to the separately owned
+QuantMeridian consumer. It does not authorize a public service, customer-facing
+redistribution, a warehouse, a bulk backfill, provider credentials outside this
+package, or a claim of current-week positioning.
 
 NAAIM's public material does not document a stable public-display DOM/payload
-contract or grant automated retrieval permission. The existing parser, invented
-fixtures and one manual live request are limited to the user-confirmed,
-permission-referenced delayed research slice. No recurring acquisition,
-persistence expansion or downstream presentation may be added until NAAIM
-provides written scope covering automation frequency, retention, internal use
-and allowed transforms, plus an approved source-shaped example containing the
-visible value, as-of date, units and failure behavior. A login, personal/member
-password, hidden endpoint or paywall bypass is never in scope.
+contract. The existing parser, invented fixtures and live request are limited to
+the user-confirmed, permission-referenced delayed research slice. The user has
+confirmed this permission covers daily automated pulls, 365-day retention,
+local research report display and required attribution. The implementation still
+rejects DOM/schema drift and never uses a login, personal/member password,
+hidden endpoint or paywall bypass.
 
 The current task breakdown is [plan.md](plan.md) and [todo.md](todo.md). The
 licensed Program Partner/API route remains a separately gated future capability.
@@ -69,7 +69,7 @@ The manual, one-page command is:
   --permission-reference '<nonsecret written-permission reference>'
 ```
 
-It has no schedule, retry loop, bulk-history option or QuantMeridian export. A
+It has no retry loop or bulk-history option. A
 bounded smoke run on 2026-11-01 accepted 131 delayed rows into ignored local
 pipeline data; the raw provider payload and values remain outside Git.
 
@@ -85,17 +85,33 @@ It reports capture freshness, retained-version count and whether the attributed
 delayed latest output is available. Freshness is based on local capture time,
 not the intentionally delayed observation date.
 
+To write the narrow local exchange artifact after a permitted capture, run:
+
+```bash
+.venv/bin/python -m market_data_pipeline.pipelines.naaim_exposure_public_delayed \
+  --root data/naaim-exposure-public-delayed \
+  --export-research data/naaim-exposure-public-delayed/research/naaim_exposure_research_v1.json \
+  --research-use-reference 'user-confirmed-naaim-report-display-2026-11-02'
+```
+
+This command makes no provider request. It reads only local Silver/Gold state,
+requires a nonsecret downstream-use reference, selects the current observed
+version for every `as_of_date`, validates that Gold agrees with Silver, and
+writes `naaim-exposure-research/1` atomically. The artifact carries the exact
+attribution and three-month-delay labels but no provider credentials or raw
+payload. QuantMeridian must read this file locally; it must not call NAAIM.
+
 ### Permission evidence status
 
 On 2026-11-01, the user reported NAAIM granted permission by phone. The manual
 smoke receipt records the nonsecret reference
 `user-confirmed-naaim-permission-2026-11-01`; no call recording, provider email
-or written terms are stored in this repository. The exact automation frequency,
-retention, permitted transformations, redistribution and QuantMeridian scope
-remain undocumented. The user subsequently confirmed daily automated pulls and
-365-day retention on 2026-11-01. The stopped schedule enforces that cadence and
-retention locally, but written provider terms are still required before any
-scope expansion, API access or downstream display.
+or written terms are stored in this repository. The user subsequently confirmed
+daily automated pulls, 365-day retention and the local report/display scope on
+2026-11-01/02. The stopped schedule enforces that cadence and retention
+locally. The current downstream boundary is the attributed, delayed,
+current-vintage local artifact only; API access, public service and any broader
+scope remain separate decisions.
 
 ### Verified delayed-display table contract
 
@@ -134,7 +150,7 @@ NAAIM exposes three public embeds:
 | Observation basis | Participants report overall U.S. equity exposure at Wednesday market close; NAAIM updates the index weekly. |
 | Verified statistics | The weekly index average; NAAIM also says the product includes standard-deviation and quartile statistics. Exact API field names, units and availability require credentialed API documentation. |
 | Reported range | The public methodology describes responses from -200% leveraged short through +200% leveraged long. This is respondent exposure context, not a validation range to invent for an unreviewed API field. |
-| Public display | Three-month-delayed, informational display only. It is not a current-data acquisition route and must not be scraped or used for QuantMeridian. |
+| Public display | Three-month-delayed informational display. The user confirmed a constrained local QuantMeridian research-report use; it remains an explicitly delayed artifact, not a current-data route, public service or credentialed API. |
 | Current/history access | Subscribers receive current weekly values and more than twenty years of history. |
 | API access | NAAIM confirms an API access option for organizations integrating the index into applications, websites or research platforms. No endpoint, schema, authentication flow, rate limit, revision policy or API terms were published in the reviewed public material. |
 | Required entitlement | A QuantMeridian integration, redistribution or republication requires NAAIM's **Program Partner** subscription under the published subscription page. Password-only/membership access is not treated as an integration license. |
@@ -169,12 +185,12 @@ The local research slice is under
 `src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/`. It owns a
 strict HTML parser, explicit permission-gated one-page acquisition boundary,
 immutable local Bronze receipt, typed Silver snapshot and attributed delayed
-latest output, a read-only local health check, and a stopped daily Dagster
-schedule. The schedule requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`,
+latest output, current-vintage research export, a read-only local health check,
+and a stopped daily Dagster schedule. The schedule requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`,
 `NAAIM_DELAYED_ROOT` and `NAAIM_PERMISSION_REFERENCE` at runtime, runs at
 10:00 America/New_York, and applies 365-day dry-run-tested source-owned
 retention after a successful capture. It has no database adapter, backfill or
-QuantMeridian export.
+networked QuantMeridian integration.
 
 ### Bronze
 
@@ -212,14 +228,14 @@ week-over-week change may be added only after NAAIM confirms that it is a
 permitted presentation of the licensed data; it must use the previous available
 observation and retain the prior date and calendar gap.
 
-The future QuantMeridian adapter is deliberately outside this repository. Once
-access is approved, MarketMedallion will publish a versioned, source-attributed
-exchange contract containing at least the source/dataset, provider metric name,
-as-of date, value and unit, `provider_published_at` when known, `retrieved_at`,
-`first_seen_at`, version identity and Bronze lineage. QuantMeridian must retain
-the required NAAIM attribution wherever values are displayed or redistributed.
-No cross-repository database connection, secret, schema, migration, runtime
-configuration, deployment identifier or Git history is created by this spec.
+The QuantMeridian adapter is deliberately outside this repository. This source
+package publishes the local `naaim-exposure-research/1` exchange artifact with
+source/dataset, as-of date, decimal value, current-version first-seen time and
+opaque capture identity. It explicitly carries the exact attribution, delay
+labels and `CURRENT_VINTAGE` basis. QuantMeridian must retain the attribution
+and delay notice wherever values are displayed. No cross-repository database
+connection, secret, shared schema, migration, deployment identifier or Git
+history is created by this spec.
 
 ## Delivery gates
 
@@ -285,8 +301,8 @@ This provider-discovery slice is complete when the following are true:
   availability were reviewed.
 - [x] The commercial redistribution/attribution boundary for a QuantMeridian
   integration was recorded.
-- [x] The public delayed display was excluded from QuantMeridian and all
-  customer-facing redistribution.
+- [x] The public delayed display is limited to the confirmed local research
+  artifact; customer-facing redistribution remains excluded.
 - [x] A bounded public table contract was characterized with invented fixtures;
   the local Bronze/Silver/delayed-latest fixture slice passes tests.
 - [x] A local-only health check reports capture freshness, version count and
@@ -296,8 +312,9 @@ This provider-discovery slice is complete when the following are true:
 - [ ] Exact schema, units, identity, revisions, rate limits and retention terms
   are added to this spec.
 - [ ] Offline-only fixtures and a source-owned vertical slice pass verification.
-- [ ] A separate QuantMeridian implementation spec accepts the published
-  MarketMedallion exchange contract and attribution requirements.
+- [x] A separate QuantMeridian implementation spec accepts the published
+  local `naaim-exposure-research/1` exchange contract and attribution
+  requirements.
 
 ## Official sources reviewed
 

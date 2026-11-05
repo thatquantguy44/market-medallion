@@ -1,21 +1,19 @@
 """Explicit AAII retrieval with bounded, observable response retries."""
 
-import os
 import ssl
 import time
 import uuid
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
-
-import certifi
+from urllib.request import Request
 
 from market_data_pipeline.pipelines.aaii.data.xls import selection
 from market_data_pipeline.pipelines.aaii.io.bronze import archive
 from market_data_pipeline.pipelines.aaii.manifest import load_manifest
 from market_data_pipeline.pipelines.aaii.pipeline import MAX_INPUT_BYTES, promote_capture
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
+from market_data_pipeline.shared.http import NetworkConfig, prepare_http, tls_context
 
 
 def utc_now():
@@ -47,8 +45,10 @@ def run_live(
     clock=None,
     sleeper=None,
     max_attempts=1,
+    network: NetworkConfig | None = None,
 ):
-    clock, transport, sleeper = clock or utc_now, transport or urlopen, sleeper or time.sleep
+    clock, sleeper = clock or utc_now, sleeper or time.sleep
+    network = network or NetworkConfig()
     if type(max_attempts) is not int or not 1 <= max_attempts <= 5:
         raise ValueError("max_attempts must be in [1,5]")
     manifest = load_manifest(manifest_path)
@@ -62,13 +62,27 @@ def run_live(
         url, headers={"User-Agent": "market-medallion/0.1 (bounded research verification)"}
     )
     with writer_lock(root):
+        context = tls_context(network)
+        if transport is None:
+            try:
+                transport = prepare_http(request, network, context=context)
+            except ValueError:
+                log = root / "operations" / "transport"
+                log.mkdir(parents=True, exist_ok=True)
+                atomic_json(
+                    log / f"{uuid.uuid4().hex}.json",
+                    {
+                        "captured_at": utc_timestamp(clock()),
+                        "error_type": "network_startup_failed",
+                        "attempt": 0,
+                        "url": url,
+                    },
+                )
+                raise
         for attempt in range(max_attempts):
             try:
-                context = ssl.create_default_context(
-                    cafile=os.environ.get("SSL_CERT_FILE") or certifi.where()
-                )
                 try:
-                    response = transport(request, timeout=30, context=context)
+                    response = transport(request, timeout=network.timeout_seconds, context=context)
                 except HTTPError as exc:
                     response = exc
                 with response:
@@ -110,6 +124,8 @@ def run_live(
                     "source_uri": url,
                     "http_status": status,
                     "http_headers": headers,
+                    "network_route": getattr(transport, "route", "injected"),
+                    "network_fallback_used": getattr(transport, "fallback_used", False),
                 },
                 date_selection={"start": start, "end": end},
             )

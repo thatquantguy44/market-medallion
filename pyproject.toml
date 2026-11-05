@@ -12,6 +12,7 @@ dependencies = ["PyYAML==6.0.3", "pyarrow==23.0.1", "xlrd==2.0.2", "certifi==202
 [project.optional-dependencies]
 postgres = ["psycopg[binary]==3.2.13"]
 dagster = ["dagster==1.12.21", "dagster-webserver==1.12.21"]
+delta = ["pyspark==4.0.1", "delta-spark==4.0.1"]
 dev = ["pytest==8.4.2", "ruff==0.14.2", "build==1.3.0", "setuptools==80.9.0", "wheel==0.45.1"]
 
 [project.scripts]
@@ -23,7 +24,10 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["postgres: requires a dedicated PostgreSQL test database"]
+markers = [
+    "postgres: requires a dedicated PostgreSQL test database",
+    "delta: requires MARKET_DATA_TEST_DELTA=true and the optional Spark/Delta runtime",
+]
 
 [tool.ruff]
 target-version = "py312"

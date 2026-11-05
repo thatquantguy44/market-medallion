@@ -9,7 +9,7 @@ not pipeline data sources or automatic runtime dependencies.
 | Library | Availability | Pin / configuration | Start here |
 | --- | --- | --- | --- |
 | **agent-skills** | Complete repository-local snapshot at `agents/agent-skills/`; works offline on fresh clones | [`agent-skills.lock.json`](agent-skills.lock.json), revision `f63ec56a3cc936408d792956ae583c3c96a825bd` | [`skills/using-agent-skills/SKILL.md`](agent-skills/skills/using-agent-skills/SKILL.md) |
-| **QuantSmith** | Configurable reference to the existing local checkout; its files stay there | [`quantsmith.reference.json`](quantsmith.reference.json), revision `5deea85438f6d46a8a14ddb85e3821a65fa62f4e`, 61 pinned guidance-file hashes | Resolve/verify below, then read the listed standards and relevant agent role |
+| **QuantSmith** | Configurable reference to the existing local checkout; its files stay there | [`quantsmith.reference.json`](quantsmith.reference.json), revision `41c56458f476a6c32fa922f7b8c70bb92e4fd21e`, 61 pinned guidance-file hashes | Resolve/verify below, then read the listed standards and relevant agent role |
 
 ## QuantSmith location and verification
 

@@ -13,6 +13,8 @@ dist/
 !.env.example
 config/config.yaml
 config/naaim-delayed.yml
+/config/sec_fails_to_deliver/*.local.yml
+/config/naaim_exposure_public_delayed/*.local.yml
 /data/
 /artifacts/
 .dagster/

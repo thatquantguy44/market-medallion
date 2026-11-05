@@ -21,7 +21,9 @@ def test_live_dagster_xls_retains_provenance_versions_and_asof(tmp_path, monkeyp
         code = 200
         headers = {"Content-Type": "application/vnd.ms-excel", "ETag": "synthetic-only"}
 
-    monkeypatch.setattr(source, "urlopen", lambda *args, **kwargs: Response(payload[0]))
+    monkeypatch.setattr(
+        source, "prepare_http", lambda *a, **k: lambda *a, **k: Response(payload[0])
+    )
     monkeypatch.setattr(source, "utc_now", lambda: datetime(2026, 10, day[0], 12, tzinfo=UTC))
     config_file = tmp_path / "runtime.yml"
     config_file.write_text(yaml.safe_dump({"warehouse": "sqlite", "root": "warehouse"}))
@@ -89,7 +91,9 @@ def test_live_dagster_failure_keeps_previous_publication(tmp_path, monkeypatch):
         code = 200
         headers = {}
 
-    monkeypatch.setattr(source, "urlopen", lambda *a, **k: Response(b"not a workbook"))
+    monkeypatch.setattr(
+        source, "prepare_http", lambda *a, **k: lambda *a, **k: Response(b"not a workbook")
+    )
     monkeypatch.setattr(source, "utc_now", lambda: datetime(2026, 10, 30, tzinfo=UTC))
     result = defs.resolve_job_def("aaii_sentiment_job").execute_in_process(
         raise_on_error=False,

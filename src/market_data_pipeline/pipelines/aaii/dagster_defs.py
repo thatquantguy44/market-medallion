@@ -48,6 +48,7 @@ def aaii_sentiment(context: dg.AssetExecutionContext, config: AaiiConfig) -> dg.
                 end=config.end,
                 dsn=dsn,
                 max_attempts=runtime.operations.http_attempts if runtime else 3,
+                network=runtime.network if runtime else None,
             )
         else:
             result = run(

@@ -8,6 +8,13 @@ CSV ingestion, Parquet, PostgreSQL, and Dagster are the first executable slice.
 The CFTC/FINRA/OFR interfaces and acceptance criteria in this document remain
 planned; the commands below are not implemented for those providers.
 
+**Next-source priority update (2026-11-03):** the user-selected
+[Specs011–015 securities-finance program](../../docs/securities_finance/README.md)
+now governs next source builds. Spec011 owns SEC FTD + Reg SHO and Spec012
+refines the FINRA short-volume proposal here. Preserve this original design as
+context; use [Spec011's checkpoint](../spec011/source_review.md) for the current
+pickup point and keep NAAIM paused.
+
 ## Objective
 
 Build an independent, manifest-driven market-data pipeline using the sister
