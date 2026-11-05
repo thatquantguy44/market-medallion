@@ -1,0 +1,44 @@
+config_version: 1
+pipeline: reg-sho-thresholds
+root: ../../data/reg_sho_thresholds/sqlite
+warehouse: sqlite
+postgres:
+  host: localhost
+  port: 5432
+  database: market_data
+  user: market_data
+  role: null
+  schema: reg_sho_thresholds
+  password_env: REG_SHO_POSTGRES_PASSWORD
+  sslmode: prefer
+  connect_timeout: 15
+acquisition:
+  enabled: false
+  user_agent_env: REG_SHO_USER_AGENT
+network:
+  mode: auto
+  preferred_route: proxy
+  fallback: true
+  proxy_url_env: null
+  no_proxy: [localhost, 127.0.0.1]
+  use_environment_no_proxy: true
+  probe_timeout_seconds: 10
+  timeout_seconds: 30
+  ca_bundle: null
+storage:
+  schema_version: reg-sho-storage/1
+partitions:
+  nasdaq_2026_11_03:
+    provider: nasdaq
+    market: NASDAQ
+    list_date: '2026-11-03'
+    manifest: ../../manifests/reg-sho-nasdaq.yml
+    input: ../../data/reg_sho_thresholds/nasdaqth20261103.txt
+    source_url: https://www.nasdaqtrader.com/dynamic/symdir/regsho/nasdaqth20261103.txt
+  nyse_american_2026_11_03:
+    provider: nyse
+    market: NYSE American
+    list_date: '2026-11-03'
+    manifest: ../../manifests/reg-sho-nyse.yml
+    input: ../../data/reg_sho_thresholds/NYSEAMEXth20261103.txt
+    source_url: https://www.nyse.com/api/regulatory/threshold-securities/download?selectedDate=2026-11-03&market=NYSE%20American

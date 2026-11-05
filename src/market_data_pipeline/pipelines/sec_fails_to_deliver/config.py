@@ -8,6 +8,7 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from types import MappingProxyType
+from urllib.parse import urlsplit
 
 import yaml
 
@@ -92,6 +93,18 @@ class DatabricksConfig:
 
 
 @dataclass(frozen=True)
+class AcquisitionConfig:
+    enabled: bool
+    user_agent_env: str
+
+    def __post_init__(self) -> None:
+        if type(self.enabled) is not bool:
+            raise ValueError("acquisition.enabled requires boolean true/false")
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", self.user_agent_env):
+            raise ValueError("acquisition.user_agent_env requires an environment variable name")
+
+
+@dataclass(frozen=True)
 class StorageConfig:
     schema_version: str
     quantity_precision: int
@@ -126,6 +139,7 @@ class PartitionConfig:
     manifest: Path
     input: Path
     coverage_evidence: Path | None = None
+    source_url: str | None = None
 
 
 @dataclass(frozen=True)
@@ -134,6 +148,7 @@ class RuntimeConfig:
     warehouse: str
     postgres: PostgresConfig
     databricks: DatabricksConfig
+    acquisition: AcquisitionConfig
     storage: StorageConfig
     partitions: Mapping[str, PartitionConfig]
     network: NetworkConfig = field(default_factory=NetworkConfig)
@@ -166,6 +181,7 @@ def load_config(path: Path) -> RuntimeConfig:
             "warehouse",
             "postgres",
             "databricks",
+            "acquisition",
             "storage",
             "partitions",
         },
@@ -214,6 +230,11 @@ def load_config(path: Path) -> RuntimeConfig:
     elif delta["enabled"]:
         raise ValueError("enabled Databricks requires catalog, schema and staging_volume")
 
+    acquisition = _object(
+        value["acquisition"], set(AcquisitionConfig.__dataclass_fields__), "acquisition"
+    )
+    acquisition = AcquisitionConfig(**acquisition)
+
     storage = _object(value["storage"], set(StorageConfig.__dataclass_fields__), "storage")
 
     raw_partitions = value["partitions"]
@@ -222,22 +243,42 @@ def load_config(path: Path) -> RuntimeConfig:
     partitions = {}
     for name, settings in raw_partitions.items():
         _identifier(name, "partition name")
-        if isinstance(settings, dict) and "coverage_evidence" in settings:
-            settings = _object(settings, {"manifest", "input", "coverage_evidence"}, "partition")
-        else:
-            settings = _object(settings, {"manifest", "input"}, "partition")
+        if not isinstance(settings, dict):
+            raise ValueError("partition requires an object")
+        allowed = {"manifest", "input", "coverage_evidence", "source_url"}
+        if set(settings) - allowed or not {"manifest", "input"} <= set(settings):
+            raise ValueError("partition requires manifest/input and documented optional fields")
+        source_url = settings.get("source_url")
+        if source_url is not None:
+            source_url = _text(source_url, "partition.source_url")
+            parts = urlsplit(source_url)
+            if (
+                parts.scheme != "https"
+                or parts.hostname != "www.sec.gov"
+                or parts.port is not None
+                or not re.fullmatch(
+                    r"/files/data/other/fails-deliver-data/cnsfails[0-9]{6}[ab]\.zip",
+                    parts.path,
+                )
+                or parts.query
+                or parts.fragment
+                or parts.username is not None
+            ):
+                raise ValueError("partition.source_url requires an official SEC FTD ZIP URL")
         partitions[name] = PartitionConfig(
             _path(settings["manifest"], path.parent, "partition.manifest"),
             _path(settings["input"], path.parent, "partition.input"),
             _path(settings["coverage_evidence"], path.parent, "partition.coverage_evidence")
             if settings.get("coverage_evidence") is not None
             else None,
+            source_url,
         )
     return RuntimeConfig(
         root,
         value["warehouse"],
         PostgresConfig(**pg),
         DatabricksConfig(**delta),
+        acquisition,
         StorageConfig(**storage),
         MappingProxyType(partitions),
         network,

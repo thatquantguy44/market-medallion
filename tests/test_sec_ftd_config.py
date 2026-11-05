@@ -36,6 +36,9 @@ def test_example_loads_without_secrets_input_files_or_connections(tmp_path, monk
     assert config.storage.quantity_precision == 38
     assert config.storage.price_scale == 12
     assert not config.databricks.enabled
+    assert not config.acquisition.enabled
+    assert config.acquisition.user_agent_env == "SEC_FTD_USER_AGENT"
+    assert config.partitions["september_2026_a"].source_url.endswith("cnsfails202609a.zip")
     assert (
         config.partitions["september_2026_b"].manifest
         == (tmp_path / "../../manifests/sec-fails-to-deliver-202609b.yml").resolve()
@@ -74,9 +77,23 @@ def test_example_loads_without_secrets_input_files_or_connections(tmp_path, monk
         ("databricks", {"table_prefix": "bad prefix"}),
         ("databricks", {"token": "must never be echoed"}),
         ("databricks", {"staging_volume": "/tmp/not-a-volume"}),
+        ("acquisition", {"enabled": "false"}),
+        ("acquisition", {"user_agent_env": "bad name"}),
         (None, {"partitions": {}}),
         (None, {"partitions": {"bad name": {"manifest": "m.yml", "input": "f.zip"}}}),
         (None, {"partitions": {"valid": {"manifest": "m.yml", "input": ""}}}),
+        (
+            None,
+            {
+                "partitions": {
+                    "valid": {
+                        "manifest": "m.yml",
+                        "input": "f.zip",
+                        "source_url": "https://example.test/file.zip",
+                    }
+                }
+            },
+        ),
     ],
 )
 def test_invalid_settings_fail_without_echoing_values(tmp_path, section, updates):

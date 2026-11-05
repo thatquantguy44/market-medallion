@@ -65,6 +65,7 @@ def archive_capture(
     input_path: Path,
     clock=None,
     coverage_evidence: bytes | None = None,
+    acquisition: dict | None = None,
 ) -> tuple[dict, bytes | None]:
     if coverage_evidence is not None and (
         not isinstance(coverage_evidence, bytes) or len(coverage_evidence) > 65536
@@ -96,7 +97,7 @@ def archive_capture(
     if payload is not None:
         _write_once(directory / "payload.bin", payload)
     receipt = {
-        "receipt_version": "sec-ftd-capture/2",
+        "receipt_version": "sec-ftd-capture/3" if acquisition is not None else "sec-ftd-capture/2",
         "coverage_evidence_sha256": _digest(coverage_evidence)
         if coverage_evidence is not None
         else None,
@@ -104,9 +105,9 @@ def archive_capture(
         "capture_sequence": sequence,
         "captured_at": captured_clock,
         "capture_started_at": started_clock,
-        "transport": "local-file",
+        "transport": "https" if acquisition is not None else "local-file",
         "provider_published_at": None,
-        "origin_retrieved_at": None,
+        "origin_retrieved_at": acquisition["retrieved_at"] if acquisition is not None else None,
         "input_name": Path(input_path).name,
         "source_state": state,
         "payload_complete": complete,
@@ -120,6 +121,38 @@ def archive_capture(
         "partition_id": f"{manifest.period_start}_{manifest.period_end}",
         "member_name": manifest.member_name,
     }
+    if acquisition is not None:
+        required = {
+            "receipt_version",
+            "partition",
+            "source_url",
+            "retrieved_at",
+            "http_status",
+            "http_route",
+            "startup_fallback_used",
+            "payload_bytes",
+            "payload_sha256",
+            "content_type",
+            "etag",
+            "last_modified",
+        }
+        if (
+            set(acquisition) != required
+            or acquisition["receipt_version"] != "sec-ftd-acquisition/1"
+            or acquisition["http_status"] != 200
+            or acquisition["payload_bytes"] != len(payload or b"")
+            or acquisition["payload_sha256"] != receipt["raw_sha256"]
+        ):
+            raise ValueError("acquisition metadata differs from captured payload")
+        receipt.update(
+            source_url=acquisition["source_url"],
+            http_status=acquisition["http_status"],
+            http_route=acquisition["http_route"],
+            startup_fallback_used=acquisition["startup_fallback_used"],
+            content_type=acquisition["content_type"],
+            etag=acquisition["etag"],
+            last_modified=acquisition["last_modified"],
+        )
     _write_once(
         directory / "receipt.json", (json.dumps(receipt, sort_keys=True, indent=2) + "\n").encode()
     )
@@ -135,7 +168,11 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
         receipt = json.loads(
             _read_bounded(directory / "receipt.json", 65536), object_pairs_hook=_unique
         )
-        if receipt["receipt_version"] not in ("sec-ftd-capture/1", "sec-ftd-capture/2"):
+        if receipt["receipt_version"] not in (
+            "sec-ftd-capture/1",
+            "sec-ftd-capture/2",
+            "sec-ftd-capture/3",
+        ):
             raise ValueError("unsupported receipt")
         fields = {
             "receipt_version",
@@ -161,13 +198,37 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
         }
         if receipt["receipt_version"] == "sec-ftd-capture/2":
             fields.add("coverage_evidence_sha256")
+        if receipt["receipt_version"] == "sec-ftd-capture/3":
+            fields.update(
+                {
+                    "coverage_evidence_sha256",
+                    "source_url",
+                    "http_status",
+                    "http_route",
+                    "startup_fallback_used",
+                    "content_type",
+                    "etag",
+                    "last_modified",
+                }
+            )
         if (
             set(receipt) != fields
-            or receipt["transport"] != "local-file"
+            or receipt["transport"] not in ("local-file", "https")
             or receipt["provider_published_at"] is not None
-            or receipt["origin_retrieved_at"] is not None
         ):
             raise ValueError("unsupported capture fields or transport clocks")
+        if receipt["receipt_version"] == "sec-ftd-capture/3":
+            if (
+                receipt["transport"] != "https"
+                or receipt["http_status"] != 200
+                or type(receipt["startup_fallback_used"]) is not bool
+                or receipt["http_route"] not in ("direct", "proxy", "injected")
+                or not isinstance(receipt["source_url"], str)
+                or receipt["origin_retrieved_at"] is None
+            ):
+                raise ValueError("invalid HTTPS capture provenance")
+        elif receipt["transport"] != "local-file" or receipt["origin_retrieved_at"] is not None:
+            raise ValueError("invalid local capture provenance")
         proof = directory / "coverage-evidence.json"
         proof_hash = (
             receipt["coverage_evidence_sha256"]
@@ -196,10 +257,16 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
         try:
             start = datetime.fromisoformat(receipt["capture_started_at"])
             captured = datetime.fromisoformat(receipt["captured_at"])
+            origin = (
+                datetime.fromisoformat(receipt["origin_retrieved_at"])
+                if receipt["origin_retrieved_at"] is not None
+                else None
+            )
             if (
                 utc_timestamp(start) != receipt["capture_started_at"]
                 or utc_timestamp(captured) != receipt["captured_at"]
                 or captured < start
+                or (origin is not None and utc_timestamp(origin) != receipt["origin_retrieved_at"])
             ):
                 raise ValueError("invalid capture clocks")
         except ValueError as exc:

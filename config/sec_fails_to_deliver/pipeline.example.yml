@@ -1,7 +1,11 @@
 # Copy to pipeline.local.yml and replace the illustrative connection settings.
 config_version: 1
 pipeline: sec-fails-to-deliver
-# Reserved for future HTTP acquisition; local operations never probe the network.
+acquisition:
+  # Keep false in the checked-in example. Enable only in a reviewed local copy.
+  enabled: false
+  # Value should identify the organization/operator and include contact information.
+  user_agent_env: SEC_FTD_USER_AGENT
 network:
   mode: auto
   preferred_route: proxy
@@ -45,7 +49,9 @@ partitions:
     manifest: ../../manifests/sec-fails-to-deliver-202609a.yml
     input: ../../data/sec_ftd/cnsfails202609a.zip
     coverage_evidence: null
+    source_url: https://www.sec.gov/files/data/other/fails-deliver-data/cnsfails202609a.zip
   september_2026_b:
     manifest: ../../manifests/sec-fails-to-deliver-202609b.yml
     input: ../../data/sec_ftd/cnsfails202609b.zip
     coverage_evidence: null
+    source_url: https://www.sec.gov/files/data/other/fails-deliver-data/cnsfails202609b.zip

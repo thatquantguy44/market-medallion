@@ -28,7 +28,7 @@ config/sec_fails_to_deliver/
 | Databricks publication | `enabled: false` | Leave disabled until a catalog, schema and writable `/Volumes/<catalog>/<schema>/<volume>/...` staging path are available. Publication later runs in an authenticated Spark session. |
 | Quantity projection | precision38, scale0 | `quantity_precision` is editable from1–38; quantities remain whole shares. Exact text is retained regardless of projection. |
 | Price projection | precision38, scale12 | `price_precision` and `price_scale` are editable; this example allows26 digits before and12 after the decimal point. Source scale remains in exact text. |
-| Selected input partitions | Two approved September2026 archives | Add named manifest/input pairs. Their source manifests retain explicit dates, member name and resource budgets; there is no filename/date inference. |
+| Selected input partitions | Two approved September2026 archives | Add named manifest/input pairs and an optional exact official SEC ZIP URL. Their source manifests retain explicit dates, member name and resource budgets; there is no filename/date inference. |
 
 Decimal38/12 is a starting recommendation, not a statement that every historical
 price fits. The implemented codecs preflight actual values against this config
@@ -46,8 +46,10 @@ The optional `network` section uses the common
 [proxy/direct contract](../../docs/development/outbound_http.md): mode,
 preference/fallback, proxy environment-variable name, no-proxy hostname list,
 timeouts and a config-relative CA bundle. It is validated without resolving
-proxy secrets or testing connectivity. Current SEC FTD commands use local files
-and never probe; these settings do not implement or enable an SEC HTTP adapter.
+proxy secrets or testing connectivity. Only `acquire-run` uses these settings.
+Local `run`, validation, health, inspection, replay and export never probe the
+network. Acquisition remains disabled in the checked-in example and requires
+`SEC_FTD_USER_AGENT` with a declared contact.
 Network changes do not alter the storage contract or require a new data root.
 
 ## Create local settings
@@ -90,6 +92,11 @@ These commands work with the checked-in example and need no database password:
   --partition september_2026_a
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver publish \
   --config config/sec_fails_to_deliver/pipeline.local.yml
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver health \
+  --config config/sec_fails_to_deliver/pipeline.local.yml
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver export-research \
+  --config config/sec_fails_to_deliver/pipeline.local.yml \
+  --destination data/research-exchange/sec-ftd
 ```
 
 Use `--partition september_2026_b` for the second approved file. Substitute your
@@ -113,6 +120,13 @@ storage settings and an empty nonoverlapping root; a PostgreSQL target also
 requires no existing SEC-owned tables. Configured live partition paths and network
 settings are not used during replay; original artifacts/outcomes supply them.
 See the [runbook](../../docs/deployment/sec_ftd_runbook.md) for safe reconstruction.
+
+For a reviewed exact SEC URL, set `acquisition.enabled: true` only in the local
+copy, export `SEC_FTD_USER_AGENT`, and run `acquire-run --partition ...`. The
+download is bounded by the selected manifest, staged outside an unbound root,
+then archived with HTTPS URL/retrieval/route/status provenance before promotion.
+The source page is not crawled and dates are never guessed. The corresponding
+Dagster schedule remains stopped by default.
 
 The PostgreSQL database and named schema must exist; the adapter creates only
 its source-owned tables/view. A new root refuses any preexisting SEC-owned table,

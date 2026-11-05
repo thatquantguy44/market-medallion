@@ -1,6 +1,7 @@
 # Settlement facts and threshold membership contract
 
-**State:** normalized types and SEC SQLite slice implemented; later adapters planned.
+**State:** SEC SQLite/PostgreSQL plus Nasdaq/NYSE threshold SQLite research slices
+implemented; threshold replay/PostgreSQL and both Delta integrations remain.
 **Date:** 2026-11-04. Inherits [C01–C11](../../docs/securities_finance/contract.md).
 T18's normalized type contracts and serialization are implemented for both source
 packages. The parser implements the six-column/trailer local profile version2,
@@ -35,9 +36,12 @@ Symbol|Security Name|Market Category|Reg SHO Threshold Flag|Rule 3210|Filler
 
 A final 14-digit creation token was observed; preserve and validate it separately.
 The historical pilot-list field documentation is not a substitute for the
-threshold file's current schema. NYSE's exact download format remains open;
-reserve no fabricated provider column names. Provider adapters normalize into a
-common membership contract only after their independent schema/sample checks.
+threshold file's current schema. NYSE's public `selectedDate`/`market` route now
+verifies the six-column header `Symbol|Security Name|Market Category|Reg SHO
+Threshold Flag|Filler|Filler` plus a terminal14-digit creation token. Empty
+NYSE and two-row NYSE American responses were reconciled on 2026-11-04;
+provider rows are not fixtures. Provider adapters still normalize only after
+their independent schema checks.
 
 Membership fact key: `(provider, market, list_date, raw_symbol, rule_family)`;
 where the source publishes a stable issue ID, retain it as an additional
@@ -172,8 +176,9 @@ required for Spec011, for both SEC FTD and exchange-threshold packages. SQLite
 remains the offline development backend. PostgreSQL is an alternative operational
 warehouse; Databricks consumes a validated committed snapshot into Delta. This
 does not require Spark in the parser or make Databricks a local ingestion backend.
-SEC SQLite/PostgreSQL and coherent Parquet are implemented; threshold PostgreSQL
-and both Delta adapters remain absent. R12/A14/A15 still gate full Spec011 parity.
+SEC SQLite/PostgreSQL and coherent Parquet are implemented; threshold SQLite and
+native Parquet research export are implemented. Threshold PostgreSQL and both
+Delta adapters remain absent. R12/A14/A15 still gate full Spec011 parity.
 
 | Logical value | SQLite | PostgreSQL | Parquet / Databricks Delta |
 | --- | --- | --- | --- |
@@ -267,7 +272,10 @@ persisted root binding. SQLite and SEC PostgreSQL enforce that binding. T18
 Arrow/Spark schemas and serialization round trips are complete; threshold
 PostgreSQL and Delta adapters remain absent.
 
-Implemented commands are `validate-config --config ...` and
+SEC commands now include config validation, inspection, local/live ingestion,
+bounded Gold, health, replay, publication and research export. Threshold commands
+include config validation, no-request health/plan, local/live ingestion, Gold and
+research export. Earlier implemented commands are `validate-config --config ...` and
 `inspect --config ... --partition ...`. Config-mode inspection selects exactly
 one configured manifest/input pair, with no conflicting input override. Existing
 `--manifest ... --input ...` inspection remains available. Both paths preserve

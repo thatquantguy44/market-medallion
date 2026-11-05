@@ -100,7 +100,7 @@ def coverage_record(manifest, evidence, parsed, audit, outcome):
     }
 
 
-def run(config_path: Path, partition: str, *, clock=None) -> dict:
+def run(config_path: Path, partition: str, *, clock=None, acquired=None) -> dict:
     """One configured local partition; every bounded attempt gets durable lineage."""
     config = _runtime(config_path)
     if config.databricks.enabled:
@@ -108,6 +108,8 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
     if partition not in config.partitions:
         raise ValueError("partition is not present in the SEC FTD config")
     selected = config.partitions[partition]
+    if acquired is not None and acquired.metadata.get("partition") != partition:
+        raise ValueError("acquired payload does not match the selected partition")
     with selected.manifest.open("rb") as stream:
         manifest_payload = stream.read(65537)
     manifest = parse_manifest(manifest_payload)
@@ -151,9 +153,10 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                 captured_at=captured_at,
                 manifest_payload=manifest_payload,
                 settings=config.storage,
-                input_path=selected.input,
+                input_path=acquired.path if acquired is not None else selected.input,
                 clock=now,
                 coverage_evidence=evidence_payload,
+                acquisition=acquired.metadata if acquired is not None else None,
             )
             captured_at = datetime.fromisoformat(receipt["captured_at"])
             started["captured_at"] = captured_at
@@ -265,7 +268,16 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
             "error_code": error_code,
             "snapshot": publication["snapshot"],
             "snapshot_id": publication["snapshot_id"],
+            "transport": receipt["transport"] if receipt is not None else None,
         }
+
+
+def acquire_and_run(config_path: Path, partition: str, *, transport=None, clock=None) -> dict:
+    """Acquire one exact configured URL, then archive and promote it in one operator action."""
+    from market_data_pipeline.pipelines.sec_fails_to_deliver.acquisition import acquire_partition
+
+    acquired = acquire_partition(config_path, partition, transport=transport, clock=clock)
+    return run(config_path, partition, clock=clock, acquired=acquired)
 
 
 def gold(

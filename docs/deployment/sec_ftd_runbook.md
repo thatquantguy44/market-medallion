@@ -2,10 +2,11 @@
 
 T04 implements authorized local ZIP capture, exact typed facts, audit, coverage
 and database Gold. T05 adds revisions/cutoffs/withdrawals, T06 replay, T07
-coherent Parquet and T19 the SEC PostgreSQL adapter. SQLite and PostgreSQL are
-explicit selections with no fallback. Delta remains T21. SEC HTTP acquisition,
-jobs and schedules remain future tasks. This is a manual research slice.
-NAAIM remains paused.
+coherent Parquet and T19 the SEC PostgreSQL adapter. Bounded exact-URL
+acquisition, no-request health, a native QuantMeridian export and stopped
+Dagster definitions are also implemented. SQLite and PostgreSQL are explicit
+selections with no fallback. Delta remains T21. This is a manual research slice;
+live acquisition and its schedule are disabled by default. NAAIM remains paused.
 
 ## Configuration and first local run
 
@@ -29,6 +30,8 @@ SQLite; neither backend silently falls back to the other.
   --config config/sec_fails_to_deliver/pipeline.local.yml --limit 20
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver publish \
   --config config/sec_fails_to_deliver/pipeline.local.yml
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver health \
+  --config config/sec_fails_to_deliver/pipeline.local.yml
 ```
 
 These are implemented commands. The partition names select configured local
@@ -36,6 +39,16 @@ input/manifest pairs. `gold` requires an explicit row limit1–1000 and refuses
 to create a nonexistent warehouse. Decimal JSON values are strings, preserving
 precision; exact source tokens are separate fields. `validate-config` reports
 whether the selected backend is implemented, not whether a server is reachable.
+
+For an admitted exact SEC ZIP URL, set `acquisition.enabled: true` in the local
+YAML and set `SEC_FTD_USER_AGENT` to an operator identity with contact. Then use
+`acquire-run --partition ...`. Startup chooses direct/proxy once; the response
+is byte-bounded and staged atomically before the standard immutable capture. No
+filename/date discovery or bulk crawl occurs.
+
+Publish an independent research exchange for QuantMeridian with
+`export-research --destination ...`. Consumers read only its `current.json`;
+see [the integration contract](../integration/QuantMeridian.md).
 
 ## Pipeline-owned root
 

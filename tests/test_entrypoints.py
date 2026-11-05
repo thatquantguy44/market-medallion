@@ -75,4 +75,6 @@ def test_dagster_job_materializes_fixture(tmp_path):
         "aaii_thursday_local_import",
         "aaii_weekly_live",
         "naaim_delayed_daily_live",
+        "reg_sho_threshold_lists_daily_live",
+        "sec_fails_to_deliver_daily_live",
     }

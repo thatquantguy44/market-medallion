@@ -2,16 +2,15 @@
 
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
-**Updated:** 2026-11-04. **Status:** initial offline SEC manifest, ZIP/pipe parser
-and local `validate`/`inspect` commands implemented; two approved September2026
-archives reconcile under profile version2. T18 portable storage types and
-serialization are complete for both source packages. T03/T04 now deliver immutable
-bounded captures, root-bound SQLite facts/audit/coverage, database Gold and
-configured `run`/`gold` commands, observed revisions and gated withdrawals.
-T06 replay, T07 coherent Parquet and the SEC T19 PostgreSQL adapter are verified.
-Next: T08 Nasdaq threshold contract. Databricks and threshold PostgreSQL remain;
-live acquisition,
-research exports, exchange adapters and Dagster remain unimplemented.
+**Updated:** 2026-11-04. **Status:** SEC T03–T07/T19, threshold T20 and shared T18 are verified.
+SEC now also has bounded exact-URL acquisition, no-request health, stopped
+Dagster and a native QuantMeridian export. Nasdaq and NYSE have independent
+physical manifests/parsers, versioned SQLite membership/coverage, exact-URL
+acquisition, correction/withdrawal history, cutoffs, coverage-qualified episodes,
+health/plan/CLI, stopped Dagster and a native research export. Invented fixtures
+cover both providers; bounded current source responses reconcile the physical
+contracts. Both actual Delta integrations and final provider-use acceptance
+remain open, so T17/G2 is not closed.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
 Nasdaq/NYSE list family. **Source packages:**
@@ -23,8 +22,8 @@ Read [data contract](data_contract.md), [implementation plan](plan.md),
 The [first source-review checkpoint](source_review.md) records current evidence,
 selected partitions, implemented offline behavior and remaining admission gaps.
 SEC FTD now has [pipeline-specific configuration](../../config/sec_fails_to_deliver/README.md)
-and no-request config validation. PostgreSQL is the user-selected default and
-is implemented for SEC FTD; Databricks stays disabled until configured.
+and no-request config validation. PostgreSQL is implemented independently for
+both sources; Databricks stays disabled until configured.
 
 ## Objective and research users
 
@@ -164,11 +163,10 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Start **S11-T08** in [todo.md](todo.md): pin the Nasdaq list, trailer and coverage
-contract. T03–T07 and T19 are complete, including corrections, reversions,
-cutoff queries, gated withdrawals and offline replay with original clocks/order
-and admission outcomes. The [local runbook](../../docs/deployment/sec_ftd_runbook.md) records tested
-commands and September ingestion evidence. Broader history, exchange contracts
-and G2 remain open.
-T20–T22 still deliver threshold PostgreSQL and both Databricks adapters. SEC T19
-is implemented and verified against a disposable PostgreSQL17.6 database.
+Implement **S11-T21** SEC FTD Delta publication, then **S11-T22** threshold Delta.
+Both require actual Spark/Delta or Databricks round trips; the owner
+previously selected Databricks disabled until a catalog/schema/staging volume is
+configured. After those gates and the Nasdaq/NYSE intended-use decision, perform
+T17 final reconciliation. See the [SEC runbook](../../docs/deployment/sec_ftd_runbook.md),
+[threshold runbook](../../docs/deployment/reg_sho_thresholds_runbook.md), and
+[QuantMeridian exchange contract](../../docs/integration/QuantMeridian.md).

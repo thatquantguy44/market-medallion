@@ -1,0 +1,20 @@
+provider: nasdaq
+dataset: reg-sho-thresholds
+schema_version: nasdaq-reg-sho-pipe/1
+format: pipe-text
+encoding: ascii
+header:
+  - Symbol
+  - Security Name
+  - Market Category
+  - Reg SHO Threshold Flag
+  - Rule 3210
+  - Filler
+allowed_markets: [NASDAQ]
+limits:
+  bytes: 1048576
+  rows: 10000
+  record_bytes: 4096
+access:
+  source_page: https://www.nasdaqtrader.com/Trader.aspx?id=RegSHOThreshold
+  automation: disabled-by-default

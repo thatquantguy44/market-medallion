@@ -1,6 +1,6 @@
 # Dagster job and schedule register
 
-Updated: 2026-11-03, America/New_York. This is the canonical register for
+Updated: 2026-11-04, America/New_York. This is the canonical register for
 Dagster-owned jobs and schedules in MarketMedallion. It complements the
 [pipeline register](../pipelines.md): that register owns source scope and
 delivery status; this document owns operational execution details.
@@ -15,6 +15,8 @@ Schedule state is runtime state, so recheck it before assuming a job will run.
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_thursday_local_import` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Local file only; no provider request. |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_weekly_live` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Requires `MARKET_MEDALLION_CONFIG` and `operations.scheduled_live_access: true`; provider entitlement remains separately required. |
 | NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | **Stopped by user decision on 2026-11-03** | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Do not restart without explicit user direction; then requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
+| SEC fails-to-deliver | `sec_fails_to_deliver_job` | `sec_fails_to_deliver_daily_live` | Daily, 08:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured pipeline-owned root; immutable Bronze and coherent Parquet retention are operator-managed | Requires local `acquisition.enabled: true`, declared `SEC_FTD_USER_AGENT`, `SEC_FTD_SCHEDULED_LIVE_ACCESS=true`, `SEC_FTD_CONFIG`, and one exact `SEC_FTD_PARTITION`. |
+| Nasdaq/NYSE Reg SHO thresholds | `reg_sho_threshold_list_job` | `reg_sho_threshold_lists_daily_live` | Weekdays, 23:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured threshold root; immutable Bronze and versioned SQLite state | Requires reviewed provider use, local `acquisition.enabled: true`, `REG_SHO_USER_AGENT`, `REG_SHO_SCHEDULED_LIVE_ACCESS=true`, `REG_SHO_CONFIG`, and one exact `REG_SHO_PARTITION`. |
 
 No other Dagster jobs or schedules are defined in the repository. A schedule
 being listed or enabled does not establish provider rights, start a persistent
@@ -56,6 +58,17 @@ metadata label it **NAAIM Exposure Index — 3-month-delayed public data** with
 `as_of_date` alongside its value. CLI capture/health responses expose
 `latest_as_of_date`; a healthy recent capture is not current-week positioning.
 Daily polling does not remove NAAIM's three-month source delay.
+
+### SEC FTD and exchange thresholds
+
+SEC FTD definitions live in `sec_fails_to_deliver/dagster_defs.py`; exchange
+threshold definitions live in `reg_sho_thresholds/dagster_defs.py`. Both invoke
+one exact configured partition, use source-owned proxy/direct selection, and
+default stopped. A definition being loadable does not authorize source access.
+The SEC job does not crawl the download page. The threshold job does not invent
+a date/market or treat a failed list as empty. See the
+[SEC runbook](sec_ftd_runbook.md) and
+[threshold runbook](reg_sho_thresholds_runbook.md).
 
 ## Local operation
 

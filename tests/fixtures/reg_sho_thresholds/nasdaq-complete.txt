@@ -1,0 +1,4 @@
+Symbol|Security Name|Market Category|Reg SHO Threshold Flag|Rule 3210|Filler
+ALFA|ALFA INVENTED CORPORATION|Q|Y|N|
+BETA|BETA INVENTED FUND|G|Y|Y|
+20261103230004

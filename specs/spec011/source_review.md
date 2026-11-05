@@ -1,6 +1,6 @@
 # Spec011 first source-contract checkpoint
 
-**Reviewed:** 2026-11-03, America/New_York. **Branch:**
+**Reviewed:** 2026-11-04, America/New_York. **Branch:**
 `feat/spec011-sec-ftd-parser`. **Scope:** source review, offline SEC parser and
 reconciliation of two user-approved local September 2026 archives. This is not
 a completed ingestion pipeline or a certified historical provider schema.
@@ -289,7 +289,7 @@ names unavailable live paths and CA. No provider request, PostgreSQL/Delta
 integration, extra source capture, real correction or withdrawal was invented.
 Population coverage remains PARTIAL/NOT_CERTIFIED. T07/T19 are verified below.
 The user's compatibility requirement is recorded in R12/A14/A15. SEC PostgreSQL
-is implemented; threshold PostgreSQL and Databricks Delta remain T20–T22.
+is implemented; threshold PostgreSQL is verified and Databricks Delta remains T21–T22.
 T03 rejected-input retention is complete; preserve unknown clocks and
 coverage limitations. S11-T02 sample conformance is complete for these two
 archives only. Full Spec011/G2, exchange rights/conformance and persistent
@@ -318,5 +318,47 @@ Only newly created identity-matched test tables were dropped; existing AAII,
 FRED and other database services were not used. No retained production SEC
 database, provider request, Delta publication or schedule was created.
 
-Next numbered task: S11-T08 Nasdaq list and coverage contract. T20–T22 remain
-required before the full backend gate can close.
+## 2026-11-04 acquisition and exchange contract checkpoint
+
+This section supersedes the earlier open-route statements while preserving the
+original review chronology.
+
+- The SEC catalog linked October first-half directly as
+  `https://www.sec.gov/files/data/other/fails-deliver-data/cnsfails202610a.zip`.
+  The catalog documents the semi-monthly availability cadence and six fields.
+  The implemented adapter downloads only an exact configured official ZIP,
+  requires a declared contact User-Agent, applies the manifest byte limit and
+  one run-scoped proxy/direct choice, and archives HTTPS provenance. The
+  checked-in config and schedule remain disabled; no bulk discovery is present.
+- The current Nasdaq page linked
+  `https://www.nasdaqtrader.com/dynamic/symdir/regsho/nasdaqth20261103.txt`.
+  The observed file had the six-field header pinned in
+  `manifests/reg-sho-nasdaq.yml`, 84 membership rows and terminal creation token
+  `20261103230004`. No CUSIP was present. Invented fixtures, not provider rows,
+  are committed. The December6 notice remains a future effective change.
+- The NYSE page's public download link resolves to
+  `/api/regulatory/threshold-securities/download?selectedDate=<ISO>&market=<market>`.
+  Bounded requests for `2026-11-03` confirmed `NYSE` returned a valid empty
+  header/trailer envelope (`NYSEth20261103.txt`) and `NYSE American` returned
+  two rows plus the same six-field/trailer structure
+  (`NYSEAMEXth20261103.txt`). Provider rows were inspected only for schema
+  reconciliation and were not committed. Independent invented fixtures pin the
+  adapter. Exact date/market mismatches fail.
+
+The source-use boundary is still conservative. SEC fair-access behavior is
+implemented below its published ceiling, but no schedule is activated. Nasdaq
+and ICE/NYSE retention, automation and downstream research-display terms must
+be accepted for the intended scope before enabling their stopped schedule.
+Public reachability and a technically working download route do not by
+themselves grant redistribution rights.
+
+Delivered local research behavior: independent provider parsers, immutable
+captures, SQLite membership/coverage/audit revisions, complete-empty versus
+unavailable outcomes, corrections/withdrawals, cutoffs, gap/censoring episodes,
+bounded acquisition, no-request health/plan, atomic native exports and stopped
+Dagster definitions. Both sources have PostgreSQL17.6 parity and deterministic
+replay; SEC also has coherent Parquet publication. Both actual Delta/Spark
+integrations remain open; therefore T17/G2 is not closed.
+
+Next engineering gates: S11-T21/T22 actual Delta integration, and final
+reconciliation after the provider-use decision.

@@ -1,0 +1,4 @@
+Symbol|Security Name|Market Category|Reg SHO Threshold Flag|Filler|Filler
+ALFA|Alfa Invented Holdings|NYSE American|Y||
+GAMM|Gamma Invented Depositary Shares|NYSE American|Y||
+20261103220201

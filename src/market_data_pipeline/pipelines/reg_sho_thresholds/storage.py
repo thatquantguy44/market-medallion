@@ -136,9 +136,9 @@ def storage_schemas(*, schema_version="reg-sho-storage/1") -> dict[str, RecordSc
             *_columns("timestamp", "source_created_at", nullable=True),
             *_columns(
                 "string",
-                "calendar_version partition_id coverage_state validation_state "
-                "version_id raw_sha256 run_id",
+                "calendar_version partition_id coverage_state validation_state version_id run_id",
             ),
+            *_columns("string", "raw_sha256", nullable=True),
             *_columns("int64", "expected_row_count", nullable=True),
             *_columns("int64", "received_row_count capture_sequence"),
             *_columns("timestamp", "first_seen_at"),
@@ -159,7 +159,7 @@ def storage_schemas(*, schema_version="reg-sho-storage/1") -> dict[str, RecordSc
     }
     return {
         name: RecordSchema(
-            f"reg-sho-{name}/1",
+            "reg-sho-coverage/2" if name == "coverage" else f"reg-sho-{name}/1",
             contract_id,
             (*_columns("string", "dataset"), *columns),
             lambda row, name=name: _validate(name, row),

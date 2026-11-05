@@ -1,11 +1,11 @@
 # Spec011 implementation tasks
 
-**Status:** T01 documentary review recorded; T02 complete for two approved local
-September2026 archives; T03 bounded parser and rejected-input retention complete.
-T18 portable types/serialization are complete for both source packages.
-T05 revisions, T06 deterministic offline replay, T07 coherent Parquet publication
-and the SEC-owned T19 PostgreSQL adapter are complete. Next: T08 Nasdaq list
-contract. Threshold PostgreSQL and both Databricks adapters remain T20–T22.
+**Status:** SEC T02–T07/T19, threshold T20 and shared T18 are complete. T08/T09 Nasdaq and the
+physical/local portion of T10 NYSE are implemented, along with native exports,
+operator commands and stopped Dagster definitions. T11 episode semantics and
+T12 dated mapping/features have offline coverage. Threshold deterministic replay
+and PostgreSQL are verified. Provider-use acceptance and both actual Delta integrations remain;
+T17/G2 is not closed.
 **Updated:** 2026-11-04. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
@@ -226,7 +226,7 @@ Actual PostgreSQL17.6 disposable-database tests cover large exact values,
 corrections, reversions, equal clocks/cutoffs, evidence-gated withdrawal,
 rollback/failed promotion, concurrent retry, wrong-root refusal, Parquet and
 SQLite → PostgreSQL replay. Failed replay removes only its newly created,
-identity-verified tables and is retryable. T20–T22 remain open.
+identity-verified tables and is retryable. T21–T22 remain open.
 Final repository verification with every PostgreSQL integration enabled:
 **430 passed**, Ruff/lint/format, documentation links and sdist/wheel build pass.
 
@@ -234,16 +234,24 @@ Final repository verification with every PostgreSQL integration enabled:
 
 **Dependencies:** T11,T18. **Scope:** M. **Requirements:** R04,R06,R07,R12,N03.
 
-- [ ] Implement the threshold-owned PostgreSQL adapter/configuration independently
+- [x] Implement the threshold-owned PostgreSQL adapter/configuration independently
   of FTD tables, preserving provider/market/list-date/rule and coverage identity.
-- [ ] Prove SQLite/PostgreSQL membership, coverage, episode, cutoff and replay
+- [x] Prove SQLite/PostgreSQL membership, coverage, episode, cutoff and replay
   parity for complete-empty, failed lists, corrections and withdrawals.
-- [ ] Verify isolated schema/root identity, rollback and writer serialization
+- [x] Verify isolated schema/root identity, rollback and writer serialization
   against a dedicated PostgreSQL test database.
 
 **Verify:** A14 actual backend parity; missing lists never become empty/exit
 events. **Likely files:** threshold PostgreSQL adapter, source config/example,
 shared contract cases within tests, PostgreSQL integration tests.
+
+**Complete:** exact backend selection has no SQLite fallback; the configured
+schema must already exist and root/database identity must agree. A disposable
+PostgreSQL17.6 integration run covers native DATE/TIMESTAMPTZ/BIGINT fields,
+corrections, complete-list withdrawals, complete-empty/rejected coverage,
+cutoffs, rollback, concurrent writer serialization, research export and exact
+SQLite→PostgreSQL replay. The combined SEC/threshold PostgreSQL integration
+suite passes **5 tests**. T21/T22 and provider-use acceptance still gate T17/G2.
 
 ## S11-T21 — Publish SEC FTD snapshots to Databricks Delta
 
@@ -281,9 +289,9 @@ source-named notebook/example, runbook.
 
 **Dependencies:** T01,T02. **Scope:** M. **Requirements:** R01,R04,N03.
 
-- [ ] Define threshold manifest independent of SEC, selected market/date and trailer.
-- [ ] Add invented complete-list/empty/date-mismatch/flag/trailer fixtures.
-- [ ] Parse list envelope and membership separately; preserve raw flags/symbols.
+- [x] Define threshold manifest independent of SEC, selected market/date and trailer.
+- [x] Add invented complete-list/empty/date-mismatch/flag/trailer fixtures.
+- [x] Parse list envelope and membership separately; preserve raw flags/symbols.
 
 **Verify:** A03/A04 schema, row-count and trailer tests. **Likely files:** threshold
 manifest, Nasdaq parser, tests, two fixtures. Exact field rules follow source sample.
@@ -292,26 +300,28 @@ manifest, Nasdaq parser, tests, two fixtures. Exact field rules follow source sa
 
 **Dependencies:** T08. **Scope:** M. **Requirements:** R01,R04,R06,R07.
 
-- [ ] Persist per-list coverage and membership with source capture lineage.
-- [ ] Apply complete replacement corrections/removals without erasing history.
-- [ ] Preserve missing/failed/valid-empty partitions as distinct outcomes.
+- [x] Persist per-list coverage and membership with source capture lineage.
+- [x] Apply complete replacement corrections/removals without erasing history.
+- [x] Preserve missing/failed/valid-empty partitions as distinct outcomes.
 
 **Verify:** A03–A05 fixture run/reopen and replacement tests. **Likely files:**
 threshold pipeline, SQLite adapter, coverage model, integration/revision tests.
 
 ### Checkpoint 3 — Nasdaq membership evidence
 
-- [ ] Complete and failed/empty list cases are distinguishable.
-- [ ] A missing file cannot generate an exit or recreate absent dates.
-- [ ] NYSE remains unimplemented/unverified until its next task passes.
+- [x] Complete and failed/empty list cases are distinguishable.
+- [x] A missing file cannot generate an exit or recreate absent dates.
+- [x] NYSE remains separate and is admitted only through its provider adapter.
 
 ## S11-T10 — Admit and implement the NYSE adapter
 
 **Dependencies:** T01,T09. **Scope:** M. **Requirements:** R01,R04,R11.
 
 - [ ] Resolve public date/market parameters, schema and applicable access rights.
-- [ ] Add a separate provider parser/envelope using invented source-shaped input.
-- [ ] Prove selected NYSE market/date coverage without assuming Nasdaq conventions.
+  Route/parameters/schema are resolved; intended automation/retention/research-use
+  acceptance remains an owner gate, so live definitions stay stopped.
+- [x] Add a separate provider parser/envelope using invented source-shaped input.
+- [x] Prove selected NYSE market/date coverage without assuming Nasdaq conventions.
 
 **Verify:** A03/A04 date/market/schema and complete-empty/failure regressions;
 source-shaped sample reconciliation if permitted. **Likely files:** NYSE source
@@ -321,9 +331,9 @@ contract/adapter, two fixtures, adapter tests. Record blockers rather than bypas
 
 **Dependencies:** T09,T10. **Scope:** M. **Requirements:** R06,R07,R08.
 
-- [ ] Derive observed entries/exits only across complete adjacent calendar dates.
-- [ ] Expose missing-date gap and left/right-censoring states explicitly.
-- [ ] Replay membership/episodes at cutoffs using versioned coverage/calendar.
+- [x] Derive observed entries/exits only across complete adjacent calendar dates.
+- [x] Expose missing-date gap and left/right-censoring states explicitly.
+- [x] Replay membership/episodes at cutoffs using versioned coverage/calendar.
 
 **Verify:** A08/A09 holiday, initial presence, final presence, missing date,
 correction and withdrawal fixtures. **Likely files:** episode transform,
@@ -333,10 +343,10 @@ calendar contract, replay module, episode/replay tests.
 
 **Dependencies:** T05,T11. **Scope:** M. **Requirements:** R03,R05,R08.
 
-- [ ] Add evidence-backed mapping inputs with effective/knowledge dates and
+- [x] Add evidence-backed mapping inputs with effective/knowledge dates and
   unresolved/ambiguous states; preserve native facts when mapping fails.
-- [ ] Define prior-balance changes and coverage-qualified observation counts.
-- [ ] Validate any reference-value proxy and price-null semantics separately.
+- [x] Define prior-balance changes and coverage-qualified observation counts.
+- [x] Validate any reference-value proxy and price-null semantics separately.
 
 **Verify:** A06/A07 reused symbol/overlap/missing mapping/date/zero/null fixtures;
 join counts never inflate FTD shares. **Likely files:** identity contract,
@@ -344,18 +354,18 @@ feature transform, mapping fixture, identity/feature tests.
 
 ### Checkpoint 4 — Research semantics
 
-- [ ] Source-native timelines remain useful independently of mappings.
-- [ ] Censoring/coverage and current-vintage/observed-as-of modes are explicit.
-- [ ] No false short-interest, lendable-supply or fail-age output exists.
+- [x] Source-native timelines remain useful independently of mappings.
+- [x] Censoring/coverage and current-vintage/observed-as-of modes are explicit.
+- [x] No false short-interest, lendable-supply or fail-age output exists.
 
 ## S11-T13 — Publish native research artifacts
 
 **Dependencies:** T07,T11. **Scope:** M. **Requirements:** R07,R09.
 
-- [ ] Publish validated bounded `sec-ftd-research/1` and
+- [x] Publish validated bounded `sec-ftd-research/1` and
   `reg-sho-thresholds-research/1` artifacts with units/dates/clocks/coverage.
-- [ ] Retain source attribution and opaque revision tokens; exclude private paths.
-- [ ] Reject oversized/invalid generation and preserve the previous artifact clock.
+- [x] Retain source attribution and opaque revision tokens; exclude private paths.
+- [x] Reject oversized/invalid generation and preserve the previous artifact clock.
 
 **Verify:** A11 schema and partial/missing/withdrawn export fixtures independently.
 **Likely files:** two export modules, artifact schema, two export tests.
@@ -377,9 +387,9 @@ projection fixture/tests. Skip only with explicit scope decision, not silence.
 **Dependencies:** T13; live calls additionally require admitted routes. T14 is
 optional and does not block native commands. **Scope:** M. **Requirements:** R10,N02,N03.
 
-- [ ] Add validated manual input/acquisition/date bounds and dry-run backfill plan.
-- [ ] Add no-request health reporting publication state and expected source lag.
-- [ ] Enforce timeout/bytes/retry limits with sanitized network failure evidence.
+- [x] Add validated manual input/acquisition/date bounds and dry-run backfill plan.
+- [x] Add no-request health reporting publication state and expected source lag.
+- [x] Enforce timeout/bytes/retry limits with sanitized network failure evidence.
 
 **Verify:** A12 injected-transport and CLI invocation tests; no accidental network
 on validate/check/replay. **Likely files:** source module, two CLI modules,
@@ -387,17 +397,17 @@ operations, focused CLI tests. Split live transport if this exceeds five files.
 
 ### Checkpoint 5 — Local research operation
 
-- [ ] CLI examples are updated to actually tested commands.
-- [ ] Both source export contracts validate and recovery/replay pass.
-- [ ] No schedule or external service is required for research use.
+- [x] CLI examples are updated to actually tested commands.
+- [x] Both source export contracts validate and recovery/replay pass.
+- [x] No schedule or external service is required for research use.
 
 ## S11-T16 — Add stopped source-owned Dagster definitions
 
 **Dependencies:** T15. **Scope:** M. **Requirements:** R10,N04.
 
-- [ ] Define jobs/assets and source-calendar schedules with stopped defaults.
-- [ ] Compose implemented definitions and add the job-register entries.
-- [ ] Verify NAAIM remains stopped and all new live schedules require explicit enablement.
+- [x] Define jobs/assets and source-calendar schedules with stopped defaults.
+- [x] Compose implemented definitions and add the job-register entries.
+- [x] Verify NAAIM remains stopped and all new live schedules require explicit enablement.
 
 **Verify:** A12 definition/skip/default tests with no provider call.
 **Likely files:** two `dagster_defs.py`, repository composition, job register,

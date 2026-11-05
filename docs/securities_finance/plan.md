@@ -5,7 +5,7 @@ two approved September2026 SEC archives reconciled. T18 portable types and
 serialization are complete for both sources. T03–T05 local SEC persistence,
 observed revisions, cutoff Gold and gated withdrawals are complete. T06 offline
 replay, T07 Parquet and SEC T19 PostgreSQL parity are verified. Next: T08.
-Spec011 still requires threshold PostgreSQL/Databricks delivery in T20–T22.
+Spec011 still requires Databricks delivery in T21–T22; threshold PostgreSQL T20 is verified.
 Exchange conformance and later deliveries
 remain planned. See [checkpoint](../../specs/spec011/source_review.md).
 **Canonical source tasks:** `specs/spec011/todo.md` through

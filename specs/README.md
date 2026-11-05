@@ -21,6 +21,17 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [013](spec013/README.md) | finra-otc-transparency | Third: delayed weekly ATS/non-ATS security/participant activity, tier/coverage-safe metrics. Full planning set; connector absent. |
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
+| [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
+
+## Presidential pipeline integration planning
+
+[Spec016](spec016/README.md) is the 2026-11-04 user-requested multi-repository
+specification and plan for porting the research website's presidential pipeline
+into MarketMedallion and completely integrating its outputs into QuantMeridian
+PRES. It includes the data contract, staged rollout, source inventory and task
+tracker. The target package and consumer integration remain unimplemented.
+This is a planning addition; existing source-build priority and the NAAIM pause
+remain as recorded below.
 
 ## Current priority: securities-finance program
 

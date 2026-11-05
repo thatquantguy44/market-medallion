@@ -164,6 +164,7 @@ def test_failed_or_missing_coverage_is_distinct_from_valid_empty():
         source_date=None,
         source_created_at_raw=None,
         validation_state="REJECTED",
+        raw_sha256=None,
     )
     assert schema.normalize(failed)["coverage_state"] == "FAILED"
     assert schema.normalize(coverage())["coverage_state"] == "COMPLETE_EMPTY"

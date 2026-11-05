@@ -12,12 +12,52 @@ Existing PostgreSQL, roles, Docker projects/volumes and data are preserved.
 
 User-requested outbound HTTP configuration is implemented in
 [`shared/http.py`](../../src/market_data_pipeline/shared/http.py), with
-[configuration and behavior](../development/outbound_http.md). Live AAII/NAAIM
-entrypoints select direct/proxy once per run, including explicit automatic
-fallback preference, NO_PROXY, timeouts and verified custom CA support. CLI and
-Dagster forward the same settings. SEC FTD accepts configuration but has no HTTP
-adapter and makes no startup probe on its local path. No provider request or
-schedule activation is part of this change. Next numbered Spec011 task is T08 below.
+[configuration and behavior](../development/outbound_http.md). Live AAII/NAAIM,
+SEC FTD and threshold entrypoints select direct/proxy once per run, including
+explicit automatic fallback preference, NO_PROXY, timeouts and verified custom
+CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
+validation, health, planning, local ingestion and export make no request. All
+new live schedules default stopped.
+
+## 2026-11-04 latest Spec011 checkpoint — authoritative pickup
+
+Commit `92d8112` was pushed before this pass. The current branch now also contains
+implementation for exact configured SEC ZIP acquisition, SEC health,
+`sec-ftd-research/1` export and stopped Dagster; independent Nasdaq/NYSE
+manifests/parsers; versioned threshold SQLite membership/coverage/audit;
+corrections, withdrawals and cutoff Gold; bounded threshold acquisition,
+health/plan/CLI; gap/censoring episodes; dated identity mapping; native research
+export; and stopped threshold Dagster definitions.
+
+Official checks on November4 pinned the SEC ZIP route, Nasdaq's current six-field
+file plus trailer, and NYSE's public `selectedDate`/`market` download route and
+six-field/trailer responses. No provider rows are committed. Checked-in configs
+keep acquisition disabled; definitions default stopped; NAAIM remains paused.
+
+This is **not final Spec011 closure**. Deterministic threshold replay and T20
+PostgreSQL parity now pass; the exact next engineering work is T21 SEC Delta,
+then T22 threshold Delta. Both require actual Spark/Delta or Databricks round
+trips; Databricks remains owner-disabled until a
+catalog, schema and staging volume are supplied. Nasdaq/NYSE intended retention,
+automation and research-display use must also be accepted before live activation.
+Do not begin Spec012 or mark G2 complete while those gates remain.
+Repository verification is **459 passed, 7 opt-in skips**; the separate
+disposable PostgreSQL17.6 suite is **5 passed**. Ruff, Python format, the pinned
+agent-skills snapshot, source/wheel builds and diff integrity pass.
+
+## Presidential pipeline port and PRES plan — Spec016
+
+The 2026-11-04 request is documented in [Spec016](../../specs/spec016/README.md),
+with [data contract](../../specs/spec016/data_contract.md),
+[cross-repository plan](../../specs/spec016/plan.md),
+[task tracker](../../specs/spec016/todo.md) and an inspection checksum inventory.
+It covers the research website donor → MarketMedallion canonical pipeline →
+QuantMeridian PRES, including the five frozen datasets, reviewed-control evidence,
+atomic publication, paired/inherited/cycle views and replay provenance.
+All port/integration tasks remain planned. Donor baseline verification: 29 offline
+tests passed. Next scoped Spec016 task is T01; no new package, source capture,
+schedule, deployment or consumer change was made by this specification. The
+existing securities-finance build sequence and NAAIM pause remain unchanged.
 
 ## Immediate operational priority — NAAIM paused
 
@@ -91,8 +131,8 @@ production database was provisioned.
 Final verification with all PostgreSQL integrations enabled is **430 passed**;
 lint, format, documentation links and package builds pass.
 On 2026-11-03 the user required PostgreSQL and Databricks compatibility too.
-SEC T19 is now implemented and verified on disposable PostgreSQL17.6. Threshold
-PostgreSQL and both Delta adapters remain T20–T22 and still gate G2. Pin exact numeric text, checked
+SEC T19 and threshold T20 are implemented and verified on disposable
+PostgreSQL17.6. Both Delta adapters remain T21–T22 and still gate G2. Pin exact numeric text, checked
 decimal ranges and UTC/date types before storage; never coerce FTD balances
 to floats/int64. See [the platform contract](../../specs/spec011/data_contract.md#9-storage-and-platform-compatibility).
 T18 is complete: config foundation is implemented in
@@ -114,8 +154,8 @@ remains PARTIAL/NOT_CERTIFIED. Full suite **316 passed, 2 existing opt-in
 PostgreSQL skips**; Ruff, changed-file format and sdist/wheel build pass.
 Evidence: `data/sec_ftd/t04-verification.json` and
 [the local runbook](../deployment/sec_ftd_runbook.md). PostgreSQL remains the
-operational default and has no SQLite fallback. Delta/live acquisition remain
-absent; T20–T22 backend parity remains open. Interrupted STARTED captures remain visible; do
+operational default and has no SQLite fallback. Delta remains absent; T21–T22
+backend parity remains open. Interrupted STARTED captures remain visible; do
 not recreate a missing/mismatched bound store or claim automatic replay.
 T05 extends that checkpoint: **346 passed, 2 skipped**; a fourth unchanged
 capture leaves 117,025 fact versions, four audits and PARTIAL real coverage.
@@ -282,14 +322,15 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T08 Nasdaq list/coverage contract. SEC T03–T07 and T19 are
-verified; T18 is complete for both packages. T20–T22 threshold PostgreSQL/Delta
-implementation and actual integration evidence remain required before Spec011 G2.
+Continue S11-T21 SEC Delta, followed by T22 threshold Delta. SEC T03–T07/T19
+and threshold T20 are verified; T08/T09 and the physical/local NYSE slice are implemented;
+T18 is complete for both packages. T21/T22 actual Delta integration evidence
+remains required before Spec011 G2. Provider-use acceptance is still open.
 The T02 September sample reconciliation is complete. Older recommendations below are historical context;
 Specs011→012→013→014→015 govern the requested next builds. The documentation
 branch is `docs/securities-finance-program` (planning commit `1b2e73b`); the
-active implementation branch is `feat/spec011-sec-ftd-parser`. No schedule
-or acquisition adapter has been enabled.
+active implementation branch is `feat/spec011-sec-ftd-parser`. No schedule has
+been enabled; checked-in acquisition settings remain false.
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo
 and use `docs/deployment/aaii_runbook.md` for PostgreSQL, Dagster, Parquet, replay,

@@ -95,7 +95,7 @@ The plans assume Python 3.12, the existing manifest-driven medallion layout,
 offline pytest, source-owned SQLite/Parquet, atomic publication, local manual
 operation and stopped Dagster schedule definitions. For Spec011, PostgreSQL
 warehouse parity and Databricks Delta publication are required delivery work.
-The SEC adapter has actual PostgreSQL17.6 evidence; threshold PostgreSQL and both
-Delta adapters remain. Hosted
-cloud deployment is separate. Other specs retain their own backend scope.
+Both source adapters have actual PostgreSQL17.6 evidence; both Delta adapters
+remain. Hosted cloud deployment is separate. Other specs retain their own
+backend scope.
 See the common contract for what each research milestone must actually prove.

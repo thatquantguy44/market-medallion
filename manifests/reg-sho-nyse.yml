@@ -1,0 +1,20 @@
+provider: nyse
+dataset: reg-sho-thresholds
+schema_version: nyse-reg-sho-pipe/1
+format: pipe-text
+encoding: utf-8
+header:
+  - Symbol
+  - Security Name
+  - Market Category
+  - Reg SHO Threshold Flag
+  - Filler
+  - Filler
+allowed_markets: [NYSE, NYSE American, NYSE Arca, NYSE National]
+limits:
+  bytes: 1048576
+  rows: 10000
+  record_bytes: 4096
+access:
+  source_page: https://www.nyse.com/regulation/regulation-sho
+  automation: disabled-by-default
