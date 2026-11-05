@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-03.
+Last updated: 2026-11-04.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -9,6 +9,15 @@ symlink for archived absolute paths and existing workspace references. Package
 distribution metadata and the request identifier use the new name. The import
 path remains `market_data_pipeline`, and both CLI names are supported.
 Existing PostgreSQL, roles, Docker projects/volumes and data are preserved.
+
+User-requested outbound HTTP configuration is implemented in
+[`shared/http.py`](../../src/market_data_pipeline/shared/http.py), with
+[configuration and behavior](../development/outbound_http.md). Live AAII/NAAIM
+entrypoints select direct/proxy once per run, including explicit automatic
+fallback preference, NO_PROXY, timeouts and verified custom CA support. CLI and
+Dagster forward the same settings. SEC FTD accepts configuration but has no HTTP
+adapter and makes no startup probe on its local path. No provider request or
+schedule activation is part of this change. Next Spec011 work remains T06 below.
 
 ## Immediate operational priority — NAAIM paused
 

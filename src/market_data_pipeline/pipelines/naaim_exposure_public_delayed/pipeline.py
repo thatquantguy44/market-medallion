@@ -16,6 +16,7 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.source import 
     fetch_table,
 )
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
+from market_data_pipeline.shared.http import NetworkConfig
 
 ATTRIBUTION = "Source: NAAIM Exposure Index® (National Association of Active Investment Managers)."
 DELAY_METADATA = {
@@ -97,10 +98,17 @@ def ingest(
     *,
     permission_reference: str,
     captured_at: str,
+    network_route: str = "local-file",
+    network_fallback_used: bool = False,
 ) -> dict[str, str | int]:
     """Archive a permitted capture and publish a local, delayed research snapshot."""
     if not isinstance(permission_reference, str) or not permission_reference.strip():
         raise ValueError("permission_reference is required for a NAAIM capture")
+    if (
+        network_route not in ("local-file", "injected", "proxy", "direct")
+        or type(network_fallback_used) is not bool
+    ):
+        raise ValueError("invalid network routing metadata")
     try:
         captured = datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
     except (AttributeError, ValueError) as exc:
@@ -145,6 +153,8 @@ def ingest(
                 "retrieved_at": captured_utc,
                 "run_id": run_id,
                 "source_url": TABLE_URL,
+                "network_route": network_route,
+                "network_fallback_used": network_fallback_used,
             },
         )
         silver = root / "silver"
@@ -187,12 +197,17 @@ def run_live(
     permission_reference: str,
     transport=None,
     captured_at: str | None = None,
+    network: NetworkConfig | None = None,
 ) -> dict[str, str | int]:
     """Perform one explicitly permission-gated table fetch and local ingestion."""
-    response = fetch_table(permission_reference=permission_reference, transport=transport)
+    response = fetch_table(
+        permission_reference=permission_reference, transport=transport, network=network
+    )
     return ingest(
         response.payload,
         root,
         permission_reference=permission_reference,
         captured_at=captured_at or utc_timestamp(datetime.now(UTC)),
+        network_route=response.network_route,
+        network_fallback_used=response.network_fallback_used,
     )

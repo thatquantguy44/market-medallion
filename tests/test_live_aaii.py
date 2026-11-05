@@ -77,9 +77,14 @@ def test_http_failure_is_archived_and_cannot_promote_rows(tmp_path, monkeypatch)
         code = 503
         headers = {"Content-Type": "text/html"}
 
-    monkeypatch.setattr(source, "urlopen", lambda *args, **kwargs: Response(b"Unavailable"))
     with pytest.raises(ValueError, match="HTTP 503"):
-        source.run_live(MANIFEST, tmp_path, start="2026-10-01", end="2026-10-26")
+        source.run_live(
+            MANIFEST,
+            tmp_path,
+            start="2026-10-01",
+            end="2026-10-26",
+            transport=lambda *a, **k: Response(b"Unavailable"),
+        )
     raw = next((tmp_path / "bronze").rglob("payload.xls"))
     assert raw.read_bytes() == b"Unavailable"
     envelope = json.loads((raw.parent / "metadata.json").read_text())

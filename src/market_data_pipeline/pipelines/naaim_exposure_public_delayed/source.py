@@ -1,11 +1,9 @@
 """Explicit, permission-gated retrieval of NAAIM's delayed public table."""
 
-import os
-import ssl
 from dataclasses import dataclass
-from urllib.request import Request, urlopen
+from urllib.request import Request
 
-import certifi
+from market_data_pipeline.shared.http import NetworkConfig, prepare_http, tls_context
 
 TABLE_URL = "https://index.naaim.org/embeddable/table"
 MAX_INPUT_BYTES = 2 * 1024 * 1024
@@ -17,19 +15,24 @@ class FetchResponse:
     source_url: str
     status: int
     headers: dict[str, str]
+    network_route: str = "injected"
+    network_fallback_used: bool = False
 
 
-def fetch_table(*, permission_reference: str, transport=None) -> FetchResponse:
+def fetch_table(
+    *, permission_reference: str, transport=None, network: NetworkConfig | None = None
+) -> FetchResponse:
     """Fetch one table only when a nonsecret written-permission reference is supplied."""
     if not isinstance(permission_reference, str) or not permission_reference.strip():
         raise ValueError("permission_reference is required for a live NAAIM request")
-    transport = transport or urlopen
+    network = network or NetworkConfig()
     request = Request(
         TABLE_URL,
         headers={"User-Agent": "market-medallion/0.1 (permitted delayed research)"},
     )
-    context = ssl.create_default_context(cafile=os.environ.get("SSL_CERT_FILE") or certifi.where())
-    with transport(request, timeout=30, context=context) as response:
+    context = tls_context(network)
+    transport = transport or prepare_http(request, network, context=context)
+    with transport(request, timeout=network.timeout_seconds, context=context) as response:
         payload = response.read(MAX_INPUT_BYTES + 1)
         status = response.code
         headers = {
@@ -41,4 +44,11 @@ def fetch_table(*, permission_reference: str, transport=None) -> FetchResponse:
         raise ValueError("NAAIM public table exceeds 2 MiB limit")
     if status != 200:
         raise ValueError(f"NAAIM public table returned HTTP {status}")
-    return FetchResponse(payload=payload, source_url=TABLE_URL, status=status, headers=headers)
+    return FetchResponse(
+        payload=payload,
+        source_url=TABLE_URL,
+        status=status,
+        headers=headers,
+        network_route=getattr(transport, "route", "injected"),
+        network_fallback_used=getattr(transport, "fallback_used", False),
+    )

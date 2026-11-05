@@ -118,6 +118,15 @@ explains transaction boundaries and storage layout.
 
 ## Database configuration and bounded live runs
 
+Outbound HTTP has [run-scoped proxy/direct configuration](docs/development/outbound_http.md).
+The `network` section in each pipeline's YAML selects automatic fallback,
+direct-only or proxy-only access. A live run probes once at startup and reuses
+the selected route for its data calls/retries. Proxy URLs come from environment
+variables or a trusted shell-loaded `.env`; `NO_PROXY`, custom CA bundles and
+timeouts are configurable. Local imports and health checks make no probe.
+AAII CLI/Dagster and NAAIM's paused live entrypoints use this client. SEC FTD
+accepts the settings for future HTTP work; its current ingestion remains local.
+
 Copy [the runtime example](config/postgres.example.yml) to ignored
 `config/config.yaml` and set host, port, database, login `user`, optional effective
 `role`, and `schema`. The schema/role must already exist with suitable permissions.

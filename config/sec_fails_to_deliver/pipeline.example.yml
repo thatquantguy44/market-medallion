@@ -1,6 +1,17 @@
 # Copy to pipeline.local.yml and replace the illustrative connection settings.
 config_version: 1
 pipeline: sec-fails-to-deliver
+# Reserved for future HTTP acquisition; local operations never probe the network.
+network:
+  mode: auto
+  preferred_route: proxy
+  fallback: true
+  proxy_url_env: null
+  no_proxy: [localhost, 127.0.0.1]
+  use_environment_no_proxy: true
+  probe_timeout_seconds: 10
+  timeout_seconds: 30
+  ca_bundle: null
 # All relative paths resolve from this YAML file's directory.
 root: ../../data/sec_fails_to_deliver/postgres
 warehouse: postgres

@@ -32,6 +32,14 @@ and operational gates are satisfied.
 
 ### NAAIM
 
+AAII reads `network` from its runtime YAML. NAAIM's optional asset setting
+`network_config_path` points to a pipeline-owned network-only YAML; its stopped
+schedule can pass `NAAIM_NETWORK_CONFIG`. Both select a proxy/direct route once
+before capture and retain it for that run. See
+[outbound HTTP settings](../development/outbound_http.md) and the
+[NAAIM network example](../../config/naaim_exposure_public_delayed/network.example.yml).
+These options do not activate any schedule or resume NAAIM.
+
 NAAIM owns its job, asset, schedule, retention, health operations and local
 research export in
 `src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/`. The daily

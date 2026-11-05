@@ -5,3 +5,4 @@ ops:
     config:
       root: data/naaim-exposure-public-delayed
       permission_reference: '<nonsecret NAAIM permission reference>'
+      network_config_path: config/naaim_exposure_public_delayed/network.example.yml

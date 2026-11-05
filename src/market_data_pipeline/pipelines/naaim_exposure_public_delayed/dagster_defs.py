@@ -9,6 +9,7 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.operations imp
     retain_captures,
 )
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline import run_live
+from market_data_pipeline.shared.http import load_network_config
 
 RETENTION_DAYS = 365
 
@@ -16,6 +17,7 @@ RETENTION_DAYS = 365
 class NaaimDelayedConfig(dg.Config):
     root: str
     permission_reference: str
+    network_config_path: str | None = None
 
 
 @dg.asset(
@@ -29,7 +31,14 @@ def naaim_delayed_capture(
     context: dg.AssetExecutionContext, config: NaaimDelayedConfig
 ) -> dg.MaterializeResult:
     try:
-        result = run_live(Path(config.root), permission_reference=config.permission_reference)
+        network = (
+            load_network_config(Path(config.network_config_path))
+            if config.network_config_path
+            else None
+        )
+        result = run_live(
+            Path(config.root), permission_reference=config.permission_reference, network=network
+        )
         retention = retain_captures(Path(config.root), retention_days=RETENTION_DAYS, apply=True)
     except ValueError as exc:
         raise dg.Failure(str(exc), allow_retries=False) from exc
@@ -85,6 +94,11 @@ def daily_schedule(_context):
                     "config": {
                         "permission_reference": permission_reference,
                         "root": root,
+                        **(
+                            {"network_config_path": os.environ["NAAIM_NETWORK_CONFIG"]}
+                            if os.environ.get("NAAIM_NETWORK_CONFIG")
+                            else {}
+                        ),
                     }
                 }
             }

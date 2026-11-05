@@ -1,6 +1,6 @@
 # Master pipeline register
 
-Updated: 2026-11-03, America/New_York.
+Updated: 2026-11-04, America/New_York.
 
 This is the master index for **pipeline ownership, implementation status and
 next work**. It tracks all concrete pipelines/candidates currently recorded in
@@ -93,6 +93,12 @@ no concrete new connector contract or package has been selected for them.
 
 No pipeline is represented as a deployed production service. Raw provider data,
 local runtime config, passwords and backup packages remain outside Git.
+
+AAII and NAAIM HTTP entrypoints now use configurable startup proxy/direct
+selection, with one selected client reused for the run. Both CLI and Dagster
+forward pipeline-owned settings; see [outbound HTTP](development/outbound_http.md).
+SEC FTD validates the same optional settings without making network requests.
+Provider permissions, NAAIM's pause and all stopped schedule defaults still apply.
 
 ## Package ownership and maintenance
 

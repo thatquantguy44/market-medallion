@@ -9,11 +9,13 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline impor
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.research_export import (
     export_research_artifact,
 )
+from market_data_pipeline.shared.http import load_network_config
 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, required=True, help="pipeline-owned output directory")
+    parser.add_argument("--network-config", type=Path, help="pipeline-owned network YAML")
     parser.add_argument(
         "--permission-reference",
         help="nonsecret reference to NAAIM permission for this live request",
@@ -61,6 +63,9 @@ def main(argv=None) -> int:
         return 0
     if not arguments.permission_reference:
         parser.error("--permission-reference is required unless --check is used")
-    result = run_live(arguments.root, permission_reference=arguments.permission_reference)
+    network = load_network_config(arguments.network_config) if arguments.network_config else None
+    result = run_live(
+        arguments.root, permission_reference=arguments.permission_reference, network=network
+    )
     print(json.dumps(result, sort_keys=True))
     return 0

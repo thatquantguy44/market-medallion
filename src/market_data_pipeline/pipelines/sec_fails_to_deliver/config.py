@@ -4,12 +4,13 @@ import hashlib
 import json
 import re
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from types import MappingProxyType
 
 import yaml
 
+from market_data_pipeline.shared.http import NetworkConfig, parse_network
 from market_data_pipeline.shared.yaml import UniqueLoader
 
 
@@ -113,6 +114,7 @@ class RuntimeConfig:
     databricks: DatabricksConfig
     storage: StorageConfig
     partitions: Mapping[str, PartitionConfig]
+    network: NetworkConfig = field(default_factory=NetworkConfig)
 
 
 def load_config(path: Path) -> RuntimeConfig:
@@ -126,6 +128,13 @@ def load_config(path: Path) -> RuntimeConfig:
         value = yaml.load(path.read_text(), Loader=UniqueLoader)
     except (yaml.YAMLError, TypeError, UnicodeError) as exc:
         raise ValueError("invalid SEC FTD runtime YAML") from exc
+    network = (
+        parse_network(value.get("network", {}), base=path.parent)
+        if isinstance(value, dict)
+        else NetworkConfig()
+    )
+    if isinstance(value, dict):
+        value = {key: item for key, item in value.items() if key != "network"}
     value = _object(
         value,
         {
@@ -209,4 +218,5 @@ def load_config(path: Path) -> RuntimeConfig:
         DatabricksConfig(**delta),
         StorageConfig(**storage),
         MappingProxyType(partitions),
+        network,
     )

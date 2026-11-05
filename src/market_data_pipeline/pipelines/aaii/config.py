@@ -7,6 +7,7 @@ from pathlib import Path
 
 import yaml
 
+from market_data_pipeline.shared.http import NetworkConfig, parse_network
 from market_data_pipeline.shared.yaml import UniqueLoader
 
 
@@ -60,6 +61,7 @@ class RuntimeConfig:
     root: Path = Path("data/aaii")
     postgres: PostgresConfig | None = None
     operations: AaiiOperations = field(default_factory=AaiiOperations)
+    network: NetworkConfig = field(default_factory=NetworkConfig)
 
 
 def load_config(path: Path) -> RuntimeConfig:
@@ -67,8 +69,16 @@ def load_config(path: Path) -> RuntimeConfig:
         value = yaml.load(path.read_text(), Loader=UniqueLoader)
     except yaml.YAMLError as exc:
         raise ValueError("invalid runtime YAML") from exc
-    if not isinstance(value, dict) or set(value) - {"warehouse", "root", "postgres", "operations"}:
-        raise ValueError("runtime config fields must be warehouse, root, postgres, operations")
+    if not isinstance(value, dict) or set(value) - {
+        "warehouse",
+        "root",
+        "postgres",
+        "operations",
+        "network",
+    }:
+        raise ValueError(
+            "runtime config fields must be warehouse, root, postgres, operations, network"
+        )
     backend = value.get("warehouse", "sqlite")
     if backend not in ("sqlite", "postgres"):
         raise ValueError("warehouse must be sqlite or postgres")
@@ -130,7 +140,13 @@ def load_config(path: Path) -> RuntimeConfig:
             raise ValueError(f"operations.{key} must be an integer in [{lower},{upper}]")
     if type(operations.scheduled_live_access) is not bool:
         raise ValueError("operations.scheduled_live_access must be boolean")
-    return RuntimeConfig(backend, root, postgres, operations)
+    return RuntimeConfig(
+        backend,
+        root,
+        postgres,
+        operations,
+        parse_network(value.get("network", {}), base=path.resolve().parent),
+    )
 
 
 def resolve_runtime(

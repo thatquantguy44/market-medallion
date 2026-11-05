@@ -41,6 +41,14 @@ data rules. The config names those rules explicitly but cannot disable them.
 Automatic schema evolution is not supported. Other pipelines have their own
 configs rather than inheriting these settings.
 
+The optional `network` section uses the common
+[proxy/direct contract](../../docs/development/outbound_http.md): mode,
+preference/fallback, proxy environment-variable name, no-proxy hostname list,
+timeouts and a config-relative CA bundle. It is validated without resolving
+proxy secrets or testing connectivity. Current SEC FTD commands use local files
+and never probe; these settings do not implement or enable an SEC HTTP adapter.
+Network changes do not alter the storage contract or require a new data root.
+
 ## Create local settings
 
 From the repository root:
