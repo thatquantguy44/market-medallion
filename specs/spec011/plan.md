@@ -5,8 +5,8 @@ against two approved September2026 archives. T18 portable types/serialization
 are complete for both sources. T03/T04 complete immutable Bronze, root-bound
 SQLite facts/coverage/audit and database Gold. T05 observed revisions, cutoff
 queries and evidence-gated withdrawals are complete. T06 replay, T07 Parquet
-publication and SEC T19 PostgreSQL parity are verified. Next: T08. Threshold
-PostgreSQL and Databricks remain required delivery targets.
+publication, SEC T19 PostgreSQL parity and T21 Delta publication are verified.
+Threshold T20 PostgreSQL is verified; T22 Delta remains the next delivery target.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
 This is the first research delivery in the [program roadmap](../../docs/securities_finance/roadmap.md).
@@ -56,12 +56,12 @@ and representability checks are implemented in T18; T04 enforces SQLite root bin
 Both source `storage.py` modules declare normalized schemas and warehouse
 Protocols. Shared field codecs have two concrete source users. SQLite/Parquet
 round trips and native PostgreSQL bindings are tested; SEC also has actual
-PostgreSQL17.6 integration evidence. Threshold PostgreSQL and Spark/Delta
-integrations remain T20–T22.
+PostgreSQL17.6 and local Spark4.0.1/Delta4.0.1 integration evidence. Threshold
+Spark/Delta integration remains T22.
 
 Each source owns its warehouse boundary and SQLite/PostgreSQL/Delta adapters.
 SEC T04 uses `bronze.py`, `warehouse.py` and `pipeline.py`; threshold persistence
-and the future Delta publishers remain separate source-owned modules. Do not import AAII's
+and the threshold Delta publisher remain separate source-owned modules. Do not import AAII's
 provider-specific storage schema or require Spark for ordinary local imports.
 The [portable data contract](data_contract.md#9-storage-and-platform-compatibility)
 defines required exact-text values, checked numeric projections and UTC/date

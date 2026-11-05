@@ -1,12 +1,12 @@
 # Spec011 implementation tasks
 
-**Status:** SEC T02–T07/T19, threshold T20 and shared T18 are complete. T08/T09 Nasdaq and the
+**Status:** SEC T02–T07/T19/T21, threshold T20 and shared T18 are complete. T08/T09 Nasdaq and the
 physical/local portion of T10 NYSE are implemented, along with native exports,
 operator commands and stopped Dagster definitions. T11 episode semantics and
 T12 dated mapping/features have offline coverage. Threshold deterministic replay
-and PostgreSQL are verified. Provider-use acceptance and both actual Delta integrations remain;
+and PostgreSQL are verified. Provider-use acceptance and threshold Delta T22 remain;
 T17/G2 is not closed.
-**Updated:** 2026-11-04. Evidence: [source_review.md](source_review.md).
+**Updated:** 2026-11-05. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
 M=3–5 files. Split a task further if the actual change exceeds that scope.
@@ -100,8 +100,8 @@ are retained. All 117,025 approved September observations pass a numeric/date
 preflight; ignored evidence is `data/sec_ftd/storage-types-202609.json`.
 Full suite: **283 passed, 2 existing opt-in PostgreSQL skips**; Ruff, changed-file
 format and sdist/wheel build pass. These tests close T18, not the full live
-A14/A15 gates. Root binding/persistence is T04; actual PostgreSQL and Delta
-integration evidence remains T19–T22. See
+A14/A15 gates. Root binding/persistence is T04. This checkpoint preceded the
+actual PostgreSQL T19/T20 and SEC Delta T21 evidence; threshold Delta T22 remains. See
 [the config guide](../../config/sec_fails_to_deliver/README.md).
 
 ## S11-T04 — Deliver one local FTD medallion partition
@@ -226,7 +226,8 @@ Actual PostgreSQL17.6 disposable-database tests cover large exact values,
 corrections, reversions, equal clocks/cutoffs, evidence-gated withdrawal,
 rollback/failed promotion, concurrent retry, wrong-root refusal, Parquet and
 SQLite → PostgreSQL replay. Failed replay removes only its newly created,
-identity-verified tables and is retryable. T21–T22 remain open.
+identity-verified tables and is retryable. This T19 checkpoint preceded the
+later completion of T21; T22 remains open.
 Final repository verification with every PostgreSQL integration enabled:
 **430 passed**, Ruff/lint/format, documentation links and sdist/wheel build pass.
 
@@ -251,23 +252,38 @@ PostgreSQL17.6 integration run covers native DATE/TIMESTAMPTZ/BIGINT fields,
 corrections, complete-list withdrawals, complete-empty/rejected coverage,
 cutoffs, rollback, concurrent writer serialization, research export and exact
 SQLite→PostgreSQL replay. The combined SEC/threshold PostgreSQL integration
-suite passes **5 tests**. T21/T22 and provider-use acceptance still gate T17/G2.
+suite passes **5 tests**. This T20 checkpoint preceded SEC T21; T22 and
+provider-use acceptance still gate T17/G2.
 
 ## S11-T21 — Publish SEC FTD snapshots to Databricks Delta
 
 **Dependencies:** T07,T18,T19. **Scope:** M. **Requirements:** R03,R06,R07,R12,N02.
 
-- [ ] Add source-owned explicit-schema snapshot validation and Unity Catalog
+- [x] Add source-owned explicit-schema snapshot validation and Unity Catalog
   Delta publication; preserve exact values, version IDs, capture sequence and audit.
-- [ ] Reject decimal overflow/scale loss before writes; publish coherent pinned
+- [x] Reject decimal overflow/scale loss before writes; publish coherent pinned
   facts/coverage/audit generations with idempotent retries and failure recovery.
-- [ ] Supply a configured staging/target example and actual Spark/Delta or
+- [x] Supply a configured staging/target example and actual Spark/Delta or
   Databricks round-trip tests; record whether a workspace smoke ran.
 
 **Verify:** A15 exact field equality, repeated publish adds no revisions, and
 failure between table commits keeps the prior consumer generation selected.
 **Likely files:** FTD Delta publisher, publication tests, engine integration tests,
 source-named notebook/example, runbook. Cloud provisioning is separate.
+
+**Complete:** the SEC-owned publisher validates the committed Parquet snapshot,
+uses explicit Spark schemas with required-field checks and disabled schema
+evolution, and insert-only merges immutable fact/coverage/audit revisions. An
+atomic checksummed generation pins each Delta table version; readers honor those
+versions rather than independently selecting each latest table. An actual local
+OpenJDK17 / Spark4.0.1 / Delta Lake4.0.1 run proves exact decimal and source-token
+round trips, a quantity above int64, idempotent repeat, correction insertion and
+recovery after an injected post-facts failure while the prior generation remains
+selected. Unity Catalog configuration and a notebook are supplied; no Databricks
+workspace smoke was run and no schedule was enabled. Final offline verification
+is **461 passed, 8 opt-in skips** and the separately enabled Delta suite is
+**3 passed**; Ruff, dependency checks and package builds pass. T22 and
+provider-use acceptance still gate T17/G2.
 
 ## S11-T22 — Publish threshold snapshots to Databricks Delta
 

@@ -71,3 +71,9 @@ Both contracts are current-vintage by default. They preserve first-seen clocks
 for future observed-as-of work, but an export does not claim the pipeline knew a
 historical value before its recorded capture. No repository-to-repository write,
 database connection, API service, or automatic UI integration is performed.
+
+The SEC pipeline also has a T21 Delta publication route for warehouse-scale
+processing. Its atomic generation pins exact facts, coverage and audit table
+versions. QuantMeridian's portable report boundary remains the research-exchange
+Parquet contract above unless the consumer explicitly adopts the Delta
+generation reader and records its generation manifest in report provenance.

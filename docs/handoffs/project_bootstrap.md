@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-04.
+Last updated: 2026-11-05.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -19,7 +19,7 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-04 latest Spec011 checkpoint — authoritative pickup
+## 2026-11-05 latest Spec011 checkpoint — authoritative pickup
 
 Commit `92d8112` was pushed before this pass. The current branch now also contains
 implementation for exact configured SEC ZIP acquisition, SEC health,
@@ -35,15 +35,20 @@ six-field/trailer responses. No provider rows are committed. Checked-in configs
 keep acquisition disabled; definitions default stopped; NAAIM remains paused.
 
 This is **not final Spec011 closure**. Deterministic threshold replay and T20
-PostgreSQL parity now pass; the exact next engineering work is T21 SEC Delta,
-then T22 threshold Delta. Both require actual Spark/Delta or Databricks round
-trips; Databricks remains owner-disabled until a
+PostgreSQL parity pass, and T21 SEC Delta now has an actual OpenJDK17,
+Spark4.0.1 and Delta Lake4.0.1 round trip. The exact next engineering work is
+T22 threshold Delta. Databricks remains owner-disabled until a
 catalog, schema and staging volume are supplied. Nasdaq/NYSE intended retention,
 automation and research-display use must also be accepted before live activation.
 Do not begin Spec012 or mark G2 complete while those gates remain.
-Repository verification is **459 passed, 7 opt-in skips**; the separate
-disposable PostgreSQL17.6 suite is **5 passed**. Ruff, Python format, the pinned
-agent-skills snapshot, source/wheel builds and diff integrity pass.
+The T21 engine run proves idempotent revisions, exact large quantities/decimals,
+and recovery after a partial multi-table publish while the prior pinned
+generation stays readable. Unity Catalog code and a notebook are included; no
+Databricks workspace smoke, cloud object or schedule was created. Final offline
+verification is **461 passed, 8 opt-in skips**; the separate enabled Delta suite
+is **3 passed**. Ruff, dependency checks, agent-skills integrity and sdist/wheel
+build pass. The read-only QuantSmith checkout differs from its recorded pin, so
+its verifier remains red and this slice does not repin or rely on it.
 
 ## Presidential pipeline port and PRES plan — Spec016
 
@@ -95,10 +100,11 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next numbered task: S11-T08 Nasdaq list and coverage contract** in
-[Spec011 tasks](../../specs/spec011/todo.md). T03–T07 and SEC T19 are complete:
-immutable Bronze, SQLite/PostgreSQL persistence, revisions/withdrawals, cutoff
-Gold, offline replay and coherent Parquet publication.
+**Exact next numbered task: S11-T22 threshold Delta publication** in
+[Spec011 tasks](../../specs/spec011/todo.md). SEC T03–T07/T19/T21 and threshold
+T20 are complete: immutable Bronze, SQLite/PostgreSQL persistence,
+revisions/withdrawals, cutoff Gold, offline replay, coherent Parquet publication
+and SEC Delta publication.
 T06 preserves original clocks, sequence, IDs, terminal outcomes and archived
 proof, including historical rejections. New captures seal `outcome.json`;
 legacy captures reconcile against the read-only original ledger. Missing or
@@ -111,10 +117,10 @@ and four audits, with cutoff counts 0/50,332/117,025. All source-file digests
 remain unchanged. Ignored evidence: `data/sec_ftd/t06-verification.json`; config
 `config/sec_fails_to_deliver/t06-verification.local.yml` deliberately has unusable
 live paths/CA. A finalized checksummed inventory pins every capture/outcome for
-database-free replay; missing inventory or capture blocks that route. The user
-also discussed a bounded SEC ZIP downloader as acquisition
-work after replay; it remains unimplemented and requires a source-reviewed,
-bounded manual HTTP slice. No new source requests or schedules were enabled.
+database-free replay; missing inventory or capture blocks that route. Bounded
+exact-URL SEC acquisition, no-request health, native research export and stopped
+Dagster definitions are implemented. Checked-in acquisition settings remain
+disabled and no live schedule was enabled.
 
 T07 writes exact-schema facts, current Gold, coverage and audit into immutable
 snapshots and records STAGED/COMMITTED/PUBLISHED database state. Only atomic
@@ -132,7 +138,8 @@ Final verification with all PostgreSQL integrations enabled is **430 passed**;
 lint, format, documentation links and package builds pass.
 On 2026-11-03 the user required PostgreSQL and Databricks compatibility too.
 SEC T19 and threshold T20 are implemented and verified on disposable
-PostgreSQL17.6. Both Delta adapters remain T21–T22 and still gate G2. Pin exact numeric text, checked
+PostgreSQL17.6; SEC T21 has actual local Delta evidence. Threshold T22 still
+gates G2. Pin exact numeric text, checked
 decimal ranges and UTC/date types before storage; never coerce FTD balances
 to floats/int64. See [the platform contract](../../specs/spec011/data_contract.md#9-storage-and-platform-compatibility).
 T18 is complete: config foundation is implemented in
@@ -154,8 +161,8 @@ remains PARTIAL/NOT_CERTIFIED. Full suite **316 passed, 2 existing opt-in
 PostgreSQL skips**; Ruff, changed-file format and sdist/wheel build pass.
 Evidence: `data/sec_ftd/t04-verification.json` and
 [the local runbook](../deployment/sec_ftd_runbook.md). PostgreSQL remains the
-operational default and has no SQLite fallback. Delta remains absent; T21–T22
-backend parity remains open. Interrupted STARTED captures remain visible; do
+operational default and has no SQLite fallback. SEC Delta is implemented; T22
+threshold parity remains open. Interrupted STARTED captures remain visible; do
 not recreate a missing/mismatched bound store or claim automatic replay.
 T05 extends that checkpoint: **346 passed, 2 skipped**; a fourth unchanged
 capture leaves 117,025 fact versions, four audits and PARTIAL real coverage.
@@ -171,10 +178,12 @@ Each numbered directory owns its
 [program roadmap](../securities_finance/roadmap.md) tracks delivery gates and
 the [common contract](../securities_finance/contract.md) supplies lineage,
 knowledge-clock, revision/removal, replay, export and manual-operation rules.
-The SEC source package contains parser/config/inspection, type contracts and
-local SQLite ingestion/Gold; the threshold package contains normalized storage
-types only. The other four source packages are absent. PostgreSQL/Delta,
-live acquisition, exchange processing and new jobs remain unimplemented. Do not claim
+The SEC source package contains parser/config/inspection, SQLite/PostgreSQL
+ingestion/Gold, replay, Parquet, research export and Delta publication. The
+threshold package contains independent Nasdaq/NYSE acquisition/parsing,
+SQLite/PostgreSQL history, replay, episodes, research export and stopped Dagster
+definitions. The other four source packages are absent. Threshold Delta and
+final provider-use acceptance remain open. Do not claim
 source access, historic coverage or consumer features from fixture tests.
 CFTC, Cboe, Nasdaq breadth, OCC, OFR and other
 existing candidates remain queued behind this user-selected sequence.
@@ -322,9 +331,9 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T21 SEC Delta, followed by T22 threshold Delta. SEC T03–T07/T19
-and threshold T20 are verified; T08/T09 and the physical/local NYSE slice are implemented;
-T18 is complete for both packages. T21/T22 actual Delta integration evidence
+Continue S11-T22 threshold Delta. SEC T03–T07/T19/T21 and threshold T20 are
+verified; T08/T09 and the physical/local NYSE slice are implemented;
+T18 is complete for both packages. T22 actual Delta integration evidence
 remains required before Spec011 G2. Provider-use acceptance is still open.
 The T02 September sample reconciliation is complete. Older recommendations below are historical context;
 Specs011→012→013→014→015 govern the requested next builds. The documentation

@@ -46,7 +46,7 @@ evidence tasks pass. Creating a stopped definition does not start a service.
 Spec011 G2 also requires R12/A14/A15: PostgreSQL warehouse parity and Databricks
 Delta publication for both source packages, verified with actual PostgreSQL and
 Spark/Delta or Databricks integrations. T18 pins portable types before T04;
-SEC T19 and threshold T20 are complete; T21–T22 deliver the remaining Delta adapters/tests. Cloud deployment is separate, and
+SEC T19/T21 and threshold T20 are complete; T22 delivers the remaining threshold Delta adapter/tests. Cloud deployment is separate, and
 skipped/mocked integrations cannot establish backend compatibility.
 
 A source can complete real-source conformance using approved actual local files
@@ -128,7 +128,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
-| 011 | Open: exchange gates | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet plus T19/T20 PostgreSQL complete | In progress; actual SEC/threshold Delta required | Not started | Deferred | Next T21 SEC Delta, then T22 threshold Delta; provider-use acceptance remains open |
+| 011 | Open: exchange gates | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21 SEC Delta complete | In progress; threshold Delta required | Not started | Deferred | Next T22 threshold Delta; provider-use acceptance remains open |
 | 012 | Open | Not started | Not started | Not started | Deferred | Await011; resolve free-route use/retention scope |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |

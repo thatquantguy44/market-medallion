@@ -3,11 +3,9 @@
 **Current priority:** the [five-stage securities-finance program](securities_finance/README.md)
 and [delivery roadmap](securities_finance/roadmap.md). Spec011's offline SEC
 parser/manifest reconciles both approved September2026 archives. Continue
-S11-T05 observed revisions/reversions and withdrawals. T03/T04 immutable
-Bronze, root-bound SQLite and Gold are complete; see the
-[runbook](deployment/sec_ftd_runbook.md). T18 types/serialization are complete for both sources.
-PostgreSQL/Databricks adapters and parity tests in
-T19–T22 are required delivery work, not implemented yet. See its
+S11-T22 threshold Delta publication. SEC T03–T07/T19/T21, threshold T20 and
+shared T18 are complete; see the [runbook](deployment/sec_ftd_runbook.md).
+Threshold Delta parity and final provider-use acceptance remain open. See the
 [checkpoint](../specs/spec011/source_review.md).
 NAAIM is paused; do not resume its capture/schedule without the
 user's explicit direction.

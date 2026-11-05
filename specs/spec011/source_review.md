@@ -289,7 +289,8 @@ names unavailable live paths and CA. No provider request, PostgreSQL/Delta
 integration, extra source capture, real correction or withdrawal was invented.
 Population coverage remains PARTIAL/NOT_CERTIFIED. T07/T19 are verified below.
 The user's compatibility requirement is recorded in R12/A14/A15. SEC PostgreSQL
-is implemented; threshold PostgreSQL is verified and Databricks Delta remains T21–T22.
+is implemented; threshold PostgreSQL and SEC Delta are verified. Threshold
+Delta remains T22.
 T03 rejected-input retention is complete; preserve unknown clocks and
 coverage limitations. S11-T02 sample conformance is complete for these two
 archives only. Full Spec011/G2, exchange rights/conformance and persistent
@@ -357,8 +358,29 @@ captures, SQLite membership/coverage/audit revisions, complete-empty versus
 unavailable outcomes, corrections/withdrawals, cutoffs, gap/censoring episodes,
 bounded acquisition, no-request health/plan, atomic native exports and stopped
 Dagster definitions. Both sources have PostgreSQL17.6 parity and deterministic
-replay; SEC also has coherent Parquet publication. Both actual Delta/Spark
-integrations remain open; therefore T17/G2 is not closed.
+replay; SEC also has coherent Parquet and Delta publication. Threshold
+Delta/Spark integration remains open; therefore T17/G2 is not closed.
 
-Next engineering gates: S11-T21/T22 actual Delta integration, and final
+Next engineering gates: S11-T22 actual Delta integration, and final
 reconciliation after the provider-use decision.
+
+## 2026-11-05 T21 SEC Delta checkpoint
+
+The SEC-owned publisher consumes only the committed Parquet snapshot selected by
+its current pointer, validates hashes/counts/explicit schemas and rejects a
+non-UTC session or automatic schema evolution. Insert-only fact, coverage and
+audit merges preserve revision keys. A checksummed generation pins all three
+Delta versions before an atomic consumer pointer advances.
+
+An actual local OpenJDK17, Spark4.0.1 and Delta Lake4.0.1 run round-tripped the
+invented two-row capture, including a leading-zero CUSIP, exact decimal price,
+source null token and a quantity above int64. Repeating the same snapshot added
+no revisions. A corrected snapshot followed by an injected failure after the
+facts commit left the prior generation readable; retry completed coverage/audit
+and selected a coherent three-version facts generation. Unity Catalog target
+configuration and a notebook are present, but no Databricks workspace smoke,
+cloud object, credential, job or schedule was created. Final offline verification
+is **461 passed, 8 opt-in skips**; the enabled local Delta suite is **3 passed**.
+Ruff, dependency checks, agent-skills integrity and package builds pass. The
+separate QuantSmith reference verifier reports pin drift; it was not repinned or
+used as evidence for T21.

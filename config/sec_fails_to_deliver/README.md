@@ -5,9 +5,10 @@ and NAAIM settings. The implemented loader validates configuration without
 connecting to PostgreSQL/Databricks or reading secrets. `inspect` can select an
 approved local file entirely from this config. T18's exact numeric projections,
 SQL bindings, Arrow schemas and Spark schema descriptions are implemented.
-T04 implements SQLite persistence/Gold; T07 adds coherent Parquet and T19 adds
-the SEC PostgreSQL adapter. Delta is **not implemented yet**. Configuration
-validation alone is not endpoint or credential evidence.
+T04 implements SQLite persistence/Gold; T07 adds coherent Parquet, T19 adds
+the SEC PostgreSQL adapter and T21 adds coherent Delta publication. Configuration
+validation alone is not endpoint or credential evidence; no Databricks workspace
+has been configured or smoke-tested.
 
 ```text
 config/sec_fails_to_deliver/
@@ -25,7 +26,7 @@ config/sec_fails_to_deliver/
 | Initial operational warehouse | `warehouse: postgres` | User selected PostgreSQL and T19 is implemented. Explicit `sqlite` remains supported; there is no fallback in either direction. |
 | Pipeline-owned durable root | `../../data/sec_fails_to_deliver/postgres` | Keep this local path or choose a mounted durable directory. Use a distinct root for another backend/warehouse identity. |
 | PostgreSQL namespace | database `market_medallion`, schema `sec_ftd`, user `sec_ftd_writer` | These are illustrative names, not provisioned objects. Set your actual host, port, database, login, optional role, schema and SSL mode. |
-| Databricks publication | `enabled: false` | Leave disabled until a catalog, schema and writable `/Volumes/<catalog>/<schema>/<volume>/...` staging path are available. Publication later runs in an authenticated Spark session. |
+| Databricks publication | `enabled: false` | The publisher is implemented. Leave disabled until a catalog, schema and writable `/Volumes/<catalog>/<schema>/<volume>/...` staging path are available; publication runs in an authenticated Spark session. |
 | Quantity projection | precision38, scale0 | `quantity_precision` is editable from1–38; quantities remain whole shares. Exact text is retained regardless of projection. |
 | Price projection | precision38, scale12 | `price_precision` and `price_scale` are editable; this example allows26 digits before and12 after the decimal point. Source scale remains in exact text. |
 | Selected input partitions | Two approved September2026 archives | Add named manifest/input pairs and an optional exact official SEC ZIP URL. Their source manifests retain explicit dates, member name and resource budgets; there is no filename/date inference. |
@@ -112,8 +113,9 @@ characters. Enabled Databricks settings must include all three target fields.
 T04 adds configured `run` and bounded `gold`; see the
 [local runbook](../../docs/deployment/sec_ftd_runbook.md). The example selects
 PostgreSQL and requires its named password plus an existing writable schema.
-T05 adds revisions/cutoffs; T07 adds `publish`; T19 implements PostgreSQL.
-Delta remains in [Spec011 tasks](../../specs/spec011/todo.md).
+T05 adds revisions/cutoffs; T07 adds `publish`; T19 implements PostgreSQL and
+T21 implements Delta. See the [runbook](../../docs/deployment/sec_ftd_runbook.md)
+for the locally verified path target and configured Unity Catalog notebook.
 T06 adds `replay --source-root ... --config <destination.yml> --max-captures 1000`.
 The destination selects SQLite or PostgreSQL, disabled Databricks, matching
 storage settings and an empty nonoverlapping root; a PostgreSQL target also

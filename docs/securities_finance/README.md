@@ -88,14 +88,15 @@ archives after an earlier HTTP403. T18 type contracts and serialization pass for
 both sources. T03–T05 persist local SEC Bronze/SQLite/audit/Gold and observed
 revisions with evidence-gated withdrawals, retaining 117,025 September facts.
 T06 replay preserves original outcomes/clocks; T07 coherent Parquet and SEC T19
-PostgreSQL parity are complete. Next is S11-T08; exchange conformance and full
-delivery remain open.
+PostgreSQL parity and SEC Delta are complete. Threshold Delta and exchange
+conformance remain open.
 
 The plans assume Python 3.12, the existing manifest-driven medallion layout,
 offline pytest, source-owned SQLite/Parquet, atomic publication, local manual
 operation and stopped Dagster schedule definitions. For Spec011, PostgreSQL
 warehouse parity and Databricks Delta publication are required delivery work.
-Both source adapters have actual PostgreSQL17.6 evidence; both Delta adapters
-remain. Hosted cloud deployment is separate. Other specs retain their own
+Both source adapters have actual PostgreSQL17.6 evidence; SEC has actual local
+Spark/Delta evidence and the threshold Delta adapter remains. Hosted cloud
+deployment is separate. Other specs retain their own
 backend scope.
 See the common contract for what each research milestone must actually prove.

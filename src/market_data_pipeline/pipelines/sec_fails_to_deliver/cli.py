@@ -154,7 +154,7 @@ def main(argv: list[str] | None = None) -> int:
                         "partition_ids": sorted(config.partitions),
                         "manifests_validated": False,
                         "storage_implemented": True,
-                        "delta_implemented": False,
+                        "delta_implemented": True,
                     },
                     sort_keys=True,
                 )

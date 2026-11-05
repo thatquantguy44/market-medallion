@@ -1,14 +1,15 @@
 # Settlement facts and threshold membership contract
 
-**State:** SEC SQLite/PostgreSQL plus Nasdaq/NYSE threshold SQLite research slices
-implemented; threshold replay/PostgreSQL and both Delta integrations remain.
-**Date:** 2026-11-04. Inherits [C01–C11](../../docs/securities_finance/contract.md).
+**State:** SEC SQLite/PostgreSQL/Delta plus Nasdaq/NYSE threshold
+SQLite/PostgreSQL research slices implemented; threshold Delta remains.
+**Date:** 2026-11-05. Inherits [C01–C11](../../docs/securities_finance/contract.md).
 T18's normalized type contracts and serialization are implemented for both source
 packages. The parser implements the six-column/trailer local profile version2,
 reconciled against two approved September2026 archives after an unsuccessful
 HTTP request. See the [source checkpoint](source_review.md) for sample hashes,
 explicit bounds, trailer checks and coverage limitations. T04 implements SEC
-SQLite persistence; PostgreSQL/Delta and threshold persistence remain planned.
+SQLite persistence; T19/T21 add PostgreSQL and Delta. Threshold
+SQLite/PostgreSQL persistence is implemented and threshold Delta remains planned.
 
 ## 1. Provider structures and grains
 
@@ -176,9 +177,9 @@ required for Spec011, for both SEC FTD and exchange-threshold packages. SQLite
 remains the offline development backend. PostgreSQL is an alternative operational
 warehouse; Databricks consumes a validated committed snapshot into Delta. This
 does not require Spark in the parser or make Databricks a local ingestion backend.
-SEC SQLite/PostgreSQL and coherent Parquet are implemented; threshold SQLite and
-native Parquet research export are implemented. Threshold PostgreSQL and both
-Delta adapters remain absent. R12/A14/A15 still gate full Spec011 parity.
+SEC SQLite/PostgreSQL, coherent Parquet and Delta are implemented; threshold
+SQLite/PostgreSQL and native Parquet research export are implemented. Threshold
+Delta remains absent. R12/A15 still gate full Spec011 parity.
 
 | Logical value | SQLite | PostgreSQL | Parquet / Databricks Delta |
 | --- | --- | --- | --- |
@@ -269,8 +270,8 @@ the pipeline and storage settings, excludes connection/path settings and must
 be bound to the durable root by T04. Changing precision/scale requires a distinct
 storage identity or an explicit migration; the loader alone does not enforce
 persisted root binding. SQLite and SEC PostgreSQL enforce that binding. T18
-Arrow/Spark schemas and serialization round trips are complete; threshold
-PostgreSQL and Delta adapters remain absent.
+Arrow/Spark schemas and serialization round trips are complete. SEC Delta is
+implemented with an actual local engine round trip; threshold Delta remains absent.
 
 SEC commands now include config validation, inspection, local/live ingestion,
 bounded Gold, health, replay, publication and research export. Threshold commands
@@ -311,8 +312,8 @@ the config contract ID. Neither automatically migrates an existing root.
 
 Each RecordSchema provides `normalize`, `sql_types`, `encode`/`decode`,
 `arrow_schema`, `arrow_table`/`read_arrow` and `spark_schema_json`. The last
-returns explicit Spark StructType JSON with field nullability; constructing a
-Spark DataFrame and enforcing a UTC session belong to the later Delta adapter.
+returns explicit Spark StructType JSON with field nullability. T21 now uses it
+to construct the SEC FTD Spark DataFrames and enforces a UTC Spark session.
 SQL mappings are field types/bindings, not a table installer or full DB adapter.
 PostgreSQL uses native date, UTC datetime and Decimal values with NUMERIC;
 SQLite encodes dates/clocks/decimals as lossless text. Both preserve exact
@@ -346,8 +347,9 @@ subset; T05 adds observed-as-of, T06 replay, T07 Parquet and T19 SEC PostgreSQL.
 
 T18 evidence is real SQLite/Parquet serialization plus native PostgreSQL binding
 and explicit Spark schema tests. T19 adds actual SEC PostgreSQL server parity;
-threshold PostgreSQL and Spark/Delta remain T20–T22. Historical first-seen clocks, new source
-coverage and warehouse readiness are not inferred from these tests.
+T20 adds threshold PostgreSQL parity and T21 adds actual SEC Spark/Delta parity.
+Threshold Delta remains T22. Historical first-seen clocks, new source coverage
+and warehouse readiness are not inferred from these tests.
 
 ## 12. T04 bounded persistence decisions
 
@@ -489,4 +491,5 @@ failed-promotion rollback, concurrent retry, wrong-root refusal, Parquet and
 SQLite→PostgreSQL replay. Failed replay cleanup is allowed only for tables newly
 created by that invocation after the stored database identity matches its root;
 preexisting or changed stores are never dropped. This evidence closes SEC T19,
-not threshold T20 or Delta T21/T22.
+and preceded the later threshold T20 and SEC Delta T21 evidence. Threshold
+Delta T22 remains open.

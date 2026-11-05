@@ -163,7 +163,7 @@ def test_validate_config_reports_implemented_backend_without_reading_secrets(tmp
     assert result["config_validation"] == "PASSED"
     assert result["warehouse"] == "postgres"
     assert result["storage_implemented"] is True
-    assert result["delta_implemented"] is False
+    assert result["delta_implemented"] is True
     assert result["manifests_validated"] is False
     assert result["partition_ids"] == ["september_2026_a", "september_2026_b"]
     assert "password" not in json.dumps(result)

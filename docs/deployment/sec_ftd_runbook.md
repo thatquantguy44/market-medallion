@@ -5,7 +5,8 @@ and database Gold. T05 adds revisions/cutoffs/withdrawals, T06 replay, T07
 coherent Parquet and T19 the SEC PostgreSQL adapter. Bounded exact-URL
 acquisition, no-request health, a native QuantMeridian export and stopped
 Dagster definitions are also implemented. SQLite and PostgreSQL are explicit
-selections with no fallback. Delta remains T21. This is a manual research slice;
+selections with no fallback. T21 Delta publication is implemented and locally
+verified; this is a manual research slice;
 live acquisition and its schedule are disabled by default. NAAIM remains paused.
 
 ## Configuration and first local run
@@ -119,6 +120,60 @@ lock serializes database writers in addition to the root filesystem lock.
 Use a dedicated empty schema for integration tests. The opt-in suite reads
 `MARKET_DATA_TEST_POSTGRES_DSN`; it creates and drops only random test schemas.
 Do not point it at a schema containing retained state.
+
+## Delta publication
+
+T21 publishes only the committed snapshot selected by `parquet/current.json`.
+It validates the manifest, checksums, row counts, explicit Spark types, required
+fields and exact numeric representability before any Delta write. Automatic
+schema evolution must remain disabled and the Spark session timezone must be
+UTC. Facts, coverage and audit use independent insert-only revision-key merges.
+
+Because three Delta commits are not one transaction, the publisher writes a
+checksummed generation manifest containing the exact version of each table and
+then atomically advances `current.json`. Consumers must use
+`read_delta_generation`; they must not independently select each table's latest
+version. A failed or interrupted attempt leaves the prior pointer selected and
+can be retried without duplicate revisions.
+
+The target is permanently bound to the first source warehouse before its first
+table write. A different warehouse with the same storage schema is rejected,
+as is any attempt to publish a lower capture sequence. This prevents independent
+pipeline roots from contaminating one Delta target.
+
+The checked-in integration proof uses OpenJDK17, Spark4.0.1 and Delta Lake4.0.1
+with a pipeline-owned local path target:
+
+```python
+from pathlib import Path
+
+from market_data_pipeline.pipelines.sec_fails_to_deliver.config import load_config
+from market_data_pipeline.pipelines.sec_fails_to_deliver.delta import (
+    DeltaPathTarget,
+    publish_delta_snapshot,
+)
+from market_data_pipeline.pipelines.sec_fails_to_deliver.publication import current_snapshot
+
+config_path = Path("config/sec_fails_to_deliver/pipeline.local.yml")
+config = load_config(config_path)
+target = DeltaPathTarget(
+    Path("data/sec_fails_to_deliver/delta"),
+    config.databricks.table_prefix,
+    config.storage.contract_id,
+).bind()
+publish_delta_snapshot(spark, config_path, current_snapshot(config.root), target)
+```
+
+For Databricks, copy the complete SEC root containing the selected pointer and
+snapshot under the configured Unity Catalog volume, set that staged root in a
+Databricks-specific config copy, enable its catalog/schema/staging volume, install
+the repository wheel, and run
+[`publish_sec_ftd_delta.py`](../../notebooks/publish_sec_ftd_delta.py). The
+publisher creates source-owned `{prefix}_facts_versions`,
+`{prefix}_coverage_versions` and `{prefix}_pipeline_runs` tables. The generation
+metadata lives under `{staging_volume}/delta/{prefix}`. No workspace, job,
+credentials or schedule is provisioned by this repository, and no Databricks
+workspace smoke has been claimed.
 
 ## Outcomes and limits
 
@@ -293,6 +348,8 @@ concurrency, root identity, replay cleanup/retry and Parquet.
 The final full suite with PostgreSQL integrations enabled is **430 passed**;
 Ruff, formatting, documentation validation and sdist/wheel builds also pass.
 
-Next: [S11-T08](../../specs/spec011/todo.md#s11-t08--pin-nasdaq-list-and-coverage-contract).
-Delta, threshold adapters, SEC acquisition and research exports remain separate
-unchecked deliveries; see the [source checkpoint](../../specs/spec011/source_review.md).
+T21 local Delta verification uses the same correction/retry boundary described
+above, including exact decimals, a quantity above int64 and a failed post-facts
+publication that leaves the prior pinned generation readable. The next storage
+delivery is [S11-T22](../../specs/spec011/todo.md#s11-t22--publish-threshold-snapshots-to-databricks-delta);
+see the [source checkpoint](../../specs/spec011/source_review.md).

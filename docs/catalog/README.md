@@ -5,13 +5,11 @@
 Specs011–015. The older catalog below preserves original source rationale;
 its former priority labels are superseded by that program. Full source
 contracts/plans/tasks now exist for SEC FTD + Reg SHO, FINRA short volume,
-FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. Spec011 now has
-a local SEC Bronze/SQLite/audit/Gold slice; later connectors remain planned.
-Its parser/manifest/local inspection slice reconciles two approved
-September2026 archives. T18 type contracts/serialization are implemented for both
-source packages; T03–T05 SEC persistence, observed revisions, cutoff Gold and
-evidence-gated withdrawals, T06 replay, T07 Parquet and SEC T19 PostgreSQL are
-complete. Next is S11-T08. Threshold PostgreSQL and Databricks remain required.
+FINRA OTC transparency, SEC N-PORT and NY Fed primary dealers. Spec011's SEC and
+threshold research slices are implemented through SEC T21 and threshold T20.
+The SEC parser reconciles two approved September2026 archives; both packages
+have SQLite/PostgreSQL, replay and research exports. SEC Delta is locally
+verified. Next is S11-T22 threshold Delta; final provider-use acceptance remains.
 NAAIM remains paused.
 
 Researched against official provider pages on 2026-10-26. These are source

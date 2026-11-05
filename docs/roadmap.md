@@ -30,10 +30,9 @@ Read the [capability map](securities_finance/README.md),
 [program plan](securities_finance/plan.md),
 [coordination tasks](securities_finance/todo.md) and
 [delivery roadmap/readiness ledger](securities_finance/roadmap.md).
-**Continue at S11-T08 Nasdaq threshold contract** after completed T03–T07
-SEC persistence, revisions, cutoff Gold, withdrawals, replay, Parquet, T18 types
-and SEC T19 PostgreSQL parity. Spec011 still requires threshold PostgreSQL and
-both Databricks adapters before G2;
+**Continue at S11-T22 threshold Delta publication** after completed SEC
+T03–T07/T19/T21, threshold T20 and shared T18. Spec011 still requires threshold
+Delta parity and final provider-use acceptance before G2;
 [checkpoint](../specs/spec011/source_review.md). Research delivery
 precedes recurring schedule activation.
 NAAIM remains paused and is not restarted by this program.

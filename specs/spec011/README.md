@@ -2,15 +2,15 @@
 
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
-**Updated:** 2026-11-04. **Status:** SEC T03–T07/T19, threshold T20 and shared T18 are verified.
+**Updated:** 2026-11-05. **Status:** SEC T03–T07/T19/T21, threshold T20 and shared T18 are verified.
 SEC now also has bounded exact-URL acquisition, no-request health, stopped
 Dagster and a native QuantMeridian export. Nasdaq and NYSE have independent
 physical manifests/parsers, versioned SQLite membership/coverage, exact-URL
 acquisition, correction/withdrawal history, cutoffs, coverage-qualified episodes,
 health/plan/CLI, stopped Dagster and a native research export. Invented fixtures
 cover both providers; bounded current source responses reconcile the physical
-contracts. Both actual Delta integrations and final provider-use acceptance
-remain open, so T17/G2 is not closed.
+contracts. Threshold Delta T22 and final provider-use acceptance remain open,
+so T17/G2 is not closed.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
 Nasdaq/NYSE list family. **Source packages:**
@@ -163,8 +163,8 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Implement **S11-T21** SEC FTD Delta publication, then **S11-T22** threshold Delta.
-Both require actual Spark/Delta or Databricks round trips; the owner
+Implement **S11-T22** threshold Delta. It requires an actual Spark/Delta or
+Databricks round trip; the owner
 previously selected Databricks disabled until a catalog/schema/staging volume is
 configured. After those gates and the Nasdaq/NYSE intended-use decision, perform
 T17 final reconciliation. See the [SEC runbook](../../docs/deployment/sec_ftd_runbook.md),
