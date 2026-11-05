@@ -21,9 +21,11 @@ new live schedules default stopped.
 
 ## 2026-11-05 latest Spec011 checkpoint — authoritative pickup
 
-Commit `92d8112` was pushed before this pass. The current branch now also contains
-implementation for exact configured SEC ZIP acquisition, SEC health,
-`sec-ftd-research/1` export and stopped Dagster; independent Nasdaq/NYSE
+The active branch `feat/spec011-sec-ftd-parser` is pushed through `68c6785`.
+Its latest implementation commit is `2ee5616` for SEC T21 Delta publication;
+`68c6785` separately restores the reviewed QuantSmith guidance reference.
+The branch also contains implementation for exact configured SEC ZIP acquisition,
+SEC health, `sec-ftd-research/1` export and stopped Dagster; independent Nasdaq/NYSE
 manifests/parsers; versioned threshold SQLite membership/coverage/audit;
 corrections, withdrawals and cutoff Gold; bounded threshold acquisition,
 health/plan/CLI; gap/censoring episodes; dated identity mapping; native research
@@ -50,6 +52,15 @@ is **3 passed**. Ruff, dependency checks, agent-skills integrity and sdist/wheel
 build pass. At T21 closeout the read-only QuantSmith checkout differed from its
 recorded pin, so that slice did not rely on it. The dedicated 2026-11-05 library
 maintenance change below subsequently restored a verified 61-file reference.
+
+### Safe stopping boundary
+
+This branch is ready for review into `main`. All repository changes are committed
+and pushed; there is no pending local implementation work to preserve. SEC T21
+is complete, but threshold T22 has not started. No provider capture, Databricks
+workspace write, cloud object, schedule activation or NAAIM resume is part of
+this stopping point. After this branch merges, start T22 on a fresh branch such
+as `feat/spec011-threshold-delta`; do not continue piling it onto this branch.
 
 ## Presidential pipeline port and PRES plan — Spec016
 
@@ -332,15 +343,36 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
+Verify both agent-library references before implementation; QuantSmith is now
+pinned at `41c56458f476a6c32fa922f7b8c70bb92e4fd21e` with 61 adopted files.
 Continue S11-T22 threshold Delta. SEC T03–T07/T19/T21 and threshold T20 are
 verified; T08/T09 and the physical/local NYSE slice are implemented;
 T18 is complete for both packages. T22 actual Delta integration evidence
 remains required before Spec011 G2. Provider-use acceptance is still open.
-The T02 September sample reconciliation is complete. Older recommendations below are historical context;
-Specs011→012→013→014→015 govern the requested next builds. The documentation
-branch is `docs/securities-finance-program` (planning commit `1b2e73b`); the
-active implementation branch is `feat/spec011-sec-ftd-parser`. No schedule has
-been enabled; checked-in acquisition settings remain false.
+The bounded T22 sequence is:
+
+1. Inspect the committed threshold snapshot/research boundary and the SEC T21
+   generation design, but keep the new publisher entirely under
+   `pipelines/reg_sho_thresholds/`; do not import SEC-owned schemas or tables.
+2. Publish explicit-schema membership, coverage, episode and audit tables with
+   provider/market identity, exact source revision keys, source-root binding,
+   monotonic capture ordering and one checksummed version-pinned generation.
+3. Add an actual local Spark/Delta round trip covering repeat idempotency,
+   correction/withdrawal, complete-empty versus missing/failed coverage,
+   cutoff ordering and an injected partial-table failure that leaves the prior
+   generation readable.
+4. Add the source-named notebook/config/runbook path, while keeping Databricks
+   disabled and every Dagster schedule stopped by default.
+5. Reconcile T22 against A15, then obtain the outstanding Nasdaq/NYSE
+   retention/automation/research-use acceptance and close T17/G2. Only after
+   those gates should the sequence advance to Spec012.
+
+The T02 September sample reconciliation is complete. Older recommendations below
+are historical context; Specs011→012→013→014→015 govern the requested next builds.
+The documentation branch is `docs/securities-finance-program` (planning commit
+`1b2e73b`); the
+review branch is `feat/spec011-sec-ftd-parser`. No schedule has been enabled;
+checked-in acquisition settings remain false.
 
 Current contracts: Specs 002 and 003, with plan/tasks under `tasks/`. Run the README demo
 and use `docs/deployment/aaii_runbook.md` for PostgreSQL, Dagster, Parquet, replay,
