@@ -25,6 +25,12 @@ network:
   probe_timeout_seconds: 10
   timeout_seconds: 30
   ca_bundle: null
+databricks:
+  enabled: false
+  catalog: null
+  schema: null
+  staging_volume: null
+  table_prefix: reg_sho
 storage:
   schema_version: reg-sho-storage/1
 partitions:

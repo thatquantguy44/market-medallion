@@ -45,6 +45,7 @@ def main(argv=None):
         "acquire-run",
         "gold",
         "export-research",
+        "stage-delta",
         "replay",
     ):
         command = commands.add_parser(name)
@@ -74,6 +75,7 @@ def main(argv=None):
                 "config_validation": "PASSED",
                 "warehouse": config.warehouse,
                 "acquisition_enabled": config.acquisition.enabled,
+                "databricks_enabled": config.databricks.enabled,
                 "partition_ids": sorted(config.partitions),
                 "providers": sorted({item.provider for item in config.partitions.values()}),
                 "storage_contract": config.schema_version,
@@ -105,6 +107,16 @@ def main(argv=None):
                 as_of_sequence=arguments.as_of_sequence,
                 include_withdrawn=arguments.include_withdrawn,
             )
+        elif arguments.command == "stage-delta":
+            from market_data_pipeline.pipelines.reg_sho_thresholds.delta_snapshot import (
+                stage_delta_snapshot,
+            )
+
+            result = {
+                "pipeline": "reg-sho-thresholds",
+                "snapshot": str(stage_delta_snapshot(arguments.config)),
+                "request_performed": False,
+            }
         elif arguments.command == "replay":
             from market_data_pipeline.pipelines.reg_sho_thresholds.replay import replay
 
