@@ -27,6 +27,41 @@ def _identifier(value, label):
 
 
 @dataclass(frozen=True)
+class DatabricksConfig:
+    enabled: bool = False
+    catalog: str | None = None
+    schema: str | None = None
+    staging_volume: str | None = None
+    table_prefix: str = "reg_sho"
+
+    def __post_init__(self):
+        if type(self.enabled) is not bool:
+            raise ValueError("databricks.enabled requires boolean true/false")
+        _identifier(self.table_prefix, "databricks.table_prefix")
+        for key in ("catalog", "schema"):
+            value = getattr(self, key)
+            if value is not None:
+                _identifier(value, f"databricks.{key}")
+            elif self.enabled:
+                raise ValueError("enabled Databricks requires catalog, schema and staging_volume")
+        if self.staging_volume is not None:
+            value = self.staging_volume
+            if (
+                not isinstance(value, str)
+                or not value.startswith("/Volumes/")
+                or any(part in ("", ".", "..") for part in value.split("/")[1:])
+                or len(value.split("/")) < 5
+            ):
+                raise ValueError(
+                    "databricks.staging_volume requires an absolute Unity Catalog volume"
+                )
+            if self.enabled and value.split("/")[2:4] != [self.catalog, self.schema]:
+                raise ValueError("databricks staging volume must match catalog/schema")
+        elif self.enabled:
+            raise ValueError("enabled Databricks requires catalog, schema and staging_volume")
+
+
+@dataclass(frozen=True)
 class AcquisitionConfig:
     enabled: bool
     user_agent_env: str
@@ -90,6 +125,7 @@ class RuntimeConfig:
     schema_version: str
     partitions: MappingProxyType
     network: NetworkConfig = field(default_factory=NetworkConfig)
+    databricks: DatabricksConfig = field(default_factory=DatabricksConfig)
 
 
 def _source_url(value, provider, market, list_date):
@@ -126,7 +162,7 @@ def load_config(path: Path) -> RuntimeConfig:
         value = yaml.load(path.read_text(), Loader=UniqueLoader)
     except (OSError, UnicodeError, yaml.YAMLError) as exc:
         raise ValueError("invalid threshold runtime YAML") from exc
-    if not isinstance(value, dict) or set(value) != {
+    if not isinstance(value, dict) or set(value) - {"databricks"} != {
         "config_version",
         "pipeline",
         "root",
@@ -144,6 +180,12 @@ def load_config(path: Path) -> RuntimeConfig:
         raise ValueError("threshold config requires pipeline reg-sho-thresholds")
     if value["warehouse"] not in ("sqlite", "postgres"):
         raise ValueError("threshold warehouse must be sqlite or postgres")
+    delta = value.get("databricks")
+    if "databricks" in value and (
+        not isinstance(delta, dict) or set(delta) != set(DatabricksConfig.__dataclass_fields__)
+    ):
+        raise ValueError("databricks requires exactly the documented fields")
+    databricks = DatabricksConfig(**delta) if delta is not None else DatabricksConfig()
     pg = value["postgres"]
     if not isinstance(pg, dict) or set(pg) != set(PostgresConfig.__dataclass_fields__):
         raise ValueError("postgres requires exactly the documented fields")
@@ -223,4 +265,5 @@ def load_config(path: Path) -> RuntimeConfig:
         storage["schema_version"],
         MappingProxyType(partitions),
         parse_network(value["network"], base=path.parent),
+        databricks,
     )

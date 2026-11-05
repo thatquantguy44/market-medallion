@@ -22,17 +22,17 @@ planned.
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
 FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary
-dealers** (Specs011–015). Spec011 has an initial offline SEC FTD parser/manifest
-and local inspection command, reconciled against both approved September2026
-archives. T18 portable storage types and serialization are complete for both
-source packages. T03–T05 local Bronze/SQLite/audit/Gold, observed revisions,
-cutoff queries and gated withdrawals are implemented, with 117,025 September
-facts. T06 replay preserves facts, coverage, audits, clocks and outcomes. T07
-adds coherent typed Parquet/current-pointer recovery, and SEC T19 adds an
-actual PostgreSQL adapter with disposable-database parity evidence. Continue at
-S11-T08. Spec011 still requires threshold PostgreSQL, both Databricks adapters,
-source acquisition, exchange adapters and research exports. See the
-[SEC FTD runbook](docs/deployment/sec_ftd_runbook.md). No new job is implemented.
+dealers** (Specs011–015). Spec011 implements independent SEC FTD and Nasdaq/NYSE
+threshold pipelines with immutable Bronze, SQLite/PostgreSQL revisions, cutoffs,
+replay, native research exports, bounded acquisition, health and stopped Dagster.
+The approved SEC September archives reconcile 117,025 facts. SEC T21 and threshold
+T22 Delta publishers have actual local Spark4.0.1/Delta4.0.1 parity and interrupted
+publication recovery evidence. T22 also stages threshold membership/coverage/audit
+history and derived episodes as a checksummed source snapshot. Continue at T17
+source-evidence/provider-use review and G2 acceptance before Spec012. Databricks
+workspace activation remains disabled. See the
+[SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
+[threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).
 NAAIM is **paused** and its
 daily schedule was stopped on 2026-11-03; see the master handoff before any resume.
 

@@ -56,5 +56,16 @@ SQLite and PostgreSQL are implemented threshold warehouses. PostgreSQL uses a
 separate pipeline-owned schema, environment-only password, root/database
 identity binding and no SQLite fallback. Select it with `warehouse: postgres`,
 create the configured empty schema, and set the named `postgres.password_env`
-variable. Databricks Delta remains the Spec011 T22 gate and is not silently
-emulated.
+variable. T22 supplies a separate threshold-owned Delta publisher; staging and
+publication commands, recovery and consumer rules are in the
+[runbook](../../docs/deployment/reg_sho_thresholds_runbook.md#delta-snapshot-and-generation-publication).
+
+The optional `databricks` section defaults disabled for older configs that omit
+it. When present, supply exactly `enabled`, `catalog`, `schema`, `staging_volume`
+and `table_prefix`. Enablement requires safe catalog/schema identifiers and a
+matching absolute `/Volumes/<catalog>/<schema>/<volume>/...` path. Local
+`stage-delta` freezes terminal history and episodes without Spark or HTTP.
+Unity Catalog publication is explicit through
+`notebooks/publish_reg_sho_thresholds_delta.py`; it never runs after ingestion
+or starts a schedule automatically. Local Spark/Delta parity is verified;
+a Databricks workspace run remains separate.

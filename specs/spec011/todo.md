@@ -1,10 +1,10 @@
 # Spec011 implementation tasks
 
-**Status:** SEC T02–T07/T19/T21, threshold T20 and shared T18 are complete. T08/T09 Nasdaq and the
+**Status:** SEC T02–T07/T19/T21, threshold T20/T22 and shared T18 are complete. T08/T09 Nasdaq and the
 physical/local portion of T10 NYSE are implemented, along with native exports,
 operator commands and stopped Dagster definitions. T11 episode semantics and
 T12 dated mapping/features have offline coverage. Threshold deterministic replay
-and PostgreSQL are verified. Provider-use acceptance and threshold Delta T22 remain;
+and PostgreSQL are verified. Provider-use acceptance and final T17 source-evidence review remain;
 T17/G2 is not closed.
 **Updated:** 2026-11-05. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
@@ -289,17 +289,33 @@ provider-use acceptance still gate T17/G2.
 
 **Dependencies:** T11,T18,T20. **Scope:** M. **Requirements:** R04,R06,R07,R12,N02.
 
-- [ ] Add a threshold-owned Delta publisher for membership, coverage, episodes
+- [x] Add a threshold-owned Delta publisher for membership, coverage, episodes
   and audit with explicit types and independent provider/market identity.
-- [ ] Preserve revision/withdrawal/cutoff behavior and coherent pinned generations
+- [x] Preserve revision/withdrawal/cutoff behavior and coherent pinned generations
   across retry, failed publication and complete-empty/missing-list inputs.
-- [ ] Supply target/staging configuration and actual Spark/Delta or Databricks
+- [x] Supply target/staging configuration and actual Spark/Delta or Databricks
   round-trip tests, including repeated publication and observed ordering.
 
 **Verify:** A15 normalized membership/coverage/episode equality with the source
 snapshot; partial publication never advances current state. **Likely files:**
 threshold Delta publisher, publication tests, engine integration tests,
 source-named notebook/example, runbook.
+
+**Completed 2026-11-05:** threshold-owned `delta_snapshot.py` freezes terminal
+SQLite/PostgreSQL history and derives episodes under the source lock. Explicit
+Parquet schemas, checksums, deterministic ordering and source identity validate
+before Delta writes. `delta.py` keeps immutable membership/coverage/audit revisions,
+replaces derived episodes, and pins four exact table versions in one checksummed
+generation. Repeat publication reuses the generation; partial writes and failed
+pointer updates preserve the prior current generation. Source-named config,
+`stage-delta` CLI, notebook and runbook are included; old configs default disabled.
+Actual OpenJDK17 / Spark4.0.1 / Delta4.0.1 tests: **2 passed**, including exact
+normalized equality, both providers, correction/reversion/withdrawal, equal-time
+cutoffs, complete-empty/unavailable/failed coverage, gap/censoring episodes,
+empty tables, cross-source rejection and both recovery boundaries. Full offline
+suite: **477 passed, 10 opt-in skips**. Ruff, dependency checks and package builds
+pass. No provider capture, Databricks workspace write or schedule activation.
+T17 source-evidence/provider-use review and G2 acceptance remain open.
 
 ## S11-T08 — Pin Nasdaq list and coverage contract
 

@@ -56,3 +56,67 @@ def test_threshold_postgres_intent_loads_without_reading_password(tmp_path, monk
     assert config.postgres.schema == "reg_sho_thresholds"
     with pytest.raises(ValueError, match="REG_SHO_POSTGRES_PASSWORD"):
         config.postgres.conninfo()
+
+
+def test_older_threshold_config_defaults_to_disabled_delta(tmp_path):
+    path = _write(tmp_path, lambda value: value.pop("databricks"))
+    assert not load_config(path).databricks.enabled
+
+
+@pytest.mark.parametrize(
+    "delta",
+    [
+        None,
+        {"enabled": False},
+        {
+            "enabled": "false",
+            "catalog": None,
+            "schema": None,
+            "staging_volume": None,
+            "table_prefix": "reg_sho",
+        },
+        {
+            "enabled": True,
+            "catalog": None,
+            "schema": None,
+            "staging_volume": None,
+            "table_prefix": "reg_sho",
+        },
+        {
+            "enabled": True,
+            "catalog": "research",
+            "schema": "thresholds",
+            "staging_volume": "/Volumes/wrong/thresholds/data",
+            "table_prefix": "reg_sho",
+        },
+        {
+            "enabled": True,
+            "catalog": "research",
+            "schema": "thresholds",
+            "staging_volume": "/Volumes/research/thresholds/../data",
+            "table_prefix": "reg_sho",
+        },
+    ],
+)
+def test_delta_config_rejects_incomplete_or_unsafe_targets(tmp_path, delta):
+    with pytest.raises(ValueError, match="databricks|Databricks"):
+        load_config(_write(tmp_path, lambda value: value.update(databricks=delta)))
+
+
+def test_explicit_delta_target_configuration_is_offline(tmp_path):
+    config = load_config(
+        _write(
+            tmp_path,
+            lambda value: value.update(
+                databricks={
+                    "enabled": True,
+                    "catalog": "research",
+                    "schema": "thresholds",
+                    "staging_volume": "/Volumes/research/thresholds/data",
+                    "table_prefix": "reg_sho",
+                }
+            ),
+        )
+    )
+    assert config.databricks.enabled
+    assert not config.root.exists()
