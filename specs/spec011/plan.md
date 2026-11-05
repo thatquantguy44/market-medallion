@@ -6,7 +6,7 @@ are complete for both sources. T03/T04 complete immutable Bronze, root-bound
 SQLite facts/coverage/audit and database Gold. T05 observed revisions, cutoff
 queries and evidence-gated withdrawals are complete. T06 replay, T07 Parquet
 publication, SEC T19 PostgreSQL parity and T21 Delta publication are verified.
-Threshold T20 PostgreSQL is verified; T22 Delta remains the next delivery target.
+Threshold T20 PostgreSQL and T22 local Spark/Delta are verified; T17/G2 review remains.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
 This is the first research delivery in the [program roadmap](../../docs/securities_finance/roadmap.md).
@@ -57,7 +57,7 @@ Both source `storage.py` modules declare normalized schemas and warehouse
 Protocols. Shared field codecs have two concrete source users. SQLite/Parquet
 round trips and native PostgreSQL bindings are tested; SEC also has actual
 PostgreSQL17.6 and local Spark4.0.1/Delta4.0.1 integration evidence. Threshold
-Spark/Delta integration remains T22.
+Spark/Delta integration is verified under T22; workspace activation remains separate.
 
 Each source owns its warehouse boundary and SQLite/PostgreSQL/Delta adapters.
 SEC T04 uses `bronze.py`, `warehouse.py` and `pipeline.py`; threshold persistence

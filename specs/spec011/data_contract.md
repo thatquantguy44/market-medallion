@@ -348,7 +348,7 @@ subset; T05 adds observed-as-of, T06 replay, T07 Parquet and T19 SEC PostgreSQL.
 T18 evidence is real SQLite/Parquet serialization plus native PostgreSQL binding
 and explicit Spark schema tests. T19 adds actual SEC PostgreSQL server parity;
 T20 adds threshold PostgreSQL parity and T21 adds actual SEC Spark/Delta parity.
-Threshold Delta remains T22. Historical first-seen clocks, new source coverage
+T22 adds actual threshold Spark/Delta parity and coherent four-table generations. Historical first-seen clocks, new source coverage
 and warehouse readiness are not inferred from these tests.
 
 ## 12. T04 bounded persistence decisions
@@ -492,4 +492,4 @@ SQLite→PostgreSQL replay. Failed replay cleanup is allowed only for tables new
 created by that invocation after the stored database identity matches its root;
 preexisting or changed stores are never dropped. This evidence closes SEC T19,
 and preceded the later threshold T20 and SEC Delta T21 evidence. Threshold
-Delta T22 remains open.
+Delta T22 is now verified; see its task evidence.

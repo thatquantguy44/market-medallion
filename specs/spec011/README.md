@@ -2,15 +2,15 @@
 
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
-**Updated:** 2026-11-05. **Status:** SEC T03–T07/T19/T21, threshold T20 and shared T18 are verified.
+**Updated:** 2026-11-05. **Status:** SEC T03–T07/T19/T21, threshold T20/T22 and shared T18 are verified.
 SEC now also has bounded exact-URL acquisition, no-request health, stopped
 Dagster and a native QuantMeridian export. Nasdaq and NYSE have independent
 physical manifests/parsers, versioned SQLite membership/coverage, exact-URL
 acquisition, correction/withdrawal history, cutoffs, coverage-qualified episodes,
 health/plan/CLI, stopped Dagster and a native research export. Invented fixtures
 cover both providers; bounded current source responses reconcile the physical
-contracts. Threshold Delta T22 and final provider-use acceptance remain open,
-so T17/G2 is not closed.
+contracts. Threshold T22 has actual local Spark/Delta evidence for all four tables and
+publication recovery. Final provider-use acceptance and T17/G2 remain open.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
 Nasdaq/NYSE list family. **Source packages:**

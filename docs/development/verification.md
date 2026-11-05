@@ -288,3 +288,46 @@ layout guide, handoffs and planned FX/web-traffic paths all specify this rule.
 Only source placement, imports and documentation changed. Stored payloads,
 identifiers, parser versions, tables and schedules retain their existing contracts.
 No provider request, live warehouse write or recurring schedule was involved.
+
+
+## Spec011 T22 threshold Delta — 2026-11-05
+
+Branch `feat/spec011-threshold-delta`, aligned with merged `main` at `0169b4c`
+(prerequisite checkpoint `46c5932`, PR #6).
+The source-owned publisher and typed immutable staging snapshot satisfy T22/A15
+without importing SEC schemas or requiring Spark for normal local commands.
+
+- Full offline regression: **477 passed, 10 opt-in skips**. The skips are existing
+  optional PostgreSQL/SEC Delta cases plus the two new threshold engine tests.
+- Actual threshold engine suite: **2 passed** on Python3.12, OpenJDK17,
+  Spark4.0.1 and Delta4.0.1. Full normalized table equality covers independent
+  Nasdaq/NYSE identity, exact revision keys/UTC microseconds, corrections,
+  reversions, withdrawals, equal-time capture cutoffs, complete-empty/unavailable/
+  failed coverage, gap/censoring episodes and empty membership/episode tables.
+- A failure after membership publication leaves the previous pinned generation
+  readable. A failed pointer update after sealing all four versions also preserves
+  the previous generation; retry reuses the exact sealed metadata and versions.
+  Repeat publication is idempotent; source changes and sequence rollback fail.
+- Offline staging tests exercise corruption, missing/unfinished warehouses,
+  row budgets, no-request CLI staging, config enablement/identifier/volume gates,
+  source identity and deterministic snapshot identity across database tie order.
+- Repository Ruff lint/format, `pip check`, sdist/wheel builds and agent-skills
+  integrity verification pass. No dependencies, database schema or schedules changed.
+- QuantSmith verification fails because its current external revision/tree differs
+  from the pin. The external checkout/reference was not changed or treated as
+  verified guidance. This failure does not affect application checks.
+
+Reproduce the engine run from this checkout with the installed optional Delta
+runtime and existing Homebrew JDK (use your own JDK path on another machine):
+
+```bash
+JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home \
+SPARK_LOCAL_IP=127.0.0.1 MARKET_DATA_TEST_DELTA=true \
+.venv/bin/python -m pytest -q tests/test_reg_sho_delta_engine.py
+```
+
+All fixtures contain invented provider-shaped values. No real provider request,
+Databricks/Unity Catalog workspace write, cloud object, schedule activation or
+NAAIM resume is part of this verification. The original provider payloads,
+warehouses, configs and secrets remain unchanged. T17 source-evidence/provider-use
+review and G2 acceptance remain outstanding before Spec012.
