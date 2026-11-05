@@ -350,6 +350,7 @@ Ruff, formatting, documentation validation and sdist/wheel builds also pass.
 
 T21 local Delta verification uses the same correction/retry boundary described
 above, including exact decimals, a quantity above int64 and a failed post-facts
-publication that leaves the prior pinned generation readable. The next storage
-delivery is [S11-T22](../../specs/spec011/todo.md#s11-t22--publish-threshold-snapshots-to-databricks-delta);
+publication that leaves the prior pinned generation readable. Threshold T22 is also complete. The bounded
+[T17/G2 acceptance](../../specs/spec011/acceptance.md) records final real-source
+conformance and actual backend evidence;
 see the [source checkpoint](../../specs/spec011/source_review.md).

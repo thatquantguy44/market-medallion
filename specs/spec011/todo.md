@@ -1,15 +1,10 @@
 # Spec011 implementation tasks
 
-**Status:** SEC T02–T07/T19/T21, threshold T20/T22 and shared T18 are complete. T08/T09 Nasdaq and the
-physical/local portion of T10 NYSE are implemented, along with native exports,
-operator commands and stopped Dagster definitions. T11 episode semantics and
-T12 dated mapping/features have offline coverage. Threshold deterministic replay
-and PostgreSQL are verified. Provider-use acceptance and final T17 source-evidence review remain;
-T17/G2 is not closed.
-**Updated:** 2026-11-05. Evidence: [source_review.md](source_review.md).
-IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
-requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
-M=3–5 files. Split a task further if the actual change exceeds that scope.
+**Status:** T17/G2 is complete for the selected native-source internal-research
+scope; [acceptance/evidence](acceptance.md) records the user-attested permission,
+ten authentic threshold files, two approved SEC archives and all A01–A15 checks.
+G3/G4 and T14's optional joined projection remain outside the accepted delivery.
+All acquisition and schedule defaults remain disabled; NAAIM remains paused.
 
 ## S11-T01 — Admit source use and select the first partitions
 
@@ -349,9 +344,11 @@ threshold pipeline, SQLite adapter, coverage model, integration/revision tests.
 
 **Dependencies:** T01,T09. **Scope:** M. **Requirements:** R01,R04,R11.
 
-- [ ] Resolve public date/market parameters, schema and applicable access rights.
-  Route/parameters/schema are resolved; intended automation/retention/research-use
-  acceptance remains an owner gate, so live definitions stay stopped.
+- [x] Resolve public date/market parameters, schema and applicable access rights.
+  Exact selected dates/markets and all source fields now reconcile. The owner
+  attests permission under a verbal agreement for this bounded retained internal
+  research sample; documentary license verification is not claimed. Wider use
+  and recurring activation remain separate; live defaults stay stopped.
 - [x] Add a separate provider parser/envelope using invented source-shaped input.
 - [x] Prove selected NYSE market/date coverage without assuming Nasdaq conventions.
 
@@ -404,6 +401,9 @@ feature transform, mapping fixture, identity/feature tests.
 
 ## S11-T14 — Add the optional settlement research projection
 
+**Delivery decision:** explicitly deferred from T17's two-native-artifact scope;
+no joined projection or universal identity mapping is claimed. See [acceptance](acceptance.md).
+
 **Dependencies:** T12,T13. **Scope:** M. **Requirements:** R05,R09.
 
 - [ ] FTD-owned `research.py` reads public artifacts plus explicit mapping input.
@@ -451,16 +451,33 @@ Dagster tests. Runtime activation is a separate owner decision.
 G3 schedule activation/G4 consumer UI are not required.
 **Scope:** M. **Requirements:** R01,R11,R12,N01–N04.
 
-- [ ] Compare selected real permitted source partitions or approved local files
+- [x] Compare selected real permitted source partitions or approved local files
   against parsed counts/values/coverage; record actual exclusions and evidence.
-- [ ] Run focused/full offline tests, lint, format and package checks; ensure
+- [x] Run focused/full offline tests, lint, format and package checks; ensure
   all A01–A15 criteria have concrete evidence or explicit unresolved status.
-- [ ] Record actual PostgreSQL parity and Spark/Delta or Databricks integration
+- [x] Record actual PostgreSQL parity and Spark/Delta or Databricks integration
   evidence for both sources. Skipped integrations do not close R12/A14/A15.
-- [ ] Update source task evidence, pipeline register, program readiness and
+- [x] Update source task evidence, pipeline register, program readiness and
   master handoff; accept G2 before beginning Spec012.
 
 **Verify:** reproducible evidence record with no credentials/raw values in Git;
 any missing selected provider coverage keeps G2 open unless owner explicitly
 changes scope. **Likely files:** this todo, README, pipeline register, program
 roadmap, master handoff. Break documentation across a second small task if needed.
+
+**Completed 2026-11-05:** [T17 acceptance](acceptance.md) consolidates every
+A01–A15 check and the bounded scope/use decision. Independent scripts compare
+all 117,025 SEC facts with original source tokens and retained facts/Gold, plus
+all 408 threshold rows across ten authentic October26–30 files with Bronze,
+warehouse and coverage/audit clocks. NYSE October30 is complete-empty. Original
+source bytes and unknown clocks remain preserved. Real threshold replay/export
+and typed Delta staging pass (408 membership / ten coverage / 93 episodes).
+A conformance-discovered NYSE HEAD/content-negotiation defect is fixed with
+source-owned startup behavior and offline regressions. The user supplied a
+verbal-permission attestation; no documentary license verification is claimed.
+The full suite with actual PostgreSQL17.6 and Spark4.0.1/Delta4.0.1 enabled is
+**492 passed, zero skips**. Lint/format, dependencies and package builds pass.
+G2 is accepted for this bounded native-source internal-research scope, subject
+to branch review/merge; G3/G4 and optional T14 remain deferred. Next source:
+Spec012 after merge. All acquisition/schedule defaults remain disabled and
+NAAIM remains paused.

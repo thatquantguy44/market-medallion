@@ -1,0 +1,79 @@
+{
+  "exchange_conformance": "NOT_ESTABLISHED_BY_THIS_SEC_REVIEW",
+  "files": [
+    {
+      "all_fields_compared": true,
+      "date_counts": {
+        "20260901": 5135,
+        "20260902": 5471,
+        "20260903": 5687,
+        "20260904": 5642,
+        "20260908": 6251,
+        "20260909": 5397,
+        "20260910": 5443,
+        "20260911": 5505,
+        "20260914": 5801
+      },
+      "file": "cnsfails202609a.zip",
+      "input_provenance": "APPROVED_LOCAL_FILE_ORIGINAL_RETRIEVAL_UNKNOWN",
+      "leading_zero_cusip_rows": 5751,
+      "manifest_sha256": "9192519005279e1d8ea6ca58e2e70e96dea81e25591df2ab92bd911b8fe28e17",
+      "member_bytes": 3168735,
+      "member_sha256": "0faa3ef27c19c31dc64b2b7f85002139fa3e9ed7dbb5898b80f8abdd9344ddd0",
+      "missing_prices": 280,
+      "missing_symbols": 0,
+      "quantity_fails_total": 1796162548,
+      "raw_bytes": 1141638,
+      "raw_sha256": "46c12079fe62d84278e9d06f97cfa34eb9ebef5fca709fc856a49e3257ac2f01",
+      "row_count": 50332,
+      "source_coverage": "NOT_CERTIFIED"
+    },
+    {
+      "all_fields_compared": true,
+      "date_counts": {
+        "20260915": 5812,
+        "20260916": 5353,
+        "20260917": 5592,
+        "20260918": 5854,
+        "20260921": 6016,
+        "20260922": 5544,
+        "20260923": 5551,
+        "20260924": 5496,
+        "20260925": 5333,
+        "20260928": 5311,
+        "20260929": 5038,
+        "20260930": 5793
+      },
+      "file": "cnsfails202609b.zip",
+      "input_provenance": "APPROVED_LOCAL_FILE_ORIGINAL_RETRIEVAL_UNKNOWN",
+      "leading_zero_cusip_rows": 7289,
+      "manifest_sha256": "fe0f8a3e5e21bc0b15646a68f7cfb8f8807bcadaffb6ce1418aa71027d535152",
+      "member_bytes": 4201778,
+      "member_sha256": "db3400c8ea67be63633ce47e9527f2ecdc82a4e22b206b1c9203f81852aacd88",
+      "missing_prices": 383,
+      "missing_symbols": 1,
+      "quantity_fails_total": 2745043657,
+      "raw_bytes": 1512400,
+      "raw_sha256": "a89615d5b7fe1e8dd0fc2872406467ac71e499f0d8216ef9c0afb8cc98bdd99e",
+      "row_count": 66693,
+      "source_coverage": "NOT_CERTIFIED"
+    }
+  ],
+  "first_seen_max": "2026-11-03T08:53:25.919082+00:00",
+  "first_seen_min": "2026-11-03T08:53:16.440652+00:00",
+  "original_publication_and_retrieval": "UNKNOWN_NOT_RECONSTRUCTED",
+  "provider_requests": 0,
+  "schema_version": "spec011-sec-sample-review/1",
+  "snapshot_and_sources_unchanged": true,
+  "snapshot_id": "fef77afe24484b45b0103d587e48a57e",
+  "snapshot_manifest_sha256": "23df8a5587f860260dc59f4b80f0332fcb9001153e73fa3ced454fdc5941b2e5",
+  "snapshot_row_counts": {
+    "audit": 4,
+    "coverage": 4,
+    "facts": 117025,
+    "gold": 117025
+  },
+  "source_population_coverage": "PARTIAL_NOT_CERTIFIED",
+  "total_facts_compared": 117025,
+  "verified_at": "2026-11-05T20:11:15.492448+00:00"
+}

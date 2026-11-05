@@ -1,9 +1,14 @@
-# Spec011 first source-contract checkpoint
+# Spec011 source-contract and conformance evidence
 
 **Reviewed:** 2026-11-04, America/New_York. **Branch:**
 `feat/spec011-sec-ftd-parser`. **Scope:** source review, offline SEC parser and
 reconciliation of two user-approved local September 2026 archives. This is not
 a completed ingestion pipeline or a certified historical provider schema.
+
+**Current state:** T17/G2 is complete for the selected bounded internal-research
+scope; see [the authoritative acceptance record](acceptance.md). The sections
+below retain the initial contract and historical checkpoints. Their original
+open-gate statements describe those checkpoints, not the current pickup point.
 
 ## Source/access matrix — S11-T01
 
@@ -385,3 +390,37 @@ Ruff, dependency checks, agent-skills integrity and package builds pass. At T21
 closeout the separate QuantSmith verifier reported pin drift and was not used as
 evidence. A later dedicated library-maintenance change repinned the reviewed
 guidance inventory; it does not change the T21 evidence.
+
+
+## 2026-11-05 T17 final bounded conformance
+
+The [acceptance record](acceptance.md) supersedes earlier outstanding T22/T17
+notes. Both approved SEC September archives and all ten authentic October26–30
+Nasdaq/NASDAQ and NYSE/NYSE files now reconcile every selected source field.
+Sanitized [SEC](evidence/sec-september-2026.json),
+[threshold](evidence/threshold-october-2026.json),
+[local round-trip](evidence/threshold-local-roundtrip.json) and
+[all-engine verification](evidence/verification.json) records are committed.
+Raw provider rows, capture receipts and runtime configuration remain ignored.
+
+The user attested existing permission under a verbal agreement for the bounded
+retained internal-research sample; no document reference was supplied and no
+independent documentary permission verification is claimed. All ten files were
+captured through the project-owned verified run-scoped HTTP client. The earlier
+November3 observations remain documentary context, not a substitute for the
+selected October dates. Other markets/history and public redistribution are
+outside this acceptance; schedules and the local sample acquisition config are
+stopped/disabled after capture.
+
+Conformance identified a NYSE method/negotiation mismatch: HEAD on Download
+returned404; GET with explicit text/plain returned406; GET accepting any content
+type returned200. The NYSE source now probes its official source page and reuses
+that client for the exact configured Download GET. The ten files' independent
+row/trailer/date/market checks then pass: Nasdaq81/82/82/80/79, NYSE1/1/1/1/0.
+Initial failed startup attempts and bounded diagnostic records are preserved
+locally; no failed attempt was represented as an empty provider list.
+
+Full actual-engine verification is **492 passed, zero skips** with disposable
+PostgreSQL17.6, OpenJDK17, Spark4.0.1 and Delta4.0.1. G2 is accepted for the
+bounded native-source delivery, pending branch review/merge. G3/G4 and optional
+T14 remain deferred. The next source is Spec012 after merge.

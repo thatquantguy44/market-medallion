@@ -1,7 +1,8 @@
 # Settlement facts and threshold membership contract
 
 **State:** SEC SQLite/PostgreSQL/Delta plus Nasdaq/NYSE threshold
-SQLite/PostgreSQL research slices implemented; threshold Delta remains.
+SQLite/PostgreSQL/Delta research slices implemented; T17/G2 accepted for the
+bounded native-source internal-research scope. See [acceptance](acceptance.md).
 **Date:** 2026-11-05. Inherits [C01–C11](../../docs/securities_finance/contract.md).
 T18's normalized type contracts and serialization are implemented for both source
 packages. The parser implements the six-column/trailer local profile version2,
@@ -9,7 +10,7 @@ reconciled against two approved September2026 archives after an unsuccessful
 HTTP request. See the [source checkpoint](source_review.md) for sample hashes,
 explicit bounds, trailer checks and coverage limitations. T04 implements SEC
 SQLite persistence; T19/T21 add PostgreSQL and Delta. Threshold
-SQLite/PostgreSQL persistence is implemented and threshold Delta remains planned.
+SQLite/PostgreSQL persistence and Delta publication are implemented and verified.
 
 ## 1. Provider structures and grains
 
@@ -271,12 +272,13 @@ be bound to the durable root by T04. Changing precision/scale requires a distinc
 storage identity or an explicit migration; the loader alone does not enforce
 persisted root binding. SQLite and SEC PostgreSQL enforce that binding. T18
 Arrow/Spark schemas and serialization round trips are complete. SEC Delta is
-implemented with an actual local engine round trip; threshold Delta remains absent.
+implemented with actual local engine round trips for both sources. T17/G2 is
+accepted for the bounded native-source scope; see [acceptance](acceptance.md).
 
 SEC commands now include config validation, inspection, local/live ingestion,
 bounded Gold, health, replay, publication and research export. Threshold commands
 include config validation, no-request health/plan, local/live ingestion, Gold and
-research export. Earlier implemented commands are `validate-config --config ...` and
+research export, replay and Delta staging. Earlier implemented commands are `validate-config --config ...` and
 `inspect --config ... --partition ...`. Config-mode inspection selects exactly
 one configured manifest/input pair, with no conflicting input override. Existing
 `--manifest ... --input ...` inspection remains available. Both paths preserve

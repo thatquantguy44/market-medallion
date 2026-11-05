@@ -9,3 +9,7 @@ recursive-include resources *.yml
 recursive-include notebooks *.py
 
 include scripts/verify_quantsmith.py
+
+include scripts/verify_spec011_sec_samples.py
+include scripts/verify_spec011_threshold_samples.py
+recursive-include specs/spec011/evidence *.json

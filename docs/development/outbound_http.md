@@ -1,14 +1,19 @@
 # Outbound HTTP configuration and run contract
 
-User-requested extension, 2026-11-04. AAII and NAAIM are the two current HTTP
-consumers. SEC FTD remains local-only; network settings do not enable acquisition.
+User-requested extension, 2026-11-04. AAII, NAAIM, SEC FTD and Reg SHO thresholds are current HTTP consumers.
+Network settings alone do not enable acquisition.
 
 ## Requirements and acceptance
 
 1. Every live run creates its own client. `mode` selects `auto`, `direct` or
    `proxy`; auto tries `preferred_route` then the other route only when `fallback`
    is true. Defaults: auto, proxy preferred, fallback enabled.
-2. Before capturing data, make one bounded HEAD request to the same provider URL.
+2. Before capturing data, make one bounded HEAD request to the source's selected official startup URL.
+   It is normally the data URL. NYSE threshold acquisition uses its canonical
+   published source page because the Download endpoint maps GET but returns
+   HEAD404; it then reuses the selected client for the exact validated Download
+   URL. The source-owned receipt records `http_probe_url`; injected transports
+   record null because no real probe occurred.
    Try each permitted route at most once. Remember the first working route for
    all data calls/retries in that run. A new run tests again. No process-global
    opener, environment mutation or persistent route cache is allowed.
@@ -53,7 +58,7 @@ Use an HTTP proxy URL even when the destination is HTTPS.
 AAII uses `network` in its existing runtime YAML. NAAIM uses a pipeline-owned
 network-only YAML supplied through `--network-config` or Dagster's
 `network_config_path`; its stopped schedule can pass `NAAIM_NETWORK_CONFIG`.
-SEC FTD accepts the same section for future HTTP work without probing on import.
+SEC FTD and threshold acquisition use the same section; imports and local paths make no probe.
 Absent settings use the auto defaults; no configured proxy means auto can select
 direct immediately. Direct-only and proxy-only never try the other route.
 
@@ -94,3 +99,17 @@ Auth and secrets: only environment-variable names and CA paths are configured;
 resolved proxy URLs are absent from logs and per-run routing metadata.
 Reproducibility: source capture/first-seen semantics are unchanged, and selection
 metadata contains only the route and whether startup fallback was used.
+
+
+## NYSE source-specific startup conformance — T17
+
+The [real-source acceptance record](../../specs/spec011/acceptance.md) documents
+NYSE HEAD404 / explicit-Accept406 / GET200 behavior. The threshold adapter selects
+its route once through `https://www.nyse.com/regulation/regulation-sho`, with the
+same declared User-Agent and `Accept: */*`, then requests only the configured
+public Download URL. This does not relax the common client's HTTP-error or
+route-fallback rules: rejection of the chosen startup URL stops the run; data
+HTTP errors do not trigger a new route. Provider/market manifest mismatch fails
+before probing. Offline tests cover exact raw bytes/provenance, one startup
+selection, denied startup and provider mismatch. The ten selected authentic
+files reconcile; the local sample config is disabled again after capture.

@@ -46,13 +46,28 @@ def acquire_partition(config_path: Path, partition: str, *, transport=None, cloc
     if selected.source_url is None:
         raise ValueError("threshold partition has no configured source URL")
     manifest = load_manifest(selected.manifest)
+    if manifest.provider != selected.provider or selected.market not in manifest.allowed_markets:
+        raise ValueError("threshold partition differs from its provider manifest")
     request = Request(
         selected.source_url,
-        headers={"Accept": "text/plain", "User-Agent": _agent(config)},
+        headers={
+            "Accept": "*/*" if selected.provider == "nyse" else "text/plain",
+            "User-Agent": _agent(config),
+        },
         method="GET",
     )
+    # NYSE's published Download route maps GET but returns HEAD 404. Its official
+    # source page supports HEAD; select the run's route there, then reuse it for GET.
+    # Exact-route method/content-negotiation evidence: Spec011 T17 source review.
+    probe_request = (
+        Request(
+            "https://www.nyse.com/regulation/regulation-sho", headers=dict(request.header_items())
+        )
+        if selected.provider == "nyse"
+        else request
+    )
     if transport is None:
-        client = prepare_http(request, config.network)
+        client = prepare_http(probe_request, config.network)
         route, fallback = client.route, client.fallback_used
     else:
         client, route, fallback = transport, "injected", False
@@ -91,6 +106,7 @@ def acquire_partition(config_path: Path, partition: str, *, transport=None, cloc
         "retrieved_at": retrieved_at,
         "http_status": status,
         "http_route": route,
+        "http_probe_url": probe_request.full_url if transport is None else None,
         "startup_fallback_used": fallback,
         "content_type": str(content_type) if content_type is not None else None,
         "payload_bytes": len(payload),

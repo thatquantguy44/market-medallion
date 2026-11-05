@@ -128,8 +128,8 @@ connector; the source-owned contract and gaps determine the final boundary.
 
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
-| 011 | Open: exchange gates | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | In progress; T17 evidence/use acceptance required | Not started | Deferred | Next T17 source-evidence/provider-use review and G2 acceptance |
-| 012 | Open | Not started | Not started | Not started | Deferred | Await011; resolve free-route use/retention scope |
+| 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete in closeout branch | Not started | Deferred | Review/merge T17 closeout; ten authentic lists and both SEC archives reconcile; then Spec012 |
+| 012 | Open | Not started | Not started | Not started | Deferred | Next after011 closeout merge; resolve free-route use/retention scope |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |
@@ -138,3 +138,10 @@ Update a gate only with a link to reproducible evidence in the source tasks or
 handoff. Record fixture count, selected real partitions, exclusions and actual
 verification date. An unselected history/universe remains explicitly outside
 the delivered coverage.
+
+
+Spec011's [T17 acceptance](../../specs/spec011/acceptance.md) records the exact
+bounded source selection and user-attested verbal permission; documentary
+provider-license verification is not claimed. G2 covers the two native artifacts
+and actual backend/recovery evidence. Recurring capture, wider markets/history,
+public display and the optional joined projection remain separate decisions.
