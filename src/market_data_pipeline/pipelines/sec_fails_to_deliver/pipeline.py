@@ -16,6 +16,7 @@ from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
     SCHEMA_VERSION,
     parse_manifest,
 )
+from market_data_pipeline.pipelines.sec_fails_to_deliver.outcomes import make_outcome, write_outcome
 from market_data_pipeline.pipelines.sec_fails_to_deliver.storage import IDENTITY
 from market_data_pipeline.pipelines.sec_fails_to_deliver.versions import knowledge_cutoff
 from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import SQLiteWarehouse
@@ -65,6 +66,34 @@ def _fact(row, receipt, captured_at):
         "provider_published_at": None,
         "source_updated_at": None,
         "parser_version": SCHEMA_VERSION,
+    }
+
+
+def coverage_record(manifest, evidence, parsed, audit, outcome):
+    accepted = audit["status"] == "SUCCEEDED"
+    return {
+        **IDENTITY,
+        "partition_id": f"{manifest.period_start}_{manifest.period_end}",
+        "period_start": manifest.period_start,
+        "period_end": manifest.period_end,
+        "coverage_state": outcome,
+        "expected_date_count": len(evidence.expected_dates) if evidence is not None else None,
+        "observed_date_count": len(parsed.observed_dates) if parsed else 0,
+        "received_row_count": len(parsed.observations) if parsed else 0,
+        "trailer_record_count": len(parsed.observations) if parsed else None,
+        "trailer_quantity_text": str(sum(r.quantity_fails for r in parsed.observations))
+        if parsed
+        else None,
+        "validation_state": "MATCHED"
+        if accepted
+        else "NOT_CHECKED"
+        if outcome == "UNAVAILABLE"
+        else "REJECTED",
+        "version_id": hashlib.sha256(f"coverage:{audit['run_id']}".encode()).hexdigest(),
+        "run_id": audit["run_id"],
+        "capture_sequence": audit["capture_sequence"],
+        "first_seen_at": audit["captured_at"],
+        "raw_sha256": audit["raw_sha256"],
     }
 
 
@@ -166,34 +195,6 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                 error_code = "CAPTURE_INTEGRITY_FAILED"
         raw_hash = receipt["raw_sha256"] if receipt else None
 
-        def coverage(outcome, accepted):
-            return {
-                **IDENTITY,
-                "partition_id": f"{manifest.period_start}_{manifest.period_end}",
-                "period_start": manifest.period_start,
-                "period_end": manifest.period_end,
-                "coverage_state": outcome,
-                "expected_date_count": len(evidence.expected_dates)
-                if evidence is not None
-                else None,
-                "observed_date_count": len(parsed.observed_dates) if parsed else 0,
-                "received_row_count": len(parsed.observations) if parsed else 0,
-                "trailer_record_count": len(parsed.observations) if parsed else None,
-                "trailer_quantity_text": str(sum(r.quantity_fails for r in parsed.observations))
-                if parsed
-                else None,
-                "validation_state": "MATCHED"
-                if accepted
-                else "NOT_CHECKED"
-                if outcome == "UNAVAILABLE"
-                else "REJECTED",
-                "version_id": hashlib.sha256(f"coverage:{run_id}".encode()).hexdigest(),
-                "run_id": run_id,
-                "capture_sequence": sequence,
-                "first_seen_at": captured_at,
-                "raw_sha256": raw_hash,
-            }
-
         completed_at = datetime.fromisoformat(utc_timestamp(now()))
         audit = {
             **started,
@@ -206,7 +207,7 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
         try:
             inserted = warehouse.promote_partition(
                 facts if status == "SUCCEEDED" else [],
-                coverage(coverage_state, status == "SUCCEEDED"),
+                coverage_record(manifest, evidence, parsed, audit, coverage_state),
                 audit,
                 evidence=evidence,
                 capture={
@@ -225,8 +226,25 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
             if isinstance(exc, sqlite3.DatabaseError):
                 status, error_code = "FAILED", "WAREHOUSE_WRITE_FAILED"
             audit.update(status=status, row_count=0, error_code=error_code)
-            warehouse.promote_partition([], coverage(coverage_state, False), audit)
+            warehouse.promote_partition(
+                [], coverage_record(manifest, evidence, parsed, audit, coverage_state), audit
+            )
             inserted = 0
+        if receipt is not None and error_code not in (
+            "CAPTURE_INTEGRITY_FAILED",
+            "BRONZE_WRITE_FAILED",
+        ):
+            directory = config.root / "bronze" / run_id
+            write_outcome(
+                directory,
+                make_outcome(
+                    directory,
+                    config.storage,
+                    audit,
+                    coverage_record(manifest, evidence, parsed, audit, coverage_state),
+                    warehouse.fact_fingerprint(run_id),
+                ),
+            )
         return {
             "pipeline": "sec-fails-to-deliver",
             "run_id": run_id,

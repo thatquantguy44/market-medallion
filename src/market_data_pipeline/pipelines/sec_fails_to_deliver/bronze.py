@@ -20,6 +20,15 @@ def _digest(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _unique(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate capture metadata key")
+        result[key] = value
+    return result
+
+
 def _write_once(path: Path, payload: bytes) -> None:
     with path.open("xb") as stream:
         stream.write(payload)
@@ -123,9 +132,42 @@ def archive_capture(
 def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageConfig]:
     """Validate complete or explicitly incomplete capture artifacts, without replay."""
     try:
-        receipt = json.loads(_read_bounded(directory / "receipt.json", 65536))
+        receipt = json.loads(
+            _read_bounded(directory / "receipt.json", 65536), object_pairs_hook=_unique
+        )
         if receipt["receipt_version"] not in ("sec-ftd-capture/1", "sec-ftd-capture/2"):
             raise ValueError("unsupported receipt")
+        fields = {
+            "receipt_version",
+            "run_id",
+            "capture_sequence",
+            "captured_at",
+            "capture_started_at",
+            "transport",
+            "provider_published_at",
+            "origin_retrieved_at",
+            "input_name",
+            "source_state",
+            "payload_complete",
+            "captured_bytes",
+            "captured_sha256",
+            "raw_sha256",
+            "manifest_sha256",
+            "storage_sha256",
+            "storage_contract_id",
+            "parser_version",
+            "partition_id",
+            "member_name",
+        }
+        if receipt["receipt_version"] == "sec-ftd-capture/2":
+            fields.add("coverage_evidence_sha256")
+        if (
+            set(receipt) != fields
+            or receipt["transport"] != "local-file"
+            or receipt["provider_published_at"] is not None
+            or receipt["origin_retrieved_at"] is not None
+        ):
+            raise ValueError("unsupported capture fields or transport clocks")
         proof = directory / "coverage-evidence.json"
         proof_hash = (
             receipt["coverage_evidence_sha256"]
@@ -144,7 +186,7 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
             raise ValueError("capture run identity mismatch")
         if (
             type(receipt["capture_sequence"]) is not int
-            or receipt["capture_sequence"] < 1
+            or not 1 <= receipt["capture_sequence"] < 2**63
             or type(receipt["payload_complete"]) is not bool
             or type(receipt["captured_bytes"]) is not int
             or receipt["captured_bytes"] < 0
@@ -175,7 +217,7 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
             or receipt["partition_id"] != f"{selected.period_start}_{selected.period_end}"
         ):
             raise ValueError("capture partition differs from its manifest")
-        settings = StorageConfig(**json.loads(profile))
+        settings = StorageConfig(**json.loads(profile, object_pairs_hook=_unique))
         if settings.contract_id != receipt["storage_contract_id"]:
             raise ValueError("capture storage contract mismatch")
         payload_path = directory / "payload.bin"
@@ -204,7 +246,11 @@ def load_capture(directory: Path) -> tuple[dict, bytes | None, bytes, StorageCon
                     or len(payload) > selected.max_archive_bytes
                 ):
                     raise ValueError("invalid complete capture")
-            elif receipt["source_state"] != "OVERSIZED" or receipt["raw_sha256"] is not None:
+            elif (
+                receipt["source_state"] != "OVERSIZED"
+                or receipt["raw_sha256"] is not None
+                or len(payload) != selected.max_archive_bytes + 1
+            ):
                 raise ValueError("invalid incomplete capture")
         return receipt, payload, manifest, settings
     except (KeyError, TypeError, UnicodeError, json.JSONDecodeError) as exc:

@@ -1,5 +1,6 @@
 """Contract-bound SQLite adapter for local SEC FTD ingestion only."""
 
+import hashlib
 import json
 import sqlite3
 import uuid
@@ -27,7 +28,7 @@ KEYS = {
 class SQLiteWarehouse:
     """Use as a context manager: the root lock spans capture and DB promotion."""
 
-    def __init__(self, root: Path, settings: StorageConfig):
+    def __init__(self, root: Path, settings: StorageConfig, *, read_only=False):
         self.root = Path(root).resolve()
         self.schemas = storage_schemas(settings)
         self.expected = {
@@ -37,9 +38,10 @@ class SQLiteWarehouse:
             "record_schemas": {name: schema.version for name, schema in self.schemas.items()},
         }
         self.connection = None
+        self.read_only = read_only
 
     def __enter__(self):
-        self.lock = writer_lock(self.root)
+        self.lock = self._reader_lock() if self.read_only else writer_lock(self.root)
         self.lock.__enter__()
         try:
             self._open()
@@ -55,6 +57,20 @@ class SQLiteWarehouse:
             self.connection.close()
         finally:
             self.lock.__exit__(*args)
+
+    @contextmanager
+    def _reader_lock(self):
+        import fcntl
+
+        path = self.root / ".writer.lock"
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("source warehouse requires its original root lock")
+        with path.open("rb") as lock:
+            fcntl.flock(lock, fcntl.LOCK_SH)
+            try:
+                yield
+            finally:
+                fcntl.flock(lock, fcntl.LOCK_UN)
 
     def _check_identity(self, identity):
         if (
@@ -78,10 +94,17 @@ class SQLiteWarehouse:
             self.identity = json.loads(marker.read_text())
             self._check_identity(self.identity)
         else:
+            if self.read_only:
+                raise ValueError("source warehouse does not exist")
             if any(p.name != ".writer.lock" for p in self.root.iterdir()):
                 raise ValueError("refusing a nonempty unbound pipeline root")
             self.identity = {**self.expected, "warehouse_id": uuid.uuid4().hex}
-        self.connection = sqlite3.connect(database, timeout=30, isolation_level=None)
+        self.connection = sqlite3.connect(
+            database.as_uri() + "?mode=ro" if self.read_only else database,
+            uri=self.read_only,
+            timeout=30,
+            isolation_level=None,
+        )
         self.connection.row_factory = sqlite3.Row
         self.connection.execute("PRAGMA foreign_keys = ON")
         self.connection.execute("PRAGMA synchronous = FULL")
@@ -91,6 +114,9 @@ class SQLiteWarehouse:
             ).fetchone()
             if stored is None or json.loads(stored[0]) != self.identity:
                 raise ValueError("database identity disagrees with the bound root")
+            if self.read_only:
+                self.connection.execute("PRAGMA query_only = ON")
+                self.connection.execute("BEGIN")
             return
         with self.transaction():
             self.connection.execute(
@@ -125,6 +151,9 @@ class SQLiteWarehouse:
             self.connection.execute(
                 "CREATE INDEX sec_ftd_partition ON sec_ftd_coverage(partition_id,capture_sequence)"
             )
+            self.connection.execute(
+                "CREATE INDEX sec_ftd_fact_run ON sec_ftd_facts(run_id,version_id)"
+            )
             columns = ",".join(c.name for c in self.schemas["facts"].columns)
             self.connection.execute(f"""CREATE VIEW sec_ftd_gold AS SELECT {columns} FROM (
                 SELECT *,ROW_NUMBER() OVER(
@@ -135,6 +164,8 @@ class SQLiteWarehouse:
 
     @contextmanager
     def transaction(self):
+        if self.read_only:
+            raise ValueError("source warehouse is read-only")
         if self.connection.in_transaction:
             raise ValueError("nested warehouse transactions are unsupported")
         self.connection.execute("BEGIN IMMEDIATE")
@@ -157,6 +188,29 @@ class SQLiteWarehouse:
             raise ValueError("capture sequence exhausted")
         self.connection.execute("UPDATE sec_ftd_sequence SET value=? WHERE id=1", (value,))
         return value
+
+    def start_replay_run(self, row):
+        """Reserve the original sequence without inventing missing captures."""
+        with self.transaction():
+            latest = self.connection.execute(
+                "SELECT value FROM sec_ftd_sequence WHERE id=1"
+            ).fetchone()[0]
+            sequence = row["capture_sequence"]
+            if type(sequence) is not int or not latest < sequence < 2**63:
+                raise ValueError("replay capture sequence is duplicate or out of order")
+            self.connection.execute("UPDATE sec_ftd_sequence SET value=? WHERE id=1", (sequence,))
+            self.record_run(row)
+
+    def fact_fingerprint(self, run_id):
+        """Stream exact encoded versions; no floating-point or schema inference."""
+        digest, count = hashlib.sha256(), 0
+        for row in self.connection.execute(
+            "SELECT * FROM sec_ftd_facts WHERE run_id=? ORDER BY version_id", (run_id,)
+        ):
+            digest.update(json.dumps(dict(row), sort_keys=True, separators=(",", ":")).encode())
+            digest.update(b"\n")
+            count += 1
+        return {"count": count, "sha256": digest.hexdigest()}
 
     def _insert(self, name, row):
         values = self.schemas[name].encode(row, "sqlite")
