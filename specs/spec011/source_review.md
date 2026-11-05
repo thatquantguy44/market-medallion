@@ -381,6 +381,7 @@ and selected a coherent three-version facts generation. Unity Catalog target
 configuration and a notebook are present, but no Databricks workspace smoke,
 cloud object, credential, job or schedule was created. Final offline verification
 is **461 passed, 8 opt-in skips**; the enabled local Delta suite is **3 passed**.
-Ruff, dependency checks, agent-skills integrity and package builds pass. The
-separate QuantSmith reference verifier reports pin drift; it was not repinned or
-used as evidence for T21.
+Ruff, dependency checks, agent-skills integrity and package builds pass. At T21
+closeout the separate QuantSmith verifier reported pin drift and was not used as
+evidence. A later dedicated library-maintenance change repinned the reviewed
+guidance inventory; it does not change the T21 evidence.

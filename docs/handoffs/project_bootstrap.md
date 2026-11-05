@@ -47,8 +47,9 @@ generation stays readable. Unity Catalog code and a notebook are included; no
 Databricks workspace smoke, cloud object or schedule was created. Final offline
 verification is **461 passed, 8 opt-in skips**; the separate enabled Delta suite
 is **3 passed**. Ruff, dependency checks, agent-skills integrity and sdist/wheel
-build pass. The read-only QuantSmith checkout differs from its recorded pin, so
-its verifier remains red and this slice does not repin or rely on it.
+build pass. At T21 closeout the read-only QuantSmith checkout differed from its
+recorded pin, so that slice did not rely on it. The dedicated 2026-11-05 library
+maintenance change below subsequently restored a verified 61-file reference.
 
 ## Presidential pipeline port and PRES plan — Spec016
 
@@ -238,7 +239,7 @@ normal use and checksum verification require no network refresh.
 The user also authorized a configurable local QuantSmith guidance reference.
 `agents/README.md` is the library discovery/routing document; root `AGENTS.md`
 directs agents to both libraries. `agents/quantsmith.reference.json` records
-revision `5deea85438f6d46a8a14ddb85e3821a65fa62f4e` and checksums for 61
+revision `41c56458f476a6c32fa922f7b8c70bb92e4fd21e` and checksums for 61
 adopted guidance files. Verify with `scripts/verify_quantsmith.py`; the path
 can be overridden with `MARKET_MEDALLION_QUANTSMITH_PATH`. The external checkout
 has unrelated drafts; those remain untouched and outside the guidance pin.
