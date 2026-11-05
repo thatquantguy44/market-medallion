@@ -14,8 +14,8 @@ jobs:
         env:
           POSTGRES_DB: aaii_test
           POSTGRES_USER: aaii_test
-          # Disposable isolated CI database; production Compose requires a password.
-          POSTGRES_HOST_AUTH_METHOD: trust
+          # Public, disposable localhost test credential; never production configuration.
+          POSTGRES_PASSWORD: ci_disposable_test_only
         ports:
           - 127.0.0.1:55439:5432
         options: >-
@@ -35,5 +35,5 @@ jobs:
       - run: ruff format --check .
       - run: python -m pytest -q
         env:
-          MARKET_DATA_TEST_POSTGRES_DSN: postgresql://aaii_test@127.0.0.1:55439/aaii_test
+          MARKET_DATA_TEST_POSTGRES_DSN: postgresql://aaii_test:ci_disposable_test_only@127.0.0.1:55439/aaii_test
       - run: python -m build --no-isolation
