@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 import re
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
@@ -58,6 +59,27 @@ class PostgresConfig:
     password_env: str
     sslmode: str
     connect_timeout: int
+
+    def conninfo(self) -> str:
+        """Resolve the named password only at connection time."""
+        password = os.environ.get(self.password_env)
+        if not password:
+            raise ValueError(f"set password environment variable {self.password_env}")
+        try:
+            from psycopg.conninfo import make_conninfo
+        except ImportError as exc:
+            raise ValueError(
+                "PostgreSQL support requires the postgres optional dependency"
+            ) from exc
+        return make_conninfo(
+            host=self.host,
+            port=self.port,
+            dbname=self.database,
+            user=self.user,
+            password=password,
+            sslmode=self.sslmode,
+            connect_timeout=self.connect_timeout,
+        )
 
 
 @dataclass(frozen=True)

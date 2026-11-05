@@ -5,8 +5,9 @@ and NAAIM settings. The implemented loader validates configuration without
 connecting to PostgreSQL/Databricks or reading secrets. `inspect` can select an
 approved local file entirely from this config. T18's exact numeric projections,
 SQL bindings, Arrow schemas and Spark schema descriptions are implemented.
-T04 implements SQLite persistence and database Gold. PostgreSQL/Delta adapters
-are **not implemented yet**; type tests are not live backend compatibility evidence.
+T04 implements SQLite persistence/Gold; T07 adds coherent Parquet and T19 adds
+the SEC PostgreSQL adapter. Delta is **not implemented yet**. Configuration
+validation alone is not endpoint or credential evidence.
 
 ```text
 config/sec_fails_to_deliver/
@@ -21,7 +22,7 @@ config/sec_fails_to_deliver/
 
 | Decision | Example setting | What you need to supply or decide |
 | --- | --- | --- |
-| Initial operational warehouse | `warehouse: postgres` | User selected PostgreSQL; its adapter remains T19. Explicit `sqlite` selects the delivered T04 local slice; there is no fallback. |
+| Initial operational warehouse | `warehouse: postgres` | User selected PostgreSQL and T19 is implemented. Explicit `sqlite` remains supported; there is no fallback in either direction. |
 | Pipeline-owned durable root | `../../data/sec_fails_to_deliver/postgres` | Keep this local path or choose a mounted durable directory. Use a distinct root for another backend/warehouse identity. |
 | PostgreSQL namespace | database `market_medallion`, schema `sec_ftd`, user `sec_ftd_writer` | These are illustrative names, not provisioned objects. Set your actual host, port, database, login, optional role, schema and SSL mode. |
 | Databricks publication | `enabled: false` | Leave disabled until a catalog, schema and writable `/Volumes/<catalog>/<schema>/<volume>/...` staging path are available. Publication later runs in an authenticated Spark session. |
@@ -60,8 +61,8 @@ cp config/sec_fails_to_deliver/.env.example config/sec_fails_to_deliver/.env
 ```
 
 Edit the local YAML and password file. PostgreSQL credentials are resolved only
-by the future connection adapter, using the variable named by `password_env`.
-The current loader/inspection never reads that variable. There is no global
+when a database command connects, using the variable named by `password_env`.
+Loading, validation and local inspection never read it. There is no global
 AAII-config fallback, implicit environment interpolation or automatic `.env`
 execution. A later connection command can inherit the trusted local environment:
 
@@ -87,6 +88,8 @@ These commands work with the checked-in example and need no database password:
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver inspect \
   --config config/sec_fails_to_deliver/pipeline.example.yml \
   --partition september_2026_a
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver publish \
+  --config config/sec_fails_to_deliver/pipeline.local.yml
 ```
 
 Use `--partition september_2026_b` for the second approved file. Substitute your
@@ -100,15 +103,23 @@ numeric ranges and unsupported identifiers fail before input/service I/O.
 SQL namespaces/table prefix currently use simple lowercase identifiers up to63
 characters. Enabled Databricks settings must include all three target fields.
 T04 adds configured `run` and bounded `gold`; see the
-[local runbook](../../docs/deployment/sec_ftd_runbook.md). The example's PostgreSQL
-selection deliberately errors before input/root I/O until T19; use an explicit
-SQLite local config. T05 adds observed revisions and cutoff queries. PostgreSQL
-connections and Delta publication remain in [Spec011 tasks](../../specs/spec011/todo.md).
+[local runbook](../../docs/deployment/sec_ftd_runbook.md). The example selects
+PostgreSQL and requires its named password plus an existing writable schema.
+T05 adds revisions/cutoffs; T07 adds `publish`; T19 implements PostgreSQL.
+Delta remains in [Spec011 tasks](../../specs/spec011/todo.md).
 T06 adds `replay --source-root ... --config <destination.yml> --max-captures 1000`.
-The destination selects SQLite, disabled Databricks, matching storage settings
-and an empty nonoverlapping root. Configured live partition paths and network
+The destination selects SQLite or PostgreSQL, disabled Databricks, matching
+storage settings and an empty nonoverlapping root; a PostgreSQL target also
+requires no existing SEC-owned tables. Configured live partition paths and network
 settings are not used during replay; original artifacts/outcomes supply them.
 See the [runbook](../../docs/deployment/sec_ftd_runbook.md) for safe reconstruction.
+
+The PostgreSQL database and named schema must exist; the adapter creates only
+its source-owned tables/view. A new root refuses any preexisting SEC-owned table,
+and a bound root must match the database warehouse ID, schema and storage
+contract. The root lock plus PostgreSQL advisory lock serialize writers. Read
+Parquet only through `parquet/current.json`; globbing snapshots duplicates
+history. `publish` first completes or abandons pending work deterministically.
 
 Each partition optionally names `coverage_evidence`, relative to this YAML's
 directory. Omission or null retains PARTIAL coverage. Supply reviewed JSON only

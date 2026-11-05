@@ -139,13 +139,13 @@ def test_duplicate_and_unhashable_yaml_keys_are_rejected(tmp_path, text):
         load_config(path)
 
 
-def test_validate_config_reports_intent_without_secrets_or_backend_claims(tmp_path, capsys):
+def test_validate_config_reports_implemented_backend_without_reading_secrets(tmp_path, capsys):
     path = write_config(tmp_path)
     assert main(["validate-config", "--config", str(path)]) == 0
     result = json.loads(capsys.readouterr().out)
     assert result["config_validation"] == "PASSED"
     assert result["warehouse"] == "postgres"
-    assert result["storage_implemented"] is False
+    assert result["storage_implemented"] is True
     assert result["delta_implemented"] is False
     assert result["manifests_validated"] is False
     assert result["partition_ids"] == ["september_2026_a", "september_2026_b"]

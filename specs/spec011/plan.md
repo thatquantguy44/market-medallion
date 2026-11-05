@@ -4,9 +4,9 @@
 against two approved September2026 archives. T18 portable types/serialization
 are complete for both sources. T03/T04 complete immutable Bronze, root-bound
 SQLite facts/coverage/audit and database Gold. T05 observed revisions, cutoff
-queries and evidence-gated withdrawals are complete. T06 offline replay is
-verified against invented fixtures and the real September root. Next: T07 publication.
-PostgreSQL and Databricks are required delivery targets, not implemented yet.
+queries and evidence-gated withdrawals are complete. T06 replay, T07 Parquet
+publication and SEC T19 PostgreSQL parity are verified. Next: T08. Threshold
+PostgreSQL and Databricks remain required delivery targets.
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
 This is the first research delivery in the [program roadmap](../../docs/securities_finance/roadmap.md).
@@ -55,8 +55,9 @@ Configurable precision/scale identifies a storage contract. Schema generation
 and representability checks are implemented in T18; T04 enforces SQLite root binding.
 Both source `storage.py` modules declare normalized schemas and warehouse
 Protocols. Shared field codecs have two concrete source users. SQLite/Parquet
-round trips and native PostgreSQL bindings are tested; PostgreSQL server and
-Spark/Delta integrations remain T19–T22.
+round trips and native PostgreSQL bindings are tested; SEC also has actual
+PostgreSQL17.6 integration evidence. Threshold PostgreSQL and Spark/Delta
+integrations remain T20–T22.
 
 Each source owns its warehouse boundary and SQLite/PostgreSQL/Delta adapters.
 SEC T04 uses `bronze.py`, `warehouse.py` and `pipeline.py`; threshold persistence

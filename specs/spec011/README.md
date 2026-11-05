@@ -2,14 +2,15 @@
 
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
-**Updated:** 2026-11-03. **Status:** initial offline SEC manifest, ZIP/pipe parser
+**Updated:** 2026-11-04. **Status:** initial offline SEC manifest, ZIP/pipe parser
 and local `validate`/`inspect` commands implemented; two approved September2026
 archives reconcile under profile version2. T18 portable storage types and
 serialization are complete for both source packages. T03/T04 now deliver immutable
 bounded captures, root-bound SQLite facts/audit/coverage, database Gold and
 configured `run`/`gold` commands, observed revisions and gated withdrawals.
-T06 deterministic offline replay is verified. Next: T07 publication. PostgreSQL and
-Databricks compatibility remain required delivery work; live acquisition,
+T06 replay, T07 coherent Parquet and the SEC T19 PostgreSQL adapter are verified.
+Next: T08 Nasdaq threshold contract. Databricks and threshold PostgreSQL remain;
+live acquisition,
 research exports, exchange adapters and Dagster remain unimplemented.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
@@ -22,8 +23,8 @@ Read [data contract](data_contract.md), [implementation plan](plan.md),
 The [first source-review checkpoint](source_review.md) records current evidence,
 selected partitions, implemented offline behavior and remaining admission gaps.
 SEC FTD now has [pipeline-specific configuration](../../config/sec_fails_to_deliver/README.md)
-and no-request config validation. PostgreSQL is the user-selected default;
-Databricks stays disabled until configured. Storage adapters remain absent.
+and no-request config validation. PostgreSQL is the user-selected default and
+is implemented for SEC FTD; Databricks stays disabled until configured.
 
 ## Objective and research users
 
@@ -163,11 +164,11 @@ live trading and consumer-repository implementation are outside this spec.
 
 ## Next bounded task
 
-Start **S11-T07** in [todo.md](todo.md): coherent typed Parquet snapshots and
-publication recovery. T03–T06 are complete, including corrections, reversions,
+Start **S11-T08** in [todo.md](todo.md): pin the Nasdaq list, trailer and coverage
+contract. T03–T07 and T19 are complete, including corrections, reversions,
 cutoff queries, gated withdrawals and offline replay with original clocks/order
 and admission outcomes. The [local runbook](../../docs/deployment/sec_ftd_runbook.md) records tested
 commands and September ingestion evidence. Broader history, exchange contracts
 and G2 remain open.
-T19–T22 deliver the required PostgreSQL and Databricks adapters and parity tests;
-they are not implemented by the current local SQLite slice.
+T20–T22 still deliver threshold PostgreSQL and both Databricks adapters. SEC T19
+is implemented and verified against a disposable PostgreSQL17.6 database.

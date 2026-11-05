@@ -17,7 +17,7 @@ entrypoints select direct/proxy once per run, including explicit automatic
 fallback preference, NO_PROXY, timeouts and verified custom CA support. CLI and
 Dagster forward the same settings. SEC FTD accepts configuration but has no HTTP
 adapter and makes no startup probe on its local path. No provider request or
-schedule activation is part of this change. Next numbered Spec011 task is T07 below.
+schedule activation is part of this change. Next numbered Spec011 task is T08 below.
 
 ## Immediate operational priority — NAAIM paused
 
@@ -55,9 +55,10 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next numbered task: S11-T07 coherent Parquet publication** in
-[Spec011 tasks](../../specs/spec011/todo.md). T03–T06 are complete: immutable
-Bronze, SQLite persistence, revisions/withdrawals, cutoff Gold and offline replay.
+**Exact next numbered task: S11-T08 Nasdaq list and coverage contract** in
+[Spec011 tasks](../../specs/spec011/todo.md). T03–T07 and SEC T19 are complete:
+immutable Bronze, SQLite/PostgreSQL persistence, revisions/withdrawals, cutoff
+Gold, offline replay and coherent Parquet publication.
 T06 preserves original clocks, sequence, IDs, terminal outcomes and archived
 proof, including historical rejections. New captures seal `outcome.json`;
 legacy captures reconcile against the read-only original ledger. Missing or
@@ -74,10 +75,24 @@ database-free replay; missing inventory or capture blocks that route. The user
 also discussed a bounded SEC ZIP downloader as acquisition
 work after replay; it remains unimplemented and requires a source-reviewed,
 bounded manual HTTP slice. No new source requests or schedules were enabled.
-On 2026-11-03 the user required PostgreSQL and
-Databricks compatibility too: R12/A14/A15 and T19–T22 require source-owned
-warehouse/Delta adapters and actual integration parity before G2. These are
-planned, not implemented or live-verified. Pin exact numeric text, checked
+
+T07 writes exact-schema facts, current Gold, coverage and audit into immutable
+snapshots and records STAGED/COMMITTED/PUBLISHED database state. Only atomic
+`parquet/current.json` selects consumers. Failure tests cover partial files,
+rename, pointer and watermark transitions, including recovery before a newer
+capture. The ignored real T06 root now has a verified snapshot with 117,025
+facts/Gold rows and four coverage/audit rows; quantity/price are exact decimal128
+and clocks are UTC. T19 uses native PostgreSQL types, environment-only password,
+root/database identity and session advisory serialization. Three actual
+PostgreSQL17.6 integration cases cover revision/reversion, equal clocks/cutoffs,
+withdrawal, rollback/failed promotion, concurrent retry, wrong root, Parquet,
+SQLite→PostgreSQL replay and identity-verified failed-replay cleanup. No retained
+production database was provisioned.
+Final verification with all PostgreSQL integrations enabled is **430 passed**;
+lint, format, documentation links and package builds pass.
+On 2026-11-03 the user required PostgreSQL and Databricks compatibility too.
+SEC T19 is now implemented and verified on disposable PostgreSQL17.6. Threshold
+PostgreSQL and both Delta adapters remain T20–T22 and still gate G2. Pin exact numeric text, checked
 decimal ranges and UTC/date types before storage; never coerce FTD balances
 to floats/int64. See [the platform contract](../../specs/spec011/data_contract.md#9-storage-and-platform-compatibility).
 T18 is complete: config foundation is implemented in
@@ -99,9 +114,8 @@ remains PARTIAL/NOT_CERTIFIED. Full suite **316 passed, 2 existing opt-in
 PostgreSQL skips**; Ruff, changed-file format and sdist/wheel build pass.
 Evidence: `data/sec_ftd/t04-verification.json` and
 [the local runbook](../deployment/sec_ftd_runbook.md). PostgreSQL remains the
-operational default but T19 is required before its first run; no fallback is
-used. Delta/live acquisition/Parquet publication remain absent. T19–T22 live
-backend parity remains open. Interrupted STARTED captures remain visible; do
+operational default and has no SQLite fallback. Delta/live acquisition remain
+absent; T20–T22 backend parity remains open. Interrupted STARTED captures remain visible; do
 not recreate a missing/mismatched bound store or claim automatic replay.
 T05 extends that checkpoint: **346 passed, 2 skipped**; a fourth unchanged
 capture leaves 117,025 fact versions, four audits and PARTIAL real coverage.
@@ -268,10 +282,9 @@ retention continue within the existing internal-research scope.
 **Next-agent pickup point:** preserve the NAAIM pause at the top of this file;
 read the [program map](../securities_finance/README.md),
 [roadmap](../securities_finance/roadmap.md) and Spec011's four documents.
-Continue S11-T07 coherent Parquet publication; T06 replay is verified.
-T03/T04 are complete for local SEC ingestion; T18 is complete for both packages.
-T19–T22 PostgreSQL/Delta implementation
-and actual integration evidence are required before Spec011 G2.
+Continue S11-T08 Nasdaq list/coverage contract. SEC T03–T07 and T19 are
+verified; T18 is complete for both packages. T20–T22 threshold PostgreSQL/Delta
+implementation and actual integration evidence remain required before Spec011 G2.
 The T02 September sample reconciliation is complete. Older recommendations below are historical context;
 Specs011→012→013→014→015 govern the requested next builds. The documentation
 branch is `docs/securities-finance-program` (planning commit `1b2e73b`); the

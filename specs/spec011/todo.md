@@ -3,9 +3,10 @@
 **Status:** T01 documentary review recorded; T02 complete for two approved local
 September2026 archives; T03 bounded parser and rejected-input retention complete.
 T18 portable types/serialization are complete for both source packages.
-T05 revisions and T06 deterministic offline replay are complete. Next: T07 Parquet publication.
-PostgreSQL/Databricks adapters and live parity in T19–T22 remain unimplemented.
-**Updated:** 2026-11-03. Evidence: [source_review.md](source_review.md).
+T05 revisions, T06 deterministic offline replay, T07 coherent Parquet publication
+and the SEC-owned T19 PostgreSQL adapter are complete. Next: T08 Nasdaq list
+contract. Threshold PostgreSQL and both Databricks adapters remain T20–T22.
+**Updated:** 2026-11-04. Evidence: [source_review.md](source_review.md).
 IDs below use S11- prefixes; R/A IDs refer to [README](README.md). Common
 requirements C01–C11 apply to every task. Estimated scopes are S=1–2 files and
 M=3–5 files. Split a task further if the actual change exceeds that scope.
@@ -185,28 +186,49 @@ PostgreSQL/Delta activation or source-store rewrite occurred.
 
 **Dependencies:** T06. **Scope:** M. **Requirements:** R07,N02.
 
-- [ ] Stage typed files, committed DB snapshot metadata and atomic current pointer.
-- [ ] Recover pending/staged publication deterministically under the root lock.
-- [ ] Never expose a partial new generation or falsely successful watermark.
+- [x] Stage typed files, committed DB snapshot metadata and atomic current pointer.
+- [x] Recover pending/staged publication deterministically under the root lock.
+- [x] Never expose a partial new generation or falsely successful watermark.
 
 **Verify:** A10 failure injections at staging/commit/finalize/pointer transitions;
 reopening uses either coherent old or coherent completed new snapshot.
 **Likely files:** publisher, pipeline, recovery helper, publication tests.
 
+**Complete:** terminal captures publish exact-schema `facts`, current `gold`,
+versioned `coverage` and `audit` files. Database state advances STAGED →
+COMMITTED → PUBLISHED; only atomic `parquet/current.json` selects a consumer
+generation. Recovery finishes a valid pending generation or marks it ABANDONED
+before the next capture, which then publishes its own state. Failure injection
+covers partial file writes, rename, pointer and post-pointer watermark failures.
+The real isolated T06 root published 117,025 facts/Gold rows plus four
+coverage/audit rows with exact decimal and UTC timestamp Arrow types.
+
 ## S11-T19 — Deliver the SEC FTD PostgreSQL adapter
 
 **Dependencies:** T07,T18. **Scope:** M. **Requirements:** R03,R06,R07,R12,N03.
 
-- [ ] Implement source-owned PostgreSQL schema/transactions, writer serialization,
+- [x] Implement source-owned PostgreSQL schema/transactions, writer serialization,
   warehouse identity and sanitized environment-based connection configuration.
-- [ ] Run the same capture/revision/reversion/withdrawal/replay/cutoff cases as
+- [x] Run the same capture/revision/reversion/withdrawal/replay/cutoff cases as
   SQLite, including exact quantities/prices, failed promotion and equal clocks.
-- [ ] Test rollback, concurrent/retried captures and wrong schema/root identity
+- [x] Test rollback, concurrent/retried captures and wrong schema/root identity
   against a dedicated disposable PostgreSQL database; preserve existing stores.
 
 **Verify:** A14 actual SQLite/PostgreSQL normalized parity, with engine version
 and test evidence recorded. **Likely files:** PostgreSQL adapter, source config,
 connection example, backend-contract tests, PostgreSQL integration tests.
+
+**Complete for SEC FTD:** the configured schema must already exist and be empty
+of SEC-owned tables for a new root. Environment-only credentials, optional role,
+native DATE/TIMESTAMPTZ/NUMERIC, a session advisory writer lock, transactional
+promotion and root/database identity binding are implemented without fallback.
+Actual PostgreSQL17.6 disposable-database tests cover large exact values,
+corrections, reversions, equal clocks/cutoffs, evidence-gated withdrawal,
+rollback/failed promotion, concurrent retry, wrong-root refusal, Parquet and
+SQLite → PostgreSQL replay. Failed replay removes only its newly created,
+identity-verified tables and is retryable. T20–T22 remain open.
+Final repository verification with every PostgreSQL integration enabled:
+**430 passed**, Ruff/lint/format, documentation links and sdist/wheel build pass.
 
 ## S11-T20 — Deliver the threshold PostgreSQL adapter
 

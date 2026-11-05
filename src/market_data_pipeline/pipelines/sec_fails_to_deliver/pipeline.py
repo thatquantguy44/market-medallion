@@ -2,7 +2,6 @@
 
 import hashlib
 import json
-import sqlite3
 import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
@@ -17,17 +16,21 @@ from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
     parse_manifest,
 )
 from market_data_pipeline.pipelines.sec_fails_to_deliver.outcomes import make_outcome, write_outcome
+from market_data_pipeline.pipelines.sec_fails_to_deliver.publication import (
+    publish_new,
+    recover_publications,
+)
 from market_data_pipeline.pipelines.sec_fails_to_deliver.storage import IDENTITY
 from market_data_pipeline.pipelines.sec_fails_to_deliver.versions import knowledge_cutoff
-from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import SQLiteWarehouse
+from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import (
+    is_database_error,
+    warehouse_for,
+)
 from market_data_pipeline.shared.files import utc_timestamp
 
 
 def _runtime(path):
-    config = load_config(Path(path))
-    if config.warehouse != "sqlite":
-        raise ValueError("SEC FTD PostgreSQL persistence is not implemented yet (T19); no fallback")
-    return config
+    return load_config(Path(path))
 
 
 def _fact(row, receipt, captured_at):
@@ -117,7 +120,8 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
     now = clock or (lambda: datetime.now(UTC))
     captured_at = datetime.fromisoformat(utc_timestamp(now()))
     run_id = uuid.uuid4().hex
-    with SQLiteWarehouse(config.root, config.storage) as warehouse:
+    with warehouse_for(config) as warehouse:
+        recover_publications(config.root, warehouse)
         with warehouse.transaction():
             sequence = warehouse.next_capture_sequence()
             started = {
@@ -218,12 +222,14 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                 if parsed is not None and receipt is not None
                 else None,
             )
-        except (ValueError, sqlite3.DatabaseError) as exc:
+        except Exception as exc:
+            if not isinstance(exc, ValueError) and not is_database_error(exc):
+                raise
             status, coverage_state = "REJECTED", "FAILED"
             error_code = (
                 str(exc) if str(exc) == "OVERLAPPING_PARTITION" else "STORAGE_VALIDATION_FAILED"
             )
-            if isinstance(exc, sqlite3.DatabaseError):
+            if is_database_error(exc):
                 status, error_code = "FAILED", "WAREHOUSE_WRITE_FAILED"
             audit.update(status=status, row_count=0, error_code=error_code)
             warehouse.promote_partition(
@@ -245,6 +251,7 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
                     warehouse.fact_fingerprint(run_id),
                 ),
             )
+        publication = publish_new(config.root, warehouse)
         return {
             "pipeline": "sec-fails-to-deliver",
             "run_id": run_id,
@@ -256,6 +263,8 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
             "source_coverage": "NOT_CERTIFIED",
             "raw_sha256": raw_hash,
             "error_code": error_code,
+            "snapshot": publication["snapshot"],
+            "snapshot_id": publication["snapshot_id"],
         }
 
 
@@ -270,12 +279,11 @@ def gold(
     clock = knowledge_cutoff(as_of, as_of_sequence)
     as_of = datetime.fromisoformat(clock) if clock is not None else None
     config = _runtime(config_path)
-    if (
-        not (config.root / ".warehouse.json").is_file()
-        or not (config.root / "warehouse.sqlite3").is_file()
+    if not (config.root / ".warehouse.json").is_file() or (
+        config.warehouse == "sqlite" and not (config.root / "warehouse.sqlite3").is_file()
     ):
         raise ValueError("SEC FTD warehouse does not exist")
-    with SQLiteWarehouse(config.root, config.storage) as warehouse:
+    with warehouse_for(config) as warehouse:
         cutoff = {"as_of": as_of, "as_of_sequence": as_of_sequence}
         rows = warehouse.select_facts(limit=limit, include_withdrawn=include_withdrawn, **cutoff)
         count = warehouse.count_facts(include_withdrawn=include_withdrawn, **cutoff)

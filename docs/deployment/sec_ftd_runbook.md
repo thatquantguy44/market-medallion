@@ -1,22 +1,20 @@
 # SEC FTD local ingestion runbook
 
-T04 implements authorized local ZIP capture, exact typed SQLite facts, audit,
-coverage and database-backed Gold. This is a manual research slice. PostgreSQL
-remains the selected operational default, but its adapter is T19; Delta is T21.
-Neither is silently substituted or activated. T05 adds observed corrections,
-reversions, cutoff queries and evidence-gated withdrawals. SEC HTTP acquisition,
-jobs, schedules and Parquet publication remain future tasks. T06 offline replay
-is implemented for a separate SQLite destination.
+T04 implements authorized local ZIP capture, exact typed facts, audit, coverage
+and database Gold. T05 adds revisions/cutoffs/withdrawals, T06 replay, T07
+coherent Parquet and T19 the SEC PostgreSQL adapter. SQLite and PostgreSQL are
+explicit selections with no fallback. Delta remains T21. SEC HTTP acquisition,
+jobs and schedules remain future tasks. This is a manual research slice.
 NAAIM remains paused.
 
 ## Configuration and first local run
 
 Read the [pipeline-specific config guide](../../config/sec_fails_to_deliver/README.md).
 Copy its example to ignored `config/sec_fails_to_deliver/pipeline.local.yml`.
-For this delivered SQLite slice, explicitly set `warehouse: sqlite` and choose
-a new empty pipeline-owned `root`. Keep Databricks disabled. The checked-in
-example intentionally stays `warehouse: postgres` and returns a T19 error for
-`run` until that adapter exists. No password or `.env` is needed for SQLite.
+Choose `warehouse: sqlite` or `postgres`, a new empty pipeline-owned `root`, and
+keep Databricks disabled. PostgreSQL also requires an existing writable schema
+and the password environment variable named in YAML. No password is needed for
+SQLite; neither backend silently falls back to the other.
 
 ```bash
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver validate-config \
@@ -29,6 +27,8 @@ example intentionally stays `warehouse: postgres` and returns a T19 error for
   --partition september_2026_b
 .venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver gold \
   --config config/sec_fails_to_deliver/pipeline.local.yml --limit 20
+.venv/bin/python -m market_data_pipeline.pipelines.sec_fails_to_deliver publish \
+  --config config/sec_fails_to_deliver/pipeline.local.yml
 ```
 
 These are implemented commands. The partition names select configured local
@@ -43,7 +43,7 @@ whether the selected backend is implemented, not whether a server is reachable.
 <root>/
   .writer.lock
   .warehouse.json
-  warehouse.sqlite3
+  warehouse.sqlite3   # SQLite only; PostgreSQL state is in the configured schema
   bronze/<run_id>/
     manifest.yml
     storage.json
@@ -52,10 +52,15 @@ whether the selected backend is implemented, not whether a server is reachable.
     receipt.json
     outcome.json       # new T06 terminal admission/fact fingerprint receipt
   replay.json          # completion plus pinned full capture inventory
+  parquet/
+    current.json       # sole consumer selector
+    snapshots/<snapshot_id>/{facts,gold,coverage,audit}.parquet
+    snapshots/<snapshot_id>/manifest.json
 ```
 
-The root marker and DB bind the dataset/regime, SQLite backend, warehouse ID,
-storage contract ID and record-schema versions. Reuse only the matching config;
+The root marker and DB bind dataset/regime, backend, warehouse ID, storage
+contract and record-schema versions; PostgreSQL also binds database/schema.
+Reuse only the matching config;
 do not change numeric types/backend on a bound root or move a different DB under
 its marker. Unbound nonempty roots, missing artifacts, symlinked DB/marker and
 identity disagreements fail before input capture. No existing store is reset.
@@ -68,10 +73,39 @@ completion, never the historical settlement date. Original provider publication
 and original download time remain unknown. All persisted knowledge clocks use UTC.
 
 Each run reserves a sequence and STARTED audit under the root lock. Accepted
-facts, coverage and terminal audit commit in one SQLite transaction. Gold is the
+facts, coverage and terminal audit commit in one database transaction. Gold is the
 `sec_ftd_gold` database view, not a filesystem export. Reopening selects the same
 exact observations. An unchanged payload creates a new capture/audit and coverage
 observation, with zero new fact versions and unchanged original first-seen.
+
+## Parquet publication and recovery
+
+Every terminal capture stages exact Arrow-schema `facts`, current `gold`, all
+coverage versions and audit rows. File checksums and row counts are sealed in
+`manifest.json`; the database advances STAGED → COMMITTED → PUBLISHED. Only the
+atomic `parquet/current.json` pointer makes a generation visible. Never glob all
+snapshot folders.
+
+On the next `run` or explicit `publish`, recovery validates pending checksums,
+schemas and counts. A complete generation is finalized and selected; an
+incomplete one is ABANDONED without moving the prior pointer. Recovery occurs
+before a new capture, and that new capture then publishes its own generation.
+This prevents a recovered old generation from becoming a false watermark for
+newer committed data.
+
+## PostgreSQL operation
+
+Provision the database, login/optional role and schema outside this pipeline;
+do not place passwords in YAML. Load the trusted `.env` into the process, then
+use the same `run`, `gold`, `publish` and replay commands. A new root requires
+no existing `sec_ftd_*` tables/view in its configured schema. Once bound, the
+root marker and database identity must agree. Native DATE, TIMESTAMPTZ and
+NUMERIC(precision,scale) preserve the portable contract. A session advisory
+lock serializes database writers in addition to the root filesystem lock.
+
+Use a dedicated empty schema for integration tests. The opt-in suite reads
+`MARKET_DATA_TEST_POSTGRES_DSN`; it creates and drops only random test schemas.
+Do not point it at a schema containing retained state.
 
 ## Outcomes and limits
 
@@ -203,7 +237,10 @@ Nonempty/overlapping destinations are rejected. A concurrent writer populating
 the destination prevents the rename. `replay.json` records rebuild completion;
 its generated time does not change observation knowledge. CLI exit0 means a
 faithful rebuild, even when the reported history includes rejected/failed runs.
-Parquet/pointer recovery is still T07; PostgreSQL replay requires T19.
+Replay publishes a coherent Parquet generation before exposing its destination.
+The destination may be SQLite or an empty PostgreSQL target. PostgreSQL replay
+failure removes only tables created by that invocation after verifying their
+new warehouse identity; a preexisting/mismatched store is never cleaned.
 
 ## Verified September checkpoint
 
@@ -234,7 +271,15 @@ is `config/sec_fails_to_deliver/t06-verification.local.yml`; aggregate evidence
 is `data/sec_ftd/t06-verification.json`. Configured live paths/CA are deliberately
 unavailable in that verification to prove the offline boundary.
 
-Next: [S11-T07](../../specs/spec011/todo.md#s11-t07--publish-coherent-ftd-parquet-snapshots)
-coherent Parquet snapshots and publication recovery. PostgreSQL
-and Delta engine parity, SEC acquisition and research exports remain separate
+T07 real-data verification published 117,025 typed fact/Gold rows and four
+coverage/audit rows from that isolated T06 root. Quantity is decimal128(38,0),
+price decimal128(38,12), and knowledge clocks are UTC timestamps. T19 was tested
+against disposable PostgreSQL17.6 for corrections/reversions, equal-clock
+cutoffs, evidence-gated withdrawal, exact values, rollback/failed promotion,
+concurrency, root identity, replay cleanup/retry and Parquet.
+The final full suite with PostgreSQL integrations enabled is **430 passed**;
+Ruff, formatting, documentation validation and sdist/wheel builds also pass.
+
+Next: [S11-T08](../../specs/spec011/todo.md#s11-t08--pin-nasdaq-list-and-coverage-contract).
+Delta, threshold adapters, SEC acquisition and research exports remain separate
 unchecked deliveries; see the [source checkpoint](../../specs/spec011/source_review.md).

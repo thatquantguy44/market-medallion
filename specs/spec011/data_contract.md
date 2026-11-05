@@ -172,8 +172,8 @@ required for Spec011, for both SEC FTD and exchange-threshold packages. SQLite
 remains the offline development backend. PostgreSQL is an alternative operational
 warehouse; Databricks consumes a validated committed snapshot into Delta. This
 does not require Spark in the parser or make Databricks a local ingestion backend.
-The SEC SQLite adapter is implemented; PostgreSQL/Delta adapters remain absent.
-R12/A14/A15 still gate full backend compatibility.
+SEC SQLite/PostgreSQL and coherent Parquet are implemented; threshold PostgreSQL
+and both Delta adapters remain absent. R12/A14/A15 still gate full Spec011 parity.
 
 | Logical value | SQLite | PostgreSQL | Parquet / Databricks Delta |
 | --- | --- | --- | --- |
@@ -245,7 +245,8 @@ The SEC FTD runtime settings live in
 The checked-in `pipeline.example.yml` is copied to ignored `pipeline.local.yml`;
 an optional ignored `.env` holds the variable named by `postgres.password_env`.
 The user confirmed **PostgreSQL as default** and **Databricks disabled until
-its target is configured**. No actual connection or target has been provisioned.
+its target is configured**. PostgreSQL17.6 was provisioned only as a disposable
+integration target; no retained production database or Delta target is claimed.
 
 Runtime config version1 has explicit pipeline identity, root/backend, PostgreSQL
 settings, Delta target settings, storage profile and named manifest/input pairs.
@@ -262,9 +263,9 @@ conversion are enforced contract rules. A SHA-256 `storage_contract_id` includes
 the pipeline and storage settings, excludes connection/path settings and must
 be bound to the durable root by T04. Changing precision/scale requires a distinct
 storage identity or an explicit migration; the loader alone does not enforce
-persisted root binding. T04 now enforces that binding for SQLite. T18 Arrow/Spark
-schemas and serialization round trips are complete; PostgreSQL and Delta
-adapters remain absent.
+persisted root binding. SQLite and SEC PostgreSQL enforce that binding. T18
+Arrow/Spark schemas and serialization round trips are complete; threshold
+PostgreSQL and Delta adapters remain absent.
 
 Implemented commands are `validate-config --config ...` and
 `inspect --config ... --partition ...`. Config-mode inspection selects exactly
@@ -333,18 +334,18 @@ and publication-journal operations. Future adapters must preserve equal-clock
 capture ordering and validate all records before commit. The Protocols supply
 no persistence, revision generation, query engine or crash recovery themselves.
 T04's source-owned SQLite adapter implements the local capture/current-selection
-subset; T05 adds observed-as-of, T06 adds replay and publication remains T07.
+subset; T05 adds observed-as-of, T06 replay, T07 Parquet and T19 SEC PostgreSQL.
 
 T18 evidence is real SQLite/Parquet serialization plus native PostgreSQL binding
-and explicit Spark schema tests. Actual PostgreSQL server and Spark/Delta parity
-remain required in A14/A15 and T19–T22. Historical first-seen clocks, new source
+and explicit Spark schema tests. T19 adds actual SEC PostgreSQL server parity;
+threshold PostgreSQL and Spark/Delta remain T20–T22. Historical first-seen clocks, new source
 coverage and warehouse readiness are not inferred from these tests.
 
 ## 12. T04 bounded persistence decisions
 
 The first concrete adapter is SQLite, used through the T18 source-owned boundary.
-PostgreSQL remains the configured operational default; selecting it before T19
-fails before input/root I/O, with no fallback to SQLite. Databricks stays disabled.
+PostgreSQL remains the configured operational default and is implemented by T19,
+with no fallback to SQLite. Databricks stays disabled.
 
 Each attempt reserves an ordered capture/run, writes immutable original manifest
 and storage settings plus a capture receipt, and retains bounded input bytes
@@ -359,8 +360,8 @@ The root and database bind one dataset/regime, backend, warehouse ID, storage
 contract and record-schema versions. Reject incompatible or unbound nonempty
 roots before input capture. A single-root writer lock and SQLite transaction
 serialize run allocation and atomic facts/coverage/audit promotion. Bronze is
-durable before promotion; initial Gold is a database-backed selection, not the
-Parquet/current-pointer publisher planned in T07. Interrupted STARTED attempts
+durable before promotion; initial Gold is database-backed. T07 adds the separate
+Parquet/current-pointer publication journal. Interrupted STARTED attempts
 remain visible for recovery; they do not imply fact promotion or success.
 
 A valid local file imports reported facts with MATCHED validation and PARTIAL
@@ -378,7 +379,7 @@ The store has 117,025 unique facts, 663 missing prices and 21 observed settlemen
 quantity sums reconcile. First-seen is actual November3 acquisition completion,
 with separate acquisition-start clocks in Bronze. No PostgreSQL/Delta engine
 was touched. See the [runbook](../../docs/deployment/sec_ftd_runbook.md) and
-ignored `data/sec_ftd/t04-verification.json`. T05/T06 are delivered below; next is T07.
+ignored `data/sec_ftd/t04-verification.json`. Later sections supersede this checkpoint.
 
 ## 13. T05 observed-revision decisions
 
@@ -433,14 +434,14 @@ the normal warehouse boundary. Never re-admit a historical rejection under a
 newer rule. Verify each reconstructed run's fact count/hash against its outcome.
 
 `replay --source-root ... --config <destination.yml> --max-captures 1000` requires
-an explicitly selected SQLite destination with the same storage contract and
-Delta disabled. The destination must be empty, separate and nonoverlapping with
+an explicitly selected SQLite or PostgreSQL destination with the same storage
+contract and Delta disabled. The destination must be empty, separate and nonoverlapping with
 the source. Build in a private sibling staging root, verify artifacts and logical
 state, then rename the completed root into place. Failure removes only this
 invocation's staging root; no partial destination is published. A new warehouse
 identity is minted while capture/version identities are retained. Source input,
 manifest and evidence paths in live YAML are never opened; no transport or
-network preflight is invoked. Parquet publication/recovery remains T07.
+network preflight is invoked. T07 publication runs before destination exposure.
 
 Acceptance A09: invented corrections/reversions, equal-clock cutoffs, unchanged
 captures, complete withdrawals/reappearance, rejection/failure and receipt1/2
@@ -448,3 +449,36 @@ replay yield equal facts, coverage, audit and Gold. Exercise missing/damaged
 artifacts/outcomes, unsupported parser/schema versions, sequence ambiguity,
 nonempty/overlapping targets and injected promotion failure. Reconcile the real
 September root into an isolated destination without changing original knowledge.
+
+## 15. T07 coherent Parquet publication decisions
+
+Publish four exact-schema files per immutable generation: all fact versions,
+current non-withdrawn Gold, all coverage versions and audit rows. Each manifest
+binds snapshot/run/capture, warehouse/storage/schema identities, row counts and
+file SHA-256 values. The database publication journal advances STAGED →
+COMMITTED → PUBLISHED; only atomic `parquet/current.json` selects consumers.
+
+Recovery validates checksums, Arrow metadata and row counts. A complete pending
+generation is finalized idempotently; an incomplete one is ABANDONED without
+moving the prior pointer. Recovery precedes a new capture, and the new capture
+then publishes its own state. Partial writes, rename, pointer and post-pointer
+watermark failures therefore expose either the prior coherent generation or a
+fully verified newer one, never a mixed table set or false current watermark.
+
+## 16. T19 SEC PostgreSQL decisions
+
+The database/schema must exist; a new pipeline root requires no preexisting
+SEC-owned tables or view. Credentials are read only from the configured
+environment-variable name at connection time. The adapter binds root and
+database identities plus backend/database/schema/storage contracts, uses native
+DATE/TIMESTAMPTZ/NUMERIC(precision,scale), and serializes writers with a
+PostgreSQL session advisory lock in addition to the root lock. Promotion and
+publication transitions are transactional; no SQLite fallback exists.
+
+Actual PostgreSQL17.6 integration tests cover corrections/reversions,
+equal-clock cutoffs, exact values above int64, evidence-gated withdrawal,
+failed-promotion rollback, concurrent retry, wrong-root refusal, Parquet and
+SQLite→PostgreSQL replay. Failed replay cleanup is allowed only for tables newly
+created by that invocation after the stored database identity matches its root;
+preexisting or changed stores are never dropped. This evidence closes SEC T19,
+not threshold T20 or Delta T21/T22.

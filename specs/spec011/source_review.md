@@ -287,11 +287,36 @@ file's SHA-256 remains unchanged. Evidence is ignored
 `data/sec_ftd/t06-verification.json`; the ignored destination config intentionally
 names unavailable live paths and CA. No provider request, PostgreSQL/Delta
 integration, extra source capture, real correction or withdrawal was invented.
-Population coverage remains PARTIAL/NOT_CERTIFIED. Next numbered task: T07.
-The user's subsequent compatibility requirement is recorded in R12/A14/A15:
-PostgreSQL warehouse and Databricks Delta delivery/parity are required before
-G2 in T19–T22. No PostgreSQL/Delta adapter or engine verification exists yet.
+Population coverage remains PARTIAL/NOT_CERTIFIED. T07/T19 are verified below.
+The user's compatibility requirement is recorded in R12/A14/A15. SEC PostgreSQL
+is implemented; threshold PostgreSQL and Databricks Delta remain T20–T22.
 T03 rejected-input retention is complete; preserve unknown clocks and
 coverage limitations. S11-T02 sample conformance is complete for these two
 archives only. Full Spec011/G2, exchange rights/conformance and persistent
 publication remain open. NAAIM remains paused.
+
+## T07 Parquet and T19 SEC PostgreSQL checkpoint
+
+T07 publishes immutable exact-schema facts, current Gold, coverage and audit
+files with checksums/counts in a manifest, a database publication journal and an
+atomic current pointer. Failure injection covers partial writes, finalization,
+pointer and watermark boundaries. Recovery completes valid pending state or
+abandons it before a new capture, which then publishes its own generation.
+
+The isolated T06 real-data root published 117,025 facts, 117,025 Gold rows and
+four coverage/audit rows. Arrow types include decimal128(38,0) quantity,
+decimal128(38,12) price and UTC microsecond timestamps. Source population
+coverage remains PARTIAL/NOT_CERTIFIED; this is storage/publication evidence,
+not new provider conformance.
+
+T19 was exercised against a disposable `postgres:17.6-alpine` database with
+random dedicated schemas. Tests cover native DATE/TIMESTAMPTZ/NUMERIC, exact
+large values, corrections/reversions, equal clocks/cutoffs, reviewed-proof
+withdrawal and SQLite→PostgreSQL replay, transaction rollback/failed promotion,
+concurrent retry, wrong-root refusal, Parquet and failed-replay cleanup/retry.
+Only newly created identity-matched test tables were dropped; existing AAII,
+FRED and other database services were not used. No retained production SEC
+database, provider request, Delta publication or schedule was created.
+
+Next numbered task: S11-T08 Nasdaq list and coverage contract. T20–T22 remain
+required before the full backend gate can close.

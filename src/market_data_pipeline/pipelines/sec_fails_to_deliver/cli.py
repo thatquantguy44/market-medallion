@@ -16,6 +16,7 @@ from market_data_pipeline.pipelines.sec_fails_to_deliver.manifest import (
     load_manifest,
 )
 from market_data_pipeline.pipelines.sec_fails_to_deliver.pipeline import gold, run
+from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import is_database_error
 
 
 def _json_value(value):
@@ -55,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
             command.add_argument("--manifest", type=Path, required=True)
     config_command = commands.add_parser("validate-config")
     config_command.add_argument("--config", type=Path, required=True)
-    for name in ("run", "gold", "replay"):
+    for name in ("run", "gold", "replay", "publish"):
         command = commands.add_parser(name)
         command.add_argument("--config", type=Path, required=True)
         if name == "run":
@@ -63,7 +64,7 @@ def main(argv: list[str] | None = None) -> int:
         elif name == "replay":
             command.add_argument("--source-root", type=Path, required=True)
             command.add_argument("--max-captures", type=int, default=1000)
-        else:
+        elif name == "gold":
             command.add_argument("--limit", type=int, required=True)
             command.add_argument("--as-of", type=_as_of)
             command.add_argument(
@@ -79,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
         if arguments.manifest and (not arguments.input or arguments.partition):
             parser.error("manifest inspection requires --input and no --partition")
     try:
-        if arguments.command in ("run", "gold", "replay"):
+        if arguments.command in ("run", "gold", "replay", "publish"):
             if arguments.command == "replay":
                 from market_data_pipeline.pipelines.sec_fails_to_deliver.replay import replay
 
@@ -88,6 +89,12 @@ def main(argv: list[str] | None = None) -> int:
                 )
             elif arguments.command == "run":
                 result = run(arguments.config, arguments.partition)
+            elif arguments.command == "publish":
+                from market_data_pipeline.pipelines.sec_fails_to_deliver.publication import (
+                    publish_config,
+                )
+
+                result = publish_config(arguments.config)
             else:
                 result = gold(
                     arguments.config,
@@ -97,7 +104,11 @@ def main(argv: list[str] | None = None) -> int:
                     include_withdrawn=arguments.include_withdrawn,
                 )
             print(json.dumps(result, sort_keys=True, default=_json_value))
-            return 0 if arguments.command == "gold" or result["status"] == "SUCCEEDED" else 1
+            return (
+                0
+                if arguments.command in ("gold", "publish") or result["status"] == "SUCCEEDED"
+                else 1
+            )
         if arguments.command == "validate-config":
             config = load_config(arguments.config)
             print(
@@ -110,7 +121,7 @@ def main(argv: list[str] | None = None) -> int:
                         "storage_contract_id": config.storage.contract_id,
                         "partition_ids": sorted(config.partitions),
                         "manifests_validated": False,
-                        "storage_implemented": config.warehouse == "sqlite",
+                        "storage_implemented": True,
                         "delta_implemented": False,
                     },
                     sort_keys=True,
@@ -159,6 +170,11 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     except ValueError as exc:
         print(json.dumps({"error": str(exc)}), file=sys.stderr)
+        return 1
+    except Exception as exc:
+        if not is_database_error(exc):
+            raise
+        print(json.dumps({"error": "configured SEC FTD warehouse is unavailable"}), file=sys.stderr)
         return 1
     print(json.dumps(result, sort_keys=True))
     return 0

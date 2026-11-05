@@ -34,7 +34,12 @@ from market_data_pipeline.pipelines.sec_fails_to_deliver.pipeline import (
     _runtime,
     coverage_record,
 )
-from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import SQLiteWarehouse
+from market_data_pipeline.pipelines.sec_fails_to_deliver.publication import publish_new
+from market_data_pipeline.pipelines.sec_fails_to_deliver.warehouse import (
+    PostgresWarehouse,
+    SQLiteWarehouse,
+    warehouse_for,
+)
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp
 
 
@@ -79,7 +84,7 @@ def _ledger(warehouse, maximum):
             raise ValueError("source ledger exceeds max-captures")
         result[name] = {}
         for row in rows:
-            decoded = schema.decode(dict(row), "sqlite")
+            decoded = schema.decode(dict(row), warehouse.backend)
             if decoded["run_id"] in result[name]:
                 raise ValueError("ambiguous original outcome ledger")
             result[name][decoded["run_id"]] = decoded
@@ -88,7 +93,7 @@ def _ledger(warehouse, maximum):
     sequence = warehouse.connection.execute(
         "SELECT value FROM sec_ftd_sequence WHERE id=1"
     ).fetchone()
-    if sequence is None or sequence[0] != max(
+    if sequence is None or sequence["value"] != max(
         row["capture_sequence"] for row in result["audit"].values()
     ):
         raise ValueError("source capture allocator disagrees with its outcome ledger")
@@ -180,7 +185,9 @@ def _preflight(paths, settings, warehouse, ledger, portable=None):
             raise ValueError("capture knowledge clock regressed in sequence order")
         last = audit["captured_at"]
     if warehouse is not None:
-        total = warehouse.connection.execute("SELECT count(*) FROM sec_ftd_facts").fetchone()[0]
+        total = warehouse.connection.execute(
+            "SELECT count(*) AS count FROM sec_ftd_facts"
+        ).fetchone()["count"]
         if total != sum(item[3]["facts"]["count"] for item in captures):
             raise ValueError("source facts contain unresolved capture lineage")
     return captures, reconciled
@@ -267,7 +274,9 @@ def _verify_final(warehouse, captures):
             or warehouse.fact_fingerprint(run_id) != outcome["facts"]
         ):
             raise ValueError("final replay state differs from the original admission ledger")
-    total = warehouse.connection.execute("SELECT count(*) FROM sec_ftd_facts").fetchone()[0]
+    total = warehouse.connection.execute("SELECT count(*) AS count FROM sec_ftd_facts").fetchone()[
+        "count"
+    ]
     if total != sum(item[3]["facts"]["count"] for item in captures):
         raise ValueError("final replay state has unexpected fact versions")
 
@@ -312,11 +321,14 @@ def replay(source_root: Path, config_path: Path, *, max_captures=1000) -> dict:
         stage = Path(
             tempfile.mkdtemp(prefix=f".{destination.name}.replay-", dir=destination.parent)
         )
+        target = None
         try:
-            with SQLiteWarehouse(stage, config.storage) as target:
+            target = warehouse_for(config, root=stage)
+            with target:
                 for capture in captures:
                     _rebuild(target, capture)
                 _verify_final(target, captures)
+                publication = publish_new(stage, target)
                 counts = Counter(item[4]["status"] for item in captures)
                 index = _capture_index(captures)
                 result = {
@@ -337,6 +349,8 @@ def replay(source_root: Path, config_path: Path, *, max_captures=1000) -> dict:
                     "warehouse_id": target.identity["warehouse_id"],
                     "source_coverage": "NOT_CERTIFIED",
                     "replayed_at": utc_timestamp(datetime.now(UTC)),
+                    "snapshot": str(destination / Path(publication["snapshot"]).relative_to(stage)),
+                    "snapshot_id": publication["snapshot_id"],
                 }
                 atomic_json(stage / "replay.json", result)
             # rename refuses a concurrently populated destination; never delete it.
@@ -345,4 +359,6 @@ def replay(source_root: Path, config_path: Path, *, max_captures=1000) -> dict:
             return result
         finally:
             if stage.exists():
+                if isinstance(target, PostgresWarehouse):
+                    target.cleanup_created_store()
                 shutil.rmtree(stage)

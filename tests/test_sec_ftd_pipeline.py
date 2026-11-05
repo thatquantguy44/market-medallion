@@ -163,12 +163,12 @@ def test_mid_insert_database_failure_rolls_back_facts_and_success_audit_together
         assert warehouse.select_coverage()[0]["coverage_state"] == "FAILED"
 
 
-def test_invalid_manifest_and_unimplemented_postgres_fail_before_root_writes(tmp_path):
+def test_invalid_manifest_and_unconfigured_postgres_fail_before_root_writes(tmp_path):
     path, _ = configured(tmp_path)
     value = yaml.safe_load(path.read_text())
     value["warehouse"] = "postgres"
     path.write_text(yaml.safe_dump(value))
-    with pytest.raises(ValueError, match="T19"):
+    with pytest.raises(ValueError, match="set password environment variable"):
         invoke(path)
     assert not (tmp_path / "root").exists()
     value["warehouse"] = "sqlite"

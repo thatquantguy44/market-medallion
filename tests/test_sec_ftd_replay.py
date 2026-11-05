@@ -245,7 +245,7 @@ def test_target_must_be_empty_nonoverlapping_and_explicit_supported_backend(tmp_
     value = yaml.safe_load(target.read_text())
     value["root"], value["warehouse"] = str(tmp_path / "postgres"), "postgres"
     target.write_text(yaml.safe_dump(value))
-    with pytest.raises(ValueError, match="T19"):
+    with pytest.raises(ValueError, match="set password environment variable"):
         replay(config.root, target)
     assert not (tmp_path / "postgres").exists()
 

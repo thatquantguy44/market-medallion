@@ -27,9 +27,10 @@ and local inspection command, reconciled against both approved September2026
 archives. T18 portable storage types and serialization are complete for both
 source packages. T03–T05 local Bronze/SQLite/audit/Gold, observed revisions,
 cutoff queries and gated withdrawals are implemented, with 117,025 September
-facts. T06 offline replay now reproduces their facts, coverage and audits with
-original clocks/outcomes and an unchanged source. Continue at S11-T07 Parquet publication.
-Spec011 still requires PostgreSQL/Databricks adapters and live parity, Parquet,
+facts. T06 replay preserves facts, coverage, audits, clocks and outcomes. T07
+adds coherent typed Parquet/current-pointer recovery, and SEC T19 adds an
+actual PostgreSQL adapter with disposable-database parity evidence. Continue at
+S11-T08. Spec011 still requires threshold PostgreSQL, both Databricks adapters,
 source acquisition, exchange adapters and research exports. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md). No new job is implemented.
 NAAIM is **paused** and its
@@ -56,8 +57,8 @@ See [the package layout and import migration guide](docs/development/pipeline_la
 SEC FTD has its own [configuration folder and decision guide](config/sec_fails_to_deliver/README.md).
 Its `validate-config` and config-based local `inspect` commands are implemented;
 PostgreSQL is the selected default and Databricks publication stays disabled
-until configured. SEC SQLite ingestion/Gold are implemented; PostgreSQL and
-Delta adapters remain pending under Spec011.
+until configured. SEC SQLite/PostgreSQL ingestion, Gold, replay and coherent
+Parquet are implemented; Delta remains pending under Spec011.
 
 ## Run the first slice
 
