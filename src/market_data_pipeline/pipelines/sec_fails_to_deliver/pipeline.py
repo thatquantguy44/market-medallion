@@ -220,9 +220,7 @@ def run(config_path: Path, partition: str, *, clock=None) -> dict:
         except (ValueError, sqlite3.DatabaseError) as exc:
             status, coverage_state = "REJECTED", "FAILED"
             error_code = (
-                str(exc)
-                if str(exc) == "OVERLAPPING_PARTITION"
-                else "STORAGE_VALIDATION_FAILED"
+                str(exc) if str(exc) == "OVERLAPPING_PARTITION" else "STORAGE_VALIDATION_FAILED"
             )
             if isinstance(exc, sqlite3.DatabaseError):
                 status, error_code = "FAILED", "WAREHOUSE_WRITE_FAILED"

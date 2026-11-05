@@ -363,8 +363,7 @@ def test_research_export_is_attributed_delayed_and_current_vintage_only(tmp_path
         "source": "NAAIM Exposure Index®",
         "dataset": "naaim-exposure-index-public-delayed",
         "attribution": (
-            "Source: NAAIM Exposure Index® "
-            "(National Association of Active Investment Managers)."
+            "Source: NAAIM Exposure Index® (National Association of Active Investment Managers)."
         ),
         "authorized_research_use_reference": "user-confirmed-naaim-report-display-2026-11-02",
         "knowledge_basis": "CURRENT_VINTAGE",
@@ -420,15 +419,27 @@ def test_cli_research_export_requires_its_separate_permission_reference(
         cli,
         "export_research_artifact",
         lambda root, path, *, research_use_reference: {
-            "root": str(root), "path": str(path), "reference": research_use_reference
+            "root": str(root),
+            "path": str(path),
+            "reference": research_use_reference,
         },
     )
-    assert cli.main([
-        "--root", str(tmp_path), "--export-research", str(destination),
-        "--research-use-reference", "user-confirmed-naaim-report-display-2026-11-02",
-    ]) == 0
+    assert (
+        cli.main(
+            [
+                "--root",
+                str(tmp_path),
+                "--export-research",
+                str(destination),
+                "--research-use-reference",
+                "user-confirmed-naaim-report-display-2026-11-02",
+            ]
+        )
+        == 0
+    )
     assert json.loads(capsys.readouterr().out) == {
-        "root": str(tmp_path), "path": str(destination),
+        "root": str(tmp_path),
+        "path": str(destination),
         "reference": "user-confirmed-naaim-report-display-2026-11-02",
     }
 
