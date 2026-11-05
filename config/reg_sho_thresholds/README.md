@@ -69,3 +69,13 @@ Unity Catalog publication is explicit through
 `notebooks/publish_reg_sho_thresholds_delta.py`; it never runs after ingestion
 or starts a schedule automatically. Local Spark/Delta parity is verified;
 a Databricks workspace run remains separate.
+
+
+T17's bounded [research acceptance](../../specs/spec011/acceptance.md) includes
+ten authentic October26–30 NASDAQ/NYSE files and the operator's verbal-permission
+attestation. The sample config is local and disabled again after capture.
+For NYSE, the adapter probes its canonical published source page, then reuses
+that client for the exact configured Download GET with `Accept: */*`. It records
+the probe URL in the capture metadata. All other routing/TLS and configuration
+gates remain in force; no recurring job or public display is enabled by this
+acceptance.

@@ -6,7 +6,8 @@ are complete for both sources. T03/T04 complete immutable Bronze, root-bound
 SQLite facts/coverage/audit and database Gold. T05 observed revisions, cutoff
 queries and evidence-gated withdrawals are complete. T06 replay, T07 Parquet
 publication, SEC T19 PostgreSQL parity and T21 Delta publication are verified.
-Threshold T20 PostgreSQL and T22 local Spark/Delta are verified; T17/G2 review remains.
+Threshold T20 PostgreSQL and T22 local Spark/Delta are verified. T17/G2 is complete
+for the bounded native-source scope; see [acceptance](acceptance.md).
 Canonical tasks: [todo.md](todo.md).
 See [source review and commands](source_review.md) for actual verification.
 This is the first research delivery in the [program roadmap](../../docs/securities_finance/roadmap.md).

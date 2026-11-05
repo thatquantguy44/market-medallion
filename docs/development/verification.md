@@ -331,3 +331,47 @@ Databricks/Unity Catalog workspace write, cloud object, schedule activation or
 NAAIM resume is part of this verification. The original provider payloads,
 warehouses, configs and secrets remain unchanged. T17 source-evidence/provider-use
 review and G2 acceptance remain outstanding before Spec012.
+
+
+## Spec011 T17 bounded research delivery — 2026-11-05
+
+Branch `chore/spec011-t17-acceptance`, from merged `main` `5b092af` (PR #7).
+The [acceptance record](../../specs/spec011/acceptance.md) maps every A01–A15
+criterion to concrete evidence, source-use attestation and selected exclusions.
+
+- Final full repository suite with actual disposable PostgreSQL17.6,
+  OpenJDK17, Spark4.0.1 and Delta4.0.1 enabled together: **492 passed, zero skips**.
+  The [machine-readable record](../../specs/spec011/evidence/verification.json)
+  binds counts/versions to implementation, tests and review-script hashes.
+- The two approved SEC September archives reconcile every field and both
+  trailers, all117,025 facts and raw lineage against retained facts and Gold.
+  Original source/snapshot digests remain unchanged. No original retrieval or
+  historical publication clock is invented; coverage remains PARTIAL.
+- All ten authentic October26–30 Nasdaq/NASDAQ and NYSE/NYSE files reconcile
+  source fields, row counts/trailers, original Bronze bytes, normalized values,
+  coverage and capture clocks. Counts are404Nasdaq +4NYSE; NYSE October30 is
+  valid complete-empty. The user attested verbal provider permission; independent
+  documentary license verification is not claimed.
+- Real ten-capture threshold replay and export pass with408membership rows,
+  ten coverage rows and93observed episodes; typed Delta staging also verifies.
+  The ignored local ZIP preserves all ten source payload hashes and provenance.
+- Conformance discovered NYSE HEAD/content-negotiation behavior. Offline
+  regressions first reproduced the failure, then verify the source-page probe,
+  exact configured GET bytes/provenance, one route selection, startup rejection
+  and manifest mismatch gating. Actual subsequent NYSE captures all succeed.
+- Additional characterization covers overlapping/unknown identity mappings and
+  an explicit holiday/weekend episode calendar. No provider data semantics or
+  warehouse schemas changed.
+- Repository Ruff lint/format, `pip check`, package builds and workflow-snapshot
+  integrity pass. CI now supplies an explicit disposable database password in
+  the service and DSN, so both source-specific PostgreSQL suites run rather than
+  skip for a missing password field. QuantSmith's external revision/tree mismatch remains recorded;
+  its checkout/reference were not changed or counted as verified guidance.
+
+The controlled network work was the selected threshold capture and its bounded
+method diagnosis; unit/backend tests made no provider requests. All source bytes
+and raw security rows remain local/ignored; only sanitized aggregate evidence is
+committed. The local acquisition config is disabled again. No production database,
+Databricks workspace write, cloud deployment, schedule activation or NAAIM resume
+occurred. G2 is complete for the selected internal-research native artifacts,
+subject to review/merge; G3/G4 and optional T14 remain separate. Next: Spec012.

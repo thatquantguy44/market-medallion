@@ -2,15 +2,16 @@
 
 **Capability:** `settlement-stress`. **Order:** 1 of 5 in the
 [securities-finance program](../../docs/securities_finance/README.md).
-**Updated:** 2026-11-05. **Status:** SEC T03–T07/T19/T21, threshold T20/T22 and shared T18 are verified.
-SEC now also has bounded exact-URL acquisition, no-request health, stopped
-Dagster and a native QuantMeridian export. Nasdaq and NYSE have independent
-physical manifests/parsers, versioned SQLite membership/coverage, exact-URL
-acquisition, correction/withdrawal history, cutoffs, coverage-qualified episodes,
-health/plan/CLI, stopped Dagster and a native research export. Invented fixtures
-cover both providers; bounded current source responses reconcile the physical
-contracts. Threshold T22 has actual local Spark/Delta evidence for all four tables and
-publication recovery. Final provider-use acceptance and T17/G2 remain open.
+**Updated:** 2026-11-05. **Status:** T17/G2 complete for the bounded native-source
+internal-research delivery, pending review/merge of the closeout branch.
+SEC and threshold SQLite/PostgreSQL history, replay, research exports, bounded
+acquisition, stopped Dagster and actual local Delta parity are verified. Both
+approved September SEC archives and all ten selected October26–30 Nasdaq/NYSE
+files reconcile. Source use relies on the user's verbal-permission attestation,
+recorded separately from independently verified technical evidence. See the
+[acceptance record](acceptance.md) for A01–A15, exclusions and scope decisions.
+G3/G4, wider history, public redistribution and a Databricks workspace run remain
+outside this delivery; T14's joined projection is explicitly deferred.
 
 **Source IDs:** retain `sec-fails-to-deliver`; add `reg-sho-thresholds` for the
 Nasdaq/NYSE list family. **Source packages:**
@@ -119,18 +120,18 @@ regression or NAAIM activation. Common requirements C01–C11 apply in full.
 | S11-A14 | The same invented capture/revision/withdrawal/replay sequence produces equal normalized facts, coverage, audit outcomes and cutoff results in SQLite and a dedicated PostgreSQL test database; leading-zero IDs, counts above int64, exact prices and unknown clocks round-trip unchanged. | R03,R06,R07,R12 |
 | S11-A15 | Explicit-schema Parquet reads and idempotent Delta publication preserve exact values, version IDs, capture ordering and coverage for both sources; an actual Spark/Delta or Databricks integration run proves repeat publication and recovery after an interrupted multi-table publication. Decimal overflow/rounding fails before advancing the consumer generation. | R03,R06,R07,R12 |
 
-The A01/A02 parser components pass invented-fixture tests and the September SEC
-samples reconcile every field and both trailers. Persistent-publication and
-exchange evidence remain open; full acceptance is not claimed by this slice.
+All A01–A15 evidence is reconciled in [the T17 acceptance record](acceptance.md),
+including every selected real-source field, actual backend parity and coherent
+publication recovery. Wider source coverage and G3/G4 remain separate.
 
 ## Gold and consumer boundary
 
-Proposed artifacts are `sec-ftd-research/1` and `reg-sho-thresholds-research/1`.
-An optional `settlement-stress-research/1` projection is owned by
-`pipelines/sec_fails_to_deliver/research.py`. It consumes the documented
-threshold artifact as an input, not threshold internals or its private database.
-The projection publishes source facts side by side and their identity/coverage
-qualification; native source exports remain useful when no mapping is admitted.
+Delivered native artifacts are `sec-ftd-research/1` and `reg-sho-thresholds-research/1`.
+The optional `settlement-stress-research/1` projection is deferred under T14;
+the proposed `pipelines/sec_fails_to_deliver/research.py` is not implemented.
+It would consume the documented threshold artifact and admitted mapping data,
+with input versions and identity/coverage qualifications. Native exports remain
+independent and useful without that extension.
 
 FTD quantity times the supplied price may be exposed only as a separately named
 **previous-close reference-value proxy**, with the price date/basis and null

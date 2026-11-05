@@ -28,8 +28,11 @@ replay, native research exports, bounded acquisition, health and stopped Dagster
 The approved SEC September archives reconcile 117,025 facts. SEC T21 and threshold
 T22 Delta publishers have actual local Spark4.0.1/Delta4.0.1 parity and interrupted
 publication recovery evidence. T22 also stages threshold membership/coverage/audit
-history and derived episodes as a checksummed source snapshot. Continue at T17
-source-evidence/provider-use review and G2 acceptance before Spec012. Databricks
+history and derived episodes as a checksummed source snapshot. T17/G2 is complete
+for the bounded native-source internal-research delivery: both SEC archives and
+ten authentic Nasdaq/NYSE lists reconcile. See the [acceptance record](specs/spec011/acceptance.md)
+for the user-attested permission, evidence and exclusions. Spec012 follows after
+the closeout merges. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).
@@ -58,7 +61,7 @@ SEC FTD has its own [configuration folder and decision guide](config/sec_fails_t
 Its `validate-config` and config-based local `inspect` commands are implemented;
 PostgreSQL is the selected default and Databricks publication stays disabled
 until configured. SEC SQLite/PostgreSQL ingestion, Gold, replay and coherent
-Parquet are implemented; Delta remains pending under Spec011.
+Parquet and Delta are implemented and locally verified under Spec011.
 
 ## Run the first slice
 
@@ -126,8 +129,9 @@ direct-only or proxy-only access. A live run probes once at startup and reuses
 the selected route for its data calls/retries. Proxy URLs come from environment
 variables or a trusted shell-loaded `.env`; `NO_PROXY`, custom CA bundles and
 timeouts are configurable. Local imports and health checks make no probe.
-AAII CLI/Dagster and NAAIM's paused live entrypoints use this client. SEC FTD
-accepts the settings for future HTTP work; its current ingestion remains local.
+AAII CLI/Dagster and NAAIM's paused live entrypoints use this client. SEC FTD and threshold acquisitions use the same run-scoped settings. NYSE
+probes its published source page before its exact configured Download GET;
+all local/replay/health paths remain free of network probes.
 
 Copy [the runtime example](config/postgres.example.yml) to ignored
 `config/config.yaml` and set host, port, database, login `user`, optional effective

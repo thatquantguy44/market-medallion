@@ -21,51 +21,59 @@ new live schedules default stopped.
 
 ## 2026-11-05 latest Spec011 checkpoint — authoritative pickup
 
-**T22 threshold Delta is implemented and verified** on
-`feat/spec011-threshold-delta`, aligned with merged `main` at `0169b4c`
-(prerequisite checkpoint `46c5932`, PR #6). T22 has not been merged into `main`.
-The predecessor includes SEC T21 Delta, source acquisition/health/research
-exports, independent Nasdaq/NYSE parsers and SQLite/PostgreSQL threshold history.
+**T17/G2 is complete for the bounded native-source internal-research delivery**
+on `chore/spec011-t17-acceptance`, from merged `main` `5b092af` (PR #7).
+The [acceptance record](../../specs/spec011/acceptance.md) is the current
+A01–A15 evidence map, source-use decision and reproducibility guide.
 
-T22 adds source-owned `delta_snapshot.py` and `delta.py` under
-`pipelines/reg_sho_thresholds/`, the no-request `stage-delta` CLI, optional disabled
-Databricks target configuration, a source-named notebook and the
-[Delta runbook](../deployment/reg_sho_thresholds_runbook.md#delta-snapshot-and-generation-publication).
-A terminal source snapshot contains exact membership/coverage/audit history and
-derived current episodes with their configured/observed calendar. Deterministic
-row order and content-derived snapshot IDs make repeated staging stable across
-database tie ordering. Immutable revision keys, withdrawals, UTC microseconds,
-provider/market identities, source-root binding and capture sequence are preserved.
-One checksummed generation pins all four Delta table versions. A partial table
-write or failed current-pointer update leaves the previous generation readable;
-retry reuses a sealed generation when one already exists.
+The user confirmed existing Nasdaq/NYSE permission under a verbal agreement
+and declined a document reference. Record this as
+`USER_ATTESTED_VERBAL_PROVIDER_PERMISSION`, not independently verified provider
+license documentation. The accepted scope is the ten selected October26–30,
+2026 Nasdaq/NASDAQ and NYSE/NYSE files, retained local copies and internal
+research. No recurring activation or public redistribution was inferred.
 
-Actual OpenJDK17 / Spark4.0.1 / Delta4.0.1 verification: **2 passed**. Tests compare
-all normalized fields with the source snapshot, exercise both providers,
-correction/reversion/withdrawal, equal-time cutoffs, complete-empty versus
-unavailable/failed lists, episode gaps/censoring, empty tables, cross-source
-rejection and recovery at both publication boundaries. Full offline regression:
-**477 passed, 10 opt-in skips**. Ruff, formatting, dependency checks and sdist/wheel
-builds pass. The separate SEC T21 engine evidence remains in its task record.
+Both approved September SEC archives reconcile all 117,025 facts and their
+source fields/raw lineage against retained facts and Gold. Original digests,
+current pointer and snapshot files remain unchanged; population coverage stays
+PARTIAL/NOT_CERTIFIED. All ten authentic threshold files now reconcile every
+source field, Bronze digest, normalized row and coverage/audit capture clock:
+404 Nasdaq plus four NYSE rows, with a valid empty NYSE October30 list.
+The real ten-capture threshold history replays without network, exports 408
+membership rows, ten coverage rows and 93 observed episodes, and stages typed
+Parquet for Delta. Raw files and the verified ZIP bundle remain ignored under
+`data/spec011-t17/thresholds/`; sanitized aggregate evidence is committed under
+`specs/spec011/evidence/`. Knowledge clocks remain actual November captures.
 
-**Next bounded work is T17 source-evidence/provider-use review and G2 acceptance.**
-Reconcile the existing real-sample evidence and intended Nasdaq/NYSE retention,
-automation and research-display use before claiming Spec011 completion or starting
-Spec012. T22's fixtures do not broaden admitted live use. Databricks workspace
-publication remains untested and owner-disabled; source acquisition defaults and
-all new schedules remain disabled/stopped. NAAIM remains paused.
+Real conformance found and fixed a NYSE acquisition issue: its Download route
+returns HEAD404 and rejects the explicit text/plain preference. The source-owned
+adapter probes the published source page, uses unrestricted content negotiation,
+then reuses the selected run-scoped client for the exact configured GET.
+Regression fixtures prove bytes/provenance, startup rejection and manifest gates;
+shared route fallback and TLS policy are unchanged. Initial failures are retained
+as failed attempts, not mislabeled empty lists.
 
-The repository-local agent-skills snapshot verifies. QuantSmith currently fails
-its revision/tree check against the recorded pin; this task left the external
-checkout and pin untouched and did not treat that checkout as verified guidance.
-Review its drift in a dedicated library-maintenance change before relying on it.
+Final full verification with actual disposable PostgreSQL17.6 and local
+OpenJDK17 / Spark4.0.1 / Delta4.0.1 enabled together: **492 passed, zero skips**.
+Ruff lint/format, dependency checks and sdist/wheel builds pass. All test databases
+were isolated and removed. agent-skills integrity verifies; QuantSmith's external
+revision/tree still differs from its pin and was left untouched/unverified.
+
+**Next source-build work: Spec012 FINRA daily short-sale volume**, after this
+closeout is reviewed/merged. Begin with its existing requirements/data contract,
+provider-use/schema review and selected fixture/sample plan. Spec011's optional
+T14 joined projection remains explicitly deferred; its two native outputs are
+independent. G3 recurring operation is not activated; G4 consumer UI/public
+presentation remains deferred. Databricks workspace publication was not run.
+Checked-in acquisition settings, the local sample acquisition config and all
+schedules remain disabled/stopped. NAAIM remains paused.
 
 ### Safe stopping boundary
 
-T22 implementation and its documentation are on the separate threshold branch.
-Review it against merged `main`. No real provider capture, Databricks
-workspace write, cloud object, schedule activation or NAAIM resume occurred.
-No further Delta engineering is required for T22's local acceptance scope.
+The closeout branch contains the NYSE fix, offline regression/acceptance tests,
+reproducible sample-review scripts and the evidence/status updates. Review it
+against merged `main`; do not treat G2 as a request to activate a service.
+No production database, cloud object, Databricks write or NAAIM resume occurred.
 
 ## Presidential pipeline port and PRES plan — Spec016
 
@@ -117,7 +125,7 @@ inspection commands are implemented on `feat/spec011-sec-ftd-parser`. Both
 approved local September2026 archives reconcile all 117,025 observations and
 their count/quantity trailers. Version2 pins ASCII/LF and explicit Sep1–14 /
 Sep15–30 bounds; no broader completeness or provider authentication is claimed.
-**Exact next numbered task: S11-T17 source-evidence/provider-use review** in
+**Current delivery: S11-T17/G2 accepted for the bounded internal-research scope** in
 [Spec011 tasks](../../specs/spec011/todo.md). SEC T03–T07/T19/T21 and threshold
 T20/T22 are complete: immutable Bronze, SQLite/PostgreSQL persistence,
 revisions/withdrawals, cutoff Gold, offline replay, coherent Parquet publication
@@ -156,7 +164,7 @@ lint, format, documentation links and package builds pass.
 On 2026-11-03 the user required PostgreSQL and Databricks compatibility too.
 SEC T19 and threshold T20 are implemented and verified on disposable
 PostgreSQL17.6; SEC T21 has actual local Delta evidence. T22 now passes local
-engine verification; T17/provider-use acceptance still gates G2. Pin exact numeric text, checked
+engine verification; T17/G2 is closed for the attested bounded scope. Pin exact numeric text, checked
 decimal ranges and UTC/date types before storage; never coerce FTD balances
 to floats/int64. See [the platform contract](../../specs/spec011/data_contract.md#9-storage-and-platform-compatibility).
 T18 is complete: config foundation is implemented in
@@ -179,7 +187,7 @@ PostgreSQL skips**; Ruff, changed-file format and sdist/wheel build pass.
 Evidence: `data/sec_ftd/t04-verification.json` and
 [the local runbook](../deployment/sec_ftd_runbook.md). PostgreSQL remains the
 operational default and has no SQLite fallback. SEC Delta is implemented; T22
-threshold parity is verified; final T17/G2 acceptance remains open. Interrupted
+threshold parity is verified; T17/G2 is now accepted for the bounded scope. Interrupted
 STARTED captures remain visible; do not recreate a missing/mismatched bound store or claim automatic replay.
 T05 extends that checkpoint: **346 passed, 2 skipped**; a fourth unchanged
 capture leaves 117,025 fact versions, four audits and PARTIAL real coverage.
@@ -200,7 +208,7 @@ ingestion/Gold, replay, Parquet, research export and Delta publication. The
 threshold package contains independent Nasdaq/NYSE acquisition/parsing,
 SQLite/PostgreSQL history, replay, episodes, research export and stopped Dagster
 definitions. The other four source packages are absent. Threshold Delta is
-verified; final source-evidence/provider-use acceptance remains open. Do not claim
+verified; final bounded source-evidence/use acceptance is recorded in T17. Do not claim
 source access, historic coverage or consumer features from fixture tests.
 CFTC, Cboe, Nasdaq breadth, OCC, OFR and other
 existing candidates remain queued behind this user-selected sequence.
@@ -345,17 +353,17 @@ retention continue within the existing internal-research scope.
 
 ## Next work
 
-Preserve the NAAIM pause. Read the program map, roadmap and Spec011 task tracker,
-then complete the bounded T17 source-evidence and provider-use review. SEC
-T03–T07/T19/T21, threshold T20/T22 and shared T18 are verified. T22's local Delta
-acceptance closes the remaining adapter task, not the overall G2 gate. Confirm
-A01–A15 evidence, retain the documented real coverage exclusions and obtain the
-intended Nasdaq/NYSE use acceptance before Spec012. Do not activate acquisition,
-schedules or a Databricks workspace as an implied part of that review.
+Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Review
+and merge the T17 closeout, then begin Spec012 on a fresh branch from updated
+`main`. Read Spec012's README, data contract, plan and task list and the program
+roadmap before implementation. Spec011's selected source conformance and A01–A15
+backend/recovery evidence are complete; wider source coverage, recurring
+operation, Databricks workspace activation, public distribution and the optional
+joined projection remain outside this accepted delivery.
 
-Verify both library references before relying on them. agent-skills currently
-passes; QuantSmith's external revision differs from its pin and needs separate
-review, not an automatic refresh.
+Verify the repository-local workflow library before engineering. QuantSmith's
+external checkout still differs from its pin; review that drift separately and
+do not silently refresh it or treat unverified guidance as checked evidence.
 
 The T02 September sample reconciliation is complete. Older recommendations below
 are historical context; Specs011→012→013→014→015 govern the requested next builds.

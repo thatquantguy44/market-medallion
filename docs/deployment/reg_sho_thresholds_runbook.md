@@ -143,9 +143,24 @@ Official contracts checked for this implementation:
 [version-pinned reads](https://docs.delta.io/delta-batch/), and
 [explicit Spark read schemas](https://spark.apache.org/docs/4.0.1/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.schema.html).
 
-## Known completion gates
+## Research-delivery acceptance and later gates
 
-T20 PostgreSQL and T22 actual local Spark 4.0.1 / Delta 4.0.1 parity are verified.
-T17 source-evidence review and the intended Nasdaq/NYSE retention, automation and
-research-use acceptance still gate Spec011 G2. Databricks workspace publication
-has not been exercised. All schedule and acquisition defaults remain disabled.
+T17/G2 is complete for the bounded native-source internal-research delivery;
+see [acceptance and source-use attestation](../../specs/spec011/acceptance.md).
+The ten authentic October26–30 NASDAQ/NYSE files and their original capture
+receipts are retained under ignored `data/spec011-t17/thresholds/`. The local
+ZIP bundles unchanged payloads, their hash/capture manifest and the user's
+verbal-permission attestation. It contains no runtime config or secrets.
+The source population outside those dates/markets is not certified.
+
+NYSE startup uses the canonical published source page rather than the
+GET-only Download route for HEAD, and `Accept: */*` for the exact validated GET.
+The same run-scoped selected client is reused; receipts record its probe URL.
+Startup HTTP rejection still prevents data requests. No global HTTP policy changed.
+
+PostgreSQL17.6 and actual local Spark4.0.1/Delta4.0.1 parity/recovery are verified
+in the full 492-test run with no skips. Databricks workspace publication has not
+been exercised. Broader source use, recurring operation, public redistribution,
+consumer integration and the optional joined projection remain separate scopes.
+All acquisition/schedule defaults and the local sample acquisition config remain
+disabled/stopped; NAAIM remains paused.
