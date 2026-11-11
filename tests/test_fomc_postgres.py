@@ -575,3 +575,167 @@ def test_fomc_discovery_evidence_write_failure_rolls_back_entire_publication(
         list(captures.values()), manifest, root=tmp_path, historical_years=(1936, 1938)
     )
     assert bronze.read_inventory_discovery(saved["run_id"])
+
+
+@pytest.fixture
+def dependency_archive(store, tmp_path):
+    from datetime import datetime
+
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import (
+        PostgresBronzeStore,
+        capture,
+    )
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.dependencies import (
+        PostgresDependencyStore,
+    )
+
+    manifest = load_manifest(Path("manifests/fomc-meeting-minutes.yml"))
+    bronze = PostgresBronzeStore(store)
+    bronze.migrate()
+    dependencies = PostgresDependencyStore(bronze)
+    dependencies.migrate()
+    dependencies.migrate()
+    base = "https://www.federalreserve.gov/monetarypolicy/"
+    samples = {
+        "parent": (
+            base + "parent.htm",
+            "document",
+            b"""<div id="article">
+        <a href="addendum.htm">Addendum to these minutes</a>
+        <img src="files/figure.png" alt="Invented chart"></div>""",
+        ),
+        "addendum": (
+            base + "addendum.htm",
+            "document",
+            b'<div id="article">Invented addendum</div>',
+        ),
+        "figure": (base + "files/figure.png", "asset", b"\x89PNG\r\n\x1a\ninvented"),
+    }
+    ids = {}
+    for name, (url, kind, payload) in samples.items():
+        ids[name] = capture(
+            tmp_path,
+            payload,
+            manifest=manifest,
+            store=bronze,
+            source_url=url,
+            kind=kind,
+            captured_at=datetime.now(UTC),
+            status=200,
+            headers={},
+            max_bytes=2000,
+        )["capture_id"]
+    return bronze, dependencies, manifest, ids
+
+
+def test_fomc_dependency_links_require_exact_archives_and_retain_parentage(
+    store, tmp_path, dependency_archive
+):
+    bronze, dependencies, manifest, ids = dependency_archive
+    with pytest.raises(ValueError, match="expected dependencies"):
+        dependencies.commit(ids["parent"], [ids["addendum"]], manifest, root=tmp_path)
+    check = dependencies.commit(
+        ids["parent"], [ids["addendum"], ids["figure"]], manifest, root=tmp_path
+    )
+    assert (
+        dependencies.commit(
+            ids["parent"], [ids["figure"], ids["addendum"]], manifest, root=tmp_path
+        )
+        == check
+    )
+    evidence = dependencies.read_check(check)
+    assert evidence["parent_capture_id"] == ids["parent"]
+    assert {d["relation"] for d in evidence["dependencies"]} == {
+        "minutes_addendum",
+        "content_asset",
+    }
+    assert len(evidence["dependencies"]) == 2
+    assert store.run_count() == 0 and store.read_inventory() is None
+    # A completed direct dependency check is not a recursive whole-archive claim.
+    leaf = dependencies.commit(ids["addendum"], [], manifest, root=tmp_path)
+    assert dependencies.read_check(leaf)["dependencies"] == []
+
+
+def test_fomc_dependency_link_failure_is_atomic(store, tmp_path, dependency_archive):
+    from psycopg.errors import CheckViolation
+
+    bronze, dependencies, manifest, ids = dependency_archive
+    store.connection.execute(
+        store._query(
+            "ALTER TABLE {schema}.bronze_dependencies "
+            "ADD CONSTRAINT simulated_failure CHECK(false) NOT VALID"
+        )
+    )
+    with pytest.raises(CheckViolation):
+        dependencies.commit(
+            ids["parent"], [ids["addendum"], ids["figure"]], manifest, root=tmp_path
+        )
+    assert (
+        store.connection.execute(
+            store._query("SELECT count(*) FROM {schema}.bronze_dependency_checks")
+        ).fetchone()[0]
+        == 0
+    )
+    assert bronze.read_capture(ids["parent"])
+
+
+def test_fomc_dependency_tampering_blocks_link_and_check_read(store, tmp_path, dependency_archive):
+    bronze, dependencies, manifest, ids = dependency_archive
+    check = dependencies.commit(
+        ids["parent"], [ids["addendum"], ids["figure"]], manifest, root=tmp_path
+    )
+    store.connection.execute(
+        store._query("UPDATE {schema}.bronze_dependency_checks SET evidence='{{}}'::jsonb")
+    )
+    with pytest.raises(ValueError, match="hash"):
+        dependencies.read_check(check)
+    payload_path = tmp_path / "captures" / ids["figure"] / "payload.bin"
+    payload_path.write_bytes(b"corruption")
+    with pytest.raises(ValueError):
+        dependencies.commit(
+            ids["parent"], [ids["addendum"], ids["figure"]], manifest, root=tmp_path
+        )
+
+
+def test_fomc_dependency_assets_inherit_all_bundled_meeting_associations(
+    store, tmp_path, dependency_archive
+):
+    bronze, dependencies, manifest, ids = dependency_archive
+    dependencies.commit(ids["parent"], [ids["addendum"], ids["figure"]], manifest, root=tmp_path)
+    page = {
+        "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1936.htm",
+        "meetings": [],
+    }
+    for day in ("1936-06-01", "1936-07-01"):
+        page["meetings"].append(
+            {
+                "committee_body": "fomc",
+                "event_kind": "meeting",
+                "meeting_dates": [day],
+                "meeting_label_raw": day,
+                "session_label_raw": None,
+                "minutes_status": "listed",
+                "documents": [
+                    {
+                        "document_kind": "minutes",
+                        "document_label_raw": "Invented minutes",
+                        "href": "/monetarypolicy/parent.htm",
+                        "representation": "html",
+                        "provider_release_date": None,
+                    }
+                ],
+            }
+        )
+    inventory = inventory_from_dict({"schema_id": manifest.schema_id, "pages": [page]}, manifest)
+    run = store.save_inventory(inventory, manifest, input_kind="invented_fixture")
+    bronze.link_document(ids["parent"], run["run_id"], inventory.documents[0].document_id)
+    inherited = dependencies.meeting_associations(ids["figure"])
+    assert {r["meeting_id"] for r in inherited} == {m.meeting_id for m in inventory.meetings}
+    assert len(inherited) == 2
+
+
+def test_fomc_dependency_migration_refuses_partial_schema(store, dependency_archive):
+    bronze, dependencies, manifest, ids = dependency_archive
+    store.connection.execute(store._query("DROP TABLE {schema}.bronze_dependencies"))
+    with pytest.raises(ValueError, match="incomplete"):
+        dependencies.migrate()
