@@ -1,0 +1,117 @@
+{
+  "schema_id": "fomc-inventory/1",
+  "pages": [
+    {
+      "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1967.htm",
+      "meetings": [
+        {
+          "committee_body": "fomc",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "1967-01-10"
+          ],
+          "meeting_label_raw": "Invented January meeting",
+          "session_label_raw": null,
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "record_of_policy_actions",
+              "document_label_raw": "Invented bundled policy record",
+              "href": "files/invented-bundle.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            }
+          ]
+        },
+        {
+          "committee_body": "fomc",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "1967-02-07"
+          ],
+          "meeting_label_raw": "Invented February meeting",
+          "session_label_raw": null,
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "record_of_policy_actions",
+              "document_label_raw": "Invented same bundled record",
+              "href": "files/invented-bundle.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            }
+          ]
+        },
+        {
+          "committee_body": "fomc",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "1967-06-20"
+          ],
+          "meeting_label_raw": "Invented June meeting",
+          "session_label_raw": null,
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "minutes_of_actions",
+              "document_label_raw": "Invented minutes of actions",
+              "href": "files/invented-actions.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            },
+            {
+              "document_kind": "memorandum_of_discussion",
+              "document_label_raw": "Invented discussion memorandum",
+              "href": "files/invented-discussion.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1936.htm",
+      "meetings": [
+        {
+          "committee_body": "executive_committee",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "1936-05-25"
+          ],
+          "meeting_label_raw": "Invented Executive Committee meeting",
+          "session_label_raw": "11:30 a.m.",
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "historical_minutes",
+              "document_label_raw": "Invented morning minutes",
+              "href": "files/invented-executive-am.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            }
+          ]
+        },
+        {
+          "committee_body": "executive_committee",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "1936-05-25"
+          ],
+          "meeting_label_raw": "Invented Executive Committee meeting",
+          "session_label_raw": "6:25 p.m.",
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "historical_minutes",
+              "document_label_raw": "Invented evening minutes",
+              "href": "files/invented-executive-pm.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

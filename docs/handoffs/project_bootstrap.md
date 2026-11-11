@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-10.
+Last updated: 2026-11-11.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -19,14 +19,39 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-10 current pickup and AAII manual refresh
+## 2026-11-11 current pickup — FOMC inventory and PostgreSQL
 
-**Planning addition:** [Spec017](../../specs/spec017/README.md) is the lightweight
-FOMC minutes archive draft: complete original documents, current/history inventory,
-full text/OCR status, versioned chunks and observed revisions, with embeddings
-as an optional later enhancement. Its embedded first-slice handoff is
-for future selection; no archive or connector exists. The current FINRA SSV-T05
-pickup, securities-finance order and NAAIM pause remain unchanged.
+The user selected [Spec017](../../specs/spec017/README.md) implementation, reuse of
+the existing PostgreSQL location and a dedicated config folder. FOMC-T01/T02 are
+complete on `feat/spec017-fomc-inventory`: strict normalized inventory/identity,
+source-owned config and transactional PostgreSQL metadata snapshots. **Next is
+[FOMC-T03](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze)**:
+native HTML discovery and complete original-document archiving. The normalized
+candidate format is not a provider API; no native HTML adapter or source capture
+exists yet. Full text/chunks and optional embeddings remain later work.
+
+Use [config/fomc_meeting_minutes/](../../config/fomc_meeting_minutes/README.md).
+Ignored `pipeline.local.yml` points to existing `127.0.0.1:55438`, database
+`additional_market_data`, login `market_data`, role null and schema
+`fomc_meeting_minutes`; passwords remain environment-backed. Six source-owned
+inventory tables are initialized with **zero production inventory imports**.
+Invented integration data existed only in unique test schemas, all removed on
+teardown. No AAII table/config or other source adapter was reused by FOMC.
+The later archival slices must also store original bytes/full text/chunks in
+this same FOMC PostgreSQL namespace alongside filesystem originals.
+
+Verification: **823 offline tests passed, 15 optional skips**; separately **80
+focused FOMC checks passed** including five actual PostgreSQL tests. Real checks
+cover exact metadata/date/hash readback, histories, concurrent/idempotent retries,
+rollback, corruption refusal and empty inventories. Ruff/style and package checks
+pass. [Sanitized evidence](../../specs/spec017/evidence/postgres_inventory.json)
+records the actual scope; it does not certify minutes or historical coverage.
+QuantSmith working-tree verification still differs from its pin; used guidance
+was read from hash-verified pinned Git objects. NAAIM remains paused and schedules
+remain stopped. FINRA stays at SSV-T05 for its next continuation; the remaining
+securities-finance order is preserved.
+
+## 2026-11-10 FINRA continuation and AAII manual refresh
 
 Spec011 T17/G2 merged through PR #8; AAII's refresh documentation merged through
 PR #9. FINRA **SSV-T01–T04 are complete for source version 1 and the selected
@@ -434,9 +459,10 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 is merged. Continue Spec012 SSV-T05 on `feat/spec012-finra-access-review`:
-SSV-T01–T04 are complete for the selected source version 1 three-TRF API profile.
-Next is immutable raw/rejected-capture archiving and redacted lineage receipts. G0 and parser
+T17 and Spec012 T01–T04 are merged. Immediate selected work is FOMC-T03 on
+`feat/spec017-fomc-inventory`; read the current pickup above and Spec017 tasks.
+When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
+archiving and redacted lineage receipts. G0 and parser
 Checkpoint A are ready for this scope; local publication and G1/G2 remain open.
 Read Spec012's README, data contract, plan, tasks, API contract and source review
 before further implementation.

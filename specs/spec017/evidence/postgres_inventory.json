@@ -1,0 +1,46 @@
+{
+  "reviewed_date": "2026-11-11",
+  "tasks": [
+    "FOMC-T01",
+    "FOMC-T02"
+  ],
+  "schema_contract": "fomc-inventory-postgres/1",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 55438,
+    "database": "additional_market_data",
+    "schema": "fomc_meeting_minutes",
+    "server_version": "17.6"
+  },
+  "tables": [
+    "catalog_state",
+    "inventory_documents",
+    "inventory_entries",
+    "inventory_meetings",
+    "inventory_pages",
+    "inventory_runs"
+  ],
+  "production_inventory_imports": 0,
+  "production_current_inventory": false,
+  "remaining_test_schemas": [],
+  "verification": {
+    "inventory_tests": 61,
+    "config_tests": 14,
+    "actual_postgres_tests": 5,
+    "focused_with_actual_postgres_passed": 80,
+    "offline_suite_passed": 823,
+    "offline_optional_skips": 15
+  },
+  "scope": "Schema-isolated invented metadata tests only; no actual Board inventory/document capture, full-text extraction, chunks or embeddings. Production FOMC inventory schema initialized empty.",
+  "config": "config/fomc_meeting_minutes/pipeline.local.yml (ignored; references existing password env name, no inline credential)",
+  "checks": [
+    "metadata snapshot/date/hash readback",
+    "historical/current snapshots",
+    "identical run retries and concurrent writers",
+    "changed input under same run ID refused",
+    "foreign-key write failure rolls back current pointer and rows",
+    "corrupt stored JSON refused",
+    "empty inventory retained",
+    "reinitialization preserves current state"
+  ]
+}

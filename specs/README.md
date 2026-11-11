@@ -1,7 +1,8 @@
 # Specification index
 
-Updated: 2026-11-10. Numbers identify documents, not automatic build priority.
-The current user-selected build order is **011 → 012 → 013 → 014 → 015**;
+Updated: 2026-11-11. Numbers identify documents, not automatic build priority.
+The user selected FOMC-T01/T02 implementation; current pickup is [FOMC-T03](spec017/todo.md).
+The remaining securities-finance order is **011 → 012 → 013 → 014 → 015**;
 see the [securities-finance program](../docs/securities_finance/README.md).
 
 | Spec | Capability ID | Contract and status |
@@ -22,7 +23,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
-| [017](spec017/README.md) | fomc-meeting-minutes | Lightweight draft for complete current/historical official minutes and separately typed predecessors; original documents, full text, versioned chunks, revisions and coverage, with optional embeddings as a later enhancement. No connector or archive implemented; does not change build priority. |
+| [017](spec017/README.md) | fomc-meeting-minutes | T01/T02 normalized inventory/identity, pipeline-owned config and PostgreSQL metadata storage implemented; current next T03 native inventory/document archive. Full text/chunks and optional embeddings remain later slices. |
 
 ## Presidential pipeline integration planning
 
@@ -46,11 +47,11 @@ so the five workstreams preserve all six source families discussed. Read the
 [delivery roadmap](../docs/securities_finance/roadmap.md).
 
 Delivery specs own `README.md`, `data_contract.md`, `plan.md` and `todo.md`;
-lightweight Spec017 starts with one README and an embedded first-slice handoff.
+Spec017 has an inventory contract and [implementation task handoff](spec017/todo.md).
 The [master handoff](../docs/handoffs/project_bootstrap.md) records accepted
-Spec011 delivery and completed Spec012 T01–T04. Continue **SSV-T05** from the
-[FINRA next-agent handoff](spec012/README.md#next-agent-handoff).
-Spec017 remains planning-only until selected. The source sequence supersedes older discovery priorities;
+Spec011 delivery and completed Spec012 T01–T04. FINRA's continuation is **SSV-T05**
+from its [next-agent handoff](spec012/README.md#next-agent-handoff). The newly selected
+FOMC build now continues at **FOMC-T03** after T01/T02 inventory/PostgreSQL checks. The source sequence supersedes older discovery priorities;
 the following historical choices remain context, not a competing next-build
 instruction. Keep NAAIM paused unless explicitly resumed by the user.
 

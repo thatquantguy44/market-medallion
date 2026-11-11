@@ -1,0 +1,15 @@
+# FOMC-T01 normalized intake profile, not a provider API or acquisition configuration.
+source: federal_reserve_board
+dataset: fomc-meeting-minutes
+schema_id: fomc-inventory/1
+official_host: www.federalreserve.gov
+first_meeting_year: 1936
+document_kinds:
+  - minutes
+  - historical_minutes
+  - minutes_of_actions
+  - record_of_policy_actions
+  - memorandum_of_discussion
+committee_bodies:
+  - fomc
+  - executive_committee

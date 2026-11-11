@@ -1,0 +1,80 @@
+{
+  "schema_id": "fomc-inventory/1",
+  "pages": [
+    {
+      "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "meetings": [
+        {
+          "committee_body": "fomc",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "2026-03-17",
+            "2026-03-18"
+          ],
+          "meeting_label_raw": "Invented March 17–18 meeting",
+          "session_label_raw": null,
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "minutes",
+              "document_label_raw": "Invented minutes PDF",
+              "href": "/monetarypolicy/files/invented-minutes-20260318.pdf#page=2",
+              "representation": "pdf",
+              "provider_release_date": "2026-04-08"
+            },
+            {
+              "document_kind": "minutes",
+              "document_label_raw": "Invented minutes HTML",
+              "href": "/monetarypolicy/invented-minutes-20260318.htm",
+              "representation": "html",
+              "provider_release_date": "2026-04-08"
+            }
+          ]
+        },
+        {
+          "committee_body": "fomc",
+          "event_kind": "meeting",
+          "meeting_dates": [
+            "2026-12-08",
+            "2026-12-09"
+          ],
+          "meeting_label_raw": "Invented pending meeting",
+          "session_label_raw": null,
+          "minutes_status": "pending_release",
+          "documents": []
+        },
+        {
+          "committee_body": "fomc",
+          "event_kind": "conference_call",
+          "meeting_dates": [
+            "2020-03-02",
+            "2020-03-15"
+          ],
+          "meeting_label_raw": "Invented joint conference proceedings",
+          "session_label_raw": null,
+          "minutes_status": "listed",
+          "documents": [
+            {
+              "document_kind": "minutes",
+              "document_label_raw": "Invented joint minutes",
+              "href": "/monetarypolicy/files/invented-joint.pdf",
+              "representation": "pdf",
+              "provider_release_date": null
+            }
+          ]
+        },
+        {
+          "committee_body": "fomc",
+          "event_kind": "conference_call",
+          "meeting_dates": [
+            "1993-01-06"
+          ],
+          "meeting_label_raw": "Invented conference call without listed minutes",
+          "session_label_raw": null,
+          "minutes_status": "not_listed",
+          "documents": []
+        }
+      ]
+    }
+  ]
+}

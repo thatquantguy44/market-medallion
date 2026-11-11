@@ -19,6 +19,13 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
+**Current FOMC build:** [Spec017](specs/spec017/README.md) now implements normalized
+inventory/identity contracts and configurable PostgreSQL metadata snapshots in
+its own schema. Settings live in [config/fomc_meeting_minutes/](config/fomc_meeting_minutes/README.md).
+Next is native HTML discovery and original-document archiving; full minutes,
+text/chunks and optional embeddings remain future slices. FINRA's continuation
+is SSV-T05; the remaining program order and NAAIM pause are preserved.
+
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
 FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary

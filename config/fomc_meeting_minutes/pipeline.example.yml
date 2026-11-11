@@ -1,0 +1,18 @@
+# Copy to pipeline.local.yml; resolve passwords from the process environment.
+root: ../../data/fomc_meeting_minutes
+manifest: ../../manifests/fomc-meeting-minutes.yml
+warehouse: postgres
+postgres:
+  host: 127.0.0.1
+  port: 55432
+  database: additional_market_data
+  user: market_data
+  role: null
+  schema: fomc_meeting_minutes
+  password_env: FOMC_POSTGRES_PASSWORD
+  sslmode: prefer
+  connect_timeout: 10
+network:
+  mode: auto
+  preferred_route: proxy
+  fallback: true
