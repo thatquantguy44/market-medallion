@@ -21,22 +21,30 @@ new live schedules default stopped.
 
 ## 2026-11-10 current pickup and AAII manual refresh
 
-Spec011's T17/G2 closeout merged through PR #8 at `c16acee`. The next
-source-build task is **Spec012 SSV-T01**, FINRA approved use and acquisition-route
-review; the older merge prerequisite below is satisfied. FINRA now owns only
-`pipelines/finra_short_sale_volume/manifest.py` approved-use metadata: 21 offline
-tests pass. Parser, connector, jobs and outputs remain absent. Preserve the NAAIM
-pause and stopped schedule defaults.
+Spec011's T17/G2 closeout merged through PR #8 at `c16acee`; AAII's refresh
+documentation merged through PR #9. FINRA **SSV-T01 is complete for the selected
+Public API route**, with user-attested accepted terms, 21 pure admission tests,
+and bounded authentication/production-metadata checks. Only approved-use code
+exists; parser, reusable acquisition, warehouse, export and jobs remain absent.
 
-The user selected personal noncommercial internal research. The
-[FINRA source review](../../specs/spec012/source_review.md) records a conditional
-free Public API candidate and unresolved TXT-file automation/database permission.
-Current admission is invented fixtures only; G0 remains open. Next, record actual
-file permission or accepted API terms. An API choice needs its own schema and
-completeness plan before SSV-T02/T03. No FINRA account was created or provider
-observation requested. QuantSmith's working-tree pin still does not verify;
-selected guidance was read from its pinned Git object and hash-checked, without
-refreshing the external checkout or this repository's reference.
+The user confirmed a Public credential and API terms acceptance for personal
+noncommercial internal research. Record this as
+`USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`, not independent license verification.
+Authentication and production `regShoDaily` metadata returned HTTP 200 in check
+`dc9f572037dd430c80783cb9315edd48`; no observations were queried. Credential
+values and tokens were not logged or committed. The user's FINRA `.env` syntax
+was normalized and retains owner-only permissions.
+
+The [API contract](../../specs/spec012/api_contract.md) explicitly amends the
+file-first design for JSON/partition/page completeness. **Next: SSV-T02**, pin
+facility/schema/source-version behavior and resolve the N/Q/B/D metadata versus
+NYTRF/NQTRF/NCTRF example discrepancy. G0 remains open; observation conformance,
+TXT permission, ADF/consolidated/ORF coverage and all recurring operation remain
+unverified or separately gated. NAAIM stays paused and all schedules stay stopped.
+
+QuantSmith's working-tree pin still does not verify; selected guidance was read
+from its pinned Git object and hash-checked without refreshing its checkout or
+this repository's reference.
 
 Verification: 503 offline tests passed, 10 optional integrations skipped; Ruff
 lint/format and package builds pass. This is admission-only unit evidence; it
@@ -385,10 +393,11 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 is merged. Continue Spec012 SSV-T01 on `feat/spec012-finra-access-review`:
-its source review and 21 pure admission tests are implemented, while the actual
-permission/accepted-terms reference and G0 remain open. Read Spec012's README,
-data contract, plan, tasks and source review before further implementation.
+T17 is merged. Continue Spec012 SSV-T02 on `feat/spec012-finra-access-review`:
+SSV-T01 is complete for user-attested API terms and verified authentication/
+production metadata. Next is SSV-T02 schema/facility readiness; G0 remains open.
+Read Spec012's README, data contract, plan, tasks, API contract and source review
+before further implementation.
 Spec011's selected source conformance and A01–A15
 backend/recovery evidence are complete; wider source coverage, recurring
 operation, Databricks workspace activation, public distribution and the optional

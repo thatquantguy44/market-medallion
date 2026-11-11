@@ -130,7 +130,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
 | 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete, merged PR #8 | Not started | Deferred | Ten authentic lists and both SEC archives reconcile; current source-build work is Spec012 |
-| 012 | Open; SSV-T01 in progress | Not started | Not started | Not started | Deferred | Personal noncommercial use selected; source review and 21 pure admission tests implemented. Record actual permission/terms and select a source profile before T02/T03. |
+| 012 | Open; SSV-T01 API route complete | Not started | Not started | Not started | Deferred | User-attested Public terms; auth/production metadata HTTP 200; 21 admission tests pass. Next T02: pin API schema/facility mapping and source version. No observation query made. |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |

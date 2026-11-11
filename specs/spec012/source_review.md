@@ -1,8 +1,9 @@
 # FINRA short-volume approved-use review
 
 Reviewed 2026-11-10, America/New_York. Traces: **SSV-T01 / SSV-REQ01 / SSV-AC01**.
-This is an evidence and admission-policy checkpoint; no FINRA observations,
-credential, provider sample, warehouse or job has been acquired or created.
+This is an evidence and admission-policy checkpoint. The user has provisioned
+Public API credentials; bounded authentication and production metadata retrieval
+succeeded. No observation query, warehouse or job has been created.
 
 ## Selected use and current decision
 
@@ -10,12 +11,20 @@ The user confirmed **personal noncommercial internal research** in this session.
 No commercial, public-distribution or model-training scope is admitted by that
 statement. It describes the intended use, not an attestation of provider rights.
 
-**Current operational decision: invented fixtures only.** The public TXT-file
-route has unresolved automation/database permission. The free Public Query API
-is a documented candidate for the selected use, conditional on an actual
-Individual/Public credential, accepted API terms and the selected API contract.
-No accepted agreement or source-specific permission reference has been provided.
-No account was created and no agreement was accepted on the user's behalf.
+**Current operational decision: Public Query API selected for the user's
+personal noncommercial internal research.** The user confirmed a Public credential
+and accepted API terms. Record this as
+`USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`, not independently verified license
+documentation. The user created and accepted their own access; the agent did not
+create an account or accept an agreement for them. The [API profile](api_contract.md)
+records the explicit schema/partition amendment to the original TXT-first design.
+Website TXT automation/database permission remains unresolved and unadmitted.
+
+Authentication and production schema-metadata retrieval both returned HTTP 200
+in check `dc9f572037dd430c80783cb9315edd48`. No observations were requested.
+The `.env` FINRA assignments were normalized without displaying values; the file
+remains ignored with owner-only permissions. Client values and token responses
+were not retained in verification output or tracked evidence.
 
 The source-owned admission gate records the intended purpose, route,
 authorization kind, a nonsecret evidence reference, permitted operations and,
@@ -40,10 +49,11 @@ I/O. No connector or command consumes this gate until its own implementation.
 | [Daily file landing page](https://www.finra.org/finra-data/browse-catalog/short-sale-volume-data/daily-short-sale-volume-files) | Facility files are separate from consolidated listed-security TRF/ADF scope. Updates may arrive later; an ADF file may be empty. | Preserve the existing separate ORF and consolidated/constituent contracts. Exact payload/header/archive conformance remains unverified. |
 | [File layout PDF](https://www.finra.org/sites/default/files/2021-07/DailyShortSaleVolumeFileLayout.pdf) | Modern files have six pipe-separated columns, a record-count trailer, and exempt shares included within short shares. An earlier layout omits exempt volume. | Documentation supports invented fixtures; it does not pin actual bytes, encoding or consolidated market-field formatting. |
 
-These are documentary findings and conservative project admission decisions,
-not a claim that FINRA has approved this user's implementation. Reviewed pages
-can change; recheck current terms before activation. No provider payload was
-requested, even to test a publicly reachable URL.
+These are documentary findings and a user-attested project admission decision,
+not a claim that FINRA has approved this implementation. Reviewed pages can
+change; recheck current terms before activation. The initial review made no API
+requests; the subsequent bounded check requested only a token and production
+schema metadata. No provider observation payload was requested.
 
 ## Concrete admission contract
 
@@ -76,15 +86,17 @@ in this checkpoint, so there is no end-to-end acquisition-refusal claim yet.
 
 ## Next bounded action
 
-Finish SSV-T01 by recording either applicable TXT/local-file permission or the
-user's accepted API-terms reference. If the API is selected, amend SSV-T02/T03
-with an explicit API schema/partition plan before implementation, retaining the
-current file-based design as a separate profile. Do not label pagination totals
-as a TXT trailer or invent missing ADF/consolidated coverage.
+**SSV-T01 is complete for the selected API route:** purpose, user-attested terms
+reference, pure admission metadata and negative fixtures are recorded. Its
+[API contract](api_contract.md) explicitly amends SSV-T02/T03 without enabling TXT
+acquisition. Complete source-profile readiness (G0) stays open until schema,
+facility mapping and selected coverage are pinned.
 
-Until then, SSV-T01 remains **in progress**, G0 stays open, and no next-source
-priority changes. Invented admission tests may run without credentials, network,
-provider data or a scheduled job. SSV-T02/T03 have not started. NAAIM stays paused.
+Next is **SSV-T02**, the API facility/schema registry. Resolve the current
+metadata/example facility-code discrepancy, source-version behavior and explicit
+scope exclusions before parser implementation. SSV-T02/T03 have not started;
+there is no reusable authentication or data acquisition adapter yet. NAAIM stays
+paused and all schedules remain stopped.
 
 ## Verification checkpoint
 
@@ -94,8 +106,9 @@ gate. Fixtures use invented permission references, never actual provider grants.
 Tests cover missing profiles without I/O, pending rights, operation-specific
 permissions, local-only acquisition refusal, API-specific terms/credential
 metadata, scope expansion and unknown fields. This verifies the helper only;
-future entry-point integration, credentials and real source conformance remain
-unverified.
+future entry-point integration and real observation conformance remain unverified.
+The later bounded authentication/metadata check is separate live evidence and
+is not included in those unit-test counts.
 
 Full offline regression: **503 passed, 10 skipped** (optional integration
 coverage was not enabled). Repository Ruff lint and formatting checks pass;

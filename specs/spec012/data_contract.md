@@ -15,11 +15,12 @@ noncommercial internal research. `manifest.require_approved_use` validates that
 purpose, route, authorization kind, nonsecret permission reference, explicit
 operation grants and optional Public credential metadata without I/O.
 
-Current operational admission is **invented fixtures only**. An actual
-file-permission or accepted API-terms reference is still required. The Public
-Query API has documented noncommercial internal/derived-data rights, but a
-separate JSON schema/completeness plan and account are needed before selecting
-that route. API evidence does not grant website TXT collection permission.
+The selected route is the **Public Query API**, backed by the user's confirmed
+terms acceptance under `USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`. Authentication
+and production metadata retrieval succeeded; actual data-query entitlement and
+observation conformance have not been tested. The [API profile](api_contract.md)
+explicitly defines the JSON schema/partition amendment and unresolved mapping.
+The TXT-oriented sections below remain a separate, unadmitted file profile.
 Future I/O entry points must call the gate; none are implemented yet.
 
 ## Evidence register and remaining conformance
@@ -36,7 +37,15 @@ with the dedicated daily-file page. Treat the latter's TRF/ADF description as
 the discovery starting point and require actual scope reconciliation. Do not
 silently add ORF or treat a comma-separated market list as one individual market.
 
-## Schema and types
+## Selected API schema and retained file profile
+
+Use [api_contract.md](api_contract.md) for the selected API's literal fields,
+partition field, lossless count semantics and pagination completeness. It has
+no file trailer. Facility-code mapping, source version and actual observation
+coverage still need SSV-T02/real conformance. The following table specifies the
+retained TXT profile only and must not be used as an API field alias map.
+
+## TXT schema and types
 
 | Provider field/concept | Proposed normalized field | Type and semantics |
 | --- | --- | --- |
@@ -93,9 +102,11 @@ by the cutoff, then derive ratios. Backfill first-seen is actual import time.
 
 ## Partition completeness, absence and replacement
 
-A partition records expected files, discovered files, response outcomes,
+For TXT inputs, a partition records expected files, discovered files, response outcomes,
 trailer count, parsed count, accepted count and the selected source revision.
-Publication requires the selected file to be complete. A valid zero trailer
+The selected API instead requires all bounded pages and consistent query counts;
+see its profile for the distinct completeness evidence. TXT publication requires
+the selected file to be complete. A valid zero trailer
 means a verified empty file, distinct from missing file, holiday, not-yet-posted,
 zero-byte response, access error, truncation and rejected schema.
 
@@ -108,8 +119,9 @@ Observed-as-of selection must reproduce membership as well as changed values.
 ## Validation and Gold formulas
 
 Required relationships: `0 <= short_exempt_volume <= short_volume <= total_volume`.
-For the current regime all counts are required. The trailer must equal parsed
-records under the verified file format; conflicting duplicates block publication.
+For the current regime all counts are required. TXT trailers must equal parsed
+records under the verified file format; API results use the selected page/count
+contract instead. Conflicting duplicates block publication.
 Reject requested-date/file-date mismatches, unknown scopes and unverified market
 codes. A schema drift outcome preserves Bronze and the old committed snapshot.
 

@@ -1,13 +1,15 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01 in progress: official-source review and pure approved-use
-admission metadata are implemented; parser, connector, jobs and data products
-remain absent. **Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
+**Status:** SSV-T01 complete for the selected Public API route: approved-use
+metadata plus bounded authentication/production-schema checks are verified;
+parser, connector, jobs and data products remain absent.
+**Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
 **Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
-(admission gate only). The [source review](source_review.md) records the current
-fixture-only decision, user-selected personal noncommercial scope, conditional
-Public API candidate and unresolved file-route permission. G0 remains open.
+(admission gate only). The [source review](source_review.md) records the user's
+personal noncommercial scope and Public API terms acknowledgement. The selected
+[API profile](api_contract.md) explicitly amends the file-first plan for JSON and
+page completeness. TXT permission stays unresolved; G0 remains open until T02.
 
 Read the [program roadmap](../../docs/securities_finance/README.md),
 [common contract](../../docs/securities_finance/contract.md),
@@ -60,15 +62,18 @@ The current [API documentation](https://developer.finra.org/docs#reg-sho-daily-s
 also identifies the production `otcMarket/regShoDaily` dataset and a rolling
 twelve-month window. The [Equity API terms](https://developer.finra.org/specific-terms-equity-data)
 permit noncommercial internal use and derived data with valid access credentials.
-This is a candidate mechanism, not an admitted replacement for TXT files: no
-accepted terms reference, actual API account, entitlement or live schema
-conformance is established. Account creation and terms acceptance remain the
-user's actions. No observation endpoint was requested during this review.
+The user subsequently confirmed a Public credential and accepted API terms.
+Authentication and the production metadata request succeeded; data-query
+entitlement and actual observation conformance remain untested. The API profile
+is selected explicitly; no TXT download permission is inferred. No observation
+endpoint was requested.
 
 ## Scope and delivery boundary
 
-The first usable slice accepts an approved local facility file into immutable
-Bronze, typed Silver versions, local SQLite and an atomic Gold/Parquet snapshot.
+The first usable slice now accepts an approved archived API JSON response plus
+its request/scope receipt into immutable Bronze, typed Silver versions, local
+SQLite and an atomic Gold/Parquet snapshot. This selected API profile supersedes
+the original TXT-first execution order; TXT files remain a separately gated path.
 Support each verified current facility explicitly. A consolidated file has a
 different scope and must be a distinct dataset, not extra rows to sum with its
 constituent facilities. ORF remains separate from listed-security TRF/ADF scope.
@@ -89,10 +94,10 @@ so integrated pre-I/O enforcement and the complete acceptance remain pending.
 | --- | --- | --- |
 | SSV-REQ01: Record approved use and route. | SSV-AC01: Missing/disallowed rights profile refuses acquisition/export before I/O; offline fixtures remain usable. | SSV-T01 |
 | SSV-REQ02: Register file/date/facility/schema scope. | SSV-AC02: Registry distinguishes individual, consolidated and ORF inputs; aliases and unavailable historical regimes are explicit. | SSV-T02 |
-| SSV-REQ03: Parse documented file structure. | SSV-AC03: Invented fixtures cover headers/trailer, zero-row file, malformed row/date and schema drift; invalid files cannot promote. | SSV-T03 |
+| SSV-REQ03: Parse documented file structure. | SSV-AC03: Invented API responses cover literal JSON fields, empty arrays, malformed rows/dates and schema drift; invalid responses cannot promote. TXT header/trailer coverage remains a separate profile. | SSV-T03 |
 | SSV-REQ04: Preserve count semantics. | SSV-AC04: Fixture 40 short, 5 exempt, 100 total yields 0.40; counts are integers with exempt <= short <= total. | SSV-T04 |
 | SSV-REQ05: Retain raw evidence. | SSV-AC05: Success and parse rejection preserve exact bytes/hash, manifest, run, schema and request metadata without secrets. | SSV-T05 |
-| SSV-REQ06: Publish local transactional results. | SSV-AC06: One invented file produces audited SQLite Silver/Gold; failure leaves the prior committed snapshot intact. | SSV-T06 |
+| SSV-REQ06: Publish local transactional results. | SSV-AC06: One invented local API response with scope receipt produces audited SQLite Silver/Gold; failure leaves the prior committed snapshot intact. | SSV-T06 |
 | SSV-REQ07: Preserve observed revisions. | SSV-AC07: Identical repeat adds no version; correction/reversion remain queryable by actual first-seen cutoff. | SSV-T07 |
 | SSV-REQ08: Represent missing and removed rows. | SSV-AC08: Full replacement removal differs from no report, valid empty, failed fetch and partial file; missingness never invents zero. | SSV-T08 |
 | SSV-REQ09: Produce scoped research ratios. | SSV-AC09: Matching numerator/denominator only; zero total returns null; mixed consolidated/constituent inputs are rejected. | SSV-T09 |
@@ -113,8 +118,8 @@ as a prerequisite. Proposed source-owned files are:
 ```text
 pipelines/finra_short_sale_volume/
   manifest.py       # scope, schema and approved-use profile
-  source.py         # finite file discovery and acquisition
-  data/file.py      # pure parser and typed records
+  source.py         # bounded API partitions and acquisition
+  data/api.py       # pure JSON parser and typed records
   data/gold.py      # denominator-safe features
   io/bronze.py     # exact input and request receipts
   io/warehouse.py  # SQLite observation versions and publication transactions
@@ -158,7 +163,7 @@ market-wide short-interest label.
 
 ```bash
 .venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume validate --manifest manifests/finra-short-sale-volume.yml
-.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume run --input tests/fixtures/finra_short_sale_volume/current.txt --root data/ssv-demo
+.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume run --input tests/fixtures/finra_short_sale_volume/current.json --root data/ssv-demo
 .venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume check --root data/ssv-demo
 .venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume replay --source-root data/ssv-demo --root data/ssv-replay
 ```

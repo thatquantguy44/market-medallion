@@ -1,6 +1,6 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01 admission checkpoint in progress, 2026-11-10.
+**Status:** SSV-T01 complete for the selected Public API route, 2026-11-10.
 Use [todo.md](todo.md) as the single task list.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
@@ -8,19 +8,19 @@ acquisition or schedule execution. [Spec012](README.md) defines acceptance.
 ## Current bounded checkpoint
 
 The [source review](source_review.md) records the user's personal noncommercial
-internal-research purpose, current fixture-only decision, Public API candidate
-and unresolved website file-use permission. Only approved-use metadata and
-its pure admission gate are implemented. Selecting the API requires a recorded
-accepted-terms reference and an explicit JSON schema/completeness amendment to
-SSV-T02/T03; it does not silently change the original file-first contract.
-No parser, warehouse, provider request, export or job is implemented.
+purpose and confirmed Public API terms acceptance. The selected
+[API profile](api_contract.md) explicitly amends SSV-T02/T03 for JSON, a trade-date
+partition and page completeness. A bounded token/production-metadata check
+succeeded; no observations were requested. Website TXT permission stays separate
+and unresolved. Only approved-use metadata is implemented; parser, reusable
+acquisition, warehouse, export and job remain absent.
 
 ## Decisions and dependency flow
 
-Use explicit file profiles and a pure parser before live acquisition. This lets
-integer, scope, trailer and empty-file behavior be proved offline while rights
-and current transfer details are resolved. Prefer an admitted free file route;
-API credentials and mock data do not silently become production dependencies.
+Use the explicitly selected API profile and a pure JSON parser before data
+acquisition. Prove integer, scope, pagination-receipt and empty-response behavior
+offline. The original TXT path remains a separate unadmitted profile with its
+own header/trailer rules. Mock responses never become observations.
 
 ```text
 approved use + file registry -> invented parser fixtures -> local single-file slice

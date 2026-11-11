@@ -1,7 +1,8 @@
 # Tasks — FINRA daily short-sale volume
 
-SSV-T01 is **in progress** with source-review and pure admission-gate evidence;
-SSV-T02–SSV-T16 are **not started**. Prefix paths below with
+SSV-T01 is **complete for the selected Public API route**, with source-review,
+user-attested terms, pure admission tests and bounded authentication/metadata
+evidence. SSV-T02–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
 Tests below are future targets except the implemented SSV-T01 admission suite. [README.md](README.md) defines their acceptance IDs.
@@ -9,36 +10,47 @@ Tests below are future targets except the implemented SSV-T01 admission suite. [
 ## SSV-T01 — Resolve rights and approved acquisition route
 
 **Depends:** Spec011 delivery; **traces:** SSV-REQ01 / SSV-AC01.
-- [ ] Close the applicable permission/accepted-terms reference for automation,
-  persistence, transforms and display. [Official review](source_review.md)
-  records the selected purpose and conditional API rights; TXT permission remains open.
+- [x] Record the selected API purpose and accepted-terms acknowledgement:
+  `USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`. [Official review](source_review.md)
+  and [API profile](api_contract.md) preserve its scope and user-attested basis.
+  Authentication/production metadata returned HTTP 200; no observations were queried.
+  TXT permission remains separate and unresolved.
 - [x] Distinguish free files, limited Public API, paid credentials and mock routes.
-- [x] Implement admission metadata after recording the current fixture-only decision.
+- [x] Implement admission metadata after recording the initial fixture-only decision;
+  then record the selected user-attested API profile after terms confirmation.
   `manifest.require_approved_use` is pure; **21 offline tests pass** against
   missing/disallowed profiles, explicit operation grants and route-specific evidence.
   Future adapters must call it before I/O; no acquisition/export adapter exists.
 
-**Checkpoint:** G0 remains open. No provider data, account or permission was
-fabricated; SSV-T02/T03 have not started.
+**Checkpoint:** SSV-T01 is complete for this user-attested API route. G0 remains
+open pending SSV-T02 facility/schema readiness. The user created the credential
+and accepted terms; no account or agreement was created by the agent. The API
+amendment below does not claim real observation coverage or integrated I/O guards.
 **Verify:** documentary review plus an offline negative admission fixture.
 **Files:** `specs/spec012/data_contract.md`, `manifest.py`, `tests/test_ssv_manifest.py`.
 
-## SSV-T02 — Pin facility and schema registry
+## SSV-T02 — Pin API facility and schema registry
 
 **Depends:** SSV-T01; **traces:** SSV-REQ02 / SSV-AC02.
-- [ ] Enumerate current facility profiles and separate consolidated/ORF datasets.
-- [ ] Record archive bounds, header variants, trailer format and unsupported regimes.
-- [ ] Reject overlapping scope selections before any acquisition.
-**Verify:** table-driven registry tests including unknown facility and old schema.
+- [ ] Pin the seven-field production schema, `tradeReportDate` partition and
+  selected source-version behavior from the [API contract](api_contract.md).
+- [ ] Resolve metadata N/Q/B/D versus example NYTRF/NQTRF/NCTRF identifiers;
+  record admitted facility pairs and explicit ADF/consolidated/ORF exclusions.
+- [ ] Bound the documented rolling twelve-month regime; keep TXT headers,
+  trailers and older regimes in a separate unadmitted profile.
+- [ ] Reject unknown and overlapping scope selections before data acquisition.
+**Verify:** table-driven schema/facility/version and overlapping-scope tests.
 **Files:** `manifest.py`, `manifests/finra-short-sale-volume.yml`, `tests/test_ssv_manifest.py`.
 
-## SSV-T03 — Characterize parser with invented files
+## SSV-T03 — Characterize API parser with invented responses
 
 **Depends:** SSV-T02; **traces:** SSV-REQ03 / SSV-AC03.
-- [ ] Cover valid rows, suffix symbols, zero trailer, malformed rows and truncation.
-- [ ] Pin explicit encoding/date/header rules and reject drift.
+- [ ] Cover valid JSON arrays, suffix symbols, empty responses, malformed rows,
+  nonintegral counts, duplicate keys/rows, unknown fields and truncation.
+- [ ] Pin lossless numeric decoding, explicit JSON/date/schema rules and scope
+  receipt validation; API page totals never become a fabricated TXT trailer.
 **Verify:** `.venv/bin/python -m pytest -q tests/test_ssv_parser.py`.
-**Files:** `data/file.py`, `tests/test_ssv_parser.py`, up to three invented fixture files.
+**Files:** `data/api.py`, `tests/test_ssv_parser.py`, up to three invented response fixtures.
 
 ### Checkpoint A — Contract and parser
 
@@ -51,7 +63,7 @@ fabricated; SSV-T02/T03 have not started.
 - [ ] Preserve integers; validate exempt <= short <= total with explicit zero cases.
 - [ ] Prove exempt is a subset using 40/5/100 and large-count examples.
 **Verify:** parameterized semantic tests and lossless count round-trip assertions.
-**Files:** `data/file.py`, `data/gold.py`, `tests/test_ssv_semantics.py`.
+**Files:** `data/api.py`, `data/gold.py`, `tests/test_ssv_semantics.py`.
 
 ## SSV-T05 — Archive input and rejected-capture evidence
 
