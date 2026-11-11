@@ -41,7 +41,7 @@ _DDL = [
 
 def artifact_path(root, kind, identity):
     if (
-        kind not in {"extractions", "catalogs"}
+        kind not in {"extractions", "catalogs", "chunks", "chunk_catalogs"}
         or not isinstance(identity, str)
         or not re.fullmatch("[0-9a-f]{64}", identity)
     ):
