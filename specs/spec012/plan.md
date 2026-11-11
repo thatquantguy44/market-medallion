@@ -1,18 +1,40 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** proposed, 2026-11-03. Use [todo.md](todo.md) as the single task list.
+**Status:** SSV-T01–T04 complete for the selected three-TRF API profile, 2026-11-10.
+Use [todo.md](todo.md) as the single task list.
+The [next-agent handoff](README.md#next-agent-handoff) is the canonical pickup
+point for SSV-T05 on `feat/spec012-finra-access-review`.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
 
+## Current bounded checkpoint
+
+The [source review](source_review.md) records the user's personal noncommercial
+purpose and confirmed Public API terms acceptance. The selected
+[API profile](api_contract.md) explicitly amends SSV-T02/T03 for JSON, a trade-date
+partition and page completeness. A bounded token/production-metadata check
+succeeded. SSV-T02 then verified source version 1, three literal TRF/market pairs,
+252 available partition dates and a bounded six-row sample. The registry rejects
+unknown/overlapping scopes, schema/version changes and invalid acquisition dates.
+Website TXT permission stays separate; ADF, consolidated and ORF are excluded.
+The pure T03 parser now passes 111 invented-fixture tests and reconciles the six
+retained rows offline. Their fractional quantities corrected the original
+integer-only assumption: all API share quantities are exact Decimal values.
+See the [amendment and evidence](api_contract.md#ssv-t03-fractional-quantity-amendment).
+T04 adds shared quantity validation/text readback and pure per-observation ratios
+with fixed 34-digit half-even arithmetic. Its 71 tests and retained six-row
+reconciliation pass. Next is SSV-T05 immutable raw and rejected-capture evidence
+with redacted receipts. Reusable acquisition, warehouse, export and job remain absent.
+
 ## Decisions and dependency flow
 
-Use explicit file profiles and a pure parser before live acquisition. This lets
-integer, scope, trailer and empty-file behavior be proved offline while rights
-and current transfer details are resolved. Prefer an admitted free file route;
-API credentials and mock data do not silently become production dependencies.
+Use the explicitly selected API profile and a pure JSON parser before data
+acquisition. Exact whole/fractional quantities, scope, pagination receipts and
+empty-response behavior are now proved offline for the parser boundary. The original TXT path remains a separate unadmitted profile with its
+own header/trailer rules. Mock responses never become observations.
 
 ```text
-approved use + file registry -> invented parser fixtures -> local single-file slice
+approved use + API registry -> invented response parser -> local single-response slice
   -> immutable revisions + complete replacement membership -> scoped Gold
   -> typed publication + replay -> bounded correction refresh + health
   -> approved research export -> stopped job + acceptance handoff
@@ -38,7 +60,7 @@ helpers may be reused only where they contain no source-specific assumptions.
 | Requirement | Design component | Task | Acceptance |
 | --- | --- | --- | --- |
 | SSV-REQ01 | approved-use manifest | SSV-T01 | SSV-AC01 |
-| SSV-REQ02 | file registry | SSV-T02 | SSV-AC02 |
+| SSV-REQ02 | API schema/facility registry | SSV-T02 | SSV-AC02 |
 | SSV-REQ03 | pure parser | SSV-T03 | SSV-AC03 |
 | SSV-REQ04 | typed counts | SSV-T04 | SSV-AC04 |
 | SSV-REQ05 | Bronze receipts | SSV-T05 | SSV-AC05 |
@@ -63,7 +85,7 @@ helpers may be reused only where they contain no source-specific assumptions.
 | Header/trailer variants | Truncated file appears complete. | Versioned exact profiles and trailer reconciliation. |
 | Symbol changes/reuse | False longitudinal join. | Raw symbols and separate dated matching evidence. |
 | Updates after completion | Missed corrections/removals. | Configured overlapping re-fetch, not permanent partition skipping. |
-| Large count precision | Ratio corruption in SQLite/export. | Lossless count encoding and numeric round-trip tests. |
+| Fractional/large quantity precision | Rounding/truncation or ratio corruption in SQLite/export. | Exact Decimal decoding and lossless quantity round-trip tests. |
 
 ## Operational decisions to record during implementation
 

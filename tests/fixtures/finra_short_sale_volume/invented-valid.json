@@ -1,0 +1,20 @@
+[
+  {
+    "tradeReportDate": "2026-11-09",
+    "securitiesInformationProcessorSymbolIdentifier": "000SYN.A",
+    "shortParQuantity": 40,
+    "shortExemptParQuantity": 5,
+    "totalParQuantity": 100,
+    "marketCode": "N",
+    "reportingFacilityCode": "NYTRF"
+  },
+  {
+    "tradeReportDate": "2026-11-09",
+    "securitiesInformationProcessorSymbolIdentifier": "tSt/P-A",
+    "shortParQuantity": 1208925819614629174706177,
+    "shortExemptParQuantity": 0,
+    "totalParQuantity": 2417851639229258349412354,
+    "marketCode": "N",
+    "reportingFacilityCode": "NYTRF"
+  }
+]

@@ -1,9 +1,29 @@
 # FINRA short-sale-volume data contract
 
-**Version:** design v1, 2026-11-03. **Implementation status:** absent.
-Provider facts below are documented; normalized names and storage are proposals.
+**Version:** design v1 with the 2026-11-10 SSV-T03 fractional amendment and T04 numeric policy.
+**Implementation status:** pure approved-use, manifest/schema/version,
+facility/date-window registry, receipt-bound Decimal JSON parser, shared quantity
+validation/text codec and per-observation ratio helpers implemented; connector
+and storage absent. Storage and downstream output remain proposals.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
+
+## Approved-use admission checkpoint
+
+The [2026-11-10 source review](source_review.md) is the current rights/route
+evidence and `approved_use` mapping contract. The user selected personal
+noncommercial internal research. `manifest.require_approved_use` validates that
+purpose, route, authorization kind, nonsecret permission reference, explicit
+operation grants and optional Public credential metadata without I/O.
+
+The selected route is the **Public Query API**, backed by the user's confirmed
+terms acceptance under `USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`. Authentication
+and production metadata retrieval succeeded. SSV-T02 subsequently obtained
+six bounded TRF rows and a partition inventory; their raw field/version pairs
+reconcile, but complete partitions and historical observations are not verified. The [API profile](api_contract.md)
+defines the JSON schema/partition amendment, verified mapping and exact decimal quantities.
+The TXT-oriented sections below remain a separate, unadmitted file profile.
+Future I/O entry points must call the gate; none are implemented yet.
 
 ## Evidence register and remaining conformance
 
@@ -19,7 +39,22 @@ with the dedicated daily-file page. Treat the latter's TRF/ADF description as
 the discovery starting point and require actual scope reconciliation. Do not
 silently add ORF or treat a comma-separated market list as one individual market.
 
-## Schema and types
+## Selected API schema and retained file profile
+
+Use [api_contract.md](api_contract.md) for the selected API's literal fields,
+partition field, lossless count semantics and pagination completeness. It has
+no file trailer. Source version 1, three TRF facility/market pairs and the schema are now pinned
+under SSV-T02. ADF, consolidated, ORF, TXT and other versions are rejected.
+Actual complete-partition/history conformance remains open. The T03 parser
+accepts the six retained rows offline with exact Decimal quantities, including
+ten fractional values, without refetching or promotion. The initial integer-only
+assumption failed and is superseded by the [fractional-quantity amendment](api_contract.md#ssv-t03-fractional-quantity-amendment).
+Whole and fractional shares retain their supplied digits and scale; no rounding,
+truncation or six-decimal API cap is inferred. The following table specifies the
+legacy TXT profile only and must not be used as an API field alias map or as
+proof of current TXT numeric conformance.
+
+## Legacy TXT schema proposal — not admitted or current-schema proof
 
 | Provider field/concept | Proposed normalized field | Type and semantics |
 | --- | --- | --- |
@@ -34,11 +69,14 @@ silently add ORF or treat a comma-separated market list as one individual market
 
 The exact current literal header must be pinned from a permitted source-shaped
 sample; the PDF's display labels alone do not approve a tolerant alias parser.
-Use explicit aliases only when verified and regression-tested. A non-integer,
-negative, malformed date or impossible count relationship invalidates promotion.
-SQLite columns must preserve counts beyond signed 64-bit where necessary; choose
-decimal text or explicitly bounded integer encoding and document it. Parquet
-must use an equally lossless integer/decimal type with a schema fingerprint.
+Use explicit aliases only when verified and regression-tested. Non-integer
+rejection belongs only to a separately verified integer TXT regime. For the API,
+nonfinite/negative quantities, malformed dates or impossible quantity relationships
+invalidate parsing; valid fractions are preserved.
+Future SQLite columns must preserve fractional shares and values beyond signed
+64-bit; choose canonical decimal text or a documented lossless scaled encoding.
+Parquet must use an equally lossless decimal type with a schema fingerprint;
+any storage precision limit must be explicit and reject, never round or truncate.
 
 ## Grain and identity
 
@@ -76,9 +114,11 @@ by the cutoff, then derive ratios. Backfill first-seen is actual import time.
 
 ## Partition completeness, absence and replacement
 
-A partition records expected files, discovered files, response outcomes,
+For TXT inputs, a partition records expected files, discovered files, response outcomes,
 trailer count, parsed count, accepted count and the selected source revision.
-Publication requires the selected file to be complete. A valid zero trailer
+The selected API instead requires all bounded pages and consistent query counts;
+see its profile for the distinct completeness evidence. TXT publication requires
+the selected file to be complete. A valid zero trailer
 means a verified empty file, distinct from missing file, holiday, not-yet-posted,
 zero-byte response, access error, truncation and rejected schema.
 
@@ -91,13 +131,15 @@ Observed-as-of selection must reproduce membership as well as changed values.
 ## Validation and Gold formulas
 
 Required relationships: `0 <= short_exempt_volume <= short_volume <= total_volume`.
-For the current regime all counts are required. The trailer must equal parsed
-records under the verified file format; conflicting duplicates block publication.
+For the current regime all counts are required. TXT trailers must equal parsed
+records under the verified file format; API results use the selected page/count
+contract instead. Conflicting duplicates block publication.
 Reject requested-date/file-date mismatches, unknown scopes and unverified market
 codes. A schema drift outcome preserves Bronze and the old committed snapshot.
 
-Proposed Gold fields include `short_share`, `short_exempt_share`, prior available
-trade date, day gap and ratio change. Compute `short_volume / total_volume` and
+T04 implements pure per-observation `short_share` and `short_exempt_share`.
+Published Gold, prior available trade date, day gap, ratio change and aggregation
+remain T09 and later work. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
@@ -119,8 +161,40 @@ Provider retention requirements are unresolved and never inherit NAAIM's 365 day
 ## Proposed downstream artifact
 
 `finra-short-sale-volume-research/1` is a proposed file contract, not implemented.
-It contains dataset/scope/facility, requested/observed coverage, trade date, integer
-counts, ratio unit, nullable ratio, version token, capture clocks, method version
+It contains dataset/scope/facility, requested/observed coverage, trade date, exact decimal
+share quantities, ratio unit, nullable ratio, version token, capture clocks, method version
 and approved-use/source labels. It excludes credentials, local filesystem paths
 and raw source payloads. Export eligibility is checked against the rights profile.
 No QuantMeridian code, DB grant or cross-repository config is changed here.
+
+## SSV-T04 arithmetic and quantity text boundary
+
+The T04 core remains pure. `data.quantities.validate_quantities` enforces finite,
+nonnegative Decimal shares and `exempt <= short <= total`, using T03's unchanged
+digit/exponent budgets. Integers, floats, strings, booleans and nulls are not
+implicitly coerced at this normalized boundary; JSON numbers enter via T03.
+
+`data.gold.share_ratios(short, exempt, total)` computes short/total and
+exempt/total separately for one matched observation. A valid all-zero triple
+returns two null ratios; a nonzero numerator with zero total fails validation.
+The method `finra-short-sale-volume-ratios/1` uses unit 1, 34 significant digits
+and ROUND_HALF_EVEN in a fresh explicit decimal context. Derived ratios may be
+rounded; source quantities never are. The caller's precision, rounding, traps,
+exponent range, capitalization and flags do not affect results or change.
+This adds no aggregation, temporal features, coverage claim or publication.
+
+`quantity_to_text` and `quantity_from_text` provide a bounded in-memory decimal
+text codec for share quantities. Text is the standard Decimal string with upper
+case E, retaining the exact Decimal tuple (sign, coefficient digits, exponent),
+including trailing zeros and signed zero. Readback accepts only that generated
+representation, not floats, nulls, padding, underscores or nonfinite values.
+Equivalent quantities with different scale can have different text; this is not
+a value-version hash policy. The codec is not a provider JSON reader or an export
+schema. SQLite/Parquet adapters and ratio serialization remain later work.
+
+Python 3.12 [Decimal contexts and conversion](https://docs.python.org/3.12/library/decimal.html)
+define the local arithmetic and exact text behavior. **71 SSV-AC04 tests pass**
+for invented inputs, exact Fraction checks and parser-to-JSON-text round trips.
+[Retained sample evidence](evidence/t04_semantics_conformance.json) additionally
+reconciles 18 quantity tuples and 12 ratios offline, without changing raw bytes,
+assigning clocks or promoting observations.

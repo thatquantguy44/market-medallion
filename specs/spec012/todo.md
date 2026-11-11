@@ -1,48 +1,123 @@
 # Tasks — FINRA daily short-sale volume
 
-All implementation tasks are **not started**. Prefix paths below with
+SSV-T01 is **complete for the selected Public API route**, with source-review,
+user-attested terms, pure admission tests and bounded authentication/metadata
+evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
+SSV-T03/T04 are **complete**; SSV-T05–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests are future targets. [README.md](README.md) defines their acceptance IDs.
+Tests below are future targets except the implemented SSV-T01–T04 suites.
+[README.md](README.md) defines their acceptance IDs.
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T05 pickup
+scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
 
 **Depends:** Spec011 delivery; **traces:** SSV-REQ01 / SSV-AC01.
-- [ ] Record dataset-specific automation, persistence, transforms and display terms.
-- [ ] Distinguish free files, limited Public API, paid credentials and mock routes.
-- [ ] Implement admission metadata only after the use decision is recorded.
+- [x] Record the selected API purpose and accepted-terms acknowledgement:
+  `USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`. [Official review](source_review.md)
+  and [API profile](api_contract.md) preserve its scope and user-attested basis.
+  Authentication/production metadata returned HTTP 200; no observations were queried.
+  TXT permission remains separate and unresolved.
+- [x] Distinguish free files, limited Public API, paid credentials and mock routes.
+- [x] Implement admission metadata after recording the initial fixture-only decision;
+  then record the selected user-attested API profile after terms confirmation.
+  `manifest.require_approved_use` is pure; **21 offline tests pass** against
+  missing/disallowed profiles, explicit operation grants and route-specific evidence.
+  Future adapters must call it before I/O; no acquisition/export adapter exists.
+
+**Checkpoint:** SSV-T01 is complete for this user-attested API route. SSV-T02
+below now makes G0 ready for the explicit three-TRF profile. The user created the credential
+and accepted terms; no account or agreement was created by the agent. The API
+amendment below does not claim real observation coverage or integrated I/O guards.
 **Verify:** documentary review plus an offline negative admission fixture.
 **Files:** `specs/spec012/data_contract.md`, `manifest.py`, `tests/test_ssv_manifest.py`.
 
-## SSV-T02 — Pin facility and schema registry
+## SSV-T02 — Pin API facility and schema registry
+
+**Status:** complete for version 1 and the three verified TRFs. Documentary
+items were checked off after the bounded source review; the registry and guard
+items below are now verified by 63 offline tests plus 21 existing admission tests.
+Raw samples remain ignored; ordinary tests use invented metadata and no provider
+requests. At T02 closeout no parser, warehouse, schedule or full capture was implemented;
+T03 below adds the pure parser.
 
 **Depends:** SSV-T01; **traces:** SSV-REQ02 / SSV-AC02.
-- [ ] Enumerate current facility profiles and separate consolidated/ORF datasets.
-- [ ] Record archive bounds, header variants, trailer format and unsupported regimes.
-- [ ] Reject overlapping scope selections before any acquisition.
-**Verify:** table-driven registry tests including unknown facility and old schema.
-**Files:** `manifest.py`, `manifests/finra-short-sale-volume.yml`, `tests/test_ssv_manifest.py`.
+- [x] Pin the seven-field production schema, `tradeReportDate` partition and
+  selected source-version behavior from the [API contract](api_contract.md).
+- [x] Resolve metadata N/Q/B/D versus example NYTRF/NQTRF/NCTRF identifiers;
+  record admitted facility pairs and explicit ADF/consolidated/ORF exclusions.
+- [x] Bound the documented rolling twelve-month regime; keep TXT headers,
+  trailers and older regimes in a separate unadmitted profile.
+- [x] Reject unknown and overlapping scope selections before data acquisition;
+  exact facility/market matching and explicit rolling acquisition-date guards
+  also reject mixed pairs, future/out-of-window dates and unsupported versions.
+**Source evidence:** [bounded source review](evidence/t02_source_contract.json)
+pins version 1, seven fields, 252 partitions from 2025-11-10 through 2026-11-10,
+and six November 9 rows confirming NYTRF/N, NQTRF/Q and NCTRF/B. Market D returned
+HTTP 204 / Record-Total 0 and supplied no facility identifier. ADF, consolidated,
+ORF and TXT remain excluded. The initial source-check script rejected HTTP 204;
+its failed result is preserved and the retained empty response was reviewed offline.
+**Verify:** 84 focused tests pass; full offline regression **566 passed, 10 skipped**.
+Ruff lint/format and source distribution/wheel builds pass.
+All six retained rows reconcile to the registry without changing their bytes.
+G0 is ready for this bounded source profile; G1/G2 are not complete.
+**Files:** `manifest.py`, `registry.py`, `manifests/finra-short-sale-volume.yml`,
+`tests/test_ssv_registry.py`; sanitized evidence is under `specs/spec012/evidence/`.
 
-## SSV-T03 — Characterize parser with invented files
+## SSV-T03 — Characterize API parser with invented responses
+
+**Status:** complete. The pure parser accepts bytes plus a manifest and receipt,
+performs no I/O, and assigns no clocks. **111 invented-fixture tests pass**;
+195 focused FINRA tests and full regression **677 passed, 10 skipped**. Ruff
+lint/format and package builds pass. [Offline conformance](evidence/t03_parser_conformance.json)
+reconciles all six unchanged retained rows, keeps all pages partial and rejects
+excluded market D. No new provider-data request or observation promotion occurred.
+
+**Evidence-driven amendment:** the initial integer-only parser rejected the
+retained Carteret response. All six retained rows contain fractional quantities.
+The [API contract](api_contract.md#ssv-t03-fractional-quantity-amendment) now requires
+exact Decimal shares for whole/fractional numbers; the integer-only assumption
+and rejection of every nonintegral value are superseded. The 40/5/100 example and
+exempt-subset invariant are unchanged; decimal arithmetic/round trips remain T04.
 
 **Depends:** SSV-T02; **traces:** SSV-REQ03 / SSV-AC03.
-- [ ] Cover valid rows, suffix symbols, zero trailer, malformed rows and truncation.
-- [ ] Pin explicit encoding/date/header rules and reject drift.
+- [x] Cover valid JSON arrays, suffix symbols, empty responses, malformed rows,
+  fractional/large quantities, duplicate keys/rows, unknown fields and truncation.
+- [x] Pin lossless numeric decoding, explicit JSON/date/schema rules and scope
+  receipt validation; API page totals never become a fabricated TXT trailer.
 **Verify:** `.venv/bin/python -m pytest -q tests/test_ssv_parser.py`.
-**Files:** `data/file.py`, `tests/test_ssv_parser.py`, up to three invented fixture files.
+**Files:** `data/api.py`, `tests/test_ssv_parser.py`, up to three invented response fixtures.
 
 ### Checkpoint A — Contract and parser
 
-- [ ] Terms/route evidence is current; fixture tests prove accepted and rejected shapes.
-- [ ] No live provider acquisition or scheduler activation occurred during fixtures.
+- [x] Terms/route evidence is current; fixture tests prove accepted and rejected shapes.
+- [x] No live provider-data acquisition or scheduler activation occurred during fixtures.
 
 ## SSV-T04 — Enforce share-count arithmetic
 
 **Depends:** SSV-T03; **traces:** SSV-REQ04 / SSV-AC04.
-- [ ] Preserve integers; validate exempt <= short <= total with explicit zero cases.
-- [ ] Prove exempt is a subset using 40/5/100 and large-count examples.
-**Verify:** parameterized semantic tests and lossless count round-trip assertions.
-**Files:** `data/file.py`, `data/gold.py`, `tests/test_ssv_semantics.py`.
+
+**Status:** complete. **71 SSV-AC04 tests pass**, including 40/5/100, fractional
+shares, large quantities, valid/invalid zero cases, exact text/JSON round trips,
+independent rational rounding bounds, half-even ties and caller-context isolation.
+The parser and ratio helper share one quantity validator with unchanged T03
+budgets. Source quantities preserve their full Decimal tuple; only derived ratios
+use 34 significant digits and ROUND_HALF_EVEN, method
+`finra-short-sale-volume-ratios/1`, unit 1.
+
+The [offline reconciliation](evidence/t04_semantics_conformance.json) checks all
+18 quantities and 12 ratios in the six unchanged retained rows. Samples remain
+partial; no provider-data request, capture clock or promotion was added.
+Full Gold aggregation/history, warehouse and publication remain later tasks.
+**Verification:** 266 focused FINRA tests; full regression **748 passed, 10 optional
+skips**; Ruff lint/format and source distribution/wheel builds pass. Next: SSV-T05.
+
+- [x] Preserve whole/fractional shares; validate exempt <= short <= total with explicit zero cases.
+- [x] Prove exempt is a subset using 40/5/100, fractional and large-quantity examples.
+**Verify:** parameterized semantic tests and lossless decimal quantity round-trip assertions.
+**Files:** `data/api.py`, `data/quantities.py`, `data/gold.py`,
+`tests/test_ssv_semantics.py`; sanitized offline evidence is under `specs/spec012/evidence/`.
 
 ## SSV-T05 — Archive input and rejected-capture evidence
 

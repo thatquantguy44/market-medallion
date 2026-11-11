@@ -1,0 +1,24 @@
+# SSV-T02 registry only; this file does not grant rights or enable acquisition.
+# Source evidence: specs/spec012/evidence/t02_source_contract.json
+source: finra
+dataset: finra-short-sale-volume
+route: finra_query_api
+provider_group: otcMarket
+provider_dataset: regShoDaily
+schema_id: finra-reg-sho-api/1
+data_version: 1
+format: json
+partition_field: tradeReportDate
+date_format: '%Y-%m-%d'
+history_months: 12
+fields:
+  tradeReportDate: Date
+  securitiesInformationProcessorSymbolIdentifier: String
+  shortParQuantity: Number
+  shortExemptParQuantity: Number
+  totalParQuantity: Number
+  marketCode: String
+  reportingFacilityCode: String
+# Exactly the three independently reported TRFs; no consolidated, ADF or ORF data.
+scopes:
+  - listed_trfs

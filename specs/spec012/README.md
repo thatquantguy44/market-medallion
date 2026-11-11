@@ -1,15 +1,89 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** Comprehensive implementation proposal; connector, package, jobs and
-data products are absent. **Reviewed:** 2026-11-03. **Delivery order:** 2 of 5.
+**Status:** SSV-T01–T04 complete for the selected three-TRF Public API profile:
+approved-use admission, strict manifest/schema/version, disjoint facility
+registry, acquisition-date guards, pure receipt-bound JSON parsing, exact quantity
+text round trips and per-observation ratio arithmetic are implemented. Connector,
+jobs and published data products remain absent. Next: SSV-T05 raw/rejected-capture
+archiving and redacted receipts.
+**Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
-**Proposed package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`.
+**Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
+(source contract, registry, pure parser and numeric helpers). The [source review](source_review.md) records the user's
+personal noncommercial scope and Public API terms acknowledgement. The selected
+[API profile](api_contract.md) explicitly amends the file-first plan for JSON and
+page completeness. G0 is ready for the explicit three-TRF profile; TXT, ADF,
+consolidated and ORF scopes stay excluded. [T02 evidence](evidence/t02_source_contract.json)
+records the six-row sample and its limits. [T03 evidence](evidence/t03_parser_conformance.json)
+reconciles its fractional share quantities offline; the
+[API amendment](api_contract.md#ssv-t03-fractional-quantity-amendment) supersedes integer-only normalization.
 
 Read the [program roadmap](../../docs/securities_finance/README.md),
 [common contract](../../docs/securities_finance/contract.md),
 [source data contract](data_contract.md), [plan](plan.md) and [tasks](todo.md).
 Spec011 delivery precedes this work by priority; its data is not a technical
 dependency of this independent FINRA pipeline. Spec013 follows this delivery.
+
+## Next agent handoff
+
+**Start here:** this section, then [SSV-T05 in the task list](todo.md#ssv-t05--archive-input-and-rejected-capture-evidence).
+Continue on `feat/spec012-finra-access-review`. The last implementation checkpoint
+is commit `9a506d3` (T04), already pushed; T01–T04 are complete and T05–T16 have
+not started. G0 and parser Checkpoint A are ready for the selected three-TRF API
+profile; G1/G2 and local publication remain open.
+
+Before coding, read the root [AGENTS.md](../../AGENTS.md), the
+[master handoff](../../docs/handoffs/project_bootstrap.md), this spec's
+[plan](plan.md), [data contract](data_contract.md),
+[API contract](api_contract.md) and [source review](source_review.md).
+Use the repository's pinned engineering workflows and retain the documented
+QuantSmith working-tree verification caveat; do not refresh either library.
+
+**Next bounded slice — SSV-T05 / SSV-REQ05 / SSV-AC05:** implement immutable raw
+input and rejected-capture evidence in the planned source-owned `io/bronze.py`
+and characterize it with `tests/test_ssv_bronze.py`. Add the package initializer
+only as needed. Start with invented valid and malformed API JSON plus scope
+receipts, using the existing fixtures and pure parser. Required outcomes:
+
+- Archive the original bytes and SHA-256, manifest/schema identity, run/capture
+  lineage and sanitized request/response scope evidence before parsing.
+- Preserve the same raw evidence when parsing rejects the input. A rejection
+  must not become a successful observation, coverage result or publication.
+- Enforce the applicable approved-use admission before I/O. Characterize
+  credential redaction before anything is persisted or logged; authentication
+  secrets, tokens, authorization/cookie headers and proxy credentials do not
+  belong in Bronze or receipts.
+
+Use [the existing parser](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/api.py),
+[quantity codec](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/quantities.py)
+and [ratio helpers](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/gold.py).
+Preserve fractional Decimal shares and the fixed T04 ratio method. The retained
+T02 `captured_at` is request start, not a Silver first-seen clock; do not backdate
+knowledge or apply today's acquisition window to archived input. Complete-partition
+proof and cross-page replacement remain later work. No provider acquisition,
+warehouse, export or Dagster job is part of T05. Keep NAAIM paused and schedules
+stopped. Secrets and retained provider payloads remain ignored.
+
+**Verification and closeout:** after adding the Bronze tests, run:
+
+```bash
+.venv/bin/python -m pytest -q tests/test_ssv_bronze.py
+.venv/bin/python -m pytest -q
+.venv/bin/ruff check .
+.venv/bin/ruff format --check .
+.venv/bin/python -m build --no-isolation
+```
+
+Last code verification at T04: **748 passed, 10 optional integrations skipped**;
+266 focused FINRA tests, Ruff and package checks passed. [T04 offline evidence](evidence/t04_semantics_conformance.json)
+reconciles 18 exact quantity round trips and 12 ratio checks in six unchanged
+retained source rows; all sampled pages remain partial and no observations were
+promoted. Ordinary tests must not depend on those ignored provider samples.
+When T05 passes, update [todo.md](todo.md), this section, the
+[master pipeline register](../../docs/pipelines.md),
+[program readiness tracker](../../docs/securities_finance/roadmap.md) and
+[master handoff](../../docs/handoffs/project_bootstrap.md) with actual evidence.
+The next planned slice after T05 is **SSV-T06**, one invented local SQLite partition.
 
 ## Objective and research questions
 
@@ -52,13 +126,23 @@ The [API fee schedule](https://developer.finra.org/fees) distinguishes limited
 Public credentials from paid Firm/Organization credentials. The
 [Reg SHO API explorer](https://developer.finra.org/docs/api-explorer/query_api-equity-reg_sho_daily_short_sale_volume)
 shows a mock endpoint. Mock responses are development data, never observations.
-No API account, paid entitlement, commercial-use approval or live-file schema
-conformance is established by this documentation-only work.
+The current [API documentation](https://developer.finra.org/docs#reg-sho-daily-short-sale-volume)
+also identifies the production `otcMarket/regShoDaily` dataset and a rolling
+twelve-month window. The [Equity API terms](https://developer.finra.org/specific-terms-equity-data)
+permit noncommercial internal use and derived data with valid access credentials.
+The user subsequently confirmed a Public credential and accepted API terms.
+Authentication and production metadata succeeded. SSV-T02 subsequently sampled
+two November 9 records from each TRF, confirming source version 1 and the literal
+facility/market pairs. These are partial contract samples, not complete extraction
+or historical coverage. The market D empty 204 response supplied no ADF identifier.
+The API profile is selected explicitly; no TXT permission is inferred.
 
 ## Scope and delivery boundary
 
-The first usable slice accepts an approved local facility file into immutable
-Bronze, typed Silver versions, local SQLite and an atomic Gold/Parquet snapshot.
+The planned first usable slice will accept an approved archived API JSON response plus
+its request/scope receipt into immutable Bronze, typed Silver versions, local
+SQLite and an atomic Gold/Parquet snapshot. This selected API profile supersedes
+the original TXT-first execution order; TXT files remain a separately gated path.
 Support each verified current facility explicitly. A consolidated file has a
 different scope and must be a distinct dataset, not extra rows to sum with its
 constituent facilities. ORF remains separate from listed-security TRF/ADF scope.
@@ -71,16 +155,19 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs; none is currently satisfied by code.
+Every task/test must cite these stable IDs. SSV-AC01–04 have 266 focused tests:
+84 admission/registry, 111 parser and 71 arithmetic/codec checks. Acquisition/export entry points do
+not exist, so their integrated guards and delivery acceptance remain pending.
+Full offline regression: 748 passed, 10 optional skips.
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |
 | SSV-REQ01: Record approved use and route. | SSV-AC01: Missing/disallowed rights profile refuses acquisition/export before I/O; offline fixtures remain usable. | SSV-T01 |
 | SSV-REQ02: Register file/date/facility/schema scope. | SSV-AC02: Registry distinguishes individual, consolidated and ORF inputs; aliases and unavailable historical regimes are explicit. | SSV-T02 |
-| SSV-REQ03: Parse documented file structure. | SSV-AC03: Invented fixtures cover headers/trailer, zero-row file, malformed row/date and schema drift; invalid files cannot promote. | SSV-T03 |
-| SSV-REQ04: Preserve count semantics. | SSV-AC04: Fixture 40 short, 5 exempt, 100 total yields 0.40; counts are integers with exempt <= short <= total. | SSV-T04 |
+| SSV-REQ03: Parse documented file structure. | SSV-AC03: Invented API responses cover literal JSON fields, empty arrays, malformed rows/dates and schema drift; invalid responses cannot promote. TXT header/trailer coverage remains a separate profile. | SSV-T03 |
+| SSV-REQ04: Preserve count semantics. | SSV-AC04: Fixture 40 short, 5 exempt, 100 total yields 0.40; whole/fractional shares remain exact decimals with exempt <= short <= total. | SSV-T04 |
 | SSV-REQ05: Retain raw evidence. | SSV-AC05: Success and parse rejection preserve exact bytes/hash, manifest, run, schema and request metadata without secrets. | SSV-T05 |
-| SSV-REQ06: Publish local transactional results. | SSV-AC06: One invented file produces audited SQLite Silver/Gold; failure leaves the prior committed snapshot intact. | SSV-T06 |
+| SSV-REQ06: Publish local transactional results. | SSV-AC06: One invented local API response with scope receipt produces audited SQLite Silver/Gold; failure leaves the prior committed snapshot intact. | SSV-T06 |
 | SSV-REQ07: Preserve observed revisions. | SSV-AC07: Identical repeat adds no version; correction/reversion remain queryable by actual first-seen cutoff. | SSV-T07 |
 | SSV-REQ08: Represent missing and removed rows. | SSV-AC08: Full replacement removal differs from no report, valid empty, failed fetch and partial file; missingness never invents zero. | SSV-T08 |
 | SSV-REQ09: Produce scoped research ratios. | SSV-AC09: Matching numerator/denominator only; zero total returns null; mixed consolidated/constituent inputs are rejected. | SSV-T09 |
@@ -100,10 +187,12 @@ as a prerequisite. Proposed source-owned files are:
 
 ```text
 pipelines/finra_short_sale_volume/
-  manifest.py       # scope, schema and approved-use profile
-  source.py         # finite file discovery and acquisition
-  data/file.py      # pure parser and typed records
-  data/gold.py      # denominator-safe features
+  manifest.py       # implemented approved-use and strict manifest/schema checks
+  registry.py       # implemented API version, facility scopes and date-window guard
+  source.py         # bounded API partitions and acquisition
+  data/api.py       # implemented pure receipt-bound parser and Decimal records
+  data/quantities.py # implemented exact quantity validation and text codec
+  data/gold.py      # implemented per-observation ratios; aggregate/history later
   io/bronze.py     # exact input and request receipts
   io/warehouse.py  # SQLite observation versions and publication transactions
   io/parquet.py    # committed typed snapshot
@@ -115,17 +204,21 @@ pipelines/finra_short_sale_volume/
 tests/fixtures/finra_short_sale_volume/  # invented data only
 ```
 
-Use explicit types, stable provider strings and integer counts. A proposed pure
-transform illustrates the style; this snippet is design guidance, not runtime:
+The implemented pure helper uses exact Decimal shares and a fixed 34-significant-digit,
+half-even ratio policy, independent of caller context. Exempt is a subset of short:
 
 ```python
 from decimal import Decimal
+from market_data_pipeline.pipelines.finra_short_sale_volume.data.gold import share_ratios
 
-def short_share(short_volume: int, total_volume: int) -> Decimal | None:
-    if total_volume == 0:
-        return None
-    return Decimal(short_volume) / Decimal(total_volume)
+ratios = share_ratios(Decimal("40"), Decimal("5"), Decimal("100"))
+assert ratios.short_share == Decimal("0.40")
+assert ratios.short_exempt_share == Decimal("0.05")
 ```
+
+The [T04 numeric contract](data_contract.md#ssv-t04-arithmetic-and-quantity-text-boundary)
+and [offline evidence](evidence/t04_semantics_conformance.json) define the quantity
+codec, zero/null behavior, method version and remaining publication boundary.
 
 ## Verification commands and CLI proposal
 
@@ -146,7 +239,7 @@ market-wide short-interest label.
 
 ```bash
 .venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume validate --manifest manifests/finra-short-sale-volume.yml
-.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume run --input tests/fixtures/finra_short_sale_volume/current.txt --root data/ssv-demo
+.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume run --input tests/fixtures/finra_short_sale_volume/current.json --root data/ssv-demo
 .venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume check --root data/ssv-demo
 .venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume replay --source-root data/ssv-demo --root data/ssv-replay
 ```

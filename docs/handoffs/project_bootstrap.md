@@ -21,10 +21,68 @@ new live schedules default stopped.
 
 ## 2026-11-10 current pickup and AAII manual refresh
 
-Spec011's T17/G2 closeout merged through PR #8 at `c16acee`. The next
-source-build task is **Spec012 SSV-T01**, FINRA approved use and acquisition-route
-review; the older merge prerequisite below is satisfied. No FINRA package or
-connector exists yet. Preserve the NAAIM pause and stopped schedule defaults.
+Spec011 T17/G2 merged through PR #8; AAII's refresh documentation merged through
+PR #9. FINRA **SSV-T01–T04 are complete for source version 1 and the selected
+three-TRF Public API profile**. Approved-use admission, strict manifest/schema/
+version validation, exact facility resolution, disjoint scope selection and
+explicit rolling acquisition-date guards, a pure receipt-bound JSON parser,
+shared quantity validation/text readback and per-observation ratios are implemented.
+Reusable acquisition, warehouse, export and job remain absent.
+**Next: SSV-T05**, immutable raw/rejected-capture archiving and redacted receipts.
+Start with the [Spec012 next-agent handoff](../../specs/spec012/README.md#next-agent-handoff),
+which records commit `9a506d3`, planned files, scope limits and verification.
+T04's numeric helpers do not complete aggregate/temporal Gold or publication.
+
+The user confirmed Public credentials and accepted API terms for personal
+noncommercial internal research. Keep the evidence reference
+`USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10` as user attestation, not independent
+license documentation. Credentials and tokens remain excluded from Git/logs.
+
+The [T02 aggregate evidence](../../specs/spec012/evidence/t02_source_contract.json)
+reconciles six November 9 rows to NQTRF/Q, NCTRF/B and NYTRF/N. Source dataset
+version 1 is active, and 252 available partition dates span 2025-11-10 through
+2026-11-10. These are partial samples, not complete date/facility history. The
+market D query returned HTTP 204 / Record-Total 0 with no ADF identifier. Its initial
+checker rejection is retained; offline review reconciled all raw digests without
+refetching or relabeling that failed check as a successful pipeline capture.
+
+T03's first offline parse exposed an incorrect integer-only assumption: all six
+retained rows contain fractional short or total quantities. The
+[API amendment](../../specs/spec012/api_contract.md#ssv-t03-fractional-quantity-amendment)
+and [sanitized evidence](../../specs/spec012/evidence/t03_parser_conformance.json)
+record the rejection and correction. Whole/fractional quantities now remain exact
+Decimal values, without rounding/truncation. All six unchanged rows and ten
+fractional values reconcile; every sampled page remains partial. T03 made no
+provider-data request, assigned no clocks and promoted no observations.
+
+T04's [numeric contract](../../specs/spec012/data_contract.md#ssv-t04-arithmetic-and-quantity-text-boundary)
+pins ratio method `finra-short-sale-volume-ratios/1`, unit 1, 34 significant digits
+and half-even rounding. Quantities retain every digit and scale through bounded
+Decimal text/JSON readback. Valid zero total yields null ratios; invalid numerator/
+denominator triples reject. Caller decimal settings/flags remain unchanged.
+[Offline evidence](../../specs/spec012/evidence/t04_semantics_conformance.json)
+checks all 18 quantities and 12 ratios in the unchanged six-row sample. It adds
+no source requests, clocks, promoted observations or coverage claims.
+
+The [API contract](../../specs/spec012/api_contract.md) records exact schema,
+version and scope behavior. `listed_trfs` is only the three reviewed TRFs;
+ADF, consolidated TRF/ADF, ORF, TXT, mock and other versions remain excluded.
+G0 is ready for this explicit profile; G1/G2 and full source conformance remain
+open. The rolling twelve-calendar-month guard is for new acquisition, not a
+current-day filter on archived local imports/replay. Contract-check receipt
+`captured_at` records request start, not an assigned Silver first-seen clock.
+No observations have been promoted. NAAIM stays paused; schedules stay stopped.
+
+Verification: **748 offline tests passed, 10 optional integrations skipped**;
+266 focused FINRA tests pass (71 semantics + 111 parser + 63 registry + 21 admission). Ruff
+lint/format and source distribution/wheel builds pass. The six retained samples,
+source metadata, version headers and unchanged raw hashes reconcile to the
+implemented registry and parser. Core verification does not establish integrated HTTP,
+warehouse, export or job behavior for this new pipeline.
+
+QuantSmith's external working-tree pin still fails verification. Previously
+adopted guidance was read from its pinned Git object and hash-checked without
+refreshing its checkout or this repository's reference.
 
 The user-requested AAII manual Dagster refresh succeeded for October 13 through
 November 10. It added October 29 and November 5, bringing local PostgreSQL and the
@@ -368,10 +426,14 @@ retention continue within the existing internal-research scope.
 
 ## Next work
 
-Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Review
-and merge the T17 closeout, then begin Spec012 on a fresh branch from updated
-`main`. Read Spec012's README, data contract, plan and task list and the program
-roadmap before implementation. Spec011's selected source conformance and A01–A15
+Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
+T17 is merged. Continue Spec012 SSV-T05 on `feat/spec012-finra-access-review`:
+SSV-T01–T04 are complete for the selected source version 1 three-TRF API profile.
+Next is immutable raw/rejected-capture archiving and redacted lineage receipts. G0 and parser
+Checkpoint A are ready for this scope; local publication and G1/G2 remain open.
+Read Spec012's README, data contract, plan, tasks, API contract and source review
+before further implementation.
+Spec011's selected source conformance and A01–A15
 backend/recovery evidence are complete; wider source coverage, recurring
 operation, Databricks workspace activation, public distribution and the optional
 joined projection remain outside this accepted delivery.

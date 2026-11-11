@@ -31,8 +31,13 @@ publication recovery evidence. T22 also stages threshold membership/coverage/aud
 history and derived episodes as a checksummed source snapshot. T17/G2 is complete
 for the bounded native-source internal-research delivery: both SEC archives and
 ten authentic Nasdaq/NYSE lists reconcile. See the [acceptance record](specs/spec011/acceptance.md)
-for the user-attested permission, evidence and exclusions. Spec012 follows after
-the closeout merges. Databricks
+for the user-attested permission, evidence and exclusions. The closeout is merged;
+Spec012 now has an [access review](specs/spec012/source_review.md), approved-use
+admission and a strict three-TRF API schema/facility registry. Bounded version 1
+samples reconcile to its pure receipt-bound JSON parser. Whole and fractional
+share quantities remain exact Decimal values, with pure per-observation ratios
+and lossless quantity text readback. Connector and complete-partition/history
+delivery remain unimplemented; next is SSV-T05 raw/rejected-capture receipts. Public API terms acceptance is user-attested. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).
