@@ -21,6 +21,12 @@ new live schedules default stopped.
 
 ## 2026-11-10 current pickup and AAII manual refresh
 
+**Planning addition:** [Spec017](../../specs/spec017/README.md) is the lightweight
+FOMC minutes archive draft: complete original documents, current/history inventory,
+full text/OCR status and observed revisions. Its embedded first-slice handoff is
+for future selection; no archive or connector exists. The current FINRA SSV-T05
+pickup, securities-finance order and NAAIM pause remain unchanged.
+
 Spec011 T17/G2 merged through PR #8; AAII's refresh documentation merged through
 PR #9. FINRA **SSV-T01–T04 are complete for source version 1 and the selected
 three-TRF Public API profile**. Approved-use admission, strict manifest/schema/
