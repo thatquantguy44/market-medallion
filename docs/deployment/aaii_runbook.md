@@ -144,6 +144,30 @@ A production run launcher/daemon and external alert destinations are not configu
 For a manual bounded live execution, use `resources/dagster-aaii-live.yml`.
 For a local XLS execution, set the XLS manifest plus explicit `start` and `end`.
 
+For an interactive manual update, open **Jobs → aaii_sentiment_job → Launchpad**
+in the Dagster UI and edit the run YAML. The worker must have this project's
+`.env` loaded, and the existing PostgreSQL container must be running. For example,
+this 70-day window ends on November 10, 2026; edit both dates for a later run:
+
+```yaml
+ops:
+  aaii_sentiment:
+    config:
+      config_path: config/config.yaml
+      manifest_path: manifests/aaii-investor-sentiment-xls.yml
+      live: true
+      start: '2026-09-01'
+      end: '2026-11-10'
+```
+
+Click **Launch Run** and inspect its status, logs and materialization metadata.
+Manual live windows are limited to 90 days. Changing Launchpad dates affects
+only that run and does not activate a schedule. See Dagster's
+[run-configuration guide](https://dagster.io/docs/guides/operate/configuration/run-configuration).
+The direct `weekly --config config/config.yaml` CLI instead reads
+`operations.overlap_days` (7–90) from runtime YAML; it executes the same core
+without creating a Dagster run record.
+
 ## Replay and failure recovery
 
 ```bash

@@ -10,8 +10,8 @@ publishes typed Parquet snapshots. Dagster provides the initial orchestration.
 **Status:** the AAII local pipeline is complete under [Spec 003](specs/spec003/README.md):
 CSV/XLS ingestion, observed revisions, replay, Parquet, SQLite/PostgreSQL,
 Dagster integration, weekly bounds/retries/freshness, historical backfill and
-verified backup/restore. The local PostgreSQL warehouse contains 2,046 reported
-dates through October 22, 2026; three invalid historical rows are quarantined.
+verified backup/restore. The local PostgreSQL warehouse contains 2,048 reported
+dates through November 5, 2026; three invalid historical rows are quarantined.
 Recurring AAII acquisition permission remains unverified, so both schedules stay
 stopped. Databricks publishing is implemented but has not been live-tested.
 CFTC has a verified provider contract but remains unimplemented. NAAIM's delayed
