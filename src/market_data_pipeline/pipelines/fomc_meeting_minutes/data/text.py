@@ -231,22 +231,33 @@ def validate(value):
     try:
         data = dict(value)
         identity = data.pop("extraction_id")
-        assert identity == digest(data)
-        assert value["schema_id"] == "fomc-native-text/1"
-        assert value["profile_sha256"] == digest(value["profile"])
-        assert value["status"] in {"native_extracted", "review_required", "failed"}
         text = value["full_text"]
-        assert hashlib.sha256(text.encode()).hexdigest() == value["text_sha256"]
-        assert text == "\n\n".join(u["text"] for u in value["units"])
+        checks = [
+            identity == digest(data),
+            value["schema_id"] == "fomc-native-text/1",
+            value["profile_sha256"] == digest(value["profile"]),
+            value["status"] in {"native_extracted", "review_required", "failed"},
+            hashlib.sha256(text.encode()).hexdigest() == value["text_sha256"],
+            text == "\n\n".join(u["text"] for u in value["units"]),
+        ]
         offset = 0
         for i, unit in enumerate(value["units"]):
-            assert unit["ordinal"] == i and unit["start"] == offset
-            assert unit["end"] == offset + len(unit["text"])
-            assert text[unit["start"] : unit["end"]] == unit["text"]
-            assert hashlib.sha256(unit["text"].encode()).hexdigest() == unit["text_sha256"]
+            checks.extend(
+                [
+                    unit["ordinal"] == i,
+                    unit["start"] == offset,
+                    unit["end"] == offset + len(unit["text"]),
+                    text[unit["start"] : unit["end"]] == unit["text"],
+                    hashlib.sha256(unit["text"].encode()).hexdigest() == unit["text_sha256"],
+                ]
+            )
             offset = unit["end"] + 2
         if value["page_count"] is not None and "page_limit" not in value["issues"]:
-            assert [u["page"] for u in value["units"]] == list(range(1, value["page_count"] + 1))
-    except (KeyError, TypeError, ValueError, AssertionError):
+            checks.append(
+                [u["page"] for u in value["units"]] == list(range(1, value["page_count"] + 1))
+            )
+        if not all(checks):
+            raise ValueError
+    except (KeyError, TypeError, ValueError):
         raise ValueError("FOMC extraction integrity mismatch") from None
     return value
