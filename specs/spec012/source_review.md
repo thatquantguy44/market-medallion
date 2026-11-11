@@ -1,0 +1,104 @@
+# FINRA short-volume approved-use review
+
+Reviewed 2026-11-10, America/New_York. Traces: **SSV-T01 / SSV-REQ01 / SSV-AC01**.
+This is an evidence and admission-policy checkpoint; no FINRA observations,
+credential, provider sample, warehouse or job has been acquired or created.
+
+## Selected use and current decision
+
+The user confirmed **personal noncommercial internal research** in this session.
+No commercial, public-distribution or model-training scope is admitted by that
+statement. It describes the intended use, not an attestation of provider rights.
+
+**Current operational decision: invented fixtures only.** The public TXT-file
+route has unresolved automation/database permission. The free Public Query API
+is a documented candidate for the selected use, conditional on an actual
+Individual/Public credential, accepted API terms and the selected API contract.
+No accepted agreement or source-specific permission reference has been provided.
+No account was created and no agreement was accepted on the user's behalf.
+
+The source-owned admission gate records the intended purpose, route,
+authorization kind, a nonsecret evidence reference, permitted operations and,
+for the API, the Public credential type. A reference records operator evidence;
+it is not independent verification or a substitute for authenticating credentials.
+Missing, pending, mismatched or disallowed profiles must fail before provider
+I/O. No connector or command consumes this gate until its own implementation.
+
+## Official evidence
+
+| Source checked | Relevant evidence | Decision or remaining gap |
+| --- | --- | --- |
+| [Dataset overview](https://www.finra.org/finra-data/browse-catalog/short-sale-volume) | Noncommercial use is described as free. | Cost alone does not establish automated loading rights. |
+| [Website terms](https://www.finra.org/terms-of-use), Restrictions (d), (e), (m) | Database creation needs an express exception; bulk extraction and predictive/AI use are restricted. | Website automation and durable TXT-derived loading are not admitted without applicable permission. |
+| [API terms](https://developer.finra.org/finra-api-terms-service), updated March 19, 2026, sections2 and3 | Specific terms control; access requires FINRA-issued credentials and an applicable license. API bulk access is distinguished from other collection methods. | Read with the Equity terms; a website download is not covered merely because an API exists. |
+| [Equity API specific terms](https://developer.finra.org/specific-terms-equity-data), updated December 20, 2022, sections1,2 and6 | The otcMarket group accepts Public/Firm/Organization credentials, permits noncommercial internal use and derived data, and adds no dataset-specific retention condition. | Candidate fit for the selected purpose; all general terms still apply. Public redistribution is outside this selected project scope. |
+| [Getting started](https://developer.finra.org/node/1146) | Individual users can provision Public and Mock credentials; individual use is noncommercial. | The user must obtain and accept their own access. Mock credentials are not production entitlement. |
+| [Fees](https://developer.finra.org/fees) and [Public credentials](https://developer.finra.org/fees/public) | Public credentials have no connection fee; Firm/Organization credentials are paid alternatives. | Paid routes are not selected. |
+| [API FAQ](https://developer.finra.org/support?field_faq_category=471) | Public credentials have a 10GB monthly cap and become inactive on exhaustion. | Future acquisition must budget usage; no upgrade or paid overage is authorized. |
+| [Reg SHO API documentation](https://developer.finra.org/docs#reg-sho-daily-short-sale-volume) | Production dataset otcMarket/regShoDaily is distinct from regShoDailyMock and has rolling twelve-month availability. JSON fields differ from TXT layout. | API selection needs its own schema, completeness/pagination and history review. It cannot silently replace the file contract. |
+| [API explorer](https://developer.finra.org/docs/api-explorer/query_api-equity-reg_sho_daily_short_sale_volume) | The displayed example URL targets regShoDailyMock. | Explorer examples are development shapes, not actual observations or live conformance. |
+| [Daily file landing page](https://www.finra.org/finra-data/browse-catalog/short-sale-volume-data/daily-short-sale-volume-files) | Facility files are separate from consolidated listed-security TRF/ADF scope. Updates may arrive later; an ADF file may be empty. | Preserve the existing separate ORF and consolidated/constituent contracts. Exact payload/header/archive conformance remains unverified. |
+| [File layout PDF](https://www.finra.org/sites/default/files/2021-07/DailyShortSaleVolumeFileLayout.pdf) | Modern files have six pipe-separated columns, a record-count trailer, and exempt shares included within short shares. An earlier layout omits exempt volume. | Documentation supports invented fixtures; it does not pin actual bytes, encoding or consolidated market-field formatting. |
+
+These are documentary findings and conservative project admission decisions,
+not a claim that FINRA has approved this user's implementation. Reviewed pages
+can change; recheck current terms before activation. No provider payload was
+requested, even to test a publicly reachable URL.
+
+## Concrete admission contract
+
+`approved_use` is a mapping validated by
+`pipelines/finra_short_sale_volume/manifest.py`. Its fields are:
+
+- `purpose`: exactly `personal_noncommercial_internal_research`.
+- `route`: `invented_fixture`, `approved_local_file`, `finra_daily_files`, or
+  `finra_query_api`.
+- `authorization`: `pending`, `provider_permission`, or `accepted_api_terms`.
+- `permission_reference`: a nonempty nonsecret reference when provider use is
+  granted; evidence is kept outside the credential value itself.
+- `operations`: an explicit list selected from `fixture`, `local_import`,
+  `acquire`, `transform`, and `internal_export`.
+- `credential_type`: `public` for the API; otherwise null.
+
+An invented-fixture profile admits only `fixture` and needs no provider grant.
+Local files and daily-file downloads require `provider_permission` plus a
+reference and an explicit operation grant. A local-file profile never admits
+network acquisition. Query API profiles require `accepted_api_terms`, a
+reference, `credential_type: public` and an operation grant. Acknowledgements
+must match the route; a noncommercial label or credential type alone is
+insufficient. Other audiences, routes and unknown fields are rejected.
+
+An internally exported artifact stays within the same authorized user's
+research scope. Its future writer must preserve FINRA attribution and source
+scope. No redistribution grant is inferred here. Real parser, storage, transport
+and export entry points must invoke this gate before their own I/O; none exist
+in this checkpoint, so there is no end-to-end acquisition-refusal claim yet.
+
+## Next bounded action
+
+Finish SSV-T01 by recording either applicable TXT/local-file permission or the
+user's accepted API-terms reference. If the API is selected, amend SSV-T02/T03
+with an explicit API schema/partition plan before implementation, retaining the
+current file-based design as a separate profile. Do not label pagination totals
+as a TXT trailer or invent missing ADF/consolidated coverage.
+
+Until then, SSV-T01 remains **in progress**, G0 stays open, and no next-source
+priority changes. Invented admission tests may run without credentials, network,
+provider data or a scheduled job. SSV-T02/T03 have not started. NAAIM stays paused.
+
+## Verification checkpoint
+
+The focused SSV-AC01 suite has **21 passing offline tests**. It first failed
+collection because the FINRA module did not exist, then passed with the pure
+gate. Fixtures use invented permission references, never actual provider grants.
+Tests cover missing profiles without I/O, pending rights, operation-specific
+permissions, local-only acquisition refusal, API-specific terms/credential
+metadata, scope expansion and unknown fields. This verifies the helper only;
+future entry-point integration, credentials and real source conformance remain
+unverified.
+
+Full offline regression: **503 passed, 10 skipped** (optional integration
+coverage was not enabled). Repository Ruff lint and formatting checks pass;
+source distribution and wheel builds pass. These results do not establish
+FINRA live access, actual provider-schema conformance, PostgreSQL/Delta parity
+for this new pipeline, or integrated transport/export admission enforcement.

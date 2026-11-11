@@ -1,9 +1,10 @@
 # Delivery roadmap — securities-finance research data
 
-**Updated:** 2026-11-03. **Planning horizon:** milestone based, without invented
-completion dates or throughput estimates. All five research deliveries remain
-open; Spec011 has an initial offline SEC parser/manifest/inspection slice.
-No new acquisition adapter or job exists yet.
+**Updated:** 2026-11-10. **Planning horizon:** milestone based, without invented
+completion dates or throughput estimates. Spec011 G2 is accepted for its bounded
+native-source scope and merged through PR #8. Spec012 has an official-use review
+and pure admission gate only; its parser/connector/jobs and Specs013–015 remain
+unimplemented. NAAIM remains paused.
 
 ## Priority and backlog relationship
 
@@ -128,8 +129,8 @@ connector; the source-owned contract and gaps determine the final boundary.
 
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
-| 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete in closeout branch | Not started | Deferred | Review/merge T17 closeout; ten authentic lists and both SEC archives reconcile; then Spec012 |
-| 012 | Open | Not started | Not started | Not started | Deferred | Next after011 closeout merge; resolve free-route use/retention scope |
+| 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete, merged PR #8 | Not started | Deferred | Ten authentic lists and both SEC archives reconcile; current source-build work is Spec012 |
+| 012 | Open; SSV-T01 in progress | Not started | Not started | Not started | Deferred | Personal noncommercial use selected; source review and 21 pure admission tests implemented. Record actual permission/terms and select a source profile before T02/T03. |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |

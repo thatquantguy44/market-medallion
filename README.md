@@ -31,8 +31,10 @@ publication recovery evidence. T22 also stages threshold membership/coverage/aud
 history and derived episodes as a checksummed source snapshot. T17/G2 is complete
 for the bounded native-source internal-research delivery: both SEC archives and
 ten authentic Nasdaq/NYSE lists reconcile. See the [acceptance record](specs/spec011/acceptance.md)
-for the user-attested permission, evidence and exclusions. Spec012 follows after
-the closeout merges. Databricks
+for the user-attested permission, evidence and exclusions. The closeout is merged;
+Spec012 now has an [access review](specs/spec012/source_review.md) and pure
+approved-use admission gate only. Its connector remains absent and actual access
+is not admitted. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).

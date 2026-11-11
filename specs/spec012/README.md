@@ -1,9 +1,13 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** Comprehensive implementation proposal; connector, package, jobs and
-data products are absent. **Reviewed:** 2026-11-03. **Delivery order:** 2 of 5.
+**Status:** SSV-T01 in progress: official-source review and pure approved-use
+admission metadata are implemented; parser, connector, jobs and data products
+remain absent. **Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
-**Proposed package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`.
+**Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
+(admission gate only). The [source review](source_review.md) records the current
+fixture-only decision, user-selected personal noncommercial scope, conditional
+Public API candidate and unresolved file-route permission. G0 remains open.
 
 Read the [program roadmap](../../docs/securities_finance/README.md),
 [common contract](../../docs/securities_finance/contract.md),
@@ -52,8 +56,14 @@ The [API fee schedule](https://developer.finra.org/fees) distinguishes limited
 Public credentials from paid Firm/Organization credentials. The
 [Reg SHO API explorer](https://developer.finra.org/docs/api-explorer/query_api-equity-reg_sho_daily_short_sale_volume)
 shows a mock endpoint. Mock responses are development data, never observations.
-No API account, paid entitlement, commercial-use approval or live-file schema
-conformance is established by this documentation-only work.
+The current [API documentation](https://developer.finra.org/docs#reg-sho-daily-short-sale-volume)
+also identifies the production `otcMarket/regShoDaily` dataset and a rolling
+twelve-month window. The [Equity API terms](https://developer.finra.org/specific-terms-equity-data)
+permit noncommercial internal use and derived data with valid access credentials.
+This is a candidate mechanism, not an admitted replacement for TXT files: no
+accepted terms reference, actual API account, entitlement or live schema
+conformance is established. Account creation and terms acceptance remain the
+user's actions. No observation endpoint was requested during this review.
 
 ## Scope and delivery boundary
 
@@ -71,7 +81,9 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs; none is currently satisfied by code.
+Every task/test must cite these stable IDs. SSV-AC01 has focused unit evidence
+for the pure admission gate; acquisition/export entry points do not exist yet,
+so integrated pre-I/O enforcement and the complete acceptance remain pending.
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |

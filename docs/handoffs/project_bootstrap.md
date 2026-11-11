@@ -23,8 +23,24 @@ new live schedules default stopped.
 
 Spec011's T17/G2 closeout merged through PR #8 at `c16acee`. The next
 source-build task is **Spec012 SSV-T01**, FINRA approved use and acquisition-route
-review; the older merge prerequisite below is satisfied. No FINRA package or
-connector exists yet. Preserve the NAAIM pause and stopped schedule defaults.
+review; the older merge prerequisite below is satisfied. FINRA now owns only
+`pipelines/finra_short_sale_volume/manifest.py` approved-use metadata: 21 offline
+tests pass. Parser, connector, jobs and outputs remain absent. Preserve the NAAIM
+pause and stopped schedule defaults.
+
+The user selected personal noncommercial internal research. The
+[FINRA source review](../../specs/spec012/source_review.md) records a conditional
+free Public API candidate and unresolved TXT-file automation/database permission.
+Current admission is invented fixtures only; G0 remains open. Next, record actual
+file permission or accepted API terms. An API choice needs its own schema and
+completeness plan before SSV-T02/T03. No FINRA account was created or provider
+observation requested. QuantSmith's working-tree pin still does not verify;
+selected guidance was read from its pinned Git object and hash-checked, without
+refreshing the external checkout or this repository's reference.
+
+Verification: 503 offline tests passed, 10 optional integrations skipped; Ruff
+lint/format and package builds pass. This is admission-only unit evidence; it
+does not establish provider access or integrated acquisition/export enforcement.
 
 The user-requested AAII manual Dagster refresh succeeded for October 13 through
 November 10. It added October 29 and November 5, bringing local PostgreSQL and the
@@ -368,10 +384,12 @@ retention continue within the existing internal-research scope.
 
 ## Next work
 
-Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Review
-and merge the T17 closeout, then begin Spec012 on a fresh branch from updated
-`main`. Read Spec012's README, data contract, plan and task list and the program
-roadmap before implementation. Spec011's selected source conformance and A01–A15
+Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
+T17 is merged. Continue Spec012 SSV-T01 on `feat/spec012-finra-access-review`:
+its source review and 21 pure admission tests are implemented, while the actual
+permission/accepted-terms reference and G0 remain open. Read Spec012's README,
+data contract, plan, tasks and source review before further implementation.
+Spec011's selected source conformance and A01–A15
 backend/recovery evidence are complete; wider source coverage, recurring
 operation, Databricks workspace activation, public distribution and the optional
 joined projection remain outside this accepted delivery.

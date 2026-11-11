@@ -1,9 +1,26 @@
 # FINRA short-sale-volume data contract
 
-**Version:** design v1, 2026-11-03. **Implementation status:** absent.
-Provider facts below are documented; normalized names and storage are proposals.
+**Version:** design v1 with the 2026-11-10 SSV-T01 admission checkpoint.
+**Implementation status:** pure approved-use gate only; parser, connector and
+storage are absent. Provider facts below are documented; normalized names and
+storage remain proposals.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
+
+## Approved-use admission checkpoint
+
+The [2026-11-10 source review](source_review.md) is the current rights/route
+evidence and `approved_use` mapping contract. The user selected personal
+noncommercial internal research. `manifest.require_approved_use` validates that
+purpose, route, authorization kind, nonsecret permission reference, explicit
+operation grants and optional Public credential metadata without I/O.
+
+Current operational admission is **invented fixtures only**. An actual
+file-permission or accepted API-terms reference is still required. The Public
+Query API has documented noncommercial internal/derived-data rights, but a
+separate JSON schema/completeness plan and account are needed before selecting
+that route. API evidence does not grant website TXT collection permission.
+Future I/O entry points must call the gate; none are implemented yet.
 
 ## Evidence register and remaining conformance
 

@@ -1,8 +1,19 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** proposed, 2026-11-03. Use [todo.md](todo.md) as the single task list.
+**Status:** SSV-T01 admission checkpoint in progress, 2026-11-10.
+Use [todo.md](todo.md) as the single task list.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
+
+## Current bounded checkpoint
+
+The [source review](source_review.md) records the user's personal noncommercial
+internal-research purpose, current fixture-only decision, Public API candidate
+and unresolved website file-use permission. Only approved-use metadata and
+its pure admission gate are implemented. Selecting the API requires a recorded
+accepted-terms reference and an explicit JSON schema/completeness amendment to
+SSV-T02/T03; it does not silently change the original file-first contract.
+No parser, warehouse, provider request, export or job is implemented.
 
 ## Decisions and dependency flow
 

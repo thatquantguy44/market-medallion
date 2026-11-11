@@ -1,16 +1,25 @@
 # Tasks — FINRA daily short-sale volume
 
-All implementation tasks are **not started**. Prefix paths below with
+SSV-T01 is **in progress** with source-review and pure admission-gate evidence;
+SSV-T02–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests are future targets. [README.md](README.md) defines their acceptance IDs.
+Tests below are future targets except the implemented SSV-T01 admission suite. [README.md](README.md) defines their acceptance IDs.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
 
 **Depends:** Spec011 delivery; **traces:** SSV-REQ01 / SSV-AC01.
-- [ ] Record dataset-specific automation, persistence, transforms and display terms.
-- [ ] Distinguish free files, limited Public API, paid credentials and mock routes.
-- [ ] Implement admission metadata only after the use decision is recorded.
+- [ ] Close the applicable permission/accepted-terms reference for automation,
+  persistence, transforms and display. [Official review](source_review.md)
+  records the selected purpose and conditional API rights; TXT permission remains open.
+- [x] Distinguish free files, limited Public API, paid credentials and mock routes.
+- [x] Implement admission metadata after recording the current fixture-only decision.
+  `manifest.require_approved_use` is pure; **21 offline tests pass** against
+  missing/disallowed profiles, explicit operation grants and route-specific evidence.
+  Future adapters must call it before I/O; no acquisition/export adapter exists.
+
+**Checkpoint:** G0 remains open. No provider data, account or permission was
+fabricated; SSV-T02/T03 have not started.
 **Verify:** documentary review plus an offline negative admission fixture.
 **Files:** `specs/spec012/data_contract.md`, `manifest.py`, `tests/test_ssv_manifest.py`.
 
