@@ -76,6 +76,11 @@ def replay_text_catalog(source, target, manifest, *, source_root, target_root, c
         ).fetchone()[0]
     ):
         raise ValueError("FOMC replay target database must be empty")
+    if any(
+        t.connection.execute(t._query("SELECT count(*) FROM {schema}." + table)).fetchone()[0]
+        for table in ("text_extractions", "text_catalogs")
+    ):
+        raise ValueError("FOMC replay target text database must be empty")
     value = source.read(manifest, root=source_root, catalog_id=catalog_id)
     if value is None:
         raise ValueError("FOMC replay requires a committed source catalog")

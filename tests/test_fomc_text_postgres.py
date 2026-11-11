@@ -241,3 +241,27 @@ def test_text_migration_refuses_partial_or_unowned_tables(text_archive):
     text.store.connection.execute(text.store._query("DROP TABLE {schema}.text_units"))
     with pytest.raises(ValueError, match="incomplete"):
         text.migrate()
+
+
+def test_long_unicode_text_round_trips_without_truncation(text_archive, tmp_path):
+    from datetime import UTC, datetime
+
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import capture
+
+    text, manifest, ids = text_archive
+    expected = "Full Unicode Ω—中 café ¹ " * 3000
+    receipt = capture(
+        tmp_path,
+        ('<div id="article"><p>' + expected + "</p></div>").encode(),
+        manifest=manifest,
+        store=text.bronze,
+        source_url="https://www.federalreserve.gov/monetarypolicy/invented-unicode.htm",
+        kind="document",
+        captured_at=datetime.now(UTC),
+        status=200,
+        headers={},
+        max_bytes=300000,
+    )
+    result = text.extract_capture(receipt["capture_id"], manifest, root=tmp_path)
+    assert result["full_text"] == expected.strip()
+    assert text.read_extraction(result["extraction_id"], root=tmp_path) == result
