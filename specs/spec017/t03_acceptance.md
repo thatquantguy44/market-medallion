@@ -76,4 +76,5 @@ Ruff lint/format, diff checks and package/artifact checks passed.
 
 This acceptance does not certify a full backfill of all 470 document references,
 PDF structure/OCR quality, complete searchable text or operational scheduling.
-T04 is the next selected slice.
+At this checkpoint T04 was next. Its later [acceptance](t04_acceptance.md)
+records bounded native-text/catalog implementation and the remaining review gaps.

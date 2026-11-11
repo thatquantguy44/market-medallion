@@ -1,13 +1,16 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** FOMC-T01/T02/T03 complete for the user-selected **1990-onward
-inventory and immutable-Bronze foundation**. The local migrations are applied;
-33 official inventories reconcile to 371 meetings and 470 document references.
-The bounded archive has 72 byte-verified captures, including 22 PNG assets;
-this is not a full original-document backfill or searchable text archive.
-[Acceptance](t03_acceptance.md) and [closeout evidence](evidence/t03_closeout.json)
-record one known unavailable official link, preserved source clocks, exact backup/
-restore and the scope exclusions. **Next: T04 complete text/extraction.**
+**Status:** FOMC-T01–T04 complete locally for the selected **1990-onward bounded
+archive and native-text foundation**. The 33-page inventory has 371 meetings and
+470 declared references; 72 originals are byte-verified. All 12 archived document
+representations now have full native extraction records: 74 PDF pages, 108 ordered
+units and 616,712 characters, with five image-review cases visible. Immutable
+PostgreSQL/filesystem mirrors, a coherent catalog, corrections/reversions and
+empty-target replay are verified. [T04 acceptance](t04_acceptance.md) and
+[evidence](evidence/t04_extraction.json) record exact 22-table backup/restore and
+preserved originals. Full document backfill and accuracy review remain incomplete.
+**Next: T05 deterministic chunks.** [T03 acceptance](t03_acceptance.md) remains the
+historical inventory/immutable-Bronze checkpoint.
 **Reviewed:** 2026-11-11. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
@@ -65,8 +68,8 @@ These documentary checks do not certify the complete archive or extraction quali
 Use the existing Python 3.12, manifest-driven medallion conventions. The
 implemented source-owned files include `manifest.py`, `data/inventory.py`,
 `config.py`, `data/native.py`, `io/postgres.py`, `io/acquisition.py` and
-`io/bronze.py`. Future work includes `data/text.py`, `data/chunks.py`, a linked
-catalog, a CLI and, later, Dagster definitions.
+`io/bronze.py`. T04 adds `data/text.py`, `data/catalog.py`, `io/text.py`, `io/catalog.py` and
+`io/text_replay.py`. Future work includes chunks, a CLI and, later, Dagster definitions.
 Keep the parsing core pure; select and pin PDF/OCR dependencies during the
 first extraction slice.
 
@@ -83,8 +86,8 @@ first extraction slice.
   originals/full text, with an atomic committed pointer. The user selected the
   existing PostgreSQL service as the operational catalog target, with a separate
   `fomc_meeting_minutes` schema. Filesystem originals remain part of the archive.
-  T02 currently publishes only inventory metadata snapshots; full-document
-  catalog publication and any external consumer integration remain later work.
+  T02 publishes metadata snapshots; T04 adds bounded original/text catalog
+  generations and verified replay. External consumer integration remains later work.
 
 A logical document has `document_id`, `document_kind`, `committee_body`, verbatim
 meeting label, explicit meeting-date associations (including joint/non-contiguous
@@ -133,8 +136,9 @@ This does not certify all 470 declared document references as acquired.
 See [acceptance](t03_acceptance.md), [discovery](discovery_contract.md),
 [attachments](attachments_contract.md), [storage/recovery](storage_recovery_contract.md)
 and [configuration/commands](../../config/fomc_meeting_minutes/README.md).
-T04 owns complete text/pages/extraction versions, OCR review and coherent
-text/document catalog publication. Broader original acquisition/operations remain
+T04 implements native text/pages/extraction versions, explicit OCR-review state
+and coherent catalog publication for the archived sample. The five text tables
+mirror full text/units/profiles/capture links and the selected generation. Broader original acquisition/operations remain
 later scoped work; no schedule was enabled.
 
 ## Core text chunks and optional embedding enhancement
@@ -228,9 +232,9 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC09 (enhancement) | Injected provider failures, oversized inputs and budget exhaustion leave the core archive/catalog usable, record retryable outcomes and accurate embedding coverage, and cannot publish a falsely complete index. Offline replay makes no model call. |
 | FOMC-AC10 (enhancement) | Retrieval fixtures enforce selected versions, publication/capture cutoffs and OCR eligibility and resolve every result to exact source pages. Query/index profiles match; any approximate index is evaluated against exact-search results. |
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
-| FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Full archive/text/chunk reconciliation remains incomplete. |
+| FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Bounded archive/text reconciliation is verified in T04; full-history and chunk reconciliation remain incomplete. |
 
-**Current pickup:** [FOMC-T04 complete text/extraction](todo.md#fomc-t04--complete-text-and-extraction-in-progress).
+**Current pickup:** [FOMC-T05 deterministic chunks](todo.md#fomc-t05--deterministic-chunks-next).
 The archive is a bounded foundation, not a historical backfill or text index.
 Embeddings remain an independently selected enhancement.
 

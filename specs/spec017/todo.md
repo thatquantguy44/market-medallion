@@ -75,26 +75,33 @@ The historical [native sample](evidence/native_bronze_sample.json),
 [storage/recovery sample](evidence/storage_recovery_sample.json) remain earlier
 checkpoints; the closeout evidence supersedes their operating status/counts.
 
-## FOMC-T04 — complete text and extraction (in progress)
+## FOMC-T04 — complete text and extraction (complete for the archived sample)
 
-First increment implements offline native extraction with pinned `pypdf==7.0.1`,
-reviewed HTML containers, ordered complete text units and explicit review/failure
-outcomes. PostgreSQL mirrors/catalog/replay and source review remain in progress.
-See [text contract](text_contract.md).
+Accepted 2026-11-11 on the same feature branch. [Acceptance](t04_acceptance.md),
+[text contract](text_contract.md) and [evidence](evidence/t04_extraction.json)
+record the native transform, immutable mirrors, coherent catalog and replay.
+Optional `pypdf==7.0.1` and the existing reviewed HTML tree preserve complete
+returned text, ordered page/section records, exact offsets and extraction profiles.
+Source corrections/reversions and capture-time first-seen remain independent of
+extractor changes. Missing text/images and failed containers have explicit outcomes.
 
-Select and pin PDF/native extraction dependencies using the existing archived
-sample; keep the core independent of network/schedulers. Implement full text and
-ordered page/section records, extraction profile/version, explicit failures and
-OCR-review state. Verify all pages/sections, tables, footnotes, appendices and
-long passages without truncation. Store complete text/extraction lineage in the
-FOMC PostgreSQL schema and retain actual capture clocks. Preserve the 1990-onward
-scope and the unavailable source link. Document versions, coherent catalog/replay
-and correction/reversion evidence follow the existing T04 contract
-(FOMC-AC03–05/FOMC-AC12). Do not infer a full original backfill from the inventory.
+All 12 existing document representations are extracted: 74 PDF pages, 108 units,
+616,712 characters; seven native-extracted and five review-required. All 72 raw
+captures and 17 pre-existing tables remain unchanged. The local migration adds
+five text tables; all 22 tables passed restore verification. A real empty-target
+replay matches the catalog and all 72 original receipt bytes without re-extraction
+or network. Full backfill and OCR/text accuracy certification remain incomplete.
+
+## FOMC-T05 — deterministic chunks (next)
+
+Derive section/paragraph-aware chunks from committed text. Pin chunker/tokenizer
+profiles, preserve exact Unicode offsets and page/section links, and prove full
+eligible-text coverage, overlap and idempotence. Keep full text intact and expose
+review/OCR eligibility per source unit. Mirror chunk metadata/text in FOMC-owned
+PostgreSQL tables (FOMC-AC07/12). Use archived inputs without broader acquisition.
 
 ## Later slices (not started)
 
-- FOMC-T05: deterministic chunks and PostgreSQL chunk metadata/text (FOMC-AC07/12).
 - FOMC-T06: bounded historical/current acquisition, health and stopped orchestration
   (FOMC-AC06), after local archival/replay evidence passes.
 - FOMC-T07: independently selected optional embeddings (FOMC-AC08–10). No model,

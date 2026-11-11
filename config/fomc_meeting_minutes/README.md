@@ -1,10 +1,11 @@
 # FOMC meeting-minutes configuration
 
-T01–T03 are accepted locally for the **1990-onward inventory / immutable-Bronze
-foundation**. This folder owns the `fomc_meeting_minutes` schema and its operating
-settings. [Acceptance](../../specs/spec017/t03_acceptance.md) and
-[closeout evidence](../../specs/spec017/evidence/t03_closeout.json) record actual
-migration, inventory, original-byte and restore state. T04 text/extraction is next.
+T01–T04 are accepted locally for the **1990-onward bounded archive/native-text
+foundation**. This folder owns the FOMC operating settings.
+[T04 acceptance](../../specs/spec017/t04_acceptance.md),
+[text contract](../../specs/spec017/text_contract.md) and
+[evidence](../../specs/spec017/evidence/t04_extraction.json) record actual state.
+T05 deterministic chunks is next. No FOMC job/schedule is enabled.
 
 ## Configuration and scope
 
@@ -31,7 +32,10 @@ There is one native metadata snapshot: 33 official source pages, 371 meeting
 records, 470 declared document references and 561 source associations. One empty
 official minutes href is explicitly unavailable. The archive holds 72 captures
 (38 inventories, 12 document representations and 22 PNGs), with eight dependency
-checks. This is not a full acquisition of all declared documents or full text.
+checks. T04 extracts all 12 archived document representations into 74 PDF pages /
+108 text units (616,712 characters): seven native-extracted, five review-required.
+The text catalog records the bounded selection and outstanding archive/review gaps.
+Full acquisition of all declared documents and accuracy review remain incomplete.
 
 With this project's trusted `.env` loaded, inspect without provider requests:
 
@@ -74,8 +78,8 @@ that evidence. Legacy metadata unions retain no source-wide discovery claim.
 
 `bronze.migrate()`, `PostgresObjectStore(bronze).migrate()` and
 `PostgresDependencyStore(bronze).migrate()` are applied locally under separate
-owned markers. Seventeen tables retain inventory metadata, immutable capture
-receipts, content objects, links and dependency checks. Legacy per-capture
+owned markers. These 17 Bronze/inventory tables retain immutable originals and
+lineage. T04 adds five text/catalog tables, for 22 total. Legacy per-capture
 payload columns are cleared only after verified object migration. Source URLs,
 UUIDs, receipt bytes and observed clocks remain unchanged.
 
@@ -94,6 +98,66 @@ checks, current pointer and native evidence. Backups and provider bytes stay
 ignored under the configured root. Do not remove populated migration tables/
 markers or run older writers against the migrated schema.
 
+## Text extraction, catalog inspection and replay
+
+Install the optional pinned engine with `.[fomc_text,postgres]` (the development
+lockfile already includes it). `PostgresTextStore(bronze).migrate()` explicitly
+adds `text_extractions`, `text_units`, `text_capture_links`, `text_catalogs` and
+`text_state` under the `fomc-text-postgres/1` marker. The reviewed local migration
+is applied. All 17 pre-existing tables and original capture bytes/clocks remain
+unchanged. Fresh backups before/after migration passed 17-/22-table restores.
+
+`text.extract_capture(capture_id, manifest, root=cfg.root)` verifies original and
+dependency mirrors, derives complete native text and saves immutable artifacts
+under `text/extractions/<extraction_id>.json` plus PostgreSQL full-text/unit rows.
+`text.read_extraction(id, root=...)` checks profile/text hashes, unit offsets and
+both mirrors. Native text, image/OCR review and failed extraction are distinct.
+Originals stay canonical; full text is never silently truncated.
+
+`PostgresTextCatalog(text).publish(bindings, manifest, root=..., inventory_run_id=...,
+start_year=cfg.start_year)` takes explicit capture/extraction bindings. It verifies
+all mirrors/associations and atomically publishes a bounded generation. Failed
+extractions/writes leave the old pointer intact; existing local artifacts support
+retry. Retrying an older generation does not roll the pointer backward. Local
+artifacts are immutable; PostgreSQL's `text_state.current_catalog_id` selects the
+committed generation. Readers never glob artifact directories.
+
+With this project's trusted `.env` loaded, inspect the selected catalog without
+provider requests or schema changes:
+
+```python
+from pathlib import Path
+from market_data_pipeline.pipelines.fomc_meeting_minutes.config import load_config
+from market_data_pipeline.pipelines.fomc_meeting_minutes.manifest import load_manifest
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.postgres import PostgresInventoryStore
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import PostgresBronzeStore
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.text import PostgresTextStore
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.catalog import PostgresTextCatalog
+
+cfg = load_config(Path("config/fomc_meeting_minutes/pipeline.local.yml"))
+manifest = load_manifest(cfg.manifest)
+with PostgresInventoryStore(cfg.postgres) as store:
+    catalog = PostgresTextCatalog(PostgresTextStore(PostgresBronzeStore(store)))
+    value = catalog.read(manifest, root=cfg.root)
+    print({"catalog_id": value["catalog_id"],
+           "representations": len(value["representations"]), "gaps": len(value["gaps"])})
+```
+
+`replay_text_catalog(source_catalog, target_catalog, manifest, source_root=...,
+target_root=...)` requires an independent initialized empty target schema/database
+and root. It copies verified originals and stored derivatives, preserving capture
+IDs/receipt bytes, source clocks, versions and catalog hash, without re-extraction
+or network. Use the isolated integration test as the setup example. The target
+is selected explicitly; replay never resets a populated destination. An interrupted
+replay leaves partial target evidence for review and does not publish a successful
+catalog. Resume support for such a partial target is not implied by empty-target
+replay; use a fresh disposable target after preserving failure evidence.
+
+Rollback uses the earlier code/catalog by explicit historical catalog ID, keeping
+immutable artifacts/tables. Do not drop populated text/lineage tables or run old
+writers against incompatible state. Cutoffs are document-capture cutoffs against
+the selected metadata snapshot; they do not reconstruct earlier inventory knowledge.
+
 ## Verification and next work
 
 ```bash
@@ -105,6 +169,6 @@ FOMC_TEST_POSTGRES_CONFIG=config/fomc_meeting_minutes/pipeline.local.yml \
 
 Keep `MARKET_DATA_TEST_POSTGRES_DSN` unset: other pipelines' legacy integration
 tests require a separate disposable database. FOMC tests create/drop only their
-unique test schemas and do not import invented fixtures into the operational
-schema. Full document-history acquisition, text/page/OCR quality, catalog/replay,
-chunks and embeddings remain later slices. No FOMC CLI/job/schedule is enabled.
+unique test schemas. Next is T05 deterministic chunks and explicit review
+eligibility. Full original-history acquisition and OCR/text accuracy review remain
+outstanding; embeddings stay separately selected. No FOMC CLI/job/schedule is enabled.

@@ -1,7 +1,7 @@
 # FOMC-T04 — full text, revisions and coherent local catalogs
 
 Scope: the existing 1990-onward archive, not wider acquisition. Traces
-FOMC-AC03–05/AC12. Continue on `feat/spec017-fomc-inventory`.
+FOMC-AC03–05/AC12. Accepted locally under [T04 acceptance](t04_acceptance.md). Continue on `feat/spec017-fomc-inventory`.
 
 Use optional pinned `pypdf==7.0.1` for strict native PDF parsing and the existing
 reviewed HTML tree/container profiles. No HTTP, OCR service, scheduler or model

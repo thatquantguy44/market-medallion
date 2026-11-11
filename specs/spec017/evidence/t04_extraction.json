@@ -1,0 +1,515 @@
+{
+  "schema_id": "fomc-t04-extraction/1",
+  "status": "accepted_bounded_native_text_catalog",
+  "verified_at": "2026-11-11T20:36:24.823219+00:00",
+  "scope_start_year": 1990,
+  "branch": "feat/spec017-fomc-inventory",
+  "input_inventory_run_id": "83b436b2-ed23-4152-a793-5a51e603dd53",
+  "catalog_id": "0660066e41ca43da17196e5f35ddc93b1697f1e03f60b5527928a7a641863c12",
+  "archived_document_representations_extracted": 12,
+  "pdf_pages_accounted": 74,
+  "ordered_text_units": 108,
+  "full_text_characters": 616712,
+  "extraction_statuses": {
+    "review_required": 5,
+    "native_extracted": 7
+  },
+  "catalog_gap_outcomes": {
+    "unacquired": 460,
+    "not_listed": 49,
+    "unavailable": 1,
+    "review_required": 5
+  },
+  "existing_17_tables_unchanged": true,
+  "original_72_receipts_bytes_clocks_unchanged": true,
+  "other_namespaces_unchanged": true,
+  "schedules_enabled": 0,
+  "new_provider_requests": 0,
+  "full_document_backfill_complete": false,
+  "all_text_or_ocr_accuracy_reviewed": false,
+  "source_review": [
+    {
+      "capture_id": "0be5f76d-6a3b-4b5c-acbf-3735fe9beedc",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614ep.htm",
+      "source_sha256": "96bf825d9964acf808de882cd30ea7e0819d7a46746266f6e60cd871aef2fbd1",
+      "extraction_id": "22dbfce6f527948356b8107d2fe983f1605e217f68c38d5a8c805cc475538d13",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "review_required",
+      "page_count": null,
+      "units": 14,
+      "characters": 40761,
+      "text_sha256": "b25f0cee55d939cad17bd55e140dcbe765d2719871330d39d2c0ad8c2b63ae8f",
+      "issues": [
+        "image_content"
+      ]
+    },
+    {
+      "capture_id": "20c6763f-c14b-4075-a148-ecd3d0f4291c",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614.htm",
+      "source_sha256": "b84af4f3aa81125fe72f8ec92acf88352f4ebe65000429600575459bd006118e",
+      "extraction_id": "4e841883ca67e085c0f921d06919fd9a03f27a518c764484c1a17383bcebb450",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": null,
+      "units": 1,
+      "characters": 58474,
+      "text_sha256": "3ee0a8b4fedb6e5ab19d9d1cebfa76301a8f0b6dba051bce173bc13ca0f139e2",
+      "issues": []
+    },
+    {
+      "capture_id": "292a670d-48c3-4ea1-ab67-af4f6dc1fdc0",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619.htm",
+      "source_sha256": "5d978d987173f56e33828dcb56dcf9d492ebb349b05fbd7abe499bbb812a1d8b",
+      "extraction_id": "01d008daba9371a98b4b0cd93d8170027db0ffc94b661fe0bd7703b57810754a",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": null,
+      "units": 1,
+      "characters": 55248,
+      "text_sha256": "b12ad750c0600ccd90fc54cbb90b23b95af9a7c767296950d3f1e151fbccea1a",
+      "issues": []
+    },
+    {
+      "capture_id": "3646690a-d2c6-4eb6-b0ec-7c12857292b4",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19900207.pdf",
+      "source_sha256": "7ceb8269be8122dbc9bb1a4715178e2c2009d2b821b62f4781bd417a4bb18422",
+      "extraction_id": "57579d9a07855c97aacef24362dd86d1578e92000e7fc366e14ef37ffe515453",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "review_required",
+      "page_count": 25,
+      "units": 25,
+      "characters": 42690,
+      "text_sha256": "4e7a1d4722e7be821bd579c2c2483513de12005428aa0b2b66d435ee016064ec",
+      "issues": [
+        "image_content"
+      ],
+      "independent_poppler_pages": 25,
+      "independent_word_recall_by_page": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "rendered_review_pages": [
+        1,
+        13,
+        25
+      ]
+    },
+    {
+      "capture_id": "4d547037-8bf5-4072-bdb7-364e88ee5283",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619ep.htm",
+      "source_sha256": "ea817187b18ee37fb4c0c68699e79ac65c338c86dc127eaff9017aea57c54705",
+      "extraction_id": "6a67478c930e0c4661bc5c8c66175281d76ce767b757b53845e2e05152b65990",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "review_required",
+      "page_count": null,
+      "units": 14,
+      "characters": 37014,
+      "text_sha256": "7a7a68b40bf6cc7646a6010ae1bec0fc97fb85b4f5038a586218cb079a1bf239",
+      "issues": [
+        "image_content"
+      ]
+    },
+    {
+      "capture_id": "690f843c-f74f-4b72-a66e-a584e84a3066",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20200315.pdf",
+      "source_sha256": "336d5fd78370531caadbdd5d82ed9df3a851a4fe768ac051b0400c26274147c2",
+      "extraction_id": "a36cc21bf636c75fcdc4fb4003c4a4a25d8676cfb4955723207d8b9b0b62f5a9",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": 14,
+      "units": 14,
+      "characters": 70002,
+      "text_sha256": "7aa325086060fcee9fe42a986799c83e6742bbe5baf8b61be564426819ef22aa",
+      "issues": [],
+      "independent_poppler_pages": 14,
+      "independent_word_recall_by_page": [
+        0.997647,
+        0.992095,
+        0.997653,
+        0.995249,
+        0.996269,
+        0.996381,
+        0.996479,
+        0.998884,
+        0.995152,
+        0.997653,
+        0.995739,
+        0.992434,
+        0.996364,
+        1.0
+      ],
+      "rendered_review_pages": [
+        1,
+        7,
+        14
+      ]
+    },
+    {
+      "capture_id": "a0c3c499-1763-4340-a585-d00d339c48b3",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930203min.htm",
+      "source_sha256": "931a671a40ce0bc3ba468ad29806863a3dca760ce09be8e9549b1be7e686debd",
+      "extraction_id": "290383824fc483027fb9dd028a4a26f9ead2a8fd0d3e6e52c1a498216d36c879",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": null,
+      "units": 1,
+      "characters": 68494,
+      "text_sha256": "e7820169c9590033853a6c7b0451e4bb47ab754ee451d4337c6b36c064b7bd59",
+      "issues": []
+    },
+    {
+      "capture_id": "bcdff0dd-a703-478b-a73d-c1f9984491ac",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20200315.htm",
+      "source_sha256": "079619c774ad4bbb3f4e3b2c6542ecf34d0924e3503bd945cbf2abad11ed69c1",
+      "extraction_id": "86b12dacffd895e4d180f409e0990821a27e1944b27a8f3cf836f0f569678d1a",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": null,
+      "units": 1,
+      "characters": 66098,
+      "text_sha256": "585f39a2e0f4135de47e5764814a9d6fc9f7e1be66d8b89bceeee934482b300f",
+      "issues": []
+    },
+    {
+      "capture_id": "c0924087-823b-4bfa-83e2-efcd587aad72",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900207.pdf",
+      "source_sha256": "bc9ca5b56a873fbf639f7cb4bd3218fe1d4625031a64e8095629e74821a20401",
+      "extraction_id": "3d8d221fd5e45e488e33a3153c4c4a585d9200c730ff0ce771f52122647edda0",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "characters": 37612,
+      "text_sha256": "506c97eca5127ab529fd1319ba7a1fd37b74f247c4d83cc6a87f5c92d8cffb7e",
+      "issues": [
+        "image_content"
+      ],
+      "independent_poppler_pages": 17,
+      "independent_word_recall_by_page": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "rendered_review_pages": [
+        1,
+        9,
+        17
+      ]
+    },
+    {
+      "capture_id": "c8e45b56-21ef-47e6-8e63-47339defdb06",
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20030129.htm",
+      "source_sha256": "cc65beba0603ca2acbb19ef13a146b609ac2a70e12ad62b4c72a58d85d7f7793",
+      "extraction_id": "6b9881c12b33508eb42b376d365b9427dfe93b48d1267cca748b1dcb95270919",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": null,
+      "units": 1,
+      "characters": 49719,
+      "text_sha256": "73a987742eee586f7593b770c567732f04c06e8862d7143027cfd2528e9debc6",
+      "issues": []
+    },
+    {
+      "capture_id": "d247f6e5-4309-42ae-ac6c-72b86a577692",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20260128.htm",
+      "source_sha256": "f6e1637aed10b3a8bb96160d7be97b51d5652136427766c491ee3041469cf183",
+      "extraction_id": "656d9b78004ab7ed8afe37d0db65d55e51a4e984ef3bb546c754b6dde20bfe3e",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "native_extracted",
+      "page_count": null,
+      "units": 1,
+      "characters": 44799,
+      "text_sha256": "cc523a6a936885d0760dff852612ee45b71eef1825537d22eb78d34c0bd25ec5",
+      "issues": []
+    },
+    {
+      "capture_id": "d3aa0bcc-363e-4441-af7e-3da50a4a0692",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20260128.pdf",
+      "source_sha256": "7565db1bbe4d562b808d50a4150d2b42d00ac87a3acb1d6d2a9eed5e4974e743",
+      "extraction_id": "fb8d784cf503ac5d11910999cda35617adfbfbf63dfb24b847c8f2f879b2921e",
+      "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "characters": 45801,
+      "text_sha256": "ff4af175a6ec02f3ac990bf42e7868099939537a19f4104c99752240c8b80ccc",
+      "issues": [
+        "image_content"
+      ],
+      "independent_poppler_pages": 18,
+      "independent_word_recall_by_page": [
+        1.0,
+        0.996564,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "rendered_review_pages": [
+        1,
+        9,
+        18
+      ]
+    }
+  ],
+  "source_review_notes": [
+    "All 74 PDF pages reconcile independently to Poppler page counts. First/middle/last original pages of each PDF visually inspected (12 pages).",
+    "1990 PDFs open with empty passwords and permit copying; retain provider text layers and flag image content, without new OCR. One provider PDF has a pypdf non-zero xref-index warning; original bytes are unchanged.",
+    "Per-page Poppler word comparisons are tokenization conformance checks, not an OCR/text accuracy certificate. Minimum recall 0.992095; no page or engine text is truncated.",
+    "Five representations remain review-required for images (1990 PDFs, 2026 cover image, and two SEP chart addenda). Seven are native-extracted; none is claimed independently accuracy-certified.",
+    "Unavailable 1994 official href and unacquired declared documents remain explicit catalog gaps."
+  ],
+  "empty_target_replay": {
+    "catalog_exact": true,
+    "capture_readbacks": 72,
+    "receipt_bytes_exact": true,
+    "derivative_reextraction_disabled": true,
+    "network_calls": 0,
+    "disposable_database_and_root_removed": true
+  },
+  "backup_before_text": {
+    "archive_path": "backups/t04-before-text-a348d1f42d2d/fomc.dump",
+    "archive_sha256": "0d5c636fd463bc10c02face51e948125c64f5edb9e4709603082fa2b7fddfe9d",
+    "tables": {
+      "bronze_capture_objects": {
+        "rows": 72,
+        "sha256": "6df37c244d997dfbe68473fda251d39fe417d8342c5ba62247b4fb8cec40a90c"
+      },
+      "bronze_captures": {
+        "rows": 72,
+        "sha256": "d89287b3a8832c309b44c652ffe6cb702dbe6ebd20603bbd75291c381612ed40"
+      },
+      "bronze_dependencies": {
+        "rows": 24,
+        "sha256": "144efe42ec31040611555457e3affdbd7d26a5de49a9a6f14eb5937397314fca"
+      },
+      "bronze_dependency_checks": {
+        "rows": 8,
+        "sha256": "87be6d42f64d763ecee121445b02d741d8b20197eeac0e0eec6130f748ab69bf"
+      },
+      "bronze_dependency_state": {
+        "rows": 1,
+        "sha256": "d31f68b3a084f5cea7949f7ea6e6c2a5e2c64e43ac147d017859f148821dc382"
+      },
+      "bronze_document_links": {
+        "rows": 10,
+        "sha256": "a3733449488513e0b03bcc0c154dc9b8ec6f034d621aa45f7b0f937b1db21fe7"
+      },
+      "bronze_inventory_discovery": {
+        "rows": 1,
+        "sha256": "0b38d45c78428e6a4ac15f682d8e26b4c95512289873920dd4516e647155aa28"
+      },
+      "bronze_inventory_links": {
+        "rows": 33,
+        "sha256": "482e8dfd263c1c49bc48ee2ce49cca44be92f4f3abeb2ff5f4cd88a0a8c0c4b0"
+      },
+      "bronze_object_state": {
+        "rows": 1,
+        "sha256": "b6643d921e622a3da39228f23d0e8df7006374afe96816d7d615cebb6e1ace22"
+      },
+      "bronze_objects": {
+        "rows": 72,
+        "sha256": "bf1385ba1376c103bd8d7faaf19f22b7e27d192273a0b8c9b479292992c02917"
+      },
+      "bronze_schema_migrations": {
+        "rows": 3,
+        "sha256": "9d7b0c04433a9ce0a2bf3f8997ea506fc969ce3dfe20b9c0c96cdb0d84289374"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "9599ff33cb8d555485377dcc4ea94931ca348f20e4ec7575441e79d1ec7857a4"
+      },
+      "inventory_documents": {
+        "rows": 470,
+        "sha256": "af6d1b96a5508dcfe329c445ff4830279b84395a5337d61f5551e34932072a72"
+      },
+      "inventory_entries": {
+        "rows": 561,
+        "sha256": "bde5ee21143a6e28d9f4ebb513e56b02f78297bb205a598fc973eb8ca8af5986"
+      },
+      "inventory_meetings": {
+        "rows": 371,
+        "sha256": "bfe4229e6bf19bb4a03bb465460236de0b6ed5e0ae57239c283a615a2e6647d6"
+      },
+      "inventory_pages": {
+        "rows": 33,
+        "sha256": "5998b001462e7482d59dc9cd1e227e0efb2789ee1d46afcf260ea387e9189942"
+      },
+      "inventory_runs": {
+        "rows": 1,
+        "sha256": "732cc51463ad8c09a30d70412785d2ce74af269d6aa195b4af8823cb6daa961d"
+      }
+    },
+    "restored_tables_verified": 17,
+    "restored_capture_readbacks": 72,
+    "current_inventory_native_evidence_restored_exactly": true,
+    "disposable_database_removed": true
+  },
+  "backup_after_text": {
+    "archive_path": "backups/t04-after-text-6619f635aff3/fomc.dump",
+    "archive_sha256": "4e3d8bfdb07b1c0467b62d0557546c880153ed6d146ff1c484671127e4e3439f",
+    "tables": {
+      "bronze_capture_objects": {
+        "rows": 72,
+        "sha256": "6df37c244d997dfbe68473fda251d39fe417d8342c5ba62247b4fb8cec40a90c"
+      },
+      "bronze_captures": {
+        "rows": 72,
+        "sha256": "d89287b3a8832c309b44c652ffe6cb702dbe6ebd20603bbd75291c381612ed40"
+      },
+      "bronze_dependencies": {
+        "rows": 24,
+        "sha256": "144efe42ec31040611555457e3affdbd7d26a5de49a9a6f14eb5937397314fca"
+      },
+      "bronze_dependency_checks": {
+        "rows": 8,
+        "sha256": "87be6d42f64d763ecee121445b02d741d8b20197eeac0e0eec6130f748ab69bf"
+      },
+      "bronze_dependency_state": {
+        "rows": 1,
+        "sha256": "d31f68b3a084f5cea7949f7ea6e6c2a5e2c64e43ac147d017859f148821dc382"
+      },
+      "bronze_document_links": {
+        "rows": 10,
+        "sha256": "a3733449488513e0b03bcc0c154dc9b8ec6f034d621aa45f7b0f937b1db21fe7"
+      },
+      "bronze_inventory_discovery": {
+        "rows": 1,
+        "sha256": "0b38d45c78428e6a4ac15f682d8e26b4c95512289873920dd4516e647155aa28"
+      },
+      "bronze_inventory_links": {
+        "rows": 33,
+        "sha256": "482e8dfd263c1c49bc48ee2ce49cca44be92f4f3abeb2ff5f4cd88a0a8c0c4b0"
+      },
+      "bronze_object_state": {
+        "rows": 1,
+        "sha256": "b6643d921e622a3da39228f23d0e8df7006374afe96816d7d615cebb6e1ace22"
+      },
+      "bronze_objects": {
+        "rows": 72,
+        "sha256": "bf1385ba1376c103bd8d7faaf19f22b7e27d192273a0b8c9b479292992c02917"
+      },
+      "bronze_schema_migrations": {
+        "rows": 3,
+        "sha256": "9d7b0c04433a9ce0a2bf3f8997ea506fc969ce3dfe20b9c0c96cdb0d84289374"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "9599ff33cb8d555485377dcc4ea94931ca348f20e4ec7575441e79d1ec7857a4"
+      },
+      "inventory_documents": {
+        "rows": 470,
+        "sha256": "af6d1b96a5508dcfe329c445ff4830279b84395a5337d61f5551e34932072a72"
+      },
+      "inventory_entries": {
+        "rows": 561,
+        "sha256": "bde5ee21143a6e28d9f4ebb513e56b02f78297bb205a598fc973eb8ca8af5986"
+      },
+      "inventory_meetings": {
+        "rows": 371,
+        "sha256": "bfe4229e6bf19bb4a03bb465460236de0b6ed5e0ae57239c283a615a2e6647d6"
+      },
+      "inventory_pages": {
+        "rows": 33,
+        "sha256": "5998b001462e7482d59dc9cd1e227e0efb2789ee1d46afcf260ea387e9189942"
+      },
+      "inventory_runs": {
+        "rows": 1,
+        "sha256": "732cc51463ad8c09a30d70412785d2ce74af269d6aa195b4af8823cb6daa961d"
+      },
+      "text_capture_links": {
+        "rows": 12,
+        "sha256": "73a834315f03a931f3c3b136e761b04b76c03414e7f3122fed69b66b0b5f0379"
+      },
+      "text_catalogs": {
+        "rows": 1,
+        "sha256": "b673ccc297abdd42275ce0ed41f3e64c85c34e0384476d08358417c64cea8aea"
+      },
+      "text_extractions": {
+        "rows": 12,
+        "sha256": "c124ed5d1559935505bf7a9447037aa968861862127177f3751162588536de45"
+      },
+      "text_state": {
+        "rows": 1,
+        "sha256": "c6a176f7c62ee3f433386a3bcbfa70fee78af20f89c8d617c38c5249e8713385"
+      },
+      "text_units": {
+        "rows": 108,
+        "sha256": "39ba46fed0f806e64242a5c2d8b3571a0d52804eb484389eecb83d5a291c13bb"
+      }
+    },
+    "restored_tables_verified": 22,
+    "restored_capture_readbacks": 72,
+    "current_inventory_native_evidence_restored_exactly": true,
+    "disposable_database_removed": true
+  },
+  "verification": {
+    "verified_at": "2026-11-11T20:40:22.446334+00:00",
+    "regression": {
+      "passed": 931,
+      "optional_skips": 46,
+      "command": ".venv/bin/python -m pytest -q"
+    },
+    "fomc_with_postgres": {
+      "passed": 219,
+      "included_isolated_postgres_checks": 36,
+      "command": "FOMC_TEST_POSTGRES_CONFIG=config/fomc_meeting_minutes/pipeline.local.yml .venv/bin/python -m pytest -q tests/test_fomc_*.py"
+    },
+    "ruff_lint": "passed",
+    "ruff_format": "184 files already formatted",
+    "git_diff_check": "passed",
+    "package_build": "passed: wheel and sdist; optional PDF engine pinned",
+    "artifact_contents": "all FOMC source modules; text tests, acceptance, contract and sanitized evidence; private data/config/backups excluded",
+    "agent_skills": "verified f63ec56a3cc936408d792956ae583c3c96a825bd; 188 files/symlinks",
+    "quant_smith": "external working checkout differs from pin; adopted modeling/lineage guidance read from hash-verified pinned Git objects; no external checkout or pin edits"
+  }
+}

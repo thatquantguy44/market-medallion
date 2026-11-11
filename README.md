@@ -19,15 +19,15 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
-**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T03 are complete
-for the selected **1990-onward inventory and immutable-Bronze foundation**.
-The local migrations are applied: 33 source pages reconcile to 371 meetings and
-470 declared document references; 72 bounded captures pass byte readback and
-verified backup/restore. One empty official minutes link remains explicitly
-unavailable. This is not a full original-document backfill or text archive.
-**Next is T04 complete text/extraction.** See the
-[acceptance](specs/spec017/t03_acceptance.md) and
-[configuration](config/fomc_meeting_minutes/README.md). FINRA remains at SSV-T05;
+**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T04 are complete
+locally for the selected **1990-onward bounded archive and native-text foundation**.
+The 33-page inventory has 371 meetings and 470 document references; 72 originals
+remain byte-verified. All 12 archived document representations have extraction
+records: 74 PDF pages, 108 text units and 616,712 characters. Five image-review
+cases remain explicit. Full-text mirrors, the catalog, replay and 22-table restore
+are verified. Full backfill and OCR/text accuracy review remain incomplete.
+**Next is T05 deterministic chunks.** See [T04 acceptance](specs/spec017/t04_acceptance.md)
+and [configuration](config/fomc_meeting_minutes/README.md). FINRA stays at SSV-T05;
 NAAIM remains paused, and no FOMC job/schedule is enabled.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),

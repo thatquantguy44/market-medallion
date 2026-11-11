@@ -23,7 +23,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
-| [017](spec017/README.md) | fomc-meeting-minutes | T01/T02 normalized inventory/identity, pipeline-owned config and PostgreSQL metadata storage implemented; current next T03 native inventory/document archive. Full text/chunks and optional embeddings remain later slices. |
+| [017](spec017/README.md) | fomc-meeting-minutes | T01–T04 accepted for the 1990-onward bounded archive/native-text foundation: 12 extracted representations, 74 PDF pages, immutable text mirrors and replay; five image-review cases remain. Next T05 deterministic chunks. Full backfill/accuracy review and optional embeddings remain separate. |
 
 ## Presidential pipeline integration planning
 
