@@ -130,6 +130,16 @@ class PostgresDependencyStore:
                 raise ValueError("FOMC dependency capture kind mismatch")
             if dependency.kind == "asset" and not body.startswith(b"\x89PNG\r\n\x1a\n"):
                 raise ValueError("FOMC dependency image lacks the reviewed PNG signature")
+            if dependency.kind == "document":
+                if dependency.source_url.lower().endswith(".pdf"):
+                    if not body.startswith(b"%PDF-") or not body.rstrip().endswith(b"%%EOF"):
+                        raise ValueError("FOMC dependency lacks the expected PDF container framing")
+                else:
+                    child_discovery = discover_html_dependencies(
+                        body, child["source_url"], manifest
+                    )
+                    if child_discovery.issues:
+                        raise ValueError("FOMC child HTML has unresolved dependency issues")
             links.append(
                 {**asdict(dependency), "child_capture_id": identity, "sha256": child["sha256"]}
             )

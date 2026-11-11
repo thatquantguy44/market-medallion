@@ -27,12 +27,20 @@ def _identity(value):
 
 
 def _write(path, payload):
-    # Exclusive creation never overwrites an earlier capture, including after a crash.
-    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-    with os.fdopen(fd, "wb") as handle:
-        handle.write(payload)
-        handle.flush()
-        os.fsync(handle.fileno())
+    # Publish an fsynced complete file exclusively; never expose a partial target.
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.objects import _sync_directory
+
+    temporary = path.parent / (".write-" + uuid.uuid4().hex)
+    try:
+        fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.link(temporary, path)
+        _sync_directory(path.parent)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def _json(value):
@@ -55,6 +63,8 @@ def capture(
     max_bytes,
     body_complete=True,
     transport_error=False,
+    attempt_id=None,
+    startup_error=False,
 ):
     """Write complete received bytes locally first, then append them to PostgreSQL.
 
@@ -68,6 +78,8 @@ def capture(
         not isinstance(payload, bytes)
         or not isinstance(captured_at, datetime)
         or captured_at.utcoffset() is None
+        or type(startup_error) is not bool
+        or (startup_error and not transport_error)
         or type(transport_error) is not bool
         or (transport_error and (status is not None or payload or body_complete))
         or (not transport_error and (type(status) is not int or not 100 <= status <= 599))
@@ -84,6 +96,8 @@ def capture(
                 raise ValueError("invalid FOMC response header")
             safe_headers[key.lower()] = value
     reasons = []
+    if startup_error:
+        reasons.append("startup_probe_error")
     if transport_error:
         reasons.append("transport_error")
     elif status != 200:
@@ -100,10 +114,33 @@ def capture(
                 reasons.append("content_length_mismatch")
         except ValueError:
             reasons.append("invalid_content_length")
-    identity = str(uuid.uuid4())
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.recovery import (
+        begin_attempt,
+        read_attempt,
+    )
+
+    identity = attempt_id or begin_attempt(
+        root,
+        manifest=manifest,
+        source_url=canonical,
+        kind=kind,
+        max_bytes=max_bytes,
+        started_at=datetime.now(UTC),
+        phase="local_import",
+    )
+    intent = read_attempt(root, identity)
+    expected = {
+        "source_url": canonical,
+        "kind": kind,
+        "max_bytes": max_bytes,
+        "manifest_sha256": hashlib.sha256(_json(manifest.to_dict())).hexdigest(),
+    }
+    if any(intent[k] != value for k, value in expected.items()):
+        raise ValueError("FOMC capture conflicts with its acquisition intent")
     receipt = {
         "schema_id": "fomc-bronze-capture/1",
         "capture_id": identity,
+        "attempt_phase": intent["phase"],
         "source_url": canonical,
         "kind": kind,
         "captured_at": captured_at.astimezone(UTC).isoformat(),
@@ -118,9 +155,21 @@ def capture(
         "manifest_sha256": hashlib.sha256(_json(manifest.to_dict())).hexdigest(),
     }
     directory = Path(root) / "captures" / identity
-    directory.mkdir(parents=True, mode=0o700, exist_ok=False)
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.objects import (
+        _sync_directory,
+        make_directory,
+    )
+
+    make_directory(directory.parent)
+    directory.mkdir(mode=0o700, exist_ok=False)
+    _sync_directory(directory.parent)
     _write(directory / "receipt.json", _json(receipt))
-    _write(directory / "payload.bin", payload)
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.objects import store_payload
+
+    os.link(store_payload(root, payload), directory / "payload.bin")
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.objects import _sync_directory
+
+    _sync_directory(directory)
     commit_capture(root, identity, store)
     return receipt
 
@@ -163,6 +212,13 @@ def commit_capture(root, capture_id, store):
     except FileExistsError:
         if marker.read_bytes() != value:
             raise ValueError("FOMC capture commit marker mismatch") from None
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.recovery import finish_attempt
+
+    finish_attempt(
+        root,
+        capture_id,
+        {"result": "captured", "receipt_sha256": hashlib.sha256(_json(receipt)).hexdigest()},
+    )
 
 
 class PostgresBronzeStore:
@@ -311,7 +367,19 @@ class PostgresBronzeStore:
             payload
         ) != receipt.get("size_bytes"):
             raise ValueError("FOMC capture hash mismatch")
+        from market_data_pipeline.pipelines.fomc_meeting_minutes.io.object_postgres import (
+            PostgresObjectStore,
+        )
+
+        objects = PostgresObjectStore(self)
         with conn.transaction():
+            conn.execute(
+                "SELECT pg_advisory_xact_lock(hashtextextended(%s,0))",
+                ("market-medallion:" + store.config.schema,),
+            )
+            active = objects.active()
+            if active:
+                objects.save_object(receipt["sha256"], payload)
             conn.execute(
                 store._query(
                     "INSERT INTO {schema}.bronze_captures "
@@ -324,18 +392,15 @@ class PostgresBronzeStore:
                     receipt["captured_at"],
                     receipt["sha256"],
                     store._Jsonb(receipt),
-                    payload,
+                    None if active else payload,
                 ),
             )
-            row = conn.execute(
-                store._query(
-                    "SELECT source_url,captured_at,sha256,receipt,payload "
-                    "FROM {schema}.bronze_captures WHERE capture_id=%s"
-                ),
-                (identity,),
-            ).fetchone()
+            if active:
+                objects.associate(identity, receipt["sha256"])
+            row = self._capture_row(identity, active)
             if (
-                row[0] != receipt["source_url"]
+                row is None
+                or row[0] != receipt["source_url"]
                 or row[2] != receipt["sha256"]
                 or row[3] != receipt
                 or bytes(row[4]) != payload
@@ -343,14 +408,33 @@ class PostgresBronzeStore:
             ):
                 raise ValueError("FOMC capture ID already has different evidence")
 
-    def read_capture(self, capture_id):
-        row = self.store.connection.execute(
-            self.store._query(
+    def _capture_row(self, capture_id, objects_active):
+        query = (
+            (
+                "SELECT c.source_url,c.captured_at,c.sha256,c.receipt,o.payload "
+                "FROM {schema}.bronze_captures c JOIN {schema}.bronze_capture_objects l "
+                "ON l.capture_id=c.capture_id JOIN {schema}.bronze_objects o ON o.sha256=l.sha256 "
+                "WHERE c.capture_id=%s"
+            )
+            if objects_active
+            else (
                 "SELECT source_url,captured_at,sha256,receipt,payload "
                 "FROM {schema}.bronze_captures WHERE capture_id=%s"
-            ),
-            (_identity(capture_id),),
-        ).fetchone()
+            )
+        )
+        return self.store.connection.execute(self.store._query(query), (capture_id,)).fetchone()
+
+    def read_capture(self, capture_id):
+        from market_data_pipeline.pipelines.fomc_meeting_minutes.io.object_postgres import (
+            PostgresObjectStore,
+        )
+
+        with self.store.connection.transaction():
+            self.store.connection.execute(
+                "SELECT pg_advisory_xact_lock_shared(hashtextextended(%s,0))",
+                ("market-medallion:" + self.store.config.schema,),
+            )
+            row = self._capture_row(_identity(capture_id), PostgresObjectStore(self).active())
         if row is None:
             raise ValueError("FOMC capture not found")
         receipt, payload = row[3], bytes(row[4])

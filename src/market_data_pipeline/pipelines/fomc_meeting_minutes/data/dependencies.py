@@ -139,6 +139,9 @@ def discover_html_dependencies(
             add(node.attrs.get("src", ""), node.attrs.get("alt", ""), "content_asset")
         elif node.tag in {
             "object",
+            "canvas",
+            "style",
+            "form",
             "embed",
             "iframe",
             "source",

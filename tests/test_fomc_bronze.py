@@ -116,14 +116,14 @@ def test_payload_write_failure_retains_attempt_receipt(tmp_path, manifest, monke
     from market_data_pipeline.pipelines.fomc_meeting_minutes.io import bronze
 
     store = Store()
-    original = bronze._write
+    original = bronze.os.link
 
-    def fail_payload(path, data):
-        if path.name == "payload.bin":
+    def fail_payload(source, destination):
+        if destination.name == "payload.bin":
             raise OSError("simulated write failure")
-        original(path, data)
+        original(source, destination)
 
-    monkeypatch.setattr(bronze, "_write", fail_payload)
+    monkeypatch.setattr(bronze.os, "link", fail_payload)
     with pytest.raises(OSError):
         create(tmp_path, manifest, store)
     directory = next((tmp_path / "captures").iterdir())
