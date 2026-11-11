@@ -32,6 +32,7 @@ class NativeResult:
     inventory: object
     issues: tuple[Issue, ...]
     exclusions: tuple[Exclusion, ...]
+    inventory_years: tuple[int, ...] = ()
 
 
 @dataclass
@@ -167,9 +168,7 @@ def _row(label, days, docs, body="fomc", kind="meeting", session=None, pending=F
     }
 
 
-def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000):
-    """Parse a reviewed calendar/year page. This function performs no I/O or clock reads."""
-    page = manifest.canonical_url(source_page_url, source_page=True)
+def _parse_tree(payload, max_bytes):
     if (
         type(max_bytes) is not int
         or max_bytes <= 0
@@ -183,7 +182,15 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
         raise ValueError("FOMC HTML must be UTF-8") from None
     tree = _Tree()
     tree.feed(content)
+    return tree
+
+
+def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000):
+    """Parse a reviewed calendar/year page. This function performs no I/O or clock reads."""
+    page = manifest.canonical_url(source_page_url, source_page=True)
+    tree = _parse_tree(payload, max_bytes)
     issues, rows, panels, exclusions = [], [], [], []
+    inventory_years = set()
     current = page.endswith("/fomccalendars.htm")
     match = re.search(r"fomchistorical(\d{4})\.htm$", page)
     if not current and not match:
@@ -197,10 +204,16 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
         if current:
             year_match = re.fullmatch(r"(\d{4}) FOMC Meetings", label)
             if not year_match:
+                if re.search(r"FOMC Meetings", label, re.I):
+                    issues.append(Issue("unsupported_inventory_heading", label[:4096]))
                 continue
             panels.append(panel)
             year = int(year_match[1])
-            for meeting in panel.descendants(cls="fomc-meeting"):
+            inventory_years.add(year)
+            native_meetings = list(panel.descendants(cls="fomc-meeting"))
+            if not native_meetings:
+                issues.append(Issue("empty_inventory_panel", label[:4096]))
+            for meeting in native_meetings:
                 month = next(meeting.descendants(cls="fomc-meeting__month"), None)
                 day = next(meeting.descendants(cls="fomc-meeting__date"), None)
                 raw = f"{month.text() if month else ''} {day.text() if day else ''} {year}".strip()
@@ -338,4 +351,6 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
         {"schema_id": manifest.schema_id, "pages": [{"source_page_url": page, "meetings": rows}]},
         manifest,
     )
-    return NativeResult(inventory, tuple(issues), tuple(exclusions))
+    if year_page is not None:
+        inventory_years.add(year_page)
+    return NativeResult(inventory, tuple(issues), tuple(exclusions), tuple(sorted(inventory_years)))

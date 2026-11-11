@@ -1,6 +1,6 @@
 include requirements-dev.lock
 recursive-include manifests *.yml
-recursive-include tests *.py *.csv *.xls *.json *.md *.txt
+recursive-include tests *.py *.csv *.xls *.json *.md *.txt *.html
 recursive-include config *.example.yml
 recursive-include config README.md .env.example
 recursive-include docs *.md
