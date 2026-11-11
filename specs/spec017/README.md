@@ -4,9 +4,9 @@
 page parsing, bounded acquisition, original-byte storage in filesystem and
 PostgreSQL, and explicit capture-to-inventory links. A five-item bounded sample
 reconciles; issue-gated multi-page publication and a bounded historical-year
-discovery/expected-page gate are implemented, while addendum/assets,
-original-byte deduplication, recovery, source-wide coverage, text/chunks and jobs
-remain incomplete. Next:
+discovery/expected-page gate, declared addenda/PNG lineage, original-byte
+content addressing and durable attempt recovery are implemented. Remaining native
+source exceptions, source-wide coverage, text/chunks and jobs remain incomplete. Next:
 [FOMC-T03 handoff](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
 **Reviewed:** 2026-11-11. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
@@ -123,11 +123,15 @@ links each source capture and refuses to drop earlier source pages. A separate
 selected-page evidence atomically with the metadata inventory and links; it is
 verified only in isolated schemas. [Bounded year discovery](discovery_contract.md)
 requires archived index/calendar inputs and an exact expected-page set; it does
-not certify source-wide completeness. Hash-based original deduplication, full
-text, document versions and chunks remain future work. The current archive keeps
-one byte copy per capture. Database failures after
-local staging can be retried; startup and pre-receipt crash evidence need further
-work before T03 is accepted.
+not certify source-wide completeness. The separate
+[dependency contract](attachments_contract.md) retains declared addenda and PNG
+parent/child lineage. [Content-object and recovery contracts](storage_recovery_contract.md)
+add explicit deduplication migrations and durable pre-request intents. New local
+payload paths hard-link hash-addressed originals; migrated PostgreSQL captures
+reference shared original bytes. Both migrations are isolated-schema verified,
+not applied to production. Startup, file and database failures retain rejected or
+interrupted evidence and can recover only from verified durable bytes.
+Remaining source exceptions and corpus-wide conformance keep T03 open.
 See [configuration/commands](../../config/fomc_meeting_minutes/README.md) and the
 [current implementation handoff](todo.md).
 

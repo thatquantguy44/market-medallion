@@ -96,6 +96,9 @@ Repository lint/format and source/wheel builds pass. Archive inspection confirms
 the HTML fixture, discovery module, contract and sanitized evidence are included,
 with ignored runtime inputs absent.
 
-Next T03 work remains addendum/HTML-asset discovery and unresolved native-label
-regimes, content-addressed original-byte migration and interrupted-write/startup
-recovery. T04 text, chunks, backfill, jobs and schedules remain later work.
+The subsequent [attachment](attachments_contract.md) and
+[storage/recovery](storage_recovery_contract.md) increments implement declared
+addenda/PNG lineage, content-addressed original-byte migration and durable
+attempt recovery. Remaining native-label exceptions and broader historical
+conformance are the T03 pickup. T04 text, chunks, backfill, jobs and schedules
+remain later work.

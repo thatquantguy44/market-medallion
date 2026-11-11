@@ -39,7 +39,10 @@ URLs require HTTPS on `www.federalreserve.gov`, without credentials, ports,
 queries, whitespace, backslashes or percent-encoded paths. Inventory pages are
 restricted to the current calendar, historical-year index and historical year
 pages. Document paths are restricted to reviewed monetary-policy and legacy
-`/fomc/minutes/` locations, with a matching PDF/HTML suffix. Fragments are removed
+`/fomc/minutes/` locations, with a matching PDF/HTML suffix. The T03 source
+review additionally accepts the case-preserved `/fomc/MINUTES/` legacy folder.
+PNG assets use a separate reviewed dependency profile and do not become
+normalized meeting/document records. Fragments are removed
 from document identity while the original href remains evidence. Unknown hosts,
 formats and document kinds are rejected; no fallback to mirrors or transcripts.
 These rules are intentionally a bounded initial profile, not all Board assets.

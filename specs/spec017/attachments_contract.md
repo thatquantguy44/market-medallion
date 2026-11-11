@@ -57,8 +57,10 @@ partial tables or a conflicting marker refuse. Production has not been migrated.
 `commit(parent_capture_id, child_capture_ids, manifest, root=...)` re-derives the
 expected direct dependencies from matching, committed filesystem/PostgreSQL
 originals. It refuses issues, missing/extra URLs, duplicate captures per URL,
-wrong kinds, mismatched manifests/bytes and PNGs without the PNG signature.
-The signature check is not a visual or full-container validation. Check evidence
+wrong kinds, mismatched manifests/bytes, PNGs without the PNG signature and
+PDFs without PDF header/EOF framing. Child HTML must match the reviewed dependency
+profile. These checks detect obvious wrong/login/truncated containers; they are
+not visual or full PDF-structure validation. Check evidence
 and all original-label links commit atomically, without moving an inventory
 pointer. Hash-derived check IDs make identical retries idempotent. A new child
 capture produces a separate immutable check. `read_check` verifies both evidence
@@ -83,5 +85,6 @@ The 1993 sample now retains eight legacy minutes references without parser
 issues. The 2020 sample retains 16 representations and surfaces the March 2
 cross-reference and cancelled March 17–18 label. The earlier 1936 date conflict
 and current notation vote also remain unresolved. No corpus-wide or text
-completeness is claimed. The next archive increments are content-addressed
-originals and interrupted-write/startup recovery.
+completeness is claimed. The subsequent
+[storage/recovery increment](storage_recovery_contract.md) implements
+content-addressed originals and interrupted-write/startup recovery.

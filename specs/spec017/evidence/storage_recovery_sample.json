@@ -1,0 +1,41 @@
+{
+  "reviewed_on": "2026-11-11",
+  "scope": "offline replay/import of the retained 28-item attachment sample; zero provider requests",
+  "source_evidence": "attachment_source_sample.json",
+  "source_evidence_sha256": "effc765d5c827bae95c818e587aa18c2797fd5e8a0cb59ec67737f85ad6262d8",
+  "local_review_migration": {
+    "schema_id": "fomc-local-object-migration/1",
+    "captures_verified": 28,
+    "unique_payloads": 28
+  },
+  "all_original_receipt_bytes_unchanged": true,
+  "all_original_capture_hashes_and_clocks_unchanged": true,
+  "per_capture_payload_paths_share_object_inodes": true,
+  "postgres_scope": "isolated temporary FOMC test schema, removed after verification",
+  "distinct_source_payloads": 28,
+  "original_imports": 28,
+  "explicit_repeat_local_imports": 2,
+  "interrupted_then_recovered_local_imports": 1,
+  "retained_capture_receipts": 31,
+  "postgres_content_objects": 28,
+  "redundant_per_capture_database_payloads": 0,
+  "byte_exact_readbacks_before_and_after_migration": 30,
+  "real_backend_recovery": {
+    "boundary": "after_database_commit_before_filesystem_marker",
+    "result": "committed",
+    "same_capture_id_on_retry": true
+  },
+  "production_migrations": 0,
+  "production_inventory_runs_published": 0,
+  "verification": {
+    "offline_tests_passed": 900,
+    "optional_integrations_skipped": 37,
+    "focused_fomc_checks_passed": 179,
+    "real_postgres_tests_passed": 27,
+    "backend_scope": "isolated temporary FOMC schemas only",
+    "lint_format": "passed",
+    "source_wheel_build_and_artifact_checks": "passed",
+    "production_migrations": 0,
+    "schedules_enabled": 0
+  }
+}

@@ -89,29 +89,45 @@ builds pass. Artifact inspection confirms the discovery module, invented HTML
 fixture, contract and sanitized evidence are packaged; ignored runtime inputs
 are absent. No production schema migration or inventory publication was performed.
 
-**Next pickup to finish T03:** Continue with addendum/HTML-asset discovery and
-source-specific native-label fixtures. Preserve the expected-page and
-unresolved-label evidence before extending publication behavior. Then:
+**Attachment/storage/recovery increment (2026-11-11):** Implemented the
+[declared-addendum and PNG dependency contract](attachments_contract.md), reviewed
+legacy/modern native-label fixes, [content-addressed original migration and
+durable attempt recovery](storage_recovery_contract.md). Dependency checks retain
+parent/child raw labels and inherited bundled-meeting associations, verify both
+archives and commit atomically. A bounded source sample reconciles two minutes,
+two SEP addenda and all 22 linked PNGs, plus the 1993/2020 year pages.
 
-- Resolve/document addendum and HTML-asset discovery, unknown native labels and
-  pending/missing cases with source-specific fixtures.
-  Unknown/addendum labels are issues, not proof of exclusion or completeness.
-- Add content-addressed original storage with an explicit reviewed migration;
-  the current implementation retains one byte copy per capture, so repeated or
-  bundled artifacts are not yet deduplicated by hash. Preserve every URL and
-  association while deduplicating the original bytes.
-- Extend interrupted-write and crash-recovery evidence across every file/database
-  boundary. Retry currently applies after both local payload and receipt exist;
-  startup-probe failures and failures before the receipt is written do not yet
-  produce a full acquisition receipt.
-- Extend bounded historical conformance and verify supported label regimes before
-  certifying T03; do not backfill, start a schedule or advance a catalog merely
-  because the current five-item sample passed.
+Filesystem originals now share hash-addressed objects; explicit local and
+PostgreSQL migrations preserve every receipt/URL/clock. Durable intents precede
+GET/startup selection, and offline recovery retains the same capture identity.
+All source and backend evidence is isolated/local review only; production remains
+at five Bronze captures and zero normalized inventory runs. No new production
+migration, backfill or schedule was performed. Evidence:
+[attachments](evidence/attachment_source_sample.json),
+[storage/recovery](evidence/storage_recovery_sample.json).
 
-Verification: **841 offline tests passed, 19 optional skips**; separately all
-**9 FOMC PostgreSQL integration tests passed** in isolated schemas. Ruff and
-source/wheel builds pass. These results describe the earlier T03 checkpoint; see the discovery increment
-above for the new scope and verification.
+**Next pickup to finish T03:** Review the remaining source exceptions and extend
+bounded historical conformance before accepting source-wide discovery:
+
+- The current calendar's 2025 notation vote has no supported meeting label.
+- The 1936 page displays a 1937 Executive Committee label; preserve the conflict
+  and verify the official document before choosing a disposition.
+- The 2020 page cross-references March 2 minutes to the March 15 document and
+  labels March 17–18 cancelled. These remain issues rather than guessed
+  associations or certified empty meeting rows.
+- Unsupported asset formats/structures and unknown/addendum labels remain
+  blocking issues. Extend only with reviewed source-specific fixtures.
+- Broader historical label regimes and recursive archive/container completeness
+  remain uncertified. Full PDF/page/text quality remains T04; do not backfill,
+  publish a completed document catalog or enable schedules from this sample.
+
+Earlier T03 checkpoint verification was 841 offline tests and nine real FOMC
+PostgreSQL tests; the discovery increment above records its later checks.
+Final increment verification: **900 offline tests passed, 37 optional skips**;
+all **179 focused FOMC checks passed**, including **27 real PostgreSQL tests** in
+isolated schemas. Ruff lint/format, source/wheel builds and artifact inclusion/
+runtime-input exclusion checks pass. No production schema migration or inventory
+publication was performed.
 
 The next slice after T03 is T04 complete text/extraction. T03's T01 candidate
 parse and Bronze success do not publish complete documents/text to downstream

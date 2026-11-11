@@ -25,34 +25,34 @@ The user selected FOMC implementation, the existing PostgreSQL service and a
 pipeline-owned config folder. T01/T02 inventory metadata and configuration are
 complete. T03 now parses reviewed current/historical native page shapes and
 archives original received bytes locally and in the FOMC PostgreSQL schema.
-[Finish T03 using its exact checklist](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress):
-the bounded year-index discovery/coverage increment is implemented;
-addendum/HTML assets, original-byte deduplication and additional failure/recovery
-evidence remain open. Issue-gated multi-page publication checks both archives,
-refuses to drop earlier source pages and rolls back if source linking fails. Start
-with addendum/HTML-asset discovery and unresolved native labels; the
-[discovery contract](../../specs/spec017/discovery_contract.md) records the
-expected-page gate and separately marked evidence migration. The new migration
-was verified only in isolated test schemas; production remains unchanged.
-Full text/chunks and optional embeddings are later work.
+[Finish T03 using its exact checklist](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
+Bounded year discovery, declared addendum/PNG lineage, content-addressed originals
+and durable acquisition/recovery are implemented. Next: review the notation vote,
+1936-page/1937 label conflict and 2020 cross-reference/cancelled meeting, then
+extend bounded historical conformance. Unsupported asset shapes remain issues.
 
-[Bounded source evidence](../../specs/spec017/evidence/native_bronze_sample.json)
-records one current calendar, one meeting's PDF/HTML, and two previously
-captured historical pages, with exact filesystem and PostgreSQL readback. The
-parser flags a current notation vote; the 1936 page contains an ambiguous 1937
-Executive Committee label. No
-source-wide completeness is implied. No inventory run was published and no
-schedule was activated. A separate bounded index request retained local review
-bytes and discovered 85 historical year links; the archived calendar supplies
-2021–2027 headings. The [87-page expected-set evidence](../../specs/spec017/evidence/year_index_discovery.json)
-retains the unresolved notation vote and does not certify an archive. The
-separate Bronze migration does not repurpose the six-table inventory catalog
-marker or current pointer.
+The [attachment contract](../../specs/spec017/attachments_contract.md) and
+[storage/recovery contract](../../specs/spec017/storage_recovery_contract.md)
+record separate explicit PostgreSQL migrations. They are verified only in
+isolated schemas; production remains at five original Bronze captures and zero
+inventory runs. New local originals share content objects; the local-review
+legacy files were explicitly relinked without changing receipts or capture clocks.
+No production migration, document catalog, backfill, job or schedule was enabled.
 
-Verification for the discovery increment: **866 offline tests passed, 25 optional
-skips**; all **133 focused FOMC checks**, including **15 real PostgreSQL tests**,
-passed in isolated schemas. Ruff lint/format, source/wheel builds and artifact
-inclusion checks pass.
+[Attachment evidence](../../specs/spec017/evidence/attachment_source_sample.json)
+reconciles two minutes, two SEP addenda, their 22 PNGs and the 1993/2020 year pages.
+[Storage/recovery evidence](../../specs/spec017/evidence/storage_recovery_sample.json)
+reconciles 31 capture receipts to 28 originals in a temporary backend, including
+same-identity recovery after an interrupted marker write. Full text/chunks and
+optional embeddings remain later work. The earlier
+[87-page expected-set evidence](../../specs/spec017/evidence/year_index_discovery.json)
+remains a bounded discovery record, not a source-wide archive.
+
+Final increment verification: **900 offline tests passed, 37 optional skips**;
+all **179 focused FOMC checks passed**, including **27 real PostgreSQL tests** in
+isolated schemas. Ruff lint/format, source/wheel builds and artifact inclusion/
+runtime-input exclusion checks pass. No production schema migration or inventory
+publication was performed.
 
 Use [config/fomc_meeting_minutes/](../../config/fomc_meeting_minutes/README.md).
 The ignored local config retains the existing PostgreSQL target, environment

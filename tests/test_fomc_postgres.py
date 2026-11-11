@@ -739,3 +739,41 @@ def test_fomc_dependency_migration_refuses_partial_schema(store, dependency_arch
     store.connection.execute(store._query("DROP TABLE {schema}.bronze_dependencies"))
     with pytest.raises(ValueError, match="incomplete"):
         dependencies.migrate()
+
+
+def test_fomc_dependency_rejects_html_login_instead_of_declared_pdf(
+    store, tmp_path, dependency_archive
+):
+    from datetime import datetime
+
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import capture
+
+    bronze, dependencies, manifest, ids = dependency_archive
+    base = "https://www.federalreserve.gov/monetarypolicy/"
+    parent = capture(
+        tmp_path,
+        b'<div id="article"><a href="addendum.pdf">Addendum to these minutes</a></div>',
+        manifest=manifest,
+        store=bronze,
+        source_url=base + "pdf-parent.htm",
+        kind="document",
+        captured_at=datetime.now(UTC),
+        status=200,
+        headers={},
+        max_bytes=1000,
+    )
+    wrong = capture(
+        tmp_path,
+        b"<html><form>Log in</form></html>",
+        manifest=manifest,
+        store=bronze,
+        source_url=base + "addendum.pdf",
+        kind="document",
+        captured_at=datetime.now(UTC),
+        status=200,
+        headers={},
+        max_bytes=1000,
+    )
+    with pytest.raises(ValueError, match="PDF container"):
+        dependencies.commit(parent["capture_id"], [wrong["capture_id"]], manifest, root=tmp_path)
+    assert bronze.read_capture(wrong["capture_id"])[1] == b"<html><form>Log in</form></html>"

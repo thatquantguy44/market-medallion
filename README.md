@@ -23,8 +23,9 @@ planned.
 inventory/identity contracts and configurable PostgreSQL metadata snapshots in
 its own schema. Settings live in [config/fomc_meeting_minutes/](config/fomc_meeting_minutes/README.md).
 T03 implements native parsing, dual-storage original captures and bounded
-historical-year discovery with an atomic expected-page publication gate. Addendum/
-asset discovery, original-byte deduplication and recovery remain open; full minutes,
+historical-year discovery with an atomic expected-page publication gate, declared
+addendum/PNG lineage, content-addressed originals and durable capture recovery.
+Source exceptions and broader historical conformance remain open; full minutes,
 text/chunks and optional embeddings remain future slices. FINRA's continuation
 is SSV-T05; the remaining program order and NAAIM pause are preserved.
 

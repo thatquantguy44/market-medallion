@@ -51,11 +51,12 @@ import receipts, not provider document-content versions or source coverage proof
 T03 introduces a separate explicit `fomc-bronze-postgres/1` migration with
 `bronze_schema_migrations` and `bronze_captures`. Captures retain original bytes
 (`bytea`), source URL, UTC capture time, SHA-256 and safe response evidence;
-bytes are currently retained per capture rather than deduplicated by hash;
-the same received bytes and receipt are written beneath the configured root.
+unmigrated PostgreSQL still retains bytes per capture. The explicit object
+migration below deduplicates originals while retaining every receipt and URL.
+New filesystem payload paths hard-link verified hash-addressed originals.
 `body_complete: false` marks a bounded prefix, whose hash is only the captured
-prefix hash. Failed HTTP bodies are retained and labeled rejected. Local retries
-can call `commit_capture` when both receipt and payload exist. The inventory
+prefix hash. Failed HTTP bodies are retained and labeled rejected. Local retries can call `commit_capture` when receipt and payload exist;
+`recover_attempt` can repair a missing payload link from a verified object. The inventory
 pointer is not moved by archiving. A separate `fomc-bronze-lineage-postgres/1` migration adds exact-URL links to
 existing inventory/document identities; these caller-asserted links do not
 certify how the inventory was derived. Complete text, document versions, chunks
@@ -64,8 +65,10 @@ rejects parser issues, atomically links each page, and refuses to drop source
 pages from the prior snapshot; it does not certify source-wide coverage. pgvector is optional.
 
 `acquisition.example.yml` supplies explicit per-run request and byte limits.
-Load it with `load_acquisition_limits`, construct `AcquisitionRun` with a client
-from `prepare_fomc_http`, and reuse that run for the selected URLs. The startup
+Load it with `load_acquisition_limits`, use `AcquisitionRun.start` with the configured root, manifest, store, startup
+inventory URL, network settings and limits, then reuse that run for selected URLs.
+Startup intent/rejection evidence is persisted before/after route selection;
+`prepare_fomc_http` remains the lower-level selector without archival context. The startup
 HEAD selects a route once; GETs refuse redirects and each attempted request
 consumes the budget. Loading configuration and local archive reads make no HTTP
 request. See the [T03 handoff](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress)
@@ -76,7 +79,7 @@ schemas on teardown:
 
 ```bash
 FOMC_TEST_POSTGRES_CONFIG=config/fomc_meeting_minutes/pipeline.local.yml \
-  .venv/bin/python -m pytest -q tests/test_fomc_postgres.py
+  .venv/bin/python -m pytest -q tests/test_fomc_postgres.py tests/test_fomc_archive_postgres.py
 ```
 
 Keep `MARKET_DATA_TEST_POSTGRES_DSN` unset for this command: other pipelines'
@@ -108,3 +111,21 @@ See the [discovery contract](../../specs/spec017/discovery_contract.md) for limi
 rollback, API examples and the known source issues. The new bounded index request
 is local review evidence only. Production remains at five Bronze captures and
 zero inventory runs; this increment performs no year-page backfill.
+
+## Explicit original/dependency migrations and recovery
+
+After `bronze.migrate()`, `PostgresObjectStore(bronze).migrate()` and
+`PostgresDependencyStore(bronze).migrate()` apply separate, owned schema contracts.
+They have been verified only in isolated FOMC schemas and have not been applied
+to production. Do not run older writers during object migration. The object
+migration verifies every legacy byte/hash/clock before clearing redundant copies;
+dependency checks keep all original parent/child labels and meeting associations.
+
+`migrate_local_objects(root)` explicitly relinks a verified legacy local batch to
+shared originals without changing receipts or capture clocks. New captures use
+content addressing automatically. After a writer stops, `recover_attempt(root,
+capture_id, bronze)` retries durable evidence under the same identity; missing
+original bytes remain incomplete and no request is made. See the
+[storage/recovery contract](../../specs/spec017/storage_recovery_contract.md)
+and [attachment contract](../../specs/spec017/attachments_contract.md) for APIs,
+limits, rollback and the remaining source exceptions.
