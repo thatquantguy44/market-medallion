@@ -2,10 +2,12 @@
 
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
-evidence. SSV-T02–SSV-T16 are **not started**. Prefix paths below with
+evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
+SSV-T03–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01 admission suite. [README.md](README.md) defines their acceptance IDs.
+Tests below are future targets except the implemented SSV-T01/T02 suites.
+[README.md](README.md) defines their acceptance IDs.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
 
@@ -22,8 +24,8 @@ Tests below are future targets except the implemented SSV-T01 admission suite. [
   missing/disallowed profiles, explicit operation grants and route-specific evidence.
   Future adapters must call it before I/O; no acquisition/export adapter exists.
 
-**Checkpoint:** SSV-T01 is complete for this user-attested API route. G0 remains
-open pending SSV-T02 facility/schema readiness. The user created the credential
+**Checkpoint:** SSV-T01 is complete for this user-attested API route. SSV-T02
+below now makes G0 ready for the explicit three-TRF profile. The user created the credential
 and accepted terms; no account or agreement was created by the agent. The API
 amendment below does not claim real observation coverage or integrated I/O guards.
 **Verify:** documentary review plus an offline negative admission fixture.
@@ -31,16 +33,34 @@ amendment below does not claim real observation coverage or integrated I/O guard
 
 ## SSV-T02 — Pin API facility and schema registry
 
+**Status:** complete for version 1 and the three verified TRFs. Documentary
+items were checked off after the bounded source review; the registry and guard
+items below are now verified by 63 offline tests plus 21 existing admission tests.
+Raw samples remain ignored; ordinary tests use invented metadata and no provider
+requests. No parser, warehouse, schedule or full capture is implemented.
+
 **Depends:** SSV-T01; **traces:** SSV-REQ02 / SSV-AC02.
-- [ ] Pin the seven-field production schema, `tradeReportDate` partition and
+- [x] Pin the seven-field production schema, `tradeReportDate` partition and
   selected source-version behavior from the [API contract](api_contract.md).
-- [ ] Resolve metadata N/Q/B/D versus example NYTRF/NQTRF/NCTRF identifiers;
+- [x] Resolve metadata N/Q/B/D versus example NYTRF/NQTRF/NCTRF identifiers;
   record admitted facility pairs and explicit ADF/consolidated/ORF exclusions.
-- [ ] Bound the documented rolling twelve-month regime; keep TXT headers,
+- [x] Bound the documented rolling twelve-month regime; keep TXT headers,
   trailers and older regimes in a separate unadmitted profile.
-- [ ] Reject unknown and overlapping scope selections before data acquisition.
-**Verify:** table-driven schema/facility/version and overlapping-scope tests.
-**Files:** `manifest.py`, `manifests/finra-short-sale-volume.yml`, `tests/test_ssv_manifest.py`.
+- [x] Reject unknown and overlapping scope selections before data acquisition;
+  exact facility/market matching and explicit rolling acquisition-date guards
+  also reject mixed pairs, future/out-of-window dates and unsupported versions.
+**Source evidence:** [bounded source review](evidence/t02_source_contract.json)
+pins version 1, seven fields, 252 partitions from 2025-11-10 through 2026-11-10,
+and six November 9 rows confirming NYTRF/N, NQTRF/Q and NCTRF/B. Market D returned
+HTTP 204 / Record-Total 0 and supplied no facility identifier. ADF, consolidated,
+ORF and TXT remain excluded. The initial source-check script rejected HTTP 204;
+its failed result is preserved and the retained empty response was reviewed offline.
+**Verify:** 84 focused tests pass; full offline regression **566 passed, 10 skipped**.
+Ruff lint/format and source distribution/wheel builds pass.
+All six retained rows reconcile to the registry without changing their bytes.
+G0 is ready for this bounded source profile; G1/G2 are not complete.
+**Files:** `manifest.py`, `registry.py`, `manifests/finra-short-sale-volume.yml`,
+`tests/test_ssv_registry.py`; sanitized evidence is under `specs/spec012/evidence/`.
 
 ## SSV-T03 — Characterize API parser with invented responses
 

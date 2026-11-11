@@ -1,1 +1,1 @@
-"""FINRA short-volume admission metadata; acquisition and ingestion are not implemented."""
+"""FINRA short-volume source contract; acquisition and ingestion are not implemented."""

@@ -1,15 +1,18 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01 complete for the selected Public API route: approved-use
-metadata plus bounded authentication/production-schema checks are verified;
-parser, connector, jobs and data products remain absent.
+**Status:** SSV-T01/T02 complete for the selected three-TRF Public API profile:
+approved-use admission, strict manifest/schema/version, disjoint facility
+registry and acquisition-date guards are implemented. Parser, connector, jobs
+and data products remain absent.
 **Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
 **Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
-(admission gate only). The [source review](source_review.md) records the user's
+(source contract and registry only). The [source review](source_review.md) records the user's
 personal noncommercial scope and Public API terms acknowledgement. The selected
 [API profile](api_contract.md) explicitly amends the file-first plan for JSON and
-page completeness. TXT permission stays unresolved; G0 remains open until T02.
+page completeness. G0 is ready for the explicit three-TRF profile; TXT, ADF,
+consolidated and ORF scopes stay excluded. [T02 evidence](evidence/t02_source_contract.json)
+records the six-row sample and its limits.
 
 Read the [program roadmap](../../docs/securities_finance/README.md),
 [common contract](../../docs/securities_finance/contract.md),
@@ -63,10 +66,11 @@ also identifies the production `otcMarket/regShoDaily` dataset and a rolling
 twelve-month window. The [Equity API terms](https://developer.finra.org/specific-terms-equity-data)
 permit noncommercial internal use and derived data with valid access credentials.
 The user subsequently confirmed a Public credential and accepted API terms.
-Authentication and the production metadata request succeeded; data-query
-entitlement and actual observation conformance remain untested. The API profile
-is selected explicitly; no TXT download permission is inferred. No observation
-endpoint was requested.
+Authentication and production metadata succeeded. SSV-T02 subsequently sampled
+two November 9 records from each TRF, confirming source version 1 and the literal
+facility/market pairs. These are partial contract samples, not complete extraction
+or historical coverage. The market D empty 204 response supplied no ADF identifier.
+The API profile is selected explicitly; no TXT permission is inferred.
 
 ## Scope and delivery boundary
 
@@ -86,9 +90,10 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. SSV-AC01 has focused unit evidence
-for the pure admission gate; acquisition/export entry points do not exist yet,
-so integrated pre-I/O enforcement and the complete acceptance remain pending.
+Every task/test must cite these stable IDs. SSV-AC01/02 have 84 focused unit
+tests for admission, schema/version and registry guards. Acquisition/export
+entry points do not exist, so their integrated guards and delivery acceptance
+remain pending. Full offline regression: 566 passed, 10 optional skips.
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |
@@ -117,7 +122,8 @@ as a prerequisite. Proposed source-owned files are:
 
 ```text
 pipelines/finra_short_sale_volume/
-  manifest.py       # scope, schema and approved-use profile
+  manifest.py       # implemented approved-use and strict manifest/schema checks
+  registry.py       # implemented API version, facility scopes and date-window guard
   source.py         # bounded API partitions and acquisition
   data/api.py       # pure JSON parser and typed records
   data/gold.py      # denominator-safe features

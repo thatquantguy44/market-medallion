@@ -1,9 +1,23 @@
-"""SSV-T01 approved-use admission, independent of credentials and provider I/O.
+"""SSV-T01/T02 approved-use and source-contract validation, independent of provider I/O.
 
 Evidence and current decisions: specs/spec012/source_review.md.
 API access terms: https://developer.finra.org/specific-terms-equity-data
 Website access terms: https://www.finra.org/terms-of-use
 """
+
+from collections.abc import Mapping
+from dataclasses import dataclass
+from pathlib import Path
+
+import yaml
+
+from market_data_pipeline.pipelines.finra_short_sale_volume.registry import (
+    API_FIELDS,
+    API_PROFILE,
+    Facility,
+    select_scopes,
+)
+from market_data_pipeline.shared.yaml import UniqueLoader
 
 _OPERATIONS = frozenset({"fixture", "local_import", "acquire", "transform", "internal_export"})
 _ROUTES = frozenset(
@@ -73,3 +87,87 @@ def require_approved_use(value: object, *, operation: str) -> None:
             raise PermissionError("FINRA API use requires accepted terms and Public metadata")
     elif authorization != "provider_permission" or not reference or credential_type is not None:
         raise PermissionError("FINRA file use requires recorded provider permission")
+
+
+@dataclass(frozen=True)
+class Manifest:
+    scopes: tuple[str, ...]
+    facilities: tuple[Facility, ...]
+
+    @property
+    def data_version(self) -> int:
+        return int(API_PROFILE["data_version"])
+
+    @property
+    def schema_id(self) -> str:
+        return str(API_PROFILE["schema_id"])
+
+    def to_dict(self) -> dict:
+        return {**API_PROFILE, "fields": dict(API_FIELDS), "scopes": list(self.scopes)}
+
+    def resolve_facility(self, reporting_facility_code: str, market_code: str) -> Facility:
+        """Require an exact, selected provider identifier pair without aliases."""
+        for facility in self.facilities:
+            if (reporting_facility_code, market_code) == (
+                facility.reporting_facility_code,
+                facility.market_code,
+            ):
+                return facility
+        raise ValueError("unknown, mismatched or unselected FINRA facility/market pair")
+
+
+def manifest_from_dict(value: object) -> Manifest:
+    """Load only the reviewed production API profile; this never grants use rights."""
+    required = set(API_PROFILE) | {"fields", "scopes"}
+    if not isinstance(value, dict) or set(value) != required:
+        raise ValueError(
+            "FINRA manifest requires the reviewed profile fields; unknown fields rejected"
+        )
+    for key, expected in API_PROFILE.items():
+        if type(value[key]) is not type(expected) or value[key] != expected:
+            raise ValueError("FINRA manifest differs from the reviewed production API profile")
+    if value["fields"] != dict(API_FIELDS):
+        raise ValueError("FINRA manifest field names/types differ from the reviewed schema")
+    facilities = select_scopes(value["scopes"])
+    return Manifest(tuple(value["scopes"]), facilities)
+
+
+def load_manifest(path: Path) -> Manifest:
+    try:
+        return manifest_from_dict(yaml.load(path.read_text(), Loader=UniqueLoader))
+    except (yaml.YAMLError, UnicodeError) as exc:
+        raise ValueError("invalid FINRA manifest YAML") from exc
+
+
+def validate_metadata(value: object) -> None:
+    """Pin literal metadata names/types/partition; descriptions never define aliases."""
+    if not isinstance(value, dict) or (
+        value.get("datasetGroup") not in ("otcMarket", "OTCMARKET")
+        or value.get("datasetName") not in ("regShoDaily", "REGSHODAILY")
+        or value.get("partitionFields") != ["tradeReportDate"]
+    ):
+        raise ValueError("FINRA metadata has a different production identity or partition")
+    fields = value.get("fields")
+    if not isinstance(fields, list) or len(fields) != len(API_FIELDS):
+        raise ValueError("FINRA metadata field set differs from the reviewed schema")
+    expected, seen = dict(API_FIELDS), set()
+    for field in fields:
+        if not isinstance(field, dict):
+            raise ValueError("invalid FINRA metadata field")
+        name = field.get("name")
+        if not isinstance(name, str) or name not in expected or name in seen:
+            raise ValueError("unknown or duplicate FINRA metadata field")
+        if field.get("type") != expected[name]:
+            raise ValueError("FINRA metadata field type differs from the reviewed schema")
+        if name == "tradeReportDate" and field.get("format") != "yyyy-MM-dd":
+            raise ValueError("FINRA metadata date format differs from the reviewed schema")
+        seen.add(name)
+
+
+def validate_data_version(headers: Mapping[str, str]) -> None:
+    """Require the dataset version; Data-API-Version is a separate transport header."""
+    if not isinstance(headers, Mapping):
+        raise ValueError("FINRA response headers must be a mapping")
+    values = [v for k, v in headers.items() if isinstance(k, str) and k.lower() == "data-version"]
+    if len(values) != 1 or not isinstance(values[0], str) or values[0].strip() != "1":
+        raise ValueError("FINRA response must declare exactly one Data-Version: 1")

@@ -3,7 +3,8 @@
 Reviewed 2026-11-10, America/New_York. Traces: **SSV-T01 / SSV-REQ01 / SSV-AC01**.
 This is an evidence and admission-policy checkpoint. The user has provisioned
 Public API credentials; bounded authentication and production metadata retrieval
-succeeded. No observation query, warehouse or job has been created.
+succeeded. The later SSV-T02 bounded sample verified six TRF records, source
+version 1 and partition inventory. No warehouse, full extraction or job exists.
 
 ## Selected use and current decision
 
@@ -52,8 +53,10 @@ I/O. No connector or command consumes this gate until its own implementation.
 These are documentary findings and a user-attested project admission decision,
 not a claim that FINRA has approved this implementation. Reviewed pages can
 change; recheck current terms before activation. The initial review made no API
-requests; the subsequent bounded check requested only a token and production
-schema metadata. No provider observation payload was requested.
+requests; the T01 check requested only a token and production metadata. The
+separate T02 sample and its limits are recorded in the [API contract](api_contract.md)
+and [aggregate evidence](evidence/t02_source_contract.json). Raw observations stay
+ignored; no full extraction or redistribution scope was added.
 
 ## Concrete admission contract
 
@@ -89,13 +92,13 @@ in this checkpoint, so there is no end-to-end acquisition-refusal claim yet.
 **SSV-T01 is complete for the selected API route:** purpose, user-attested terms
 reference, pure admission metadata and negative fixtures are recorded. Its
 [API contract](api_contract.md) explicitly amends SSV-T02/T03 without enabling TXT
-acquisition. Complete source-profile readiness (G0) stays open until schema,
-facility mapping and selected coverage are pinned.
+acquisition. SSV-T02 is now complete: source version 1, seven fields, exact three-TRF
+facility/market pairs and rolling acquisition-date bounds are pinned and tested.
+G0 is ready for that explicit profile; partial samples do not establish G2.
 
-Next is **SSV-T02**, the API facility/schema registry. Resolve the current
-metadata/example facility-code discrepancy, source-version behavior and explicit
-scope exclusions before parser implementation. SSV-T02/T03 have not started;
-there is no reusable authentication or data acquisition adapter yet. NAAIM stays
+Next is **SSV-T03**, the pure JSON-response parser with invented fixtures.
+ADF, consolidated, ORF, TXT and other source versions remain excluded. There
+is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
 
 ## Verification checkpoint
@@ -115,3 +118,8 @@ coverage was not enabled). Repository Ruff lint and formatting checks pass;
 source distribution and wheel builds pass. These results do not establish
 FINRA live access, actual provider-schema conformance, PostgreSQL/Delta parity
 for this new pipeline, or integrated transport/export admission enforcement.
+
+SSV-T02 checkpoint: 63 registry tests plus the original 21 admission tests pass;
+full offline regression now records **566 passed, 10 skipped**. The source sample
+confirms the selected three facility pairs while preserving the initial checker
+failure on market D's HTTP 204. No complete partition or warehouse was published.

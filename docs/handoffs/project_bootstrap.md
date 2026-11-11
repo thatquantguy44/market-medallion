@@ -21,34 +21,46 @@ new live schedules default stopped.
 
 ## 2026-11-10 current pickup and AAII manual refresh
 
-Spec011's T17/G2 closeout merged through PR #8 at `c16acee`; AAII's refresh
-documentation merged through PR #9. FINRA **SSV-T01 is complete for the selected
-Public API route**, with user-attested accepted terms, 21 pure admission tests,
-and bounded authentication/production-metadata checks. Only approved-use code
-exists; parser, reusable acquisition, warehouse, export and jobs remain absent.
+Spec011 T17/G2 merged through PR #8; AAII's refresh documentation merged through
+PR #9. FINRA **SSV-T01/T02 are complete for source version 1 and the selected
+three-TRF Public API profile**. Approved-use admission, strict manifest/schema/
+version validation, exact facility resolution, disjoint scope selection and
+explicit rolling acquisition-date guards are implemented. No parser, reusable
+acquisition, warehouse, export or job exists. **Next: SSV-T03**, the pure JSON
+parser with invented response/receipt fixtures.
 
-The user confirmed a Public credential and API terms acceptance for personal
-noncommercial internal research. Record this as
-`USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`, not independent license verification.
-Authentication and production `regShoDaily` metadata returned HTTP 200 in check
-`dc9f572037dd430c80783cb9315edd48`; no observations were queried. Credential
-values and tokens were not logged or committed. The user's FINRA `.env` syntax
-was normalized and retains owner-only permissions.
+The user confirmed Public credentials and accepted API terms for personal
+noncommercial internal research. Keep the evidence reference
+`USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10` as user attestation, not independent
+license documentation. Credentials and tokens remain excluded from Git/logs.
 
-The [API contract](../../specs/spec012/api_contract.md) explicitly amends the
-file-first design for JSON/partition/page completeness. **Next: SSV-T02**, pin
-facility/schema/source-version behavior and resolve the N/Q/B/D metadata versus
-NYTRF/NQTRF/NCTRF example discrepancy. G0 remains open; observation conformance,
-TXT permission, ADF/consolidated/ORF coverage and all recurring operation remain
-unverified or separately gated. NAAIM stays paused and all schedules stay stopped.
+The [T02 aggregate evidence](../../specs/spec012/evidence/t02_source_contract.json)
+reconciles six November 9 rows to NQTRF/Q, NCTRF/B and NYTRF/N. Source dataset
+version 1 is active, and 252 available partition dates span 2025-11-10 through
+2026-11-10. These are partial samples, not complete date/facility history. The
+market D query returned HTTP 204 / Record-Total 0 with no ADF identifier. Its initial
+checker rejection is retained; offline review reconciled all raw digests without
+refetching or relabeling that failed check as a successful pipeline capture.
 
-QuantSmith's working-tree pin still does not verify; selected guidance was read
-from its pinned Git object and hash-checked without refreshing its checkout or
-this repository's reference.
+The [API contract](../../specs/spec012/api_contract.md) records exact schema,
+version and scope behavior. `listed_trfs` is only the three reviewed TRFs;
+ADF, consolidated TRF/ADF, ORF, TXT, mock and other versions remain excluded.
+G0 is ready for this explicit profile; G1/G2 and full source conformance remain
+open. The rolling twelve-calendar-month guard is for new acquisition, not a
+current-day filter on archived local imports/replay. Contract-check receipt
+`captured_at` records request start, not an assigned Silver first-seen clock.
+No observations have been promoted. NAAIM stays paused; schedules stay stopped.
 
-Verification: 503 offline tests passed, 10 optional integrations skipped; Ruff
-lint/format and package builds pass. This is admission-only unit evidence; it
-does not establish provider access or integrated acquisition/export enforcement.
+Verification: **566 offline tests passed, 10 optional integrations skipped**;
+84 focused FINRA tests pass (63 registry + 21 admission). Ruff lint/format pass.
+Source distribution and wheel builds pass. The six retained samples,
+source metadata, version headers and unchanged raw hashes also reconcile to the
+implemented registry. Core verification does not establish integrated HTTP,
+warehouse, export or job behavior for this new pipeline.
+
+QuantSmith's external working-tree pin still fails verification. Previously
+adopted guidance was read from its pinned Git object and hash-checked without
+refreshing its checkout or this repository's reference.
 
 The user-requested AAII manual Dagster refresh succeeded for October 13 through
 November 10. It added October 29 and November 5, bringing local PostgreSQL and the
@@ -393,9 +405,9 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 is merged. Continue Spec012 SSV-T02 on `feat/spec012-finra-access-review`:
-SSV-T01 is complete for user-attested API terms and verified authentication/
-production metadata. Next is SSV-T02 schema/facility readiness; G0 remains open.
+T17 is merged. Continue Spec012 SSV-T03 on `feat/spec012-finra-access-review`:
+SSV-T01/T02 are complete for the selected source version 1 three-TRF API profile.
+Next is SSV-T03's pure JSON parser; G0 is ready for the explicit selected scope.
 Read Spec012's README, data contract, plan, tasks, API contract and source review
 before further implementation.
 Spec011's selected source conformance and A01–A15

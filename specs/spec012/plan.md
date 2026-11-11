@@ -1,6 +1,6 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01 complete for the selected Public API route, 2026-11-10.
+**Status:** SSV-T01/T02 complete for the selected three-TRF API profile, 2026-11-10.
 Use [todo.md](todo.md) as the single task list.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
@@ -11,9 +11,12 @@ The [source review](source_review.md) records the user's personal noncommercial
 purpose and confirmed Public API terms acceptance. The selected
 [API profile](api_contract.md) explicitly amends SSV-T02/T03 for JSON, a trade-date
 partition and page completeness. A bounded token/production-metadata check
-succeeded; no observations were requested. Website TXT permission stays separate
-and unresolved. Only approved-use metadata is implemented; parser, reusable
-acquisition, warehouse, export and job remain absent.
+succeeded. SSV-T02 then verified source version 1, three literal TRF/market pairs,
+252 available partition dates and a bounded six-row sample. The registry rejects
+unknown/overlapping scopes, schema/version changes and invalid acquisition dates.
+Website TXT permission stays separate; ADF, consolidated and ORF are excluded.
+Next is SSV-T03's invented-response parser. Reusable acquisition, warehouse,
+export and job remain absent.
 
 ## Decisions and dependency flow
 
@@ -23,7 +26,7 @@ offline. The original TXT path remains a separate unadmitted profile with its
 own header/trailer rules. Mock responses never become observations.
 
 ```text
-approved use + file registry -> invented parser fixtures -> local single-file slice
+approved use + API registry -> invented response parser -> local single-response slice
   -> immutable revisions + complete replacement membership -> scoped Gold
   -> typed publication + replay -> bounded correction refresh + health
   -> approved research export -> stopped job + acceptance handoff
@@ -49,7 +52,7 @@ helpers may be reused only where they contain no source-specific assumptions.
 | Requirement | Design component | Task | Acceptance |
 | --- | --- | --- | --- |
 | SSV-REQ01 | approved-use manifest | SSV-T01 | SSV-AC01 |
-| SSV-REQ02 | file registry | SSV-T02 | SSV-AC02 |
+| SSV-REQ02 | API schema/facility registry | SSV-T02 | SSV-AC02 |
 | SSV-REQ03 | pure parser | SSV-T03 | SSV-AC03 |
 | SSV-REQ04 | typed counts | SSV-T04 | SSV-AC04 |
 | SSV-REQ05 | Bronze receipts | SSV-T05 | SSV-AC05 |

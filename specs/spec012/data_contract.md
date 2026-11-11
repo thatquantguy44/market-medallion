@@ -1,8 +1,8 @@
 # FINRA short-sale-volume data contract
 
 **Version:** design v1 with the 2026-11-10 SSV-T01 admission checkpoint.
-**Implementation status:** pure approved-use gate only; parser, connector and
-storage are absent. Provider facts below are documented; normalized names and
+**Implementation status:** pure approved-use, manifest/schema/version and
+facility/date-window registry implemented; parser, connector and storage absent. Provider facts below are documented; normalized names and
 storage remain proposals.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
@@ -17,8 +17,9 @@ operation grants and optional Public credential metadata without I/O.
 
 The selected route is the **Public Query API**, backed by the user's confirmed
 terms acceptance under `USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`. Authentication
-and production metadata retrieval succeeded; actual data-query entitlement and
-observation conformance have not been tested. The [API profile](api_contract.md)
+and production metadata retrieval succeeded. SSV-T02 subsequently obtained
+six bounded TRF rows and a partition inventory; their raw field/version pairs
+reconcile, but complete partitions and historical observations are not verified. The [API profile](api_contract.md)
 explicitly defines the JSON schema/partition amendment and unresolved mapping.
 The TXT-oriented sections below remain a separate, unadmitted file profile.
 Future I/O entry points must call the gate; none are implemented yet.
@@ -41,8 +42,9 @@ silently add ORF or treat a comma-separated market list as one individual market
 
 Use [api_contract.md](api_contract.md) for the selected API's literal fields,
 partition field, lossless count semantics and pagination completeness. It has
-no file trailer. Facility-code mapping, source version and actual observation
-coverage still need SSV-T02/real conformance. The following table specifies the
+no file trailer. Source version 1, three TRF facility/market pairs and the schema are now pinned
+under SSV-T02. ADF, consolidated, ORF, TXT and other versions are rejected.
+Actual complete-partition/history conformance remains open. The following table specifies the
 retained TXT profile only and must not be used as an API field alias map.
 
 ## TXT schema and types

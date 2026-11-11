@@ -1,0 +1,204 @@
+{
+  "reviewed_date": "2026-11-10",
+  "source_check_id": "79c14c9f27104a94b77dc9a4c1494625",
+  "source_check_initial_status": "failed",
+  "initial_failure": "Review script expected HTTP200 for every request; market D returned retained HTTP204 / Record-Total0. This is separately reviewed evidence, not a rewritten successful capture.",
+  "dataset": "otcMarket/regShoDaily",
+  "data_version": 1,
+  "sample_trade_date": "2026-11-09",
+  "permission_reference": "USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10",
+  "scope_status": "bounded_contract_evidence_only_not_complete_extraction",
+  "requests": [
+    {
+      "name": "datasets",
+      "http_status": 200,
+      "bytes": 317,
+      "sha256": "2cb274c906cd19adb79a7945aad4185bcf26858007101e7d254a193ef0cbc008",
+      "captured_at": "2026-11-11T02:58:13.428676+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:19 GMT",
+        "Content-Type": "application/json",
+        "data-api-version": "1",
+        "finra-api-request-id": "3e01a970-4c13-4652-9002-d174020a9e5c"
+      }
+    },
+    {
+      "name": "market-B",
+      "http_status": 200,
+      "bytes": 445,
+      "sha256": "125268d01534deafcdced7b50a8fcca97c24b4600f3edc074f6e236709c6c426",
+      "captured_at": "2026-11-11T02:58:20.884669+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:21 GMT",
+        "Content-Type": "application/json",
+        "data-version": "1",
+        "finra-api-request-id": "d9000321-fea5-400b-9c12-b31bdcf13d8f",
+        "record-limit": "2",
+        "record-max-limit": "5000",
+        "record-offset": "0",
+        "record-total": "5849"
+      }
+    },
+    {
+      "name": "market-D",
+      "http_status": 204,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "captured_at": "2026-11-11T02:58:21.130071+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:21 GMT",
+        "data-version": "1",
+        "finra-api-request-id": "a2c6f7a9-3f76-45d4-8ea5-bddf771a1291",
+        "record-limit": "2",
+        "record-max-limit": "5000",
+        "record-offset": "0",
+        "record-total": "0"
+      }
+    },
+    {
+      "name": "market-N",
+      "http_status": 200,
+      "bytes": 443,
+      "sha256": "9bb118f12737df951fd090ac6ad5051a23fa36f81c371e85f3ce981f950c4e5b",
+      "captured_at": "2026-11-11T02:58:20.219768+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:20 GMT",
+        "Content-Type": "application/json",
+        "data-version": "1",
+        "finra-api-request-id": "9406031c-c3a0-4104-9844-bdfc46ba10af",
+        "record-limit": "2",
+        "record-max-limit": "5000",
+        "record-offset": "0",
+        "record-total": "7032"
+      }
+    },
+    {
+      "name": "market-Q",
+      "http_status": 200,
+      "bytes": 462,
+      "sha256": "986235454e6dd2c746501bfd1f383e05312fa41d5f6f4c034fd139a05b89f83e",
+      "captured_at": "2026-11-11T02:58:20.545353+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:20 GMT",
+        "Content-Type": "application/json",
+        "data-version": "1",
+        "finra-api-request-id": "aba4e834-ac61-4557-ba58-72f86d6ab532",
+        "record-limit": "2",
+        "record-max-limit": "5000",
+        "record-offset": "0",
+        "record-total": "12349"
+      }
+    },
+    {
+      "name": "metadata",
+      "http_status": 200,
+      "bytes": 1066,
+      "sha256": "0444c8491e61c5160f4a94e302efc7f4aa0fecc721db5d7e87cf09ac5b244d4f",
+      "captured_at": "2026-11-11T02:58:19.342253+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:19 GMT",
+        "Content-Type": "application/json",
+        "data-api-version": "1",
+        "data-version": "1",
+        "finra-api-request-id": "7b4977ef-6bea-4603-90ef-baef1b22ef08"
+      }
+    },
+    {
+      "name": "partitions",
+      "http_status": 200,
+      "bytes": 7678,
+      "sha256": "0de3290700d2d16c4daa9a0406a1ebdd628d8e229f553bc1bbfaf4df3ea029b2",
+      "captured_at": "2026-11-11T02:58:19.582669+00:00",
+      "headers": {
+        "Date": "Wed, 11 Nov 2026 02:58:20 GMT",
+        "Content-Type": "application/json",
+        "data-version": "1",
+        "finra-api-request-id": "8a6ab962-162d-4564-a1ce-42ac26ddb23c"
+      }
+    }
+  ],
+  "samples": [
+    {
+      "market": "N",
+      "sampled_rows": 2,
+      "facility_market_pair": [
+        "NYTRF",
+        "N"
+      ],
+      "record_total": 7032,
+      "complete_partition": false
+    },
+    {
+      "market": "Q",
+      "sampled_rows": 2,
+      "facility_market_pair": [
+        "NQTRF",
+        "Q"
+      ],
+      "record_total": 12349,
+      "complete_partition": false
+    },
+    {
+      "market": "B",
+      "sampled_rows": 2,
+      "facility_market_pair": [
+        "NCTRF",
+        "B"
+      ],
+      "record_total": 5849,
+      "complete_partition": false
+    }
+  ],
+  "market_D": {
+    "http_status": 204,
+    "body_bytes": 0,
+    "record_total": 0,
+    "facility_identifier_observed": false,
+    "registry_decision": "excluded_until_identifier_and_empty_partition_contract_are_verified"
+  },
+  "partition_inventory": {
+    "count": 252,
+    "first": "2025-11-10",
+    "last": "2026-11-10",
+    "as_of_date": "2026-11-10"
+  },
+  "dataset_descriptor": {
+    "group": "OTCMARKET",
+    "name": "REGSHODAILY",
+    "description": "Reg SHO Daily File",
+    "supportedFormats": [
+      "text/plain",
+      "application/json"
+    ],
+    "supportsRecordOffset": true,
+    "supportsRecordLimit": true,
+    "supportsQuery": true,
+    "supportsGetById": false,
+    "supportedMethods": [
+      "GET",
+      "POST"
+    ],
+    "status": "Active",
+    "dataVersion": 1
+  },
+  "observation_rows_sampled": 6,
+  "registry_reconciliation": {
+    "resolved_rows": 6,
+    "source_metadata_and_data_versions_match": true,
+    "scopes": [
+      "nasdaq_carteret_trf",
+      "nasdaq_chicago_trf",
+      "nyse_trf"
+    ],
+    "all_source_digests_unchanged": true,
+    "excluded_scopes": [
+      "adf",
+      "consolidated_trf_adf",
+      "orf",
+      "txt",
+      "mock"
+    ],
+    "promoted_observations": 0
+  },
+  "timing_note": "Source receipts captured_at records request-start time, not an assigned Silver first-seen clock. HTTP Date is retained; future ingestion must stamp retrieval completion. No observations were promoted."
+}

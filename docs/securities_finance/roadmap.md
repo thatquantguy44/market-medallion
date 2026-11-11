@@ -2,8 +2,8 @@
 
 **Updated:** 2026-11-10. **Planning horizon:** milestone based, without invented
 completion dates or throughput estimates. Spec011 G2 is accepted for its bounded
-native-source scope and merged through PR #8. Spec012 has an official-use review
-and pure admission gate only; its parser/connector/jobs and Specs013–015 remain
+native-source scope and merged through PR #8. Spec012 has approved-use/schema and three-TRF registry checks with bounded
+source evidence; its parser/connector/jobs and Specs013–015 remain
 unimplemented. NAAIM remains paused.
 
 ## Priority and backlog relationship
@@ -130,7 +130,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
 | 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete, merged PR #8 | Not started | Deferred | Ten authentic lists and both SEC archives reconcile; current source-build work is Spec012 |
-| 012 | Open; SSV-T01 API route complete | Not started | Not started | Not started | Deferred | User-attested Public terms; auth/production metadata HTTP 200; 21 admission tests pass. Next T02: pin API schema/facility mapping and source version. No observation query made. |
+| 012 | Ready for selected three-TRF API profile; T01/T02 complete | Not started | Not started | Not started | Deferred | User-attested Public terms; version 1/three TRF pairs and six sampled rows reconcile. 84 focused tests pass. Next T03 parser; full partition/history coverage and wider scopes remain open. |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |
