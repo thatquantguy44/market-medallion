@@ -140,3 +140,24 @@ def test_transport_failure_is_recorded_without_exception_details(tmp_path, manif
     assert "transport_error" in receipt["reasons"] and not receipt["body_complete"]
     assert "sensitive" not in str(receipt)
     assert store.payload == b""
+
+
+def test_png_asset_acquisition_preserves_original_bytes_and_budget(tmp_path, manifest):
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.acquisition import (
+        AcquisitionLimits,
+        AcquisitionRun,
+    )
+
+    payload = b"\x89PNG\r\n\x1a\nsynthetic-image-fixture"
+    store = Store()
+    run = AcquisitionRun(
+        tmp_path,
+        manifest=manifest,
+        store=store,
+        client=lambda req: Response(payload),
+        limits=AcquisitionLimits(max_requests=1, inventory_max_bytes=100, document_max_bytes=100),
+    )
+    receipt = run.acquire("https://www.federalreserve.gov/sep20190619figure3a.png", "asset")
+    assert receipt["kind"] == "asset" and receipt["accepted"]
+    assert read_capture(tmp_path, receipt["capture_id"])[1] == payload
+    assert run.requests == 1

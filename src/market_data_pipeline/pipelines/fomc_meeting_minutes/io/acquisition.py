@@ -28,13 +28,7 @@ def prepare_fomc_http(source_url, manifest, settings):
 
 def acquire_one(root, *, manifest, store, client, source_url, kind, max_bytes, now=None):
     """Capture one response; limits preserve a marked partial prefix, never claim completeness."""
-    if kind not in ("inventory", "document"):
-        raise ValueError("unknown FOMC source kind")
-    url = manifest.canonical_url(source_url, source_page=kind == "inventory")
-    if url != source_url or (
-        kind == "document" and not url.lower().endswith((".pdf", ".htm", ".html"))
-    ):
-        raise ValueError("unreviewed FOMC acquisition URL")
+    url = manifest.capture_url(source_url, kind)
     if type(max_bytes) is not int or not 1 <= max_bytes <= 50_000_000:
         raise ValueError("FOMC acquisition byte limit must be between 1 and 50000000")
     request = Request(
@@ -138,7 +132,7 @@ class AcquisitionRun:
     def acquire(self, source_url, kind):
         if self.requests >= self.limits.max_requests:
             raise ValueError("FOMC acquisition request budget exhausted")
-        if kind not in ("inventory", "document"):
+        if kind not in ("inventory", "document", "asset"):
             raise ValueError("unknown FOMC source kind")
         # Attempted requests count even if the provider or database fails.
         self.requests += 1

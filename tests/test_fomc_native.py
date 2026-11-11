@@ -90,3 +90,50 @@ def test_unknown_minutes_addendum_is_flagged_instead_of_reclassified(manifest):
     result = parse_native_page(page, BASE + "fomccalendars.htm", manifest)
     assert not result.inventory.documents
     assert any(issue.code == "unresolved_minutes_addendum" for issue in result.issues)
+
+
+def test_historical_format_links_inherit_only_explicit_paragraph_kind(manifest):
+    page = b"""<div class="panel"><h5 class="panel-heading">June 16-17 Meeting - 2020</h5>
+    <p>Beige Book: <a href="/monetarypolicy/files/beige.pdf">PDF</a></p>
+    <p>Minutes (Released July 08, 2020): <a href="/monetarypolicy/fake.htm">HTML</a>
+    | <a href="/monetarypolicy/files/fake.pdf">PDF</a></p></div>"""
+    result = parse_native_page(page, BASE + "fomchistorical2020.htm", manifest)
+    assert len(result.inventory.documents) == 2 and not result.issues
+    assert {d.document_kind for d in result.inventory.documents} == {"minutes"}
+    assert {e.provider_release_date for e in result.inventory.entries} == {date(2020, 7, 8)}
+    assert len(result.exclusions) == 1
+
+
+def test_reviewed_legacy_uppercase_minutes_folder_preserves_original_case(manifest):
+    page = b"""<div class="panel"><h5 class="panel-heading">February 2-3 Meeting - 1993</h5>
+    <p><a href="/fomc/MINUTES/1993/19930203min.htm">Minutes</a>
+    (Released March 26, 1993)</p></div>"""
+    result = parse_native_page(page, BASE + "fomchistorical1993.htm", manifest)
+    assert not result.issues
+    assert result.inventory.documents[0].source_url.endswith("/fomc/MINUTES/1993/19930203min.htm")
+
+
+def test_explicit_addendum_is_included_but_ambiguous_label_remains_issue(manifest):
+    page = b"""<div class="panel"><h5 class="panel-heading">June 16-17 Meeting - 2020</h5>
+    <p><a href="/monetarypolicy/files/fake.pdf">Minutes</a></p>
+    <p><a href="/monetarypolicy/fake-addendum.htm">Addendum to these minutes</a></p>
+    <p><a href="/monetarypolicy/files/unknown.pdf">Addendum</a></p></div>"""
+    result = parse_native_page(page, BASE + "fomchistorical2020.htm", manifest)
+    assert len(result.inventory.documents) == 2
+    assert any(
+        e.document_label_raw == "Addendum to these minutes" for e in result.inventory.entries
+    )
+    assert any(i.code == "unresolved_minutes_addendum" for i in result.issues)
+
+
+def test_cross_reference_and_cancelled_labels_do_not_become_complete_empty_minutes(manifest):
+    page = b"""<div class="panel">
+    <h5 class="panel-heading">March 2 (unscheduled) Meeting - 2020</h5>
+    <p>Minutes: See end of minutes of March 15 meeting</p></div>
+    <div class="panel">
+    <h5 class="panel-heading">March 17-18 (cancelled) Meeting - 2020</h5></div>"""
+    result = parse_native_page(page, BASE + "fomchistorical2020.htm", manifest)
+    assert {i.code for i in result.issues} >= {
+        "unresolved_minutes_cross_reference",
+        "unsupported_meeting_label",
+    }

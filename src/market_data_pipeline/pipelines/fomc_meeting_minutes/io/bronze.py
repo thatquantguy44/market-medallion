@@ -63,13 +63,7 @@ def capture(
     This API takes already-received bytes; it does not itself fetch or truncate.
     """
     manifest_from_dict(manifest.to_dict())
-    if kind not in ("inventory", "document"):
-        raise ValueError("unknown FOMC capture kind")
-    canonical = manifest.canonical_url(source_url, source_page=kind == "inventory")
-    if canonical != source_url:
-        raise ValueError("FOMC capture URL must be canonical")
-    if kind == "document" and not canonical.lower().endswith((".pdf", ".htm", ".html")):
-        raise ValueError("unreviewed FOMC capture document suffix")
+    canonical = manifest.capture_url(source_url, kind)
     if (
         not isinstance(payload, bytes)
         or not isinstance(captured_at, datetime)

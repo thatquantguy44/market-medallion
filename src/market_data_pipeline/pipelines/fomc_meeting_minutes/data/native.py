@@ -134,6 +134,26 @@ def _release(text):
         return None
 
 
+def _document_kind(label):
+    for title, kind in (
+        ("historical minutes", "historical_minutes"),
+        ("minutes of actions", "minutes_of_actions"),
+        ("record of policy actions", "record_of_policy_actions"),
+        ("memoranda of discussion", "memorandum_of_discussion"),
+        ("memorandum of discussion", "memorandum_of_discussion"),
+        ("minutes", "minutes"),
+    ):
+        if re.match(re.escape(title) + r"\b", label, re.I):
+            return kind
+    return None
+
+
+def _addendum_kind(label):
+    # Explicit association only; a bare "Addendum" or "Minutes addendum" is unresolved.
+    match = re.match(r"addendum to (?:these |the )?(.+)", label, re.I)
+    return _document_kind(match[1]) if match else None
+
+
 def _document(anchor, kind, page, manifest, issues, release=None):
     label, href = anchor.text(), anchor.attrs.get("href", "")
     try:
@@ -241,19 +261,22 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                         re.search(r"pending release|to be released", minutes.text(), re.I)
                     )
                     for anchor in minutes_anchors:
-                        if re.search(r"addend", anchor.text(), re.I):
+                        addendum_kind = _addendum_kind(anchor.text())
+                        if re.search(r"addend", anchor.text(), re.I) and not addendum_kind:
                             issues.append(
                                 Issue("unresolved_minutes_addendum", anchor.text()[:4096])
                             )
                             continue
-                        doc = _document(anchor, "minutes", page, manifest, issues, release)
+                        doc = _document(
+                            anchor, addendum_kind or "minutes", page, manifest, issues, release
+                        )
                         if doc:
                             docs.append(doc)
                 rows.append(_row(raw, days, docs, pending=pending))
         else:
             heading_match = re.fullmatch(
                 r"([A-Za-z./]+)\s+(\d{1,2}(?:\s*[-–]\s*\d{1,2})?\*?)"
-                r"\s+(Meeting|Conference Call)\s*-\s*(\d{4})",
+                r"(?:\s+\(unscheduled\))?\s+(Meeting|Conference Call)\s*-\s*(\d{4})",
                 label,
                 re.I,
             )
@@ -302,24 +325,19 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                                 )
                             )
                     continue
-                for anchor in p.descendants(tag="a"):
+                anchors = list(p.descendants(tag="a"))
+                context_kind = _document_kind(ptext)
+                if context_kind and not anchors and re.search(r"see\b", ptext, re.I):
+                    issues.append(Issue("unresolved_minutes_cross_reference", ptext[:4096]))
+                for anchor in anchors:
                     text = anchor.text().lower()
-                    kind = next(
-                        (
-                            v
-                            for k, v in (
-                                ("historical minutes", "historical_minutes"),
-                                ("minutes of actions", "minutes_of_actions"),
-                                ("record of policy actions", "record_of_policy_actions"),
-                                ("memoranda of discussion", "memorandum_of_discussion"),
-                                ("memorandum of discussion", "memorandum_of_discussion"),
-                                ("minutes", "minutes"),
-                            )
-                            if text.startswith(k)
-                        ),
-                        None,
-                    )
-                    if "addend" in text and ("minute" in text or "discussion" in text):
+                    addendum_kind = _addendum_kind(anchor.text())
+                    kind = addendum_kind or _document_kind(anchor.text())
+                    if kind is None and re.fullmatch(
+                        r"(?:HTML|PDF)(?:\s*\([^)]*\))?", anchor.text(), re.I
+                    ):
+                        kind = context_kind
+                    if "addend" in text and not addendum_kind:
                         issues.append(Issue("unresolved_minutes_addendum", anchor.text()[:4096]))
                     elif kind:
                         doc = _document(anchor, kind, page, manifest, issues, _release(ptext))
@@ -333,7 +351,9 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                                 "unrecognized_or_out_of_scope_label",
                             )
                         )
-                        if re.search(r"minute|policy action|memorand.*discussion", text):
+                        if context_kind or re.search(
+                            r"minute|policy action|memorand.*discussion", text
+                        ):
                             issues.append(Issue("unreviewed_document_label", anchor.text()[:4096]))
             rows.append(
                 _row(

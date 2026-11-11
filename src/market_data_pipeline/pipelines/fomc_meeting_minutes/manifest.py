@@ -48,10 +48,7 @@ class Manifest:
             "committee_bodies": list(self.committee_bodies),
         }
 
-    def canonical_url(
-        self, value: object, *, base_url: str | None = None, source_page: bool = False
-    ) -> str:
-        """Resolve reviewed HTTPS references; callers retain raw href as evidence."""
+    def _resolve_url(self, value, base_url):
         if (
             not isinstance(value, str)
             or not value
@@ -71,6 +68,37 @@ class Manifest:
             )
         if any(part in (".", "..") for part in resolved.path.split("/")):
             raise ValueError("ambiguous FOMC document path")
+        return resolved
+
+    def capture_url(self, value, kind):
+        if kind not in ("inventory", "document", "asset"):
+            raise ValueError("unknown FOMC source kind")
+        url = (
+            self.canonical_asset_url(value)
+            if kind == "asset"
+            else self.canonical_url(value, source_page=kind == "inventory")
+        )
+        if url != value or (
+            kind == "document" and not url.lower().endswith((".pdf", ".htm", ".html"))
+        ):
+            raise ValueError("FOMC capture requires a canonical reviewed URL")
+        return url
+
+    def canonical_asset_url(self, value, *, base_url=None):
+        """Reviewed PNG content assets; paths come from archived article references."""
+        resolved = self._resolve_url(value, base_url)
+        if resolved.fragment or not (
+            re.fullmatch(r"/sep[0-9]{8}figure[0-9]+[a-z]?\.png", resolved.path)
+            or re.fullmatch(r"/monetarypolicy/files/[^/]+\.png", resolved.path)
+        ):
+            raise ValueError("unreviewed FOMC content-asset path or format")
+        return urlunsplit(("https", self.official_host, resolved.path, "", ""))
+
+    def canonical_url(
+        self, value: object, *, base_url: str | None = None, source_page: bool = False
+    ) -> str:
+        """Resolve reviewed HTTPS references; callers retain raw href as evidence."""
+        resolved = self._resolve_url(value, base_url)
         if source_page:
             path = resolved.path
             match = re.fullmatch(r"/monetarypolicy/fomchistorical([0-9]{4})\.htm", path)
@@ -82,7 +110,7 @@ class Manifest:
                 allowed or (match and int(match[1]) >= self.first_meeting_year)
             ):
                 raise ValueError("unreviewed FOMC inventory page")
-        elif not resolved.path.startswith(("/monetarypolicy/", "/fomc/minutes/")):
+        elif not resolved.path.startswith(("/monetarypolicy/", "/fomc/minutes/", "/fomc/MINUTES/")):
             raise ValueError("unreviewed FOMC document path")
         return urlunsplit(("https", self.official_host, resolved.path, "", ""))
 
