@@ -19,47 +19,43 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-11 current pickup — FOMC-T03 in progress
+## 2026-11-11 current pickup — FOMC-T04 next; T03 accepted
 
-The user selected FOMC implementation, the existing PostgreSQL service and a
-pipeline-owned config folder. T01/T02 inventory metadata and configuration are
-complete. T03 now parses reviewed current/historical native page shapes and
-archives original received bytes locally and in the FOMC PostgreSQL schema.
-[Finish T03 using its exact checklist](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
-Bounded year discovery, declared addendum/PNG lineage, content-addressed originals
-and durable acquisition/recovery are implemented. Next: review the notation vote,
-1936-page/1937 label conflict and 2020 cross-reference/cancelled meeting, then
-extend bounded historical conformance. Unsupported asset shapes remain issues.
+The user requested T03 closeout and narrowed active scope to **1990 onward**.
+T01–T03 are complete for the native inventory / immutable-Bronze foundation.
+[Acceptance](../../specs/spec017/t03_acceptance.md) and
+[closeout evidence](../../specs/spec017/evidence/t03_closeout.json) are current.
 
-The [attachment contract](../../specs/spec017/attachments_contract.md) and
-[storage/recovery contract](../../specs/spec017/storage_recovery_contract.md)
-record separate explicit PostgreSQL migrations. They are verified only in
-isolated schemas; production remains at five original Bronze captures and zero
-inventory runs. New local originals share content objects; the local-review
-legacy files were explicitly relinked without changing receipts or capture clocks.
-No production migration, document catalog, backfill, job or schedule was enabled.
+All 33 official in-scope inventory pages reconcile to 371 meeting records, 470
+unique document references and 561 source associations. Every source panel/row is
+accounted for, including 14 bundled-minutes cross-references. Cancelled dates and
+notation votes are explicit exclusions. The empty December 30, 1994 minutes href
+remains `unavailable`; no replacement URL or historical availability is guessed.
+The original normalized provider profile remains readable back to 1936, preserving
+old receipt hashes/IDs; active acquisition/config starts in 1990.
 
-[Attachment evidence](../../specs/spec017/evidence/attachment_source_sample.json)
-reconciles two minutes, two SEP addenda, their 22 PNGs and the 1993/2020 year pages.
-[Storage/recovery evidence](../../specs/spec017/evidence/storage_recovery_sample.json)
-reconciles 31 capture receipts to 28 originals in a temporary backend, including
-same-identity recovery after an interrupted marker write. Full text/chunks and
-optional embeddings remain later work. The earlier
-[87-page expected-set evidence](../../specs/spec017/evidence/year_index_discovery.json)
-remains a bounded discovery record, not a source-wide archive.
+The existing local FOMC schema has all reviewed migrations applied. One native
+metadata snapshot is committed. The canonical archive has 72 captures: 38
+inventories, 12 document representations and 22 PNGs. All originals reconcile
+between filesystem and PostgreSQL. The original five captures retain exact
+receipts/bytes/clocks, including old pre-1990 review evidence outside scope.
+Eight dependency checks retain addendum/image meeting associations. Both pre-
+and post-migration backups passed full restore verification; the final restore
+reconciles all 17 tables, 72 captures, native evidence and current pointer.
+Disposable restore databases were removed. Other namespaces remain unchanged.
 
-Final increment verification: **900 offline tests passed, 37 optional skips**;
-all **179 focused FOMC checks passed**, including **27 real PostgreSQL tests** in
-isolated schemas. Ruff lint/format, source/wheel builds and artifact inclusion/
-runtime-input exclusion checks pass. No production schema migration or inventory
-publication was performed.
+**Next: [FOMC-T04](../../specs/spec017/todo.md#fomc-t04--complete-text-and-extraction-next).**
+Select/pin PDF/native extraction dependencies, then implement full text with
+ordered pages/sections, explicit extraction failures and OCR-review state, and
+source-owned PostgreSQL extraction lineage. Use the archived sample before any
+larger source acquisition. Full document-history backfill, text/catalog/replay,
+chunks, jobs/schedules and optional embeddings are not implied by T03 acceptance.
 
 Use [config/fomc_meeting_minutes/](../../config/fomc_meeting_minutes/README.md).
-The ignored local config retains the existing PostgreSQL target, environment
-password and dedicated FOMC schema. Live raw files and local config are ignored;
-tests use isolated test schemas. QuantSmith's checkout remains different from
-its pin; adopted instructions were read from hash-verified pinned Git objects.
-NAAIM remains paused and FINRA stays at SSV-T05 for its next continuation.
+Local config and raw data/backups stay ignored; no credentials were copied or
+logged. QuantSmith's working checkout still differs from its pin; previously
+adopted guidance was read from hash-verified pinned Git objects. NAAIM stays
+paused and FINRA's continuation remains SSV-T05.
 
 ## 2026-11-10 FINRA continuation and AAII manual refresh
 
@@ -469,8 +465,9 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 and Spec012 T01–T04 are merged. Immediate selected work is FOMC-T03 on
-`feat/spec017-fomc-inventory`; read the current pickup above and Spec017 tasks.
+T17 and Spec012 T01–T04 are merged. Immediate selected work is FOMC-T04 on
+`feat/spec017-fomc-inventory`; T03 is accepted for the 1990-onward foundation.
+Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser
 Checkpoint A are ready for this scope; local publication and G1/G2 remain open.

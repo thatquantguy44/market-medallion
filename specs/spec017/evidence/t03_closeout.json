@@ -1,0 +1,882 @@
+{
+  "schema_id": "fomc-t03-closeout/1",
+  "status": "accepted_1990_onward_foundation",
+  "verified_at": "2026-11-11T18:25:49.219634+00:00",
+  "scope_start_year": 1990,
+  "inventory_last_labeled_year": 2027,
+  "source_coverage": [
+    {
+      "capture_id": "d415fe9d-2e84-4613-8d9c-72434783603c",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomc_historical_year.htm",
+      "sha256": "dcaeed58785af81f7708fa08b0717efb5f51e4010436f2aa35d8dda88124c926",
+      "captured_at": "2026-11-11T17:46:17.445467+00:00",
+      "meetings": 0,
+      "documents": 0,
+      "issues": [],
+      "inventory_index": true
+    },
+    {
+      "capture_id": "f67d2da7-4fd5-429c-855b-d55c168723ab",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "sha256": "b32e15388f8b9fe84e568cc944405471bbb2c272e53a40a05731c47d21ff30fe",
+      "captured_at": "2026-11-11T17:46:17.622128+00:00",
+      "source_rows_accounted": 57,
+      "meetings": 56,
+      "declared_documents": 92,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": [
+        {
+          "label": "August 22 (notation vote) 2025",
+          "href": "",
+          "reason": "notation_vote_not_meeting"
+        }
+      ]
+    },
+    {
+      "capture_id": "d2abbf68-2440-473b-82d1-655f32eec28e",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1990.htm",
+      "sha256": "9de3a4e57fbfc8478ebf41afafd76b32fae7c286a1d3eb061d1a2604abc4e114",
+      "captured_at": "2026-11-11T17:46:18.088262+00:00",
+      "source_rows_accounted": 12,
+      "meetings": 12,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "a3b9ccda-8c46-4226-a5da-8067a0d1c892",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1991.htm",
+      "sha256": "87a967921bddc997046d79e35710bb42b0e6076d97eb8350c900eadb1685dbd6",
+      "captured_at": "2026-11-11T17:46:18.536334+00:00",
+      "source_rows_accounted": 19,
+      "meetings": 19,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "f7d260ca-f666-4414-bead-757a0db05ed7",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1992.htm",
+      "sha256": "82c80c08d60c41b27f0f551dfa22805679064970b6a0c76880edf215e3c8929b",
+      "captured_at": "2026-11-11T17:46:19.018191+00:00",
+      "source_rows_accounted": 12,
+      "meetings": 12,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "e2deb777-d71d-4216-953b-ed8ff0ff4402",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1993.htm",
+      "sha256": "6e59b4a9b95e474e299a4e2edf1ae7d92ea0c08e4334c7401e4fae02978b602a",
+      "captured_at": "2026-11-11T17:46:19.554157+00:00",
+      "source_rows_accounted": 16,
+      "meetings": 16,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "d9212fe1-06f9-43cc-95a2-ad3b6c252c62",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1994.htm",
+      "sha256": "53b4deda061252021e708357f0f025100a00d22fedb324d86c8ceda5ee7f9686",
+      "captured_at": "2026-11-11T17:46:19.982655+00:00",
+      "source_rows_accounted": 13,
+      "meetings": 13,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "7bfa19fc-b7b7-4aa1-b343-e7314df1034b",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1995.htm",
+      "sha256": "7b1d0df57068da4ae227c45222634acf5dd67d56427eda2f57dc44f1baae642a",
+      "captured_at": "2026-11-11T17:46:20.408830+00:00",
+      "source_rows_accounted": 11,
+      "meetings": 11,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "a615828b-7783-4c56-a7c3-41bf72671a1c",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1996.htm",
+      "sha256": "d3a97baaba7628e43446f7e54a61647d544e1e065fa562e182370acea452cb8e",
+      "captured_at": "2026-11-11T17:46:20.813952+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "e44d3098-c9f4-40ad-bc64-cd6cc543d0c9",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1997.htm",
+      "sha256": "713e0de3b97f10782ac590db43ea3084b01d07cecdf8199030f974dd602eccef",
+      "captured_at": "2026-11-11T17:46:21.221566+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "17ad4b42-9117-4bf2-968a-a0418ac2b8c9",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1998.htm",
+      "sha256": "a67ced26cfb4fc16e025565def7de37a5e3c9aa41e115dfc22ede2dcd86e12c7",
+      "captured_at": "2026-11-11T17:46:21.631147+00:00",
+      "source_rows_accounted": 10,
+      "meetings": 10,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "24526262-ce35-4a2f-aaeb-7ae89d596229",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1999.htm",
+      "sha256": "fe5771d2b958183cf4ccc28f8bbeae32056eb541b7c2ba6e28f18ee4d70e4fa4",
+      "captured_at": "2026-11-11T17:46:22.069672+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "76108328-c8e1-43d1-ab27-3de4741dbd69",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2000.htm",
+      "sha256": "eafd970dcae4a5691fb8ed3972ac04095843e35b72a0eab6322a5f3663817082",
+      "captured_at": "2026-11-11T17:46:22.465223+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "e0d0bde4-e49b-4130-b92c-94fb15a358c0",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2001.htm",
+      "sha256": "afc7183fe07f993c6db9f443615c6af87e7bcd799ec3adfe0e1822b285185b4a",
+      "captured_at": "2026-11-11T17:46:22.936515+00:00",
+      "source_rows_accounted": 13,
+      "meetings": 13,
+      "declared_documents": 9,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "e331d437-8de7-47c7-a7ba-94e380ae9fea",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2002.htm",
+      "sha256": "0bc2770a825db4526b90fa0312ece77ba61d5a016196b3656fb8c2eeec0b9ae1",
+      "captured_at": "2026-11-11T17:46:23.375491+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "55cd2b28-1703-4fb6-b7ef-b969e1a013c9",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2003.htm",
+      "sha256": "5d8c2e794e80a3b65175c955626268cd1224dc75327335d64411a996374b27c7",
+      "captured_at": "2026-11-11T17:46:23.809632+00:00",
+      "source_rows_accounted": 13,
+      "meetings": 13,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "dd744c93-82ce-408d-bf12-0dd16b880ce3",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2004.htm",
+      "sha256": "2e6e516465a2fd849ad0b6a592072b27231431fb44ec3b6f68b9a31492330f02",
+      "captured_at": "2026-11-11T17:46:24.237174+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "03876f8c-9974-4223-81e9-3687b3a28c5a",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2005.htm",
+      "sha256": "c7d67b653df99303f384083d2087147185bab317adc72c926e4a359667e6f888",
+      "captured_at": "2026-11-11T17:46:24.671379+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "bc17783b-5e29-448e-8c82-2122c0d1b233",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2006.htm",
+      "sha256": "a96a0a5c0d7fb8c828ef3db14672efb342dc5f58b205050287ff29787f43b4c5",
+      "captured_at": "2026-11-11T17:46:25.116519+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 8,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "209627f2-68b7-4402-b897-0b58ea8fd448",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2007.htm",
+      "sha256": "2df186c4cb727503c46c24ce0cd927b6d20a36f418145688049a59cbd40b8f66",
+      "captured_at": "2026-11-11T17:46:25.541684+00:00",
+      "source_rows_accounted": 11,
+      "meetings": 11,
+      "declared_documents": 10,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "bf2ace05-1fcc-4839-8e8c-5787402e4b5b",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2008.htm",
+      "sha256": "6d625cff9982ced09cff91860d1fac42f39ed67156235ac6e030f48b3ca59831",
+      "captured_at": "2026-11-11T17:46:25.952718+00:00",
+      "source_rows_accounted": 14,
+      "meetings": 14,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "July 24 Conference Call - 2008",
+          "target_meeting_label_raw": "August 5 Meeting - 2008",
+          "label_raw": "Minutes: See end of minutes of August 5 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20080805.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20080805.htm"
+          ]
+        },
+        {
+          "meeting_label_raw": "September 29 Conference Call - 2008",
+          "target_meeting_label_raw": "October 28-29 Meeting - 2008",
+          "label_raw": "Minutes: See end of minutes of October 28/29 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20081029.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20081029.htm"
+          ]
+        },
+        {
+          "meeting_label_raw": "October 7 Conference Call - 2008",
+          "target_meeting_label_raw": "October 28-29 Meeting - 2008",
+          "label_raw": "Minutes: See end of minutes of October 28/29 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20081029.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20081029.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "212414df-fb42-4995-a3b6-60aeabd027f8",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2009.htm",
+      "sha256": "4a44893630f0334009bf720f3d6cf517734aabf4b906c383648b4e80c638a045",
+      "captured_at": "2026-11-11T17:46:26.395344+00:00",
+      "source_rows_accounted": 11,
+      "meetings": 11,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "January 16 Conference Call - 2009",
+          "target_meeting_label_raw": "January 27-28 Meeting - 2009",
+          "label_raw": "Minutes: See end of minutes of January 27/28 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20090128.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090128.htm"
+          ]
+        },
+        {
+          "meeting_label_raw": "February 7 Conference Call - 2009",
+          "target_meeting_label_raw": "March 17-18 Meeting - 2009",
+          "label_raw": "Minutes: See end of minutes of March 17/18 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20090318.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090318.htm"
+          ]
+        },
+        {
+          "meeting_label_raw": "June 3 Conference Call - 2009",
+          "target_meeting_label_raw": "June 23-24 Meeting - 2009",
+          "label_raw": "Minutes: See end of minutes of June 23/24 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20090624.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20090624.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "72232af8-cba5-4022-9e19-5c860bbe1c00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2010.htm",
+      "sha256": "11807788ad8c6b5ba2d5fb3f033592596f7fdcb216d72135dad8bd74c113f967",
+      "captured_at": "2026-11-11T17:46:26.824272+00:00",
+      "source_rows_accounted": 10,
+      "meetings": 10,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "May 9 Conference Call - 2010",
+          "target_meeting_label_raw": "June 22-23 Meeting - 2010",
+          "label_raw": "Minutes: See end of minutes of June 22/23 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20100623.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20100623.htm"
+          ]
+        },
+        {
+          "meeting_label_raw": "October 15 Conference Call - 2010",
+          "target_meeting_label_raw": "November 2-3 Meeting - 2010",
+          "label_raw": "Minutes: See end of minutes of November 2/3 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20101103.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20101103.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "e7bf12ed-f98c-42a3-935d-f968aab1dd1a",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2011.htm",
+      "sha256": "fc0f49cb767c0e65ee26245b30a00664f1e0251c52966c9a7a67bf1a5f32beb1",
+      "captured_at": "2026-11-11T17:46:27.269166+00:00",
+      "source_rows_accounted": 10,
+      "meetings": 10,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "August 1 Conference Call - 2011",
+          "target_meeting_label_raw": "August 9 Meeting - 2011",
+          "label_raw": "Minutes: See end of minutes of August 9 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20110809.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20110809.htm"
+          ]
+        },
+        {
+          "meeting_label_raw": "November 28 Conference Call - 2011",
+          "target_meeting_label_raw": "December 13 Meeting - 2011",
+          "label_raw": "Minutes: See end of minutes of December 13 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20111213.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20111213.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "dfb27d64-0370-47a9-9985-eb6c97767675",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2012.htm",
+      "sha256": "d3682976a5f21e227734de6f958454afaeec6740584eb5953da0fb6b3c7089e8",
+      "captured_at": "2026-11-11T17:46:27.677245+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "0dbe4a88-5a54-4666-b3ae-b095b6abbd69",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2013.htm",
+      "sha256": "46f93f72447a93f3e5b3aa085ec6dd040f677c43614393444e1831b8cde7663c",
+      "captured_at": "2026-11-11T17:46:28.088139+00:00",
+      "source_rows_accounted": 9,
+      "meetings": 9,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "October 16 (unscheduled) - 2013",
+          "target_meeting_label_raw": "October 29-30 Meeting - 2013",
+          "label_raw": "Minutes: See end of minutes of October 29-30 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20131030.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20131030.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "445da245-eebe-481b-a275-6c91eb8126f5",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2014.htm",
+      "sha256": "158d2ca816537522ee987603326e3785078359cb126ef82b77f514d307411eb0",
+      "captured_at": "2026-11-11T17:46:28.513145+00:00",
+      "source_rows_accounted": 9,
+      "meetings": 9,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "March 4 (unscheduled) - 2014",
+          "target_meeting_label_raw": "March 18-19 Meeting - 2014",
+          "label_raw": "Minutes: See end of minutes of March 18-19 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20140319.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20140319.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "55e52b5c-f2c4-4867-9a94-a897a4be2e85",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2015.htm",
+      "sha256": "6674b43d855429fa8e2cb12c7f958350b482fb18e6fc9d95018824c8b8953303",
+      "captured_at": "2026-11-11T17:46:28.937537+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "f7d41e84-bc97-4f1b-9155-3557a502223d",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2016.htm",
+      "sha256": "ee3c0265f01fe7cef129644a381b059f4adaa24f235b2a1fa0984ed9f7c72aad",
+      "captured_at": "2026-11-11T17:46:29.362686+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "4b6b5890-a4bd-434e-9ae8-74252da0955c",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2017.htm",
+      "sha256": "8538fb90c63769bf79e09f6319dd3e67e9cf89d2e55c8c85c04f53a0b9cba31f",
+      "captured_at": "2026-11-11T17:46:29.783484+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "009c9448-7f37-43bb-bb5f-1646d2783c7f",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2018.htm",
+      "sha256": "88ae803fc0e61195e00985eedc62e2f40d549b041a7834284b98ed62e97fbdd7",
+      "captured_at": "2026-11-11T17:46:30.240100+00:00",
+      "source_rows_accounted": 8,
+      "meetings": 8,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "e6fa2cb0-5a5c-42bd-bcbb-0549ecd3c340",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2019.htm",
+      "sha256": "1729f48170505c43986bee1efb0fdbb0a09eef4a3a115b67f16edcd2aadc3f95",
+      "captured_at": "2026-11-11T17:46:30.689662+00:00",
+      "source_rows_accounted": 9,
+      "meetings": 9,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "October 4 (unscheduled) - 2019",
+          "target_meeting_label_raw": "October 29-30 Meeting - 2019",
+          "label_raw": "Minutes: See end of minutes of October 29-30 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20191030.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20191030.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": []
+    },
+    {
+      "capture_id": "615c6184-726d-4e57-8528-956c1efcb740",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2020.htm",
+      "sha256": "f87d88f95040f1f8de7cf25953744cc15acfb6c15bf74be5220f4439ae005ef6",
+      "captured_at": "2026-11-11T17:46:31.114067+00:00",
+      "source_rows_accounted": 14,
+      "meetings": 9,
+      "declared_documents": 16,
+      "issues": [],
+      "cross_references": [
+        {
+          "meeting_label_raw": "March 2 (unscheduled) Meeting - 2020",
+          "target_meeting_label_raw": "March 15 (unscheduled) Meeting - 2020",
+          "label_raw": "Minutes: See end of minutes of March 15 meeting",
+          "target_urls": [
+            "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20200315.pdf",
+            "https://www.federalreserve.gov/monetarypolicy/fomcminutes20200315.htm"
+          ]
+        }
+      ],
+      "nonmeeting_exclusions": [
+        {
+          "label": "March 17-18 (cancelled) Meeting - 2020",
+          "href": "",
+          "reason": "cancelled_meeting"
+        },
+        {
+          "label": "March 19 (notation vote) - 2020",
+          "href": "",
+          "reason": "notation_vote_not_meeting"
+        },
+        {
+          "label": "March 23 (notation vote) - 2020",
+          "href": "",
+          "reason": "notation_vote_not_meeting"
+        },
+        {
+          "label": "March 31 (notation vote) - 2020",
+          "href": "",
+          "reason": "notation_vote_not_meeting"
+        },
+        {
+          "label": "August 27 (notation vote) - 2020",
+          "href": "",
+          "reason": "notation_vote_not_meeting"
+        }
+      ]
+    }
+  ],
+  "unresolved_inventory_issues": 0,
+  "unaccounted_source_panels": 0,
+  "resolved_cross_reference_count": 14,
+  "known_unavailable_entries": [
+    {
+      "href_raw": null,
+      "meeting_id": "fm_54be5c2bed90061cf01e9621d17b30a9d011bb37890c118327fdc03094d5b402",
+      "document_id": null,
+      "minutes_status": "unavailable",
+      "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1994.htm",
+      "meeting_label_raw": "December 30 Conference Call - 1994",
+      "document_label_raw": null,
+      "provider_release_date": null,
+      "meeting_dates": [
+        "1994-12-30"
+      ]
+    }
+  ],
+  "inventory": {
+    "run_id": "83b436b2-ed23-4152-a793-5a51e603dd53",
+    "source_pages": 33,
+    "meetings": 371,
+    "documents": 470,
+    "entries": 561,
+    "status_counts": {
+      "listed": 511,
+      "not_listed": 49,
+      "unavailable": 1
+    }
+  },
+  "archive": {
+    "capture_receipts": 72,
+    "unique_content_objects": 72,
+    "original_bytes": 8881259,
+    "exact_filesystem_database_readbacks": 72,
+    "retained_existing_capture_ids": [
+      "20c300b3-661c-40fc-abe8-1492217103ce",
+      "2ff83f98-45a8-4330-877b-3279f53bf2e5",
+      "8a0ec066-03d6-4551-b257-d16f4d386af8",
+      "d247f6e5-4309-42ae-ac6c-72b86a577692",
+      "d3aa0bcc-363e-4441-af7e-3da50a4a0692"
+    ],
+    "all_existing_receipts_bytes_and_clocks_unchanged": true,
+    "primary_document_links": 10,
+    "linked_png_assets": 22,
+    "dependency_checks": [
+      {
+        "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614ep.htm",
+        "capture_id": "0be5f76d-6a3b-4b5c-acbf-3735fe9beedc",
+        "profile_id": "fomc-html-article/1",
+        "direct_dependencies": 11,
+        "check_id": "a8e0937410dd5866776619ea737ecbeacf5b378231d93f62376796aab6b91372"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614.htm",
+        "capture_id": "20c6763f-c14b-4075-a148-ecd3d0f4291c",
+        "profile_id": "fomc-html-article/1",
+        "direct_dependencies": 1,
+        "check_id": "2a1a0bc9a3c832a9f01288ab7c625227d64df7da7e396603a80c9a80f27d95dc"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619.htm",
+        "capture_id": "292a670d-48c3-4ea1-ab67-af4f6dc1fdc0",
+        "profile_id": "fomc-html-article/1",
+        "direct_dependencies": 1,
+        "check_id": "a38434d269acb94d9fa6fa690a5da58baaaaf85b41f1e09d577e990e5c0d7c5a"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619ep.htm",
+        "capture_id": "4d547037-8bf5-4072-bdb7-364e88ee5283",
+        "profile_id": "fomc-html-article/1",
+        "direct_dependencies": 11,
+        "check_id": "83bacdb0b3a628c7f4b5d62164f12afe29203d2dadd868e13ebfc4b278e11487"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930203min.htm",
+        "capture_id": "a0c3c499-1763-4340-a585-d00d339c48b3",
+        "profile_id": "fomc-legacy-body/1",
+        "direct_dependencies": 0,
+        "check_id": "70861c8f435da30ce88ea265f5dd6f1756ef8dc839908be6192ecc512c11b5b5"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20200315.htm",
+        "capture_id": "bcdff0dd-a703-478b-a73d-c1f9984491ac",
+        "profile_id": "fomc-html-article/1",
+        "direct_dependencies": 0,
+        "check_id": "722db1fdfe49558b0fac0fa03aeca9dbb22e86a466548d73a94a6d03bf14da48"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/fomc/minutes/20030129.htm",
+        "capture_id": "c8e45b56-21ef-47e6-8e63-47339defdb06",
+        "profile_id": "fomc-legacy-body/1",
+        "direct_dependencies": 0,
+        "check_id": "8b81940689ad22bea16b09c2589ef20b3ef91251c1543ead36e035ee991c9a0e"
+      },
+      {
+        "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20260128.htm",
+        "capture_id": "d247f6e5-4309-42ae-ac6c-72b86a577692",
+        "profile_id": "fomc-html-article/1",
+        "direct_dependencies": 0,
+        "check_id": "3b5eb44c9b78ede9e4ede27789522477ec5c4ca3d3e017ec7d68a03642ceb02b"
+      }
+    ],
+    "local_legacy_migration": {
+      "schema_id": "fomc-local-object-migration/1",
+      "captures_verified": 72,
+      "unique_payloads": 72
+    },
+    "kind_counts": {
+      "document": 12,
+      "asset": 22,
+      "inventory": 38
+    }
+  },
+  "backup_before_migrations": {
+    "schema_id": "fomc-t03-pre-migration-backup/1",
+    "archive_path": "backups/t03-before-migrations-91b259887c14/fomc.dump",
+    "archive_sha256": "1be780d2956fa1c32a7f603b7266a5d87d222d1675179de45dd0e836979172df",
+    "tables": {
+      "bronze_captures": {
+        "rows": 5,
+        "sha256": "fd6d860023381a386444c86f9dff78771eed85c01009c04f9e19294281d03e96"
+      },
+      "bronze_document_links": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "bronze_inventory_links": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "bronze_schema_migrations": {
+        "rows": 2,
+        "sha256": "60afe408567784050dc28d7eed82503a8bb6e979087957bad3035f58efb4da81"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "4a50e5bd2e2433a8c400d5e180ad230566732dd4162e179d7f325a835081911a"
+      },
+      "inventory_documents": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inventory_entries": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inventory_meetings": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inventory_pages": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inventory_runs": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "capture_ids": [
+      "20c300b3-661c-40fc-abe8-1492217103ce",
+      "2ff83f98-45a8-4330-877b-3279f53bf2e5",
+      "8a0ec066-03d6-4551-b257-d16f4d386af8",
+      "d247f6e5-4309-42ae-ac6c-72b86a577692",
+      "d3aa0bcc-363e-4441-af7e-3da50a4a0692"
+    ],
+    "captures_verified": 5,
+    "restore_verified_in_disposable_database": true,
+    "source_unchanged_during_verification": true
+  },
+  "local_migrations_applied": [
+    "fomc-bronze-discovery-postgres/1",
+    "fomc-bronze-objects-postgres/1",
+    "fomc-bronze-dependencies-postgres/1"
+  ],
+  "other_namespaces_unchanged": true,
+  "source_product_review": {
+    "url": "https://www.federalreserve.gov/monetarypolicy/files/FOMC20191004accessible.zip",
+    "sha256": "a81de508b5e79aab9aebe2fb3f10d8b4a999dbaba103f67a8491e1cf927ddd61",
+    "members": [
+      {
+        "name": "FOMC20191004accessible/",
+        "size_bytes": 0
+      },
+      {
+        "name": "FOMC20191004accessible/FOMC20191004confcall.pdf",
+        "size_bytes": 1137177
+      },
+      {
+        "name": "FOMC20191004accessible/FOMC20191004material.pdf",
+        "size_bytes": 1097171
+      }
+    ],
+    "disposition": "transcript_and_presentation_bundle_outside_minutes_scope",
+    "earlier_failed_manual_review": "recorded separately; no retained body; excluded from all pipeline capture/acceptance counts"
+  },
+  "full_original_document_backfill_complete": false,
+  "text_or_ocr_complete": false,
+  "schedules_enabled": 0,
+  "backup_after_closeout": {
+    "archive_path": "backups/t03-closeout-2ff36e87847d/fomc.dump",
+    "archive_sha256": "236b6e950bccdbc2b4434e39c6c1d336158dcc579bbebe22021bf724f28c4a60",
+    "tables": {
+      "bronze_capture_objects": {
+        "rows": 72,
+        "sha256": "6df37c244d997dfbe68473fda251d39fe417d8342c5ba62247b4fb8cec40a90c"
+      },
+      "bronze_captures": {
+        "rows": 72,
+        "sha256": "d89287b3a8832c309b44c652ffe6cb702dbe6ebd20603bbd75291c381612ed40"
+      },
+      "bronze_dependencies": {
+        "rows": 24,
+        "sha256": "144efe42ec31040611555457e3affdbd7d26a5de49a9a6f14eb5937397314fca"
+      },
+      "bronze_dependency_checks": {
+        "rows": 8,
+        "sha256": "87be6d42f64d763ecee121445b02d741d8b20197eeac0e0eec6130f748ab69bf"
+      },
+      "bronze_dependency_state": {
+        "rows": 1,
+        "sha256": "d31f68b3a084f5cea7949f7ea6e6c2a5e2c64e43ac147d017859f148821dc382"
+      },
+      "bronze_document_links": {
+        "rows": 10,
+        "sha256": "a3733449488513e0b03bcc0c154dc9b8ec6f034d621aa45f7b0f937b1db21fe7"
+      },
+      "bronze_inventory_discovery": {
+        "rows": 1,
+        "sha256": "0b38d45c78428e6a4ac15f682d8e26b4c95512289873920dd4516e647155aa28"
+      },
+      "bronze_inventory_links": {
+        "rows": 33,
+        "sha256": "482e8dfd263c1c49bc48ee2ce49cca44be92f4f3abeb2ff5f4cd88a0a8c0c4b0"
+      },
+      "bronze_object_state": {
+        "rows": 1,
+        "sha256": "b6643d921e622a3da39228f23d0e8df7006374afe96816d7d615cebb6e1ace22"
+      },
+      "bronze_objects": {
+        "rows": 72,
+        "sha256": "bf1385ba1376c103bd8d7faaf19f22b7e27d192273a0b8c9b479292992c02917"
+      },
+      "bronze_schema_migrations": {
+        "rows": 3,
+        "sha256": "9d7b0c04433a9ce0a2bf3f8997ea506fc969ce3dfe20b9c0c96cdb0d84289374"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "9599ff33cb8d555485377dcc4ea94931ca348f20e4ec7575441e79d1ec7857a4"
+      },
+      "inventory_documents": {
+        "rows": 470,
+        "sha256": "af6d1b96a5508dcfe329c445ff4830279b84395a5337d61f5551e34932072a72"
+      },
+      "inventory_entries": {
+        "rows": 561,
+        "sha256": "bde5ee21143a6e28d9f4ebb513e56b02f78297bb205a598fc973eb8ca8af5986"
+      },
+      "inventory_meetings": {
+        "rows": 371,
+        "sha256": "bfe4229e6bf19bb4a03bb465460236de0b6ed5e0ae57239c283a615a2e6647d6"
+      },
+      "inventory_pages": {
+        "rows": 33,
+        "sha256": "5998b001462e7482d59dc9cd1e227e0efb2789ee1d46afcf260ea387e9189942"
+      },
+      "inventory_runs": {
+        "rows": 1,
+        "sha256": "732cc51463ad8c09a30d70412785d2ce74af269d6aa195b4af8823cb6daa961d"
+      }
+    },
+    "restored_tables_verified": 17,
+    "restored_capture_readbacks": 72,
+    "restored_dependency_checks": 8,
+    "current_inventory_and_native_evidence_restored_exactly": true,
+    "pre_migration_restore_reverified_existing_receipts_bytes_clocks": 5,
+    "disposable_restore_databases_removed": true
+  },
+  "verification": {
+    "verified_at": "2026-11-11T18:41:33.555043+00:00",
+    "regression": {
+      "command": ".venv/bin/python -m pytest -q",
+      "passed": 918,
+      "optional_skips": 38
+    },
+    "fomc_with_postgres": {
+      "command": "FOMC_TEST_POSTGRES_CONFIG=config/fomc_meeting_minutes/pipeline.local.yml .venv/bin/python -m pytest -q tests/test_fomc_*.py",
+      "passed": 198,
+      "included_real_postgres_checks": 28,
+      "isolated_test_schemas": true
+    },
+    "ruff_check": "passed",
+    "ruff_format_check": "176 files already formatted",
+    "git_diff_check": "passed",
+    "agent_skills_pin_verification": "f63ec56a3cc936408d792956ae583c3c96a825bd; 188 files/symlinks verified",
+    "quant_smith": "Working checkout differs from pin; previously adopted guidance read from hash-verified pinned Git objects; no pin or external checkout changes.",
+    "package_build": {
+      "command": ".venv/bin/python -m build --no-isolation",
+      "status": "passed",
+      "artifact_contents_checked": [
+        "all FOMC modules in wheel",
+        "closeout tests and acceptance/evidence/config example in sdist"
+      ],
+      "excluded_private_material_checked": [
+        "runtime .env",
+        "pipeline.local.yml",
+        "provider payloads",
+        "data/backups"
+      ]
+    }
+  }
+}

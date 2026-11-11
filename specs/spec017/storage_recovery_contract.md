@@ -1,5 +1,9 @@
 # FOMC-T03 — content-addressed originals and interrupted capture recovery
 
+Current status: accepted under [T03 closeout](t03_acceptance.md); local object
+migrations are applied and all 72 canonical captures pass readback/restore.
+Earlier sample counts below remain checkpoint evidence.
+
 Traces FOMC-AC02/05/12. All helpers are pipeline-owned and use the standard
 library. No migration or recovery operation makes a provider request.
 
@@ -35,7 +39,8 @@ Concurrent migration/capture and dependency-check readback are integration-teste
 Existing objects are compared before reuse; corruption is never overwritten.
 Stop older writers before migration. Rollback requires a reviewed, verified
 rehydration of per-capture payloads before removing the new marker/tables; no
-such destructive rollback has been run. Production remains unmigrated.
+such destructive rollback has been run. The migrations are now applied to the
+existing local FOMC schema, with pre/post restore verification.
 
 ## Durable intents and recovery boundaries
 
@@ -96,8 +101,8 @@ concurrent capture, startup rejection, partial reads, failed intent/receipt/obje
 payload-link/database/marker/outcome writes, and repeated offline recovery.
 These are injected-failure tests, not a physical power-loss certification.
 
-T03 remains open for the explicit source exceptions and broader historical
-conformance in `todo.md`. Container screening detects wrong HTML/PDF framing and
+T03 is accepted for the selected 1990-onward foundation; the reviewed source
+exceptions and complete inventory census are recorded in `t03_acceptance.md`. Container screening detects wrong HTML/PDF framing and
 PNG signatures; full PDF structure/page checks and image/text quality belong to
 T04. No full backfill, document/text catalog, job or schedule is enabled.
 

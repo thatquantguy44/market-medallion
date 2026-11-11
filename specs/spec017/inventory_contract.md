@@ -1,8 +1,8 @@
 # FOMC-T01 — normalized inventory and identity contract
 
 **Status:** implemented; 61 offline tests pass. Traces FOMC-AC01. This is the pipeline's own
-normalized intake contract, **not a Federal Reserve JSON API**. A later native
-HTML adapter must produce these candidates from the archived official pages.
+normalized intake contract, **not a Federal Reserve JSON API**. The native
+HTML adapter produces these candidates from archived official pages.
 This slice performs no HTTP, file reads (apart from explicit manifest loading),
 archival, text extraction, chunking or embeddings and assigns no capture clocks.
 
@@ -11,7 +11,7 @@ a nonempty `pages` list. Each page has an absolute `source_page_url` and a
 `meetings` list. Each meeting has `committee_body` (`fomc` or `executive_committee`),
 `event_kind` (`meeting` or `conference_call`), explicit ordered unique ISO
 `meeting_dates`, verbatim `meeting_label_raw`, nullable `session_label_raw`,
-`minutes_status` (`listed`, `pending_release`, `not_listed`) and `documents`.
+`minutes_status` (`listed`, `pending_release`, `not_listed`, `unavailable`) and `documents`.
 Each document has `document_kind`, `document_label_raw`, original `href`,
 `representation` (`pdf` or `html`) and nullable date-only `provider_release_date`.
 Unknown fields and malformed or contradictory shapes reject the whole candidate
@@ -50,6 +50,13 @@ These rules are intentionally a bounded initial profile, not all Board assets.
 Operating guards: at most 128 input pages and 20,000 meeting/document records by
 default (positive integer overrides), 366 date labels per meeting and 4,096
 characters per label/URL. They are resource limits, not provider field widths.
+T03 adds `unavailable` for an explicitly empty official minutes href; the
+original claim is retained in native page evidence. Reviewed legacy HTTP hrefs
+under `/fomc/minutes/` resolve to HTTPS only when interpreted as source references;
+the raw href/fragment remains evidence and outbound HTTP URLs still reject.
+The active operating floor is 1990; the manifest's 1936 provider floor remains
+unchanged for historical capture/identifier compatibility.
+
 All accepted records are frozen. Results represent observed inventory candidates,
 not verified archive/text coverage. Pending and not-listed observations remain
 explicit even when another page has a listed observation for the same meeting.

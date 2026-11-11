@@ -1,25 +1,25 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** FOMC-T01/T02 complete; FOMC-T03 is in progress with reviewed native
-page parsing, bounded acquisition, original-byte storage in filesystem and
-PostgreSQL, and explicit capture-to-inventory links. A five-item bounded sample
-reconciles; issue-gated multi-page publication and a bounded historical-year
-discovery/expected-page gate, declared addenda/PNG lineage, original-byte
-content addressing and durable attempt recovery are implemented. Remaining native
-source exceptions, source-wide coverage, text/chunks and jobs remain incomplete. Next:
-[FOMC-T03 handoff](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
+**Status:** FOMC-T01/T02/T03 complete for the user-selected **1990-onward
+inventory and immutable-Bronze foundation**. The local migrations are applied;
+33 official inventories reconcile to 371 meetings and 470 document references.
+The bounded archive has 72 byte-verified captures, including 22 PNG assets;
+this is not a full original-document backfill or searchable text archive.
+[Acceptance](t03_acceptance.md) and [closeout evidence](evidence/t03_closeout.json)
+record one known unavailable official link, preserved source clocks, exact backup/
+restore and the scope exclusions. **Next: T04 complete text/extraction.**
 **Reviewed:** 2026-11-11. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
-FINRA remains at SSV-T05; NAAIM remains paused.
+FINRA remains at SSV-T05; NAAIM remains paused; FOMC has no job or schedule.
 
 ## Objective and scope
 
 Save current and historical officially published FOMC minutes in their entirety,
 with original documents, searchable full text, versioned chunks and traceable
 observed revisions. Embeddings are an optional enhancement after the core archive.
-Default historical target: all discoverable in-scope records from **1936 through
-the latest released minutes**, acquired in bounded year batches. Completeness is
+User-selected historical target: all discoverable in-scope records from **1990
+through the latest released minutes**, acquired in bounded year batches. Completeness is
 measured against archived official inventories, not an assumed meetings-per-year count.
 
 “In entirety” includes every page, section, attendance list, vote, table, footnote,
@@ -29,10 +29,13 @@ needed to preserve HTML-only content. Whole source documents remain canonical;
 extracted/OCR text is a separately versioned derivative. No character/token limit
 may silently shorten a document. A published source redaction remains a redaction.
 
-Modern minutes and historical predecessors have separate document kinds:
+The active scope includes modern minutes and the official 1990–1992 action/
+policy predecessors. The backward-compatible normalized contract retains these
+distinct document kinds:
 `minutes`, `historical_minutes`, `minutes_of_actions`, `record_of_policy_actions`
-and `memorandum_of_discussion`. Include officially linked Executive Committee
-minutes under a distinct committee/body identity. Discover kinds from official
+and `memorandum_of_discussion`. Earlier kinds and Executive Committee records
+remain supported for retained legacy evidence, outside active 1990-onward
+acquisition and acceptance. Discover kinds from official
 labels, rather than imposing year cutoffs that discard transition-year records.
 Verbatim transcripts, statements, press conferences, speeches, Beige/Green/Blue/
 Tealbooks and unrelated references are outside this archive. A separate SEP is
@@ -112,28 +115,27 @@ and a transactional current pointer. Imports are marked `invented_fixture` or
 `normalized_inventory`; neither is a certified source archive. Original-document
 versions and provider first-seen clocks are not assigned by this metadata store.
 
-T03 adds an independently marked Bronze migration with `bronze_schema_migrations`
-and `bronze_captures`, retaining original bytes in PostgreSQL `bytea` and the
-filesystem. A separate lineage migration adds `bronze_inventory_links` and
-`bronze_document_links`, linking exact URLs to existing inventory claims without
-moving the inventory pointer. Five bounded captures have passed exact
-readback; the inventory catalog remains empty. Issue-gated publication atomically
-links each source capture and refuses to drop earlier source pages. A separate
-`fomc-bronze-discovery-postgres/1` migration stores hashed
-selected-page evidence atomically with the metadata inventory and links; it is
-verified only in isolated schemas. [Bounded year discovery](discovery_contract.md)
-requires archived index/calendar inputs and an exact expected-page set; it does
-not certify source-wide completeness. The separate
-[dependency contract](attachments_contract.md) retains declared addenda and PNG
-parent/child lineage. [Content-object and recovery contracts](storage_recovery_contract.md)
-add explicit deduplication migrations and durable pre-request intents. New local
-payload paths hard-link hash-addressed originals; migrated PostgreSQL captures
-reference shared original bytes. Both migrations are isolated-schema verified,
-not applied to production. Startup, file and database failures retain rejected or
-interrupted evidence and can recover only from verified durable bytes.
-Remaining source exceptions and corpus-wide conformance keep T03 open.
-See [configuration/commands](../../config/fomc_meeting_minutes/README.md) and the
-[current implementation handoff](todo.md).
+T03's explicit Bronze, lineage, discovery, content-object and dependency migrations
+are applied to the existing local FOMC schema. Original bytes live in shared
+PostgreSQL `bytea` objects and hash-addressed filesystem objects; every capture
+retains its own immutable receipt, URL and capture clock. The original five
+captures, including pre-1990 review pages, remain unchanged and outside the
+active scope where applicable. One committed native metadata inventory links all
+33 archived source pages. Source-owned evidence retains 14 bundled-minutes
+cross-references, cancelled/notation exclusions and one unavailable 1994 link.
+
+The 72-capture archive includes 38 inventories, 12 document representations and
+22 PNG assets. Ten primary representations link to inventory references; declared
+SEP addenda and images inherit meeting associations through eight dependency
+checks. All 72 bytes/receipts and the full 17-table state passed restore/readback.
+This does not certify all 470 declared document references as acquired.
+
+See [acceptance](t03_acceptance.md), [discovery](discovery_contract.md),
+[attachments](attachments_contract.md), [storage/recovery](storage_recovery_contract.md)
+and [configuration/commands](../../config/fomc_meeting_minutes/README.md).
+T04 owns complete text/pages/extraction versions, OCR review and coherent
+text/document catalog publication. Broader original acquisition/operations remain
+later scoped work; no schedule was enabled.
 
 ## Core text chunks and optional embedding enhancement
 
@@ -228,7 +230,7 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
 | FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Full archive/text/chunk reconciliation remains incomplete. |
 
-**Current pickup:** [finish FOMC-T03](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
+**Current pickup:** [FOMC-T04 complete text/extraction](todo.md#fomc-t04--complete-text-and-extraction-next).
 The archive is a bounded foundation, not a historical backfill or text index.
 Embeddings remain an independently selected enhancement.
 

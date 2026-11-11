@@ -1,5 +1,9 @@
 # FOMC-T03 — declared addenda and substantive HTML assets
 
+Current status: accepted under [T03 closeout](t03_acceptance.md); the dependency
+schema is applied locally and eight direct checks are committed. Earlier sample
+counts below remain historical evidence.
+
 Traces FOMC-AC01/02/12. `data/dependencies.py` performs bounded, offline discovery
 from original HTML, without reading a clock or constructing filenames. Source
 review: 2026-11-11. This profile advances archive lineage; text and visual/image
@@ -16,7 +20,8 @@ A separate press-conference projection is not automatically a minutes addendum.
 The policy-normalization addendum embedded in the 2017 minutes stays in the
 original HTML; its referenced policy documents do not become minutes addenda.
 
-`discover_html_dependencies` requires one `#article`, at most 2 MB by default
+`discover_html_dependencies` uses one `#article` for modern pages or the reviewed
+classic body profile below, at most 2 MB by default
 and at most 256 dependency records (configurable up to 1,000). Explicit
 “Addendum to these/the minutes” anchors are eligible. Same-document fragment
 references remain embedded. Bare “Addendum” and “Minutes addendum” labels remain
@@ -52,7 +57,8 @@ URLs and preserves original received bytes and safe receipts in both stores.
 `PostgresDependencyStore(bronze).migrate()` explicitly creates separately marked
 `bronze_dependency_state`, `bronze_dependency_checks` and `bronze_dependencies`
 tables under contract `fomc-bronze-dependencies-postgres/1`. Missing ownership,
-partial tables or a conflicting marker refuse. Production has not been migrated.
+partial tables or a conflicting marker refuse. The migration is now applied
+to the existing local FOMC schema.
 
 `commit(parent_capture_id, child_capture_ids, manifest, root=...)` re-derives the
 expected direct dependencies from matching, committed filesystem/PostgreSQL
@@ -82,9 +88,29 @@ addenda and all 22 images. The schema was then removed; production and inventory
 pointers remain unchanged. Raw provider files stay ignored.
 
 The 1993 sample now retains eight legacy minutes references without parser
-issues. The 2020 sample retains 16 representations and surfaces the March 2
-cross-reference and cancelled March 17–18 label. The earlier 1936 date conflict
-and current notation vote also remain unresolved. No corpus-wide or text
-completeness is claimed. The subsequent
+issues. The earlier 2020 sample surfaced its March 2 cross-reference and cancelled
+March 17–18 label. Closeout now resolves all in-scope source cases, including 14
+bundled cross-references and explicit nonmeeting exclusions. The 1936 conflict is
+outside scope. Full original-document/text completeness is not claimed. The subsequent
 [storage/recovery increment](storage_recovery_contract.md) implements
 content-addressed originals and interrupted-write/startup recovery.
+
+## Classic HTML and closeout source regimes
+
+The reviewed `/fomc/MINUTES/YYYY/YYYYMMDDmin.htm` and
+`/fomc/minutes/YYYYMMDD.htm` pages use a single body containing the published FOMC
+minutes title. Profile `fomc-legacy-body/1` retains the complete original. The two
+observed Board-logo/top-arrow GIF paths are decorative exclusions; the final
+recognized edge-challenge script is retained in raw bytes and excluded from
+content dependencies, even when legacy unclosed markup nests it in a footer.
+No script is executed. Other active content/assets remain issues. A base tag's
+`target` alone does not rewrite URLs; any `href` base still blocks coverage.
+
+Scoped native inventory supports explicit cross-month dates, sized PDF captions,
+nounless unscheduled sessions and slash/hyphen bundled-meeting references. Known
+non-minutes products have reviewed family exclusions; unknown panel/attachment
+labels raise issues. The standalone 2019 accessibility ZIP was directory-reviewed
+and contains the conference transcript/presentation material, not minutes. An
+empty minutes href is `unavailable`; raw exclusions and cross-reference claims
+are saved in the committed inventory evidence. See the acceptance record for
+source coverage, backup/restore and the one known source gap.

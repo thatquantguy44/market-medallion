@@ -14,12 +14,11 @@ canonical operational inventory.
 ## Current build sequence and status
 
 On 2026-11-11 the user selected FOMC implementation with the existing PostgreSQL
-location and a pipeline-owned config folder. T01/T02 inventory/config/catalog
-foundation is implemented; [FOMC-T03](../specs/spec017/todo.md) is in progress
-with a bounded original-byte sample and selected-year page-discovery gate;
-declared addenda/PNG lineage, content-addressed originals and durable recovery
-are implemented; source exceptions and wider conformance remain the pickup. FINRA remains at SSV-T05 for its next continuation, and the remaining
-securities-finance sequence below is preserved.
+location, then narrowed the operating scope to 1990 onward. T01–T03 are complete
+for the reviewed inventory/immutable-Bronze foundation; migrations and exact
+backup/restore are applied/verified locally. **FOMC-T04 complete text/extraction**
+is the immediate pickup. FINRA remains at SSV-T05; the remaining securities-finance
+sequence and NAAIM pause are preserved.
 
 AAII local completion and package cleanup merged through PR #2. SEC FTD and
 Reg SHO thresholds now satisfy Spec011 G2 for the bounded native-source
@@ -47,7 +46,7 @@ queue is retained but deferred behind this program. NAAIM remains paused.
 
 | Pipeline ID | Purpose | Status | Package under `src/market_data_pipeline/pipelines/` | Contract / evidence | Next scoped work |
 | --- | --- | --- | --- | --- | --- |
-| `fomc-meeting-minutes` | Complete official current/historical FOMC minutes and typed predecessor documents | T01/T02 inventory and PostgreSQL catalog complete; T03 native parsing, dual-storage Bronze, bounded discovery, declared addenda/PNG lineage, content-addressed originals and durable recovery implemented; source exceptions/conformance open; migrations isolated-schema verified; no text/chunks/job | [`fomc_meeting_minutes/`](../src/market_data_pipeline/pipelines/fomc_meeting_minutes/) | [Spec017](../specs/spec017/README.md), [config](../config/fomc_meeting_minutes/README.md), [bounded sample](../specs/spec017/evidence/native_bronze_sample.json) | Finish T03: review notation vote, 1936 date conflict, 2020 cross-reference/cancelled labels and wider historical conformance; unsupported assets remain issues; no full backfill or schedule yet. |
+| `fomc-meeting-minutes` | Official FOMC minutes and action/policy predecessors from 1990 onward | T01–T03 accepted locally: 33 source inventories, 371 meetings, 470 declared references; 72 bounded byte-verified captures and restored backups; one known unavailable source link; full document backfill/text/jobs remain later | [`fomc_meeting_minutes/`](../src/market_data_pipeline/pipelines/fomc_meeting_minutes/) | [Spec017](../specs/spec017/README.md), [acceptance](../specs/spec017/t03_acceptance.md), [closeout evidence](../specs/spec017/evidence/t03_closeout.json) | T04 complete text/extraction, page/section accounting and OCR-review state; retain 1990 scope; no schedule. |
 | `presidential-research-data` | Reviewed political-control and public equity-return research inputs for QuantMeridian PRES | Spec016 draft and multi-repository plan saved; donor standalone pipeline exists in research website; no target port, jobs or consumer additions implemented | Proposed `presidential_research/`; absent | [Spec016](../specs/spec016/README.md), [integration plan](../specs/spec016/plan.md), [tasks](../specs/spec016/todo.md) | Review contract and start T01 baseline when implementation is selected; preserve existing source-build priority and NAAIM pause. |
 | `aaii-investor-sentiment` | Weekly investor sentiment shares and bull/bear spread | Implemented locally; recurring acquisition gated | [`aaii/`](../src/market_data_pipeline/pipelines/aaii/) | [Spec 002](../specs/spec002/README.md), [Spec 003](../specs/spec003/README.md), [checkpoint](handoffs/aaii_checkpoint.md), [runbook](deployment/aaii_runbook.md) | Local completion merged; November 10 manual Dagster refresh is healthy. Establish recurring access and production operations before scheduling. |
 | `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for authorized research | Local Bronze/Silver/delayed-latest slice, manual smoke, health check, stopped-by-user daily Dagster schedule and versioned research export verified; each scheduled run retains 365 days; every output explicitly labels the 3-month provider delay | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md), [job register](deployment/dagster_jobs.md) | **Paused.** Do not capture or restart the schedule until the user resumes NAAIM. On resumption, automate export after a successful capture, then retain attribution/delay labels. No warehouse or public service is added. |

@@ -19,15 +19,16 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
-**Current FOMC build:** [Spec017](specs/spec017/README.md) now implements normalized
-inventory/identity contracts and configurable PostgreSQL metadata snapshots in
-its own schema. Settings live in [config/fomc_meeting_minutes/](config/fomc_meeting_minutes/README.md).
-T03 implements native parsing, dual-storage original captures and bounded
-historical-year discovery with an atomic expected-page publication gate, declared
-addendum/PNG lineage, content-addressed originals and durable capture recovery.
-Source exceptions and broader historical conformance remain open; full minutes,
-text/chunks and optional embeddings remain future slices. FINRA's continuation
-is SSV-T05; the remaining program order and NAAIM pause are preserved.
+**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T03 are complete
+for the selected **1990-onward inventory and immutable-Bronze foundation**.
+The local migrations are applied: 33 source pages reconcile to 371 meetings and
+470 declared document references; 72 bounded captures pass byte readback and
+verified backup/restore. One empty official minutes link remains explicitly
+unavailable. This is not a full original-document backfill or text archive.
+**Next is T04 complete text/extraction.** See the
+[acceptance](specs/spec017/t03_acceptance.md) and
+[configuration](config/fomc_meeting_minutes/README.md). FINRA remains at SSV-T05;
+NAAIM remains paused, and no FOMC job/schedule is enabled.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
