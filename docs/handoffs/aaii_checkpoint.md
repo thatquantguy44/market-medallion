@@ -1,9 +1,32 @@
 # AAII completion checkpoint and next pipeline
 
-Updated 2026-10-30, America/New_York. Branch: `feature/pipeline-completion`.
+Updated 2026-11-10, America/New_York. Original completion branch: `feature/pipeline-completion`.
 The user explicitly selected **finish AAII first; CFTC on the next branch**.
 Spec 003 supersedes the previous test-only pickup task. AAII's local pipeline
 capabilities are complete; do not restart its scaffold or silently enable downloads.
+
+## 2026-11-10 manual refresh
+
+A user-requested one-time live `aaii_sentiment_job` completed successfully with
+reported-date bounds **2026-10-13 through 2026-11-10** (28-day overlap).
+Dagster run `3f037d51-a42c-4914-9bef-b35534c05ca6` produced AAII capture
+`0ae569cbd96142cf9e2b68b0e14b1923`: four selected rows, two new versions for
+October 29 and November 5. Current PostgreSQL and committed Parquet now contain
+**2,048 versions / 2,048 reported dates**, through **2026-11-05**.
+The post-run no-request health check passes with no reasons.
+
+Capture time is `2026-11-11T02:13:21.054494Z` (November 10 in New York), not
+historical publication time. Snapshot `aa3c50eadc1043f6abdaa5e2e9961761`
+is selected by `parquet/current.json`. The pre-run logical backup is retained
+locally under `data/backups/aaii-before-manual-20261110-021232/`.
+Earlier quarantine outcomes remain in historical audit/quality evidence.
+
+Docker Desktop was started and the existing AAII container resumed on its
+persistent volume. Its existing password was saved, at the user's request, in
+this project's ignored `.env` with owner-only permissions; no secret is included
+here. No schedule was activated. NAAIM remains stopped and paused. Runtime data,
+run YAML, backups and credentials stay outside Git. The completion evidence
+below describes the original October30 baseline.
 
 ## Read first
 

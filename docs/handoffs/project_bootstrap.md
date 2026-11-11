@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-05.
+Last updated: 2026-11-10.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -19,7 +19,22 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-05 latest Spec011 checkpoint — authoritative pickup
+## 2026-11-10 current pickup and AAII manual refresh
+
+Spec011's T17/G2 closeout merged through PR #8 at `c16acee`. The next
+source-build task is **Spec012 SSV-T01**, FINRA approved use and acquisition-route
+review; the older merge prerequisite below is satisfied. No FINRA package or
+connector exists yet. Preserve the NAAIM pause and stopped schedule defaults.
+
+The user-requested AAII manual Dagster refresh succeeded for October 13 through
+November 10. It added October 29 and November 5, bringing local PostgreSQL and the
+committed Parquet snapshot to **2,048 reported dates through 2026-11-05**.
+The no-request health check passes. The pre-run backup and the full sanitized
+run/snapshot identifiers are recorded in the [AAII checkpoint](aaii_checkpoint.md#2026-11-10-manual-refresh).
+Credentials and provider bytes remain ignored. This was a single manual run;
+recurring acquisition permission and production operation are still separate.
+
+## 2026-11-05 Spec011 checkpoint — accepted delivery evidence
 
 **T17/G2 is complete for the bounded native-source internal-research delivery**
 on `chore/spec011-t17-acceptance`, from merged `main` `5b092af` (PR #7).
