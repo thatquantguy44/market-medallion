@@ -17,7 +17,7 @@ On 2026-11-11 the user selected FOMC implementation with the existing PostgreSQL
 location and narrowed active scope to 1990 onward. T01–T04 are complete for the
 bounded inventory/archive and native-text foundation. T04 continues on the same
 feature branch with verified text mirrors, catalog, replay and backup/restore.
-**FOMC-T05 deterministic chunks** is next. FINRA stays at SSV-T05; the remaining
+**FOMC-T05 deterministic chunks is in progress** on the same feature branch. FINRA stays at SSV-T05; the remaining
 securities-finance sequence and NAAIM pause are preserved.
 
 AAII local completion and package cleanup merged through PR #2. SEC FTD and

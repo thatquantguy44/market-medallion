@@ -92,7 +92,12 @@ five text tables; all 22 tables passed restore verification. A real empty-target
 replay matches the catalog and all 72 original receipt bytes without re-extraction
 or network. Full backfill and OCR/text accuracy certification remain incomplete.
 
-## FOMC-T05 — deterministic chunks (next)
+## FOMC-T05 — deterministic chunks (in progress)
+
+The pure chunk transform is implemented with fixture-backed offsets, Unicode,
+paragraph boundaries, overlap, identity and eligibility checks. PostgreSQL mirrors,
+generation publication/replay and source closeout remain in progress. See
+[chunks contract](chunks_contract.md).
 
 Derive section/paragraph-aware chunks from committed text. Pin chunker/tokenizer
 profiles, preserve exact Unicode offsets and page/section links, and prove full
