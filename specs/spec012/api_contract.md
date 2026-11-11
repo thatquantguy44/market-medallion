@@ -2,9 +2,10 @@
 
 Selected 2026-11-10 for personal noncommercial internal research. This explicitly
 amends the original TXT-first plan; it does not enable website downloads.
-Traces: SSV-T01–SSV-T03 / SSV-REQ01–SSV-REQ03. Runtime implementation now includes
+Traces: SSV-T01–SSV-T04 / SSV-REQ01–SSV-REQ04. Runtime implementation now includes
 approved-use admission, the source schema/facility registry and a pure receipt-bound
-JSON parser. Data acquisition, warehouse and jobs are not implemented.
+JSON parser plus pure quantity validation/text conversion and per-observation
+ratios. Data acquisition, warehouse and jobs are not implemented.
 
 ## Approved route and evidence
 
@@ -102,15 +103,15 @@ publication time unknown unless source-owned evidence establishes it.
 
 ## Implemented parser and next bounded scope
 
-SSV-T01–T03 are complete for the selected source profile: strict schema/version,
+SSV-T01–T04 are complete for the selected source profile: strict schema/version,
 explicit scope exclusions, disjoint selection, acquisition-date guards and a pure
 receipt-bound parser are implemented. It rejects truncated JSON, unknown/duplicate
 fields, duplicate logical keys, malformed dates, invalid symbols and impossible
 or nonfinite/negative quantities. Whole and fractional quantities are exact Decimal
 shares; binary floating point and integer truncation are forbidden. A complete
 empty response is distinct from missing, pending, denied or failed extraction.
-**Next: SSV-T04**, decimal quantity arithmetic, subset/zero cases and lossless
-serialization; no Gold or persistence implementation is implied.
+**Next: SSV-T05**, raw/rejected-capture archiving and redacted lineage receipts.
+T04's pure ratios and quantity codec do not constitute published Gold or persistence.
 
 Future local input is an approved archived JSON response and its request/scope
 receipt, not a TXT file silently relabeled as API data. The TXT schema, trailer
@@ -138,7 +139,7 @@ remove earlier rows. Unknown publication timestamps remain null; response Date
 and retrieval time are not provider publication vintages. API release timing,
 empty-facility meaning and correction visibility still need source conformance.
 
-## Verification checkpoint
+## T03 verification checkpoint
 
 **111 SSV-AC03 parser tests plus 84 admission/registry tests pass.** Full offline
 regression: **677 passed, 10 optional integration tests skipped**. Ruff lint/format
@@ -211,5 +212,21 @@ The parser returns immutable typed rows and page metadata, including original
 payload digest, declared date/facility scope, offset, effective limit and total.
 It performs no network, file, environment or clock access and creates no Bronze,
 Silver, Gold or publication artifact. Archived local parsing does not apply a
-current rolling acquisition window. Ratios and storage round trips remain T04
-and later slices. No new provider-data request is part of T03.
+current rolling acquisition window. T04 adds pure ratio arithmetic and exact
+quantity text readback; DB/Parquet round trips and publication remain later
+slices. No new provider-data request is part of T03/T04.
+
+## T04 verification checkpoint
+
+71 SSV-AC04 arithmetic/codec checks pass, bringing the focused FINRA total to
+266. Full offline regression: **748 passed, 10 optional integrations skipped**;
+Ruff lint/format and source distribution/wheel builds pass. The parser now reuses
+`data.quantities.validate_quantities` without changing its acceptance budgets.
+`data.gold.share_ratios` uses method `finra-short-sale-volume-ratios/1`, unit 1,
+34 significant digits and half-even rounding only for derived ratios. The
+[numeric contract](data_contract.md#ssv-t04-arithmetic-and-quantity-text-boundary)
+defines source quantity exactness, text representation and caller-context isolation.
+[Offline evidence](evidence/t04_semantics_conformance.json) reconciles all 18
+quantity tuples and 12 ratios in the retained six-row sample; bytes are unchanged,
+pages remain partial and no observation was promoted or clock assigned. G1/G2
+remain open. Next: SSV-T05 archival receipts, not provider acquisition or scheduling.

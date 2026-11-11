@@ -1,0 +1,42 @@
+{
+  "task": "SSV-T04",
+  "reviewed_date": "2026-11-10",
+  "method": "offline parser, quantity-text readback and per-observation arithmetic on unchanged retained T02 responses; no provider data requests",
+  "source_check_id": "79c14c9f27104a94b77dc9a4c1494625",
+  "ratio_method": "finra-short-sale-volume-ratios/1",
+  "ratio_unit": "1",
+  "ratio_precision": 34,
+  "rounding": "ROUND_HALF_EVEN",
+  "pages": [
+    {
+      "market_code": "Q",
+      "facility_id": "nasdaq_carteret_trf",
+      "parsed_rows": 2,
+      "quantity_tuples_round_tripped": 6,
+      "ratios_checked_against_exact_rationals": 4,
+      "partition_complete": false,
+      "payload_sha256": "986235454e6dd2c746501bfd1f383e05312fa41d5f6f4c034fd139a05b89f83e"
+    },
+    {
+      "market_code": "B",
+      "facility_id": "nasdaq_chicago_trf",
+      "parsed_rows": 2,
+      "quantity_tuples_round_tripped": 6,
+      "ratios_checked_against_exact_rationals": 4,
+      "partition_complete": false,
+      "payload_sha256": "125268d01534deafcdced7b50a8fcca97c24b4600f3edc074f6e236709c6c426"
+    },
+    {
+      "market_code": "N",
+      "facility_id": "nyse_trf",
+      "parsed_rows": 2,
+      "quantity_tuples_round_tripped": 6,
+      "ratios_checked_against_exact_rationals": 4,
+      "partition_complete": false,
+      "payload_sha256": "9bb118f12737df951fd090ac6ad5051a23fa36f81c371e85f3ce981f950c4e5b"
+    }
+  ],
+  "promoted_observations": 0,
+  "clocks_assigned": false,
+  "coverage_limit": "All retained sample pages remain partial; no complete-partition/history or warehouse/publication claim."
+}

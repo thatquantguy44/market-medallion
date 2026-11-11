@@ -1,6 +1,6 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T03 complete for the selected three-TRF API profile, 2026-11-10.
+**Status:** SSV-T01–T04 complete for the selected three-TRF API profile, 2026-11-10.
 Use [todo.md](todo.md) as the single task list.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
@@ -19,8 +19,10 @@ The pure T03 parser now passes 111 invented-fixture tests and reconciles the six
 retained rows offline. Their fractional quantities corrected the original
 integer-only assumption: all API share quantities are exact Decimal values.
 See the [amendment and evidence](api_contract.md#ssv-t03-fractional-quantity-amendment).
-Next is SSV-T04 decimal arithmetic, subset/zero cases and lossless round trips.
-Reusable acquisition, warehouse, export and job remain absent.
+T04 adds shared quantity validation/text readback and pure per-observation ratios
+with fixed 34-digit half-even arithmetic. Its 71 tests and retained six-row
+reconciliation pass. Next is SSV-T05 immutable raw and rejected-capture evidence
+with redacted receipts. Reusable acquisition, warehouse, export and job remain absent.
 
 ## Decisions and dependency flow
 

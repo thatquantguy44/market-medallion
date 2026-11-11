@@ -1,14 +1,15 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T03 complete for the selected three-TRF Public API profile:
+**Status:** SSV-T01–T04 complete for the selected three-TRF Public API profile:
 approved-use admission, strict manifest/schema/version, disjoint facility
-registry, acquisition-date guards and a pure receipt-bound JSON parser are
-implemented. Connector, jobs and data products remain absent. Next: SSV-T04
-decimal share arithmetic and lossless serialization.
+registry, acquisition-date guards, pure receipt-bound JSON parsing, exact quantity
+text round trips and per-observation ratio arithmetic are implemented. Connector,
+jobs and published data products remain absent. Next: SSV-T05 raw/rejected-capture
+archiving and redacted receipts.
 **Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
 **Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
-(source contract, registry and pure parser). The [source review](source_review.md) records the user's
+(source contract, registry, pure parser and numeric helpers). The [source review](source_review.md) records the user's
 personal noncommercial scope and Public API terms acknowledgement. The selected
 [API profile](api_contract.md) explicitly amends the file-first plan for JSON and
 page completeness. G0 is ready for the explicit three-TRF profile; TXT, ADF,
@@ -93,10 +94,10 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. SSV-AC01–03 have 195 focused tests:
-84 admission/registry and 111 parser checks. Acquisition/export entry points do
+Every task/test must cite these stable IDs. SSV-AC01–04 have 266 focused tests:
+84 admission/registry, 111 parser and 71 arithmetic/codec checks. Acquisition/export entry points do
 not exist, so their integrated guards and delivery acceptance remain pending.
-Full offline regression: 677 passed, 10 optional skips.
+Full offline regression: 748 passed, 10 optional skips.
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |
@@ -129,7 +130,8 @@ pipelines/finra_short_sale_volume/
   registry.py       # implemented API version, facility scopes and date-window guard
   source.py         # bounded API partitions and acquisition
   data/api.py       # implemented pure receipt-bound parser and Decimal records
-  data/gold.py      # denominator-safe features
+  data/quantities.py # implemented exact quantity validation and text codec
+  data/gold.py      # implemented per-observation ratios; aggregate/history later
   io/bronze.py     # exact input and request receipts
   io/warehouse.py  # SQLite observation versions and publication transactions
   io/parquet.py    # committed typed snapshot
@@ -141,17 +143,21 @@ pipelines/finra_short_sale_volume/
 tests/fixtures/finra_short_sale_volume/  # invented data only
 ```
 
-Use explicit types, stable provider strings and exact Decimal share quantities. A proposed pure
-transform illustrates the style; this snippet is design guidance, not runtime:
+The implemented pure helper uses exact Decimal shares and a fixed 34-significant-digit,
+half-even ratio policy, independent of caller context. Exempt is a subset of short:
 
 ```python
 from decimal import Decimal
+from market_data_pipeline.pipelines.finra_short_sale_volume.data.gold import share_ratios
 
-def short_share(short_volume: Decimal, total_volume: Decimal) -> Decimal | None:
-    if total_volume == 0:
-        return None
-    return short_volume / total_volume
+ratios = share_ratios(Decimal("40"), Decimal("5"), Decimal("100"))
+assert ratios.short_share == Decimal("0.40")
+assert ratios.short_exempt_share == Decimal("0.05")
 ```
+
+The [T04 numeric contract](data_contract.md#ssv-t04-arithmetic-and-quantity-text-boundary)
+and [offline evidence](evidence/t04_semantics_conformance.json) define the quantity
+codec, zero/null behavior, method version and remaining publication boundary.
 
 ## Verification commands and CLI proposal
 

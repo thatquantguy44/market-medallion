@@ -2,8 +2,8 @@
 
 **Decision date:** 2026-11-03. **Status:** comprehensive specification and
 planning set. Spec011 is accepted for its bounded native-source delivery;
-Spec012 T01–T03 provide admission, a three-TRF registry and a pure Decimal JSON
-parser. Spec012 acquisition/storage/jobs and Specs013–015 remain unimplemented.
+Spec012 T01–T04 provide admission, a three-TRF registry, pure Decimal JSON
+parsing, quantity text readback and per-observation ratio arithmetic. Spec012 acquisition/storage/jobs and Specs013–015 remain unimplemented.
 **Owner:** MarketMedallion. **Consumer:** local research and a future separately
 scoped QuantMeridian reader. **Priority:** the user's next source-build program.
 
@@ -87,12 +87,14 @@ All committed test examples use invented values and identifiers. Spec011's
 September SEC archives and ten Nasdaq/NYSE threshold files; both source packages
 have PostgreSQL and local Spark/Delta evidence. Hosted deployment remains separate.
 
-Spec012 T01–T03 are complete for the user-attested three-TRF Public API profile.
+Spec012 T01–T04 are complete for the user-attested three-TRF Public API profile.
 Its pure parser reconciles the six retained source rows offline with exact Decimal
 quantities, including fractional shares that corrected the earlier integer-only
 assumption. [Source tasks](../../specs/spec012/todo.md) and the
 [API amendment](../../specs/spec012/api_contract.md#ssv-t03-fractional-quantity-amendment)
-record 195 focused checks and the next T04 arithmetic/serialization slice.
+record 266 focused checks and the next T05 raw/rejected-capture archival slice.
+T04 fixes derived ratios at 34 significant digits / half-even and preserves source
+quantities exactly through text/JSON readback; published Gold remains later work.
 No acquisition/storage/job is implemented for Spec012; G1/G2 remain open.
 
 The baseline remains Python 3.12, manifest-driven source packages, offline pytest,

@@ -101,7 +101,9 @@ SSV-T03 is complete: 111 invented-fixture checks and [offline sample reconciliat
 validate the pure receipt-bound parser. Actual fractional quantities corrected
 the earlier integer-only assumption; the [API amendment](api_contract.md#ssv-t03-fractional-quantity-amendment)
 requires exact Decimal shares. No new provider-data request was made.
-Next is **SSV-T04**, decimal arithmetic and lossless serialization.
+SSV-T04 is complete: pure per-observation ratios and exact quantity text readback
+pass 71 semantic tests and retained-sample reconciliation.
+Next is **SSV-T05**, immutable raw/rejected-capture archiving and redacted receipts.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -140,3 +142,14 @@ The earlier integer-only offline rejection and its correction are recorded in
 [T03 aggregate evidence](evidence/t03_parser_conformance.json). No observations
 were promoted, no clocks assigned and no provider-data calls or schedule changes
 occurred during T03. G1/G2 and complete-partition/history conformance remain open.
+
+## SSV-T04 verification checkpoint
+
+71 arithmetic/codec tests pass; the focused FINRA total is 266. Full offline
+regression: **748 passed, 10 optional integrations skipped**; Ruff lint/format
+and source distribution/wheel builds pass. [T04 evidence](evidence/t04_semantics_conformance.json)
+reconciles 18 exact quantity text round trips and 12 rational-reference ratio
+checks against the unchanged six-row sample. T04 uses no provider-data requests,
+new clocks or promoted observations; partial pages stay partial. The selected
+access profile and exclusions are unchanged. G1/G2, local storage, complete
+history and operation remain open.

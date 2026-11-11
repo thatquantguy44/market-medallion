@@ -1,9 +1,10 @@
 # FINRA short-sale-volume data contract
 
-**Version:** design v1 with the 2026-11-10 SSV-T03 fractional-quantity amendment.
+**Version:** design v1 with the 2026-11-10 SSV-T03 fractional amendment and T04 numeric policy.
 **Implementation status:** pure approved-use, manifest/schema/version,
-facility/date-window registry and receipt-bound Decimal JSON parser implemented;
-connector and storage absent. Storage and downstream output remain proposals.
+facility/date-window registry, receipt-bound Decimal JSON parser, shared quantity
+validation/text codec and per-observation ratio helpers implemented; connector
+and storage absent. Storage and downstream output remain proposals.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -136,8 +137,9 @@ contract instead. Conflicting duplicates block publication.
 Reject requested-date/file-date mismatches, unknown scopes and unverified market
 codes. A schema drift outcome preserves Bronze and the old committed snapshot.
 
-Proposed Gold fields include `short_share`, `short_exempt_share`, prior available
-trade date, day gap and ratio change. Compute `short_volume / total_volume` and
+T04 implements pure per-observation `short_share` and `short_exempt_share`.
+Published Gold, prior available trade date, day gap, ratio change and aggregation
+remain T09 and later work. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
@@ -164,3 +166,35 @@ share quantities, ratio unit, nullable ratio, version token, capture clocks, met
 and approved-use/source labels. It excludes credentials, local filesystem paths
 and raw source payloads. Export eligibility is checked against the rights profile.
 No QuantMeridian code, DB grant or cross-repository config is changed here.
+
+## SSV-T04 arithmetic and quantity text boundary
+
+The T04 core remains pure. `data.quantities.validate_quantities` enforces finite,
+nonnegative Decimal shares and `exempt <= short <= total`, using T03's unchanged
+digit/exponent budgets. Integers, floats, strings, booleans and nulls are not
+implicitly coerced at this normalized boundary; JSON numbers enter via T03.
+
+`data.gold.share_ratios(short, exempt, total)` computes short/total and
+exempt/total separately for one matched observation. A valid all-zero triple
+returns two null ratios; a nonzero numerator with zero total fails validation.
+The method `finra-short-sale-volume-ratios/1` uses unit 1, 34 significant digits
+and ROUND_HALF_EVEN in a fresh explicit decimal context. Derived ratios may be
+rounded; source quantities never are. The caller's precision, rounding, traps,
+exponent range, capitalization and flags do not affect results or change.
+This adds no aggregation, temporal features, coverage claim or publication.
+
+`quantity_to_text` and `quantity_from_text` provide a bounded in-memory decimal
+text codec for share quantities. Text is the standard Decimal string with upper
+case E, retaining the exact Decimal tuple (sign, coefficient digits, exponent),
+including trailing zeros and signed zero. Readback accepts only that generated
+representation, not floats, nulls, padding, underscores or nonfinite values.
+Equivalent quantities with different scale can have different text; this is not
+a value-version hash policy. The codec is not a provider JSON reader or an export
+schema. SQLite/Parquet adapters and ratio serialization remain later work.
+
+Python 3.12 [Decimal contexts and conversion](https://docs.python.org/3.12/library/decimal.html)
+define the local arithmetic and exact text behavior. **71 SSV-AC04 tests pass**
+for invented inputs, exact Fraction checks and parser-to-JSON-text round trips.
+[Retained sample evidence](evidence/t04_semantics_conformance.json) additionally
+reconciles 18 quantity tuples and 12 ratios offline, without changing raw bytes,
+assigning clocks or promoting observations.

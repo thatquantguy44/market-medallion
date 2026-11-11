@@ -1,1 +1,1 @@
-"""FINRA source contract and pure JSON parser; acquisition/persistence remain unimplemented."""
+"""FINRA source contract, pure parser and numeric helpers; no acquisition/persistence."""

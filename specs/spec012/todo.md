@@ -3,10 +3,10 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03 is **complete**; SSV-T04–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03/T04 are **complete**; SSV-T05–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01–T03 suites.
+Tests below are future targets except the implemented SSV-T01–T04 suites.
 [README.md](README.md) defines their acceptance IDs.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -96,13 +96,26 @@ exempt-subset invariant are unchanged; decimal arithmetic/round trips remain T04
 
 **Depends:** SSV-T03; **traces:** SSV-REQ04 / SSV-AC04.
 
-Parser eligibility already preserves exact Decimal quantities and checks the
-subset ordering. T04 remains open for arithmetic/serialization and Gold semantics:
+**Status:** complete. **71 SSV-AC04 tests pass**, including 40/5/100, fractional
+shares, large quantities, valid/invalid zero cases, exact text/JSON round trips,
+independent rational rounding bounds, half-even ties and caller-context isolation.
+The parser and ratio helper share one quantity validator with unchanged T03
+budgets. Source quantities preserve their full Decimal tuple; only derived ratios
+use 34 significant digits and ROUND_HALF_EVEN, method
+`finra-short-sale-volume-ratios/1`, unit 1.
 
-- [ ] Preserve whole/fractional shares; validate exempt <= short <= total with explicit zero cases.
-- [ ] Prove exempt is a subset using 40/5/100, fractional and large-quantity examples.
+The [offline reconciliation](evidence/t04_semantics_conformance.json) checks all
+18 quantities and 12 ratios in the six unchanged retained rows. Samples remain
+partial; no provider-data request, capture clock or promotion was added.
+Full Gold aggregation/history, warehouse and publication remain later tasks.
+**Verification:** 266 focused FINRA tests; full regression **748 passed, 10 optional
+skips**; Ruff lint/format and source distribution/wheel builds pass. Next: SSV-T05.
+
+- [x] Preserve whole/fractional shares; validate exempt <= short <= total with explicit zero cases.
+- [x] Prove exempt is a subset using 40/5/100, fractional and large-quantity examples.
 **Verify:** parameterized semantic tests and lossless decimal quantity round-trip assertions.
-**Files:** `data/api.py`, `data/gold.py`, `tests/test_ssv_semantics.py`.
+**Files:** `data/api.py`, `data/quantities.py`, `data/gold.py`,
+`tests/test_ssv_semantics.py`; sanitized offline evidence is under `specs/spec012/evidence/`.
 
 ## SSV-T05 — Archive input and rejected-capture evidence
 

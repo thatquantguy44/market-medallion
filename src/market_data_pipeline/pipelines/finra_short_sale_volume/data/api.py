@@ -13,6 +13,10 @@ from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
+from market_data_pipeline.pipelines.finra_short_sale_volume.data.quantities import (
+    MAX_QUANTITY_DIGITS,
+    validate_quantities,
+)
 from market_data_pipeline.pipelines.finra_short_sale_volume.manifest import (
     Manifest,
     validate_data_version,
@@ -21,7 +25,6 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.registry import API_
 
 _ENDPOINT = "https://api.finra.org/data/group/otcMarket/name/regShoDaily"
 _FIELD_NAMES = frozenset(name for name, _ in API_FIELDS)
-_COUNT_DIGITS = 4096  # Resource guard, not a provider field-width assertion.
 _JSON_TYPE = re.compile(r'application/json(?:\s*;\s*charset=(?:utf-8|"utf-8"))?', re.I)
 
 
@@ -69,24 +72,12 @@ def _day(value: object) -> date:
 
 
 def _number(token: str) -> Decimal:
-    if len(token) > _COUNT_DIGITS + 64:
+    if len(token) > MAX_QUANTITY_DIGITS + 64:
         raise ValueError("FINRA numeric token exceeds parser budget")
     try:
         return Decimal(token)
     except InvalidOperation:
         raise ValueError("invalid FINRA numeric token") from None
-
-
-def _quantity(value: object) -> Decimal:
-    if not isinstance(value, Decimal) or not value.is_finite() or value < 0:
-        raise ValueError("FINRA quantities must be finite nonnegative decimal numbers")
-    if (
-        value.adjusted() >= _COUNT_DIGITS
-        or not -_COUNT_DIGITS <= value.as_tuple().exponent <= _COUNT_DIGITS
-        or len(value.as_tuple().digits) > _COUNT_DIGITS
-    ):
-        raise ValueError("FINRA quantity exceeds parser digit/exponent budget")
-    return value
 
 
 def _unique_object(pairs: list[tuple[str, object]]) -> dict:
@@ -173,7 +164,7 @@ def _headers(value: object) -> dict[str, str]:
 
 def _header_int(headers: dict[str, str], name: str) -> int:
     value = headers.get(name)
-    if value is None or len(value) > _COUNT_DIGITS or re.fullmatch(r"[0-9]+", value) is None:
+    if value is None or len(value) > MAX_QUANTITY_DIGITS or re.fullmatch(r"[0-9]+", value) is None:
         raise ValueError("missing or invalid FINRA integer response header")
     return int(Decimal(value))
 
@@ -197,11 +188,9 @@ def _rows(
             or symbol.strip() != symbol
         ):
             raise ValueError("FINRA symbol must be nonempty printable text without padding")
-        short = _quantity(item["shortParQuantity"])
-        exempt = _quantity(item["shortExemptParQuantity"])
-        total = _quantity(item["totalParQuantity"])
-        if not exempt <= short <= total:
-            raise ValueError("FINRA quantities require exempt <= short <= total")
+        short, exempt, total = validate_quantities(
+            item["shortParQuantity"], item["shortExemptParQuantity"], item["totalParQuantity"]
+        )
         if symbol in seen:
             raise ValueError("duplicate FINRA observation within a date/facility page")
         seen.add(symbol)
