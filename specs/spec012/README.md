@@ -1,18 +1,21 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01/T02 complete for the selected three-TRF Public API profile:
+**Status:** SSV-T01–T03 complete for the selected three-TRF Public API profile:
 approved-use admission, strict manifest/schema/version, disjoint facility
-registry and acquisition-date guards are implemented. Parser, connector, jobs
-and data products remain absent.
+registry, acquisition-date guards and a pure receipt-bound JSON parser are
+implemented. Connector, jobs and data products remain absent. Next: SSV-T04
+decimal share arithmetic and lossless serialization.
 **Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
 **Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
-(source contract and registry only). The [source review](source_review.md) records the user's
+(source contract, registry and pure parser). The [source review](source_review.md) records the user's
 personal noncommercial scope and Public API terms acknowledgement. The selected
 [API profile](api_contract.md) explicitly amends the file-first plan for JSON and
 page completeness. G0 is ready for the explicit three-TRF profile; TXT, ADF,
 consolidated and ORF scopes stay excluded. [T02 evidence](evidence/t02_source_contract.json)
-records the six-row sample and its limits.
+records the six-row sample and its limits. [T03 evidence](evidence/t03_parser_conformance.json)
+reconciles its fractional share quantities offline; the
+[API amendment](api_contract.md#ssv-t03-fractional-quantity-amendment) supersedes integer-only normalization.
 
 Read the [program roadmap](../../docs/securities_finance/README.md),
 [common contract](../../docs/securities_finance/contract.md),
@@ -74,7 +77,7 @@ The API profile is selected explicitly; no TXT permission is inferred.
 
 ## Scope and delivery boundary
 
-The first usable slice now accepts an approved archived API JSON response plus
+The planned first usable slice will accept an approved archived API JSON response plus
 its request/scope receipt into immutable Bronze, typed Silver versions, local
 SQLite and an atomic Gold/Parquet snapshot. This selected API profile supersedes
 the original TXT-first execution order; TXT files remain a separately gated path.
@@ -90,17 +93,17 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. SSV-AC01/02 have 84 focused unit
-tests for admission, schema/version and registry guards. Acquisition/export
-entry points do not exist, so their integrated guards and delivery acceptance
-remain pending. Full offline regression: 566 passed, 10 optional skips.
+Every task/test must cite these stable IDs. SSV-AC01–03 have 195 focused tests:
+84 admission/registry and 111 parser checks. Acquisition/export entry points do
+not exist, so their integrated guards and delivery acceptance remain pending.
+Full offline regression: 677 passed, 10 optional skips.
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |
 | SSV-REQ01: Record approved use and route. | SSV-AC01: Missing/disallowed rights profile refuses acquisition/export before I/O; offline fixtures remain usable. | SSV-T01 |
 | SSV-REQ02: Register file/date/facility/schema scope. | SSV-AC02: Registry distinguishes individual, consolidated and ORF inputs; aliases and unavailable historical regimes are explicit. | SSV-T02 |
 | SSV-REQ03: Parse documented file structure. | SSV-AC03: Invented API responses cover literal JSON fields, empty arrays, malformed rows/dates and schema drift; invalid responses cannot promote. TXT header/trailer coverage remains a separate profile. | SSV-T03 |
-| SSV-REQ04: Preserve count semantics. | SSV-AC04: Fixture 40 short, 5 exempt, 100 total yields 0.40; counts are integers with exempt <= short <= total. | SSV-T04 |
+| SSV-REQ04: Preserve count semantics. | SSV-AC04: Fixture 40 short, 5 exempt, 100 total yields 0.40; whole/fractional shares remain exact decimals with exempt <= short <= total. | SSV-T04 |
 | SSV-REQ05: Retain raw evidence. | SSV-AC05: Success and parse rejection preserve exact bytes/hash, manifest, run, schema and request metadata without secrets. | SSV-T05 |
 | SSV-REQ06: Publish local transactional results. | SSV-AC06: One invented local API response with scope receipt produces audited SQLite Silver/Gold; failure leaves the prior committed snapshot intact. | SSV-T06 |
 | SSV-REQ07: Preserve observed revisions. | SSV-AC07: Identical repeat adds no version; correction/reversion remain queryable by actual first-seen cutoff. | SSV-T07 |
@@ -125,7 +128,7 @@ pipelines/finra_short_sale_volume/
   manifest.py       # implemented approved-use and strict manifest/schema checks
   registry.py       # implemented API version, facility scopes and date-window guard
   source.py         # bounded API partitions and acquisition
-  data/api.py       # pure JSON parser and typed records
+  data/api.py       # implemented pure receipt-bound parser and Decimal records
   data/gold.py      # denominator-safe features
   io/bronze.py     # exact input and request receipts
   io/warehouse.py  # SQLite observation versions and publication transactions
@@ -138,16 +141,16 @@ pipelines/finra_short_sale_volume/
 tests/fixtures/finra_short_sale_volume/  # invented data only
 ```
 
-Use explicit types, stable provider strings and integer counts. A proposed pure
+Use explicit types, stable provider strings and exact Decimal share quantities. A proposed pure
 transform illustrates the style; this snippet is design guidance, not runtime:
 
 ```python
 from decimal import Decimal
 
-def short_share(short_volume: int, total_volume: int) -> Decimal | None:
+def short_share(short_volume: Decimal, total_volume: Decimal) -> Decimal | None:
     if total_volume == 0:
         return None
-    return Decimal(short_volume) / Decimal(total_volume)
+    return short_volume / total_volume
 ```
 
 ## Verification commands and CLI proposal

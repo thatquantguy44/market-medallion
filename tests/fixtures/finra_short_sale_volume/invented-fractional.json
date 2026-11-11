@@ -1,0 +1,11 @@
+[
+  {
+    "tradeReportDate": "2026-11-09",
+    "securitiesInformationProcessorSymbolIdentifier": "SYNTH.FRAC",
+    "shortParQuantity": 12.345678,
+    "shortExemptParQuantity": 0.000001,
+    "totalParQuantity": 24.691356,
+    "marketCode": "N",
+    "reportingFacilityCode": "NYTRF"
+  }
+]

@@ -1,8 +1,9 @@
 # Securities-finance data program — five ordered deliveries
 
 **Decision date:** 2026-11-03. **Status:** comprehensive specification and
-planning set with an initial offline Spec011 SEC parser/manifest and local
-inspection commands; ingestion connectors and jobs remain unimplemented.
+planning set. Spec011 is accepted for its bounded native-source delivery;
+Spec012 T01–T03 provide admission, a three-TRF registry and a pure Decimal JSON
+parser. Spec012 acquisition/storage/jobs and Specs013–015 remain unimplemented.
 **Owner:** MarketMedallion. **Consumer:** local research and a future separately
 scoped QuantMeridian reader. **Priority:** the user's next source-build program.
 
@@ -82,21 +83,18 @@ No complete production schema, historical coverage or permission regime is
 certified by this research pass. The first tasks require a bounded provider
 sample, pinned schema/terms evidence and explicit decisions for remaining gaps.
 All committed test examples use invented values and identifiers. Spec011's
-[source checkpoint](../../specs/spec011/source_review.md) records the actual
-offline tests and successful reconciliation of two approved September2026 SEC
-archives after an earlier HTTP403. T18 type contracts and serialization pass for
-both sources. T03–T05 persist local SEC Bronze/SQLite/audit/Gold and observed
-revisions with evidence-gated withdrawals, retaining 117,025 September facts.
-T06 replay preserves original outcomes/clocks; T07 coherent Parquet and SEC T19
-PostgreSQL parity and SEC Delta are complete. Threshold Delta and exchange
-conformance remain open.
+[accepted delivery](../../specs/spec011/acceptance.md) reconciles both approved
+September SEC archives and ten Nasdaq/NYSE threshold files; both source packages
+have PostgreSQL and local Spark/Delta evidence. Hosted deployment remains separate.
 
-The plans assume Python 3.12, the existing manifest-driven medallion layout,
-offline pytest, source-owned SQLite/Parquet, atomic publication, local manual
-operation and stopped Dagster schedule definitions. For Spec011, PostgreSQL
-warehouse parity and Databricks Delta publication are required delivery work.
-Both source adapters have actual PostgreSQL17.6 evidence; SEC has actual local
-Spark/Delta evidence and the threshold Delta adapter remains. Hosted cloud
-deployment is separate. Other specs retain their own
-backend scope.
-See the common contract for what each research milestone must actually prove.
+Spec012 T01–T03 are complete for the user-attested three-TRF Public API profile.
+Its pure parser reconciles the six retained source rows offline with exact Decimal
+quantities, including fractional shares that corrected the earlier integer-only
+assumption. [Source tasks](../../specs/spec012/todo.md) and the
+[API amendment](../../specs/spec012/api_contract.md#ssv-t03-fractional-quantity-amendment)
+record 195 focused checks and the next T04 arithmetic/serialization slice.
+No acquisition/storage/job is implemented for Spec012; G1/G2 remain open.
+
+The baseline remains Python 3.12, manifest-driven source packages, offline pytest,
+source-owned SQLite/Parquet, atomic publication and stopped schedule definitions.
+See the common contract and source-specific tasks for each delivery gate.

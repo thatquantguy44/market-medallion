@@ -3,10 +3,10 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03 is **complete**; SSV-T04–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01/T02 suites.
+Tests below are future targets except the implemented SSV-T01–T03 suites.
 [README.md](README.md) defines their acceptance IDs.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -37,7 +37,8 @@ amendment below does not claim real observation coverage or integrated I/O guard
 items were checked off after the bounded source review; the registry and guard
 items below are now verified by 63 offline tests plus 21 existing admission tests.
 Raw samples remain ignored; ordinary tests use invented metadata and no provider
-requests. No parser, warehouse, schedule or full capture is implemented.
+requests. At T02 closeout no parser, warehouse, schedule or full capture was implemented;
+T03 below adds the pure parser.
 
 **Depends:** SSV-T01; **traces:** SSV-REQ02 / SSV-AC02.
 - [x] Pin the seven-field production schema, `tradeReportDate` partition and
@@ -64,25 +65,43 @@ G0 is ready for this bounded source profile; G1/G2 are not complete.
 
 ## SSV-T03 — Characterize API parser with invented responses
 
+**Status:** complete. The pure parser accepts bytes plus a manifest and receipt,
+performs no I/O, and assigns no clocks. **111 invented-fixture tests pass**;
+195 focused FINRA tests and full regression **677 passed, 10 skipped**. Ruff
+lint/format and package builds pass. [Offline conformance](evidence/t03_parser_conformance.json)
+reconciles all six unchanged retained rows, keeps all pages partial and rejects
+excluded market D. No new provider-data request or observation promotion occurred.
+
+**Evidence-driven amendment:** the initial integer-only parser rejected the
+retained Carteret response. All six retained rows contain fractional quantities.
+The [API contract](api_contract.md#ssv-t03-fractional-quantity-amendment) now requires
+exact Decimal shares for whole/fractional numbers; the integer-only assumption
+and rejection of every nonintegral value are superseded. The 40/5/100 example and
+exempt-subset invariant are unchanged; decimal arithmetic/round trips remain T04.
+
 **Depends:** SSV-T02; **traces:** SSV-REQ03 / SSV-AC03.
-- [ ] Cover valid JSON arrays, suffix symbols, empty responses, malformed rows,
-  nonintegral counts, duplicate keys/rows, unknown fields and truncation.
-- [ ] Pin lossless numeric decoding, explicit JSON/date/schema rules and scope
+- [x] Cover valid JSON arrays, suffix symbols, empty responses, malformed rows,
+  fractional/large quantities, duplicate keys/rows, unknown fields and truncation.
+- [x] Pin lossless numeric decoding, explicit JSON/date/schema rules and scope
   receipt validation; API page totals never become a fabricated TXT trailer.
 **Verify:** `.venv/bin/python -m pytest -q tests/test_ssv_parser.py`.
 **Files:** `data/api.py`, `tests/test_ssv_parser.py`, up to three invented response fixtures.
 
 ### Checkpoint A — Contract and parser
 
-- [ ] Terms/route evidence is current; fixture tests prove accepted and rejected shapes.
-- [ ] No live provider acquisition or scheduler activation occurred during fixtures.
+- [x] Terms/route evidence is current; fixture tests prove accepted and rejected shapes.
+- [x] No live provider-data acquisition or scheduler activation occurred during fixtures.
 
 ## SSV-T04 — Enforce share-count arithmetic
 
 **Depends:** SSV-T03; **traces:** SSV-REQ04 / SSV-AC04.
-- [ ] Preserve integers; validate exempt <= short <= total with explicit zero cases.
-- [ ] Prove exempt is a subset using 40/5/100 and large-count examples.
-**Verify:** parameterized semantic tests and lossless count round-trip assertions.
+
+Parser eligibility already preserves exact Decimal quantities and checks the
+subset ordering. T04 remains open for arithmetic/serialization and Gold semantics:
+
+- [ ] Preserve whole/fractional shares; validate exempt <= short <= total with explicit zero cases.
+- [ ] Prove exempt is a subset using 40/5/100, fractional and large-quantity examples.
+**Verify:** parameterized semantic tests and lossless decimal quantity round-trip assertions.
 **Files:** `data/api.py`, `data/gold.py`, `tests/test_ssv_semantics.py`.
 
 ## SSV-T05 — Archive input and rejected-capture evidence

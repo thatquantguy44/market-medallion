@@ -1,0 +1,67 @@
+{
+  "task": "SSV-T03",
+  "reviewed_date": "2026-11-10",
+  "method": "offline parsing of unchanged retained T02 responses and receipts; no provider data requests",
+  "source_check_id": "79c14c9f27104a94b77dc9a4c1494625",
+  "schema_id": "finra-reg-sho-api/1",
+  "data_version": 1,
+  "initial_integer_assumption": {
+    "result": "first retained Carteret response rejected by the initial integer-only parser",
+    "finding": "all six retained rows have at least one fractional quantity; integer-only API normalization was incorrect",
+    "resolution": "invented fractional fixture and exact Decimal quantities; no rounding, truncation, or new source-version inference"
+  },
+  "official_context": {
+    "url": "https://www.finra.org/rules-guidance/notices/trade-reporting-notice-20260114",
+    "effective_date": "2026-02-23",
+    "limitation": "Notice covers NMS trade reporting; actual API fraction evidence is the retained raw responses. It does not prove an API maximum scale or historical cutover."
+  },
+  "pages": [
+    {
+      "market_code": "Q",
+      "facility_id": "nasdaq_carteret_trf",
+      "parsed_rows": 2,
+      "fractional_quantity_values": 4,
+      "all_quantity_tuples_exact": true,
+      "record_total": 12349,
+      "offset": 0,
+      "limit": 2,
+      "partition_complete": false,
+      "payload_sha256": "986235454e6dd2c746501bfd1f383e05312fa41d5f6f4c034fd139a05b89f83e",
+      "receipt_sha256": "afab4c4869ecfb9ce3122730ddff66485d203b44f7a664d19de9b60b737ab2e3"
+    },
+    {
+      "market_code": "B",
+      "facility_id": "nasdaq_chicago_trf",
+      "parsed_rows": 2,
+      "fractional_quantity_values": 3,
+      "all_quantity_tuples_exact": true,
+      "record_total": 5849,
+      "offset": 0,
+      "limit": 2,
+      "partition_complete": false,
+      "payload_sha256": "125268d01534deafcdced7b50a8fcca97c24b4600f3edc074f6e236709c6c426",
+      "receipt_sha256": "14e462482eed3e253a6ac8cb5d3c6e60c2275d954384526bd7bd2694f06668dd"
+    },
+    {
+      "market_code": "N",
+      "facility_id": "nyse_trf",
+      "parsed_rows": 2,
+      "fractional_quantity_values": 3,
+      "all_quantity_tuples_exact": true,
+      "record_total": 7032,
+      "offset": 0,
+      "limit": 2,
+      "partition_complete": false,
+      "payload_sha256": "9bb118f12737df951fd090ac6ad5051a23fa36f81c371e85f3ce981f950c4e5b",
+      "receipt_sha256": "9ce1d6eb06deb34f3d38866da598fc7f05649a6a26a5d9b6d9c7d0dfa0df1d5f"
+    }
+  ],
+  "promoted_observations": 0,
+  "clocks_assigned": false,
+  "scope_limit": "Six sampled rows are partial contract evidence, not complete-partition or historical conformance.",
+  "excluded_market_D": {
+    "http_status": 204,
+    "bytes": 0,
+    "parser_result": "rejected: unselected/unverified facility scope; empty response does not admit ADF"
+  }
+}

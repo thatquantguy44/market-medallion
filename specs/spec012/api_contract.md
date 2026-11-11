@@ -3,8 +3,8 @@
 Selected 2026-11-10 for personal noncommercial internal research. This explicitly
 amends the original TXT-first plan; it does not enable website downloads.
 Traces: SSV-T01–SSV-T03 / SSV-REQ01–SSV-REQ03. Runtime implementation now includes
-approved-use admission and the source schema/facility registry. The parser,
-data acquisition, warehouse and jobs are not implemented.
+approved-use admission, the source schema/facility registry and a pure receipt-bound
+JSON parser. Data acquisition, warehouse and jobs are not implemented.
 
 ## Approved route and evidence
 
@@ -42,13 +42,13 @@ verified active source `dataVersion: 1` using `/datasets` and explicit
 transport header and is not accepted as dataset-version evidence. Other source
 versions, mock datasets and TXT layouts are rejected by the checked manifest.
 
-| Literal JSON field | Metadata type | Planned normalization |
+| Literal JSON field | Metadata type | Implemented normalization |
 | --- | --- | --- |
 | `tradeReportDate` | Date, `yyyy-MM-dd` | Unshifted `trade_date` |
 | `securitiesInformationProcessorSymbolIdentifier` | String | Exact `symbol_raw` |
-| `shortParQuantity` | Number | Exact integer `short_volume`; includes exempt |
-| `shortExemptParQuantity` | Number | Exact integer `short_exempt_volume` |
-| `totalParQuantity` | Number | Exact integer `total_volume` |
+| `shortParQuantity` | Number | Exact Decimal shares `short_volume`; includes exempt |
+| `shortExemptParQuantity` | Number | Exact Decimal shares `short_exempt_volume` |
+| `totalParQuantity` | Number | Exact Decimal shares `total_volume` |
 | `marketCode` | String | Exact `market_raw` |
 | `reportingFacilityCode` | String | Exact raw facility identifier; explicit registry mapping required |
 
@@ -100,16 +100,17 @@ clock is not a Silver first-seen timestamp. No observations were promoted.
 Future ingestion must stamp actual retrieval completion and keep provider
 publication time unknown unless source-owned evidence establishes it.
 
-## Next bounded implementation contract
+## Implemented parser and next bounded scope
 
-SSV-T02 is complete for the selected source profile: strict schema/version,
-explicit scope exclusions, disjoint selection and acquisition-date guards are
-implemented. **Next: SSV-T03**, a pure
-JSON-response parser with invented fixtures. It must reject truncated JSON,
-unknown/duplicate fields, duplicate logical keys, malformed dates, invalid symbols
-and impossible or nonintegral counts. Decode numeric values losslessly; metadata's
-Number label does not justify binary floating-point share counts. A complete
+SSV-T01–T03 are complete for the selected source profile: strict schema/version,
+explicit scope exclusions, disjoint selection, acquisition-date guards and a pure
+receipt-bound parser are implemented. It rejects truncated JSON, unknown/duplicate
+fields, duplicate logical keys, malformed dates, invalid symbols and impossible
+or nonfinite/negative quantities. Whole and fractional quantities are exact Decimal
+shares; binary floating point and integer truncation are forbidden. A complete
 empty response is distinct from missing, pending, denied or failed extraction.
+**Next: SSV-T04**, decimal quantity arithmetic, subset/zero cases and lossless
+serialization; no Gold or persistence implementation is implied.
 
 Future local input is an approved archived JSON response and its request/scope
 receipt, not a TXT file silently relabeled as API data. The TXT schema, trailer
@@ -139,10 +140,76 @@ empty-facility meaning and correction visibility still need source conformance.
 
 ## Verification checkpoint
 
-**63 SSV-AC02 registry tests plus 21 admission tests pass.** Full offline
-regression: **566 passed, 10 optional integration tests skipped**. Ruff lint and
-format checks pass. The pure validation helpers also reconcile all six retained
-source rows, the metadata and version headers. No reusable HTTP adapter, parser,
-warehouse, export or job is implied. G0 is ready only for the explicitly selected
-three-TRF profile; full extraction/recovery and G2 source coverage remain open.
-Source distribution and wheel builds pass.
+**111 SSV-AC03 parser tests plus 84 admission/registry tests pass.** Full offline
+regression: **677 passed, 10 optional integration tests skipped**. Ruff lint/format
+and source distribution/wheel builds pass. The [offline T03 reconciliation](evidence/t03_parser_conformance.json)
+proves all quantities in the six retained rows are exact, all three pages remain
+partial, raw digests are unchanged and excluded market D still rejects. No new
+provider-data request occurred. G0 and parser Checkpoint A are ready for this
+selected profile; G1/G2 remain open. No HTTP adapter, warehouse, export or job exists.
+
+## SSV-T03 fractional-quantity amendment
+
+The first offline parse rejected the retained Carteret page because the original
+integer-only assumption was wrong: **all six retained rows have a fractional
+short or total quantity**, with ten fractional values across the three pages.
+The API metadata says Number, not integer. FINRA's [January 14, 2026 notice](https://www.finra.org/rules-guidance/notices/trade-reporting-notice-20260114)
+sets February 23, 2026 as the effective date for NMS fractional-share trade
+reporting, up to six decimal places. The notice explains the reporting change;
+the retained responses establish this API's actual fractional quantities.
+The linked 2011/2021 TXT layout still says no decimals and cannot override those
+API observations. No API historical cutover or maximum decimal scale is inferred.
+
+This explicitly amends the earlier integer-only API normalization and the T03/T04
+acceptance wording. Source Data-Version 1 and the seven Number-typed fields did
+not change. Return Decimal for all three quantities, including whole shares;
+preserve every supplied digit and scale without float conversion, rounding or
+truncation. Future SQLite/Parquet/export contracts must support fractional shares.
+
+## SSV-T03 implemented parser boundary
+
+`data.api.parse_page(payload, manifest, receipt)` accepts immutable raw bytes
+and an in-memory receipt with `url`, `method`, `request_payload`,
+`request_data_version`, `http_status`, `headers`, `bytes` and `sha256`.
+Additional envelope/diagnostic fields are ignored and are never used as clocks
+or coverage flags. The caller owns credential redaction before archival.
+
+The supported request is the exact production POST endpoint, a positive explicit
+limit and nonnegative offset, and exactly two EQUAL filters: `tradeReportDate`
+and one selected TRF's `marketCode`. Optional projections must name all seven
+fields once; asynchronous requests and other filter shapes are unsupported.
+Request/response version, offset and effective limit must agree. The response
+must provide Data-Version, Record-Total, Record-Offset and Record-Limit;
+Record-Max-Limit and Total-Records-On-Page are checked when present. A receipt's
+byte count and SHA-256 must match the original payload.
+
+A successful JSON response is strictly UTF-8, a top-level array and exactly the
+seven reviewed fields in each object. Duplicate JSON keys, duplicate logical
+rows, wrong dates/facilities, nonfinite or negative quantities, and
+impossible exempt/short/total relationships reject the page. Whole, fractional
+and exponent JSON numeric forms are decoded exactly with Decimal, without floats.
+Symbols remain nonempty printable strings with no surrounding whitespace;
+case, punctuation, leading zeros and printable internal spaces are preserved.
+No undocumented API symbol-width rule is inferred from the TXT layout.
+
+Default operating budgets are 20 MiB per page and 5,000 rows, configurable by the
+caller as positive integer limits. Decimal quantities have at most 4,096
+coefficient digits, adjusted exponent below 4,096, and stored exponent between
+-4,096 and 4,096. Numeric tokens have a 4,160-character budget; integer response
+headers have a 4,096-digit budget. These are operating limits, not provider widths
+or an API scale cap of six. No global integer/decimal settings are changed.
+
+HTTP 200 requires JSON; an empty body is invalid. HTTP 204 requires zero bytes and
+Record-Total 0 at offset 0. A known selected TRF may return a verified empty page;
+this never admits ADF or manufactures a zero-valued observation. Nonempty pages
+cannot exceed the limit or remaining total. Short positive pages stay partial;
+an empty page before the declared total is inconsistent and fails. A page is
+`partition_complete` only when offset 0 and its parsed row count equals the total.
+Cross-page stability and complete replacement promotion remain later tasks.
+
+The parser returns immutable typed rows and page metadata, including original
+payload digest, declared date/facility scope, offset, effective limit and total.
+It performs no network, file, environment or clock access and creates no Bronze,
+Silver, Gold or publication artifact. Archived local parsing does not apply a
+current rolling acquisition window. Ratios and storage round trips remain T04
+and later slices. No new provider-data request is part of T03.

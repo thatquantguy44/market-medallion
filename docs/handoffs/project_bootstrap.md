@@ -22,12 +22,13 @@ new live schedules default stopped.
 ## 2026-11-10 current pickup and AAII manual refresh
 
 Spec011 T17/G2 merged through PR #8; AAII's refresh documentation merged through
-PR #9. FINRA **SSV-T01/T02 are complete for source version 1 and the selected
+PR #9. FINRA **SSV-T01–T03 are complete for source version 1 and the selected
 three-TRF Public API profile**. Approved-use admission, strict manifest/schema/
 version validation, exact facility resolution, disjoint scope selection and
-explicit rolling acquisition-date guards are implemented. No parser, reusable
-acquisition, warehouse, export or job exists. **Next: SSV-T03**, the pure JSON
-parser with invented response/receipt fixtures.
+explicit rolling acquisition-date guards and a pure receipt-bound JSON parser
+are implemented. Reusable acquisition, warehouse, export and job remain absent.
+**Next: SSV-T04**, exact decimal quantity arithmetic, subset/zero cases and
+lossless serialization; T03's parsing checks do not complete Gold semantics.
 
 The user confirmed Public credentials and accepted API terms for personal
 noncommercial internal research. Keep the evidence reference
@@ -42,6 +43,15 @@ market D query returned HTTP 204 / Record-Total 0 with no ADF identifier. Its in
 checker rejection is retained; offline review reconciled all raw digests without
 refetching or relabeling that failed check as a successful pipeline capture.
 
+T03's first offline parse exposed an incorrect integer-only assumption: all six
+retained rows contain fractional short or total quantities. The
+[API amendment](../../specs/spec012/api_contract.md#ssv-t03-fractional-quantity-amendment)
+and [sanitized evidence](../../specs/spec012/evidence/t03_parser_conformance.json)
+record the rejection and correction. Whole/fractional quantities now remain exact
+Decimal values, without rounding/truncation. All six unchanged rows and ten
+fractional values reconcile; every sampled page remains partial. T03 made no
+provider-data request, assigned no clocks and promoted no observations.
+
 The [API contract](../../specs/spec012/api_contract.md) records exact schema,
 version and scope behavior. `listed_trfs` is only the three reviewed TRFs;
 ADF, consolidated TRF/ADF, ORF, TXT, mock and other versions remain excluded.
@@ -51,11 +61,11 @@ current-day filter on archived local imports/replay. Contract-check receipt
 `captured_at` records request start, not an assigned Silver first-seen clock.
 No observations have been promoted. NAAIM stays paused; schedules stay stopped.
 
-Verification: **566 offline tests passed, 10 optional integrations skipped**;
-84 focused FINRA tests pass (63 registry + 21 admission). Ruff lint/format pass.
-Source distribution and wheel builds pass. The six retained samples,
-source metadata, version headers and unchanged raw hashes also reconcile to the
-implemented registry. Core verification does not establish integrated HTTP,
+Verification: **677 offline tests passed, 10 optional integrations skipped**;
+195 focused FINRA tests pass (111 parser + 63 registry + 21 admission). Ruff
+lint/format and source distribution/wheel builds pass. The six retained samples,
+source metadata, version headers and unchanged raw hashes reconcile to the
+implemented registry and parser. Core verification does not establish integrated HTTP,
 warehouse, export or job behavior for this new pipeline.
 
 QuantSmith's external working-tree pin still fails verification. Previously
@@ -405,9 +415,10 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 is merged. Continue Spec012 SSV-T03 on `feat/spec012-finra-access-review`:
-SSV-T01/T02 are complete for the selected source version 1 three-TRF API profile.
-Next is SSV-T03's pure JSON parser; G0 is ready for the explicit selected scope.
+T17 is merged. Continue Spec012 SSV-T04 on `feat/spec012-finra-access-review`:
+SSV-T01–T03 are complete for the selected source version 1 three-TRF API profile.
+Next is decimal quantity arithmetic and lossless serialization. G0 and parser
+Checkpoint A are ready for this scope; local publication and G1/G2 remain open.
 Read Spec012's README, data contract, plan, tasks, API contract and source review
 before further implementation.
 Spec011's selected source conformance and A01–A15

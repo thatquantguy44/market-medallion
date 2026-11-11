@@ -1,1 +1,1 @@
-"""FINRA short-volume source contract; acquisition and ingestion are not implemented."""
+"""FINRA source contract and pure JSON parser; acquisition/persistence remain unimplemented."""

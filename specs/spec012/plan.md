@@ -1,6 +1,6 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01/T02 complete for the selected three-TRF API profile, 2026-11-10.
+**Status:** SSV-T01–T03 complete for the selected three-TRF API profile, 2026-11-10.
 Use [todo.md](todo.md) as the single task list.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
@@ -15,14 +15,18 @@ succeeded. SSV-T02 then verified source version 1, three literal TRF/market pair
 252 available partition dates and a bounded six-row sample. The registry rejects
 unknown/overlapping scopes, schema/version changes and invalid acquisition dates.
 Website TXT permission stays separate; ADF, consolidated and ORF are excluded.
-Next is SSV-T03's invented-response parser. Reusable acquisition, warehouse,
-export and job remain absent.
+The pure T03 parser now passes 111 invented-fixture tests and reconciles the six
+retained rows offline. Their fractional quantities corrected the original
+integer-only assumption: all API share quantities are exact Decimal values.
+See the [amendment and evidence](api_contract.md#ssv-t03-fractional-quantity-amendment).
+Next is SSV-T04 decimal arithmetic, subset/zero cases and lossless round trips.
+Reusable acquisition, warehouse, export and job remain absent.
 
 ## Decisions and dependency flow
 
 Use the explicitly selected API profile and a pure JSON parser before data
-acquisition. Prove integer, scope, pagination-receipt and empty-response behavior
-offline. The original TXT path remains a separate unadmitted profile with its
+acquisition. Exact whole/fractional quantities, scope, pagination receipts and
+empty-response behavior are now proved offline for the parser boundary. The original TXT path remains a separate unadmitted profile with its
 own header/trailer rules. Mock responses never become observations.
 
 ```text
@@ -77,7 +81,7 @@ helpers may be reused only where they contain no source-specific assumptions.
 | Header/trailer variants | Truncated file appears complete. | Versioned exact profiles and trailer reconciliation. |
 | Symbol changes/reuse | False longitudinal join. | Raw symbols and separate dated matching evidence. |
 | Updates after completion | Missed corrections/removals. | Configured overlapping re-fetch, not permanent partition skipping. |
-| Large count precision | Ratio corruption in SQLite/export. | Lossless count encoding and numeric round-trip tests. |
+| Fractional/large quantity precision | Rounding/truncation or ratio corruption in SQLite/export. | Exact Decimal decoding and lossless quantity round-trip tests. |
 
 ## Operational decisions to record during implementation
 

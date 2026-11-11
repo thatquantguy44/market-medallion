@@ -83,9 +83,10 @@ insufficient. Other audiences, routes and unknown fields are rejected.
 
 An internally exported artifact stays within the same authorized user's
 research scope. Its future writer must preserve FINRA attribution and source
-scope. No redistribution grant is inferred here. Real parser, storage, transport
-and export entry points must invoke this gate before their own I/O; none exist
-in this checkpoint, so there is no end-to-end acquisition-refusal claim yet.
+scope. No redistribution grant is inferred here. The pure T03 parser performs
+no I/O; future acquisition, storage, transform and export entry points must invoke
+this gate before their own I/O. None exist yet, so there is no end-to-end
+acquisition-refusal claim.
 
 ## Next bounded action
 
@@ -96,12 +97,16 @@ acquisition. SSV-T02 is now complete: source version 1, seven fields, exact thre
 facility/market pairs and rolling acquisition-date bounds are pinned and tested.
 G0 is ready for that explicit profile; partial samples do not establish G2.
 
-Next is **SSV-T03**, the pure JSON-response parser with invented fixtures.
+SSV-T03 is complete: 111 invented-fixture checks and [offline sample reconciliation](evidence/t03_parser_conformance.json)
+validate the pure receipt-bound parser. Actual fractional quantities corrected
+the earlier integer-only assumption; the [API amendment](api_contract.md#ssv-t03-fractional-quantity-amendment)
+requires exact Decimal shares. No new provider-data request was made.
+Next is **SSV-T04**, decimal arithmetic and lossless serialization.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
 
-## Verification checkpoint
+## Historical T01 verification checkpoint
 
 The focused SSV-AC01 suite has **21 passing offline tests**. It first failed
 collection because the FINRA module did not exist, then passed with the pure
@@ -123,3 +128,15 @@ SSV-T02 checkpoint: 63 registry tests plus the original 21 admission tests pass;
 full offline regression now records **566 passed, 10 skipped**. The source sample
 confirms the selected three facility pairs while preserving the initial checker
 failure on market D's HTTP 204. No complete partition or warehouse was published.
+
+## SSV-T03 verification checkpoint
+
+195 focused admission/registry/parser tests pass, including 111 parser tests.
+Full offline regression: **677 passed, 10 optional integrations skipped**; Ruff
+lint/format and source distribution/wheel builds pass. All six retained source
+rows reconcile exactly, including ten fractional quantities; hashes are unchanged
+and every sampled page is partial. Market D remains excluded despite HTTP 204.
+The earlier integer-only offline rejection and its correction are recorded in
+[T03 aggregate evidence](evidence/t03_parser_conformance.json). No observations
+were promoted, no clocks assigned and no provider-data calls or schedule changes
+occurred during T03. G1/G2 and complete-partition/history conformance remain open.

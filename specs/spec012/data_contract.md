@@ -1,9 +1,9 @@
 # FINRA short-sale-volume data contract
 
-**Version:** design v1 with the 2026-11-10 SSV-T01 admission checkpoint.
-**Implementation status:** pure approved-use, manifest/schema/version and
-facility/date-window registry implemented; parser, connector and storage absent. Provider facts below are documented; normalized names and
-storage remain proposals.
+**Version:** design v1 with the 2026-11-10 SSV-T03 fractional-quantity amendment.
+**Implementation status:** pure approved-use, manifest/schema/version,
+facility/date-window registry and receipt-bound Decimal JSON parser implemented;
+connector and storage absent. Storage and downstream output remain proposals.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -20,7 +20,7 @@ terms acceptance under `USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10`. Authenticati
 and production metadata retrieval succeeded. SSV-T02 subsequently obtained
 six bounded TRF rows and a partition inventory; their raw field/version pairs
 reconcile, but complete partitions and historical observations are not verified. The [API profile](api_contract.md)
-explicitly defines the JSON schema/partition amendment and unresolved mapping.
+defines the JSON schema/partition amendment, verified mapping and exact decimal quantities.
 The TXT-oriented sections below remain a separate, unadmitted file profile.
 Future I/O entry points must call the gate; none are implemented yet.
 
@@ -44,10 +44,16 @@ Use [api_contract.md](api_contract.md) for the selected API's literal fields,
 partition field, lossless count semantics and pagination completeness. It has
 no file trailer. Source version 1, three TRF facility/market pairs and the schema are now pinned
 under SSV-T02. ADF, consolidated, ORF, TXT and other versions are rejected.
-Actual complete-partition/history conformance remains open. The following table specifies the
-retained TXT profile only and must not be used as an API field alias map.
+Actual complete-partition/history conformance remains open. The T03 parser
+accepts the six retained rows offline with exact Decimal quantities, including
+ten fractional values, without refetching or promotion. The initial integer-only
+assumption failed and is superseded by the [fractional-quantity amendment](api_contract.md#ssv-t03-fractional-quantity-amendment).
+Whole and fractional shares retain their supplied digits and scale; no rounding,
+truncation or six-decimal API cap is inferred. The following table specifies the
+legacy TXT profile only and must not be used as an API field alias map or as
+proof of current TXT numeric conformance.
 
-## TXT schema and types
+## Legacy TXT schema proposal — not admitted or current-schema proof
 
 | Provider field/concept | Proposed normalized field | Type and semantics |
 | --- | --- | --- |
@@ -62,11 +68,14 @@ retained TXT profile only and must not be used as an API field alias map.
 
 The exact current literal header must be pinned from a permitted source-shaped
 sample; the PDF's display labels alone do not approve a tolerant alias parser.
-Use explicit aliases only when verified and regression-tested. A non-integer,
-negative, malformed date or impossible count relationship invalidates promotion.
-SQLite columns must preserve counts beyond signed 64-bit where necessary; choose
-decimal text or explicitly bounded integer encoding and document it. Parquet
-must use an equally lossless integer/decimal type with a schema fingerprint.
+Use explicit aliases only when verified and regression-tested. Non-integer
+rejection belongs only to a separately verified integer TXT regime. For the API,
+nonfinite/negative quantities, malformed dates or impossible quantity relationships
+invalidate parsing; valid fractions are preserved.
+Future SQLite columns must preserve fractional shares and values beyond signed
+64-bit; choose canonical decimal text or a documented lossless scaled encoding.
+Parquet must use an equally lossless decimal type with a schema fingerprint;
+any storage precision limit must be explicit and reject, never round or truncate.
 
 ## Grain and identity
 
@@ -150,8 +159,8 @@ Provider retention requirements are unresolved and never inherit NAAIM's 365 day
 ## Proposed downstream artifact
 
 `finra-short-sale-volume-research/1` is a proposed file contract, not implemented.
-It contains dataset/scope/facility, requested/observed coverage, trade date, integer
-counts, ratio unit, nullable ratio, version token, capture clocks, method version
+It contains dataset/scope/facility, requested/observed coverage, trade date, exact decimal
+share quantities, ratio unit, nullable ratio, version token, capture clocks, method version
 and approved-use/source labels. It excludes credentials, local filesystem paths
 and raw source payloads. Export eligibility is checked against the rights profile.
 No QuantMeridian code, DB grant or cross-repository config is changed here.

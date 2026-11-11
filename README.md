@@ -34,8 +34,9 @@ ten authentic Nasdaq/NYSE lists reconcile. See the [acceptance record](specs/spe
 for the user-attested permission, evidence and exclusions. The closeout is merged;
 Spec012 now has an [access review](specs/spec012/source_review.md), approved-use
 admission and a strict three-TRF API schema/facility registry. Bounded version 1
-samples reconcile; parser, connector and complete-partition/history delivery
-remain unimplemented. Public API terms acceptance is user-attested. Databricks
+samples reconcile to its pure receipt-bound JSON parser. Whole and fractional
+share quantities remain exact Decimal values. Connector and complete-partition/
+history delivery remain unimplemented; next is SSV-T04 arithmetic/serialization. Public API terms acceptance is user-attested. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).
