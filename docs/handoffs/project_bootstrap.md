@@ -19,37 +19,35 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-11 current pickup — FOMC inventory and PostgreSQL
+## 2026-11-11 current pickup — FOMC-T03 in progress
 
-The user selected [Spec017](../../specs/spec017/README.md) implementation, reuse of
-the existing PostgreSQL location and a dedicated config folder. FOMC-T01/T02 are
-complete on `feat/spec017-fomc-inventory`: strict normalized inventory/identity,
-source-owned config and transactional PostgreSQL metadata snapshots. **Next is
-[FOMC-T03](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze)**:
-native HTML discovery and complete original-document archiving. The normalized
-candidate format is not a provider API; no native HTML adapter or source capture
-exists yet. Full text/chunks and optional embeddings remain later work.
+The user selected FOMC implementation, the existing PostgreSQL service and a
+pipeline-owned config folder. T01/T02 inventory metadata and configuration are
+complete. T03 now parses reviewed current/historical native page shapes and
+archives original received bytes locally and in the FOMC PostgreSQL schema.
+[Finish T03 using its exact checklist](../../specs/spec017/todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress):
+year-index coverage, addendum/HTML assets and additional failure/recovery
+evidence remain open. Issue-gated multi-page publication checks both archives,
+refuses to drop earlier source pages and rolls back if source linking fails. Start
+with offline characterization and bounded discovery of the official historical-year
+index; the checklist records the remaining work. Full text/chunks and optional
+embeddings are later work.
+
+[Bounded source evidence](../../specs/spec017/evidence/native_bronze_sample.json)
+records one current calendar, one meeting's PDF/HTML, and two previously
+captured historical pages, with exact filesystem and PostgreSQL readback. The
+parser flags a current notation vote; the 1936 page contains an ambiguous 1937
+Executive Committee label. No
+source-wide completeness is implied. No inventory run was published and no
+schedule was activated. The separate Bronze migration does not repurpose the
+six-table inventory catalog marker or current pointer.
 
 Use [config/fomc_meeting_minutes/](../../config/fomc_meeting_minutes/README.md).
-Ignored `pipeline.local.yml` points to existing `127.0.0.1:55438`, database
-`additional_market_data`, login `market_data`, role null and schema
-`fomc_meeting_minutes`; passwords remain environment-backed. Six source-owned
-inventory tables are initialized with **zero production inventory imports**.
-Invented integration data existed only in unique test schemas, all removed on
-teardown. No AAII table/config or other source adapter was reused by FOMC.
-The later archival slices must also store original bytes/full text/chunks in
-this same FOMC PostgreSQL namespace alongside filesystem originals.
-
-Verification: **823 offline tests passed, 15 optional skips**; separately **80
-focused FOMC checks passed** including five actual PostgreSQL tests. Real checks
-cover exact metadata/date/hash readback, histories, concurrent/idempotent retries,
-rollback, corruption refusal and empty inventories. Ruff/style and package checks
-pass. [Sanitized evidence](../../specs/spec017/evidence/postgres_inventory.json)
-records the actual scope; it does not certify minutes or historical coverage.
-QuantSmith working-tree verification still differs from its pin; used guidance
-was read from hash-verified pinned Git objects. NAAIM remains paused and schedules
-remain stopped. FINRA stays at SSV-T05 for its next continuation; the remaining
-securities-finance order is preserved.
+The ignored local config retains the existing PostgreSQL target, environment
+password and dedicated FOMC schema. Live raw files and local config are ignored;
+tests use isolated test schemas. QuantSmith's checkout remains different from
+its pin; adopted instructions were read from hash-verified pinned Git objects.
+NAAIM remains paused and FINRA stays at SSV-T05 for its next continuation.
 
 ## 2026-11-10 FINRA continuation and AAII manual refresh
 

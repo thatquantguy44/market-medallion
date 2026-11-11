@@ -1,0 +1,4 @@
+# Explicit per-run budgets; select the number of URLs before acquisition.
+max_requests: 3
+inventory_max_bytes: 2000000
+document_max_bytes: 5000000

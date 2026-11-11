@@ -1,0 +1,85 @@
+{
+  "description": "Bounded official-source sample; two historical pages imported from exact verified local captures; no coverage claim or text extraction",
+  "route": "direct",
+  "items": [
+    {
+      "capture_id": "20c300b3-661c-40fc-abe8-1492217103ce",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "captured_at": "2026-11-11T05:26:27.918025+00:00",
+      "http_status": 200,
+      "size_bytes": 166350,
+      "sha256": "369c475c3c1f54ad3955b6a63c56ca4ddb108aa51f17744ac07cd1ea48a8202b",
+      "accepted": true,
+      "body_complete": true
+    },
+    {
+      "capture_id": "d3aa0bcc-363e-4441-af7e-3da50a4a0692",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20260128.pdf",
+      "captured_at": "2026-11-11T05:26:28.130328+00:00",
+      "http_status": 200,
+      "size_bytes": 468555,
+      "sha256": "7565db1bbe4d562b808d50a4150d2b42d00ac87a3acb1d6d2a9eed5e4974e743",
+      "accepted": true,
+      "body_complete": true
+    },
+    {
+      "capture_id": "d247f6e5-4309-42ae-ac6c-72b86a577692",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20260128.htm",
+      "captured_at": "2026-11-11T05:26:28.324736+00:00",
+      "http_status": 200,
+      "size_bytes": 127869,
+      "sha256": "f6e1637aed10b3a8bb96160d7be97b51d5652136427766c491ee3041469cf183",
+      "accepted": true,
+      "body_complete": true
+    },
+    {
+      "capture_id": "8a0ec066-03d6-4551-b257-d16f4d386af8",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1936.htm",
+      "captured_at": "2026-11-11T05:16:44.423543+00:00",
+      "http_status": 200,
+      "size_bytes": 85034,
+      "sha256": "7db2d8b9bc1f219e52e025bd2da22d8da7442872c794b9e632a373045200d64e",
+      "accepted": true,
+      "body_complete": true,
+      "offline_native_conformance": {
+        "meetings": 12,
+        "documents": 15,
+        "excluded_links": 0,
+        "issues": [
+          {
+            "code": "conflicting_year",
+            "label": "November 20, 1937 (125 KB PDF)"
+          }
+        ]
+      }
+    },
+    {
+      "capture_id": "2ff83f98-45a8-4330-877b-3279f53bf2e5",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1967.htm",
+      "captured_at": "2026-11-11T05:16:44.621252+00:00",
+      "http_status": 200,
+      "size_bytes": 100222,
+      "sha256": "d0635c6e58c6c7ff3bc1e5591d092f87e9e8462711d98ca132fba1fc6fce612d",
+      "accepted": true,
+      "body_complete": true,
+      "offline_native_conformance": {
+        "meetings": 15,
+        "documents": 39,
+        "excluded_links": 73,
+        "issues": []
+      }
+    }
+  ],
+  "inventory": {
+    "meetings": 56,
+    "documents": 92,
+    "issues": [
+      {
+        "code": "unsupported_meeting_label",
+        "label": "August 22 (notation vote) 2025"
+      }
+    ]
+  },
+  "storage": "filesystem and FOMC PostgreSQL Bronze, byte-for-byte readback",
+  "scheduled": false
+}

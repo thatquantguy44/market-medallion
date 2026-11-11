@@ -1,15 +1,15 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** FOMC-T01/T02 complete: normalized inventory contracts, own configuration
-and PostgreSQL inventory metadata storage. Native HTML acquisition, full-document
-archival, text/chunks and jobs remain unimplemented. Next: [FOMC-T03](todo.md).
+**Status:** FOMC-T01/T02 complete; FOMC-T03 is in progress with reviewed native
+page parsing, bounded acquisition, original-byte storage in filesystem and
+PostgreSQL, and explicit capture-to-inventory links. A five-item bounded sample
+reconciles; issue-gated multi-page publication is implemented, while source-wide
+coverage, text/chunks and jobs remain incomplete. Next:
+[FOMC-T03 handoff](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
 **Reviewed:** 2026-11-11. **Pipeline ID:** `fomc-meeting-minutes`.
-**Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`
-(inventory/config/PostgreSQL metadata only). Configuration owns
-[`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
-The user selected this FOMC first slice for implementation. FINRA remains at
-SSV-T05 for its next continuation; the remaining securities-finance order and
-NAAIM pause are preserved.
+**Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
+Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
+FINRA remains at SSV-T05; NAAIM remains paused.
 
 ## Objective and scope
 
@@ -59,8 +59,9 @@ These documentary checks do not certify the complete archive or extraction quali
 
 Use the existing Python 3.12, manifest-driven medallion conventions. The
 implemented source-owned files include `manifest.py`, `data/inventory.py`,
-`config.py` and `io/postgres.py`. Future files are `source.py`, `data/text.py`, `io/bronze.py`,
-`data/chunks.py`, `io/catalog.py`, `cli.py` and, later, `dagster_defs.py`.
+`config.py`, `data/native.py`, `io/postgres.py`, `io/acquisition.py` and
+`io/bronze.py`. Future work includes `data/text.py`, `data/chunks.py`, a linked
+catalog, a CLI and, later, Dagster definitions.
 Keep the parsing core pure; select and pin PDF/OCR dependencies during the
 first extraction slice.
 
@@ -109,12 +110,17 @@ and a transactional current pointer. Imports are marked `invented_fixture` or
 `normalized_inventory`; neither is a certified source archive. Original-document
 versions and provider first-seen clocks are not assigned by this metadata store.
 
-Later archive/text slices must save original HTML/PDF bytes in PostgreSQL `bytea`
-as well as immutable filesystem files, complete text in `text`, and document/page/
-chunk lineage in source-owned tables. Migrations and database/file publication
-failure behavior need explicit tests before those slices are accepted. T02's
-live initialization created only the six empty inventory tables on the existing
-database; invented integration data was confined to temporary test schemas.
+T03 adds an independently marked Bronze migration with `bronze_schema_migrations`
+and `bronze_captures`, retaining original bytes in PostgreSQL `bytea` and the
+filesystem. A separate lineage migration adds `bronze_inventory_links` and
+`bronze_document_links`, linking exact URLs to existing inventory claims without
+moving the inventory pointer. Five bounded captures have passed exact
+readback; the inventory catalog remains empty. Issue-gated publication atomically
+links each source capture and refuses to drop earlier source pages. Year-index
+completeness, hash-based original deduplication, full text, document versions and
+chunks remain future work. The current archive keeps one byte copy per capture. Database failures after
+local staging can be retried; startup and pre-receipt crash evidence need further
+work before T03 is accepted.
 See [configuration/commands](../../config/fomc_meeting_minutes/README.md) and the
 [current implementation handoff](todo.md).
 
@@ -209,17 +215,13 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC09 (enhancement) | Injected provider failures, oversized inputs and budget exhaustion leave the core archive/catalog usable, record retryable outcomes and accurate embedding coverage, and cannot publish a falsely complete index. Offline replay makes no model call. |
 | FOMC-AC10 (enhancement) | Retrieval fixtures enforce selected versions, publication/capture cutoffs and OCR eligibility and resolve every result to exact source pages. Query/index profiles match; any approximate index is evaluated against exact-search results. |
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
-| FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. This is not complete at T02. |
+| FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Full archive/text/chunk reconciliation remains incomplete. |
 
-**Current pickup:** [FOMC-T03 in todo.md](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze).
-The user selected implementation and the PostgreSQL backend. T01's [normalized
-inventory contract](inventory_contract.md) passes 61 invented-fixture tests. T02
-passes 14 config tests and five real PostgreSQL tests; normal offline runs skip
-those five integration tests unless explicitly configured. Native HTML discovery
-and complete-document acquisition/storage remain the next work. Embeddings are
-still independently selected enhancement work, not a core acceptance prerequisite.
+**Current pickup:** [finish FOMC-T03](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
+The archive is a bounded foundation, not a historical backfill or text index.
+Embeddings remain an independently selected enhancement.
 
-Current verification commands (PostgreSQL integration is opt-in; see the config README):
+Verification commands (PostgreSQL integration is opt-in; see the config README):
 
 ```bash
 .venv/bin/python -m pytest -q tests/test_fomc_*.py
@@ -229,10 +231,7 @@ Current verification commands (PostgreSQL integration is opt-in; see the config 
 .venv/bin/python -m build --no-isolation
 ```
 
-Use explicit types and frozen records, for example
-`@dataclass(frozen=True)` for a document reference holding `document_kind: str`,
-`source_url: str` and immutable meeting associations. Always preserve originals,
-source identity and capture clocks. Review source/date inconsistencies and any
-third-party notice before dependent acquisition. Never fabricate missing text,
-backdate knowledge, silently replace minutes with another product, copy sibling
-runtime config/secrets, or enable live scheduling through this spec.
+Preserve originals, source identity and capture clocks. Review source/date
+inconsistencies and third-party notices before dependent acquisition. Do not
+fabricate missing text, backdate knowledge, replace minutes with another product,
+copy sibling runtime config/secrets, or enable live scheduling through this spec.

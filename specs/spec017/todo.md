@@ -24,34 +24,77 @@ corruption refusal, empty inventories and reinitialization. Tests use isolated
 FOMC schemas; the production schema is initialized with zero inventory imports.
 Configuration and operating commands: [config folder](../../config/fomc_meeting_minutes/README.md).
 The [sanitized backend evidence](evidence/postgres_inventory.json) records actual
-location/schema and verification scope. Complete documents/text are not stored yet.
+location/schema and verification scope. At T02, complete documents/text were not stored.
 
 Full offline regression: **823 passed, 15 optional skips**. The five FOMC
 PostgreSQL tests additionally passed against the existing service in isolated
 schemas, for **80 focused checks** total. Ruff lint/format and build/artifact
 checks pass. Local config remains ignored and owner-only.
 
-## FOMC-T03 — native inventory adapter and immutable Bronze (next)
+## FOMC-T03 — native inventory adapter and immutable Bronze (in progress)
 
-Traces native-source integration of FOMC-AC01 plus FOMC-AC02/FOMC-AC12.
-First split native page discovery and raw-document archival into separately
-reviewable tasks (at most five substantive files each). Then:
+Split into reviewable pieces: discovery (`data/native.py`, `test_fomc_native.py`),
+archive (`io/bronze.py`, `test_fomc_bronze.py`, PostgreSQL tests), and bounded
+acquisition (`io/acquisition.py`, `acquisition.example.yml`, acquisition tests).
 
-- [ ] Characterize current/historical native HTML from the official source
-  shapes linked in [README](README.md#official-sources-and-access). Parse only
-  reviewed minutes/predecessor labels into T01 candidates, preserving exclusions,
-  pending/not-listed evidence and dates/session qualifiers. Flag ambiguous labels
-  such as the 1937 Executive Committee link under the 1936 page; do not guess.
-- [ ] Capture original inventories/documents/addenda before extraction, with
-  exact hash/bytes, safe HTTP evidence and actual capture clocks. Add explicit
-  finite acquisition controls using the run-scoped shared HTTP client and
-  pipeline-owned network config. Local import paths remain network-free.
-- [ ] Add PostgreSQL original-byte storage and lineage in the same FOMC schema,
-  alongside filesystem originals. Introduce a reviewed catalog/schema migration;
-  do not silently repurpose the T02 inventory contract or marker.
-- [ ] Prove rejection evidence, raw-byte readback and database/file failure
-  behavior with invented fixtures, then record bounded actual-source conformance
-  separately. No corpus-wide backfill is implicit in the first live sample.
+Implemented: an offline HTML parser for reviewed current/year-page shapes returns
+normalized candidates, exclusions and issues; explicit pending labels are not
+inferred from a clock. It detects the 1936-page/1937 Executive Committee label
+and the 2025 notation vote without guessing. Archived source-review pages for
+1936 and 1967 provide bounded parser characterization, not corpus-wide coverage.
+The run-scoped HTTP adapter refuses redirects, uses configured request/byte budgets,
+and retains a marked incomplete prefix if a response exceeds its cap. Original
+response bytes and a safe receipt are staged on disk before PostgreSQL. Failed
+HTTP responses are retained; a failed database write leaves retryable local
+bytes without a commit marker. Separate `fomc-bronze-postgres/1` and
+`fomc-bronze-lineage-postgres/1` migrations add capture and link tables without changing T02's catalog marker or
+current pointer. Exact URL/kind checks enforce caller-asserted links to existing
+inventory runs; bundled documents resolve to all retained meeting associations.
+GET transport failures retain sanitized rejected receipts; failed payload writes
+leave a local attempt receipt when that receipt was successfully written. A
+publication method checks matching committed filesystem/database bytes, rejects
+parser issues or empty pages, and atomically saves and links a union of up to 128
+pages. Rollback on link failure and refusal to drop previously included source
+pages are verified. The union is not a source-wide completeness claim.
+
+[Bounded source evidence](evidence/native_bronze_sample.json): one official
+calendar, the PDF and HTML for a single meeting, and locally imported, previously
+captured 1936 and 1967 historical pages were read back byte-for-byte from both
+filesystem and PostgreSQL. Five original captures now exist in the production
+FOMC Bronze tables; **zero normalized inventory runs** have been published. Current-page parsing returns an unresolved notation-vote
+issue. No source-wide completeness or text extraction is claimed.
+
+**Next pickup to finish T03:** Start by characterizing the official historical-year
+index with offline fixtures and implementing bounded, reviewed year-page discovery
+in the FOMC package. Record the expected page set and unresolved source labels in
+the inventory evidence before changing publication behavior. Then:
+
+- Enumerate the official historical-year index and define an explicit expected
+  page set before certifying a union as complete. Publication prevents dropping
+  existing source pages, but cannot detect pages that were never discovered.
+  Standalone linking methods associate existing runs and do not prove derivation.
+- Resolve/document addendum and HTML-asset discovery, inventory-year enumeration,
+  unknown native labels and pending/missing cases with source-specific fixtures.
+  Unknown/addendum labels are issues, not proof of exclusion or completeness.
+- Add content-addressed original storage with an explicit reviewed migration;
+  the current implementation retains one byte copy per capture, so repeated or
+  bundled artifacts are not yet deduplicated by hash. Preserve every URL and
+  association while deduplicating the original bytes.
+- Extend interrupted-write and crash-recovery evidence across every file/database
+  boundary. Retry currently applies after both local payload and receipt exist;
+  startup-probe failures and failures before the receipt is written do not yet
+  produce a full acquisition receipt.
+- Extend bounded historical conformance and verify supported label regimes before
+  certifying T03; do not backfill, start a schedule or advance a catalog merely
+  because the current five-item sample passed.
+
+Verification: **841 offline tests passed, 19 optional skips**; separately all
+**9 FOMC PostgreSQL integration tests passed** in isolated schemas. Ruff and
+source/wheel builds pass. These results describe this T03 checkpoint.
+
+The next slice after T03 is T04 complete text/extraction. T03's T01 candidate
+parse and Bronze success do not publish complete documents/text to downstream
+consumers. Real source data is ignored; only sanitized aggregate evidence is saved.
 
 ## Later slices (not started)
 
