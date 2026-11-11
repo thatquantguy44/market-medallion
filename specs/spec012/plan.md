@@ -2,6 +2,8 @@
 
 **Status:** SSV-T01–T04 complete for the selected three-TRF API profile, 2026-11-10.
 Use [todo.md](todo.md) as the single task list.
+The [next-agent handoff](README.md#next-agent-handoff) is the canonical pickup
+point for SSV-T05 on `feat/spec012-finra-access-review`.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
 

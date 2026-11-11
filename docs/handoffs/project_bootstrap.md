@@ -29,6 +29,8 @@ explicit rolling acquisition-date guards, a pure receipt-bound JSON parser,
 shared quantity validation/text readback and per-observation ratios are implemented.
 Reusable acquisition, warehouse, export and job remain absent.
 **Next: SSV-T05**, immutable raw/rejected-capture archiving and redacted receipts.
+Start with the [Spec012 next-agent handoff](../../specs/spec012/README.md#next-agent-handoff),
+which records commit `9a506d3`, planned files, scope limits and verification.
 T04's numeric helpers do not complete aggregate/temporal Gold or publication.
 
 The user confirmed Public credentials and accepted API terms for personal

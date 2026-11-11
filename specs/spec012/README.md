@@ -24,6 +24,67 @@ Read the [program roadmap](../../docs/securities_finance/README.md),
 Spec011 delivery precedes this work by priority; its data is not a technical
 dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
+## Next agent handoff
+
+**Start here:** this section, then [SSV-T05 in the task list](todo.md#ssv-t05--archive-input-and-rejected-capture-evidence).
+Continue on `feat/spec012-finra-access-review`. The last implementation checkpoint
+is commit `9a506d3` (T04), already pushed; T01–T04 are complete and T05–T16 have
+not started. G0 and parser Checkpoint A are ready for the selected three-TRF API
+profile; G1/G2 and local publication remain open.
+
+Before coding, read the root [AGENTS.md](../../AGENTS.md), the
+[master handoff](../../docs/handoffs/project_bootstrap.md), this spec's
+[plan](plan.md), [data contract](data_contract.md),
+[API contract](api_contract.md) and [source review](source_review.md).
+Use the repository's pinned engineering workflows and retain the documented
+QuantSmith working-tree verification caveat; do not refresh either library.
+
+**Next bounded slice — SSV-T05 / SSV-REQ05 / SSV-AC05:** implement immutable raw
+input and rejected-capture evidence in the planned source-owned `io/bronze.py`
+and characterize it with `tests/test_ssv_bronze.py`. Add the package initializer
+only as needed. Start with invented valid and malformed API JSON plus scope
+receipts, using the existing fixtures and pure parser. Required outcomes:
+
+- Archive the original bytes and SHA-256, manifest/schema identity, run/capture
+  lineage and sanitized request/response scope evidence before parsing.
+- Preserve the same raw evidence when parsing rejects the input. A rejection
+  must not become a successful observation, coverage result or publication.
+- Enforce the applicable approved-use admission before I/O. Characterize
+  credential redaction before anything is persisted or logged; authentication
+  secrets, tokens, authorization/cookie headers and proxy credentials do not
+  belong in Bronze or receipts.
+
+Use [the existing parser](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/api.py),
+[quantity codec](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/quantities.py)
+and [ratio helpers](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/gold.py).
+Preserve fractional Decimal shares and the fixed T04 ratio method. The retained
+T02 `captured_at` is request start, not a Silver first-seen clock; do not backdate
+knowledge or apply today's acquisition window to archived input. Complete-partition
+proof and cross-page replacement remain later work. No provider acquisition,
+warehouse, export or Dagster job is part of T05. Keep NAAIM paused and schedules
+stopped. Secrets and retained provider payloads remain ignored.
+
+**Verification and closeout:** after adding the Bronze tests, run:
+
+```bash
+.venv/bin/python -m pytest -q tests/test_ssv_bronze.py
+.venv/bin/python -m pytest -q
+.venv/bin/ruff check .
+.venv/bin/ruff format --check .
+.venv/bin/python -m build --no-isolation
+```
+
+Last code verification at T04: **748 passed, 10 optional integrations skipped**;
+266 focused FINRA tests, Ruff and package checks passed. [T04 offline evidence](evidence/t04_semantics_conformance.json)
+reconciles 18 exact quantity round trips and 12 ratio checks in six unchanged
+retained source rows; all sampled pages remain partial and no observations were
+promoted. Ordinary tests must not depend on those ignored provider samples.
+When T05 passes, update [todo.md](todo.md), this section, the
+[master pipeline register](../../docs/pipelines.md),
+[program readiness tracker](../../docs/securities_finance/roadmap.md) and
+[master handoff](../../docs/handoffs/project_bootstrap.md) with actual evidence.
+The next planned slice after T05 is **SSV-T06**, one invented local SQLite partition.
+
 ## Objective and research questions
 
 Build a reproducible view of reported short-sale flow by trade date, security

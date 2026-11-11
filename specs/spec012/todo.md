@@ -8,6 +8,8 @@ SSV-T03/T04 are **complete**; SSV-T05–SSV-T16 are **not started**. Prefix path
 path is shown. Each task is S/M (at most five likely files); split if it grows.
 Tests below are future targets except the implemented SSV-T01–T04 suites.
 [README.md](README.md) defines their acceptance IDs.
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T05 pickup
+scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
 
