@@ -22,7 +22,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
-| [017](spec017/README.md) | fomc-meeting-minutes | Lightweight draft for complete current/historical official minutes and separately typed predecessors; original documents, full text, revisions and coverage. No connector or archive implemented; does not change build priority. |
+| [017](spec017/README.md) | fomc-meeting-minutes | Lightweight draft for complete current/historical official minutes and separately typed predecessors; original documents, full text, versioned chunks, revisions and coverage, with optional embeddings as a later enhancement. No connector or archive implemented; does not change build priority. |
 
 ## Presidential pipeline integration planning
 

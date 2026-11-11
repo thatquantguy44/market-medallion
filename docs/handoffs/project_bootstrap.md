@@ -23,7 +23,8 @@ new live schedules default stopped.
 
 **Planning addition:** [Spec017](../../specs/spec017/README.md) is the lightweight
 FOMC minutes archive draft: complete original documents, current/history inventory,
-full text/OCR status and observed revisions. Its embedded first-slice handoff is
+full text/OCR status, versioned chunks and observed revisions, with embeddings
+as an optional later enhancement. Its embedded first-slice handoff is
 for future selection; no archive or connector exists. The current FINRA SSV-T05
 pickup, securities-finance order and NAAIM pause remain unchanged.
 
