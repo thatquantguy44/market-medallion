@@ -12,6 +12,7 @@ from market_data_pipeline.pipelines.fomc_meeting_minutes.manifest import manifes
 
 MIGRATION = "fomc-bronze-postgres/1"
 LINK_MIGRATION = "fomc-bronze-lineage-postgres/1"
+DISCOVERY_MIGRATION = "fomc-bronze-discovery-postgres/1"
 _HEADERS = {"content-type", "content-length", "last-modified", "date", "etag"}
 
 
@@ -200,8 +201,8 @@ class PostgresBronzeStore:
             if existing and existing != base:
                 raise ValueError("incomplete or unowned FOMC Bronze schema")
             if not existing:
-                if tables & links:
-                    raise ValueError("unowned FOMC Bronze lineage tables")
+                if tables & (links | {"bronze_inventory_discovery"}):
+                    raise ValueError("unowned FOMC Bronze lineage/discovery tables")
                 conn.execute(
                     store._query(
                         "CREATE TABLE {schema}.bronze_schema_migrations "
@@ -230,11 +231,16 @@ class PostgresBronzeStore:
                         store._query("SELECT migration_id FROM {schema}.bronze_schema_migrations")
                     )
                 }
-                if migrations not in ({MIGRATION}, {MIGRATION, LINK_MIGRATION}):
+                if migrations not in (
+                    {MIGRATION},
+                    {MIGRATION, LINK_MIGRATION},
+                    {MIGRATION, LINK_MIGRATION, DISCOVERY_MIGRATION},
+                ):
                     raise ValueError("FOMC Bronze migration identity mismatch")
             if LINK_MIGRATION in migrations:
                 if tables & links != links:
                     raise ValueError("incomplete FOMC Bronze lineage migration")
+                self._migrate_discovery(tables, migrations)
                 return
             if tables & links:
                 raise ValueError("unowned FOMC Bronze lineage tables")
@@ -264,6 +270,45 @@ class PostgresBronzeStore:
                 ),
                 (LINK_MIGRATION,),
             )
+
+            self._migrate_discovery(tables, migrations)
+
+    def _migrate_discovery(self, tables, migrations):
+        table = "bronze_inventory_discovery"
+        if DISCOVERY_MIGRATION in migrations:
+            if table not in tables:
+                raise ValueError("incomplete FOMC Bronze discovery migration")
+            return
+        if table in tables:
+            raise ValueError("unowned FOMC Bronze discovery table")
+        self.store.connection.execute(
+            self.store._query(
+                "CREATE TABLE {schema}.bronze_inventory_discovery ("
+                "run_id uuid PRIMARY KEY REFERENCES {schema}.inventory_runs(run_id), "
+                "evidence jsonb NOT NULL, evidence_sha256 text NOT NULL)"
+            )
+        )
+        self.store.connection.execute(
+            self.store._query(
+                "INSERT INTO {schema}.bronze_schema_migrations (migration_id) VALUES (%s)"
+            ),
+            (DISCOVERY_MIGRATION,),
+        )
+
+    def read_inventory_discovery(self, run_id):
+        """Read hash-checked selected-page evidence, never claim complete documents."""
+        row = self.store.connection.execute(
+            self.store._query(
+                "SELECT evidence,evidence_sha256 FROM {schema}.bronze_inventory_discovery "
+                "WHERE run_id=%s"
+            ),
+            (_identity(run_id),),
+        ).fetchone()
+        if row is None:
+            return None
+        if hashlib.sha256(_json(row[0])).hexdigest() != row[1]:
+            raise ValueError("FOMC discovery evidence hash mismatch")
+        return row[0]
 
     def save_capture(self, receipt, payload):
         store, conn = self.store, self.store.connection
@@ -403,12 +448,19 @@ class PostgresBronzeStore:
         """Publish one page only when it does not drop existing source-page coverage."""
         return self.publish_inventory_captures([capture_id], manifest, root=root)
 
-    def publish_inventory_captures(self, capture_ids, manifest, *, root):
+    def publish_inventory_captures(self, capture_ids, manifest, *, root, historical_years=None):
         """Atomically publish an issue-free page union and link every archived page.
 
-        Source-page retention prevents accidental shrinking of a prior snapshot.
-        It does not certify that the source's complete year inventory was captured.
+        Passing historical_years=(start,end) requires both source inventories and
+        exactly their discovered page set for that bounded historical selection.
+        Without it this remains a metadata union with no discovery coverage claim.
+        Neither mode certifies complete source documents or extracted text.
         """
+        from market_data_pipeline.pipelines.fomc_meeting_minutes.data.discovery import (
+            CALENDAR_URL,
+            INDEX_URL,
+            discover_inventory_pages,
+        )
         from market_data_pipeline.pipelines.fomc_meeting_minutes.data.inventory import (
             inventory_from_dict,
         )
@@ -417,6 +469,10 @@ class PostgresBronzeStore:
         )
 
         manifest_from_dict(manifest.to_dict())
+        if historical_years is not None and (
+            not isinstance(historical_years, tuple) or len(historical_years) != 2
+        ):
+            raise ValueError("FOMC discovery requires an explicit historical year pair")
         if (
             not isinstance(capture_ids, (list, tuple))
             or not 1 <= len(capture_ids) <= 128
@@ -424,7 +480,7 @@ class PostgresBronzeStore:
         ):
             raise ValueError("FOMC publication requires 1–128 distinct captures")
         digest = hashlib.sha256(_json(manifest.to_dict())).hexdigest()
-        pages = []
+        pages, captures = [], {}
         urls = set()
         for capture_id in capture_ids:
             receipt, payload = self.read_capture(capture_id)
@@ -440,7 +496,36 @@ class PostgresBronzeStore:
             if receipt["source_url"] in urls:
                 raise ValueError("FOMC publication requires one capture per source page")
             urls.add(receipt["source_url"])
-            parsed = parse_native_page(payload, receipt["source_url"], manifest)
+            captures[receipt["source_url"]] = (capture_id, receipt, payload)
+        evidence = None
+        if INDEX_URL in urls and historical_years is None:
+            raise ValueError("FOMC year-index publication requires explicit historical years")
+        if historical_years is not None:
+            if not {INDEX_URL, CALENDAR_URL}.issubset(urls):
+                raise ValueError("FOMC discovery requires both source inventories")
+            discovery = discover_inventory_pages(
+                captures[INDEX_URL][2],
+                captures[CALENDAR_URL][2],
+                manifest,
+                start_year=historical_years[0],
+                end_year=historical_years[1],
+            )
+            if discovery.issues:
+                raise ValueError("FOMC inventory has unresolved discovery issues")
+            if urls != set(discovery.expected_pages):
+                raise ValueError("FOMC inventory does not match discovered expected pages")
+            evidence = {
+                "schema_id": "fomc-inventory-publication-discovery/1",
+                "coverage_kind": "selected_inventory_pages",
+                "manifest_sha256": digest,
+                "discovery": discovery.to_dict(),
+                "capture_ids": {url: captures[url][0] for url in sorted(urls)},
+            }
+            pages.append({"source_page_url": INDEX_URL, "meetings": []})
+        for url, (_, receipt, payload) in sorted(captures.items()):
+            if url == INDEX_URL:
+                continue
+            parsed = parse_native_page(payload, url, manifest)
             if parsed.issues or not parsed.inventory.meetings:
                 raise ValueError("FOMC inventory has unresolved discovery issues or no meetings")
             meetings = {m.meeting_id: m for m in parsed.inventory.meetings}
@@ -489,4 +574,16 @@ class PostgresBronzeStore:
             result = self.store.save_inventory(union, manifest, input_kind="normalized_inventory")
             for capture_id in capture_ids:
                 self.link_inventory(capture_id, result["run_id"])
+            if evidence is not None:
+                self.store.connection.execute(
+                    self.store._query(
+                        "INSERT INTO {schema}.bronze_inventory_discovery "
+                        "(run_id,evidence,evidence_sha256) VALUES (%s,%s,%s)"
+                    ),
+                    (
+                        result["run_id"],
+                        self.store._Jsonb(evidence),
+                        hashlib.sha256(_json(evidence)).hexdigest(),
+                    ),
+                )
         return result

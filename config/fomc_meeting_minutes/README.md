@@ -2,7 +2,9 @@
 
 This pipeline owns this folder and the `fomc_meeting_minutes` PostgreSQL schema.
 The pipeline validates inventory candidates, parses reviewed native HTML shapes,
-and archives bounded source responses in this schema and on disk. Year-index completeness, full text, chunks, jobs and embeddings remain open.
+and archives bounded source responses in this schema and on disk. Bounded historical-year discovery and expected-page publication checks are
+implemented; source-wide completeness, full text, chunks, jobs and embeddings
+remain open.
 
 Copy `pipeline.example.yml` to ignored `pipeline.local.yml`. Paths resolve against
 the configuration file's directory. The local configuration prepared for this
@@ -84,3 +86,25 @@ Ordinary offline tests leave these integration tests skipped. Do not import
 invented fixtures into the production FOMC schema; current production inventory
 tables remain empty. Five bounded source captures are stored in Bronze; they do
 not constitute a published inventory or source-wide archive.
+
+## Bounded historical-year discovery
+
+Use `data.discovery.parse_historical_index` and `discover_inventory_pages` on
+archived source bytes to define the expected set before acquisition/publication.
+The latter requires explicit `start_year`/`end_year`, includes both source
+inventories and follows only discovered official year-page links. Acquisition
+still uses the existing per-run request/byte budgets and one selected client.
+
+`publish_inventory_captures(..., historical_years=(start,end))` re-derives that
+set from matching committed index/calendar captures, rejects source issues and
+missing/extra pages, and persists hashed selected-page evidence with all links
+and the current pointer in one transaction. `read_inventory_discovery(run_id)`
+verifies that evidence on readback. The separate explicit
+`fomc-bronze-discovery-postgres/1` migration adds `bronze_inventory_discovery`;
+verification has used only isolated test schemas, leaving production unchanged.
+Legacy publication without bounds retains no discovery coverage claim.
+
+See the [discovery contract](../../specs/spec017/discovery_contract.md) for limits,
+rollback, API examples and the known source issues. The new bounded index request
+is local review evidence only. Production remains at five Bronze captures and
+zero inventory runs; this increment performs no year-page backfill.

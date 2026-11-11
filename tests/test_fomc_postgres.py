@@ -379,3 +379,199 @@ def test_fomc_multipage_publication_rejects_partial_replacement(store, tmp_path)
         bronze.publish_inventory_capture(ids[0], manifest, root=tmp_path)
     assert store.read_inventory() == inventory and store.run_count() == 1
     assert saved["inserted"]
+
+
+@pytest.fixture
+def discovered_captures(store, tmp_path):
+    from datetime import datetime
+
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import (
+        PostgresBronzeStore,
+        capture,
+    )
+
+    manifest = load_manifest(Path("manifests/fomc-meeting-minutes.yml"))
+    bronze = PostgresBronzeStore(store)
+    bronze.migrate()
+    base = "https://www.federalreserve.gov/monetarypolicy/"
+    samples = {
+        "fomc_historical_year.htm": Path(
+            "tests/fixtures/fomc_meeting_minutes/invented-year-index.html"
+        ).read_bytes(),
+        "fomccalendars.htm": b"""<div class="panel">
+        <h4 class="panel-heading">1938 FOMC Meetings</h4>
+        <div class="fomc-meeting"><div class="fomc-meeting__month">June</div>
+        <div class="fomc-meeting__date">16-17</div></div></div>""",
+    }
+    for year in (1936, 1937):
+        samples[f"fomchistorical{year}.htm"] = f"""<div class="panel">
+        <h5 class="panel-heading">May 25 Meeting - {year}</h5><div class="panel-body">
+        <p><a href="/monetarypolicy/files/fake{year}.pdf">Historical Minutes</a></p>
+        </div></div>""".encode()
+    captures = {}
+    for name, content in samples.items():
+        captures[name] = capture(
+            tmp_path,
+            content,
+            manifest=manifest,
+            store=bronze,
+            source_url=base + name,
+            kind="inventory",
+            captured_at=datetime.now(UTC),
+            status=200,
+            headers={},
+            max_bytes=2000,
+        )["capture_id"]
+    return bronze, manifest, captures
+
+
+def test_fomc_discovered_publication_requires_every_expected_page(
+    store, tmp_path, discovered_captures
+):
+    bronze, manifest, captures = discovered_captures
+    ids = list(captures.values())
+    with pytest.raises(ValueError, match="expected pages"):
+        bronze.publish_inventory_captures(
+            ids[:-1], manifest, root=tmp_path, historical_years=(1936, 1938)
+        )
+    assert store.run_count() == 0 and store.read_inventory() is None
+    result = bronze.publish_inventory_captures(
+        ids, manifest, root=tmp_path, historical_years=(1936, 1938)
+    )
+    evidence = bronze.read_inventory_discovery(result["run_id"])
+    assert evidence["discovery"]["historical_years"] == [1936, 1937]
+    assert evidence["discovery"]["calendar_years"] == [1938]
+    assert len(evidence["discovery"]["expected_pages"]) == 4
+    assert set(evidence["capture_ids"].values()) == set(ids)
+    assert evidence["coverage_kind"] == "selected_inventory_pages"
+    assert (
+        store.connection.execute(
+            store._query("SELECT count(*) FROM {schema}.bronze_inventory_links")
+        ).fetchone()[0]
+        == 4
+    )
+    assert len(store.read_inventory()["meetings"]) == 3
+
+
+def test_fomc_discovery_publication_rollback_keeps_evidence_and_pointer_atomic(
+    store, tmp_path, discovered_captures, monkeypatch
+):
+    bronze, manifest, captures = discovered_captures
+
+    def fail_link(*args):
+        raise RuntimeError("simulated discovery link failure")
+
+    monkeypatch.setattr(bronze, "link_inventory", fail_link)
+    with pytest.raises(RuntimeError, match="discovery link failure"):
+        bronze.publish_inventory_captures(
+            list(captures.values()), manifest, root=tmp_path, historical_years=(1936, 1938)
+        )
+    assert store.run_count() == 0 and store.read_inventory() is None
+    assert (
+        store.connection.execute(
+            store._query("SELECT count(*) FROM {schema}.bronze_inventory_discovery")
+        ).fetchone()[0]
+        == 0
+    )
+
+
+def test_fomc_discovery_requires_both_roots_and_explicit_scope(
+    store, tmp_path, discovered_captures
+):
+    bronze, manifest, captures = discovered_captures
+    with pytest.raises(ValueError, match="explicit historical"):
+        bronze.publish_inventory_captures(list(captures.values()), manifest, root=tmp_path)
+    for omitted in ("fomc_historical_year.htm", "fomccalendars.htm"):
+        ids = [identity for name, identity in captures.items() if name != omitted]
+        with pytest.raises(ValueError, match="both source inventories"):
+            bronze.publish_inventory_captures(
+                ids, manifest, root=tmp_path, historical_years=(1936, 1938)
+            )
+    assert store.run_count() == 0
+
+
+def test_fomc_discovery_migration_upgrades_owned_state_and_refuses_damage(store, tmp_path):
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import (
+        DISCOVERY_MIGRATION,
+        PostgresBronzeStore,
+    )
+
+    bronze = PostgresBronzeStore(store)
+    bronze.migrate()
+    bronze.migrate()
+    store.connection.execute(store._query("DROP TABLE {schema}.bronze_inventory_discovery"))
+    with pytest.raises(ValueError, match="incomplete.*discovery"):
+        bronze.migrate()
+    store.connection.execute(
+        store._query("DELETE FROM {schema}.bronze_schema_migrations WHERE migration_id=%s"),
+        (DISCOVERY_MIGRATION,),
+    )
+    bronze.migrate()
+    assert store.run_count() == 0
+    store.connection.execute(
+        store._query("DELETE FROM {schema}.bronze_schema_migrations WHERE migration_id=%s"),
+        (DISCOVERY_MIGRATION,),
+    )
+    with pytest.raises(ValueError, match="unowned.*discovery"):
+        bronze.migrate()
+    assert bronze.read_inventory_discovery(str(uuid.uuid4())) is None
+
+
+def test_fomc_discovery_evidence_corruption_is_detected(store, tmp_path, discovered_captures):
+    bronze, manifest, captures = discovered_captures
+    result = bronze.publish_inventory_captures(
+        list(captures.values()), manifest, root=tmp_path, historical_years=(1936, 1938)
+    )
+    evidence = bronze.read_inventory_discovery(result["run_id"])
+    assert evidence["discovery"]["issues"] == []
+    with pytest.raises(RuntimeError, match="restore isolated mutation"):
+        with store.connection.transaction():
+            store.connection.execute(
+                store._query(
+                    "UPDATE {schema}.bronze_inventory_discovery SET evidence='{{}}'::jsonb"
+                )
+            )
+            with pytest.raises(ValueError, match="discovery evidence hash"):
+                bronze.read_inventory_discovery(result["run_id"])
+            raise RuntimeError("restore isolated mutation")
+    assert bronze.read_inventory_discovery(result["run_id"]) == evidence
+
+
+def test_fomc_discovery_evidence_write_failure_rolls_back_entire_publication(
+    store, tmp_path, discovered_captures
+):
+    from psycopg.errors import CheckViolation
+
+    bronze, manifest, captures = discovered_captures
+    store.connection.execute(
+        store._query(
+            "ALTER TABLE {schema}.bronze_inventory_discovery "
+            "ADD CONSTRAINT simulated_rejection CHECK(false) NOT VALID"
+        )
+    )
+    with pytest.raises(CheckViolation):
+        bronze.publish_inventory_captures(
+            list(captures.values()), manifest, root=tmp_path, historical_years=(1936, 1938)
+        )
+    assert store.run_count() == 0 and store.read_inventory() is None
+    assert (
+        store.connection.execute(
+            store._query("SELECT count(*) FROM {schema}.bronze_inventory_links")
+        ).fetchone()[0]
+        == 0
+    )
+    assert (
+        store.connection.execute(
+            store._query("SELECT count(*) FROM {schema}.bronze_inventory_discovery")
+        ).fetchone()[0]
+        == 0
+    )
+    store.connection.execute(
+        store._query(
+            "ALTER TABLE {schema}.bronze_inventory_discovery DROP CONSTRAINT simulated_rejection"
+        )
+    )
+    saved = bronze.publish_inventory_captures(
+        list(captures.values()), manifest, root=tmp_path, historical_years=(1936, 1938)
+    )
+    assert bronze.read_inventory_discovery(saved["run_id"])

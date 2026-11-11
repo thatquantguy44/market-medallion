@@ -3,8 +3,10 @@
 **Status:** FOMC-T01/T02 complete; FOMC-T03 is in progress with reviewed native
 page parsing, bounded acquisition, original-byte storage in filesystem and
 PostgreSQL, and explicit capture-to-inventory links. A five-item bounded sample
-reconciles; issue-gated multi-page publication is implemented, while source-wide
-coverage, text/chunks and jobs remain incomplete. Next:
+reconciles; issue-gated multi-page publication and a bounded historical-year
+discovery/expected-page gate are implemented, while addendum/assets,
+original-byte deduplication, recovery, source-wide coverage, text/chunks and jobs
+remain incomplete. Next:
 [FOMC-T03 handoff](todo.md#fomc-t03--native-inventory-adapter-and-immutable-bronze-in-progress).
 **Reviewed:** 2026-11-11. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
@@ -116,9 +118,14 @@ filesystem. A separate lineage migration adds `bronze_inventory_links` and
 `bronze_document_links`, linking exact URLs to existing inventory claims without
 moving the inventory pointer. Five bounded captures have passed exact
 readback; the inventory catalog remains empty. Issue-gated publication atomically
-links each source capture and refuses to drop earlier source pages. Year-index
-completeness, hash-based original deduplication, full text, document versions and
-chunks remain future work. The current archive keeps one byte copy per capture. Database failures after
+links each source capture and refuses to drop earlier source pages. A separate
+`fomc-bronze-discovery-postgres/1` migration stores hashed
+selected-page evidence atomically with the metadata inventory and links; it is
+verified only in isolated schemas. [Bounded year discovery](discovery_contract.md)
+requires archived index/calendar inputs and an exact expected-page set; it does
+not certify source-wide completeness. Hash-based original deduplication, full
+text, document versions and chunks remain future work. The current archive keeps
+one byte copy per capture. Database failures after
 local staging can be retried; startup and pre-receipt crash evidence need further
 work before T03 is accepted.
 See [configuration/commands](../../config/fomc_meeting_minutes/README.md) and the

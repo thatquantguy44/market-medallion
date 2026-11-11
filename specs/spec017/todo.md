@@ -64,17 +64,37 @@ filesystem and PostgreSQL. Five original captures now exist in the production
 FOMC Bronze tables; **zero normalized inventory runs** have been published. Current-page parsing returns an unresolved notation-vote
 issue. No source-wide completeness or text extraction is claimed.
 
-**Next pickup to finish T03:** Start by characterizing the official historical-year
-index with offline fixtures and implementing bounded, reviewed year-page discovery
-in the FOMC package. Record the expected page set and unresolved source labels in
-the inventory evidence before changing publication behavior. Then:
+**Year-index discovery increment (2026-11-11):** Complete for the bounded
+selected-page contract in [discovery contract](discovery_contract.md).
+`data/discovery.py` retains native year-link evidence and derives an explicit
+expected page set from archived index/calendar bytes. Unknown/conflicting/moved
+labels, gaps, empty panels and uncovered selected years block coverage. Opt-in
+publication with `historical_years=(start,end)` requires an exact expected-page
+match and commits hashed discovery evidence, capture links and the metadata
+pointer atomically. The separately marked discovery migration upgrades the
+owned Bronze schema; it is tested only in isolated FOMC schemas, not applied to
+production. Legacy metadata unions retain no discovery coverage claim.
 
-- Enumerate the official historical-year index and define an explicit expected
-  page set before certifying a union as complete. Publication prevents dropping
-  existing source pages, but cannot detect pages that were never discovered.
-  Standalone linking methods associate existing runs and do not prove derivation.
-- Resolve/document addendum and HTML-asset discovery, inventory-year enumeration,
-  unknown native labels and pending/missing cases with source-specific fixtures.
+[Source characterization](evidence/year_index_discovery.json) records one
+bounded official index request, 85 historical year links (1936–2020), retained
+calendar headings 2021–2027 and an explicit 87-page expected set. No year-page
+backfill was performed. The index is local review evidence only; production
+still holds five Bronze captures and zero inventory runs. The 2025 notation
+vote and 1936-page/1937 Executive Committee conflict remain blocking issues.
+
+Discovery increment verification: **866 offline tests passed, 25 optional skips**;
+**133 FOMC checks passed** with the FOMC integration configuration, including all
+**15 real PostgreSQL tests** in isolated schemas. Ruff lint/format and source/wheel
+builds pass. Artifact inspection confirms the discovery module, invented HTML
+fixture, contract and sanitized evidence are packaged; ignored runtime inputs
+are absent. No production schema migration or inventory publication was performed.
+
+**Next pickup to finish T03:** Continue with addendum/HTML-asset discovery and
+source-specific native-label fixtures. Preserve the expected-page and
+unresolved-label evidence before extending publication behavior. Then:
+
+- Resolve/document addendum and HTML-asset discovery, unknown native labels and
+  pending/missing cases with source-specific fixtures.
   Unknown/addendum labels are issues, not proof of exclusion or completeness.
 - Add content-addressed original storage with an explicit reviewed migration;
   the current implementation retains one byte copy per capture, so repeated or
@@ -90,7 +110,8 @@ the inventory evidence before changing publication behavior. Then:
 
 Verification: **841 offline tests passed, 19 optional skips**; separately all
 **9 FOMC PostgreSQL integration tests passed** in isolated schemas. Ruff and
-source/wheel builds pass. These results describe this T03 checkpoint.
+source/wheel builds pass. These results describe the earlier T03 checkpoint; see the discovery increment
+above for the new scope and verification.
 
 The next slice after T03 is T04 complete text/extraction. T03's T01 candidate
 parse and Bronze success do not publish complete documents/text to downstream

@@ -22,7 +22,9 @@ planned.
 **Current FOMC build:** [Spec017](specs/spec017/README.md) now implements normalized
 inventory/identity contracts and configurable PostgreSQL metadata snapshots in
 its own schema. Settings live in [config/fomc_meeting_minutes/](config/fomc_meeting_minutes/README.md).
-Next is native HTML discovery and original-document archiving; full minutes,
+T03 implements native parsing, dual-storage original captures and bounded
+historical-year discovery with an atomic expected-page publication gate. Addendum/
+asset discovery, original-byte deduplication and recovery remain open; full minutes,
 text/chunks and optional embeddings remain future slices. FINRA's continuation
 is SSV-T05; the remaining program order and NAAIM pause are preserved.
 
