@@ -64,5 +64,6 @@ unchanged; jobs/schedules remain absent.
 **931 regression tests passed with 46 optional skips; all 219 FOMC checks passed
 with PostgreSQL enabled**, including 36 isolated backend checks. Ruff lint/format,
 diff and package/artifact checks passed. Results are recorded in the evidence.
-**Next: T05 deterministic chunks**, preserving exact offsets, page citations,
-profile IDs and explicit OCR/review eligibility. Broader acquisition remains T06.
+At this checkpoint T05 was next. Its later [acceptance](t05_acceptance.md) records
+deterministic chunk coverage, exact citations, coherent generations and explicit
+review eligibility. Broader acquisition remains T06.

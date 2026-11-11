@@ -1,11 +1,11 @@
 # FOMC meeting-minutes configuration
 
-T01–T04 are accepted locally for the **1990-onward bounded archive/native-text
-foundation**. This folder owns the FOMC operating settings.
-[T04 acceptance](../../specs/spec017/t04_acceptance.md),
-[text contract](../../specs/spec017/text_contract.md) and
-[evidence](../../specs/spec017/evidence/t04_extraction.json) record actual state.
-T05 deterministic chunks is next. No FOMC job/schedule is enabled.
+T01–T05 are accepted locally for the **1990-onward bounded archive, native-text
+and chunk foundation**. This folder owns the FOMC operating settings.
+[T05 acceptance](../../specs/spec017/t05_acceptance.md),
+[chunks contract](../../specs/spec017/chunks_contract.md) and
+[evidence](../../specs/spec017/evidence/t05_chunks.json) record actual state.
+T06 bounded acquisition/operations is next. No FOMC job/schedule is enabled.
 
 ## Configuration and scope
 
@@ -35,7 +35,9 @@ official minutes href is explicitly unavailable. The archive holds 72 captures
 checks. T04 extracts all 12 archived document representations into 74 PDF pages /
 108 text units (616,712 characters): seven native-extracted, five review-required.
 The text catalog records the bounded selection and outstanding archive/review gaps.
-Full acquisition of all declared documents and accuracy review remain incomplete.
+T05 adds 12 chunk sets: 241 chunks (166 eligible, 75 review-flagged), with exact
+source-unit coverage and all 74 PDF page citations. Full acquisition of all
+declared documents and accuracy review remain incomplete.
 
 With this project's trusted `.env` loaded, inspect without provider requests:
 
@@ -79,7 +81,8 @@ that evidence. Legacy metadata unions retain no source-wide discovery claim.
 `bronze.migrate()`, `PostgresObjectStore(bronze).migrate()` and
 `PostgresDependencyStore(bronze).migrate()` are applied locally under separate
 owned markers. These 17 Bronze/inventory tables retain immutable originals and
-lineage. T04 adds five text/catalog tables, for 22 total. Legacy per-capture
+lineage. T04 adds five text/catalog tables; T05 adds four chunk tables, for
+26 total. All 22 pre-T05 tables remain unchanged. Legacy per-capture
 payload columns are cleared only after verified object migration. Source URLs,
 UUIDs, receipt bytes and observed clocks remain unchanged.
 
@@ -158,6 +161,62 @@ immutable artifacts/tables. Do not drop populated text/lineage tables or run old
 writers against incompatible state. Cutoffs are document-capture cutoffs against
 the selected metadata snapshot; they do not reconstruct earlier inventory knowledge.
 
+## Chunk generations, eligibility and replay
+
+`PostgresChunkStore(text).migrate()` explicitly adds `chunk_sets`, `chunks`,
+`chunk_catalogs` and `chunk_state` under `fomc-chunks-postgres/1`. The reviewed
+local migration is applied. Fresh T05 backups restore all 22 pre-migration and
+26 post-migration tables exactly, with original/text state preserved.
+
+`PostgresChunkCatalog(chunks).publish(manifest, root=cfg.root)` reads a verified
+committed text catalog and materializes one selected extraction per observed
+version. Defaults use a pinned core Unicode tokenizer, a 650-token maximum and
+75-token overlap, preferring paragraph/line boundaries after 500 tokens. Python/
+Unicode versions, exact text spans/hashes, citations and eligibility reasons are
+stored. Full text remains unchanged; coverage merges overlapping spans and accounts
+for extraction separators separately. Future embedding profiles define their own
+model-specific token limits.
+
+Immutable mirrors live at `text/chunks/<set_id>.json` and
+`text/chunk_catalogs/<catalog_id>.json`. PostgreSQL's
+`chunk_state.current_catalog_id` selects one coherent generation. Failed writes
+retain reusable artifacts and preserve that pointer. Default publication rejects
+a text-pointer change during building; explicit `text_catalog_id` can pin a
+historical input. Retrying an old generation cannot move the pointer backward.
+Multiple extraction profiles require explicit `selections={document_version_id:
+extraction_id}` for every observed version, preventing implicit profile mixing.
+
+With `cfg` and `manifest` loaded as above, inspect without migration, transform
+or provider requests:
+
+```python
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.chunks import PostgresChunkStore
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.chunk_catalog import PostgresChunkCatalog
+
+with PostgresInventoryStore(cfg.postgres) as store:
+    text = PostgresTextStore(PostgresBronzeStore(store))
+    catalog = PostgresChunkCatalog(PostgresChunkStore(text))
+    value = catalog.read(manifest, root=cfg.root)
+    eligible = catalog.read_chunks(manifest, root=cfg.root)
+    print({"catalog_id": value["catalog_id"], "coverage": value["coverage"],
+           "eligible_current_chunks": len(eligible)})
+```
+
+`read_chunks` defaults to `eligible_only=True, current_only=True`. Explicit false
+values expose review text or prior observed versions with source/capture/citation
+context. Reads verify original/text/chunk mirrors and the pinned generation.
+Five upstream representation review cases remain; 75 chunks are review-flagged.
+Eligibility is a native-unit policy and does not certify text/OCR accuracy.
+
+`replay_chunk_catalog(source_catalog, target_catalog, manifest, source_root=...,
+target_root=...)` requires an independent empty target with owned Bronze, text and
+chunk migrations initialized. It reuses stored artifacts, retaining all original
+receipt bytes, source clocks, version/set/chunk/generation IDs and eligibility,
+with HTTP/extraction/tokenization/chunking disabled. It rejects populated targets;
+retain partial failure evidence and use a fresh disposable target after review.
+Read historical generations by explicit ID for rollback; keep immutable populated
+tables/artifacts. No automatic deletion, job or schedule is added.
+
 ## Verification and next work
 
 ```bash
@@ -169,6 +228,5 @@ FOMC_TEST_POSTGRES_CONFIG=config/fomc_meeting_minutes/pipeline.local.yml \
 
 Keep `MARKET_DATA_TEST_POSTGRES_DSN` unset: other pipelines' legacy integration
 tests require a separate disposable database. FOMC tests create/drop only their
-unique test schemas. Next is T05 deterministic chunks and explicit review
-eligibility. Full original-history acquisition and OCR/text accuracy review remain
+unique test schemas. Next is T06 bounded acquisition, health and stopped orchestration. Full original-history acquisition and OCR/text accuracy review remain
 outstanding; embeddings stay separately selected. No FOMC CLI/job/schedule is enabled.

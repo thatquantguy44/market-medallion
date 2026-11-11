@@ -19,42 +19,47 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-11 current pickup — FOMC-T05 next; T04 accepted
+## 2026-11-11 current pickup — FOMC-T06 next; T05 accepted
 
-FOMC T01–T04 are complete locally for the selected **1990-onward bounded
-archive/native-text foundation**, on `feat/spec017-fomc-inventory`.
-[T04 acceptance](../../specs/spec017/t04_acceptance.md),
-[text contract](../../specs/spec017/text_contract.md) and
-[evidence](../../specs/spec017/evidence/t04_extraction.json) are current.
+FOMC T01–T05 are complete locally for the selected **1990-onward bounded archive,
+native-text and chunk foundation**, on `feat/spec017-fomc-inventory`.
+[T05 acceptance](../../specs/spec017/t05_acceptance.md),
+[chunks contract](../../specs/spec017/chunks_contract.md) and
+[evidence](../../specs/spec017/evidence/t05_chunks.json) are current.
 
-The original 33-page inventory (371 meetings, 470 references) and all 72 captures
-remain unchanged. One empty December 30, 1994 minutes href stays `unavailable`.
-All 12 archived document representations now have full native extraction records:
-74 PDF pages, 108 ordered units, 616,712 characters. Seven are native-extracted;
-five have explicit image-review state. The 1990 PDFs open with an empty password
-and permit copying; their existing text layers remain unreviewed for accuracy.
-The two SEP addenda retain native text and all chart references. No new provider
-request or OCR/model call was made. Full historical backfill remains incomplete.
+The 33-page inventory (371 meetings, 470 references), 72 original captures and
+committed text catalog remain unchanged. The 12 extracted representations retain
+74 PDF pages, 108 units and 616,712 characters. T05 creates 12 deterministic chunk
+sets: **241 chunks, 166 eligible and 75 review-flagged**. All 616,520 source-unit
+characters are covered; 192 extraction separators are accounted for separately.
+Every PDF page has an exact citation. Source-version, extraction and chunker
+profiles remain distinct, with actual capture clocks and date-only release labels.
 
-T04 adds five explicit owned PostgreSQL tables and immutable text artifacts.
-Source corrections/reversions preserve actual capture clocks and remain separate
-from extraction profiles. The current text catalog has 460 unacquired references,
-49 not-listed source outcomes, one unavailable link and five image-review gaps.
-Failed writes/extractions cannot advance its pointer. Both backups restored
-exactly: 17 tables before migration and all 22 after. A real empty-target replay
-reproduces the catalog and 72 original receipt bytes without re-extraction/network.
-Disposable databases/root were removed; all pre-existing tables, raw bytes/clocks
-and other namespaces remain unchanged.
+The pinned core tokenizer/profile uses 650 tokens maximum and 75-token overlap,
+preferring unit/paragraph boundaries after 500 tokens. Profile/runtime versions,
+exact Unicode offsets, citations and eligibility reasons are stored. Review text
+remains visible. The five upstream representation review cases, 460 unacquired
+references, 49 not-listed outcomes and one unavailable 1994 href remain explicit.
+Full historical backfill and text/OCR accuracy certification remain incomplete.
 
-**Next: [FOMC-T05 deterministic chunks](../../specs/spec017/todo.md#fomc-t05--deterministic-chunks-next).**
-Pin chunker/tokenizer profiles, prove full eligible-text coverage and exact
-Unicode offsets/page links, preserve full text and expose OCR/review eligibility.
-Keep broad acquisition under T06 and embeddings independently selected. No job or
-schedule is enabled. Use [configuration/commands](../../config/fomc_meeting_minutes/README.md).
+Four additive chunk tables bring the owned schema to 26 tables. All 22 prior
+tables and original/text pointers are unchanged. Missing/corrupt inputs, failed
+writes and a text pointer change during a default build cannot advance a successful
+chunk generation. Old retries cannot roll it backward. Fresh before/after backups
+restored 22/26 tables exactly. Actual empty-target replay reproduces chunks,
+eligibility and all 72 receipt bytes with HTTP/extraction/tokenization/chunking
+disabled. Disposable databases/root were removed; other namespaces are unchanged.
 
-Local config, originals, derivatives and backups stay ignored. QuantSmith's
-working checkout still differs from its pin; relevant guidance was read from
-hash-verified pinned Git objects. NAAIM remains paused; FINRA stays at SSV-T05.
+**Next: [FOMC-T06 bounded acquisition and operations](../../specs/spec017/todo.md#fomc-t06--bounded-acquisition-and-operations-next).**
+Start with offline bounded-run/health fixtures and an explicit finite year batch,
+then obey request/byte/year budgets, preserve overlapping revision refreshes,
+source outcomes and coherent publication. Keep the 1990 floor. No job/schedule is
+enabled. Embeddings remain independently selected T07 work.
+
+Use [configuration/commands](../../config/fomc_meeting_minutes/README.md).
+Local config, originals, text/chunks and backups stay ignored. QuantSmith's working
+checkout differs from its pin; relevant guidance was read from hash-verified pinned
+Git objects (all 61 hashes verified). NAAIM remains paused; FINRA stays at SSV-T05.
 
 ## 2026-11-10 FINRA continuation and AAII manual refresh
 
@@ -464,8 +469,8 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 and Spec012 T01–T04 are merged. Immediate selected work is FOMC-T05 on
-`feat/spec017-fomc-inventory`; T04 is accepted for the bounded 1990-onward native-text foundation.
+T17 and Spec012 T01–T04 are merged. Immediate selected work is FOMC-T06 on
+`feat/spec017-fomc-inventory`; T05 is accepted for the bounded 1990-onward archive/text/chunk foundation.
 Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser

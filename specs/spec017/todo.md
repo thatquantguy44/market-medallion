@@ -92,23 +92,37 @@ five text tables; all 22 tables passed restore verification. A real empty-target
 replay matches the catalog and all 72 original receipt bytes without re-extraction
 or network. Full backfill and OCR/text accuracy certification remain incomplete.
 
-## FOMC-T05 — deterministic chunks (in progress)
+## FOMC-T05 — deterministic chunks (complete for committed text sample)
 
-The pure chunk transform is implemented with fixture-backed offsets, Unicode,
-paragraph boundaries, overlap, identity and eligibility checks. PostgreSQL mirrors,
-generation publication/replay and source closeout remain in progress. See
-[chunks contract](chunks_contract.md).
+Accepted 2026-11-11 on the same feature branch. [Acceptance](t05_acceptance.md),
+[chunks contract](chunks_contract.md) and [evidence](evidence/t05_chunks.json)
+record exact offsets/citations, pinned tokenizer/profile, paragraph boundaries,
+overlap, source-version identity and explicit per-unit eligibility. Four additive
+owned PostgreSQL tables and immutable mirrors publish a coherent chunk generation
+pinned to one text catalog. Missing/corrupt inputs, failed writes and a changed
+text pointer cannot advance a successful generation. Replay uses stored artifacts
+with HTTP/extraction/tokenization/chunking disabled.
 
-Derive section/paragraph-aware chunks from committed text. Pin chunker/tokenizer
-profiles, preserve exact Unicode offsets and page/section links, and prove full
-eligible-text coverage, overlap and idempotence. Keep full text intact and expose
-review/OCR eligibility per source unit. Mirror chunk metadata/text in FOMC-owned
-PostgreSQL tables (FOMC-AC07/12). Use archived inputs without broader acquisition.
+The actual 12-set sample has 241 chunks: 166 eligible, 75 review-flagged. All
+616,520 source-unit characters are covered, with 192 extraction separators
+accounted for separately; full text remains 616,712 characters. All 74 PDF pages
+have citations. All 72 originals, 22 existing tables and inventory/text pointers
+remain unchanged. Pre-/post-migration backups restored 22/26 tables; actual replay
+preserves the generation, row text/eligibility and original receipt bytes.
+Full history and text/OCR accuracy review remain incomplete.
+
+## FOMC-T06 — bounded acquisition and operations (next)
+
+Implement bounded historical/current acquisition, health and stopped orchestration
+(FOMC-AC06), using the verified archive/text/chunk foundations. Keep the 1990 floor,
+follow archived official references and explicit finite year/document/request/byte
+budgets, refresh overlapping inventories for corrections, and report each source
+outcome. Start with a bounded year batch and offline transport fixtures before
+broader requests. Preserve clocks, review/coverage gaps and coherent publication.
+No schedule is selected or enabled by this handoff. Full history remains pending.
 
 ## Later slices (not started)
 
-- FOMC-T06: bounded historical/current acquisition, health and stopped orchestration
-  (FOMC-AC06), after local archival/replay evidence passes.
 - FOMC-T07: independently selected optional embeddings (FOMC-AC08–10). No model,
   paid service, vector extension or deployment activation is selected.
 

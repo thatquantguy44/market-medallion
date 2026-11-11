@@ -1,5 +1,6 @@
 # FOMC-T05 — deterministic chunks and coherent local generations
 
+Accepted locally under [T05 acceptance](t05_acceptance.md).
 Traces FOMC-AC07/12. Scope: the selected 1990-onward committed text catalog,
 using archived originals/derivatives on `feat/spec017-fomc-inventory`.
 
