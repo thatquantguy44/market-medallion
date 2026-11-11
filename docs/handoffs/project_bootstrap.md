@@ -19,7 +19,7 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-11 current pickup — FOMC-T04 next; T03 accepted
+## 2026-11-11 current pickup — FOMC-T04 in progress; T03 accepted
 
 The user requested T03 closeout and narrowed active scope to **1990 onward**.
 T01–T03 are complete for the native inventory / immutable-Bronze foundation.
@@ -44,7 +44,7 @@ and post-migration backups passed full restore verification; the final restore
 reconciles all 17 tables, 72 captures, native evidence and current pointer.
 Disposable restore databases were removed. Other namespaces remain unchanged.
 
-**Next: [FOMC-T04](../../specs/spec017/todo.md#fomc-t04--complete-text-and-extraction-next).**
+**Next: [FOMC-T04](../../specs/spec017/todo.md#fomc-t04--complete-text-and-extraction-in-progress).**
 Select/pin PDF/native extraction dependencies, then implement full text with
 ordered pages/sections, explicit extraction failures and OCR-review state, and
 source-owned PostgreSQL extraction lineage. Use the archived sample before any

@@ -230,7 +230,7 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
 | FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Full archive/text/chunk reconciliation remains incomplete. |
 
-**Current pickup:** [FOMC-T04 complete text/extraction](todo.md#fomc-t04--complete-text-and-extraction-next).
+**Current pickup:** [FOMC-T04 complete text/extraction](todo.md#fomc-t04--complete-text-and-extraction-in-progress).
 The archive is a bounded foundation, not a historical backfill or text index.
 Embeddings remain an independently selected enhancement.
 

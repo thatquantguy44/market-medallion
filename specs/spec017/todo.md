@@ -75,7 +75,12 @@ The historical [native sample](evidence/native_bronze_sample.json),
 [storage/recovery sample](evidence/storage_recovery_sample.json) remain earlier
 checkpoints; the closeout evidence supersedes their operating status/counts.
 
-## FOMC-T04 — complete text and extraction (next)
+## FOMC-T04 — complete text and extraction (in progress)
+
+First increment implements offline native extraction with pinned `pypdf==7.0.1`,
+reviewed HTML containers, ordered complete text units and explicit review/failure
+outcomes. PostgreSQL mirrors/catalog/replay and source review remain in progress.
+See [text contract](text_contract.md).
 
 Select and pin PDF/native extraction dependencies using the existing archived
 sample; keep the core independent of network/schedulers. Implement full text and

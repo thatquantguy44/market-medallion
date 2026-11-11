@@ -38,21 +38,8 @@ class Dependencies:
     profile_id: str = "fomc-html-article/1"
 
 
-def discover_html_dependencies(
-    payload, parent_url, manifest, *, max_bytes=2_000_000, max_dependencies=256
-):
-    """Discover declared minutes addenda and PNGs inside the substantive article.
-
-    SEP navigation is eligible only with an explicit source declaration that it
-    is an addendum to these minutes. Styling/scripts/site icons are not fetched.
-    Unsupported article resources block dependency coverage rather than vanish.
-    """
-    parent = manifest.canonical_url(parent_url)
-    if parent != parent_url or not parent.endswith((".htm", ".html")):
-        raise ValueError("FOMC dependency discovery requires a canonical HTML document URL")
-    if type(max_dependencies) is not int or not 1 <= max_dependencies <= 1000:
-        raise ValueError("FOMC dependency limit must be an integer in [1,1000]")
-    tree = _parse_tree(payload, max_bytes)
+def document_container(tree, parent):
+    """Select the same reviewed substantive container for dependencies and text."""
     articles = [n for n in tree.root.descendants() if n.attrs.get("id") == "article"]
     legacy = False
     bodies = list(tree.root.descendants(tag="body"))
@@ -70,6 +57,25 @@ def discover_html_dependencies(
         article = articles[0]
     else:
         raise ValueError("FOMC HTML document requires a reviewed substantive container")
+    return article, legacy
+
+
+def discover_html_dependencies(
+    payload, parent_url, manifest, *, max_bytes=2_000_000, max_dependencies=256
+):
+    """Discover declared minutes addenda and PNGs inside the substantive article.
+
+    SEP navigation is eligible only with an explicit source declaration that it
+    is an addendum to these minutes. Styling/scripts/site icons are not fetched.
+    Unsupported article resources block dependency coverage rather than vanish.
+    """
+    parent = manifest.canonical_url(parent_url)
+    if parent != parent_url or not parent.endswith((".htm", ".html")):
+        raise ValueError("FOMC dependency discovery requires a canonical HTML document URL")
+    if type(max_dependencies) is not int or not 1 <= max_dependencies <= 1000:
+        raise ValueError("FOMC dependency limit must be an integer in [1,1000]")
+    tree = _parse_tree(payload, max_bytes)
+    article, legacy = document_container(tree, parent)
     issues, exclusions, embedded, dependencies = [], [], set(), set()
     if any("href" in node.attrs for node in tree.root.descendants(tag="base")):
         issues.append(Issue("unsupported_base_url", "HTML base URL"))
