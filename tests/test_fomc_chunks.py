@@ -139,3 +139,42 @@ def test_bounds_and_failed_extraction_never_publish_truncated_chunks(manifest):
     failed = extract_text(b"bad PDF", URL.replace(".htm", ".pdf"), manifest)
     with pytest.raises(ValueError, match="failed"):
         chunk_text(failed, document_version_id=VERSION)
+
+
+def test_unattributed_review_issue_excludes_every_unit_without_losing_text(manifest):
+    source = extraction(manifest, "all original text")
+    source["issues"] = ["unknown_review_case"]
+    source["status"] = "review_required"
+    del source["extraction_id"]
+    source["extraction_id"] = digest(source)
+    value = chunk_text(source, document_version_id=VERSION)
+    assert all(
+        not r["eligible"] and r["review_reasons"] == ["unknown_review_case"]
+        for r in value["chunks"]
+    )
+    assert value["coverage"][0]["review_characters"] == len(source["full_text"])
+
+
+def test_whitespace_only_pdf_text_is_accounted_for_and_ineligible(manifest):
+    source = extract_text(pdf_bytes(["   "]), URL.replace(".htm", ".pdf"), manifest)
+    value = chunk_text(source, document_version_id=VERSION)
+    assert value["coverage"][0]["covered_characters"] == len(source["full_text"])
+    assert all(not r["eligible"] for r in value["chunks"])
+
+
+def test_table_rows_and_footnotes_keep_parent_section_and_exact_context(manifest):
+    body = (
+        b'<div id="article"><h2>Decisions</h2><table><tr><th>Rate</th><th>Votes</th></tr>'
+        b"<tr><td>1.25</td><td>10</td></tr><tr><td>1.50</td><td>2</td></tr></table>"
+        b"<p>Footnote 1: voting explanation</p><h2>Appendix</h2><p>Last note</p></div>"
+    )
+    source = extract_text(body, URL, manifest)
+    value = chunk_text(
+        source, document_version_id=VERSION, max_tokens=6, min_tokens=3, overlap_tokens=1
+    )
+    decisions = [r for r in value["chunks"] if r["heading"] == "Decisions"]
+    assert any("Footnote" in r["text"] for r in decisions)
+    assert any("1.25" in r["text"] for r in decisions)
+    assert {r["unit_ordinal"] for r in decisions} == {0}
+    assert all(r["text"] == source["full_text"][r["start"] : r["end"]] for r in decisions)
+    assert value["coverage"][0]["covered_characters"] == len(source["units"][0]["text"])

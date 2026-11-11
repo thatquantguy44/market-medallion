@@ -108,27 +108,27 @@ def _covered(rows):
 
 def _coverage(extraction, chunks):
     reasons = _reason_map(extraction)
-    return [
-        {
-            "unit_ordinal": u["ordinal"],
-            "page": u["page"],
-            "heading": u["heading"],
-            "start": u["start"],
-            "end": u["end"],
-            "characters": len(u["text"]),
-            "issues": reasons[u["ordinal"]],
-            "covered_characters": _covered(
-                [r for r in chunks if r["unit_ordinal"] == u["ordinal"]]
-            ),
-            "eligible_characters": _covered(
-                [r for r in chunks if r["unit_ordinal"] == u["ordinal"] and r["eligible"]]
-            ),
-            "review_characters": _covered(
-                [r for r in chunks if r["unit_ordinal"] == u["ordinal"] and not r["eligible"]]
-            ),
-        }
-        for u in extraction["units"]
-    ]
+    grouped = {}
+    for row in chunks:
+        grouped.setdefault(row["unit_ordinal"], []).append(row)
+    result = []
+    for unit in extraction["units"]:
+        rows = grouped.get(unit["ordinal"], [])
+        result.append(
+            {
+                "unit_ordinal": unit["ordinal"],
+                "page": unit["page"],
+                "heading": unit["heading"],
+                "start": unit["start"],
+                "end": unit["end"],
+                "characters": len(unit["text"]),
+                "issues": reasons[unit["ordinal"]],
+                "covered_characters": _covered(rows),
+                "eligible_characters": _covered([r for r in rows if r["eligible"]]),
+                "review_characters": _covered([r for r in rows if not r["eligible"]]),
+            }
+        )
+    return result
 
 
 def _chunk_id(version, extraction, settings, unit, start, end):
