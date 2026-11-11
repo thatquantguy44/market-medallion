@@ -28,11 +28,20 @@ class Exclusion:
 
 
 @dataclass(frozen=True)
+class CrossReference:
+    meeting_label_raw: str
+    target_meeting_label_raw: str
+    label_raw: str
+    target_urls: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class NativeResult:
     inventory: object
     issues: tuple[Issue, ...]
     exclusions: tuple[Exclusion, ...]
     inventory_years: tuple[int, ...] = ()
+    cross_references: tuple[CrossReference, ...] = ()
 
 
 @dataclass
@@ -154,6 +163,25 @@ def _addendum_kind(label):
     return _document_kind(match[1]) if match else None
 
 
+def _outside_minutes_paragraph(text, anchor):
+    if re.match(
+        r"(?:Agenda|Beige Book|Greenbook|Bluebook|Tealbook|Transcript|"
+        r"Presentation materials|Staff statements|Statement|Press Conference|Press Release|"
+        r"SEP|[0-9]{4} Memos|Related Current FAQs|Policy Normalization Principles and Plans|"
+        r"Balance Sheet Normalization Principles and Plans)\b",
+        text,
+        re.I,
+    ):
+        return True
+    href = anchor.attrs.get("href", "")
+    if text.startswith("Accessible version"):
+        return (
+            bool(re.fullmatch(r"/monetarypolicy/files/FOMC[0-9]{8}material\.htm", href))
+            or href == "/monetarypolicy/files/FOMC20191004accessible.zip"
+        )
+    return False
+
+
 def _document(anchor, kind, page, manifest, issues, release=None):
     label, href = anchor.text(), anchor.attrs.get("href", "")
     try:
@@ -205,12 +233,33 @@ def _parse_tree(payload, max_bytes):
     return tree
 
 
+def _historical_dates(label, year):
+    label = re.sub(r"\s+\(unscheduled\)$", "", label, flags=re.I)
+    cross = re.fullmatch(r"([A-Za-z.]+)\s+(\d{1,2})\s*[-–]\s*([A-Za-z.]+)\s+(\d{1,2})", label)
+    if cross:
+        return _dates(cross[1] + "/" + cross[3], cross[2] + "-" + cross[4], year)
+    normal = re.fullmatch(r"([A-Za-z./]+)\s+(\d{1,2}(?:\s*[-–]\s*\d{1,2})?\*?)", label)
+    if not normal:
+        raise ValueError
+    return _dates(normal[1], normal[2], year)
+
+
+def _exclude_nonmeeting(node, label, reason, has_minutes, issues, exclusions):
+    if has_minutes:
+        issues.append(Issue("unexpected_nonmeeting_minutes", label[:4096]))
+        return
+    exclusions.append(Exclusion(label[:4096], "", reason))
+    for anchor in node.descendants(tag="a"):
+        exclusions.append(Exclusion(anchor.text(), anchor.attrs.get("href", ""), reason))
+
+
 def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000):
     """Parse a reviewed calendar/year page. This function performs no I/O or clock reads."""
     page = manifest.canonical_url(source_page_url, source_page=True)
     tree = _parse_tree(payload, max_bytes)
     issues, rows, panels, exclusions = [], [], [], []
     inventory_years = set()
+    pending_references, cross_references = [], []
     current = page.endswith("/fomccalendars.htm")
     match = re.search(r"fomchistorical(\d{4})\.htm$", page)
     if not current and not match:
@@ -237,6 +286,25 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                 month = next(meeting.descendants(cls="fomc-meeting__month"), None)
                 day = next(meeting.descendants(cls="fomc-meeting__date"), None)
                 raw = f"{month.text() if month else ''} {day.text() if day else ''} {year}".strip()
+                notation = re.fullmatch(
+                    r"(\d{1,2})\s+\(notation vote\)", day.text() if day else "", re.I
+                )
+                if notation:
+                    try:
+                        _dates(month.text(), notation[1], year)
+                    except (ValueError, KeyError, AttributeError):
+                        issues.append(Issue("unsupported_meeting_label", raw))
+                        continue
+                    minutes = next(meeting.descendants(cls="fomc-meeting__minutes"), None)
+                    _exclude_nonmeeting(
+                        meeting,
+                        raw,
+                        "notation_vote_not_meeting",
+                        bool(minutes and minutes.text()),
+                        issues,
+                        exclusions,
+                    )
+                    continue
                 try:
                     days = _dates(month.text(), day.text(), year)
                 except (ValueError, KeyError, AttributeError):
@@ -274,26 +342,52 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                             docs.append(doc)
                 rows.append(_row(raw, days, docs, pending=pending))
         else:
+            nonmeeting = re.fullmatch(
+                r"(.+?)\s+\((cancelled|notation vote)\)(?:\s+Meeting)?\s*-\s*(\d{4})", label, re.I
+            )
+            if nonmeeting:
+                panels.append(panel)
+                try:
+                    if int(nonmeeting[3]) != year_page:
+                        raise ValueError
+                    _historical_dates(nonmeeting[1], year_page)
+                except (ValueError, KeyError):
+                    issues.append(Issue("unsupported_meeting_label", label))
+                    continue
+                reason = (
+                    "cancelled_meeting"
+                    if nonmeeting[2].lower() == "cancelled"
+                    else "notation_vote_not_meeting"
+                )
+                has_minutes = any(_document_kind(p.text()) for p in panel.descendants(tag="p"))
+                if reason == "cancelled_meeting":
+                    has_minutes = has_minutes or any(p.text() for p in panel.descendants(tag="p"))
+                _exclude_nonmeeting(panel, label, reason, has_minutes, issues, exclusions)
+                continue
             heading_match = re.fullmatch(
-                r"([A-Za-z./]+)\s+(\d{1,2}(?:\s*[-–]\s*\d{1,2})?\*?)"
-                r"(?:\s+\(unscheduled\))?\s+(Meeting|Conference Call)\s*-\s*(\d{4})",
-                label,
-                re.I,
+                r"(.+?)\s+(Meeting|Conference Call)\s*-\s*(\d{4})", label, re.I
             )
             if not heading_match:
-                # Panel titles unrelated to meetings do not establish inventory coverage.
-                if re.search(r"Meeting|Conference Call", label, re.I):
+                unscheduled = re.fullmatch(r"(.+?\s+\(unscheduled\))\s*-\s*([0-9]{4})", label, re.I)
+                if unscheduled:
+                    heading_match = re.fullmatch(
+                        r"(.+?)\s+(Meeting|Conference Call)\s*-\s*([0-9]{4})",
+                        unscheduled[1] + " Meeting - " + unscheduled[2],
+                        re.I,
+                    )
+                else:
                     issues.append(Issue("unsupported_meeting_label", label[:4096]))
-                continue
+                    continue
             panels.append(panel)
             try:
-                if int(heading_match[4]) != year_page:
+                if int(heading_match[3]) != year_page:
                     raise ValueError
-                days = _dates(heading_match[1], heading_match[2], year_page)
+                days = _historical_dates(heading_match[1], year_page)
             except (ValueError, KeyError):
                 issues.append(Issue("unsupported_meeting_label", label[:4096]))
                 continue
-            docs = []
+            docs, cross_claims = [], []
+            unavailable = False
             for p in panel.descendants(tag="p"):
                 ptext = p.text()
                 if re.search(r"Intermeeting Executive Committee Minutes", ptext, re.I):
@@ -328,15 +422,39 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                 anchors = list(p.descendants(tag="a"))
                 context_kind = _document_kind(ptext)
                 if context_kind and not anchors and re.search(r"see\b", ptext, re.I):
-                    issues.append(Issue("unresolved_minutes_cross_reference", ptext[:4096]))
+                    reference = re.fullmatch(
+                        r"Minutes:\s*See end of minutes of "
+                        r"([A-Za-z]+) (\d{1,2}(?:[-/]\d{1,2})?) meeting",
+                        ptext,
+                        re.I,
+                    )
+                    if reference:
+                        cross_claims.append((ptext, reference[1], reference[2]))
+                    else:
+                        issues.append(Issue("unresolved_minutes_cross_reference", ptext[:4096]))
                 for anchor in anchors:
                     text = anchor.text().lower()
                     addendum_kind = _addendum_kind(anchor.text())
                     kind = addendum_kind or _document_kind(anchor.text())
                     if kind is None and re.fullmatch(
-                        r"(?:HTML|PDF)(?:\s*\([^)]*\))?", anchor.text(), re.I
+                        r"(?:HTML|PDF|[0-9]+(?:\.[0-9]+)?\s+(?:KB|MB)\s+PDF)(?:\s*\([^)]*\))?",
+                        anchor.text(),
+                        re.I,
                     ):
                         kind = context_kind
+                    if text == "addendum to the policy normalization principles and plans":
+                        exclusions.append(
+                            Exclusion(
+                                anchor.text(),
+                                anchor.attrs.get("href", ""),
+                                "outside_minutes_policy_document",
+                            )
+                        )
+                        continue
+                    if kind and not anchor.attrs.get("href", ""):
+                        unavailable = True
+                        exclusions.append(Exclusion(anchor.text(), "", "empty_minutes_href"))
+                        continue
                     if "addend" in text and not addendum_kind:
                         issues.append(Issue("unresolved_minutes_addendum", anchor.text()[:4096]))
                     elif kind:
@@ -351,9 +469,7 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                                 "unrecognized_or_out_of_scope_label",
                             )
                         )
-                        if context_kind or re.search(
-                            r"minute|policy action|memorand.*discussion", text
-                        ):
+                        if context_kind or not _outside_minutes_paragraph(ptext, anchor):
                             issues.append(Issue("unreviewed_document_label", anchor.text()[:4096]))
             rows.append(
                 _row(
@@ -361,10 +477,51 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
                     days,
                     docs,
                     kind="conference_call"
-                    if heading_match[3].lower() == "conference call"
+                    if heading_match[2].lower() == "conference call"
                     else "meeting",
                 )
             )
+            if unavailable and not docs:
+                rows[-1]["minutes_status"] = "unavailable"
+            for claim in cross_claims:
+                pending_references.append((rows[-1], claim))
+    direct_by_dates = {}
+    for candidate in rows:
+        if (
+            candidate["documents"]
+            and candidate["committee_body"] == "fomc"
+            and candidate["event_kind"] == "meeting"
+        ):
+            direct_by_dates.setdefault(tuple(candidate["meeting_dates"]), []).append(candidate)
+    for row, (claim, month, days_raw) in pending_references:
+        try:
+            target_dates = _dates(month, days_raw.replace("/", "-"), year_page)
+        except (ValueError, KeyError):
+            target_dates = []
+        targets = [
+            target for target in direct_by_dates.get(tuple(target_dates), []) if target is not row
+        ]
+        if len(targets) != 1:
+            issues.append(Issue("unresolved_minutes_cross_reference", claim[:4096]))
+            continue
+        target = targets[0]
+        row["documents"] = [dict(document) for document in target["documents"]]
+        row["minutes_status"] = "listed"
+        cross_references.append(
+            CrossReference(
+                row["meeting_label_raw"],
+                target["meeting_label_raw"],
+                claim,
+                tuple(
+                    sorted(
+                        {
+                            manifest.canonical_url(d["href"], base_url=page)
+                            for d in target["documents"]
+                        }
+                    )
+                ),
+            )
+        )
     if not panels:
         raise ValueError("FOMC source page has no recognized inventory panels")
     inventory = inventory_from_dict(
@@ -373,4 +530,10 @@ def parse_native_page(payload, source_page_url, manifest, *, max_bytes=2_000_000
     )
     if year_page is not None:
         inventory_years.add(year_page)
-    return NativeResult(inventory, tuple(issues), tuple(exclusions), tuple(sorted(inventory_years)))
+    return NativeResult(
+        inventory,
+        tuple(issues),
+        tuple(exclusions),
+        tuple(sorted(inventory_years)),
+        tuple(cross_references),
+    )

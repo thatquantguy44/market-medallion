@@ -7,6 +7,7 @@ Unsupported content remains an issue; this is not a browser renderer.
 import hashlib
 import re
 from dataclasses import dataclass
+from urllib.parse import urljoin, urlsplit
 
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.native import (
     Exclusion,
@@ -34,6 +35,7 @@ class Dependencies:
     embedded_references: tuple[str, ...]
     exclusions: tuple[Exclusion, ...]
     issues: tuple[Issue, ...]
+    profile_id: str = "fomc-html-article/1"
 
 
 def discover_html_dependencies(
@@ -52,11 +54,24 @@ def discover_html_dependencies(
         raise ValueError("FOMC dependency limit must be an integer in [1,1000]")
     tree = _parse_tree(payload, max_bytes)
     articles = [n for n in tree.root.descendants() if n.attrs.get("id") == "article"]
-    if len(articles) != 1:
-        raise ValueError("FOMC HTML document requires one substantive article")
-    article = articles[0]
+    legacy = False
+    bodies = list(tree.root.descendants(tag="body"))
+    if (
+        not articles
+        and len(bodies) == 1
+        and re.fullmatch(
+            r"/fomc/(?:MINUTES/[0-9]{4}/[0-9]{8}min|minutes/[0-9]{8})\.htm", urlsplit(parent).path
+        )
+        and re.search(r"Minutes of the Federal Open Market Committee", bodies[0].text(), re.I)
+    ):
+        article = bodies[0]
+        legacy = True
+    elif len(articles) == 1:
+        article = articles[0]
+    else:
+        raise ValueError("FOMC HTML document requires a reviewed substantive container")
     issues, exclusions, embedded, dependencies = [], [], set(), set()
-    if next(tree.root.descendants(tag="base"), None) is not None:
+    if any("href" in node.attrs for node in tree.root.descendants(tag="base")):
         issues.append(Issue("unsupported_base_url", "HTML base URL"))
 
     def add(href, label, relation):
@@ -130,7 +145,35 @@ def discover_html_dependencies(
         issues.append(Issue("missing_declared_addendum", "Summary of Economic Projections"))
     if len({href for href, _ in sep_links}) > 1:
         issues.append(Issue("ambiguous_declared_addendum", "Summary of Economic Projections"))
+    legacy_scripts = list(article.descendants(tag="script")) if legacy else []
+    legacy_last_script = legacy_scripts[-1] if legacy_scripts else None
     for node in article.descendants():
+        if (
+            legacy
+            and node.tag == "img"
+            and urljoin(parent, node.attrs.get("src", ""))
+            in {
+                "https://www.federalreserve.gov/GIFJPG/sm_head2.gif",
+                "https://www.federalreserve.gov/gifjpg/uparrow.gif",
+            }
+        ):
+            exclusions.append(
+                Exclusion(node.attrs.get("alt", ""), node.attrs.get("src", ""), "legacy_site_image")
+            )
+            continue
+        if (
+            legacy
+            and node.tag == "script"
+            and not node.attrs
+            and (
+                node is legacy_last_script
+                and node.text().startswith("(function(){function c(){var b=a.contentDocument")
+                and "window.__CF$cv$params" in node.text()
+                and "/cdn-cgi/challenge-platform/scripts/jsd/main.js" in node.text()
+            )
+        ):
+            exclusions.append(Exclusion("provider edge challenge script", "", "legacy_site_script"))
+            continue
         if "srcset" in node.attrs or "data-src" in node.attrs or "data-srcset" in node.attrs:
             issues.append(Issue("unsupported_asset_attribute", node.tag))
         if re.search(r"url\s*\(", node.attrs.get("style", ""), re.I):
@@ -162,4 +205,5 @@ def discover_html_dependencies(
         tuple(sorted(embedded)),
         tuple(exclusions),
         tuple(issues),
+        "fomc-legacy-body/1" if legacy else "fomc-html-article/1",
     )

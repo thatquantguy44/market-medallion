@@ -1,10 +1,12 @@
 """Bounded source-owned acquisition using one shared run-scoped HTTP route."""
 
+import re
 from datetime import UTC, datetime
 from http.client import IncompleteRead
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, ProxyHandler, Request, build_opener
 
+from market_data_pipeline.pipelines.fomc_meeting_minutes.config import validate_start_year
 from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import capture
 from market_data_pipeline.shared.http import _RunProxyHandler, prepare_http
 
@@ -147,16 +149,23 @@ def load_acquisition_limits(path):
     return AcquisitionLimits(**value)
 
 
+def _scope_year_page(url, start_year):
+    match = re.search(r"/fomchistorical([0-9]{4})\.htm$", url)
+    if match and int(match[1]) < start_year:
+        raise ValueError("FOMC year page is before the configured operating scope")
+
+
 class AcquisitionRun:
-    def __init__(self, root, *, manifest, store, client, limits):
+    def __init__(self, root, *, manifest, store, client, limits, start_year=1990):
         if not isinstance(limits, AcquisitionLimits):
             raise ValueError("FOMC acquisition requires validated per-run limits")
         self.root, self.manifest, self.store, self.client = root, manifest, store, client
         self.limits = limits
+        self.start_year = validate_start_year(start_year)
         self.requests = 0
 
     @classmethod
-    def start(cls, root, *, manifest, store, source_url, settings, limits):
+    def start(cls, root, *, manifest, store, source_url, settings, limits, start_year=1990):
         """Durable startup attempt before selection; reuse one client for the run."""
         from market_data_pipeline.pipelines.fomc_meeting_minutes.io.recovery import (
             begin_attempt,
@@ -165,7 +174,9 @@ class AcquisitionRun:
 
         if not isinstance(limits, AcquisitionLimits):
             raise ValueError("FOMC acquisition requires validated per-run limits")
+        start_year = validate_start_year(start_year)
         url = manifest.capture_url(source_url, "inventory")
+        _scope_year_page(url, start_year)
         identity = begin_attempt(
             root,
             manifest=manifest,
@@ -204,13 +215,23 @@ class AcquisitionRun:
                 "fallback_used": client.fallback_used,
             },
         )
-        return cls(root, manifest=manifest, store=store, client=client, limits=limits)
+        return cls(
+            root,
+            manifest=manifest,
+            store=store,
+            client=client,
+            limits=limits,
+            start_year=start_year,
+        )
 
     def acquire(self, source_url, kind):
         if self.requests >= self.limits.max_requests:
             raise ValueError("FOMC acquisition request budget exhausted")
         if kind not in ("inventory", "document", "asset"):
             raise ValueError("unknown FOMC source kind")
+        url = self.manifest.capture_url(source_url, kind)
+        if kind == "inventory":
+            _scope_year_page(url, self.start_year)
         # Attempted requests count even if the provider or database fails.
         self.requests += 1
         limit = (

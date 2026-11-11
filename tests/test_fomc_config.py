@@ -70,3 +70,17 @@ def test_fomc_ac11_programmatic_store_cannot_bypass_namespace_validation():
     config = load_config(EXAMPLE)
     with pytest.raises(ValueError):
         PostgresInventoryStore(replace(config.postgres, schema="aaii"))
+
+
+def test_fomc_operating_scope_defaults_to_1990_without_rewriting_manifest():
+    cfg = load_config(EXAMPLE)
+    assert cfg.start_year == 1990
+    value = yaml.safe_load(EXAMPLE.read_text())
+    value.pop("start_year", None)
+    assert config_from_dict(value, base_dir=EXAMPLE.parent).start_year == 1990
+    for year in (1936, 1989, True, "1990", 10000):
+        with pytest.raises(ValueError):
+            config_from_dict({**value, "start_year": year}, base_dir=EXAMPLE.parent)
+    assert (
+        config_from_dict({**value, "start_year": 2000}, base_dir=EXAMPLE.parent).start_year == 2000
+    )

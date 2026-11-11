@@ -29,6 +29,7 @@ class Config:
     manifest: Path
     postgres: PostgresConfig
     network: NetworkConfig
+    start_year: int = 1990
 
 
 def _text(value: object) -> str:
@@ -48,17 +49,30 @@ def _int(value: object, minimum: int, maximum: int) -> int:
     return value
 
 
+def validate_start_year(value):
+    if type(value) is not int or not 1990 <= value <= 9999:
+        raise ValueError("FOMC operating scope start_year must be an integer in [1990,9999]")
+    return value
+
+
 def config_from_dict(value: object, *, base_dir: Path) -> Config:
-    if not isinstance(value, dict) or set(value) != {
+    required = {
         "root",
         "manifest",
         "warehouse",
         "postgres",
         "network",
-    }:
+    }
+    if (
+        not isinstance(value, dict)
+        or not required.issubset(value)
+        or set(value) - required - {"start_year"}
+    ):
         raise ValueError(
-            "FOMC config requires exactly root, manifest, warehouse, postgres and network"
+            "FOMC config requires root, manifest, warehouse, postgres, network "
+            "and optional start_year"
         )
+    start_year = validate_start_year(value.get("start_year", 1990))
     if value["warehouse"] != "postgres":
         raise ValueError("FOMC implemented catalog backend is postgres")
     settings = postgres_from_dict(value["postgres"])
@@ -67,6 +81,7 @@ def config_from_dict(value: object, *, base_dir: Path) -> Config:
         (base_dir / Path(_text(value["manifest"])).expanduser()).resolve(),
         settings,
         parse_network(value["network"], base=base_dir),
+        start_year,
     )
 
 

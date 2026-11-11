@@ -121,7 +121,7 @@ def test_missing_selected_year_and_source_issues_block_coverage(manifest):
     assert "undiscovered_selected_years" in {i.code for i in result.issues}
     result = discover_inventory_pages(
         FIXTURE,
-        CALENDAR_HTML.replace(b"16-17", b"16 (notation vote)"),
+        CALENDAR_HTML.replace(b"16-17", b"16 (unreviewed vote)"),
         manifest,
         start_year=1936,
         end_year=1938,

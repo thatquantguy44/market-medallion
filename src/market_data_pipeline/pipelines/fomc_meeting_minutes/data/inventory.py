@@ -111,7 +111,7 @@ def _meeting(value: object, manifest: Manifest) -> tuple[MeetingRef, str, str, l
     label = _text(row["meeting_label_raw"])
     status, docs = row["minutes_status"], row["documents"]
     if (
-        status not in ("listed", "pending_release", "not_listed")
+        status not in ("listed", "pending_release", "not_listed", "unavailable")
         or not isinstance(docs, list)
         or (status == "listed") != bool(docs)
     ):

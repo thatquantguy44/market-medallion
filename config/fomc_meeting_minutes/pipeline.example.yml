@@ -2,6 +2,7 @@
 root: ../../data/fomc_meeting_minutes
 manifest: ../../manifests/fomc-meeting-minutes.yml
 warehouse: postgres
+start_year: 1990
 postgres:
   host: 127.0.0.1
   port: 55432

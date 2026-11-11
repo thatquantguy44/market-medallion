@@ -98,6 +98,15 @@ class Manifest:
         self, value: object, *, base_url: str | None = None, source_page: bool = False
     ) -> str:
         """Resolve reviewed HTTPS references; callers retain raw href as evidence."""
+        # Archived 2003 year pages use HTTP legacy references. Retain the raw href,
+        # but resolve only that reviewed folder to HTTPS; acquisition stays HTTPS-only.
+        if (
+            not source_page
+            and base_url
+            and isinstance(value, str)
+            and value.startswith("http://www.federalreserve.gov/fomc/minutes/")
+        ):
+            value = "https://" + value[len("http://") :]
         resolved = self._resolve_url(value, base_url)
         if source_page:
             path = resolved.path

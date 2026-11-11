@@ -61,6 +61,7 @@ def parse_historical_index(
     *,
     max_bytes: int = 2_000_000,
     max_year_pages: int = 128,
+    coverage_start_year: int | None = None,
 ) -> YearIndex:
     """Follow explicit labeled year links in #article, without constructing URLs."""
     page = manifest.canonical_url(source_page_url, source_page=True)
@@ -68,6 +69,9 @@ def parse_historical_index(
         raise ValueError("FOMC year discovery requires the official historical-year index")
     if type(max_year_pages) is not int or not 1 <= max_year_pages <= 128:
         raise ValueError("FOMC year-page limit must be an integer in [1,128]")
+    first_year = manifest.first_meeting_year if coverage_start_year is None else coverage_start_year
+    if type(first_year) is not int or not manifest.first_meeting_year <= first_year <= 9999:
+        raise ValueError("invalid FOMC index coverage start year")
     tree = _parse_tree(payload, max_bytes)
     articles = [n for n in tree.root.descendants() if n.attrs.get("id") == "article"]
     if len(articles) != 1 or not any(
@@ -124,7 +128,7 @@ def parse_historical_index(
     if not years:
         issues.append(Issue("no_discovered_years", "Historical Materials by Year"))
     else:
-        missing = sorted(set(range(manifest.first_meeting_year, max(years) + 1)) - years)
+        missing = sorted(set(range(first_year, max(years) + 1)) - years)
         if missing:
             issues.append(Issue("missing_index_years", ",".join(map(str, missing))[:4096]))
     return YearIndex(
@@ -158,7 +162,9 @@ def discover_inventory_pages(
         or end_year - start_year >= 128
     ):
         raise ValueError("FOMC discovery requires 1–128 explicit supported years")
-    index = parse_historical_index(index_payload, INDEX_URL, manifest, max_bytes=max_bytes)
+    index = parse_historical_index(
+        index_payload, INDEX_URL, manifest, max_bytes=max_bytes, coverage_start_year=start_year
+    )
     calendar = parse_native_page(calendar_payload, CALENDAR_URL, manifest, max_bytes=max_bytes)
     selected = tuple(range(start_year, end_year + 1))
     historical_years = tuple(sorted({p.year for p in index.year_pages if p.year in selected}))

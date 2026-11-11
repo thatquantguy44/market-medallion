@@ -35,7 +35,8 @@ def test_current_calendar_explicit_ranges_and_releases(manifest):
         date(2026, 5, 20)
     }
     assert {e.minutes_status for e in parsed.inventory.entries} == {"listed", "not_listed"}
-    assert any(i.code == "unsupported_meeting_label" for i in parsed.issues)
+    assert not parsed.issues
+    assert any(e.reason == "notation_vote_not_meeting" for e in parsed.exclusions)
 
 
 def test_historical_executive_sessions_and_year_conflict(manifest):
@@ -133,7 +134,5 @@ def test_cross_reference_and_cancelled_labels_do_not_become_complete_empty_minut
     <div class="panel">
     <h5 class="panel-heading">March 17-18 (cancelled) Meeting - 2020</h5></div>"""
     result = parse_native_page(page, BASE + "fomchistorical2020.htm", manifest)
-    assert {i.code for i in result.issues} >= {
-        "unresolved_minutes_cross_reference",
-        "unsupported_meeting_label",
-    }
+    assert {i.code for i in result.issues} == {"unresolved_minutes_cross_reference"}
+    assert any(e.reason == "cancelled_meeting" for e in result.exclusions)

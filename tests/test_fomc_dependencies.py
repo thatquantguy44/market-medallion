@@ -132,3 +132,40 @@ def test_reviewed_root_and_folder_png_urls_preserve_exact_paths(manifest):
     ):
         with pytest.raises(ValueError):
             manifest.canonical_asset_url(href, base_url=PARENT)
+
+
+def test_reviewed_legacy_minutes_body_keeps_site_images_out_of_content_assets(manifest):
+    payload = b"""<html><title>FOMC Minutes</title><base target="_top"><body>
+    <img src="../../../GIFJPG/sm_head2.gif" alt="Federal Reserve logo">
+    <h2>Minutes of the Federal Open Market Committee</h2><p>Invented full minutes.</p>
+    <img src="/gifjpg/uparrow.gif" alt="Return to top"></body></html>"""
+    result = discover_html_dependencies(
+        payload, "https://www.federalreserve.gov/fomc/MINUTES/1993/19930203min.htm", manifest
+    )
+    assert not result.issues and not result.dependencies
+    assert result.profile_id == "fomc-legacy-body/1"
+    assert len([e for e in result.exclusions if e.reason == "legacy_site_image"]) == 2
+    with pytest.raises(ValueError):
+        discover_html_dependencies(payload, PARENT, manifest)
+
+
+def test_unknown_legacy_image_is_an_issue_instead_of_a_site_icon(manifest):
+    payload = b"""<body><h2>Minutes of the Federal Open Market Committee</h2>
+    <img src="unknown-chart.gif" alt="Substantive chart"></body>"""
+    result = discover_html_dependencies(
+        payload, "https://www.federalreserve.gov/fomc/minutes/20030129.htm", manifest
+    )
+    assert any(i.code == "unreviewed_asset_url" for i in result.issues)
+
+
+def test_legacy_edge_scaffolding_is_not_executed_or_confused_with_document_content(manifest):
+    payload = b"""<body><h1>Minutes of the Federal Open Market Committee</h1>
+    <script>document.write('unreviewed content')</script>
+    <div><p><script>(function(){function c(){var b=a.contentDocument;
+    window.__CF$cv$params; '/cdn-cgi/challenge-platform/scripts/jsd/main.js';})()</script>
+    </p></div></body>"""
+    result = discover_html_dependencies(
+        payload, "https://www.federalreserve.gov/fomc/minutes/20030129.htm", manifest
+    )
+    assert any(e.reason == "legacy_site_script" for e in result.exclusions)
+    assert any(i.code == "unsupported_embedded_content" for i in result.issues)

@@ -161,3 +161,25 @@ def test_png_asset_acquisition_preserves_original_bytes_and_budget(tmp_path, man
     assert receipt["kind"] == "asset" and receipt["accepted"]
     assert read_capture(tmp_path, receipt["capture_id"])[1] == payload
     assert run.requests == 1
+
+
+def test_operating_scope_blocks_pre1990_year_pages_before_request(tmp_path, manifest):
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.acquisition import (
+        AcquisitionLimits,
+        AcquisitionRun,
+    )
+
+    requests = []
+    run = AcquisitionRun(
+        tmp_path,
+        manifest=manifest,
+        store=Store(),
+        client=lambda req: requests.append(req),
+        limits=AcquisitionLimits(max_requests=1, inventory_max_bytes=100, document_max_bytes=100),
+        start_year=1990,
+    )
+    with pytest.raises(ValueError, match="scope"):
+        run.acquire(
+            "https://www.federalreserve.gov/monetarypolicy/fomchistorical1989.htm", "inventory"
+        )
+    assert requests == [] and run.requests == 0

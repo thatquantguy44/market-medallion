@@ -148,6 +148,7 @@ class PostgresDependencyStore:
             "coverage_kind": "direct_html_dependencies",
             "parent_capture_id": parent_capture_id,
             "parent_sha256": receipt["sha256"],
+            "discovery_profile_id": result.profile_id,
             "dependencies": links,
             "embedded_references": list(result.embedded_references),
         }

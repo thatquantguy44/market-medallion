@@ -310,7 +310,7 @@ def test_fomc_native_publication_refuses_issues_and_rolls_back_on_link_failure(
             max_bytes=1000,
         )["capture_id"]
 
-    invalid = page_capture(b"16 (notation vote)")
+    invalid = page_capture(b"16 (unreviewed vote)")
     with pytest.raises(ValueError, match="issues"):
         bronze.publish_inventory_capture(invalid, manifest, root=tmp_path)
     assert store.run_count() == 0 and store.read_inventory() is None

@@ -526,7 +526,9 @@ class PostgresBronzeStore:
         """Publish one page only when it does not drop existing source-page coverage."""
         return self.publish_inventory_captures([capture_id], manifest, root=root)
 
-    def publish_inventory_captures(self, capture_ids, manifest, *, root, historical_years=None):
+    def publish_inventory_captures(
+        self, capture_ids, manifest, *, root, historical_years=None, start_year=None
+    ):
         """Atomically publish an issue-free page union and link every archived page.
 
         Passing historical_years=(start,end) requires both source inventories and
@@ -534,6 +536,9 @@ class PostgresBronzeStore:
         Without it this remains a metadata union with no discovery coverage claim.
         Neither mode certifies complete source documents or extracted text.
         """
+        from dataclasses import asdict
+
+        from market_data_pipeline.pipelines.fomc_meeting_minutes.config import validate_start_year
         from market_data_pipeline.pipelines.fomc_meeting_minutes.data.discovery import (
             CALENDAR_URL,
             INDEX_URL,
@@ -548,9 +553,15 @@ class PostgresBronzeStore:
 
         manifest_from_dict(manifest.to_dict())
         if historical_years is not None and (
-            not isinstance(historical_years, tuple) or len(historical_years) != 2
+            not isinstance(historical_years, tuple)
+            or len(historical_years) != 2
+            or any(type(year) is not int for year in historical_years)
         ):
             raise ValueError("FOMC discovery requires an explicit historical year pair")
+        if start_year is not None:
+            start_year = validate_start_year(start_year)
+            if historical_years is None or historical_years[0] < start_year:
+                raise ValueError("FOMC publication is before the configured operating scope")
         if (
             not isinstance(capture_ids, (list, tuple))
             or not 1 <= len(capture_ids) <= 128
@@ -595,6 +606,7 @@ class PostgresBronzeStore:
             evidence = {
                 "schema_id": "fomc-inventory-publication-discovery/1",
                 "coverage_kind": "selected_inventory_pages",
+                "native_parser_profile_id": "fomc-native-inventory/2",
                 "manifest_sha256": digest,
                 "discovery": discovery.to_dict(),
                 "capture_ids": {url: captures[url][0] for url in sorted(urls)},
@@ -606,6 +618,17 @@ class PostgresBronzeStore:
             parsed = parse_native_page(payload, url, manifest)
             if parsed.issues or not parsed.inventory.meetings:
                 raise ValueError("FOMC inventory has unresolved discovery issues or no meetings")
+            if start_year is not None and any(
+                m.committee_body != "fomc" or any(day.year < start_year for day in m.meeting_dates)
+                for m in parsed.inventory.meetings
+            ):
+                raise ValueError("FOMC inventory contains meetings outside the operating scope")
+            if evidence is not None:
+                evidence["operating_start_year"] = start_year
+                evidence.setdefault("native_page_evidence", {})[url] = {
+                    "exclusions": [asdict(e) for e in parsed.exclusions],
+                    "cross_references": [asdict(c) for c in parsed.cross_references],
+                }
             meetings = {m.meeting_id: m for m in parsed.inventory.meetings}
             docs = {d.document_id: d for d in parsed.inventory.documents}
             rows = []

@@ -233,3 +233,25 @@ def test_unreviewed_manifest_is_rejected_before_startup_intent_or_network(
             ),
         )
     assert requests == [] and not (tmp_path / "attempts").exists()
+
+
+def test_start_rejects_pre_scope_year_before_probe(tmp_path, manifest, monkeypatch):
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io import acquisition
+
+    def unexpected(*args):
+        raise AssertionError("scope gate ran after network")
+
+    monkeypatch.setattr(acquisition, "prepare_fomc_http", unexpected)
+    with pytest.raises(ValueError, match="scope"):
+        AcquisitionRun.start(
+            tmp_path,
+            manifest=manifest,
+            store=Store(),
+            source_url="https://www.federalreserve.gov/monetarypolicy/fomchistorical1989.htm",
+            settings=None,
+            limits=AcquisitionLimits(
+                max_requests=1, inventory_max_bytes=100, document_max_bytes=100
+            ),
+            start_year=1990,
+        )
+    assert not (tmp_path / "attempts").exists()
