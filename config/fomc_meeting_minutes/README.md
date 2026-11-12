@@ -1,18 +1,18 @@
 # FOMC meeting-minutes configuration
 
-T01–T06 are accepted locally for the **1990-onward bounded archive and
-operations**. This folder owns FOMC settings. [T06 acceptance](../../specs/spec017/t06_acceptance.md),
-[operations contract](../../specs/spec017/operations_contract.md) and
-[evidence](../../specs/spec017/evidence/t06_operations.json) record the actual
-1990 batch. The archive has 89 captures and 26 text representations (239 PDF
-pages), with 406 chunks: 166 eligible and 240 review-flagged. Full history and
-text/OCR accuracy review remain incomplete. The FOMC schedule defaults stopped.
-See the [operating runbook](../../docs/deployment/fomc_runbook.md) for CLI, migration,
-backup/restore, recovery and Dagster procedures. Next core batch: 1991.
+T01–T06 and the [script/1991 continuation](../../specs/spec017/1991_acceptance.md)
+are accepted locally for the **1990-onward bounded archive and operations**.
+Latest [evidence](../../specs/spec017/evidence/1991_script_backfill.json) records
+108 captures and 42 text representations (434 PDF pages), with 601 chunks:
+166 eligible and 435 review-flagged. Full history and text/OCR accuracy review
+remain incomplete. The [T06 acceptance](../../specs/spec017/t06_acceptance.md)
+remains the earlier 1990 checkpoint. All schedules remain stopped.
 
-The reusable checkout entrypoint is [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh).
-See the [fresh-checkout setup](../../docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint)
-for user-owned config, dependencies and a bounded 1991 example.
+Other users can run [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) with their
+own config. See [fresh-checkout setup](../../docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint)
+for dependencies, environment-backed credentials and bounded plan/run/health
+examples. The script does not load `.env` or activate access automatically.
+Next core batch: 1992.
 
 ## Configuration and scope
 
