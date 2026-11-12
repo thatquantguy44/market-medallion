@@ -1,7 +1,8 @@
 # Specification index
 
-Updated: 2026-11-11. Numbers identify documents, not automatic build priority.
-The user selected FOMC-T01/T02 implementation; current pickup is [FOMC-T03](spec017/todo.md).
+Updated: 2026-11-12. Numbers identify documents, not automatic build priority.
+FOMC T01–T05 are accepted for the bounded 1990-onward foundation; current pickup is
+[FOMC-T06 bounded acquisition/operations](spec017/todo.md#fomc-t06--bounded-acquisition-and-operations-next).
 The remaining securities-finance order is **011 → 012 → 013 → 014 → 015**;
 see the [securities-finance program](../docs/securities_finance/README.md).
 
@@ -51,7 +52,7 @@ Spec017 has an inventory contract and [implementation task handoff](spec017/todo
 The [master handoff](../docs/handoffs/project_bootstrap.md) records accepted
 Spec011 delivery and completed Spec012 T01–T04. FINRA's continuation is **SSV-T05**
 from its [next-agent handoff](spec012/README.md#next-agent-handoff). The newly selected
-FOMC build now continues at **FOMC-T03** after T01/T02 inventory/PostgreSQL checks. The source sequence supersedes older discovery priorities;
+FOMC build now continues at **FOMC-T06** after accepted T01–T05 archive/text/chunk checks. The source sequence supersedes older discovery priorities;
 the following historical choices remain context, not a competing next-build
 instruction. Keep NAAIM paused unless explicitly resumed by the user.
 
