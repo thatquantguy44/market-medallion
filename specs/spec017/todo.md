@@ -6,7 +6,10 @@ schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merg
 [PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
 script and 1991 continuation merged in
 [PR #13](https://github.com/thatquantguy44/market-medallion/pull/13). The accepted
-1992 continuation is on `feat/fomc-1992-backfill`.
+1992 continuation is on `feat/fomc-1992-backfill` in
+[PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); track its
+[live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
+and current review threads.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 

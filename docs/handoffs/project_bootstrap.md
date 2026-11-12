@@ -21,6 +21,15 @@ new live schedules default stopped.
 
 ## 2026-11-12 current pickup — bounded FOMC 1992 accepted locally
 
+[PR #14 — Bounded 1992 FOMC backfill and recovery](https://github.com/thatquantguy44/market-medallion/pull/14)
+is open from `feat/fomc-1992-backfill` to `main`. Acceptance/evidence head at
+creation: `5274279ae741e8d0527a197963821f7acac3ed22`.
+Track [live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/14/files).
+On continuation verify the current head SHA, CI results and unresolved review
+threads before advancing. The handoff does not imply approval to merge or
+activate schedules.
+
 The selected 1992-only continuation is on `feat/fomc-1992-backfill`, from merged
 PR #13 at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`.
 [Acceptance](../../specs/spec017/1992_acceptance.md),
