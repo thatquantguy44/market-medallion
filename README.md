@@ -19,16 +19,17 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
-**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 are complete
-locally for the **1990-onward bounded archive and operations**. A verified 1990
-backfill brings the archive to 89 captures and 26 extracted representations,
-239 PDF pages and 406 chunks (166 eligible, 240 review-flagged). The current
-inventory has 363 meeting records and 470 references; prior source claims remain
-queryable. CLI, health/recovery, coherent publication, 29-table restore and offline
-replay are verified. Full history and text/OCR accuracy review remain incomplete.
-See [T06 acceptance](specs/spec017/t06_acceptance.md) and the
-[runbook](docs/deployment/fomc_runbook.md). Next core operation: a bounded 1991 batch.
-The FOMC schedule defaults stopped; NAAIM remains paused; FINRA stays at SSV-T05.
+**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 and the
+[script/1991 continuation](specs/spec017/1991_acceptance.md) are complete locally
+for the **1990-onward bounded archive and operations**. Verified 1990/1991 batches
+bring the archive to 108 captures and 42 extracted representations: 434 PDF pages
+and 601 chunks (166 eligible, 435 review-flagged). The current inventory has
+371 meeting claims and 470 references, with earlier snapshots preserved. Full
+history and text/OCR accuracy review remain incomplete. Other users can run
+[`scripts/run_fomc.sh`](scripts/run_fomc.sh) with their own config; see the
+[setup and script guide](docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint).
+Next core batch: 1992. The FOMC schedule stays stopped; NAAIM remains paused and
+FINRA stays at SSV-T05.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →

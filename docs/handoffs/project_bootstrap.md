@@ -19,10 +19,66 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — FOMC-T06 accepted locally
+## 2026-11-12 current pickup — FOMC script and 1991 accepted locally
+
+[PR #13 — Reusable FOMC runner script and 1991 backfill](https://github.com/thatquantguy44/market-medallion/pull/13)
+is open from `feat/fomc-runner-script` to `main`. Acceptance/evidence head at
+creation: `6fd3c5b9594eb933db48117a1c93b08e49d41b53`.
+Track its [live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/13/files).
+On continuation verify the latest head SHA, CI results and unresolved review
+threads; the handoff does not imply approval to merge or activate schedules.
+
+User-selected continuation is on `feat/fomc-runner-script`, based on merged
+PR #12 at `1aa49549890dba51445341e304fdea83c9c2c7e8`. The executable
+[`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) delegates to the source CLI,
+selects checkout `.venv` or explicit `FOMC_PYTHON`, and preserves caller paths,
+arguments, JSON and exit codes. It does not source `.env`, install dependencies,
+migrate or enable live access implicitly. Other users supply their own config
+and environment-backed credentials using the [setup/runbook](../deployment/fomc_runbook.md).
+The script is included in source distributions; wheel users retain the console CLI.
+[Acceptance](../../specs/spec017/1991_acceptance.md),
+[contract](../../specs/spec017/scripts_contract.md) and
+[evidence](../../specs/spec017/evidence/1991_script_backfill.json) are current.
+
+The same script completed the **1991** batch: 16 primary representations acquired,
+three inventories refreshed, 19 data GETs plus two probes, 9,439,345 received bytes.
+All three catalog pointers advanced together. The archive now has **108 captures**
+(44 inventories, 42 documents, 22 PNGs), **434 PDF pages**, **468 text units**,
+**1,239,281 characters** and **601 chunks: 166 eligible, 435 review-flagged**.
+Coverage accounts for 1,238,429 unit characters and 852 separators separately.
+Thirty-five representation review cases, 430 unacquired references, 49 not-listed
+claims and one unavailable 1994 href remain explicit. Accuracy and full history
+remain incomplete; no OCR/model service was invoked.
+
+The latest captured calendar again contains eight 2027 planning rows absent from
+T06's capture. Current inventory is **33 pages, 371 meeting claims, 470 references
+and 561 associations**. Both earlier snapshots remain queryable with actual clocks;
+this observed variation does not infer meeting creation or cancellation.
+All 89 prior original receipts/bytes/clocks and old append-only rows are preserved.
+No schema migration was needed. Pre-/post-batch backups both restored **29 tables**.
+Offline replay preserves all 108 receipts, selected catalogs/chunk eligibility and
+the latest operation's intent/events/result with HTTP/extraction/tokenization/
+chunking disabled. Full backup retains old catalog/operation snapshots; replay
+selects the latest generation. Disposable targets were removed; other namespaces
+remain unchanged. Health/plan/run-recovery also passed with HTTP disabled.
+
+Verification: **954 regression tests passed, 71 optional skips; 267 FOMC checks
+passed with PostgreSQL enabled**, including 61 isolated backend checks. Bash
+syntax, Ruff, format, build, diff and source-artifact checks pass. The two new
+script checks cover other working directories, paths with spaces, interpreter
+selection, no-service validation and closed access gates.
+
+**Next core operation: bounded 1992 through the same script**, then health/readback.
+Keep all FOMC schedules stopped, embeddings independently selected, NAAIM paused
+and FINRA at SSV-T05. Local config, bytes, derivatives and backups remain ignored.
+The external QuantSmith checkout still differs from its pin; all 61 adopted
+pinned Git objects were hash-verified without editing that checkout.
+
+## 2026-11-12 FOMC-T06 accepted checkpoint (merged)
 
 [PR #12 — Complete FOMC T-06 bounded acquisition and operations](https://github.com/thatquantguy44/market-medallion/pull/12)
-is open from `feat/spec017-fomc-operations` to `main`. Accepted implementation/
+merged into `main` at `1aa49549890dba51445341e304fdea83c9c2c7e8`. Accepted implementation/
 evidence head at creation: `b0b7b12e18d8e73c033639270e4d3a6228360afd`.
 Track [live checks](https://github.com/thatquantguy44/market-medallion/pull/12/checks)
 and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/12/files);
@@ -73,9 +129,9 @@ PostgreSQL enabled**, including 61 isolated backend checks. Ruff, format, build,
 diff and artifact checks pass. CLI health/plan/run-recovery also passed against
 actual local state with HTTP disabled.
 
-**Next core operation: an explicit bounded 1991 backfill**, then no-request health/
-readback using the runbook. Continue year batches and review separately. T07
-embeddings remain optional and independently selected. The user requested commit/
+The 1991 continuation is accepted above; the current next core batch is 1992.
+Continue year batches and review separately. T07 embeddings remain optional and
+independently selected. The user requested commit/
 push, PR creation and tracking; inspect the current branch PR's head, checks and
 review threads on continuation. Merging remains unrequested.
 
@@ -488,7 +544,7 @@ retention continue within the existing internal-research scope.
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
 T17 and Spec012 T01–T04 are merged. FOMC-T06 is accepted locally on
-`feat/spec017-fomc-operations`; the next core operation is a bounded 1991 batch.
+`feat/spec017-fomc-operations`; the next core operation is a bounded 1992 batch through the portable script.
 Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser

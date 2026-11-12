@@ -3,7 +3,52 @@
 The FOMC pipeline owns its CLI, source adapters, archive, PostgreSQL namespace and
 Dagster definitions under `pipelines/fomc_meeting_minutes/`. Active acquisition
 starts in 1990. [T06 acceptance](../../specs/spec017/t06_acceptance.md) records the
-bounded local result; it does not certify full history or text/OCR accuracy.
+bounded local T06 result. The [script/1991 acceptance](../../specs/spec017/1991_acceptance.md)
+is the latest checkpoint; neither certifies full history or text/OCR accuracy.
+
+## Checkout setup and script entrypoint
+
+On macOS or Linux, use Bash, Python 3.12 and an existing PostgreSQL database/login
+with permission to create the dedicated FOMC schema and its owned tables. From a
+fresh checkout or extracted source distribution, install the tested environment:
+
+```bash
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.lock
+.venv/bin/python -m pip install --no-deps --no-build-isolation -e .
+cp config/fomc_meeting_minutes/pipeline.example.yml config/fomc_meeting_minutes/pipeline.local.yml
+cp config/fomc_meeting_minutes/operations.example.yml config/fomc_meeting_minutes/operations.local.yml
+```
+
+Edit your `pipeline.local.yml` for your own host, port, database, user, root and
+network. The example uses port 55432; it does not connect to the maintainer's
+local service automatically. Set the password in the environment variable named
+by `postgres.password_env` (the example uses `FOMC_POSTGRES_PASSWORD`). Keep
+`scheduled_live_access: false`. Each user supplies their own connection settings
+and credentials; do not copy another user's local YAML, `.env` or data directory.
+
+The executable script supports the same commands and arguments as the CLI:
+
+```bash
+./scripts/run_fomc.sh --help
+./scripts/run_fomc.sh validate-config \
+  --config config/fomc_meeting_minutes/pipeline.local.yml \
+  --operations config/fomc_meeting_minutes/operations.local.yml
+```
+
+It selects `.venv/bin/python` relative to its checkout. To use another environment
+with this project installed, set `FOMC_PYTHON=/absolute/path/to/python` (or an
+interpreter name on `PATH`). The script preserves the caller's working directory;
+relative `--config`/`--operations` paths resolve there, while paths inside YAML
+resolve against that YAML file. Quote paths containing spaces. From another
+working directory, invoke the script by its absolute path and supply absolute
+config paths as needed.
+
+The script passes through JSON and exit codes. It inherits your environment;
+it does not load `.env`, install packages, initialize a database or fetch data
+implicitly. `validate-config` and help require no database/password or provider
+access. Follow the explicit backup/migration steps below for an existing archive.
+For wheel-only installations, use the equivalent `market-medallion fomc` command.
 
 ## Configuration and preparation
 
@@ -61,6 +106,28 @@ market-medallion fomc run \
   --operations config/fomc_meeting_minutes/operations.local.yml \
   --start-year 1990 --end-year 1990 --mode backfill --live
 ```
+
+For a bounded 1991 batch, use the same script after explicit initialization/
+migration of your own target:
+
+```bash
+./scripts/run_fomc.sh plan \
+  --config config/fomc_meeting_minutes/pipeline.local.yml \
+  --operations config/fomc_meeting_minutes/operations.local.yml \
+  --start-year 1991 --end-year 1991 --mode backfill
+./scripts/run_fomc.sh run \
+  --config config/fomc_meeting_minutes/pipeline.local.yml \
+  --operations config/fomc_meeting_minutes/operations.local.yml \
+  --start-year 1991 --end-year 1991 --mode backfill --live
+./scripts/run_fomc.sh health \
+  --config config/fomc_meeting_minutes/pipeline.local.yml \
+  --operations config/fomc_meeting_minutes/operations.local.yml
+```
+
+The local 1991 batch is accepted; the next core batch is 1992.
+Change only the explicit year bounds for another bounded batch; the operation
+settings still enforce all finite limits. `migrate`, `recover-capture` and
+`recover-run` also work through the same script with their documented arguments.
 
 The source module `python -m market_data_pipeline.pipelines.fomc_meeting_minutes`
 accepts the same subcommands. Root CLI aliases also support `fomc`.

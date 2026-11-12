@@ -2,9 +2,11 @@
 
 Updated: 2026-11-12. The user selected implementation, reuse of this project's
 PostgreSQL location and a pipeline-owned configuration folder. No recurring
-schedule or embedding service was selected. T01–T05 merged in PR #11. T06 is on `feat/spec017-fomc-operations` in
-[PR #12](https://github.com/thatquantguy44/market-medallion/pull/12); follow its
-[live checks](https://github.com/thatquantguy44/market-medallion/pull/12/checks)
+schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merged in
+[PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
+script and accepted 1991 continuation are on `feat/fomc-runner-script` in
+[PR #13](https://github.com/thatquantguy44/market-medallion/pull/13); track the
+[live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
 and current review threads.
 
 ## FOMC-T01 — normalized inventory contract (complete)
@@ -136,10 +138,26 @@ Verification: **952 regression tests passed, 71 optional skips; 265 FOMC checks
 passed with PostgreSQL enabled**, including 61 isolated backend checks. Lint,
 format, build and artifact checks pass. No schedule was activated.
 
-**Next core operation:** run an explicit bounded **1991** backfill, then health/
-readback, using the runbook and finite settings. Continue year batches separately
-from native-text/OCR review; full history and accuracy remain incomplete. Do not
-activate schedules or silently broaden into embeddings.
+## Portable script and 1991 continuation (complete)
+
+Accepted 2026-11-12. [Script contract](scripts_contract.md),
+[acceptance](1991_acceptance.md) and [evidence](evidence/1991_script_backfill.json)
+record the user-requested `scripts/run_fomc.sh` entrypoint, own-config setup,
+interpreter/path handling and retained explicit live gates. The script delegates
+to the source CLI and ships in source distributions.
+
+The actual 1991 batch acquired 16 primary representations in 19 data GETs plus
+two probes. The archive now has 108 captures, 42 representations, 434 PDF pages,
+1,239,281 text characters and 601 chunks (166 eligible, 435 review-flagged).
+Current inventory is 371 meetings / 470 references / 561 associations; the latest
+calendar again includes eight 2027 planning rows absent from T06's capture.
+All earlier claims, originals and clocks remain preserved. Both backups restore
+29 tables, and offline replay/readback passes. Verification: 954 regression tests
+with 71 optional skips; 267 FOMC checks with PostgreSQL, including 61 backend checks.
+
+**Next core operation:** a bounded **1992** batch through the same script, then
+health/readback. Full history and text/OCR accuracy remain incomplete. Keep
+schedules stopped and embeddings separately selected.
 
 ## Later slices (not started)
 
