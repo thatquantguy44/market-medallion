@@ -19,7 +19,17 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — bounded FOMC 1992 accepted locally
+## 2026-11-12 current pickup — PR #14 extended through 1994 (in progress)
+
+The user requested more work in the same PR. Keep `feat/fomc-1992-backfill` and
+[PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); add the bounded
+1993–1994 batch through the existing script and unchanged finite settings.
+The no-request plan lists 16 HTML primary references. [Acceptance](../../specs/spec017/1993_1994_acceptance.md)
+is pending acquisition/readback and before/after restore plus offline replay.
+The 1992 checkpoint below remains the current accepted data state. Keep all
+schedules stopped, embeddings/OCR unselected, NAAIM paused and FINRA at SSV-T05.
+
+## 2026-11-12 bounded FOMC 1992 accepted checkpoint
 
 [PR #14 — Bounded 1992 FOMC backfill and recovery](https://github.com/thatquantguy44/market-medallion/pull/14)
 is open from `feat/fomc-1992-backfill` to `main`. Acceptance/evidence head at
