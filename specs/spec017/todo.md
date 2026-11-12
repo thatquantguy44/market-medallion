@@ -2,7 +2,10 @@
 
 Updated: 2026-11-12. The user selected implementation, reuse of this project's
 PostgreSQL location and a pipeline-owned configuration folder. No recurring
-schedule or embedding service was selected. T01–T05 merged in PR #11. T06 is on `feat/spec017-fomc-operations`.
+schedule or embedding service was selected. T01–T05 merged in PR #11. T06 is on `feat/spec017-fomc-operations` in
+[PR #12](https://github.com/thatquantguy44/market-medallion/pull/12); follow its
+[live checks](https://github.com/thatquantguy44/market-medallion/pull/12/checks)
+and current review threads.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 

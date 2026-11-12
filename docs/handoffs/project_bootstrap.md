@@ -21,6 +21,15 @@ new live schedules default stopped.
 
 ## 2026-11-12 current pickup — FOMC-T06 accepted locally
 
+[PR #12 — Complete FOMC T-06 bounded acquisition and operations](https://github.com/thatquantguy44/market-medallion/pull/12)
+is open from `feat/spec017-fomc-operations` to `main`. Accepted implementation/
+evidence head at creation: `b0b7b12e18d8e73c033639270e4d3a6228360afd`.
+Track [live checks](https://github.com/thatquantguy44/market-medallion/pull/12/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/12/files);
+on continuation re-read the latest head SHA, CI results and unresolved review
+threads before advancing. Runtime/CI state is live, not an implied approval from
+this handoff. Merging remains unrequested.
+
 T01–T05 merged through [PR #11](https://github.com/thatquantguy44/market-medallion/pull/11)
 at `79c499420faf9602f7ac2a50cafca0596c5b12fc`. T06 is implemented on
 `feat/spec017-fomc-operations`; [acceptance](../../specs/spec017/t06_acceptance.md),
