@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-11.
+Last updated: 2026-11-12.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -18,6 +18,20 @@ explicit automatic fallback preference, NO_PROXY, timeouts and verified custom
 CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
+
+## 2026-11-12 FOMC pull-request tracking
+
+[PR #11 — 1990-onward FOMC archive, text and chunk foundation](https://github.com/thatquantguy44/market-medallion/pull/11)
+is open from `feat/spec017-fomc-inventory` to `main`, covering T01–T05.
+Implementation head at PR creation: `4d5aa230fb15e496bcecb00ce3b1cbe5b501adb8`.
+The accepted implementation/evidence below remain current; T06 is the next build.
+
+Use the PR's [live checks](https://github.com/thatquantguy44/market-medallion/pull/11/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/11/files)
+for current status. On continuation, verify the current head SHA, inspect its
+latest CI run and unresolved review threads, and address failures before advancing.
+CI/review state is live rather than an implied approval from this handoff.
+The user requested commit/push, PR creation and tracking; merging remains unrequested.
 
 ## 2026-11-11 current pickup — FOMC-T06 next; T05 accepted
 
