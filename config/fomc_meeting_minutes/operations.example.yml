@@ -1,0 +1,18 @@
+# Manual year batches are explicit. Recurring access remains disabled.
+max_years: 2
+max_inventory_pages: 40
+max_documents: 40
+max_assets: 100
+max_requests: 100
+max_total_bytes: 100000000
+max_elapsed_seconds: 600
+max_attempts: 3
+request_interval_seconds: 1.0
+max_retry_delay_seconds: 30.0
+inventory_max_bytes: 2000000
+document_max_bytes: 10000000
+asset_max_bytes: 5000000
+max_capture_history: 5000
+overlap_years: 1
+max_run_age_hours: 168
+scheduled_live_access: false
