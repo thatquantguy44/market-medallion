@@ -19,7 +19,8 @@ user-selected 1990-onward bounded archive and operations. Other users can run
 the [setup guide](deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint).
 The actual 1991 script run, no-request health/recovery, 29-table restore and offline
 replay are verified. Full historical acquisition and text/OCR accuracy review
-remain incomplete. Next core batch: 1992. All FOMC schedules remain stopped;
+remain incomplete. The 1992 batch is in progress on `feat/fomc-1992-backfill`
+using the same script and recovery gates. All FOMC schedules remain stopped;
 FINRA stays at SSV-T05 and NAAIM remains paused.
 
 AAII local completion and package cleanup merged through PR #2. SEC FTD and

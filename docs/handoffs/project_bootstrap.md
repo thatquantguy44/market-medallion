@@ -19,10 +19,20 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — FOMC script and 1991 accepted locally
+## 2026-11-12 current pickup — bounded FOMC 1992 in progress
+
+User-selected next slice is on `feat/fomc-1992-backfill`, based on merged PR #13
+at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`. Run the existing script for 1992
+only with unchanged finite settings. Preflight is healthy and the archived
+inventory lists 16 primary references. [1992 acceptance](../../specs/spec017/1992_acceptance.md)
+is in progress; verified backup, acquisition/readback, restore and replay remain
+the gates. Current accepted data is still the 1991 checkpoint below. Keep all
+schedules stopped, embeddings unselected, NAAIM paused and FINRA at SSV-T05.
+
+## 2026-11-12 FOMC script and 1991 accepted checkpoint (merged)
 
 [PR #13 — Reusable FOMC runner script and 1991 backfill](https://github.com/thatquantguy44/market-medallion/pull/13)
-is open from `feat/fomc-runner-script` to `main`. Acceptance/evidence head at
+merged into `main` at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`. Acceptance/evidence head at
 creation: `6fd3c5b9594eb933db48117a1c93b08e49d41b53`.
 Track its [live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
 and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/13/files).
