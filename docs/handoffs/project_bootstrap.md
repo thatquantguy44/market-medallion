@@ -650,9 +650,10 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 and Spec012 T01–T04 are merged. FOMC-T06 is accepted locally on
-`feat/spec017-fomc-operations`; the next core operation is a bounded 1995–1996 batch through the portable script.
-Read the current pickup above and Spec017 tasks.
+T17 and Spec012 T01–T04 are merged. FOMC T01–T06 and the bounded 1990–1994
+batches are accepted locally. Active review is PR #14 on
+`feat/fomc-1992-backfill`; the next core operation is bounded 1995–1996 through
+the portable script. Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser
 Checkpoint A are ready for this scope; local publication and G1/G2 remain open.
