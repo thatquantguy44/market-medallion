@@ -1,0 +1,2982 @@
+{
+  "schema_id": "fomc-1993-1994-script-backfill/1",
+  "status": "accepted_1993_1994_script_batch",
+  "verified_at": "2026-11-12T21:13:07.029733+00:00",
+  "branch": "feat/fomc-1992-backfill",
+  "implementation_commit": "f03a7ac709e9b6a7e04f4066f466983cc46f1ee9",
+  "scope_start_year": 1990,
+  "live_batch": {
+    "document_outcomes": {
+      "acquired": 15,
+      "reused": 1
+    },
+    "error_code": null,
+    "excluded_prior_captures": [],
+    "finished_at": "2026-11-12T21:11:20.578896Z",
+    "full_history_complete": false,
+    "mode": "backfill",
+    "pointers_after": {
+      "chunk": "f78b91e75d39c866ccde3d1701b8840f5944d131157fd95bd69f1b69b01713bf",
+      "inventory": "92ce7a64-3d00-4986-a997-fb3deba49961",
+      "text": "dec5dc5e3cf86a438ba4b95452358bb9ae6bc95a1f022dea414d5df385e555fa"
+    },
+    "pointers_before": {
+      "chunk": "3622060baf21a507bd9165d5ffac1b298d38a9263390b689b5c4a757c980e49a",
+      "inventory": "99301fe5-22e5-40b8-828d-751749100130",
+      "text": "75e9251e50e833b5d3222b69ab523babf4710f6ddc5b1211859b1cbd75abf740"
+    },
+    "probe_requests": 2,
+    "received_bytes": 1145768,
+    "received_bytes_complete": true,
+    "requests": 19,
+    "reserved_probe_requests": 2,
+    "run_id": "76d3b509-90a4-401d-b387-a93fc3c73c03",
+    "scheduled": false,
+    "schema_id": "fomc-operation-result/1",
+    "selected_documents": 16,
+    "source_outcomes": {
+      "not_listed": 11,
+      "unavailable": 1
+    },
+    "startup_attempt_id": "90a55350-cf8d-42bd-b4c2-d853a5314b02",
+    "status": "completed",
+    "years": [
+      1993,
+      1994
+    ]
+  },
+  "health": {
+    "schema_id": "fomc-health/1",
+    "status": "healthy",
+    "issues": [],
+    "pointers": {
+      "inventory": "92ce7a64-3d00-4986-a997-fb3deba49961",
+      "text": "dec5dc5e3cf86a438ba4b95452358bb9ae6bc95a1f022dea414d5df385e555fa",
+      "chunk": "f78b91e75d39c866ccde3d1701b8840f5944d131157fd95bd69f1b69b01713bf"
+    },
+    "last_operation_status": "completed",
+    "last_operation_id": "76d3b509-90a4-401d-b387-a93fc3c73c03",
+    "last_operation_age_hours": 0.020363675833333334,
+    "inventory_meetings": 371,
+    "inventory_document_references": 470,
+    "source_gap_outcomes": {
+      "unacquired": 399,
+      "review_required": 51,
+      "not_listed": 49,
+      "unavailable": 1
+    },
+    "chunk_coverage": {
+      "sets": 73,
+      "chunks": 993,
+      "empty_units": 0,
+      "review_chunks": 625,
+      "eligible_chunks": 368,
+      "review_characters": 1103494,
+      "covered_characters": 2170946,
+      "eligible_characters": 1067452,
+      "separator_characters": 1200,
+      "source_unit_characters": 2170946,
+      "complete_selected_unit_coverage": true
+    },
+    "request_performed": false,
+    "full_history_complete": false,
+    "text_or_ocr_accuracy_certified": false
+  },
+  "capture_counts": {
+    "inventory": 51,
+    "document": 73,
+    "asset": 22
+  },
+  "total_captures": 146,
+  "inventory_meetings": 371,
+  "inventory_documents": 470,
+  "native_text": {
+    "representations": 73,
+    "pdf_pages": 624,
+    "units": 673,
+    "characters": 2172146,
+    "statuses": {
+      "review_required": 51,
+      "native_extracted": 22
+    },
+    "all_pdf_page_counts_match_pdfinfo": true
+  },
+  "chunk_coverage": {
+    "sets": 73,
+    "chunks": 993,
+    "empty_units": 0,
+    "review_chunks": 625,
+    "eligible_chunks": 368,
+    "review_characters": 1103494,
+    "covered_characters": 2170946,
+    "eligible_characters": 1067452,
+    "separator_characters": 1200,
+    "source_unit_characters": 2170946,
+    "complete_selected_unit_coverage": true
+  },
+  "selections": [
+    {
+      "set_id": "e2553b6ae883356a4e4d39701f3da91e4bd2fac79b4804f11557b48104a419fa",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19920818.pdf",
+      "capture_ids": [
+        "9dd13fb4-7924-40d2-815a-36fc0932a987"
+      ],
+      "meeting_ids": [
+        "fm_20712ff9d912d21b8b7af9c8497cde6120c2ce4aec5728c60a52c3675a9ca23c"
+      ],
+      "extraction_id": "369f4ad077078d3656ddb829bcb82208aa5997eb4a34778ed637f6158ce22a32",
+      "first_seen_at": "2026-11-12T20:14:38.352635Z",
+      "source_sha256": "93226c40f3661dc4401e209986f1beaa39632326b35199fdacf623d6db1a6818",
+      "document_version_id": "008d21ddf964052db83ade86965473670dd1cb2111c9a055ad057c50a38dba0d",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 30324,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "330f090f290898ad557ae99e70768b7040e223ea92ce9ac7d74e1614d75d5522",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19920701.pdf",
+      "capture_ids": [
+        "0828bf44-a90b-42f1-9163-4a421bb2737a"
+      ],
+      "meeting_ids": [
+        "fm_5aa335f7dc897baf7167930455008d2655284ac172fefa794acd1d3f741dd1a6"
+      ],
+      "extraction_id": "e5e0b6f3e57be3f8cbecd13baa27ef6b97a746d53aafe362d67ab4ebdcfcef8d",
+      "first_seen_at": "2026-11-12T20:14:37.339397Z",
+      "source_sha256": "fd7286b1b22579f2645416297478eea1065b8ae20192be0aefc21569354593c4",
+      "document_version_id": "0324f07ccd156c1cd8c7302343069cd34ff209c6bf0f8ba1ac234aa81062dcd6",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 22,
+      "units": 22,
+      "full_text_characters": 40227,
+      "chunks": 22,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    },
+    {
+      "set_id": "2157c581a3ee96c7b8a52e25f07b9694eade24cc192ed2d7c7893784183f1d14",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19920205.pdf",
+      "capture_ids": [
+        "956bd775-0214-429c-aac0-3d645ce92239"
+      ],
+      "meeting_ids": [
+        "fm_9a9f8400eb72c0cc3f6be7df9f80ff65456743582d4585ead967509a2dfcc271"
+      ],
+      "extraction_id": "40a59a69b6ad21701129e276551373962f3cbfc80493da9a94ae5bdc80a854d6",
+      "first_seen_at": "2026-11-12T20:14:26.317850Z",
+      "source_sha256": "57123a9c9385d75d2272699410ad67e9ec2b55e60f7b8d569e959445a5efa1b6",
+      "document_version_id": "0ac199070e1122c95a3cbaed8fbb694c645ef79c6b6d69d73c02f9ea709bb95b",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 13,
+      "units": 13,
+      "full_text_characters": 29445,
+      "chunks": 13,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    {
+      "set_id": "22a6924937d4a72d2046ea022a601c8a0d2bfc2b9f439302085a4d34215f4b80",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19921117.pdf",
+      "capture_ids": [
+        "22615a66-0592-4b39-a6f3-a58cd1abe7da"
+      ],
+      "meeting_ids": [
+        "fm_d303078de6010eaef738dfd0414654a2b48461f34c705add96ae71b0bdc9a895"
+      ],
+      "extraction_id": "4188bbbfc9fbdcff8743e0210090ee4f13f789aaaa497495ea8a77a95206e512",
+      "first_seen_at": "2026-11-12T20:14:32.346340Z",
+      "source_sha256": "56ff973cd5397e58b9abde2cbdbe3912b5917cf19aadc2717190a2dc86a74b7c",
+      "document_version_id": "0d536ba46e64d35bd7b7ba484faa63734775bb802484c2b4f8021df59e132821",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 5,
+      "units": 5,
+      "full_text_characters": 8119,
+      "chunks": 5,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "set_id": "e0b69e38b643f958ab5821f79abad0502171d54e82d4936c4140aefdf9c81064",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619ep.htm",
+      "capture_ids": [
+        "4d547037-8bf5-4072-bdb7-364e88ee5283"
+      ],
+      "meeting_ids": [
+        "fm_6c2b77c5bf097993a7ca02bfd700ff342700ab9a7222e625fcca02a98fd65f17"
+      ],
+      "extraction_id": "6a67478c930e0c4661bc5c8c66175281d76ce767b757b53845e2e05152b65990",
+      "first_seen_at": "2026-11-11T16:24:13.413768Z",
+      "source_sha256": "ea817187b18ee37fb4c0c68699e79ac65c338c86dc127eaff9017aea57c54705",
+      "document_version_id": "102bec79721ea9178e46638e2f0484c1eebcf48e0aa7759bd6d1742f392f6ca3",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 0,
+      "units": 14,
+      "full_text_characters": 37014,
+      "chunks": 19,
+      "eligible_chunks": 4,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "3d39defcdbf89c71820b6228e2cb33acb2dce7bc9819e0ab3ead34f71e3bdd54",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19910820.pdf",
+      "capture_ids": [
+        "174bc5a0-78ff-449a-a764-8099f2e9dde4"
+      ],
+      "meeting_ids": [
+        "fm_e2046d3322a81b711fed18c1990823e1a6d80a07dae8f28b77af9876c05746da"
+      ],
+      "extraction_id": "3efc755708c2600311b8d90f6cc2f6053262891d332f8e565c7186891f17ba5a",
+      "first_seen_at": "2026-11-12T19:30:37.909680Z",
+      "source_sha256": "189b833b5558f407edb1dca220204ab2567c14b19718a7b95f9ab8d0192a212d",
+      "document_version_id": "18d26fd21e70bd76af4573737fa31d9810257f2ecdd2a0e35c10f111d96ef607",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 31710,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "e73812ae8d6eb0aec5380da13aa4f61bdf15a2ca102aafa2acdfb0c7f543f6d8",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19901002.pdf",
+      "capture_ids": [
+        "32d1ac48-6592-47de-8aaf-97526ed1e6ba"
+      ],
+      "meeting_ids": [
+        "fm_3f488907ee6366e54efaf97adb5a817ce7d7946ab7708ef801cfda6adba21d00"
+      ],
+      "extraction_id": "8fcb5ca658a38c3539851d8d43c1be2added2f4cfa27ca85ae00105f538dc1bd",
+      "first_seen_at": "2026-11-12T17:36:23.158536Z",
+      "source_sha256": "fcf07cff9104800189aeb367a97bf9303c67c0398ff74b07fee1c5b438cedee5",
+      "document_version_id": "1aa491f4c40de4360c69cc0b984a164531d164fb7a2b5043f0f4a354c286d1fb",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 20,
+      "units": 20,
+      "full_text_characters": 33549,
+      "chunks": 20,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "set_id": "8cc4f4a0667899314878daadddfb69089a5840f038ef9234ddfa08a34a182b50",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930203min.htm",
+      "capture_ids": [
+        "a0c3c499-1763-4340-a585-d00d339c48b3"
+      ],
+      "meeting_ids": [
+        "fm_d0a20598ae9ed4a7f6212dd3fecfb419bfae6bfa04b1c06c7083e0ccbbb3d78a"
+      ],
+      "extraction_id": "290383824fc483027fb9dd028a4a26f9ead2a8fd0d3e6e52c1a498216d36c879",
+      "first_seen_at": "2026-11-11T17:55:31.506354Z",
+      "source_sha256": "931a671a40ce0bc3ba468ad29806863a3dca760ce09be8e9549b1be7e686debd",
+      "document_version_id": "2547ef34d9f0ae9fdfd3d5404859cb27647599f5358201c041a77eb848657b8b",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 68494,
+      "chunks": 23,
+      "eligible_chunks": 23,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "4c8b2592cfd93433bf59d6ba0d4bf7d773a237263db04bcd1e6fcca9f90d764d",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19900515.pdf",
+      "capture_ids": [
+        "1ec391de-77f3-4645-a9e1-10179c9cd293"
+      ],
+      "meeting_ids": [
+        "fm_e7255d07e4af8e1f8a5d94b2dd0b5c71969f83715f2fd1bbbb80854e99cf50e8"
+      ],
+      "extraction_id": "be80c79713054ae8a51cbc3d3a49f8c0343bfee34f03b90dffcdcb64c1a0fb4f",
+      "first_seen_at": "2026-11-12T17:36:20.150142Z",
+      "source_sha256": "af35833270aa8d0210f967015755699ccc03f0f0c30c9c600df19e8b7fe2111a",
+      "document_version_id": "2577a596314f241c1848b5b5c5bd62c70f41b2178b79e0d23e9f1bc99075a881",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 16,
+      "units": 16,
+      "full_text_characters": 27388,
+      "chunks": 16,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "set_id": "66b899c71953786779ca54b758200c5a4ba6e5ccad6da2fba26852b57362ea76",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900207.pdf",
+      "capture_ids": [
+        "c0924087-823b-4bfa-83e2-efcd587aad72"
+      ],
+      "meeting_ids": [
+        "fm_b6eea3c0e6e2df08a068391feed2eac1e0a233f74f0c5c9897fe43357a84cdb7"
+      ],
+      "extraction_id": "3d8d221fd5e45e488e33a3153c4c4a585d9200c730ff0ce771f52122647edda0",
+      "first_seen_at": "2026-11-11T17:55:32.830130Z",
+      "source_sha256": "bc9ca5b56a873fbf639f7cb4bd3218fe1d4625031a64e8095629e74821a20401",
+      "document_version_id": "2b5df7b8760d4c9c681cb11b3fbe010d2127566752159a6196a3d408ccc43ed4",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 37612,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "c3029ddf757554dddfaf0212b9758bca9f01cd1266be6ccf71145f7a5243ca62",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19901113.pdf",
+      "capture_ids": [
+        "dba92f76-20a8-4b8c-b1ce-5d611a168891"
+      ],
+      "meeting_ids": [
+        "fm_e5e9357c31f376cee5bf54190894da92421cb92c95acf4bd20cd6e1139f58961"
+      ],
+      "extraction_id": "fa8a5155a7d9423b415283f89d3aac2068ad240b037b1b29005d99259bd3ebb1",
+      "first_seen_at": "2026-11-12T17:36:24.165405Z",
+      "source_sha256": "79eb9661d500bb605e61960e08c6819673ed390c2a03b9312fc6799c6135a2cf",
+      "document_version_id": "2c58df628e68fa08362261a3c1e78f2bc615760e93e2019c7db464314b32ab46",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 28482,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "995c6cbd4284ea2ca8d153e4ac62217be60c6a0b93025d275052a19c9ad5fb2c",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900821.pdf",
+      "capture_ids": [
+        "d8928aa8-dce0-4743-8df1-bc09e63130fe"
+      ],
+      "meeting_ids": [
+        "fm_bd3c4df98a5aeafc44e40f5218b428191ee9715be5f1a6137db1a0f881d76106"
+      ],
+      "extraction_id": "0290e9e3222c19758655538217f6561e697b821798c10ea294e6abf90e97be2d",
+      "first_seen_at": "2026-11-12T17:36:15.122700Z",
+      "source_sha256": "f6ea76df8f5d3a650da3db4b73f35e2d94f78fc43efc648da9626ed0866a63a8",
+      "document_version_id": "2fe4220cacf714789cd68843550422f4be73b5e8aab7840193942b77c4911c92",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 7290,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "51f172bd0aa8cf7009f6e71c8ee27e72cd8baf445c991d3ea0d8687b6c2d86ce",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19910703.pdf",
+      "capture_ids": [
+        "86717cf0-4ddc-4706-9e75-bc546592275c"
+      ],
+      "meeting_ids": [
+        "fm_d084a8baae0207d725f01fab7108b10638a235f859b364e78d73f790391e4f06"
+      ],
+      "extraction_id": "fb239c5fae9fcdbb9a4f219565a828306b53492172e2d2d9cdcbe2bd0fbe8ce8",
+      "first_seen_at": "2026-11-12T19:30:36.943047Z",
+      "source_sha256": "75f9bddf658b6c5f868818a555075f31c98af402f8979ef8eed8b9eba38c677a",
+      "document_version_id": "376dee6a16004ec6cfc8665226efff7aef309ee4a6145ac42d780da9b49c2a4f",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 23,
+      "units": 23,
+      "full_text_characters": 38906,
+      "chunks": 23,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "set_id": "d0872134964bd65ce176b7fd620c5909bf6e507a0284c68cd62a5ffa3e9e9924",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900327.pdf",
+      "capture_ids": [
+        "496f8c77-4e31-4cc7-8a90-6afdbfa7238d"
+      ],
+      "meeting_ids": [
+        "fm_3846fda37931dce3617af908e4f2d5ef9b5d2840a861e531b520f47a42be1ba2"
+      ],
+      "extraction_id": "b61dd770f3bde8b78179b3078f858bc1d65c98f3d306e72880ab9f6640736f34",
+      "first_seen_at": "2026-11-12T17:36:12.124069Z",
+      "source_sha256": "408674e90c7c53a29455a12aacfdb79cc9bf96ef029a505befd2f2221dcc5cf2",
+      "document_version_id": "38e966a1be65ca39bef32f07d67db8e75ac27c76497ee4657bef06740c22a533",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 5,
+      "units": 5,
+      "full_text_characters": 7911,
+      "chunks": 5,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "set_id": "3ffe6d3da5b897baaf40ead1cac83e00208df6c66e90b735925926c73f4876a7",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930921min.htm",
+      "capture_ids": [
+        "7a2e0475-60be-40c0-a3f1-cefedc64e8a1"
+      ],
+      "meeting_ids": [
+        "fm_a98b1ee02b9caef546eab644ba4464a09f72f89edd8e018a95ba6808326b1a98"
+      ],
+      "extraction_id": "25db2843733a98c6ef42d0f66b34a8d711383c6bcfb0f41813dccbe6725e3f9c",
+      "first_seen_at": "2026-11-12T21:10:44.539507Z",
+      "source_sha256": "3e021f0a8a07698527511dd41a1835f0055af84991eeb96b4a92a1886925a319",
+      "document_version_id": "4091c04f301f3cf3c32972a2bf5ab208dca035efdb18e255d078b8be7205ac42",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 33323,
+      "chunks": 11,
+      "eligible_chunks": 11,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "bc8a04a1160204da87f7903069102ebb0651130080b54bfbd25821480de952e7",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20200315.htm",
+      "capture_ids": [
+        "bcdff0dd-a703-478b-a73d-c1f9984491ac"
+      ],
+      "meeting_ids": [
+        "fm_6d47eab6cf4d38438b5d84c34c3eaf36ef38de9d35e0fc7c49279c19de9aaceb",
+        "fm_feda9c9f462359ede463bef0d260fb3218f28640caaa3bf24f34b09980319c3b"
+      ],
+      "extraction_id": "86b12dacffd895e4d180f409e0990821a27e1944b27a8f3cf836f0f569678d1a",
+      "first_seen_at": "2026-11-11T17:55:33.793218Z",
+      "source_sha256": "079619c774ad4bbb3f4e3b2c6542ecf34d0924e3503bd945cbf2abad11ed69c1",
+      "document_version_id": "40cda9a97a114b38d83cb1b8368bcc1b971d3a5a32eba224275c34d70c6238d6",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 66098,
+      "chunks": 22,
+      "eligible_chunks": 22,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "7a87f0214690d9e8923da53e55b8e88f2757f6277c9b58d3de377bcfbc2a9110",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19910820.pdf",
+      "capture_ids": [
+        "13f602b7-1e62-4f77-8fa0-2df6db2192e8"
+      ],
+      "meeting_ids": [
+        "fm_e2046d3322a81b711fed18c1990823e1a6d80a07dae8f28b77af9876c05746da"
+      ],
+      "extraction_id": "3f873d2041d915c480ee7ecff4571e50e89e89e21bc56b3ae2da9e12344f8dcc",
+      "first_seen_at": "2026-11-12T19:30:29.858596Z",
+      "source_sha256": "cc25820095bfd3b74309091333573979f7a953833fde5535ba3ebbf4255a124d",
+      "document_version_id": "42e4bb16d8449a8e8bd98131c1b62df10c78fefa0593269abb16ebc81be84d0b",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6024,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "a5e9435d41215ac41b1f8a415c231efd799695399d0f298c393d9b352ce4915f",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19911001.pdf",
+      "capture_ids": [
+        "1f1b4084-15e5-4046-9050-0ab33913ebc2"
+      ],
+      "meeting_ids": [
+        "fm_5481cf56a05f1c33f2c7273ef7b4130ca58525d7dc7d6932175f893d333eea1d"
+      ],
+      "extraction_id": "e95543dc527053429d0a0849678dfcd76625df020db1bb30913b1eba9c2aee91",
+      "first_seen_at": "2026-11-12T19:30:38.929073Z",
+      "source_sha256": "8c6e505e9b556f2c33ffbe584c85bb0e758410ebc821f0bce2e76450c2f15ab8",
+      "document_version_id": "431cb5c75c09e1c0afdd8d3d1e12ade1bc133b6a940eabd1568bc9356d063a3c",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 15,
+      "units": 15,
+      "full_text_characters": 27895,
+      "chunks": 15,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "set_id": "e05e217d1abfd618600417d922a22e4173bb4dd3c082de680053bd454c890727",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19920331.pdf",
+      "capture_ids": [
+        "641b0c0d-8a7c-434e-8bf2-3632a6a4ef94"
+      ],
+      "meeting_ids": [
+        "fm_d120becfa6d6f037d572cebaec56c53cae352a3b1d17e1d8e459854a89853388"
+      ],
+      "extraction_id": "b512d07cf9f30b012503f5ef77bc2ed5c3e40eed11b607df6a04070b0e928f50",
+      "first_seen_at": "2026-11-12T20:14:27.290324Z",
+      "source_sha256": "9bb41c82fb555760463939f4ad1cbb9d58ec95575dd2c1c6fe8ea46eaa3e7b44",
+      "document_version_id": "432ccc736b2a259ce4285c00492648103cfe2a74505aaedf867d2050ea7c6e90",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6445,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "756d47f9b1a245a68fa19d1f97fad534c20b2226e8bd86ca240182c2a6b7ef24",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940927min.htm",
+      "capture_ids": [
+        "4b21ae6a-02a2-426c-8efe-271a5f212533"
+      ],
+      "meeting_ids": [
+        "fm_a82ce5d1076bee34b3d617a0e413eb68c4889d29ffac445d71c380865b733240"
+      ],
+      "extraction_id": "49701668ca99921c793c34b2290d943d7f0a39b4c8ecc3a05ec592b16c7a8200",
+      "first_seen_at": "2026-11-12T21:10:52.804002Z",
+      "source_sha256": "8a5f05e572773dfc42001935c200ba817cbc627b11eb7bba4682afe22296083c",
+      "document_version_id": "466f085cd1934861a384d26f1cbf690467b02af905aa4e27b6679533a4fab13f",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 33781,
+      "chunks": 12,
+      "eligible_chunks": 12,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "9bf75aa78e3675f9afe57866258dfc8d5f57470a33e73eb81f6cb7140c783e6e",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930707min.htm",
+      "capture_ids": [
+        "329c27da-2216-47e2-8701-173d5de9101b"
+      ],
+      "meeting_ids": [
+        "fm_e97ece1fe611c97d10eae9a6a5689e76bf4a5e9b0a438f0daf577b8d9631dd79"
+      ],
+      "extraction_id": "426cefa895452343cfa002d7f3b74a1ef53734f3b5aeafe8799dba876cfd89f8",
+      "first_seen_at": "2026-11-12T21:10:42.522150Z",
+      "source_sha256": "1af41b0459e7636f987806e3c0890086c788229ac1ee7e64c660d9f757641adb",
+      "document_version_id": "4c306a3f4b7eeed3d5165d4174068b19ad6e296d26213ee716061fd751a33d1a",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 46474,
+      "chunks": 17,
+      "eligible_chunks": 17,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "cba00065fa9f5fb8bcf061cdcc4e8d69d1a6ee4a5cb2258024693f0c267b25c3",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930323min.htm",
+      "capture_ids": [
+        "9457483c-af5a-47fb-a7f8-0190d79a1a04"
+      ],
+      "meeting_ids": [
+        "fm_babae246eaf861902d2372da8631d4b069b022631464fbe910d1cc1268ff6e1d"
+      ],
+      "extraction_id": "9b10afe28eebac318a2e4c8f5f748f661d11f3f4f2abe1a2e40cc5fa4be28d8a",
+      "first_seen_at": "2026-11-12T21:10:40.505917Z",
+      "source_sha256": "815dcc038eddac8d7dfeee880691ebf683cb9e0a21e23d23b172008974f36b88",
+      "document_version_id": "4c337ecfe88df4f474125c237a18aaad6c3fbb4d4e4f2bd4c5319fcac7daaedb",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 38768,
+      "chunks": 13,
+      "eligible_chunks": 13,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "705df8d2eec0b36d8c18153715f8912e72e8fef7c252460c84840aeb95cd20c3",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940204min.htm",
+      "capture_ids": [
+        "8261228e-fef7-47f0-861e-bab3c2d9d838"
+      ],
+      "meeting_ids": [
+        "fm_bb64e36f0c30d655eeb8a7b5cb211e73abaeac70a0604053d2f1ee71c95d5adc"
+      ],
+      "extraction_id": "f2395be184a590be37da109adf2fad9cafbfa88383002157489569f422787300",
+      "first_seen_at": "2026-11-12T21:10:47.712503Z",
+      "source_sha256": "928073ad0443f2f16956303366428e9268824be67d3a75be230c7fc13e00d687",
+      "document_version_id": "4cc64a7df882511a513aa3e496f3ddd94b410c8094ad858ba8b82a2d582f47f5",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 68589,
+      "chunks": 23,
+      "eligible_chunks": 23,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "f66d86d94c3bf7a7f65d7db31e26ea6d50e0118d29fdc292fd965f61a34f1d60",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19900821.pdf",
+      "capture_ids": [
+        "f5087086-52dc-46e8-b02e-138b0607b4f1"
+      ],
+      "meeting_ids": [
+        "fm_bd3c4df98a5aeafc44e40f5218b428191ee9715be5f1a6137db1a0f881d76106"
+      ],
+      "extraction_id": "c19dc70d876e41ead6d05ad3d3a5348906f6354832ea3828d29dac5204de4e53",
+      "first_seen_at": "2026-11-12T17:36:22.183609Z",
+      "source_sha256": "6f6fe2634cbfd7ca4bb40f80d1bba657771dbfd7cdc6a0b84ff2519c2bd5d07c",
+      "document_version_id": "5e5edc11890bb4655fe3c79d1003e0327f8f89c4f2fe13572bb9e557353f57e2",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 30193,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "5c6f54c8ea13ab12dec1a1906bcf69e8189f8f84876dd21828e55c17e9c8d97d",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19921006.pdf",
+      "capture_ids": [
+        "66336a96-1687-4eb6-898e-8d8420f83ba5"
+      ],
+      "meeting_ids": [
+        "fm_6b95e06f9f38c0cfceda4103b37b4bf50c420c7277cf32c76d54b86d7c8bfe35"
+      ],
+      "extraction_id": "a1d848fbc156955aee418ada4fbaad30ddedc0137b961c4ac350488ca384cd3c",
+      "first_seen_at": "2026-11-12T20:14:31.273103Z",
+      "source_sha256": "68f296623ae15c07983955ea894fdf9f60c9b9694255c6b89fd81a1ce959a07e",
+      "document_version_id": "5fa9932d5bc46397bd6bd289e265b4c5c32fa596d915f6f4df3830ef88e8bb20",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6110,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "a21e301e5c579e09f67529a758d2772c1bbd06f8d31ccd8f1e423de8bf76a0bc",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614.htm",
+      "capture_ids": [
+        "20c6763f-c14b-4075-a148-ecd3d0f4291c"
+      ],
+      "meeting_ids": [
+        "fm_d91436082515f5968455cf2e87f9604a235962dd68797c80a7f8d37e78115d57"
+      ],
+      "extraction_id": "4e841883ca67e085c0f921d06919fd9a03f27a518c764484c1a17383bcebb450",
+      "first_seen_at": "2026-11-11T16:22:40.920112Z",
+      "source_sha256": "b84af4f3aa81125fe72f8ec92acf88352f4ebe65000429600575459bd006118e",
+      "document_version_id": "603d95bfa4a1465532b963f4bc08486ee5a090671a233fbb93a52b77d40658da",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 58474,
+      "chunks": 20,
+      "eligible_chunks": 20,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "19bdff3aeeac60149ec00007400c0355ee3da432d4882676710ea9e68e93a301",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19911105.pdf",
+      "capture_ids": [
+        "07cba1c9-f456-4d8b-9a46-86206a616cd8"
+      ],
+      "meeting_ids": [
+        "fm_1a95ed550020f68163263c4bdf06067ed2261370aadb88fcc308c8220c8c7ac6"
+      ],
+      "extraction_id": "107546ef4fd06cd04cb3aea81cad900f00fa2743d2dc79a041011fe8316f5265",
+      "first_seen_at": "2026-11-12T19:30:39.953174Z",
+      "source_sha256": "3fb567628e719af5d38d33d29b95564f350050f9d7fa6a60d4b09251c3a71dca",
+      "document_version_id": "611e08949c38811c5f6b67538a6e9ef6cd21a4cffbc8f5ddbbdd8ba1eec9fda9",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 33018,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "bf121f9722cac58960007e776330b92d34e1b41eb36f2d65f3ca8c80d4c1b076",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20030129.htm",
+      "capture_ids": [
+        "c8e45b56-21ef-47e6-8e63-47339defdb06"
+      ],
+      "meeting_ids": [
+        "fm_67f0bd9b00c629e5ca22d30b734ea1bb63d8371a49cb0fc0e06e7333517e06ee"
+      ],
+      "extraction_id": "6b9881c12b33508eb42b376d365b9427dfe93b48d1267cca748b1dcb95270919",
+      "first_seen_at": "2026-11-11T17:55:31.916550Z",
+      "source_sha256": "cc65beba0603ca2acbb19ef13a146b609ac2a70e12ad62b4c72a58d85d7f7793",
+      "document_version_id": "64e3fe93b355cfb103aab5f894617540e50a3a3919f6018079455eeb4cc88256",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 49719,
+      "chunks": 16,
+      "eligible_chunks": 16,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "88ce61b6f40bf8c88ce65856eee52b8fe23d31bc31406db3ef3ae41174100671",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19910703.pdf",
+      "capture_ids": [
+        "f9e893fa-87e3-40d5-ae0c-883527d95af3"
+      ],
+      "meeting_ids": [
+        "fm_d084a8baae0207d725f01fab7108b10638a235f859b364e78d73f790391e4f06"
+      ],
+      "extraction_id": "107f84866aa4e565b968ed3a37d5a58d866541837f7960b45499c27ef48f94ac",
+      "first_seen_at": "2026-11-12T19:30:28.875971Z",
+      "source_sha256": "0aebc3284e62c7a502adb619e65d28350bc31db5c8fbd9c1f503417109b77ede",
+      "document_version_id": "6be650e3a4fcf7b5090e563791c9ee0047927bbc9b2e0b5c0a02786b8d6db8f1",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 5,
+      "units": 5,
+      "full_text_characters": 7729,
+      "chunks": 5,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "set_id": "4b1572237598e5ca5d421365ec2dec887d510277235f1df51a5c4d1bf8cf0c25",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20200315.pdf",
+      "capture_ids": [
+        "690f843c-f74f-4b72-a66e-a584e84a3066"
+      ],
+      "meeting_ids": [
+        "fm_6d47eab6cf4d38438b5d84c34c3eaf36ef38de9d35e0fc7c49279c19de9aaceb",
+        "fm_feda9c9f462359ede463bef0d260fb3218f28640caaa3bf24f34b09980319c3b"
+      ],
+      "extraction_id": "a36cc21bf636c75fcdc4fb4003c4a4a25d8676cfb4955723207d8b9b0b62f5a9",
+      "first_seen_at": "2026-11-11T17:55:32.349929Z",
+      "source_sha256": "336d5fd78370531caadbdd5d82ed9df3a851a4fe768ac051b0400c26274147c2",
+      "document_version_id": "6f3742491e1ea752f0cb0a318db97976fc9d55078a41d5f9911b3ed8566c3918",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 14,
+      "units": 14,
+      "full_text_characters": 70002,
+      "chunks": 26,
+      "eligible_chunks": 26,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "set_id": "75610c03e362a5e8783ce8a041e0463a8d9276a8cd8af31d9384951b7f23d8e8",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900515.pdf",
+      "capture_ids": [
+        "fc1bf449-6efe-442f-91a9-3cab670c1b55"
+      ],
+      "meeting_ids": [
+        "fm_e7255d07e4af8e1f8a5d94b2dd0b5c71969f83715f2fd1bbbb80854e99cf50e8"
+      ],
+      "extraction_id": "1e85fdd0c461373376a6d3d0e518c7eb406ed0416a1005dd6d120150de1a5c53",
+      "first_seen_at": "2026-11-12T17:36:13.098115Z",
+      "source_sha256": "edca175ee343c6e17d8bbd4d1c412c874bdefe9c0778e45ea716a7ed80f1ed93",
+      "document_version_id": "74a7a9d4d48b14f859800eebc8a5b661e84f1f5dd7f74f7083b73144210e444a",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6436,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "c6c6257b8647ee4e3855ae05a125fab56b19d160caf99e888b9ba33e90866005",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19910206.pdf",
+      "capture_ids": [
+        "327bdc5b-7a78-41a4-8f6f-4d5cab4e95f8"
+      ],
+      "meeting_ids": [
+        "fm_99c53f3ed21ed3cbec26f665bb84fc5decc0eaa56879cad99b2efe3cbdf7d8d4"
+      ],
+      "extraction_id": "535ca41666473060f938428e59d2c6f257215bd2ab289a8abec4d093331c1662",
+      "first_seen_at": "2026-11-12T19:30:33.908216Z",
+      "source_sha256": "1051950493321a9bf88043c47c24f8cc39176fb205fc8017391ef8b7ddd255c4",
+      "document_version_id": "786bc004a3122511cc1edd4b37003492e5b5f247997e46c058cfa931df6064d2",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 24,
+      "units": 24,
+      "full_text_characters": 41343,
+      "chunks": 24,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "set_id": "03246a6a6516e3ff57f572e92a07de37c72936fff6eb5e4cad2efd1372a2520e",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19921222.pdf",
+      "capture_ids": [
+        "1facd5a7-1197-4490-8cfe-de813273e3f9"
+      ],
+      "meeting_ids": [
+        "fm_9b1f18420dfbe4740d03219cdb79fd442bb12238cacbd846f3da123548a508ed"
+      ],
+      "extraction_id": "e1edb71d809b5e446c09244d96c112bfc16b94cac870eaa0a73c6408b54f48c1",
+      "first_seen_at": "2026-11-12T20:14:41.380024Z",
+      "source_sha256": "ab5cccfd41acbbaa0fc80c296d5c78df6946fa69cf3ac0f3679099695491615e",
+      "document_version_id": "7bbca27a1f8817ab78f236fab5e50827aab82c1c810fafd90eb9db57e9c78015",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 29888,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "1ad16d0f6c6fb57dae26210891208780ba06688bfc0b2476de5543ca4f7cbec8",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19921222.pdf",
+      "capture_ids": [
+        "de794bb3-84cf-4241-a64d-ad9412104476"
+      ],
+      "meeting_ids": [
+        "fm_9b1f18420dfbe4740d03219cdb79fd442bb12238cacbd846f3da123548a508ed"
+      ],
+      "extraction_id": "9e150461f3da9a0cb0f38b7b21e43f940f3e89bcc33a3c7576cd60dd2c57ab43",
+      "first_seen_at": "2026-11-12T20:14:33.283541Z",
+      "source_sha256": "0a201c20fa857f7868970b2b1abb1946da6f90f640c9e8e4ecea8623d5fed467",
+      "document_version_id": "7e9cb9e6fdfb3cdee2c6aa304f1759e63ae06030afd12fab3ec1158f6fc834ab",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 5914,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "f42fc78ee61a6cc09d039de72df8e2174e76cf48934d30759a1e03a74c0cde13",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19931116min.htm",
+      "capture_ids": [
+        "830f01c4-ba89-4406-85ed-20acf18de73e"
+      ],
+      "meeting_ids": [
+        "fm_3ab2b233c38d235e5af23d1dc3ea2acf975c2b318b08a02c2661d0ae877de53a"
+      ],
+      "extraction_id": "04c9d14f2ac4b6179c8006d8e5469531f9f1ee8f1e3c61d25a15a06e03d14713",
+      "first_seen_at": "2026-11-12T21:10:45.562748Z",
+      "source_sha256": "5119ee4b303f134cd21614ba5da51acf88bbf16f8bab95a17fe4414a475fbcfd",
+      "document_version_id": "7eacaa82674bf31e8db954df4d102787cbed83eacd95c5204032777730abd570",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 40766,
+      "chunks": 14,
+      "eligible_chunks": 14,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "08c23bdc2239e4b474981fb82dedc189b15000f849db9282e455c70981a5fa63",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19921006.pdf",
+      "capture_ids": [
+        "92bc09c7-671b-45b1-86c0-9a4266354db7"
+      ],
+      "meeting_ids": [
+        "fm_6b95e06f9f38c0cfceda4103b37b4bf50c420c7277cf32c76d54b86d7c8bfe35"
+      ],
+      "extraction_id": "0f9ed1f6c94f2305a4a9fecb5b3f701420334ae7680e8c37715f379dbb63b624",
+      "first_seen_at": "2026-11-12T20:14:39.344343Z",
+      "source_sha256": "dc9348c00780b553f2e46d735e0c20e544f345131d5e3a9e504f694e2a0587fa",
+      "document_version_id": "7edffdb3405c18130082b42ac0f9f3b88eac7c8b261f1ee614be3e3d8a9251e5",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 29974,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "d5f7e4fdcc52e1a8fa9a42d0ecb2e1cda8d9210e624dd4a4c29a5194b272ab53",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940816min.htm",
+      "capture_ids": [
+        "3056a13d-7cfb-4210-8b40-e26fb796c93e"
+      ],
+      "meeting_ids": [
+        "fm_74e52fb1337a143f22b9a3d6b53b44b9ac7c3b96e6a226dd029ebbc321873009"
+      ],
+      "extraction_id": "d447e0b1e1f4eebc4b5c6baff5926903a3979e73ec45517310bbaa2d5423936e",
+      "first_seen_at": "2026-11-12T21:10:51.713924Z",
+      "source_sha256": "fb4e9de2cc170debb986b6d77c75e85f2dbe2cad0d5d09fc2a0cc233f77ccd3f",
+      "document_version_id": "80055e6b341b3f9b6c78bea90814bfbd0fef8fde5e147533937bd6c4f626d5b3",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 32313,
+      "chunks": 11,
+      "eligible_chunks": 11,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "e2b7188fae2be7033d9e64226b50b7a31554ea2845f7463ab5cd562ea1b49bb8",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19931221min.htm",
+      "capture_ids": [
+        "cc8c7843-e10a-48e0-b924-9632a85bbe98"
+      ],
+      "meeting_ids": [
+        "fm_4dee24e1b6664908a95d9a73945cdadb29967ac07c9750709ba40ab279b00c5e"
+      ],
+      "extraction_id": "f68618445ff295e68cab33b153941d996c91082272a0837e16d245eeb77b6193",
+      "first_seen_at": "2026-11-12T21:10:47.563143Z",
+      "source_sha256": "44478c8ad9f90b82695c544cc195bb2a605b95a964db9d1cb373059feb5c5bef",
+      "document_version_id": "825acf87c788791587f0bad1ebfaefb3727a5474777b8a2afee1ba6d4d8ffa25",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 38460,
+      "chunks": 13,
+      "eligible_chunks": 13,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "f9e9cfbd03243e78300066efa69dbdbbe13f62a12b9f18688445cdcab2172240",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19901113.pdf",
+      "capture_ids": [
+        "79dad395-6da5-43d5-a6e5-ff99c5d69c70"
+      ],
+      "meeting_ids": [
+        "fm_e5e9357c31f376cee5bf54190894da92421cb92c95acf4bd20cd6e1139f58961"
+      ],
+      "extraction_id": "7a72eba14c7bce3c8dbc19e2222ba480f11cd46e4b101d324722441934204924",
+      "first_seen_at": "2026-11-12T17:36:17.108605Z",
+      "source_sha256": "9533c35cdeeef9c8bc50c4207f71a596416216a5dbf3f8605274fb8f4933ac33",
+      "document_version_id": "82f216f51f72c424d9f15031a2faa82632c997006e93da8a048ccd540d751844",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 5,
+      "units": 5,
+      "full_text_characters": 7747,
+      "chunks": 5,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "set_id": "b0a67962300407abec11b93e13e7e99226cabe4dcb70ee212ea76a50f135c297",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614ep.htm",
+      "capture_ids": [
+        "0be5f76d-6a3b-4b5c-acbf-3735fe9beedc"
+      ],
+      "meeting_ids": [
+        "fm_d91436082515f5968455cf2e87f9604a235962dd68797c80a7f8d37e78115d57"
+      ],
+      "extraction_id": "22dbfce6f527948356b8107d2fe983f1605e217f68c38d5a8c805cc475538d13",
+      "first_seen_at": "2026-11-11T16:24:13.562627Z",
+      "source_sha256": "96bf825d9964acf808de882cd30ea7e0819d7a46746266f6e60cd871aef2fbd1",
+      "document_version_id": "8428360f8c19489c62d0cb952d681961a24beaed63ebbc59346925eb2e22762b",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 0,
+      "units": 14,
+      "full_text_characters": 40761,
+      "chunks": 21,
+      "eligible_chunks": 5,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "241ef54c0241572e7e70aa5c362bafc4d4c10de2793aa6e5fad882f01ac0e299",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20260128.pdf",
+      "capture_ids": [
+        "d3aa0bcc-363e-4441-af7e-3da50a4a0692"
+      ],
+      "meeting_ids": [
+        "fm_d7a1344a91fc7245f372fd3080cfbb98a0b253ea890b50a1728c9dba63445147"
+      ],
+      "extraction_id": "fb8d784cf503ac5d11910999cda35617adfbfbf63dfb24b847c8f2f879b2921e",
+      "first_seen_at": "2026-11-11T05:26:28.130328Z",
+      "source_sha256": "7565db1bbe4d562b808d50a4150d2b42d00ac87a3acb1d6d2a9eed5e4974e743",
+      "document_version_id": "88b0a0cb6f02952f308212334c011e40132d675e5e351c0a4c72e84dedc84ed8",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 45801,
+      "chunks": 18,
+      "eligible_chunks": 16,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "cec7a0589357c9c99b7ffce5753e15ca1b706e19eeec5951ea58e74fd4eedb83",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19910326.pdf",
+      "capture_ids": [
+        "6fdb1f11-b57d-4509-884b-222b2e826f22"
+      ],
+      "meeting_ids": [
+        "fm_a13213058b5b64bc49b5efc99b822d5e605a9d528f069cd90202396fe46a92a7"
+      ],
+      "extraction_id": "de567abd1246776417b6fca2986bdc3240784065412534901f5216c717a55a3f",
+      "first_seen_at": "2026-11-12T19:30:34.909217Z",
+      "source_sha256": "641bd65b09b95ccc72cbb31391072336ab549ca7bb9d930e894f94921dc4cc77",
+      "document_version_id": "8fd50994c702002313cee34bbc514f373fb8920863440782aa924cea490b8dca",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 29675,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "abbbdeefd6d5196f10a7930ba9c6e14ec45591c7f3c73250ff1a20121e23d165",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20260128.htm",
+      "capture_ids": [
+        "d247f6e5-4309-42ae-ac6c-72b86a577692"
+      ],
+      "meeting_ids": [
+        "fm_d7a1344a91fc7245f372fd3080cfbb98a0b253ea890b50a1728c9dba63445147"
+      ],
+      "extraction_id": "656d9b78004ab7ed8afe37d0db65d55e51a4e984ef3bb546c754b6dde20bfe3e",
+      "first_seen_at": "2026-11-11T05:26:28.324736Z",
+      "source_sha256": "f6e1637aed10b3a8bb96160d7be97b51d5652136427766c491ee3041469cf183",
+      "document_version_id": "903739c9ab39cd894d5a70ee669b66349e95a79764bd9c02666c8f15de64fa75",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 44799,
+      "chunks": 15,
+      "eligible_chunks": 15,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "512005290ffaec5ecc1c4b17ff12a51d85ea430d267577970990f67a584166bc",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19921117.pdf",
+      "capture_ids": [
+        "b707bdfb-b82f-44d5-9e71-d0e09c17255b"
+      ],
+      "meeting_ids": [
+        "fm_d303078de6010eaef738dfd0414654a2b48461f34c705add96ae71b0bdc9a895"
+      ],
+      "extraction_id": "5026e8c13e140a89fca8d42627b01e85c32c2079655fe90618a1d39bc2d4f3d0",
+      "first_seen_at": "2026-11-12T20:14:40.467151Z",
+      "source_sha256": "ebc0ca4b70f2f9f3871b27478dc69a077916163ac850ad949defaaff8ca64b04",
+      "document_version_id": "963d29c8ba2aa91d8035581a858498994b92619dec6f0109a338357832aad7b3",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 33004,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "78cb5ca9182ae7c5ad4e9115bafcf22f9ad57a42bd5827476fd55e5425aecf71",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19920519.pdf",
+      "capture_ids": [
+        "97e37fd6-94b0-432d-9711-f8c02260ea10"
+      ],
+      "meeting_ids": [
+        "fm_4e6e331d1cffb14533f449190ece726d21bb7b47f5bc92fb6e691f7b4b6061e9"
+      ],
+      "extraction_id": "5e1449c5a6343120d277a4d3df2a24364773e8c68ac4d1616607f6913104595d",
+      "first_seen_at": "2026-11-12T20:14:28.290495Z",
+      "source_sha256": "609bd71621bf75a16ad83ed6c541bb918a82b7647441acc341e5afb2ef5f2815",
+      "document_version_id": "9c7f4adf6d3a452c71a8a06f0dc8982a449ce592f1555d01f2a38bd39769d047",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6019,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "a613999df79cafd9956bb24c3dc14fe59862b08d36847a386c53ca6a2ada701b",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19901002.pdf",
+      "capture_ids": [
+        "0493f04a-c86c-4e7a-bbcc-89e5cbade2b4"
+      ],
+      "meeting_ids": [
+        "fm_3f488907ee6366e54efaf97adb5a817ce7d7946ab7708ef801cfda6adba21d00"
+      ],
+      "extraction_id": "7544e9d9f006ea1d58546636f13d43aa535733948ee7352b85386a5ada8a7a5f",
+      "first_seen_at": "2026-11-12T17:36:16.108958Z",
+      "source_sha256": "59de7e3693386fe19bf4e6c8afe8d9b01ba96c1f7e6786b82fe68109ba22beaa",
+      "document_version_id": "a0b2173366f066f0dc888b832e730e81bac7e1ab810f5ee301b46b7c1f608e86",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 7580,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "3978b812ec69d112b1d1dd192a1987b47877c151a1312eb99c61460233380f88",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930817min.htm",
+      "capture_ids": [
+        "e930870c-f5fa-41f6-86ed-6030f7a6bec8"
+      ],
+      "meeting_ids": [
+        "fm_373b1641bde7085e3e84d6225fd261d45e62a0e47a7c9e9c63a1cf7fdf6d3566"
+      ],
+      "extraction_id": "33320f6e3086f383a69763d3866cfbcbb551f09a3d1627888ad4e9350ec7bac3",
+      "first_seen_at": "2026-11-12T21:10:43.529544Z",
+      "source_sha256": "6e7dda5338c342f807de72f1ccf6ca8480d58d3136d73ace7a6cbef7fa9b0e53",
+      "document_version_id": "a8a7126559a8de2d28ebedc12885b5b186578fa60b0b42b2e9217ed53e735fa3",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 31209,
+      "chunks": 11,
+      "eligible_chunks": 11,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "5fa9e3351c49782cc01a74caadd0fc0162020f1d2d81a0d38d470a3a47cbdcc3",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19941220min.htm",
+      "capture_ids": [
+        "d2a0f48c-3dca-4326-9e1e-24efd7128d20"
+      ],
+      "meeting_ids": [
+        "fm_1fda38377511a969c9bf5ceb07754f5f23adf0e63373689cb402999f0606ba68"
+      ],
+      "extraction_id": "dcdee6c11eb53ae002fb4c7a3e043eeaafc1e6e2ed489d7ab76f5ec80ff885f3",
+      "first_seen_at": "2026-11-12T21:10:54.715835Z",
+      "source_sha256": "0d7b01f29f174f306264083b5800cee028cf96e9ba3c52f2d4f012732578117b",
+      "document_version_id": "a9545a2faff69dbae206ab66dc010f18a93236daf772c9ce02b807f065d56586",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 37979,
+      "chunks": 13,
+      "eligible_chunks": 13,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "bdb72a1be3222499bd13e84e848e38ed15a23fc2f1cdb1519f14981b04bf55c8",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930518min.htm",
+      "capture_ids": [
+        "e377dd4f-091f-4ab9-abfe-c421a99c3d9f"
+      ],
+      "meeting_ids": [
+        "fm_1bab5804d7b4167d6a63bbb26cd38b88e5ee0cdfc680b8c5876d8888a76aa5af"
+      ],
+      "extraction_id": "54784da2e8936c5ecb47e162ae39a685316b357ab9115d8fa45becb3ba87cb21",
+      "first_seen_at": "2026-11-12T21:10:41.533806Z",
+      "source_sha256": "d6e20106ef6bfaec299c6d7fa7f1cf41ed857955578221075e0a9f9b2a124435",
+      "document_version_id": "adf48cf6ed597a47def7185d5d782c50c90c970f13280f32132766ea99ef61cf",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 33572,
+      "chunks": 12,
+      "eligible_chunks": 12,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "b7d5a15b69546e77cf83e7a04298a1f01fe2d04723c12c061642ae016ef529ce",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900703.pdf",
+      "capture_ids": [
+        "2db50bce-9287-4af2-a920-e175d00bdd68"
+      ],
+      "meeting_ids": [
+        "fm_6eab21e3e6930099cc5a4f5c35b28ecfa44ab6e102bdec2b2a648420be60b601"
+      ],
+      "extraction_id": "4012fb522c1a03fc799d314fad381d84e2579b37a9fe77df748f27083aa9522a",
+      "first_seen_at": "2026-11-12T17:36:14.151459Z",
+      "source_sha256": "12a0e1cb274b449aff10284230563784ca17b88dcf9f2cfec30c39f0d3dbeb97",
+      "document_version_id": "ae597dfe749e90e6dc0f2de4858b8a8162b4fd1393e20cdcd2ab04fbccd38737",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 5,
+      "units": 5,
+      "full_text_characters": 9708,
+      "chunks": 5,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "set_id": "33d22ae3fea85ea7918faececc49ec2de23f24eb2363e006ad13665d2389fc31",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19910326.pdf",
+      "capture_ids": [
+        "7c1ef18d-7fd5-41d5-9f62-b698473f48d1"
+      ],
+      "meeting_ids": [
+        "fm_a13213058b5b64bc49b5efc99b822d5e605a9d528f069cd90202396fe46a92a7"
+      ],
+      "extraction_id": "8cb6b60b4d0745392b92b63d6c5bfee2f08698da45ef70975c1e8865299a3920",
+      "first_seen_at": "2026-11-12T19:30:26.905688Z",
+      "source_sha256": "bc26f60e797834db4e756e1f5766889643d3768e8c8823fe1f9979dfd3212484",
+      "document_version_id": "ae8d6defdcfaff4aca02ad64462062464b24a31138fc70c24b806f38dfbfe119",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6282,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "1c256b1061b2d5170ed418e61dec0d5446b32d1f6b85e02ebf22f4e8bd7dee4b",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19900207.pdf",
+      "capture_ids": [
+        "3646690a-d2c6-4eb6-b0ec-7c12857292b4"
+      ],
+      "meeting_ids": [
+        "fm_b6eea3c0e6e2df08a068391feed2eac1e0a233f74f0c5c9897fe43357a84cdb7"
+      ],
+      "extraction_id": "57579d9a07855c97aacef24362dd86d1578e92000e7fc366e14ef37ffe515453",
+      "first_seen_at": "2026-11-11T17:55:33.313484Z",
+      "source_sha256": "7ceb8269be8122dbc9bb1a4715178e2c2009d2b821b62f4781bd417a4bb18422",
+      "document_version_id": "b388d9e04dd5b5c6956c0e2b01b42242b77b51782ab6600f5507adc3c0f7c812",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 25,
+      "units": 25,
+      "full_text_characters": 42690,
+      "chunks": 25,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    {
+      "set_id": "88c3543a28c269d81fd333a3014ece7dba68c10e51002b668a5a2f7587369105",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19920701.pdf",
+      "capture_ids": [
+        "cd98e65d-96b7-4e63-bfb0-9c0cccbf79fb"
+      ],
+      "meeting_ids": [
+        "fm_5aa335f7dc897baf7167930455008d2655284ac172fefa794acd1d3f741dd1a6"
+      ],
+      "extraction_id": "ba2a6aee567c329cd7e2581e893912c70231768d66d5b2aa049d2907c78539bb",
+      "first_seen_at": "2026-11-12T20:14:29.269600Z",
+      "source_sha256": "0b0b6030c4ac72604ae4e4f61122b2fc0ff2708c4a71dac2e68d8d97fd399432",
+      "document_version_id": "b43f8885cf72edcf81e513679b571f4c9fc2fb216dd0d30fd6dcd68f35a52988",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 5,
+      "units": 5,
+      "full_text_characters": 8060,
+      "chunks": 5,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "set_id": "4c90c93677ce2dde1d50b9ffe295a675287dd89a144c529e2a261220c9262548",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19910206.pdf",
+      "capture_ids": [
+        "bcec243d-3107-49e6-8b6b-da3efb501413"
+      ],
+      "meeting_ids": [
+        "fm_99c53f3ed21ed3cbec26f665bb84fc5decc0eaa56879cad99b2efe3cbdf7d8d4"
+      ],
+      "extraction_id": "85e99efdd655846a55bf5974afa2dff919f828d580c0da920f239a0f0b0d2056",
+      "first_seen_at": "2026-11-12T19:30:25.875114Z",
+      "source_sha256": "a3f7c6a20528d790d46fcdd325b3111f27d1c58a3462fc459625ee85dca6752d",
+      "document_version_id": "b64101ea90a487b599b0529dc236beb6023bc67f14ab45c70d9081165594fdec",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 15,
+      "units": 15,
+      "full_text_characters": 30115,
+      "chunks": 15,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "set_id": "837ba1c38c5f95be94706b45e90f94409dca6a3c0a886fd0903ec542513763fc",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940517min.htm",
+      "capture_ids": [
+        "edc86086-443f-4fa0-b8c0-43f6696f0ac9"
+      ],
+      "meeting_ids": [
+        "fm_235ebbd0228a2d329da4e38e9ab48f834c7699492abf8b44405c57186d1b20b6"
+      ],
+      "extraction_id": "66efd8ca913d73d1db6581bcfb34faaa5739d2466a197589d30a172160a94130",
+      "first_seen_at": "2026-11-12T21:10:49.704440Z",
+      "source_sha256": "130204f4b475f32a7e29e0a349553361f1c58bf7e003d035e899ec6557074c2c",
+      "document_version_id": "bda39ae2b825a7e2e4253ed9d9776c33549d28f50dd8c1e679ecd87413a4032e",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 32585,
+      "chunks": 11,
+      "eligible_chunks": 11,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "8dea0234ca0c1ba55999b4aa691e1df13977f66b149735bfc1c8a8aa8536404a",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19901218.pdf",
+      "capture_ids": [
+        "a618d478-7891-4323-adc4-2d21e33d5cc7"
+      ],
+      "meeting_ids": [
+        "fm_0d8c16ed556988e0d5398d001759d7388cd27fcfa0eef24322202ade942fa677"
+      ],
+      "extraction_id": "9d64bd17f03e02efcdf86eabf3ea21cc6e62943674b7b85a20d20a4d25ac18c7",
+      "first_seen_at": "2026-11-12T17:36:25.158500Z",
+      "source_sha256": "2e6ced3cca286a26654ec4c218eee7768f9b46b78d88897dc4c44150c526518c",
+      "document_version_id": "c0fa5d05582f1a77482f8d2d38693a2f5674a81bbf119b0fc9c6652fa74eff16",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 30931,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "set_id": "18476edf4bcc9390ae38b2feb39591e71edd0fea3c983c3f20311aebd4eddc10",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19910514.pdf",
+      "capture_ids": [
+        "07784723-cf1e-49cc-b701-106a95fd46af"
+      ],
+      "meeting_ids": [
+        "fm_13e8cb508eb500fa81eb8ef747c2c6bd2bad40fb9aba406ffa819e043ad4c5a9"
+      ],
+      "extraction_id": "75e11ef203c410cec59617b2278890d9ec75bfebe4318dc8dda8895d9531c4a8",
+      "first_seen_at": "2026-11-12T19:30:35.954956Z",
+      "source_sha256": "141900fdbb1854054551b102ad3116ccefb7fe159b74bb9e0f71aa38075275ba",
+      "document_version_id": "c20558d793a13b166f61965f4b198b14a04c3f5c4e715e95859ee00b90d39fcf",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 29294,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "f1719340043f2884bf2f2e1d8e0d37da2d91b09753073f5ebc4a393a4991a502",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19920205.pdf",
+      "capture_ids": [
+        "d2fda2c9-0b38-4d19-b4c6-10e1fba530df"
+      ],
+      "meeting_ids": [
+        "fm_9a9f8400eb72c0cc3f6be7df9f80ff65456743582d4585ead967509a2dfcc271"
+      ],
+      "extraction_id": "54037954da0129ef308bf8b47e50690c3fe7ee6d1d3e0215c1615bcd98777793",
+      "first_seen_at": "2026-11-12T20:14:34.348630Z",
+      "source_sha256": "d518fc46ca1f59989283730bed9ac20ed637ba8bc75c5562d7ec357e0f7b3fde",
+      "document_version_id": "c275b268c78195e72cbb0c443689f7e368005dd48f2f1ca090c7627a7d4c1fe6",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 22,
+      "units": 22,
+      "full_text_characters": 39936,
+      "chunks": 22,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    },
+    {
+      "set_id": "5502ad9b6b4d0a67d28f415396fea9cdc8afc8def832dc0c194ec203c33649b1",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19900703.pdf",
+      "capture_ids": [
+        "5e9797fc-4249-420c-91c1-355350bb9206"
+      ],
+      "meeting_ids": [
+        "fm_6eab21e3e6930099cc5a4f5c35b28ecfa44ab6e102bdec2b2a648420be60b601"
+      ],
+      "extraction_id": "f2742d93b58174542ba74065050d00aa9a675e0bda3985223158b4192f959c76",
+      "first_seen_at": "2026-11-12T17:36:21.154966Z",
+      "source_sha256": "c7e600919099177b2cef244fab1b4d874742290043b561d4fff4f737b1508d54",
+      "document_version_id": "d3508f421d361f4c70da577d5e15fb79e3c369e20f3513a42e8257eed752f173",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 24,
+      "units": 24,
+      "full_text_characters": 40799,
+      "chunks": 24,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "set_id": "83b2b992813ac65dee49f78acd95ecdb0e18b70bb2d30b84409a085b83b5e454",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19911001.pdf",
+      "capture_ids": [
+        "740504a0-d72b-4e0b-bde8-353b4938948f"
+      ],
+      "meeting_ids": [
+        "fm_5481cf56a05f1c33f2c7273ef7b4130ca58525d7dc7d6932175f893d333eea1d"
+      ],
+      "extraction_id": "6d9f28635bac35602d4aa6446772b50ea5b27f53f0a3f0499f6de9da67c0e90a",
+      "first_seen_at": "2026-11-12T19:30:30.870155Z",
+      "source_sha256": "62c253dd7f80485bf05f7fc6315dc08ac6a86273c5f3f9af6f4182b52c66419a",
+      "document_version_id": "d6294e4d1c935fd9910af1706a81f10f6c8d381a09ac3d9af9c7486b41ff8b27",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6508,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "4853c6260136b1c088e296a88c5210738760c6e1977ca91145e70bd2ac8f9fe4",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19911105.pdf",
+      "capture_ids": [
+        "c2a79f42-a721-4c98-a4df-72ddba359ddd"
+      ],
+      "meeting_ids": [
+        "fm_1a95ed550020f68163263c4bdf06067ed2261370aadb88fcc308c8220c8c7ac6"
+      ],
+      "extraction_id": "f0305248d1be2496b8cafc1d20c3b220595f6a7a833c26d3c359b641e5e540be",
+      "first_seen_at": "2026-11-12T19:30:31.881818Z",
+      "source_sha256": "781bcf19fee30c5f695d03b653edade8351fc1386042bf46132a422d5674ce4c",
+      "document_version_id": "d7d5dab759c309f740326a67627872ac5196977ac107f1ce9fd5591cfe3e0aee",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 7128,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "633399e3b84bff4055830f369a583278313bad841f76e32d7ec92538dd5b02f7",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19920818.pdf",
+      "capture_ids": [
+        "bfdb1c0c-d490-4dea-8203-f4956ed5edbe"
+      ],
+      "meeting_ids": [
+        "fm_20712ff9d912d21b8b7af9c8497cde6120c2ce4aec5728c60a52c3675a9ca23c"
+      ],
+      "extraction_id": "6596e00143160b85d3afffd3b0c44cc47bc7ea51a074b61a5982666f9a35d3d2",
+      "first_seen_at": "2026-11-12T20:14:30.323050Z",
+      "source_sha256": "4838648936638b131ccb8346b22d3882bd045588410e1ae2d08e276a54ad2d5c",
+      "document_version_id": "dcbe5e623e63e31c6fb46e625838d6a8a78cb0fe352c6bbe727d0731d9fd27e8",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 7399,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "8c93640a5a4c50fd9c0233f5758ec93ce6c2ea3a96261db8f1c6a4253fac08fb",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19900327.pdf",
+      "capture_ids": [
+        "7b08b41c-0b2e-4e3b-bbb2-60c29d48e297"
+      ],
+      "meeting_ids": [
+        "fm_3846fda37931dce3617af908e4f2d5ef9b5d2840a861e531b520f47a42be1ba2"
+      ],
+      "extraction_id": "8deead5bd63713d68d738b0b235be5c55cc66d66462765c1b17f5e7396ff8f77",
+      "first_seen_at": "2026-11-12T17:36:19.156015Z",
+      "source_sha256": "72913350d030b49afa045dcfd8f4bedf185ca1f45aa91f3d12c4bd5fdb0d321f",
+      "document_version_id": "e3552b581d62df9f670d754448f97617b66f5d30c3b82de9408cd6a52feee067",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 21,
+      "units": 21,
+      "full_text_characters": 36084,
+      "chunks": 21,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "set_id": "934c696c43453a8fa02cc56e814f06654e6fa6157d6c4711e9e285ac81c9d856",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940706min.htm",
+      "capture_ids": [
+        "bbdfbfcd-132e-4551-96e4-b64b114d7831"
+      ],
+      "meeting_ids": [
+        "fm_31120ed9daf39032b0e8502a83c4c1b04f6450f7996f6ca02d0379191fdf95d4"
+      ],
+      "extraction_id": "c7c4db5333c86e09ab473312f6347f0b6bc6433b48cafa1dc28ff54a446bbea3",
+      "first_seen_at": "2026-11-12T21:10:50.730590Z",
+      "source_sha256": "9819fb4b93bc818e2e2fb34ed7188aacff78824a462bc835c0b21b88ccedcc4d",
+      "document_version_id": "e61d2ae8c2a177d466e0cb790fb9345818b2655a607da07140b71801f401a665",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 44182,
+      "chunks": 15,
+      "eligible_chunks": 15,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "34e50f73e27c680fdf4a341170c5760f4dc5b5c7766247849393457a54c38834",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19941115min.htm",
+      "capture_ids": [
+        "bbe5ef8b-6c6b-4d05-a5d5-7a17d1a27e1a"
+      ],
+      "meeting_ids": [
+        "fm_8a042aed742026b182fc170b95f2809dac94612d84102302d0f7f4af05de3c99"
+      ],
+      "extraction_id": "1cce41b69931ea788954b2c4a626f28201d9a49db314a83df92e503436f64f36",
+      "first_seen_at": "2026-11-12T21:10:53.719094Z",
+      "source_sha256": "f47ec476851564e49fa3419cabef1ad8b105b9bbbb8e2321e58c8c14cc730341",
+      "document_version_id": "e771ef8ebc194d8dc041238aa8fb75850988c29ae4c154dac844b1230b1c02de",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 38022,
+      "chunks": 12,
+      "eligible_chunks": 12,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "09827ffa728975d60bf7d2ae9f050863b4694a280722be1d0702b41119623b79",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19910514.pdf",
+      "capture_ids": [
+        "0bd42f42-79ac-4d6e-a576-1434813171fc"
+      ],
+      "meeting_ids": [
+        "fm_13e8cb508eb500fa81eb8ef747c2c6bd2bad40fb9aba406ffa819e043ad4c5a9"
+      ],
+      "extraction_id": "10441cc35b7a923d2b5a8591d37918a68ef09dce90c478e01e31e84858db369e",
+      "first_seen_at": "2026-11-12T19:30:27.855081Z",
+      "source_sha256": "8b460ab4c82444bc3ff6b5a01304fd2c983607fb499cda67f1ab2b334833f907",
+      "document_version_id": "ee210a975cfeba694e87404225bae864f6e599caa7cc96cd723f4eb022369ad9",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 6157,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "89feb4d938e714a46383a47801ba819a5fe3df5ccf586f0e211c7e795761c93a",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940322min.htm",
+      "capture_ids": [
+        "2b22f1a4-a43f-4ebe-92ea-184e2c24869a"
+      ],
+      "meeting_ids": [
+        "fm_480a42e048e60f085311819874d2bcf58e8fa69798a7cd811aa98a3e1c1affdc",
+        "fm_6c543edc88ebd65877e1ea07a17e144e2871fc0e1fe061e12c178994298e96ed"
+      ],
+      "extraction_id": "abf22c46bbe74b69c9869aa036899675b3b8a365258f052688ad8bb0afdd45bf",
+      "first_seen_at": "2026-11-12T21:10:48.714063Z",
+      "source_sha256": "6415a130eab5517d5363f4685060e221051c2c0fc9d1b18b54befae991bf9b48",
+      "document_version_id": "f3acc95ba087f11b587fa9a159e73daece832dffe0dc05d48d80984e8b4ce5a1",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 42450,
+      "chunks": 14,
+      "eligible_chunks": 14,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "a9f35d7909a36bfc180522c54f26bebc937a4d44130b43fba220ed0311984130",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19920331.pdf",
+      "capture_ids": [
+        "1ef1e9d7-d185-4795-90b4-cbfaec2c03dc"
+      ],
+      "meeting_ids": [
+        "fm_d120becfa6d6f037d572cebaec56c53cae352a3b1d17e1d8e459854a89853388"
+      ],
+      "extraction_id": "d23b8daaeeb333977dcae334218280a700eb45e37633d9bafea70ad77410c594",
+      "first_seen_at": "2026-11-12T20:14:35.322828Z",
+      "source_sha256": "4ee503fae0cebdae7dadaff9b41e808e9bd60311ec89fbd9890c32081f8c2523",
+      "document_version_id": "f3b1d7e9c4c7e55cd412c299e403106a6a23cc3e54a088d620825624d2f45eaa",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 30181,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "73a759d672ac85637a5cfe7164b87d698b6d2b82aee31cc070f406eed681a6e8",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619.htm",
+      "capture_ids": [
+        "292a670d-48c3-4ea1-ab67-af4f6dc1fdc0"
+      ],
+      "meeting_ids": [
+        "fm_6c2b77c5bf097993a7ca02bfd700ff342700ab9a7222e625fcca02a98fd65f17"
+      ],
+      "extraction_id": "01d008daba9371a98b4b0cd93d8170027db0ffc94b661fe0bd7703b57810754a",
+      "first_seen_at": "2026-11-11T16:22:40.760192Z",
+      "source_sha256": "5d978d987173f56e33828dcb56dcf9d492ebb349b05fbd7abe499bbb812a1d8b",
+      "document_version_id": "f816a2d2c25d36e43c285aee98e729282dcdb5a4cbe27a7a84c31a1279cbffb6",
+      "observed_version_ordinal": 1,
+      "status": "native_extracted",
+      "page_count": 0,
+      "units": 1,
+      "full_text_characters": 55248,
+      "chunks": 19,
+      "eligible_chunks": 19,
+      "pdf_page_citations": []
+    },
+    {
+      "set_id": "7f3646bbac236f7d3ac41456a7bf3e0fe2e9ebee7594a9fb0cdd9a3117e06a7f",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19920519.pdf",
+      "capture_ids": [
+        "eb054e45-0b51-4264-963c-3718b723eeb5"
+      ],
+      "meeting_ids": [
+        "fm_4e6e331d1cffb14533f449190ece726d21bb7b47f5bc92fb6e691f7b4b6061e9"
+      ],
+      "extraction_id": "f1753c6b569a3de22bc0f6f41a33c9af4eb8b772bdd9a63dfd490815321b3f57",
+      "first_seen_at": "2026-11-12T20:14:36.336388Z",
+      "source_sha256": "fa62ea0806c89442be0eb8f6d57eb4716dfb573588758a099189a7b8444a79dc",
+      "document_version_id": "f89d09eb9cd7b5643c0b69b2796ed8ce8319103e167d5bc1687fd82af372665b",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 17,
+      "units": 17,
+      "full_text_characters": 29347,
+      "chunks": 17,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "set_id": "b3ad456199b5617be21c095cde33c1a6e829f83de4a633846a00b1158138f77c",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19911217.pdf",
+      "capture_ids": [
+        "b77a2d50-2d10-429d-8310-b48a729e0d1e"
+      ],
+      "meeting_ids": [
+        "fm_48fe3bd80cafbf7632876b3b360a3ca155530d86e52ae6dfbc224e56e6880aae"
+      ],
+      "extraction_id": "e88821db45e030ee6497e1c28185e900b6f5be14bf97f07598dc0132ea8f1fc9",
+      "first_seen_at": "2026-11-12T19:30:32.889002Z",
+      "source_sha256": "95f187afe472f842c1b4b051ced10eb394b30b538b18544dcfb413a76067c1c2",
+      "document_version_id": "fd1458f952cf42696235d59db2234fcd130690cec10acf0c8d6db940647da3b3",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 7111,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "146746714b8bfd4f800cfffbd19a03944a44bd8a293a313da15e3e1c4df99f4c",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19901218.pdf",
+      "capture_ids": [
+        "6e0f6c4d-8a3c-4269-b054-74f21ba323c4"
+      ],
+      "meeting_ids": [
+        "fm_0d8c16ed556988e0d5398d001759d7388cd27fcfa0eef24322202ade942fa677"
+      ],
+      "extraction_id": "702c2e0e85084857486c174581b6653efa7b90ab31886aeede5cb426152dc5b2",
+      "first_seen_at": "2026-11-12T17:36:18.152152Z",
+      "source_sha256": "27b1b196c0d2cb6d455f01bf82748ac9369587cf8a6c7bd5b4a05da5d65baee2",
+      "document_version_id": "ff325f14e0172c3a191ffdc76431f4868a12ab62c2430a3c6fe26f3be5c0ef53",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 4,
+      "units": 4,
+      "full_text_characters": 7089,
+      "chunks": 4,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "set_id": "1047935578c0db04aa157b2bca491fd03c3512f7f42dae3dd1ac46fcf67a284a",
+      "current": true,
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcropa19911217.pdf",
+      "capture_ids": [
+        "f8840dd2-5c17-4513-9d11-15fe053e2ac4"
+      ],
+      "meeting_ids": [
+        "fm_48fe3bd80cafbf7632876b3b360a3ca155530d86e52ae6dfbc224e56e6880aae"
+      ],
+      "extraction_id": "cbb3decdd72778520e971c75edf41759a95705756e30b6855c00f35ccb95353d",
+      "first_seen_at": "2026-11-12T19:30:40.976836Z",
+      "source_sha256": "c764c58d9f038c5e49322f0e5734dc72dfcbc1af5f60fc13c5b17d173c1709fe",
+      "document_version_id": "ff6da23042aa18f06f5ee35610526d0824637867faf43612ec8a707edab2435d",
+      "observed_version_ordinal": 1,
+      "status": "review_required",
+      "page_count": 18,
+      "units": 18,
+      "full_text_characters": 32487,
+      "chunks": 18,
+      "eligible_chunks": 0,
+      "pdf_page_citations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    }
+  ],
+  "source_gap_outcomes": {
+    "unacquired": 399,
+    "review_required": 51,
+    "not_listed": 49,
+    "unavailable": 1
+  },
+  "prior_127_receipts_bytes_clocks_unchanged": true,
+  "all_preexisting_append_only_rows_preserved": true,
+  "all_three_pointers_promoted_together": true,
+  "other_namespaces_unchanged": true,
+  "empty_target_replay": {
+    "catalog_rows_and_eligibility_exact": true,
+    "original_capture_readbacks": 146,
+    "receipt_bytes_exact": true,
+    "operation_intent_events_result_exact": true,
+    "http_extraction_tokenization_chunking_disabled": true,
+    "disposable_database_and_root_removed": true,
+    "operation_receipt_scope": "latest 1993\u20131994 operation only; historical operation/catalog snapshots preserved by full backup"
+  },
+  "backup_before_batch": {
+    "archive_path": "backups/1993-1994-before-1993-1994-79aad4047cb2/fomc.dump",
+    "archive_sha256": "6e3bd0772c637d4551a22f80c53a8632d2bc7aed0cb8cf643aba697b4d85e5a7",
+    "tables": {
+      "bronze_capture_objects": {
+        "rows": 127,
+        "sha256": "7077ca9bf05b40b191b30213a927660e675939a4c66d1c734cda2c2ffd80e6bc"
+      },
+      "bronze_captures": {
+        "rows": 127,
+        "sha256": "656483d45206a6d10499c97554a187e8c25660cd60e2de1207de736b493a4258"
+      },
+      "bronze_dependencies": {
+        "rows": 24,
+        "sha256": "144efe42ec31040611555457e3affdbd7d26a5de49a9a6f14eb5937397314fca"
+      },
+      "bronze_dependency_checks": {
+        "rows": 8,
+        "sha256": "87be6d42f64d763ecee121445b02d741d8b20197eeac0e0eec6130f748ab69bf"
+      },
+      "bronze_dependency_state": {
+        "rows": 1,
+        "sha256": "d31f68b3a084f5cea7949f7ea6e6c2a5e2c64e43ac147d017859f148821dc382"
+      },
+      "bronze_document_links": {
+        "rows": 130,
+        "sha256": "7b5fe4f9b758c6f4898e59ba13adf6df27d104e7d9cf31cdd304b2e5d4d6aef7"
+      },
+      "bronze_inventory_discovery": {
+        "rows": 4,
+        "sha256": "c760f1a9121b5970a0a2b9d132500843e5577098c4ec23aa1c270e187446d025"
+      },
+      "bronze_inventory_links": {
+        "rows": 132,
+        "sha256": "4afa1fd21d18203238da5ec71a7e878ed6fc78090044334e35304cc56e1b8f77"
+      },
+      "bronze_object_state": {
+        "rows": 1,
+        "sha256": "b6643d921e622a3da39228f23d0e8df7006374afe96816d7d615cebb6e1ace22"
+      },
+      "bronze_objects": {
+        "rows": 127,
+        "sha256": "f7d18346e3be4d20b7061e630f5fa2e00b3ee2c6e1272e60951ed4b7ec3836cd"
+      },
+      "bronze_schema_migrations": {
+        "rows": 3,
+        "sha256": "9d7b0c04433a9ce0a2bf3f8997ea506fc969ce3dfe20b9c0c96cdb0d84289374"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "aba25ebe75933c590db87b5e4f304ac2fd3e7e343102b44c4347a5e7195023d5"
+      },
+      "chunk_catalogs": {
+        "rows": 4,
+        "sha256": "f721620350c4b9ae8c3416f23c476377c1abaca3fa776c601a6891a1c17f713c"
+      },
+      "chunk_sets": {
+        "rows": 58,
+        "sha256": "348b3d899be46686f17946b9b39427a1d68cba461e8b8dcf57179e48676a0b4b"
+      },
+      "chunk_state": {
+        "rows": 1,
+        "sha256": "68039d17faa443f88569dc5a41778cb2a1362da04755d3ee6aa7d61ec02f008a"
+      },
+      "chunks": {
+        "rows": 791,
+        "sha256": "ae7228aeaf41bed9c67ee66c34b1a98f360f1129c9cb28084cb5e295c4d6488c"
+      },
+      "inventory_documents": {
+        "rows": 1880,
+        "sha256": "1b5f4a0c2279a78a677371c5e007324e00856f7f2ca880fae797ffa1bc1d8494"
+      },
+      "inventory_entries": {
+        "rows": 2236,
+        "sha256": "93ec7526a2b6e833192a7e685adde8a031d66243b6c11bdbcd26ab0a828f5958"
+      },
+      "inventory_meetings": {
+        "rows": 1476,
+        "sha256": "0f1c0876f0c64be1f534e6e2f07809c775eff7f64e80296cf104afd161eed8ab"
+      },
+      "inventory_pages": {
+        "rows": 132,
+        "sha256": "ba2387bb0a2c36045d9ee1c2b37818270f8799f876d50f06836c15cdb9a39ec3"
+      },
+      "inventory_runs": {
+        "rows": 4,
+        "sha256": "91fbcee6acc4a876bf88cc6976b92c2a9fc8e5e12b2bafec6d247c6be2dc9137"
+      },
+      "operation_records": {
+        "rows": 156,
+        "sha256": "f41e7755379baa85379ab50f7d9ec5c8d57dc082856f7d9fc01ddc809bacf147"
+      },
+      "operation_runs": {
+        "rows": 3,
+        "sha256": "474c70a89d6ac33f68cfe7ea369e518877fc211705a9b0ced57e8096884c06e3"
+      },
+      "operation_state": {
+        "rows": 1,
+        "sha256": "4f3c3ef67dcfcec7fc99f578288702e5314b9d0bf4e87d4ea85de41818cf1e5b"
+      },
+      "text_capture_links": {
+        "rows": 58,
+        "sha256": "1e121b166678f59d6295ac65d905c775be44f4541ed28d4c22d57c9d7672428c"
+      },
+      "text_catalogs": {
+        "rows": 4,
+        "sha256": "fcc0a195db8df9ca839d2260ea5a98797f5e47c5f0e2c74554f2fe999f96e212"
+      },
+      "text_extractions": {
+        "rows": 58,
+        "sha256": "cbda1df60c7a375009fab4cad5eaa166f55d2e7459d69840c36ec3197f66785c"
+      },
+      "text_state": {
+        "rows": 1,
+        "sha256": "f53a047c1c883c85dbdff42cf4df1a424f001b1de75a7223d344cd3487f879a0"
+      },
+      "text_units": {
+        "rows": 658,
+        "sha256": "f84dfe53a915b13a0db1e0822abff3f7ecd92996b1fff5c90f3fa07f7026e960"
+      }
+    },
+    "restored_tables_verified": 29,
+    "capture_readbacks": 127,
+    "catalogs_and_operation_audit_exact": true,
+    "disposable_database_removed": true
+  },
+  "backup_after_batch": {
+    "archive_path": "backups/1993-1994-after-1993-1994-1f90000f38dc/fomc.dump",
+    "archive_sha256": "809fa85fcebf76a6073e4a775f00af5591ff1371ceb98cd249709f48f2ab25fc",
+    "tables": {
+      "bronze_capture_objects": {
+        "rows": 146,
+        "sha256": "2bfd012b0f36881512947cd1578f7447994dc004bdd55d3ea6dd770615be0dac"
+      },
+      "bronze_captures": {
+        "rows": 146,
+        "sha256": "006a597e23f777cb4d220577bc009b657d1154b68a9904974abe141aabd04d80"
+      },
+      "bronze_dependencies": {
+        "rows": 24,
+        "sha256": "144efe42ec31040611555457e3affdbd7d26a5de49a9a6f14eb5937397314fca"
+      },
+      "bronze_dependency_checks": {
+        "rows": 23,
+        "sha256": "b39a09bf0efe4d5db05c64630cc550bf7724d7c0d21262b3c4920eba469443d5"
+      },
+      "bronze_dependency_state": {
+        "rows": 1,
+        "sha256": "d31f68b3a084f5cea7949f7ea6e6c2a5e2c64e43ac147d017859f148821dc382"
+      },
+      "bronze_document_links": {
+        "rows": 201,
+        "sha256": "c40402736de6e3aa31096d6e8cf3ef5c3c57b8932dd8a58c60b413c24ef52ab2"
+      },
+      "bronze_inventory_discovery": {
+        "rows": 5,
+        "sha256": "6c2690ec7c1b330a7be6dd21d9a76a1a58c8c9fdb4ffb7dadfdda8e8e716b3b7"
+      },
+      "bronze_inventory_links": {
+        "rows": 165,
+        "sha256": "64fff429f596a314ab09312dc27c026d8f6308bd50652eb7f4c10f220566dceb"
+      },
+      "bronze_object_state": {
+        "rows": 1,
+        "sha256": "b6643d921e622a3da39228f23d0e8df7006374afe96816d7d615cebb6e1ace22"
+      },
+      "bronze_objects": {
+        "rows": 146,
+        "sha256": "2c60053b1a1ea117131e2fa97e5fb74ab37344f9081559d1057436509bd7a336"
+      },
+      "bronze_schema_migrations": {
+        "rows": 3,
+        "sha256": "9d7b0c04433a9ce0a2bf3f8997ea506fc969ce3dfe20b9c0c96cdb0d84289374"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "33fb978e3f37e75d1b290b297b5d3964043b61d807e9fefdbe72df779f104851"
+      },
+      "chunk_catalogs": {
+        "rows": 5,
+        "sha256": "07b08e44393c6a7f83a799cf53befa7bbb0d5c21c08dba36c36e6d4db8e2781d"
+      },
+      "chunk_sets": {
+        "rows": 73,
+        "sha256": "6b8d887259b8b651c365d7bb8aa4033f1259295056e99e6afcdd618fe00cd7bd"
+      },
+      "chunk_state": {
+        "rows": 1,
+        "sha256": "0b7e7f622f70302536598570392846208b77b4f8f8da33f23a0a5ba3c761e167"
+      },
+      "chunks": {
+        "rows": 993,
+        "sha256": "68ef8dad342121faa6233524a3891798fbb694801a3b211197072a5ac445c0ed"
+      },
+      "inventory_documents": {
+        "rows": 2350,
+        "sha256": "8b612074ac36d0d3925f18480a155b6351defa2d411ea9b5911d4ac1c0ba23b0"
+      },
+      "inventory_entries": {
+        "rows": 2797,
+        "sha256": "59fe18d9a49800c4ea896f94367c75f997fdc60d86c81963bd3246482b1cee85"
+      },
+      "inventory_meetings": {
+        "rows": 1847,
+        "sha256": "c600bac28ca99c7aea81ac3bee5bbf0d71bd609b3f9fe068c66681b5f983affc"
+      },
+      "inventory_pages": {
+        "rows": 165,
+        "sha256": "164812752e1e8f19a7ee090f34a35331055102d68cb881541f99513d1430014f"
+      },
+      "inventory_runs": {
+        "rows": 5,
+        "sha256": "ec68cf561641404aab18a824a9f3b4f71dcd9cd8a70166c020cfed6615deef50"
+      },
+      "operation_records": {
+        "rows": 208,
+        "sha256": "b43f963c83884331c1b7f1baa92b4f00161e798fe8fc4504091fe1349fb88685"
+      },
+      "operation_runs": {
+        "rows": 4,
+        "sha256": "a5aa55f2c97e154e490f3fa38728e389430e2aa1e0589d575220586267a4eaaa"
+      },
+      "operation_state": {
+        "rows": 1,
+        "sha256": "4f3c3ef67dcfcec7fc99f578288702e5314b9d0bf4e87d4ea85de41818cf1e5b"
+      },
+      "text_capture_links": {
+        "rows": 73,
+        "sha256": "cca0a94a9f34bf8f0d1b2e3bc2a4d60f6197150a6ad48493e1d4b654bcd0957c"
+      },
+      "text_catalogs": {
+        "rows": 5,
+        "sha256": "c1c34a8e783f0e6d0224b2dadb59fb59d0587c9bdaf42272fac3b13734d41011"
+      },
+      "text_extractions": {
+        "rows": 73,
+        "sha256": "8a201807a026edac5b98157e19418f2fd38cd90341314b76831b02c2548d0627"
+      },
+      "text_state": {
+        "rows": 1,
+        "sha256": "7935be159d1605ede513d47c23de05f611915909ac8c1af0450859e994e1e4db"
+      },
+      "text_units": {
+        "rows": 673,
+        "sha256": "67123dd6bab2479d84f8e6fbab9b9f52fe40337be8a564bc783de913219e6d78"
+      }
+    },
+    "restored_tables_verified": 29,
+    "capture_readbacks": 146,
+    "catalogs_and_operation_audit_exact": true,
+    "disposable_database_removed": true
+  },
+  "full_history_backfill_complete": false,
+  "text_or_ocr_accuracy_certified": false,
+  "schedules_enabled": 0,
+  "ocr_or_model_calls": 0,
+  "operation_settings": {
+    "max_years": 2,
+    "max_assets": 100,
+    "max_attempts": 3,
+    "max_requests": 100,
+    "max_documents": 40,
+    "overlap_years": 1,
+    "asset_max_bytes": 5000000,
+    "max_total_bytes": 100000000,
+    "max_run_age_hours": 168,
+    "document_max_bytes": 10000000,
+    "inventory_max_bytes": 2000000,
+    "max_capture_history": 5000,
+    "max_elapsed_seconds": 600,
+    "max_inventory_pages": 40,
+    "scheduled_live_access": false,
+    "max_retry_delay_seconds": 30.0,
+    "request_interval_seconds": 1.0
+  },
+  "started_at": "2026-11-12T21:10:32.902897Z",
+  "inventory_pages": 33,
+  "new_captures": [
+    {
+      "capture_id": "35919d09-c7c6-494b-b4be-67f6701edaff",
+      "kind": "inventory",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomc_historical_year.htm",
+      "captured_at": "2026-11-12T21:10:36.481180+00:00",
+      "sha256": "213e6454af25b234af7e41f5c8005d9ea3119f615bf6dbfd4321b0c23d642bbd",
+      "size_bytes": 89979
+    },
+    {
+      "capture_id": "63b38f13-3054-4ad3-8f90-722459fad2e4",
+      "kind": "inventory",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "captured_at": "2026-11-12T21:10:37.518005+00:00",
+      "sha256": "9f8d183b983fa6cbb5564e953eae8da21fce504834a4e3a57067151ed3c1c599",
+      "size_bytes": 166065
+    },
+    {
+      "capture_id": "ac8adc46-e935-4317-89c1-26058ec4c028",
+      "kind": "inventory",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1993.htm",
+      "captured_at": "2026-11-12T21:10:38.520977+00:00",
+      "sha256": "1b48fc01e417fd795cd9fec98f57bb1a70a907a3478d699bdcec92983c6dbe5b",
+      "size_bytes": 94824
+    },
+    {
+      "capture_id": "967faae0-e6a6-43b7-ac1e-156a90decd68",
+      "kind": "inventory",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1994.htm",
+      "captured_at": "2026-11-12T21:10:39.525417+00:00",
+      "sha256": "99a5822723c4047828527733add38ac726585bdb302b2174d29c7631b11efe0b",
+      "size_bytes": 93444
+    },
+    {
+      "capture_id": "9457483c-af5a-47fb-a7f8-0190d79a1a04",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930323min.htm",
+      "captured_at": "2026-11-12T21:10:40.505917+00:00",
+      "sha256": "815dcc038eddac8d7dfeee880691ebf683cb9e0a21e23d23b172008974f36b88",
+      "size_bytes": 45632
+    },
+    {
+      "capture_id": "e377dd4f-091f-4ab9-abfe-c421a99c3d9f",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930518min.htm",
+      "captured_at": "2026-11-12T21:10:41.533806+00:00",
+      "sha256": "d6e20106ef6bfaec299c6d7fa7f1cf41ed857955578221075e0a9f9b2a124435",
+      "size_bytes": 40032
+    },
+    {
+      "capture_id": "329c27da-2216-47e2-8701-173d5de9101b",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930707min.htm",
+      "captured_at": "2026-11-12T21:10:42.522150+00:00",
+      "sha256": "1af41b0459e7636f987806e3c0890086c788229ac1ee7e64c660d9f757641adb",
+      "size_bytes": 54834
+    },
+    {
+      "capture_id": "e930870c-f5fa-41f6-86ed-6030f7a6bec8",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930817min.htm",
+      "captured_at": "2026-11-12T21:10:43.529544+00:00",
+      "sha256": "6e7dda5338c342f807de72f1ccf6ca8480d58d3136d73ace7a6cbef7fa9b0e53",
+      "size_bytes": 37135
+    },
+    {
+      "capture_id": "7a2e0475-60be-40c0-a3f1-cefedc64e8a1",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19930921min.htm",
+      "captured_at": "2026-11-12T21:10:44.539507+00:00",
+      "sha256": "3e021f0a8a07698527511dd41a1835f0055af84991eeb96b4a92a1886925a319",
+      "size_bytes": 39763
+    },
+    {
+      "capture_id": "830f01c4-ba89-4406-85ed-20acf18de73e",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19931116min.htm",
+      "captured_at": "2026-11-12T21:10:45.562748+00:00",
+      "sha256": "5119ee4b303f134cd21614ba5da51acf88bbf16f8bab95a17fe4414a475fbcfd",
+      "size_bytes": 52263
+    },
+    {
+      "capture_id": "cc8c7843-e10a-48e0-b924-9632a85bbe98",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1993/19931221min.htm",
+      "captured_at": "2026-11-12T21:10:47.563143+00:00",
+      "sha256": "44478c8ad9f90b82695c544cc195bb2a605b95a964db9d1cb373059feb5c5bef",
+      "size_bytes": 44286
+    },
+    {
+      "capture_id": "8261228e-fef7-47f0-861e-bab3c2d9d838",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940204min.htm",
+      "captured_at": "2026-11-12T21:10:47.712503+00:00",
+      "sha256": "928073ad0443f2f16956303366428e9268824be67d3a75be230c7fc13e00d687",
+      "size_bytes": 82727
+    },
+    {
+      "capture_id": "2b22f1a4-a43f-4ebe-92ea-184e2c24869a",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940322min.htm",
+      "captured_at": "2026-11-12T21:10:48.714063+00:00",
+      "sha256": "6415a130eab5517d5363f4685060e221051c2c0fc9d1b18b54befae991bf9b48",
+      "size_bytes": 47729
+    },
+    {
+      "capture_id": "edc86086-443f-4fa0-b8c0-43f6696f0ac9",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940517min.htm",
+      "captured_at": "2026-11-12T21:10:49.704440+00:00",
+      "sha256": "130204f4b475f32a7e29e0a349553361f1c58bf7e003d035e899ec6557074c2c",
+      "size_bytes": 37803
+    },
+    {
+      "capture_id": "bbdfbfcd-132e-4551-96e4-b64b114d7831",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940706min.htm",
+      "captured_at": "2026-11-12T21:10:50.730590+00:00",
+      "sha256": "9819fb4b93bc818e2e2fb34ed7188aacff78824a462bc835c0b21b88ccedcc4d",
+      "size_bytes": 50632
+    },
+    {
+      "capture_id": "3056a13d-7cfb-4210-8b40-e26fb796c93e",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940816min.htm",
+      "captured_at": "2026-11-12T21:10:51.713924+00:00",
+      "sha256": "fb4e9de2cc170debb986b6d77c75e85f2dbe2cad0d5d09fc2a0cc233f77ccd3f",
+      "size_bytes": 37623
+    },
+    {
+      "capture_id": "4b21ae6a-02a2-426c-8efe-271a5f212533",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19940927min.htm",
+      "captured_at": "2026-11-12T21:10:52.804002+00:00",
+      "sha256": "8a5f05e572773dfc42001935c200ba817cbc627b11eb7bba4682afe22296083c",
+      "size_bytes": 39167
+    },
+    {
+      "capture_id": "bbe5ef8b-6c6b-4d05-a5d5-7a17d1a27e1a",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19941115min.htm",
+      "captured_at": "2026-11-12T21:10:53.719094+00:00",
+      "sha256": "f47ec476851564e49fa3419cabef1ad8b105b9bbbb8e2321e58c8c14cc730341",
+      "size_bytes": 47940
+    },
+    {
+      "capture_id": "d2a0f48c-3dca-4326-9e1e-24efd7128d20",
+      "kind": "document",
+      "source_url": "https://www.federalreserve.gov/fomc/MINUTES/1994/19941220min.htm",
+      "captured_at": "2026-11-12T21:10:54.715835+00:00",
+      "sha256": "0d7b01f29f174f306264083b5800cee028cf96e9ba3c52f2d4f012732578117b",
+      "size_bytes": 43890
+    }
+  ],
+  "inventory_observed_diff": {
+    "meetings_before": 371,
+    "meetings_after": 371,
+    "document_references_before": 470,
+    "document_references_after": 470,
+    "source_associations_before": 561,
+    "source_associations_after": 561,
+    "added_meeting_claims": [],
+    "removed_meeting_claims": [],
+    "prior_snapshot_preserved": true,
+    "normalized_inventory_unchanged": true
+  },
+  "script": {
+    "path": "scripts/run_fomc.sh",
+    "sha256": "28e6be848fdb1aaaafd9b1480a56f6d6bf8cf2e55fe8431059be4a421ce63008",
+    "invocation": "./scripts/run_fomc.sh run --config <user-config> --operations <user-operations> --start-year 1993 --end-year 1994 --mode backfill --live",
+    "shell": "bash",
+    "python": "checkout .venv/bin/python or explicit FOMC_PYTHON",
+    "credential_values_recorded": false
+  },
+  "verification": {
+    "regression": {
+      "passed": 954,
+      "optional_skips": 71
+    },
+    "fomc_with_postgres": {
+      "passed": 267,
+      "isolated_postgres_checks": 61
+    },
+    "shell_syntax": "passed",
+    "ruff_lint_format": "passed"
+  },
+  "schema_migrations_applied": 0,
+  "year_coverage": {
+    "1993": {
+      "listed_primary_references": 8,
+      "archived_primary_references": 8,
+      "document_kinds": {
+        "minutes": 8
+      },
+      "source_outcomes": {
+        "not_listed": 8
+      }
+    },
+    "1994": {
+      "listed_primary_references": 8,
+      "archived_primary_references": 8,
+      "document_kinds": {
+        "minutes": 8
+      },
+      "source_outcomes": {
+        "unavailable": 1,
+        "not_listed": 3
+      }
+    }
+  },
+  "offline_cli_health_plan_recover_run_with_http_disabled": true
+}

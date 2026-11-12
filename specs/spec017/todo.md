@@ -6,7 +6,7 @@ schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merg
 [PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
 script and 1991 continuation merged in
 [PR #13](https://github.com/thatquantguy44/market-medallion/pull/13). The accepted
-1992 continuation is on `feat/fomc-1992-backfill` in
+1992–1994 continuation is on `feat/fomc-1992-backfill` in
 [PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); track its
 [live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
 and current review threads.
@@ -180,10 +180,33 @@ claims, one unavailable href and 51 review cases. Full history and text/OCR
 accuracy remain incomplete. Verification: 954 regression tests with 71 optional
 skips; 267 FOMC checks with PostgreSQL, including 61 backend checks.
 
-**Next core operation:** bounded **1993** through the same script, then health/
-readback and recovery gates. Preserve source product distinctions at the
-transition into modern minutes, actual first-seen clocks and review flags.
-Keep all schedules stopped and embeddings separately selected.
+The 1993–1994 extension is accepted below in the same PR; source kinds, clocks
+and review flags remain preserved.
+
+## Bounded 1993–1994 extension to PR #14 (complete)
+
+Accepted 2026-11-12 on the existing `feat/fomc-1992-backfill` branch.
+[Acceptance](1993_1994_acceptance.md) and [evidence](evidence/1993_1994_script_backfill.json)
+record the added two-year run through the unchanged script and finite settings.
+All 16 listed HTML minutes references are archived/verified: eight for each year,
+with 15 acquired and one reused. Four inventories were refreshed; the run made
+19 data GETs plus two probes and received 1,145,768 bytes. Eleven not-listed
+claims and one unavailable 1994 href remain explicit.
+
+The archive now has 146 captures and 73 representations, with 624 PDF pages,
+673 units and 2,172,146 characters. There are 993 chunks (368 eligible and 625
+review-flagged), adding 202 eligible chunks. Current normalized inventory is
+unchanged at 371 meetings / 470 references / 561 associations. Gaps retain 399
+unacquired references, 49 not-listed claims, one unavailable href and 51 review
+cases. Both backups restored 29 tables, and offline replay/readback preserves
+all 146 originals, selected catalogs/chunk eligibility and the latest operation
+audit. All old 127 originals/clocks and append-only rows remain intact.
+
+Verification: 954 regression tests with 71 optional skips; 267 FOMC checks with
+PostgreSQL, including 61 backend checks. Full history and text/OCR accuracy remain
+incomplete. **Next core operation: bounded 1995–1996** through the same script
+with health/readback and recovery gates. Keep schedules stopped and embeddings
+separately selected.
 
 ## Later slices (not started)
 
