@@ -1,5 +1,7 @@
 """FOMC-AC07/12: atomic chunk-generation selection and citation-aware reads."""
 
+from contextlib import nullcontext
+
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.chunk_catalog import (
     build_generation,
     validate_generation,
@@ -20,7 +22,9 @@ class PostgresChunkCatalog:
         self.chunks, self.store = chunks, chunks.store
         self.text_catalog = PostgresTextCatalog(chunks.text)
 
-    def publish(self, manifest, *, root, text_catalog_id=None, selections=None, **options):
+    def publish(
+        self, manifest, *, root, text_catalog_id=None, selections=None, _locked=False, **options
+    ):
         base = self.text_catalog.read(manifest, root=root, catalog_id=text_catalog_id)
         if base is None:
             raise ValueError("FOMC chunks require a committed text catalog")
@@ -46,13 +50,16 @@ class PostgresChunkCatalog:
             root=root,
             text_catalog_id=base["catalog_id"],
             require_current_text=text_catalog_id is None,
+            _locked=_locked,
         )
 
-    def commit_sets(self, set_ids, manifest, *, root, text_catalog_id, require_current_text=False):
+    def commit_sets(
+        self, set_ids, manifest, *, root, text_catalog_id, require_current_text=False, _locked=False
+    ):
         if not isinstance(set_ids, (list, tuple)) or not 1 <= len(set_ids) <= 10000:
             raise ValueError("FOMC chunk generation requires bounded explicit set IDs")
         store, conn = self.store, self.store.connection
-        with writer_lock(root), conn.transaction():
+        with nullcontext() if _locked else writer_lock(root), conn.transaction():
             state = conn.execute(
                 store._query(
                     "SELECT contract_id,current_catalog_id FROM {schema}.chunk_state FOR UPDATE"

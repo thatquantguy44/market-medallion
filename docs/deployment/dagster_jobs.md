@@ -1,6 +1,6 @@
 # Dagster job and schedule register
 
-Updated: 2026-11-04, America/New_York. This is the canonical register for
+Updated: 2026-11-12, America/New_York. This is the canonical register for
 Dagster-owned jobs and schedules in MarketMedallion. It complements the
 [pipeline register](../pipelines.md): that register owns source scope and
 delivery status; this document owns operational execution details.
@@ -8,7 +8,8 @@ delivery status; this document owns operational execution details.
 ## Current local state
 
 The status below was verified in the local Dagster instance on 2026-11-03.
-Schedule state is runtime state, so recheck it before assuming a job will run.
+Schedule state is runtime state, so recheck it before assuming a job will run. FOMC definitions and stopped defaults were
+verified on 2026-11-12; no FOMC schedule was activated.
 
 | Pipeline | Job | Schedule | Cadence | Local state | Data root / retention | Activation boundary |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -17,6 +18,7 @@ Schedule state is runtime state, so recheck it before assuming a job will run.
 | NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | **Stopped by user decision on 2026-11-03** | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Do not restart without explicit user direction; then requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
 | SEC fails-to-deliver | `sec_fails_to_deliver_job` | `sec_fails_to_deliver_daily_live` | Daily, 08:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured pipeline-owned root; immutable Bronze and coherent Parquet retention are operator-managed | Requires local `acquisition.enabled: true`, declared `SEC_FTD_USER_AGENT`, `SEC_FTD_SCHEDULED_LIVE_ACCESS=true`, `SEC_FTD_CONFIG`, and one exact `SEC_FTD_PARTITION`. |
 | Nasdaq/NYSE Reg SHO thresholds | `reg_sho_threshold_list_job` | `reg_sho_threshold_lists_daily_live` | Weekdays, 23:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured threshold root; immutable Bronze and versioned SQLite state | Requires reviewed provider use, local `acquisition.enabled: true`, `REG_SHO_USER_AGENT`, `REG_SHO_SCHEDULED_LIVE_ACCESS=true`, `REG_SHO_CONFIG`, and one exact `REG_SHO_PARTITION`. |
+| FOMC meeting minutes | `fomc_meeting_minutes_job` | `fomc_meeting_minutes_weekday_refresh` | Weekdays, 17:10 America/New_York | Not activated; definition defaults **stopped** | `data/fomc_meeting_minutes/`; retain originals, revisions, derivatives and operation evidence | Manual runs require explicit `live: true`; scheduled execution additionally requires `FOMC_CONFIG`, `FOMC_OPERATIONS_CONFIG` and `scheduled_live_access: true`. |
 
 No other Dagster jobs or schedules are defined in the repository. A schedule
 being listed or enabled does not establish provider rights, start a persistent
@@ -69,6 +71,15 @@ The SEC job does not crawl the download page. The threshold job does not invent
 a date/market or treat a failed list as empty. See the
 [SEC runbook](sec_ftd_runbook.md) and
 [threshold runbook](reg_sho_thresholds_runbook.md).
+
+### FOMC
+
+FOMC owns its manual bounded acquisition/publication job and stopped overlapping-
+year refresh in `fomc_meeting_minutes/dagster_defs.py`. Both call the source-owned
+runner; raw acquisition precedes one coherent inventory/text/chunk promotion.
+Live/scheduled gates are rechecked during execution, and health/recovery are local
+commands without HTTP. The 1990-onward scope, finite budgets and actual bounded
+acceptance are in the [FOMC runbook](fomc_runbook.md). No FOMC schedule is activated.
 
 ## Local operation
 

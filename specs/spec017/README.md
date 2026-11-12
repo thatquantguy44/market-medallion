@@ -1,20 +1,21 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** FOMC-T01–T05 complete locally for the selected **1990-onward bounded
-archive, native-text and chunk foundation**. The 33-page inventory has 371 meetings
-and 470 declared references; 72 originals remain byte-verified. All 12 archived
-document representations have native extraction records (74 PDF pages, 108 units,
-616,712 characters) and deterministic chunk sets: **241 chunks, 166 eligible and
-75 review-flagged**. Unit-span coverage, exact citations, immutable mirrors,
-coherent generations and empty-target replay are verified. All 26 tables passed
-restore; original/text state is unchanged. [T05 acceptance](t05_acceptance.md) and
-[evidence](evidence/t05_chunks.json) are current. Full document backfill and text/OCR
-accuracy review remain incomplete. **Next: T06 bounded acquisition/operations.**
-[T04](t04_acceptance.md) and [T03](t03_acceptance.md) remain earlier checkpoints.
-**Reviewed:** 2026-11-11. **Pipeline ID:** `fomc-meeting-minutes`.
+**Status:** FOMC-T01–T06 complete locally for **1990-onward bounded archive,
+native text, chunks and operations**. The accepted 1990 batch acquired 14 PDFs
+and reused two originals. The archive now has 89 captures and 26 representations:
+239 PDF pages, 897,899 text characters and 406 chunks (166 eligible, 240 review-
+flagged). The current 33-page inventory has 363 meetings and 470 references;
+previous source claims remain queryable. CLI, no-request health/recovery, coherent
+publication, 29-table restore and offline replay are verified. Full historical
+acquisition and text/OCR accuracy review remain incomplete.
+[T06 acceptance](t06_acceptance.md) and [evidence](evidence/t06_operations.json)
+are current; [T05](t05_acceptance.md), [T04](t04_acceptance.md) and
+[T03](t03_acceptance.md) remain earlier checkpoints.
+**Reviewed:** 2026-11-12. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
-FINRA remains at SSV-T05; NAAIM remains paused; FOMC has no job or schedule.
+The FOMC manual job is defined and its schedule defaults stopped; none was activated.
+FINRA remains at SSV-T05; NAAIM remains paused. Next core operation: bounded 1991.
 
 ## Objective and scope
 
@@ -70,7 +71,8 @@ implemented source-owned files include `manifest.py`, `data/inventory.py`,
 `config.py`, `data/native.py`, `io/postgres.py`, `io/acquisition.py` and
 `io/bronze.py`. T04 adds `data/text.py`, `data/catalog.py`, `io/text.py`, `io/catalog.py` and
 `io/text_replay.py`. T05 adds `data/chunks.py`, `data/chunk_catalog.py`, `io/chunks.py`,
-`io/chunk_catalog.py` and `io/chunk_replay.py`. A CLI and Dagster definitions remain later work.
+`io/chunk_catalog.py` and `io/chunk_replay.py`. T06 adds source-owned operation policy/audit, bounded orchestration, CLI and
+Dagster definitions; see [operations contract](operations_contract.md).
 Keep the parsing core pure; select and pin PDF/OCR dependencies during the
 first extraction slice.
 
@@ -139,8 +141,8 @@ See [acceptance](t03_acceptance.md), [discovery](discovery_contract.md),
 and [configuration/commands](../../config/fomc_meeting_minutes/README.md).
 T04 implements native text/pages/extraction versions, explicit OCR-review state
 and coherent catalog publication for the archived sample. The five text tables
-mirror full text/units/profiles/capture links and the selected generation. Broader original acquisition/operations remain
-later scoped work; no schedule was enabled.
+mirror full text/units/profiles/capture links and the selected generation. T06 subsequently adds bounded acquisition/operations; full history remains
+incomplete and no schedule was enabled.
 
 ## Core text chunks and optional embedding enhancement
 
@@ -236,10 +238,10 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC09 (enhancement) | Injected provider failures, oversized inputs and budget exhaustion leave the core archive/catalog usable, record retryable outcomes and accurate embedding coverage, and cannot publish a falsely complete index. Offline replay makes no model call. |
 | FOMC-AC10 (enhancement) | Retrieval fixtures enforce selected versions, publication/capture cutoffs and OCR eligibility and resolve every result to exact source pages. Query/index profiles match; any approximate index is evaluated against exact-search results. |
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
-| FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Bounded archive/text/chunk reconciliation is verified through T05; full-history reconciliation remains incomplete. |
+| FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Bounded archive/text/chunk/operation reconciliation is verified through T06; full-history reconciliation remains incomplete. |
 
-**Current pickup:** [FOMC-T06 bounded acquisition/operations](todo.md#fomc-t06--bounded-acquisition-and-operations-next).
-The archive is a bounded foundation, not a historical backfill or text index.
+**Current pickup:** a bounded 1991 backfill using the [T06 runbook](../../docs/deployment/fomc_runbook.md).
+The archive remains bounded; full historical acquisition and accuracy review are pending.
 Embeddings remain an independently selected enhancement.
 
 Verification commands (PostgreSQL integration is opt-in; see the config README):

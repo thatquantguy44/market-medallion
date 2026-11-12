@@ -32,7 +32,9 @@ def prepare_fomc_http(source_url, manifest, settings):
     return prepare_http(request, settings, opener_factory=_opener)
 
 
-def acquire_one(root, *, manifest, store, client, source_url, kind, max_bytes, now=None):
+def acquire_one(
+    root, *, manifest, store, client, source_url, kind, max_bytes, now=None, on_attempt=None
+):
     """Capture one response; limits preserve a marked partial prefix, never claim completeness."""
     url = manifest.capture_url(source_url, kind)
     if type(max_bytes) is not int or not 1 <= max_bytes <= 50_000_000:
@@ -48,6 +50,8 @@ def acquire_one(root, *, manifest, store, client, source_url, kind, max_bytes, n
         started_at=(now or (lambda: datetime.now(UTC)))(),
         phase="get",
     )
+    if on_attempt is not None:
+        on_attempt(identity)
     request = Request(
         url, headers={"User-Agent": "MarketMedallion/1.0", "Accept-Encoding": "identity"}
     )
@@ -165,7 +169,18 @@ class AcquisitionRun:
         self.requests = 0
 
     @classmethod
-    def start(cls, root, *, manifest, store, source_url, settings, limits, start_year=1990):
+    def start(
+        cls,
+        root,
+        *,
+        manifest,
+        store,
+        source_url,
+        settings,
+        limits,
+        start_year=1990,
+        on_attempt=None,
+    ):
         """Durable startup attempt before selection; reuse one client for the run."""
         from market_data_pipeline.pipelines.fomc_meeting_minutes.io.recovery import (
             begin_attempt,
@@ -186,6 +201,8 @@ class AcquisitionRun:
             started_at=datetime.now(UTC),
             phase="probe",
         )
+        if on_attempt is not None:
+            on_attempt(identity)
         try:
             client = prepare_fomc_http(url, manifest, settings)
         except (ValueError, OSError):
@@ -215,7 +232,7 @@ class AcquisitionRun:
                 "fallback_used": client.fallback_used,
             },
         )
-        return cls(
+        run = cls(
             root,
             manifest=manifest,
             store=store,
@@ -224,7 +241,10 @@ class AcquisitionRun:
             start_year=start_year,
         )
 
-    def acquire(self, source_url, kind):
+        run.startup_attempt_id = identity
+        return run
+
+    def acquire(self, source_url, kind, *, max_bytes=None, now=None):
         if self.requests >= self.limits.max_requests:
             raise ValueError("FOMC acquisition request budget exhausted")
         if kind not in ("inventory", "document", "asset"):
@@ -233,12 +253,17 @@ class AcquisitionRun:
         if kind == "inventory":
             _scope_year_page(url, self.start_year)
         # Attempted requests count even if the provider or database fails.
-        self.requests += 1
         limit = (
             self.limits.inventory_max_bytes
             if kind == "inventory"
             else self.limits.document_max_bytes
         )
+        if max_bytes is not None:
+            if type(max_bytes) is not int or not 1 <= max_bytes <= limit:
+                raise ValueError("FOMC per-request override exceeds the run byte limit")
+            limit = max_bytes
+        self.requests += 1
+        self.last_attempt_id = None
         return acquire_one(
             self.root,
             manifest=self.manifest,
@@ -247,4 +272,6 @@ class AcquisitionRun:
             source_url=source_url,
             kind=kind,
             max_bytes=limit,
+            now=now,
+            on_attempt=lambda identity: setattr(self, "last_attempt_id", identity),
         )
