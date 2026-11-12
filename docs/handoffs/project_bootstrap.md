@@ -19,15 +19,52 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — bounded FOMC 1992 in progress
+## 2026-11-12 current pickup — bounded FOMC 1992 accepted locally
 
-User-selected next slice is on `feat/fomc-1992-backfill`, based on merged PR #13
-at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`. Run the existing script for 1992
-only with unchanged finite settings. Preflight is healthy and the archived
-inventory lists 16 primary references. [1992 acceptance](../../specs/spec017/1992_acceptance.md)
-is in progress; verified backup, acquisition/readback, restore and replay remain
-the gates. Current accepted data is still the 1991 checkpoint below. Keep all
-schedules stopped, embeddings unselected, NAAIM paused and FINRA at SSV-T05.
+The selected 1992-only continuation is on `feat/fomc-1992-backfill`, from merged
+PR #13 at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`.
+[Acceptance](../../specs/spec017/1992_acceptance.md),
+[evidence](../../specs/spec017/evidence/1992_script_backfill.json) and
+[runbook](../deployment/fomc_runbook.md) are current. The existing
+[`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) ran with unchanged finite
+operation/network settings. No runtime/schema/config/dependency change was needed.
+
+The bounded run acquired **16 primary 1992 representations** and refreshed three
+inventory pages, carrying 30 verified nonselected pages with old capture clocks.
+It made **19 data GETs plus two startup probes**, receiving **9,401,386 bytes**.
+Four 1992 not-listed outcomes remain explicit. All three selected pointers and
+the successful operation result committed together. All **108 prior original
+receipts/bytes/clocks** and old append-only database rows are preserved.
+
+The archive has **127 captures** (47 inventories, 58 documents, 22 PNGs),
+**624 PDF pages**, **658 text units**, **1,579,673 characters** and **791 chunks:
+166 eligible, 625 review-flagged**. Coverage reconciles 1,578,473 source-unit
+characters and 1,200 separators. Fifty-one representation review cases, 414
+unacquired references, 49 not-listed claims and one unavailable 1994 href remain
+explicit. Full history and text/OCR accuracy are incomplete; no OCR/model service
+was called. Current normalized inventory is exactly unchanged from 1991: **33
+pages, 371 meeting claims, 470 references and 561 associations**. Earlier source
+snapshots and capture clocks remain queryable; no publication time was inferred.
+
+Fresh pre-/post-batch backups both restored all **29 tables**, with exact row
+fingerprints, originals, selected catalogs and operation audit. Actual empty-
+target replay preserves all 127 receipts, selected catalogs/chunk eligibility
+and the latest 1992 operation audit with HTTP/extraction/tokenization/chunking
+disabled. Full backup retains historical catalog/operation snapshots. Health,
+plan and run recovery also passed with HTTP disabled. Disposable targets were
+removed; other namespaces remain unchanged. Local configs, originals,
+derivatives and backups remain ignored.
+
+Verification: **954 regression tests passed, 71 optional skips; 267 FOMC checks
+passed with PostgreSQL enabled**, including 61 isolated backend checks. Bash,
+Ruff, format, build, diff, local-link and source-artifact checks pass. The pinned
+workflow snapshot and all 61 QuantSmith guidance objects were verified; the
+external checkout still differs from its pin and was left unchanged.
+
+**Next core operation: bounded 1993 through the same script**, then health/
+readback and recovery gates. Preserve distinct action/policy products and modern
+minutes through the transition. Keep all schedules stopped, embeddings optional
+and unselected, NAAIM paused and FINRA at SSV-T05.
 
 ## 2026-11-12 FOMC script and 1991 accepted checkpoint (merged)
 
@@ -79,7 +116,7 @@ syntax, Ruff, format, build, diff and source-artifact checks pass. The two new
 script checks cover other working directories, paths with spaces, interpreter
 selection, no-service validation and closed access gates.
 
-**Next core operation: bounded 1992 through the same script**, then health/readback.
+The 1992 continuation is accepted above; the current next core batch is 1993.
 Keep all FOMC schedules stopped, embeddings independently selected, NAAIM paused
 and FINRA at SSV-T05. Local config, bytes, derivatives and backups remain ignored.
 The external QuantSmith checkout still differs from its pin; all 61 adopted
@@ -139,7 +176,7 @@ PostgreSQL enabled**, including 61 isolated backend checks. Ruff, format, build,
 diff and artifact checks pass. CLI health/plan/run-recovery also passed against
 actual local state with HTTP disabled.
 
-The 1991 continuation is accepted above; the current next core batch is 1992.
+The 1991 continuation is accepted above; the current next core batch is 1993.
 Continue year batches and review separately. T07 embeddings remain optional and
 independently selected. The user requested commit/
 push, PR creation and tracking; inspect the current branch PR's head, checks and
@@ -554,7 +591,7 @@ retention continue within the existing internal-research scope.
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
 T17 and Spec012 T01–T04 are merged. FOMC-T06 is accepted locally on
-`feat/spec017-fomc-operations`; the next core operation is a bounded 1992 batch through the portable script.
+`feat/spec017-fomc-operations`; the next core operation is a bounded 1993 batch through the portable script.
 Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser

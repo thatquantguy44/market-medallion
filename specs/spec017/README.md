@@ -1,21 +1,21 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** T01–T06 and the **portable script/1991 continuation** are complete
-locally for 1990-onward bounded archive, native text, chunks and operations.
-The latest 1991 batch acquired 16 primary representations through
-[`scripts/run_fomc.sh`](../../scripts/run_fomc.sh). The archive now has 108 captures
-and 42 representations: 434 PDF pages, 1,239,281 text characters and 601 chunks
-(166 eligible, 435 review-flagged). The current 33-page inventory has 371 meeting
+**Status:** T01–T06 and bounded **1990–1992 batches** are complete locally for
+the 1990-onward archive, native text, chunks and operations. The latest 1992 batch
+acquired all 16 primary representations through
+[`scripts/run_fomc.sh`](../../scripts/run_fomc.sh). The archive has 127 captures
+and 58 representations: 624 PDF pages, 1,579,673 text characters and 791 chunks
+(166 eligible, 625 review-flagged). The current 33-page inventory has 371 meeting
 claims and 470 references, with prior snapshots preserved. Full history and
-text/OCR accuracy review remain incomplete. [1991 acceptance](1991_acceptance.md)
-and [evidence](evidence/1991_script_backfill.json) are current;
-[T06](t06_acceptance.md), [T05](t05_acceptance.md), [T04](t04_acceptance.md) and
-[T03](t03_acceptance.md) remain earlier checkpoints.
+text/OCR accuracy review remain incomplete. [1992 acceptance](1992_acceptance.md)
+and [evidence](evidence/1992_script_backfill.json) are current;
+[1991](1991_acceptance.md), [T06](t06_acceptance.md), [T05](t05_acceptance.md),
+[T04](t04_acceptance.md) and [T03](t03_acceptance.md) remain earlier checkpoints.
 **Reviewed:** 2026-11-12. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
-The [user runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
-Next core batch: 1992. All FOMC schedules stay stopped; FINRA remains at SSV-T05
+The [runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
+Next core batch: 1993. All FOMC schedules stay stopped; FINRA remains at SSV-T05
 and NAAIM remains paused. Embeddings remain independently selected optional work.
 
 ## Objective and scope
@@ -241,7 +241,7 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
 | FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Bounded archive/text/chunk/operation reconciliation is verified through T06; full-history reconciliation remains incomplete. |
 
-**Current pickup:** a bounded 1992 backfill using the [T06 runbook](../../docs/deployment/fomc_runbook.md).
+**Current pickup:** a bounded 1993 backfill using the [T06 runbook](../../docs/deployment/fomc_runbook.md).
 The archive remains bounded; full historical acquisition and accuracy review are pending.
 Embeddings remain an independently selected enhancement.
 

@@ -4,10 +4,9 @@ Updated: 2026-11-12. The user selected implementation, reuse of this project's
 PostgreSQL location and a pipeline-owned configuration folder. No recurring
 schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merged in
 [PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
-script and accepted 1991 continuation are on `feat/fomc-runner-script` in
-[PR #13](https://github.com/thatquantguy44/market-medallion/pull/13); track the
-[live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
-and current review threads.
+script and 1991 continuation merged in
+[PR #13](https://github.com/thatquantguy44/market-medallion/pull/13). The accepted
+1992 continuation is on `feat/fomc-1992-backfill`.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 
@@ -155,9 +154,33 @@ All earlier claims, originals and clocks remain preserved. Both backups restore
 29 tables, and offline replay/readback passes. Verification: 954 regression tests
 with 71 optional skips; 267 FOMC checks with PostgreSQL, including 61 backend checks.
 
-**Next core operation:** a bounded **1992** batch through the same script, then
-health/readback. Full history and text/OCR accuracy remain incomplete. Keep
-schedules stopped and embeddings separately selected.
+The bounded 1992 continuation is accepted below. The portable script and its
+explicit access gates remain unchanged.
+
+## Bounded 1992 continuation (complete)
+
+Accepted 2026-11-12 on `feat/fomc-1992-backfill`, from merged PR #13.
+[Acceptance](1992_acceptance.md) and [evidence](evidence/1992_script_backfill.json)
+record the unchanged script runner and finite settings, 16 acquired primary
+representations, 19 data GETs plus two probes, and 9,401,386 received bytes.
+Inventory/text/chunk pointers advanced coherently. All 108 prior originals,
+receipts/clocks and append-only rows remain intact; no schema/runtime change
+was needed. Pre-/post-batch backups both restored 29 tables. Offline replay
+preserves all 127 receipts, selected catalogs/chunk eligibility and the latest
+operation audit, with HTTP/extraction/tokenization/chunking disabled.
+
+The archive has 127 captures and 58 representations: 624 PDF pages, 658 units,
+1,579,673 characters and 791 chunks (166 eligible, 625 review-flagged).
+Current inventory is unchanged at 371 meeting claims, 470 references and 561
+associations. Gaps remain explicit: 414 unacquired references, 49 not-listed
+claims, one unavailable href and 51 review cases. Full history and text/OCR
+accuracy remain incomplete. Verification: 954 regression tests with 71 optional
+skips; 267 FOMC checks with PostgreSQL, including 61 backend checks.
+
+**Next core operation:** bounded **1993** through the same script, then health/
+readback and recovery gates. Preserve source product distinctions at the
+transition into modern minutes, actual first-seen clocks and review flags.
+Keep all schedules stopped and embeddings separately selected.
 
 ## Later slices (not started)
 

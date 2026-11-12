@@ -3,7 +3,7 @@
 The FOMC pipeline owns its CLI, source adapters, archive, PostgreSQL namespace and
 Dagster definitions under `pipelines/fomc_meeting_minutes/`. Active acquisition
 starts in 1990. [T06 acceptance](../../specs/spec017/t06_acceptance.md) records the
-bounded local T06 result. The [script/1991 acceptance](../../specs/spec017/1991_acceptance.md)
+bounded local T06 result. The [1992 acceptance](../../specs/spec017/1992_acceptance.md)
 is the latest checkpoint; neither certifies full history or text/OCR accuracy.
 
 ## Checkout setup and script entrypoint
@@ -107,24 +107,24 @@ market-medallion fomc run \
   --start-year 1990 --end-year 1990 --mode backfill --live
 ```
 
-For a bounded 1991 batch, use the same script after explicit initialization/
+For a bounded 1992 batch, use the same script after explicit initialization/
 migration of your own target:
 
 ```bash
 ./scripts/run_fomc.sh plan \
   --config config/fomc_meeting_minutes/pipeline.local.yml \
   --operations config/fomc_meeting_minutes/operations.local.yml \
-  --start-year 1991 --end-year 1991 --mode backfill
+  --start-year 1992 --end-year 1992 --mode backfill
 ./scripts/run_fomc.sh run \
   --config config/fomc_meeting_minutes/pipeline.local.yml \
   --operations config/fomc_meeting_minutes/operations.local.yml \
-  --start-year 1991 --end-year 1991 --mode backfill --live
+  --start-year 1992 --end-year 1992 --mode backfill --live
 ./scripts/run_fomc.sh health \
   --config config/fomc_meeting_minutes/pipeline.local.yml \
   --operations config/fomc_meeting_minutes/operations.local.yml
 ```
 
-The local 1991 batch is accepted; the next core batch is 1992.
+The local 1990–1992 batches are accepted; the next core batch is 1993.
 Change only the explicit year bounds for another bounded batch; the operation
 settings still enforce all finite limits. `migrate`, `recover-capture` and
 `recover-run` also work through the same script with their documented arguments.

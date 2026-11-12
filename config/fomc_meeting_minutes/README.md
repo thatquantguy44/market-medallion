@@ -1,18 +1,19 @@
 # FOMC meeting-minutes configuration
 
-T01–T06 and the [script/1991 continuation](../../specs/spec017/1991_acceptance.md)
-are accepted locally for the **1990-onward bounded archive and operations**.
-Latest [evidence](../../specs/spec017/evidence/1991_script_backfill.json) records
-108 captures and 42 text representations (434 PDF pages), with 601 chunks:
-166 eligible and 435 review-flagged. Full history and text/OCR accuracy review
-remain incomplete. The [T06 acceptance](../../specs/spec017/t06_acceptance.md)
-remains the earlier 1990 checkpoint. All schedules remain stopped.
+T01–T06 and bounded **1990–1992** batches are accepted locally for the
+1990-onward archive and operations. Latest [acceptance](../../specs/spec017/1992_acceptance.md)
+and [evidence](../../specs/spec017/evidence/1992_script_backfill.json) record
+127 captures and 58 text representations (624 PDF pages), with 791 chunks:
+166 eligible and 625 review-flagged. Full history and text/OCR accuracy review
+remain incomplete. [1991](../../specs/spec017/1991_acceptance.md) and
+[T06](../../specs/spec017/t06_acceptance.md) remain earlier checkpoints.
+All schedules remain stopped.
 
 Other users can run [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) with their
 own config. See [fresh-checkout setup](../../docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint)
 for dependencies, environment-backed credentials and bounded plan/run/health
 examples. The script does not load `.env` or activate access automatically.
-Next core batch: 1992.
+Next core batch: 1993.
 
 ## Configuration and scope
 
