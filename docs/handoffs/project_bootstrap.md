@@ -19,61 +19,56 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 FOMC pull-request tracking
+## 2026-11-12 current pickup — FOMC-T06 accepted locally
 
-[PR #11 — 1990-onward FOMC archive, text and chunk foundation](https://github.com/thatquantguy44/market-medallion/pull/11)
-is open from `feat/spec017-fomc-inventory` to `main`, covering T01–T05.
-Implementation head at PR creation: `4d5aa230fb15e496bcecb00ce3b1cbe5b501adb8`.
-The accepted implementation/evidence below remain current; T06 is the next build.
+T01–T05 merged through [PR #11](https://github.com/thatquantguy44/market-medallion/pull/11)
+at `79c499420faf9602f7ac2a50cafca0596c5b12fc`. T06 is implemented on
+`feat/spec017-fomc-operations`; [acceptance](../../specs/spec017/t06_acceptance.md),
+[contract](../../specs/spec017/operations_contract.md),
+[evidence](../../specs/spec017/evidence/t06_operations.json) and
+[runbook](../deployment/fomc_runbook.md) are current.
 
-Use the PR's [live checks](https://github.com/thatquantguy44/market-medallion/pull/11/checks)
-and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/11/files)
-for current status. On continuation, verify the current head SHA, inspect its
-latest CI run and unresolved review threads, and address failures before advancing.
-CI/review state is live rather than an implied approval from this handoff.
-The user requested commit/push, PR creation and tracking; merging remains unrequested.
+T06 adds finite source acquisition/retries, overlapping inventory refresh,
+immutable operation audit/recovery, coherent inventory/text/chunk promotion,
+operator CLI, no-request health and a manual Dagster job with a **STOPPED**
+weekday schedule. Live/scheduled gates are checked before service/probe and again
+at execution. No schedule was activated. NAAIM remains paused; FINRA stays at SSV-T05.
 
-## 2026-11-11 current pickup — FOMC-T06 next; T05 accepted
+The bounded 1990 batch acquired 14 PDFs and reused two originals: 17 data GETs,
+two startup probes and 7,800,834 response bytes. The archive has **89 captures**
+(41 inventory, 26 documents, 22 PNGs). The selected generation has **26
+representations**, **239 PDF pages**, **273 units**, **897,899 text characters**
+and **406 chunks: 166 eligible, 240 review-flagged**. All 897,405 source-unit
+characters are covered; 494 separators are accounted for separately. Nineteen
+representation review cases, 446 unacquired references, 41 not-listed claims and
+one unavailable 1994 href remain explicit. Full history and text/OCR accuracy
+review remain incomplete; no OCR/model service was invoked.
 
-FOMC T01–T05 are complete locally for the selected **1990-onward bounded archive,
-native-text and chunk foundation**, on `feat/spec017-fomc-inventory`.
-[T05 acceptance](../../specs/spec017/t05_acceptance.md),
-[chunks contract](../../specs/spec017/chunks_contract.md) and
-[evidence](../../specs/spec017/evidence/t05_chunks.json) are current.
+The refreshed calendar removed its eight 2027 planning placeholders. Exact raw
+comparison confirms the change. The current 33-page inventory has **363 meeting
+claims, 470 references and 553 associations**; the prior 371/561 snapshot and all
+old document claims remain queryable. This does not infer cancelled meetings.
+All 72 prior original receipts/bytes/clocks and every old append-only table row
+are preserved; the three current pointers intentionally changed together.
 
-The 33-page inventory (371 meetings, 470 references), 72 original captures and
-committed text catalog remain unchanged. The 12 extracted representations retain
-74 PDF pages, 108 units and 616,712 characters. T05 creates 12 deterministic chunk
-sets: **241 chunks, 166 eligible and 75 review-flagged**. All 616,520 source-unit
-characters are covered; 192 extraction separators are accounted for separately.
-Every PDF page has an exact citation. Source-version, extraction and chunker
-profiles remain distinct, with actual capture clocks and date-only release labels.
+Fresh backups restored all 26 pre-migration and 29 post-operation tables exactly.
+Actual empty-target replay preserves all 89 captures, selected catalogs/chunk
+eligibility and the operation intent/events/result with HTTP/extraction/
+tokenization/chunking disabled. Disposable databases/root were removed; other
+namespaces remain unchanged. Local config, source bytes, derivatives and backups
+remain ignored. QuantSmith's working checkout differs from its pin; adopted
+guidance was read from hash-verified pinned Git objects (all 61 verified).
 
-The pinned core tokenizer/profile uses 650 tokens maximum and 75-token overlap,
-preferring unit/paragraph boundaries after 500 tokens. Profile/runtime versions,
-exact Unicode offsets, citations and eligibility reasons are stored. Review text
-remains visible. The five upstream representation review cases, 460 unacquired
-references, 49 not-listed outcomes and one unavailable 1994 href remain explicit.
-Full historical backfill and text/OCR accuracy certification remain incomplete.
+Verification: **952 tests passed, 71 optional skips; 265 FOMC checks passed with
+PostgreSQL enabled**, including 61 isolated backend checks. Ruff, format, build,
+diff and artifact checks pass. CLI health/plan/run-recovery also passed against
+actual local state with HTTP disabled.
 
-Four additive chunk tables bring the owned schema to 26 tables. All 22 prior
-tables and original/text pointers are unchanged. Missing/corrupt inputs, failed
-writes and a text pointer change during a default build cannot advance a successful
-chunk generation. Old retries cannot roll it backward. Fresh before/after backups
-restored 22/26 tables exactly. Actual empty-target replay reproduces chunks,
-eligibility and all 72 receipt bytes with HTTP/extraction/tokenization/chunking
-disabled. Disposable databases/root were removed; other namespaces are unchanged.
-
-**Next: [FOMC-T06 bounded acquisition and operations](../../specs/spec017/todo.md#fomc-t06--bounded-acquisition-and-operations-next).**
-Start with offline bounded-run/health fixtures and an explicit finite year batch,
-then obey request/byte/year budgets, preserve overlapping revision refreshes,
-source outcomes and coherent publication. Keep the 1990 floor. No job/schedule is
-enabled. Embeddings remain independently selected T07 work.
-
-Use [configuration/commands](../../config/fomc_meeting_minutes/README.md).
-Local config, originals, text/chunks and backups stay ignored. QuantSmith's working
-checkout differs from its pin; relevant guidance was read from hash-verified pinned
-Git objects (all 61 hashes verified). NAAIM remains paused; FINRA stays at SSV-T05.
+**Next core operation: an explicit bounded 1991 backfill**, then no-request health/
+readback using the runbook. Continue year batches and review separately. T07
+embeddings remain optional and independently selected. The user requested commit/
+push, PR creation and tracking; inspect the current branch PR's head, checks and
+review threads on continuation. Merging remains unrequested.
 
 ## 2026-11-10 FINRA continuation and AAII manual refresh
 
@@ -483,8 +478,8 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 and Spec012 T01–T04 are merged. Immediate selected work is FOMC-T06 on
-`feat/spec017-fomc-inventory`; T05 is accepted for the bounded 1990-onward archive/text/chunk foundation.
+T17 and Spec012 T01–T04 are merged. FOMC-T06 is accepted locally on
+`feat/spec017-fomc-operations`; the next core operation is a bounded 1991 batch.
 Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser

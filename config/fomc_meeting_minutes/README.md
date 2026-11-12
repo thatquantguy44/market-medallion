@@ -1,11 +1,14 @@
 # FOMC meeting-minutes configuration
 
-T01–T05 are accepted locally for the **1990-onward bounded archive, native-text
-and chunk foundation**. This folder owns the FOMC operating settings.
-[T05 acceptance](../../specs/spec017/t05_acceptance.md),
-[chunks contract](../../specs/spec017/chunks_contract.md) and
-[evidence](../../specs/spec017/evidence/t05_chunks.json) record actual state.
-T06 bounded acquisition/operations is next. No FOMC job/schedule is enabled.
+T01–T06 are accepted locally for the **1990-onward bounded archive and
+operations**. This folder owns FOMC settings. [T06 acceptance](../../specs/spec017/t06_acceptance.md),
+[operations contract](../../specs/spec017/operations_contract.md) and
+[evidence](../../specs/spec017/evidence/t06_operations.json) record the actual
+1990 batch. The archive has 89 captures and 26 text representations (239 PDF
+pages), with 406 chunks: 166 eligible and 240 review-flagged. Full history and
+text/OCR accuracy review remain incomplete. The FOMC schedule defaults stopped.
+See the [operating runbook](../../docs/deployment/fomc_runbook.md) for CLI, migration,
+backup/restore, recovery and Dagster procedures. Next core batch: 1991.
 
 ## Configuration and scope
 
@@ -228,5 +231,27 @@ FOMC_TEST_POSTGRES_CONFIG=config/fomc_meeting_minutes/pipeline.local.yml \
 
 Keep `MARKET_DATA_TEST_POSTGRES_DSN` unset: other pipelines' legacy integration
 tests require a separate disposable database. FOMC tests create/drop only their
-unique test schemas. Next is T06 bounded acquisition, health and stopped orchestration. Full original-history acquisition and OCR/text accuracy review remain
-outstanding; embeddings stay separately selected. No FOMC CLI/job/schedule is enabled.
+unique test schemas. Full original-history acquisition and OCR/text accuracy
+review remain outstanding; embeddings stay separately selected. T06 adds the CLI,
+manual job and stopped schedule; none is activated by loading definitions.
+
+
+## Bounded operation settings
+
+`operations.example.yml` documents every required finite setting; an ignored
+`operations.local.yml` owns operator overrides. `scheduled_live_access` defaults
+false. `max_requests` includes two reserved startup probes; returned `requests`
+counts data GETs. `backfill` reuses valid verified originals, while `refresh`
+re-fetches selected references and declared dependencies. Both refresh inventories
+and carry nonselected verified pages with their actual old capture clocks.
+
+The explicit operations migration adds three tables, for 29 total. The accepted
+1990 run used 17 data GETs plus two probes and received 7,800,834 bytes. Fourteen
+new PDFs and three inventories bring the archive to 89 captures. The current
+33-page inventory has 363 meeting claims and 470 references; the earlier 371-claim
+snapshot is retained after eight 2027 placeholders disappeared from the refreshed
+calendar. The selected generation has 26 representations, 273 units, 239 PDF pages
+and 897,899 text characters. All 897,405 unit characters are covered by 406 chunks;
+494 extraction separators are accounted for separately. Nineteen representations
+require review. The actual 26/29-table restores and offline capture/catalog/audit
+replay passed; this does not certify full historical acquisition or accuracy.

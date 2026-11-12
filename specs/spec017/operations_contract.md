@@ -81,6 +81,7 @@ Official sources checked 2026-11-12:
 - https://www.federalreserve.gov/disclaimer.htm
 - https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3
 - https://dagster.io/docs/api/dagster/schedules-sensors
+- https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers
 
 The installed Dagster pin is 1.12.21. The fetched API documentation labels its
 1.12 line as 1.12.8; used signatures are additionally checked against the installed

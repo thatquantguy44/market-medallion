@@ -1,8 +1,8 @@
 # FOMC implementation tasks and pickup
 
-Updated: 2026-11-11. The user selected implementation, reuse of this project's
+Updated: 2026-11-12. The user selected implementation, reuse of this project's
 PostgreSQL location and a pipeline-owned configuration folder. No recurring
-schedule or embedding service was selected. Work on `feat/spec017-fomc-inventory`.
+schedule or embedding service was selected. T01–T05 merged in PR #11. T06 is on `feat/spec017-fomc-operations`.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 
@@ -111,15 +111,32 @@ remain unchanged. Pre-/post-migration backups restored 22/26 tables; actual repl
 preserves the generation, row text/eligibility and original receipt bytes.
 Full history and text/OCR accuracy review remain incomplete.
 
-## FOMC-T06 — bounded acquisition and operations (next)
+## FOMC-T06 — bounded acquisition and operations (complete for the 1990 batch)
 
-Implement bounded historical/current acquisition, health and stopped orchestration
-(FOMC-AC06), using the verified archive/text/chunk foundations. Keep the 1990 floor,
-follow archived official references and explicit finite year/document/request/byte
-budgets, refresh overlapping inventories for corrections, and report each source
-outcome. Start with a bounded year batch and offline transport fixtures before
-broader requests. Preserve clocks, review/coverage gaps and coherent publication.
-No schedule is selected or enabled by this handoff. Full history remains pending.
+Accepted 2026-11-12. [Acceptance](t06_acceptance.md),
+[operations contract](operations_contract.md), [runbook](../../docs/deployment/fomc_runbook.md)
+and [evidence](evidence/t06_operations.json) trace AC06 and retained source/text/
+chunk guarantees. Source-owned finite bounds, retries, overlapping inventory
+refresh, recursive dependencies, immutable operation audit/recovery, coherent
+three-pointer promotion, CLI, health and stopped Dagster definitions are implemented.
+
+The actual 1990 batch acquired 14 PDFs and reused two originals, with 17 data GETs
+plus two probes. The archive has 89 captures; 26 representations retain 239 PDF
+pages and 897,899 characters, with 406 chunks (166 eligible, 240 review-flagged).
+Nineteen representation review cases and 446 unacquired references remain explicit.
+A refreshed calendar removed eight 2027 placeholders; the current inventory has
+363 meetings, 470 references and 553 associations, with earlier claims preserved.
+Pre-/post-operation restores verify 26/29 tables. Actual offline replay preserves
+all 89 receipts, selected catalogs, chunk eligibility and the operation audit.
+
+Verification: **952 regression tests passed, 71 optional skips; 265 FOMC checks
+passed with PostgreSQL enabled**, including 61 isolated backend checks. Lint,
+format, build and artifact checks pass. No schedule was activated.
+
+**Next core operation:** run an explicit bounded **1991** backfill, then health/
+readback, using the runbook and finite settings. Continue year batches separately
+from native-text/OCR review; full history and accuracy remain incomplete. Do not
+activate schedules or silently broaden into embeddings.
 
 ## Later slices (not started)
 
