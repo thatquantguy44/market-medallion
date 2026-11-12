@@ -13,7 +13,7 @@ from market_data_pipeline.pipelines.fomc_meeting_minutes.manifest import manifes
 MIGRATION = "fomc-bronze-postgres/1"
 LINK_MIGRATION = "fomc-bronze-lineage-postgres/1"
 DISCOVERY_MIGRATION = "fomc-bronze-discovery-postgres/1"
-_HEADERS = {"content-type", "content-length", "last-modified", "date", "etag"}
+_HEADERS = {"content-type", "content-length", "last-modified", "date", "etag", "retry-after"}
 
 
 def _identity(value):
@@ -526,10 +526,10 @@ class PostgresBronzeStore:
         """Publish one page only when it does not drop existing source-page coverage."""
         return self.publish_inventory_captures([capture_id], manifest, root=root)
 
-    def publish_inventory_captures(
+    def prepare_inventory_captures(
         self, capture_ids, manifest, *, root, historical_years=None, start_year=None
     ):
-        """Atomically publish an issue-free page union and link every archived page.
+        """Prepare an issue-free page union/evidence without modifying catalog pointers.
 
         Passing historical_years=(start,end) requires both source inventories and
         exactly their discovered page set for that bounded historical selection.
@@ -663,6 +663,20 @@ class PostgresBronzeStore:
                 )
             pages.append({"source_page_url": receipt["source_url"], "meetings": rows})
         union = inventory_from_dict({"schema_id": manifest.schema_id, "pages": pages}, manifest)
+        return union, evidence
+
+    def publish_inventory_captures(
+        self, capture_ids, manifest, *, root, historical_years=None, start_year=None
+    ):
+        """Atomically publish verified preparation, retaining existing page coverage."""
+        union, evidence = self.prepare_inventory_captures(
+            capture_ids,
+            manifest,
+            root=root,
+            historical_years=historical_years,
+            start_year=start_year,
+        )
+        urls = set(union.source_pages)
         with self.store.connection.transaction():
             self.store.connection.execute(
                 self.store._query(

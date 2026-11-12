@@ -1,5 +1,6 @@
 """FOMC-AC05: verified generation reads and atomic PostgreSQL catalog selection."""
 
+from contextlib import nullcontext
 from datetime import datetime
 
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.catalog import (
@@ -47,11 +48,21 @@ class PostgresTextCatalog:
             result.append({"receipt": receipt, "extraction": extraction, "meeting_ids": meetings})
         return result
 
-    def publish(self, bindings, manifest, *, root, inventory_run_id, start_year=1990, as_of=None):
+    def publish(
+        self,
+        bindings,
+        manifest,
+        *,
+        root,
+        inventory_run_id,
+        start_year=1990,
+        as_of=None,
+        _locked=False,
+    ):
         if not isinstance(bindings, (list, tuple)) or not 1 <= len(bindings) <= 10000:
             raise ValueError("FOMC catalog requires a bounded explicit extraction set")
         store, conn = self.store, self.store.connection
-        with writer_lock(root), conn.transaction():
+        with nullcontext() if _locked else writer_lock(root), conn.transaction():
             state = conn.execute(
                 store._query(
                     "SELECT contract_id,current_catalog_id FROM {schema}.text_state FOR UPDATE"
