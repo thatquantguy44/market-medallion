@@ -1,7 +1,9 @@
 # Specification index
 
-Updated: 2026-11-03. Numbers identify documents, not automatic build priority.
-The current user-selected build order is **011 → 012 → 013 → 014 → 015**;
+Updated: 2026-11-12. Numbers identify documents, not automatic build priority.
+FOMC T01–T05 are accepted for the bounded 1990-onward foundation; current pickup is
+[FOMC-T06 bounded acquisition/operations](spec017/todo.md#fomc-t06--bounded-acquisition-and-operations-next).
+The remaining securities-finance order is **011 → 012 → 013 → 014 → 015**;
 see the [securities-finance program](../docs/securities_finance/README.md).
 
 | Spec | Capability ID | Contract and status |
@@ -16,12 +18,13 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [008](spec008/README.md) | occ-options-volume-query | Draft OCC options put/call-volume query contract. Filtered scope, CSV schema, terms, history and rate behavior require review; no connector implemented. |
 | [009](spec009/README.md) | cboe-published-put-call-ratios | Draft Cboe published daily put/call-ratio contract. Date-selection, history, terms and source shape require review; no connector implemented. |
 | [010](spec010/README.md) | nasdaq-daily-market-breadth | Draft Nasdaq Trader advances/declines/unchanged-count contract. Year coverage, universe semantics, terms and source shape require review; no connector implemented. |
-| [011](spec011/README.md) | settlement-stress | First: SEC FTD plus Nasdaq/NYSE Reg SHO. T18 types and T03–T06 local SEC persistence, revisions, cutoff Gold, gated withdrawals and offline replay complete, verified with 117,025 September facts. Next T07 publication. PostgreSQL/Delta, exchange adapters and jobs remain open. |
-| [012](spec012/README.md) | finra-short-sale-volume | Second: facility-scoped daily short volume, included short-exempt subset and matching reported denominators. Full planning set; connector absent. |
+| [011](spec011/README.md) | settlement-stress | First: SEC FTD plus Nasdaq/NYSE Reg SHO; bounded native-source delivery accepted through PR #8, with PostgreSQL/local Delta, replay and stopped jobs. See its acceptance record and master handoff for scope limits. |
+| [012](spec012/README.md) | finra-short-sale-volume | Second: T01–T04 admission, three-TRF registry, pure JSON parser and exact quantity/ratio helpers complete through PR #10. Next T05 raw/rejected-capture receipts; acquisition, warehouse and jobs absent. |
 | [013](spec013/README.md) | finra-otc-transparency | Third: delayed weekly ATS/non-ATS security/participant activity, tier/coverage-safe metrics. Full planning set; connector absent. |
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
+| [017](spec017/README.md) | fomc-meeting-minutes | T01–T05 accepted for the 1990-onward bounded archive/native-text/chunk foundation: 12 representations, 74 PDF pages, 241 chunks (166 eligible, 75 review-flagged), coherent mirrors and replay. Next T06 bounded acquisition/operations. Full backfill/accuracy review and optional embeddings remain separate. |
 
 ## Presidential pipeline integration planning
 
@@ -44,12 +47,12 @@ so the five workstreams preserve all six source families discussed. Read the
 [coordination tasks](../docs/securities_finance/todo.md) and
 [delivery roadmap](../docs/securities_finance/roadmap.md).
 
-Each numbered spec owns `README.md`, `data_contract.md`, `plan.md` and `todo.md`.
-Spec011 now has a first offline SEC slice and [source-review checkpoint](spec011/source_review.md).
-Continue **S11-T07** coherent Parquet publication after completed T03–T06
-local SEC persistence, observed revisions, cutoff Gold, offline replay, T18 type contracts and
-the successful September sample reconciliation. Later source tasks remain unchecked; no new job, live acquisition
-adapter or consumer module exists. The source sequence supersedes older discovery priorities;
+Delivery specs own `README.md`, `data_contract.md`, `plan.md` and `todo.md`;
+Spec017 has an inventory contract and [implementation task handoff](spec017/todo.md).
+The [master handoff](../docs/handoffs/project_bootstrap.md) records accepted
+Spec011 delivery and completed Spec012 T01–T04. FINRA's continuation is **SSV-T05**
+from its [next-agent handoff](spec012/README.md#next-agent-handoff). The newly selected
+FOMC build now continues at **FOMC-T06** after accepted T01–T05 archive/text/chunk checks. The source sequence supersedes older discovery priorities;
 the following historical choices remain context, not a competing next-build
 instruction. Keep NAAIM paused unless explicitly resumed by the user.
 

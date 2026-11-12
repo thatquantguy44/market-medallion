@@ -19,6 +19,18 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
+**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T05 are complete
+locally for the selected **1990-onward bounded archive, native-text and chunk
+foundation**. The inventory has 371 meetings and 470 references; 72 originals
+remain byte-verified. The 12 extracted representations retain 74 PDF pages and
+616,712 text characters. T05 adds 241 chunks: 166 eligible, 75 review-flagged,
+with complete source-unit coverage and exact citations. Immutable mirrors,
+coherent catalogs, replay and 26-table restore are verified. Full backfill and
+text/OCR accuracy review remain incomplete. **Next: T06 bounded acquisition and
+operations.** See [T05 acceptance](specs/spec017/t05_acceptance.md) and
+[configuration](config/fomc_meeting_minutes/README.md). FINRA stays at SSV-T05;
+NAAIM remains paused, and no FOMC job/schedule is enabled.
+
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
 FINRA daily short volume → FINRA ATS/non-ATS → SEC N-PORT → NY Fed primary

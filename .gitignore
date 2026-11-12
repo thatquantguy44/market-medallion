@@ -24,3 +24,5 @@ config/naaim-delayed.yml
 *.sqlite3
 *.pem
 .aws/
+
+/config/fomc_meeting_minutes/*.local.yml

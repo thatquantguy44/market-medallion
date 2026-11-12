@@ -1,0 +1,280 @@
+{
+  "reviewed_on": "2026-11-11",
+  "scope": "bounded 2017/2019 minutes and SEP addenda, 22 PNGs, and 1993/2020 label regimes; no corpus-wide completeness",
+  "source_storage": "ignored local review captures only; no production writes",
+  "source_review_captures": [
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure1.png",
+      "capture_id": "63cbb25c-3edb-4b1a-b7e8-9d705ac24ebb",
+      "sha256": "7b961ee31e35006abd96edd680076e187f69a9f0d3ef704038f0cc2ecdb9e57f",
+      "size_bytes": 46042,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:46.655183+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure2.png",
+      "capture_id": "7b830db0-93a0-454e-b7b8-3c3a4d83817d",
+      "sha256": "6c4af0b9165cd8dd4ddde3b33dae71a438e3f07b522815bf3edfb9709a124f03",
+      "size_bytes": 18544,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:47.029793+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure3a.png",
+      "capture_id": "152a56ba-2e70-4a0c-a6a5-73096207348e",
+      "sha256": "56d5964a9a60b1594fe1ed35ad417d26c6d4483f18140333bcb08e9206b6a157",
+      "size_bytes": 40322,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:47.396682+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure3b.png",
+      "capture_id": "6a62e183-ea17-4d4e-bf99-4e7edff7cd69",
+      "sha256": "4ddafa6fbdbec9029c8f0c5c536283d2acb0603d9e81dd9598022a76e2688c63",
+      "size_bytes": 41494,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:47.757318+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure3c.png",
+      "capture_id": "9f7f9a82-f7f7-4864-8dad-c00b0d4581ac",
+      "sha256": "9e99fac2ea64ad0f3191b9c2b270cc79c113e723d6cd6535965add9969c70415",
+      "size_bytes": 38594,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:48.122536+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure3d.png",
+      "capture_id": "54ac6cff-4b14-427d-bdf0-fbac32cf0402",
+      "sha256": "84d561ea36d6cf3f4432d093f6acc295f45638cf61a33151f74e9fc1a7aa3209",
+      "size_bytes": 31222,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:48.493373+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure3e.png",
+      "capture_id": "5144e5f6-f485-430d-8fa3-e8c6278911be",
+      "sha256": "646740b6164954cabc0d37d5e86293fd5e1dfdc885d2d1a91888aa3ceb354c93",
+      "size_bytes": 46825,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:48.861269+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure4a.png",
+      "capture_id": "04fbe730-d1b3-4451-9056-0727c54d8037",
+      "sha256": "c7223ac940e22918cb4254813a9c2f4f672117a978fe05e5b33817075e0caad8",
+      "size_bytes": 53801,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:49.239048+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure4b.png",
+      "capture_id": "b78f1755-fad4-4deb-a4ec-ebcbda9597ab",
+      "sha256": "b928c0cb34a0ef3500f98b66886d9394b07e74af9568ab707f5e8d1c1a14b249",
+      "size_bytes": 54384,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:49.601161+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure4c.png",
+      "capture_id": "b73d6d53-f1e6-475f-898b-c1ccdcc63411",
+      "sha256": "80349d2399adcf06475ff29c1ff26f41baee133a6c14f76d65cf4aa903780d91",
+      "size_bytes": 76733,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:49.983774+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/sep20170614-figure5.png",
+      "capture_id": "66d3e7fa-1709-4c8f-a14e-bfca0755ca49",
+      "sha256": "7c109a2b6a3c4c0d6fba19aec68959ce65820c8b2f0f50317925a481a5407d00",
+      "size_bytes": 22942,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:50.364315+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1993.htm",
+      "capture_id": "6cb4d24c-b05b-4149-afc6-30c1f53c52a6",
+      "sha256": "e332f0f7f74d8c16299e72740f67c5502313c4ae8fd6bd4b13642c3539ea96b4",
+      "size_bytes": 94824,
+      "kind": "inventory",
+      "captured_at": "2026-11-11T16:22:41.045761+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2020.htm",
+      "capture_id": "55b179b3-2226-4ebc-98d8-a8d8471bd08e",
+      "sha256": "38d1c91ff648d751d6cadcba121def042b5816c4ae5f280cbf586105bb37d145",
+      "size_bytes": 98731,
+      "kind": "inventory",
+      "captured_at": "2026-11-11T16:22:41.193795+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614.htm",
+      "capture_id": "20c6763f-c14b-4075-a148-ecd3d0f4291c",
+      "sha256": "b84af4f3aa81125fe72f8ec92acf88352f4ebe65000429600575459bd006118e",
+      "size_bytes": 139384,
+      "kind": "document",
+      "captured_at": "2026-11-11T16:22:40.920112+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614ep.htm",
+      "capture_id": "0be5f76d-6a3b-4b5c-acbf-3735fe9beedc",
+      "sha256": "96bf825d9964acf808de882cd30ea7e0819d7a46746266f6e60cd871aef2fbd1",
+      "size_bytes": 136288,
+      "kind": "document",
+      "captured_at": "2026-11-11T16:24:13.562627+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619.htm",
+      "capture_id": "292a670d-48c3-4ea1-ab67-af4f6dc1fdc0",
+      "sha256": "5d978d987173f56e33828dcb56dcf9d492ebb349b05fbd7abe499bbb812a1d8b",
+      "size_bytes": 135824,
+      "kind": "document",
+      "captured_at": "2026-11-11T16:22:40.760192+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619ep.htm",
+      "capture_id": "4d547037-8bf5-4072-bdb7-364e88ee5283",
+      "sha256": "ea817187b18ee37fb4c0c68699e79ac65c338c86dc127eaff9017aea57c54705",
+      "size_bytes": 131257,
+      "kind": "document",
+      "captured_at": "2026-11-11T16:24:13.413768+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure1.png",
+      "capture_id": "2e70fde0-922f-42f1-9ce1-2fe4a6a6ac12",
+      "sha256": "d2ffb33b18a67457dce2cd9130c2b55f0537572660678e99fca3242c4697b836",
+      "size_bytes": 75258,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:50.751415+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure2.png",
+      "capture_id": "50dde77b-8725-4638-91af-c9407e0a5525",
+      "sha256": "54cf42a31b74b564bd7c61d09738aaa7053e2ddc6e958dccc9a429638dcb1d58",
+      "size_bytes": 27870,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:51.129568+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure3a.png",
+      "capture_id": "078abf82-037f-48d4-8bcf-dec706acb6d8",
+      "sha256": "df6403d037f9742adbc7ab5f4b0d90c9d518b9a5b731eae2b79750ad55b94ace",
+      "size_bytes": 62933,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:51.533086+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure3b.png",
+      "capture_id": "ff03a207-1e08-41d4-a890-0f11461d9f8a",
+      "sha256": "7c1d1dea3e85214f3714f49049ba6d28133878c2cc661c00dc2539d4084b035a",
+      "size_bytes": 71815,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:51.909146+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure3c.png",
+      "capture_id": "9ba07ec3-fb88-48bb-a22f-bc67b4f7e6da",
+      "sha256": "9700162da88bb1bd1b76f88eb5e64be93b065bc9f828f038e9ec9b4b96535c87",
+      "size_bytes": 59386,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:52.270626+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure3d.png",
+      "capture_id": "a29edf8f-8871-47b4-8c80-37e33fa9d6d7",
+      "sha256": "3379d58affd3c6474b7b99e1a55b1273a852fa6279b47ce5fa97169d571a8f08",
+      "size_bytes": 48867,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:52.622131+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure3e.png",
+      "capture_id": "8f19575a-660a-4f8c-80a6-0f5bda5e642e",
+      "sha256": "ea5fdc9d37eba710c9e9290dc595c5fedd24e90d17f4c1dd6c92acf47ee746a5",
+      "size_bytes": 83495,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:53.013778+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure4a.png",
+      "capture_id": "3bd65057-3358-4f3b-b32c-a3a5f8a52d70",
+      "sha256": "61a93b1a9085edc4c6dfafa0d14a802908c6c48bbf27e937ebe798aec23ed32a",
+      "size_bytes": 91896,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:53.404094+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure4b.png",
+      "capture_id": "4f99d52f-fb77-4da9-b1e2-edcf71c2a1c0",
+      "sha256": "2d63502fb80a2c26b9f69465ebb7d345ffa7ca713ca09176eed60c6878a23585",
+      "size_bytes": 91075,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:53.781391+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure4c.png",
+      "capture_id": "06d3da32-ab3e-4b05-9f0d-2d79ee1419af",
+      "sha256": "1b3c02e1a993b27dcded37c145182566e37b3fd269d496c352914fa76fe1335e",
+      "size_bytes": 130191,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:54.201941+00:00"
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/sep20190619figure5.png",
+      "capture_id": "c00b2688-d2af-45c9-b0f0-c8e01c6c7836",
+      "sha256": "da7dff9687af48f00eee5a290bc2213adecc0cc18542fdc3fa7fa9e2e1ee36b8",
+      "size_bytes": 41094,
+      "kind": "asset",
+      "captured_at": "2026-11-11T16:32:54.562232+00:00"
+    }
+  ],
+  "byte_exact_filesystem_postgres_readbacks": 28,
+  "postgres_scope": "isolated temporary FOMC test schema, removed after verification",
+  "direct_dependency_checks": [
+    {
+      "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614ep.htm",
+      "direct_dependencies": 11,
+      "check_sha256": "4c9f3f60ed0e0f685bfb49d338d935974b0be5c5a335d8ab36e6510d5f4d2666"
+    },
+    {
+      "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20170614.htm",
+      "direct_dependencies": 1,
+      "check_sha256": "69f0a7d8289e95c808afdd84ac27ec445ad36c9e2f3070f6c9797575f3c78888"
+    },
+    {
+      "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619.htm",
+      "direct_dependencies": 1,
+      "check_sha256": "e718059541d5af9f12ddde887b2fad3641630858bbb917743c56cb4c93dc9174"
+    },
+    {
+      "parent_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20190619ep.htm",
+      "direct_dependencies": 11,
+      "check_sha256": "8220782e26df786e4b2d284dbeb4c1f9d79b8357a1949eb3c54d7e54cfb872f2"
+    }
+  ],
+  "native_regimes": [
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2020.htm",
+      "meetings": 9,
+      "documents": 16,
+      "issues": [
+        {
+          "code": "unresolved_minutes_cross_reference",
+          "label": "Minutes: See end of minutes of March 15 meeting"
+        },
+        {
+          "code": "unsupported_meeting_label",
+          "label": "March 17-18 (cancelled) Meeting - 2020"
+        }
+      ]
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1993.htm",
+      "meetings": 16,
+      "documents": 8,
+      "issues": []
+    }
+  ],
+  "inventory_runs_published": 0,
+  "text_or_image_visual_validation": false
+}
