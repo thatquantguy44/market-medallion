@@ -19,10 +19,117 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — FOMC script and 1991 accepted locally
+## 2026-11-12 current pickup — PR #14 covers 1992–1994 (accepted locally)
+
+The user requested more work in the same PR. Keep `feat/fomc-1992-backfill` and
+[PR #14 — 1992–1994 FOMC backfills and recovery](https://github.com/thatquantguy44/market-medallion/pull/14).
+The added 1993–1994 batch is accepted. [Acceptance](../../specs/spec017/1993_1994_acceptance.md),
+[evidence](../../specs/spec017/evidence/1993_1994_script_backfill.json) and
+[runbook](../deployment/fomc_runbook.md) are current. Follow the PR's
+[live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/14/files);
+on continuation verify the current head SHA, checks and unresolved review threads.
+No merge or schedule activation is implied.
+
+The unchanged script ran explicit **1993–1994** backfill under existing finite
+settings. All 16 listed HTML minutes references are archived/verified, eight per
+year: **15 acquired and one reused**. Four inventories were refreshed and 29
+verified pages carried with their old clocks. The run made **19 data GETs plus
+two probes**, receiving **1,145,768 bytes**. Eleven not-listed claims and the
+unavailable December 30, 1994 href remain explicit; no replacement was guessed.
+All three pointers and the successful operation result committed together.
+All **127 prior originals/receipts/clocks** and old append-only rows are intact.
+
+The archive now has **146 captures** (51 inventories, 73 documents, 22 PNGs),
+**624 PDF pages**, **673 text units**, **2,172,146 characters** and **993 chunks:
+368 eligible, 625 review-flagged**. The added HTML minutes contribute 202 eligible
+chunks. Native outcomes are 22 native-extracted and 51 review-required. Coverage
+reconciles 2,170,946 unit characters and 1,200 separators. Current normalized
+inventory is unchanged: **33 pages, 371 meeting claims, 470 references and 561
+associations**. Gaps remain: 399 unacquired references, 49 not-listed claims,
+one unavailable href and 51 review cases. Full history and accuracy review remain
+incomplete; no OCR/model service was called and no clock was backdated.
+
+Fresh pre-/post-run backups both restored all **29 tables**, matching exact row
+fingerprints, originals, selected catalogs and operation audit. Offline replay
+preserves all 146 receipt bytes, selected catalogs/chunk eligibility and the latest
+1993–1994 operation's intent/events/result, with HTTP/extraction/tokenization/
+chunking disabled. Full backup retains historical catalog/operation snapshots.
+Health, plan and run recovery also passed with HTTP disabled. Disposable targets
+were removed; other namespaces remain unchanged. Local configuration, credentials,
+originals, derivatives and backups stay ignored. No runtime/config/schema or
+dependency change was needed for the additional years.
+
+Verification: **954 regression tests passed, 71 optional skips; 267 FOMC checks
+passed with PostgreSQL enabled**, including 61 backend checks. Bash, Ruff, format,
+build, diff, local-link and source-artifact checks pass. The local workflow pin
+and all 61 adopted QuantSmith guidance objects were verified without editing the
+external checkout, which still differs from its configured pin.
+
+**Next core operation: bounded 1995–1996 through the same script**, then health/
+readback and recovery gates. Preserve source-product distinctions, first-seen
+clocks and review flags. Keep all schedules stopped, embeddings unselected,
+NAAIM paused and FINRA at SSV-T05.
+
+## 2026-11-12 bounded FOMC 1992 accepted checkpoint
+
+[PR #14 — Bounded 1992 FOMC backfill and recovery](https://github.com/thatquantguy44/market-medallion/pull/14)
+is open from `feat/fomc-1992-backfill` to `main`. Acceptance/evidence head at
+creation: `5274279ae741e8d0527a197963821f7acac3ed22`.
+Track [live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/14/files).
+On continuation verify the current head SHA, CI results and unresolved review
+threads before advancing. The handoff does not imply approval to merge or
+activate schedules.
+
+The selected 1992-only continuation is on `feat/fomc-1992-backfill`, from merged
+PR #13 at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`.
+[Acceptance](../../specs/spec017/1992_acceptance.md),
+[evidence](../../specs/spec017/evidence/1992_script_backfill.json) and
+[runbook](../deployment/fomc_runbook.md) are current. The existing
+[`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) ran with unchanged finite
+operation/network settings. No runtime/schema/config/dependency change was needed.
+
+The bounded run acquired **16 primary 1992 representations** and refreshed three
+inventory pages, carrying 30 verified nonselected pages with old capture clocks.
+It made **19 data GETs plus two startup probes**, receiving **9,401,386 bytes**.
+Four 1992 not-listed outcomes remain explicit. All three selected pointers and
+the successful operation result committed together. All **108 prior original
+receipts/bytes/clocks** and old append-only database rows are preserved.
+
+The archive has **127 captures** (47 inventories, 58 documents, 22 PNGs),
+**624 PDF pages**, **658 text units**, **1,579,673 characters** and **791 chunks:
+166 eligible, 625 review-flagged**. Coverage reconciles 1,578,473 source-unit
+characters and 1,200 separators. Fifty-one representation review cases, 414
+unacquired references, 49 not-listed claims and one unavailable 1994 href remain
+explicit. Full history and text/OCR accuracy are incomplete; no OCR/model service
+was called. Current normalized inventory is exactly unchanged from 1991: **33
+pages, 371 meeting claims, 470 references and 561 associations**. Earlier source
+snapshots and capture clocks remain queryable; no publication time was inferred.
+
+Fresh pre-/post-batch backups both restored all **29 tables**, with exact row
+fingerprints, originals, selected catalogs and operation audit. Actual empty-
+target replay preserves all 127 receipts, selected catalogs/chunk eligibility
+and the latest 1992 operation audit with HTTP/extraction/tokenization/chunking
+disabled. Full backup retains historical catalog/operation snapshots. Health,
+plan and run recovery also passed with HTTP disabled. Disposable targets were
+removed; other namespaces remain unchanged. Local configs, originals,
+derivatives and backups remain ignored.
+
+Verification: **954 regression tests passed, 71 optional skips; 267 FOMC checks
+passed with PostgreSQL enabled**, including 61 isolated backend checks. Bash,
+Ruff, format, build, diff, local-link and source-artifact checks pass. The pinned
+workflow snapshot and all 61 QuantSmith guidance objects were verified; the
+external checkout still differs from its pin and was left unchanged.
+
+The added 1993–1994 batch is accepted above; the next core batch is 1995–1996.
+Preserve distinct action/policy products and modern minutes through the transition. Keep all schedules stopped, embeddings optional
+and unselected, NAAIM paused and FINRA at SSV-T05.
+
+## 2026-11-12 FOMC script and 1991 accepted checkpoint (merged)
 
 [PR #13 — Reusable FOMC runner script and 1991 backfill](https://github.com/thatquantguy44/market-medallion/pull/13)
-is open from `feat/fomc-runner-script` to `main`. Acceptance/evidence head at
+merged into `main` at `41e9d0c06a4669b1ef6e9aa308c93f829034176f`. Acceptance/evidence head at
 creation: `6fd3c5b9594eb933db48117a1c93b08e49d41b53`.
 Track its [live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
 and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/13/files).
@@ -69,7 +176,7 @@ syntax, Ruff, format, build, diff and source-artifact checks pass. The two new
 script checks cover other working directories, paths with spaces, interpreter
 selection, no-service validation and closed access gates.
 
-**Next core operation: bounded 1992 through the same script**, then health/readback.
+The 1992 continuation is accepted above; the current next core batch is 1995–1996.
 Keep all FOMC schedules stopped, embeddings independently selected, NAAIM paused
 and FINRA at SSV-T05. Local config, bytes, derivatives and backups remain ignored.
 The external QuantSmith checkout still differs from its pin; all 61 adopted
@@ -129,7 +236,7 @@ PostgreSQL enabled**, including 61 isolated backend checks. Ruff, format, build,
 diff and artifact checks pass. CLI health/plan/run-recovery also passed against
 actual local state with HTTP disabled.
 
-The 1991 continuation is accepted above; the current next core batch is 1992.
+The 1991 continuation is accepted above; the current next core batch is 1995–1996.
 Continue year batches and review separately. T07 embeddings remain optional and
 independently selected. The user requested commit/
 push, PR creation and tracking; inspect the current branch PR's head, checks and
@@ -543,9 +650,10 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 and Spec012 T01–T04 are merged. FOMC-T06 is accepted locally on
-`feat/spec017-fomc-operations`; the next core operation is a bounded 1992 batch through the portable script.
-Read the current pickup above and Spec017 tasks.
+T17 and Spec012 T01–T04 are merged. FOMC T01–T06 and the bounded 1990–1994
+batches are accepted locally. Active review is PR #14 on
+`feat/fomc-1992-backfill`; the next core operation is bounded 1995–1996 through
+the portable script. Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser
 Checkpoint A are ready for this scope; local publication and G1/G2 remain open.
