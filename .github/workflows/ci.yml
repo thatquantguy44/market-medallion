@@ -33,7 +33,22 @@ jobs:
       - run: python scripts/verify_agent_skills.py
       - run: ruff check .
       - run: ruff format --check .
+      - name: Configure isolated FOMC PostgreSQL checks
+        run: |
+          python - <<'PYCONFIG'
+          from pathlib import Path
+          import yaml
+          path = Path("config/fomc_meeting_minutes/pipeline.example.yml")
+          cfg = yaml.safe_load(path.read_text())
+          cfg["postgres"].update(port=55439, database="aaii_test", user="aaii_test")
+          Path("config/fomc_meeting_minutes/pipeline.ci.local.yml").write_text(
+              yaml.safe_dump(cfg)
+          )
+          PYCONFIG
       - run: python -m pytest -q
         env:
           MARKET_DATA_TEST_POSTGRES_DSN: postgresql://aaii_test:ci_disposable_test_only@127.0.0.1:55439/aaii_test
+          FOMC_TEST_POSTGRES_CONFIG: config/fomc_meeting_minutes/pipeline.ci.local.yml
+          # Same public, disposable service credential as above; no external service access.
+          FOMC_POSTGRES_PASSWORD: ci_disposable_test_only
       - run: python -m build --no-isolation
