@@ -1,6 +1,6 @@
 # Master pipeline register
 
-Updated: 2026-11-11, America/New_York.
+Updated: 2026-11-12, America/New_York.
 
 This is the master index for **pipeline ownership, implementation status and
 next work**. It tracks all concrete pipelines/candidates currently recorded in
@@ -17,7 +17,9 @@ FOMC T01–T06 are complete locally for the user-selected 1990-onward bounded
 archive and operations. The 1990 batch, coherent text/chunk catalogs, no-request
 health/recovery, 29-table restore and offline replay are verified. Full historical
 acquisition and text/OCR accuracy review remain incomplete. The next core
-operation is a bounded 1991 batch. The FOMC schedule defaults stopped; FINRA stays
+operation is a bounded 1991 batch, now in progress through the reusable
+[`scripts/run_fomc.sh`](../scripts/run_fomc.sh) entrypoint on
+`feat/fomc-runner-script`. The FOMC schedule defaults stopped; FINRA stays
 at SSV-T05 and NAAIM remains paused.
 
 AAII local completion and package cleanup merged through PR #2. SEC FTD and

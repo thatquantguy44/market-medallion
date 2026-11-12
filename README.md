@@ -29,6 +29,8 @@ replay are verified. Full history and text/OCR accuracy review remain incomplete
 See [T06 acceptance](specs/spec017/t06_acceptance.md) and the
 [runbook](docs/deployment/fomc_runbook.md). Next core operation: a bounded 1991 batch.
 The FOMC schedule defaults stopped; NAAIM remains paused; FINRA stays at SSV-T05.
+Other users can run the same commands through [`scripts/run_fomc.sh`](scripts/run_fomc.sh);
+see the [setup and script guide](docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint).
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →

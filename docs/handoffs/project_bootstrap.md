@@ -19,10 +19,22 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — FOMC-T06 accepted locally
+## 2026-11-12 current pickup — reusable FOMC script and 1991 batch
+
+User-selected continuation is on `feat/fomc-runner-script`, based on merged
+PR #12 at `1aa49549890dba51445341e304fdea83c9c2c7e8`. The portable checkout script
+[`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) delegates to the existing CLI,
+uses checkout `.venv` or explicit `FOMC_PYTHON`, and preserves caller paths,
+arguments and exit codes. It does not load `.env` or enable live access implicitly.
+Fresh-checkout setup and 1991 examples are in the [runbook](../deployment/fomc_runbook.md).
+The [script contract](../../specs/spec017/scripts_contract.md) records scope.
+The bounded 1991 batch and final readback/restore/replay acceptance are in progress.
+No schedule or embedding service is activated; NAAIM remains paused.
+
+## 2026-11-12 FOMC-T06 accepted checkpoint (merged)
 
 [PR #12 — Complete FOMC T-06 bounded acquisition and operations](https://github.com/thatquantguy44/market-medallion/pull/12)
-is open from `feat/spec017-fomc-operations` to `main`. Accepted implementation/
+merged into `main` at `1aa49549890dba51445341e304fdea83c9c2c7e8`. Accepted implementation/
 evidence head at creation: `b0b7b12e18d8e73c033639270e4d3a6228360afd`.
 Track [live checks](https://github.com/thatquantguy44/market-medallion/pull/12/checks)
 and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/12/files);

@@ -10,6 +10,10 @@ text/OCR accuracy review remain incomplete. The FOMC schedule defaults stopped.
 See the [operating runbook](../../docs/deployment/fomc_runbook.md) for CLI, migration,
 backup/restore, recovery and Dagster procedures. Next core batch: 1991.
 
+The reusable checkout entrypoint is [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh).
+See the [fresh-checkout setup](../../docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint)
+for user-owned config, dependencies and a bounded 1991 example.
+
 ## Configuration and scope
 
 Copy `pipeline.example.yml` to ignored `pipeline.local.yml`. Paths resolve against
