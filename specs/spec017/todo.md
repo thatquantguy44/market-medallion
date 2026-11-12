@@ -4,7 +4,10 @@ Updated: 2026-11-12. The user selected implementation, reuse of this project's
 PostgreSQL location and a pipeline-owned configuration folder. No recurring
 schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merged in
 [PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
-script and accepted 1991 continuation are on `feat/fomc-runner-script`.
+script and accepted 1991 continuation are on `feat/fomc-runner-script` in
+[PR #13](https://github.com/thatquantguy44/market-medallion/pull/13); track the
+[live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
+and current review threads.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 

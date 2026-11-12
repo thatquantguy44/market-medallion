@@ -21,6 +21,14 @@ new live schedules default stopped.
 
 ## 2026-11-12 current pickup — FOMC script and 1991 accepted locally
 
+[PR #13 — Reusable FOMC runner script and 1991 backfill](https://github.com/thatquantguy44/market-medallion/pull/13)
+is open from `feat/fomc-runner-script` to `main`. Acceptance/evidence head at
+creation: `6fd3c5b9594eb933db48117a1c93b08e49d41b53`.
+Track its [live checks](https://github.com/thatquantguy44/market-medallion/pull/13/checks)
+and [review discussion](https://github.com/thatquantguy44/market-medallion/pull/13/files).
+On continuation verify the latest head SHA, CI results and unresolved review
+threads; the handoff does not imply approval to merge or activate schedules.
+
 User-selected continuation is on `feat/fomc-runner-script`, based on merged
 PR #12 at `1aa49549890dba51445341e304fdea83c9c2c7e8`. The executable
 [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) delegates to the source CLI,
