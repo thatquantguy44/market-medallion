@@ -164,11 +164,14 @@ def discover_html_dependencies(
         if len(dependencies) > max_dependencies:
             raise ValueError("FOMC dependency count exceeds the configured bound")
 
+    article_text = article.text()
+    sep_name = r"Summary of Economic Projections(?:\s*\(SEP\))?"
+    if re.search(r"\bSummary of Economic Projections\s*\(SEP\)", article_text, re.I):
+        sep_name = rf"(?:{sep_name}|\bSEP)"
     sep_declared = bool(
         re.search(
-            r"Summary of Economic Projections(?: \(SEP\))?"
-            r"(?:\s*, which| that)? is (?:attached as )?an addendum to these minutes",
-            article.text(),
+            sep_name + r"(?:\s*, which| that)? is (?:attached as )?an addendum to these minutes",
+            article_text,
             re.I,
         )
     )

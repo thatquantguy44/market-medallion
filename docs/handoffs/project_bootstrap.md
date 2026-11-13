@@ -28,19 +28,19 @@ references. Individual years for 2009–2020 leave room for source-declared SEP
 addenda/images under unchanged 40-document/100-request limits. The original
 15-batch plan is retained locally. Read the [contract](../../specs/spec017/1997_2026_contract.md).
 
-**Current accepted checkpoint: 1997–2011, 9 of 21 batches.** Latest accepted
-archive: 508 captures, 285 text representations and 4,187 chunks. The **2012
-retry is active**, after a fixture-proven addition for source-declared GIF charts
-in the existing official files folder. Eight failed attempts retain original
+**Current accepted checkpoint: 1997–2013, 11 of 21 batches.** Read latest accepted
+counts in `state.json` and its referenced `verified.json`. The **2014
+retry is active**, after a fixture-proven explicit SEP-acronym association rule.
+Nine failed attempts retain original
 responses/audit, unchanged published pointers and additional restored checkpoints;
-the last failed-attempt checkpoint contains 521 captures. Do not skip references
+the last failed-attempt checkpoint contains 643 captures. Do not skip references
 or increase budgets to bypass a failure.
 
 Durable ignored state is
 `data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`; the same directory
 holds `plan.json`, per-batch `verified.json`/`checkpoint.json`, extra failed-attempt
 checkpoints and `parser-fix-verification.json`. **Read state before any launch.**
-The active local driver is `/tmp/fomc_1997_2026_bulk.py` (execution session **2100**).
+The active local driver is `/tmp/fomc_1997_2026_bulk.py` (execution session **89600**).
 It skips accepted batches and resumes an already-launched run: do not duplicate it.
 On a genuine failed attempt, diagnose first; only after a verified fix use
 `/tmp/fomc_1997_2026_prepare_retry.py` to preserve/restore-test its state and prepare
@@ -57,8 +57,8 @@ retained backups and verification receipts remain ignored under the FOMC root.
 
 Historical print-container, declared Windows-1252, explicit SEP association and
 PNG/GIF/JPEG support are fixture-proven; source fixes are pushed through `e19b8fd`,
-whose CI passed. The 2012 folder change now passes 1,083 regressions (82 optional
-skips), all 348 FOMC checks with isolated PostgreSQL, exact 194-extraction
+whose CI passed. Historical-source changes now pass 1,086 regressions (82 optional
+skips), all 351 FOMC checks with isolated PostgreSQL, exact 194-extraction
 compatibility and matching wheel/sdist source hashes. Refreshed evidence is in `/tmp/fomc-bulk-regression.log`,
 `/tmp/fomc-bulk-postgres.log` and `/tmp/fomc-parser-compatibility.log`. The immutable
 pre-fix catalog has 194 extraction results/IDs; its final-runtime proof pins seven

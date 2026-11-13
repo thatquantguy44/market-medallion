@@ -178,3 +178,10 @@ declares GIF charts in `/monetarypolicy/files/`, including
 source-declared GIF/JPEG files with the same framing/lineage checks. Existing
 PNG admission is preserved exactly. Unsupported formats, other hosts/folders,
 queries and wrong/truncated image framing still fail; image text stays review-required.
+
+The [March 2014 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20140319.htm)
+define “Summary of Economic Projections (SEP)” and later explicitly identify
+“SEP” as the attached minutes addendum. Acronym declarations are eligible only
+when that definition appears in the same substantive article; undefined acronyms
+and navigation labels alone remain unresolved. HTML spacing around the acronym's
+parentheses does not change the association. Original labels/hrefs are retained.

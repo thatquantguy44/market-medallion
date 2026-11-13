@@ -251,3 +251,20 @@ def test_2012_declared_gif_charts_in_official_files_folder_are_required(manifest
     deps = discover_html_dependencies(payload, URL, manifest)
     assert not deps.issues
     assert any(d.href_raw.endswith(filename) and d.kind == "asset" for d in deps.dependencies)
+
+
+@pytest.mark.parametrize("definition", [" (SEP)", "(SEP)", None])
+def test_2014_sep_acronym_requires_local_definition_and_explicit_addendum(manifest, definition):
+    payload = HTML.replace(
+        b"<em>Summary of Economic Projections</em>, which is attached as an addendum",
+        b"SEP, which is attached as an addendum",
+    )
+    defined = definition is not None
+    if defined:
+        payload = payload.replace(
+            b"<p>First:",
+            f"<p>Summary of Economic Projections{definition}.</p><p>First:".encode(),
+        )
+    result = discover_html_dependencies(payload, URL, manifest)
+    assert any(d.relation == "minutes_addendum" for d in result.dependencies) == defined
+    assert ("unresolved_sep_association" in {i.code for i in result.issues}) == (not defined)
