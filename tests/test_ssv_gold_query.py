@@ -320,3 +320,16 @@ def test_ssv_ac09_all_facilities_share_one_sqlite_snapshot(tmp_path, manifest, l
     after = query(tmp_path, manifest, scopes=[NY, NQ])
     assert during["rows"][0]["short_volume"] == "49"
     assert after["rows"][0]["short_volume"] == "108"
+
+
+def test_ssv_ac09_snapshot_budget_is_checked_before_loading_member_documents(
+    tmp_path, manifest, load, monkeypatch
+):
+    from market_data_pipeline.pipelines.finra_short_sale_volume.io import warehouse
+
+    load(values=[("A", "1", "0", "2"), ("B", "1", "0", "2")])
+    monkeypatch.setattr(
+        warehouse, "rows", lambda *a, **k: pytest.fail("oversized snapshot was loaded")
+    )
+    with pytest.raises(ValueError, match="symbol budget"):
+        query(tmp_path, manifest, max_symbols=1)

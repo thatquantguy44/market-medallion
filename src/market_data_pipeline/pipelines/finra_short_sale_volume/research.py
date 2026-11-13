@@ -22,8 +22,11 @@ _QUANTITIES = ("short_volume", "short_exempt_volume", "total_volume")
 _RATIOS = ("short_share", "short_exempt_share")
 
 
-def _partitions(db, day, facilities, cutoff, sequence):
-    return {f: store.partition_snapshot(db, day, f, cutoff, sequence) for f in facilities}
+def _partitions(db, day, facilities, cutoff, sequence, budget):
+    return {
+        f: store.partition_snapshot(db, day, f, cutoff, sequence, row_budget=budget)
+        for f in facilities
+    }
 
 
 def _provenance(partitions):
@@ -132,11 +135,15 @@ def research_gold(
         raise ValueError("FINRA research lookback exceeds date range") from None
     with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
         db.execute("BEGIN")
-        current = _partitions(db, day.isoformat(), facilities, cutoff, as_of_sequence)
+        current = _partitions(db, day.isoformat(), facilities, cutoff, as_of_sequence, max_symbols)
         prior_day, skipped = _prior_date(
             db, day.isoformat(), earliest, facilities, cutoff, as_of_sequence
         )
-        prior = _partitions(db, prior_day, facilities, cutoff, as_of_sequence) if prior_day else {}
+        prior = (
+            _partitions(db, prior_day, facilities, cutoff, as_of_sequence, max_symbols)
+            if prior_day
+            else {}
+        )
         current_index = {f: {r["symbol_raw"]: r for r in p["rows"]} for f, p in current.items()}
         prior_index = {f: {r["symbol_raw"]: r for r in p["rows"]} for f, p in prior.items()}
         symbols = sorted({symbol for rows in current_index.values() for symbol in rows})
@@ -183,6 +190,7 @@ def research_gold(
             as_of_sequence=as_of_sequence,
             evidence_known_at=max(clocks, default=None),
             lookback_days=lookback_days,
+            max_symbols=max_symbols,
             prior_trade_date=prior_day,
             calendar_day_gap=(day - _day(prior_day)).days if prior_day else None,
             gap_basis="CALENDAR_DAYS",

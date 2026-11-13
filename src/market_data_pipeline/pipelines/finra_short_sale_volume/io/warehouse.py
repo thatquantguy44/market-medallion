@@ -407,7 +407,7 @@ def capture_result(db, capture_id):
     return value
 
 
-def partition_snapshot(db, day, facility, cutoff=None, sequence=None):
+def partition_snapshot(db, day, facility, cutoff=None, sequence=None, *, row_budget=None):
     """Read one complete committed membership inside the caller's pinned transaction."""
     if cutoff is None:
         selected = db.execute(
@@ -437,6 +437,8 @@ def partition_snapshot(db, day, facility, cutoff=None, sequence=None):
         "APPLIED",
     ):
         raise ValueError("FINRA committed partition scope mismatch")
+    if row_budget is not None and result["accepted_rows"] > row_budget:
+        raise ValueError("FINRA research symbol budget exceeded by a partition")
     return dict(
         capture_id=capture_id,
         rows=rows(db, capture_id),
