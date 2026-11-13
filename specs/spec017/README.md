@@ -1,7 +1,7 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
 **Status:** T01–T06 and bounded **1990–1994 batches** are accepted locally for
-listed references in the 1990-onward archive. PR #14 covers 1992 plus the added
+listed references in the 1990-onward archive. Merged PR #14 covers 1992 plus the added
 1993–1994 HTML minutes through [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh).
 The archive has 146 captures and 73 representations: 624 PDF pages, 2,172,146 text
 characters and 993 chunks (368 eligible, 625 review-flagged). The current 33-page
@@ -16,6 +16,10 @@ remain earlier checkpoints.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
 The [runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
+The [Dagster job delivery](dagster_job_acceptance.md) adds recent-refresh launch
+configuration, post-run health gating and failure metadata, with unit and isolated
+backend regression coverage. Deployment scope is the job in the existing code
+location; alert/remote-backup destinations remain deferred.
 Next core batch: 1995–1996. All FOMC schedules stay stopped; FINRA remains at
 SSV-T05 and NAAIM remains paused. Embeddings remain independently selected work.
 

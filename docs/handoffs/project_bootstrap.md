@@ -19,7 +19,35 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — PR #14 covers 1992–1994 (accepted locally)
+## 2026-11-12 current pickup — FOMC Dagster job delivery
+
+PR #14 merged at `3bbb0c1426f399b7ec85d6f2eea9ed4d32cb49ef`. The user first
+selected a local Mac/Docker productionization target, then narrowed deployment
+to **a Dagster job**. Backup and alert destinations should be configurable later.
+The current branch is `feat/fomc-dagster-job`. [Job acceptance](../../specs/spec017/dagster_job_acceptance.md),
+[contract](../../specs/spec017/dagster_job_contract.md),
+[evidence](../../specs/spec017/evidence/dagster_job.json) and
+[runbook](../deployment/fomc_runbook.md#dagster) record the bounded delivery.
+
+Reuse the root-registered `fomc_meeting_minutes_job`. It supports explicit
+backfills and opt-in execution-time recent refresh, followed by no-HTTP archive
+health before materialization. Metadata distinguishes an incomplete operation
+from a committed operation requiring health review, retains catalog/run IDs and
+coverage/gaps, and redacts unexpected exception context. Job/op automatic retries
+default to zero; source retries and the PostgreSQL advisory lock remain in force.
+Refresh/backfill launch examples validate and keep `live: false` by default.
+
+Verification: **991 regression tests passed, 80 optional skips; 313 FOMC checks
+passed with PostgreSQL enabled**, including 70 backend checks. Root job
+registration, all six stopped schedule states, lint/format and package checks
+pass. No-request operational health remains healthy at 146 captures, 29 tables
+and 993 chunks, with the same last 1993–1994 operation and catalog selections.
+No provider request, migration or additional historical batch was performed.
+No worker service, recurrence, alert endpoint or remote backup destination was
+installed. NAAIM remains paused, embeddings unselected and FINRA at SSV-T05.
+Next historical batch remains 1995–1996 through the script or explicit job config.
+
+## 2026-11-12 historical checkpoint — PR #14 covers 1992–1994 (accepted locally)
 
 The user requested more work in the same PR. Keep `feat/fomc-1992-backfill` and
 [PR #14 — 1992–1994 FOMC backfills and recovery](https://github.com/thatquantguy44/market-medallion/pull/14).
@@ -651,9 +679,9 @@ retention continue within the existing internal-research scope.
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
 T17 and Spec012 T01–T04 are merged. FOMC T01–T06 and the bounded 1990–1994
-batches are accepted locally. Active review is PR #14 on
-`feat/fomc-1992-backfill`; the next core operation is bounded 1995–1996 through
-the portable script. Read the current pickup above and Spec017 tasks.
+batches are accepted locally and PR #14 is merged. The current deployment slice
+is the verified Dagster job on `feat/fomc-dagster-job`; see the current pickup.
+The next historical operation is bounded 1995–1996 through the script or job. Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser
 Checkpoint A are ready for this scope; local publication and G1/G2 remain open.

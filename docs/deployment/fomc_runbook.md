@@ -200,25 +200,69 @@ full database backup/restore preserves those snapshots.
 
 ## Dagster
 
-The manual `fomc_meeting_minutes_job` invokes the same runner. Its asset config is:
+The registered `fomc_meeting_minutes_job` runs only
+`fomc_meeting_minutes_refresh` through the same bounded source runner. The
+user-selected deployment deliverable is this job in the existing code location.
+Use the checkout's installed `dagster`, `postgres` and `fomc_text` extras and your
+own environment-backed configuration from the setup section above.
 
-```yaml
-ops:
-  fomc_meeting_minutes_refresh:
-    config:
-      config_path: config/fomc_meeting_minutes/pipeline.local.yml
-      operations_path: config/fomc_meeting_minutes/operations.local.yml
-      start_year: 1990
-      end_year: 1990
-      mode: backfill
-      live: true
-      scheduled: false
+For a recent refresh, copy
+[`resources/dagster-fomc-refresh.yml`](../../resources/dagster-fomc-refresh.yml)
+to an ignored local run config and set `live: true` deliberately. Launch that
+config in the Dagster Launchpad for `fomc_meeting_minutes_job`, or execute it
+from the checkout root:
+
+```bash
+cp resources/dagster-fomc-refresh.yml config/fomc_meeting_minutes/refresh.local.yml
+# Edit refresh.local.yml to enable live access after reviewing the configuration.
+.venv/bin/dagster job execute \
+  -m market_data_pipeline.orchestration.dagster_defs \
+  -j fomc_meeting_minutes_job -c config/fomc_meeting_minutes/refresh.local.yml
 ```
 
-The definition `fomc_meeting_minutes_weekday_refresh` defaults **STOPPED** and is
-not activated by this work. Its cadence is weekdays at 17:10 America/New_York.
-A future deliberate activation also requires `FOMC_CONFIG`,
-`FOMC_OPERATIONS_CONFIG` and `scheduled_live_access: true`. Preview and execution
-both check access. The schedule refreshes current year plus `overlap_years`
-(default one prior year), floored at 1990. Config loading and preview make no
-service request. Do not resume NAAIM or activate any other schedule with FOMC.
+The checked-in examples have `live: false`; they refuse execution before SQL or
+an HTTP probe. `recent_years: true` requires `mode: refresh` and omitted/null
+`start_year` and `end_year`. It selects the execution-time New York calendar
+year plus `overlap_years` (default one prior year), floored at the configured
+operating start year and constrained by `max_years`. For example, a 2026 run
+selects 2025–2026 with default settings. Year selection never backdates capture
+clocks. A partially specified range or mixed recent/explicit selection fails
+before service access.
+
+For deliberate historical batches, use
+[`resources/dagster-fomc-backfill.yml`](../../resources/dagster-fomc-backfill.yml),
+which shows the next 1995–1996 batch with live access disabled. Set explicit
+bounds and review them before enabling live access. Ordinary configs omitting
+both bounds and `recent_years` retain the original 1990-only backfill default.
+This job delivery did not acquire a new historical batch.
+
+A successful materialization requires a completed source operation followed by
+healthy no-HTTP archive readback and matching inventory/text/chunk pointers.
+Dagster metadata includes the operation ID, commit status, requested years/mode,
+request/byte counters, prior/current catalog IDs, chunk coverage and source-gap
+outcomes. `full_history_complete` and `text_or_ocr_accuracy_certified` remain
+false. A healthy bounded archive may still have unacquired years and review text.
+
+Source failures, budgets, concurrent-operation refusal and SQL publication
+failures fail the job without a materialization. The source's immutable evidence
+and prior catalog pointers remain available. A health failure after publication
+also fails the job, with `operation_committed: true` and the committed operation
+and catalog IDs; investigate with `health` and `recover-run` before launching a
+new bounded run. Do not assume a failed Dagster run rolled back an already
+committed source operation. Unexpected exception details are replaced with safe
+phase/error codes in Dagster events. Job-wide and op automatic retries default
+to zero; bounded HTTP retries remain source-owned. Explicit retries can reuse
+verified originals, and the existing PostgreSQL advisory lock excludes competing
+FOMC operations.
+
+The definition `fomc_meeting_minutes_weekday_refresh` remains **STOPPED**. Its
+cadence is weekdays at 17:10 America/New_York. Future deliberate activation also
+requires `FOMC_CONFIG`, `FOMC_OPERATIONS_CONFIG` and
+`scheduled_live_access: true`. Preview uses the same recent-window calculation
+without service access; execution rechecks the gates. Keep NAAIM paused.
+
+Job registration and all stopped schedule states were verified locally. No new
+persistent worker/service, schedule activation, external alert destination or
+off-machine backup destination is installed by this job delivery. External
+integrations remain configurable future work. See the
+[job acceptance](../../specs/spec017/dagster_job_acceptance.md) for verification.
