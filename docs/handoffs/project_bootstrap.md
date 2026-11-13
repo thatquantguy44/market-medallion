@@ -26,7 +26,12 @@ The user authorized the next historical batch after merged PR #17. Current branc
 [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18). Track its
 [checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks) and
 [review threads](https://github.com/thatquantguy44/market-medallion/pull/18/files)
-against the current head before merging; no merge or acquisition activation is implied. Read
+against the current head before merging; no merge or acquisition activation is implied.
+The requested originals/text/chunks/health/Slack/restore/replay gates are explicitly
+closed in the [acceptance checklist](../../specs/spec017/1995_1996_acceptance.md#acceptance-gate-checklist).
+A fresh read-only audit reconfirmed all current tables, originals, text/chunk spans,
+retained archive checksums/restore receipts and the exact Slack reaction, with no
+provider HTTP or source mutation. The 1997–1998 batch has not started. Read
 [acceptance](../../specs/spec017/1995_1996_acceptance.md),
 [contract](../../specs/spec017/1995_1996_contract.md),
 [evidence](../../specs/spec017/evidence/1995_1996_dagster_backfill.json) and the

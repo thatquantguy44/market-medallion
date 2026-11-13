@@ -6,6 +6,28 @@ PR #17. The [contract](1995_1996_contract.md) and
 publication, Slack delivery and recovery through the existing Dagster job.
 The runtime, schema, dependencies, finite budgets and source semantics are unchanged.
 
+## Acceptance gate checklist
+
+All requested gates are **passed and recorded on PR #18** before any 1997–1998
+batch. A fresh read-only review on 2026-11-13 is recorded under
+`acceptance_gate_review` in the [evidence](evidence/1995_1996_dagster_backfill.json).
+
+| Gate | Status | Verified result / evidence |
+| --- | --- | --- |
+| Originals | Passed | All 172 capture readbacks match database/filesystem; all 152 prior receipt bytes and clocks remain unchanged. |
+| Native text | Passed | All 89 representations read back; 2,771,872 full-text characters reconcile to source units plus separators; prior PDF page counts/citations remain verified. |
+| Chunks | Passed | All 1,193 chunks retain exact source spans; coverage and eligibility match the accepted catalog (568 eligible, 625 review-flagged). |
+| Archive health | Passed | Fresh health is `healthy`, issues are empty and all 29 current tables match the verified post-batch restore fingerprints; selected pointers and latest operation are unchanged. |
+| Slack success | Passed | Dagster run `12d67c3f-4aab-41a1-bdb1-83a5c0532d9c` is SUCCESS; tick 147 is SUCCESS for that run with the acknowledged-delivery log present. |
+| Backup and restore | Passed | Actual before/after restores verified 29 tables and 1,337/1,546 canonical files; all four retained archive checksums and restore receipts were reconfirmed. |
+| Offline replay | Passed | Actual empty-target batch verification reproduced all 172 originals/receipts, selected catalogs/chunk rows and latest operation audit with HTTP and transforms disabled. |
+| Acceptance boundary | Recorded | 1995–1996 is accepted for its listed references. No 1997–1998 batch was launched by this review. |
+
+The restore/replay executions were completed during batch verification and their
+retained evidence was reconfirmed here; they were not repeated during this read-only
+review. It made zero provider HTTP requests and no source mutations. Existing
+review flags and full-history/text-accuracy limitations remain explicit below.
+
 ## Execution and source coverage
 
 The no-request plan selected 16 primary references. A fresh pre-run schema backup
