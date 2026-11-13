@@ -1,0 +1,147 @@
+{
+  "task": "SSV-T09",
+  "requirement": "SSV-AC09",
+  "reviewed_date": "2026-11-13",
+  "method": "Invented fixtures through actual local script/CLI and temporary SQLite; independent Fraction oracles; no provider-data requests.",
+  "method_version": "finra-ssv-research-gold/1",
+  "population": [
+    "nasdaq_carteret_trf",
+    "nyse_trf"
+  ],
+  "captures": [
+    {
+      "capture_id": "de6d9ab7-b9f0-4479-a226-cad2122be2b3",
+      "capture_sequence": 1,
+      "archived_at": "2026-11-13T18:17:15.044076Z",
+      "trade_date": "2026-11-06",
+      "facility_id": "nyse_trf",
+      "status": "APPLIED",
+      "payload_sha256": "58b6363a05e352a5c11285ea07b567875e68f09787eadaa833c67e0e5664b224"
+    },
+    {
+      "capture_id": "8dc1e610-ef05-44a3-a271-dd5014007c48",
+      "capture_sequence": 2,
+      "archived_at": "2026-11-13T18:17:15.094449Z",
+      "trade_date": "2026-11-06",
+      "facility_id": "nasdaq_carteret_trf",
+      "status": "APPLIED",
+      "payload_sha256": "1b732c246b0dfbdc18191d75abaae3fe32eaf101513cef6615cecaa979ad92fe"
+    },
+    {
+      "capture_id": "7c90076a-a0c3-470c-b222-c0a05d3952b4",
+      "capture_sequence": 3,
+      "archived_at": "2026-11-13T18:17:15.144801Z",
+      "trade_date": "2026-11-09",
+      "facility_id": "nyse_trf",
+      "status": "APPLIED",
+      "payload_sha256": "c442f9eb3afd3a7ab4dde507a0b7e6b426c4f2de9a57aefdeef1749682211bed"
+    },
+    {
+      "capture_id": "33e7adb4-88e4-41fd-91d7-5253440faad9",
+      "capture_sequence": 4,
+      "archived_at": "2026-11-13T18:17:15.194756Z",
+      "trade_date": "2026-11-09",
+      "facility_id": "nasdaq_carteret_trf",
+      "status": "APPLIED",
+      "payload_sha256": "049c57afbc8d645ea28fc3c3ea13ffe2397e73803dca35a66c992a759a164bd3"
+    },
+    {
+      "capture_id": "a1c34bd7-7cfb-4417-bed0-9e10b6c64519",
+      "capture_sequence": 5,
+      "archived_at": "2026-11-13T18:17:15.292562Z",
+      "trade_date": "2026-11-06",
+      "facility_id": "nyse_trf",
+      "status": "APPLIED",
+      "payload_sha256": "955e612cd9180ccb85070e9c4432955bbb159371524e7594e2a70694a0a9ae6d"
+    },
+    {
+      "capture_id": "d1820c36-b0f1-4c50-bd97-6e22420221ef",
+      "capture_sequence": 6,
+      "archived_at": "2026-11-13T18:17:15.390377Z",
+      "trade_date": "2026-11-06",
+      "facility_id": "nasdaq_carteret_trf",
+      "status": "APPLIED",
+      "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "capture_id": "a91eea79-6e45-42b9-be43-db11138c8965",
+      "capture_sequence": 7,
+      "archived_at": "2026-11-13T18:17:15.486006Z",
+      "trade_date": "2026-11-09",
+      "facility_id": "nyse_trf",
+      "status": "PARTIAL",
+      "payload_sha256": "bd5cb13ee65e3ce58e1cc1397e031abe6f6c14061e9515099c4c74bf2d9dccd0"
+    },
+    {
+      "capture_id": "44e3569c-a51c-43c3-b5cd-45db9a0ee7e8",
+      "capture_sequence": 8,
+      "archived_at": "2026-11-13T18:17:15.584101Z",
+      "trade_date": "2026-11-09",
+      "facility_id": "nyse_trf",
+      "status": "APPLIED",
+      "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  ],
+  "initial": {
+    "short_volume": "49",
+    "total_volume": "110",
+    "short_share": "0.4454545454545454545454545454545455",
+    "prior_short_share": "0.2636363636363636363636363636363636",
+    "short_share_change": "0.1818181818181818181818181818181819",
+    "prior_trade_date": "2026-11-06",
+    "calendar_day_gap": 3
+  },
+  "prior_revision_observed": true,
+  "prior_empty_withheld_change": true,
+  "partial_preserved_committed_metric": true,
+  "current_empty_withheld_population_quantities": true,
+  "old_cutoff_reproduced": true,
+  "missing_constituent_did_not_renormalize": true,
+  "raw_and_warehouse_inventory_unchanged_by_reads": true,
+  "privacy_sentinel_excluded": true,
+  "module_sha256": {
+    "config.py": "3b1f685f8ee714feb3c505216cde10a57dff766e1b66cd0bef841a1c5f0e5f2e",
+    "research.py": "45dfed2d7c2bed4d21ea2c39f679bdf052f63cf29a194d663c9fc66ca586041e",
+    "manifest.py": "c245a122c5d4e6766ff36013f9825a35eaa68eef0148233c3d52df42cb297016",
+    "registry.py": "2ff33cc86d1ec657a88a084cf195318a2e12c79647b00237d535a07865b28df7",
+    "__init__.py": "07dbe0ab071994f5108cdd3f2f9b3abc6d968d0a801a0e353cd25e9dbec93b7d",
+    "cli.py": "35634925d817190a1787e4428dca24eecebf57f8c659d94476013f7edbd33cb4",
+    "pipeline.py": "4cf719db6671cf86524734192e5ce12ada0f32c78251fd78509d87082df2ae00",
+    "__main__.py": "4a93ffa7b7eed54e9e232fc972f6bcce478e071c6c3afce56f4dc847e75983ea",
+    "io/warehouse.py": "a3f4ff4f4522ffe16faaa79bf209f361151b81e1af590da40235618159b95fdd",
+    "io/__init__.py": "ac2cc2b8f2fe9271952539a66e98ebe12706d0e5848e09562b8ca3495187dd44",
+    "io/bronze.py": "37a76dcbed01cae6a6765e1559ff9aff32b791550fd576a4a511b0b6936a33d7",
+    "io/schema.py": "30a4a6c834cbceded23e80a82451b6d8eae1adc056a5e9a254f33abec70936de",
+    "data/__init__.py": "cbcb5fc565035fe00b2e64d423fc611feb706c2ea508e5ec09461f85046fef6a",
+    "data/quantities.py": "04286db168e205fb4c76b0c854f58bdac918bbf27c3f7c78e69b5c5f65477547",
+    "data/api.py": "6bd8b5543b900eee92c2e2e62ac242676c102a8e30e815355a4e4720a881313c",
+    "data/capture.py": "4a00bcfa8e8f0c98de4e8140ef54f968236f2aa7039081132f7e1cb1894e2b2d",
+    "data/gold.py": "c603033f6d9dc4ebb4edf67adb032c808a0d8218fcdb0a79cbdece4cf003be0b",
+    "data/versions.py": "7605e9e7af0fc7b0de82d307641fc7adbc2822fee5b075fdea85c63625af061f"
+  },
+  "unchanged_from_t06_t08": [
+    "manifest.py",
+    "registry.py",
+    "data/api.py",
+    "data/quantities.py",
+    "data/capture.py",
+    "io/bronze.py",
+    "io/schema.py",
+    "data/versions.py"
+  ],
+  "verification": {
+    "arithmetic_tests": 19,
+    "query_tests": 32,
+    "cli_tests_added": 1,
+    "t09_tests_added": 52,
+    "finra_tests": 431,
+    "offline_tests_passed": 1419,
+    "optional_skips": 92
+  },
+  "limits": {
+    "default_lookback_calendar_days": 366,
+    "max_lookback_calendar_days": 3660,
+    "default_max_symbols": 15000
+  },
+  "remaining": "T10 typed Parquet and file journal; T11 replay; acquisition/health/export/jobs and real-source coverage remain open."
+}

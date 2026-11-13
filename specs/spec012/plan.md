@@ -1,9 +1,9 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T08 complete for the selected three-TRF API profile, 2026-11-13.
+**Status:** SSV-T01–T09 complete for the selected three-TRF API profile, 2026-11-13.
 Use [todo.md](todo.md) as the single task list.
 The [next-agent handoff](README.md#next-agent-handoff) is the canonical pickup
-point for SSV-T09 on `feat/finra-local-revisions`.
+point for SSV-T10 on `feat/finra-local-revisions`.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
 
@@ -29,7 +29,10 @@ and sanitized parse/rejection outcomes, with admission before filesystem I/O.
 T06–T08 now add exact local SQLite versions/membership/Gold, durable run attempts,
 revisions/reversions/removals, cutoff queries and a configured CLI/script.
 [Local acceptance](t06_t08_acceptance.md) closes Checkpoint B with 379 focused checks.
-Next is T09 scope-safe research Gold. G1/G2 remain open; cross-page assembly,
+T09 now adds exact scoped aggregation, prior complete dates, explicit calendar gaps
+and cutoff-safe read-only research through the CLI. [Acceptance](t09_acceptance.md)
+records 430 FINRA checks and independent rational/concurrency evidence.
+Next is T10 typed Parquet and its C07 journal. G1/G2 remain open; cross-page assembly,
 Parquet, replay, acquisition, export and jobs remain later work.
 
 ## Decisions and dependency flow

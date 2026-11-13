@@ -3,12 +3,12 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03–T08 are **complete**; SSV-T09–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03–T09 are **complete**; SSV-T10–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01–T08 suites.
+Tests below are future targets except the implemented SSV-T01–T09 suites.
 [README.md](README.md) defines their acceptance IDs.
-The [next-agent handoff](README.md#next-agent-handoff) records the exact T09 pickup
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T10 pickup
 scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -181,16 +181,25 @@ Next is SSV-T09; G1/G2 and complete real-source coverage remain open.
 
 ## SSV-T09 — Add scope-safe research Gold
 
+**Status:** complete, 2026-11-13, in the same PR #23 as T06–T08.
 **Depends:** SSV-T08; **traces:** SSV-REQ09 / SSV-AC09.
-- [ ] Calculate denominator-matched ratios and explicit prior-date/gap fields.
-- [ ] Reject constituent/consolidated double counting and return null on zero total.
-**Verify:** independent expected values for individual and disjoint aggregate fixtures.
-**Files:** `data/gold.py`, `tests/test_ssv_gold.py`, `io/warehouse.py`.
+- [x] Calculate denominator-matched individual/disjoint aggregate ratios and prior-date/gap fields.
+- [x] Reject overlapping/excluded scopes; withhold missing-row/population metrics; null on zero total.
+- [x] Preserve exact sums, cutoff membership and component lineage in one read-only transaction.
+**Verify:** 19 pure arithmetic, 32 query/temporal/concurrency and one CLI check;
+**431 FINRA tests** and full offline **1,419 passed / 92 optional skips**.
+Independent rational checks, eight actual CLI capture cases, unchanged-store
+readback, lint/format and package checks pass. [Acceptance](t09_acceptance.md),
+[contract](research_gold_contract.md) and [evidence](evidence/t09_research_gold_conformance.json).
+**Implementation split:** T09a owns pure arithmetic/oracles; T09b owns snapshot
+selection, research queries and CLI integration. Existing ingestion/schema stays compatible.
+**Files:** `data/gold.py`, `research.py`, `io/warehouse.py`, `pipeline.py`, `cli.py`
+and corresponding arithmetic/query/CLI tests.
 
 ### Checkpoint C — Correct changing data
 
-- [ ] Current/as-of results reconcile to capture lineage and replacement membership.
-- [ ] No short-interest, borrow-rate or naked-short label is present in output.
+- [x] Current/as-of results reconcile to capture lineage and replacement membership.
+- [x] Output measures are scoped short-sale flow; no short-interest, borrow-rate or naked-short metric.
 
 ## SSV-T10 — Publish typed Parquet snapshots
 

@@ -1,6 +1,8 @@
 # SSV-T09 — scope-safe research Gold
 
 Selected 2026-11-13 for the existing `feat/finra-local-revisions` / PR #23.
+**Status:** implemented and accepted; [acceptance](t09_acceptance.md) and
+[evidence](evidence/t09_research_gold_conformance.json).
 Traces SSV-REQ09 / SSV-AC09 and common C04–C08. Reuse the accepted T06–T08
 read-only SQLite snapshot, scope registry, exact quantities and fixed T04 ratios.
 Implement/test pure metrics first, then snapshot/temporal queries and the CLI.
@@ -65,8 +67,11 @@ existing `gold` output and ingest behavior compatible. Inputs: ISO trade date,
 explicit scopes, optional aware `as_of` plus sequence, `lookback_days` (default366,
 range1–3660) and `max_symbols` (default15000, range1–250000). Only known current
 symbols are returned; prior history does not invent rows in today's population.
+The symbol budget bounds both each loaded current/prior membership and the
+output union. Oversized snapshots refuse before loading member documents.
 Missing scopes, invalid bounds/cutoffs and resource excess refuse explicitly.
-Querying creates no files, performs no network probe and loads no credentials.
+Querying creates no application captures/publications, performs no network probe
+and loads no credentials.
 
 Characterize invented asymmetric facility ratios, exact large/fractional sums,
 zero totals, missing/empty constituents, overlapping scopes, calendar gaps,

@@ -1,10 +1,11 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T08 complete for the selected three-TRF Public API profile.
+**Status:** SSV-T01–T09 complete for the selected three-TRF Public API profile.
 The local loop now includes immutable Bronze, audited SQLite Silver/Gold,
 observed revisions/reversions, complete replacement/removal and UTC/sequence
 cutoffs. The local CLI, strict per-pipeline YAML and portable script are implemented.
-Next: **SSV-T09**, scope-safe research Gold. Acquisition, Parquet, replay,
+T09 adds exact matched-population metrics, prior complete dates and calendar gaps.
+Next: **SSV-T10**, typed Parquet with a publication journal. Acquisition, replay,
 export and jobs remain absent; G1/G2 are open.
 **Reviewed:** 2026-11-13. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
@@ -26,56 +27,55 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 ## Next agent handoff
 
-**Start here:** [T06–T08 acceptance](t06_t08_acceptance.md),
-[local storage contract](local_storage_contract.md) and
-[SSV-T09](todo.md#ssv-t09--add-scope-safe-research-gold).
+**Start here:** [T09 acceptance](t09_acceptance.md), [research contract](research_gold_contract.md)
+and [SSV-T10](todo.md#ssv-t10--publish-typed-parquet-snapshots).
 Continue on `feat/finra-local-revisions` in [PR #23](https://github.com/thatquantguy44/market-medallion/pull/23),
-from merged T05 PR #20 / main `9f211ce`, with current main `6790882` integrated.
-T01–T08 are complete; T09–T16 have not started. Checkpoint B is accepted for
-invented local input; real complete-partition/history coverage and G1/G2 remain open.
+which now includes T06–T09. Current main `6790882` is integrated. T01–T09 and
+Checkpoints B/C are accepted for invented local input; T10–T16, real complete
+partition/history coverage and G1/G2 remain open.
 
 Read root [AGENTS.md](../../AGENTS.md), the [master handoff](../../docs/handoffs/project_bootstrap.md),
 [plan](plan.md), [data contract](data_contract.md), [API contract](api_contract.md),
-[source review](source_review.md) and common C04–C08 before coding. Use pinned
-engineering workflows; QuantSmith checkout drift remains reported, with all 61
-pinned guidance objects verified independently rather than refreshed.
+[source review](source_review.md) and common C04–C08. Use pinned engineering
+workflows. QuantSmith checkout drift remains reported; all 61 pinned guidance
+objects were verified without refreshing either library.
 
-**Next bounded slice — SSV-T09 / SSV-REQ09 / SSV-AC09:** add independently tested
-scope-safe research Gold: denominator-matched individual/disjoint aggregate
-ratios, prior available trade date and explicit date gaps. Prove aggregate ratios
-from summed quantities, never mean-of-ratios; require matched complete partitions,
-reject overlapping constituent/consolidated populations and return null for a
-zero denominator. Define the calendar/gap and unavailable-population policy
-before implementing temporal or aggregation behavior. Preserve T04's fixed
-ratio method and exact whole/fractional quantities. No rolling features or
-short-interest/borrow/naked-short interpretation is implied.
+**Next bounded slice — SSV-T10 / SSV-REQ10 / SSV-AC10:** stage typed Parquet
+snapshots and select one coherent database/file generation through a committed
+pointer. Specify lossless quantity/ratio types and a schema fingerprint before
+coding. Source quantities can exceed int64 and standard fixed decimal widths;
+T09 sums can exceed an individual row's precision budget. Preserve exactness or
+refuse an unsupported representation explicitly; never round source values.
+Prove C07 failure/restart behavior at staging, DB commit, file finalization,
+pointer publication and journal completion. A failed run must not advance a
+success watermark or expose mixed generations. Keep replay as T11.
 
-Reuse the source-owned `pipeline.py`, `io/warehouse.py` and `data/versions.py`.
-Each complete capture owns immutable membership; the transactional partition
-pointer selects local Gold. Partial/rejected inputs cannot change membership.
-Current/as-of selection uses local `archived_at` plus original sequence; never
-infer earlier knowledge from trade date or T02 request-start `captured_at`.
-Unknown publication/retrieval times remain null. Preserve root/kind/manifest
-identity, schema checks, attempt settings and sanitized failure evidence.
+Reuse the existing admitted Bronze, immutable versions and complete membership.
+T09's separate `research-gold` reader pins all selected dates/facilities to one
+SQLite transaction, validates disjoint scope, and calculates ratio-of-exact-sums.
+Missing constituents/rows withhold population metrics. Prior comparison uses the
+nearest earlier population-complete date at the same local cutoff; absence on
+that date is not skipped. `calendar_day_gap` includes weekends without inferring
+trading-calendar coverage. Preserve local capture clocks/sequence, component
+lineage, fixed ratios and nullable publication/retrieval fields.
 
 Run local commands through [`scripts/run_finra_short_sale_volume.sh`](../../scripts/run_finra_short_sale_volume.sh)
-and the [strict fixture-default YAML](../../config/finra_short_sale_volume/README.md).
-[Local runbook](../../docs/deployment/ssv_local_runbook.md) covers ingestion,
-inspection, exact retry and interrupted attempts. T10 Parquet/C07 file journaling,
-T11 replay, cross-page assembly, acquisition, health/export and Dagster are later
-work. Existing provider payloads/stores remain ignored; do not substitute fixture
-evidence for a source coverage claim. NAAIM stays paused and schedules stay stopped.
+and [per-pipeline YAML](../../config/finra_short_sale_volume/README.md).
+[Local runbook](../../docs/deployment/ssv_local_runbook.md) describes inspection,
+research queries and retry. No acquisition, file exchange, Dagster or Slack
+integration is added by T09. NAAIM stays paused and schedules stay stopped.
 
-**Verified:** 64 new local checks / **379 FINRA tests**; full offline suite
-**1,367 passed, 92 optional skips**. Lint/format and package checks pass.
-[Nine-capture conformance](evidence/t06_t08_local_conformance.json) verifies
-nine audits/captures, eight immutable versions, eleven published memberships,
-two final Gold rows and cutoffs `[2,2,2,2,2,1,0,2,2]` using invented fixtures only.
-All seven preexisting FINRA core/Bronze modules remain byte-identical to merged T05.
+**Verified T09:** 52 new checks / **431 FINRA tests**; full offline suite
+**1,419 passed, 92 optional skips**. Lint/format and package source readback pass.
+[Eight-capture conformance](evidence/t09_research_gold_conformance.json) verifies
+weighted ratios against independent rational expectations, prior revisions and
+absence, partial-refresh preservation, original cutoffs and byte-identical
+raw/warehouse inventories across research reads. The SQLite schema and eight
+preexisting source/storage modules remain unchanged from T06–T08.
 
 Update [tasks](todo.md), the [master register](../../docs/pipelines.md),
 [program tracker](../../docs/securities_finance/roadmap.md) and
-[master handoff](../../docs/handoffs/project_bootstrap.md) after the next acceptance.
+[master handoff](../../docs/handoffs/project_bootstrap.md) with the next acceptance.
 
 ## Objective and research questions
 
@@ -147,12 +147,13 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. **379 focused FINRA tests** cover
+Every task/test must cite these stable IDs. **431 focused FINRA tests** cover
 84 admission/registry, 111 parser, 71 arithmetic/codec, 49 Bronze and 64 local
-SQLite/config/CLI/revision/replacement checks. Implemented data entrypoints enforce
+SQLite/config/CLI/revision/replacement checks, plus 52 T09 arithmetic/query/CLI
+checks. Implemented data entrypoints enforce
 admission before I/O. Acquisition/export and broader delivery acceptance remain
-pending. Full offline regression: **1,367 passed, 92 optional skips**.
-[T06–T08 acceptance](t06_t08_acceptance.md).
+pending. Full offline regression: **1,419 passed, 92 optional skips**.
+[T09 acceptance](t09_acceptance.md).
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |

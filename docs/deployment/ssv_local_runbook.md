@@ -98,3 +98,40 @@ queries accept limits 1–1,000. Database changes and the partition pointer comm
 one transaction; file/Parquet publication and its recovery journal remain T10.
 Replay/backup tooling is not delivered here. Existing operational databases,
 source samples, services and schedules were not used for local acceptance.
+
+## T09 research Gold
+
+The separate read-only research command uses the same configuration and captured
+partitions. For the invented single-facility example above:
+
+```bash
+./scripts/run_finra_short_sale_volume.sh research-gold --config config/finra_short_sale_volume/pipeline.local.yml \
+  --trade-date 2026-11-09 --scope nyse_trf
+```
+
+Repeat `--scope` to request explicit disjoint facilities, or use `--scope listed_trfs`
+for all three verified TRFs. Every selected facility must have a complete partition
+and each symbol must have a reported row in all of them for an aggregate metric.
+Missing partitions return INCOMPLETE_POPULATION and CLI exit2; missing reported
+rows withhold population quantities rather than supplying zero. Complete/valid-empty
+reports return0. Overlap and excluded scopes fail with exit2. This command creates
+no captures, versions or publication changes and does not perform a network probe.
+
+Optional `--as-of` and `--as-of-sequence` apply to all current and prior components.
+`--lookback-days` defaults to366 (range1–3660); `--max-symbols` defaults to15000
+(range1–250000). The prior date is the nearest earlier complete date for that exact
+population at the cutoff, within lookback. Missing membership on the selected
+prior date is not skipped to find an older value. The first isolated fixture run
+has no prior date, so prior values and changes are null with an explicit reason.
+
+`prior_trade_date` and `calendar_day_gap` are report fields; calendar gaps include
+weekends without claiming missing trading sessions. Row fields include current/
+prior ratios, ratio changes, missing-row facilities and component version/capture/
+source-row lineage. Ratios are ratio-of-summed-quantities using the fixed method.
+Current/prior selections share one SQLite snapshot, including while another
+writer commits. `evidence_known_at` describes the latest local capture used by
+the report, not provider publication. Operational freshness remains separately
+inspectable with `coverage` and `audit`.
+
+[T09 acceptance](../../specs/spec012/t09_acceptance.md) records numeric, missingness,
+cutoff, concurrency and actual-script evidence. Typed file publication remains T10.

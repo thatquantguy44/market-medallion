@@ -28,3 +28,10 @@ All values there are invented, not provider history. See the
 root identity, retry and missing/pending states. Parquet, replay, live acquisition,
 research exchange, jobs and alerts remain later tasks. No network probe, service
 startup, `.env` loading or schedule activation occurs through these commands.
+
+T09's `research-gold` command uses the same local config. Supply one or more
+explicit `--scope` values; the existing manifest bounds the permitted population.
+Optional `--as-of`/`--as-of-sequence`, `--lookback-days` and `--max-symbols` bound
+research reads. No new YAML fields or warehouse migration is required. See the
+[research contract](../../specs/spec012/research_gold_contract.md) for matched
+coverage, prior-date and calendar-gap semantics.

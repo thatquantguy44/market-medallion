@@ -44,7 +44,7 @@ remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
 records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
 stay explicit, with no flags cleared or derivative publication. Recent-year
 refreshes cover new releases/corrections. Acquisition schedules stay stopped;
-NAAIM remains paused; FINRA T06–T08 are accepted and T09 is next.
+NAAIM remains paused; FINRA T06–T09 are accepted and T10 is next.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
@@ -65,10 +65,12 @@ samples reconcile to its pure receipt-bound JSON parser. Whole and fractional
 share quantities remain exact Decimal values, with pure per-observation ratios
 and lossless quantity text readback. [T06–T08 local acceptance](specs/spec012/t06_t08_acceptance.md)
 adds audited SQLite Silver/Gold, revisions/reversions/removals and UTC/sequence
-cutoffs on top of immutable Bronze; **379 FINRA tests pass**. The
+cutoffs on top of immutable Bronze. [T09 research Gold](specs/spec012/t09_acceptance.md)
+adds exact scope-safe aggregation, prior complete dates and calendar gaps;
+**431 FINRA tests pass**. The
 [portable script](scripts/run_finra_short_sale_volume.sh) uses
-[per-pipeline YAML](config/finra_short_sale_volume/README.md). Next is SSV-T09,
-scope-safe research Gold. Acquisition, Parquet, replay, exports/jobs and complete
+[per-pipeline YAML](config/finra_short_sale_volume/README.md). Next is SSV-T10,
+typed Parquet and a coherent publication journal. Acquisition, Parquet, replay, exports/jobs and complete
 real-source coverage remain unimplemented. Public API terms acceptance is user-attested. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and

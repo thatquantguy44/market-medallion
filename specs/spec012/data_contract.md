@@ -7,7 +7,8 @@ validation/text codec, per-observation ratio helpers and selected API-response
 Bronze implemented. The [T05 contract](bronze_contract.md) defines immutable
 captures and sanitized outcomes. T06–T08 implement audited local SQLite
 versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/script.
-[Storage contract](local_storage_contract.md) and [acceptance](t06_t08_acceptance.md).
+[Storage contract](local_storage_contract.md), [local acceptance](t06_t08_acceptance.md)
+and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
 Parquet/downstream exchange, acquisition and jobs remain unimplemented.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
@@ -143,8 +144,11 @@ Reject requested-date/file-date mismatches, unknown scopes and unverified market
 codes. A schema drift outcome preserves Bronze and the old committed snapshot.
 
 T04 implements pure per-observation `short_share` and `short_exempt_share`.
-Published Gold, prior available trade date, day gap, ratio change and aggregation
-remain T09 and later work. Compute `short_volume / total_volume` and
+T06–T08 persist local per-observation Gold. T09 implements a separate read-only
+research query with exact disjoint aggregation, prior complete scope dates,
+calendar-day gaps and ratio changes. [Research contract](research_gold_contract.md)
+defines missingness, cutoff, population and rounding behavior. Typed snapshots,
+research interchange and acquisition remain later work. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
