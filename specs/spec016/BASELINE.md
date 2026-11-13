@@ -1,0 +1,22 @@
+# PR016-R01/R02 donor baseline
+
+Recorded 2026-11-13. The donor research website checkout was clean at commit
+`37c9307e86711ffadc391b6cc49079812fb09c14`; its 29 offline unittest cases
+passed without source requests. The target MarketMedallion branch starts at
+`1bd4ab5` and the separate QuantMeridian branch starts at `68f794b6`.
+Existing checkout branches and any unrelated work are not modified.
+
+`tests/fixtures/presidential_research/baseline.json` records SHA-256 digests of
+10 relevant donor code/config/test files and wholly invented factor inputs.
+Independent decimal arithmetic checks `2.00% + 0.10% = 0.021`,
+`-1.00% + 0.05% = -0.0095`, and `(102 + 12/12) / 100 - 1 = 0.03`.
+These are software expectations, not historical observations. The source
+catalog and donor source-decision notes retain seven source IDs; candidate
+Congress rows are review-only and the two control-evidence bundles are manual.
+Their historical source rights/captures are not imported by this baseline.
+
+The local QuantSmith checkout does not match its reference pin. The pinned Git
+commit and tree were available locally; the engineering, point-in-time,
+provenance, testing and file-ingestion guidance used here was read from that
+commit and individually matched against the reference SHA-256 inventory.
+The pinned agent-skills snapshot verified without network access.
