@@ -1,0 +1,742 @@
+{
+  "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+  "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+  "pack_id": "ef923548503eeef50a167ff939b55e702bc88fdf773b38b0943b199fb7b07b37",
+  "selected_cases": 8,
+  "strata": [
+    {
+      "stratum_id": "image_content|html|2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "case_count": 316,
+      "selected_case_ids": [
+        "2675930edc23b9acf6e446bf8d79022768f57ff0f14fef9ab46058e04e455981",
+        "fbf3fe12e96d63ad8d9df8790811aca05d2619c0901a3e4cd0ccea6910ad5946"
+      ],
+      "earliest_case_id": "2675930edc23b9acf6e446bf8d79022768f57ff0f14fef9ab46058e04e455981",
+      "latest_case_id": "fbf3fe12e96d63ad8d9df8790811aca05d2619c0901a3e4cd0ccea6910ad5946"
+    },
+    {
+      "stratum_id": "image_content|html|6229ef52c5926aedc8ada1f838701f919e5308ae117b5b7aa0fc0714582b381b",
+      "case_count": 78,
+      "selected_case_ids": [
+        "b36230bb62450ef0456d449931e5f0ba64bf16219aa2e9a24f700776a9331b33",
+        "cfe5747e8f44affe265ffc6f9d58a87889219e5e3f51348bff880b10e8ea7d1f"
+      ],
+      "earliest_case_id": "b36230bb62450ef0456d449931e5f0ba64bf16219aa2e9a24f700776a9331b33",
+      "latest_case_id": "cfe5747e8f44affe265ffc6f9d58a87889219e5e3f51348bff880b10e8ea7d1f"
+    },
+    {
+      "stratum_id": "image_content|pdf|2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "case_count": 667,
+      "selected_case_ids": [
+        "03a0f2a779f2db1d3c4f720725d7d0d881aa8863e62b27caa7806027540626ab",
+        "d367cf4b002f9a1c00585401c93984b7c865e8eb9c2b65838b29e083416eb51b"
+      ],
+      "earliest_case_id": "03a0f2a779f2db1d3c4f720725d7d0d881aa8863e62b27caa7806027540626ab",
+      "latest_case_id": "d367cf4b002f9a1c00585401c93984b7c865e8eb9c2b65838b29e083416eb51b"
+    },
+    {
+      "stratum_id": "replacement_character|html|2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+      "case_count": 26,
+      "selected_case_ids": [
+        "160a329eeee8baf5ed04c7b316f451981eff8f3d0ae53db1d52b9140e1bbf3cb",
+        "25324efabb0d84b42c1f7ce0e77f72a2e40c91268e41bdefd086a36b29c43170"
+      ],
+      "earliest_case_id": "25324efabb0d84b42c1f7ce0e77f72a2e40c91268e41bdefd086a36b29c43170",
+      "latest_case_id": "160a329eeee8baf5ed04c7b316f451981eff8f3d0ae53db1d52b9140e1bbf3cb"
+    }
+  ],
+  "uncovered_strata": [],
+  "deferred_boundaries": [],
+  "canonical_files_unchanged": 10207,
+  "source_tables_unchanged": {
+    "bronze_capture_objects": "9299e19c1ebcc2fd86b938bc5803bd25b857545eb47ee5c8cb04b3bdf7a9ecd3",
+    "bronze_captures": "9a2cd3110eab1b7addd3126a66554c8242134e6fd8c2806ab2ec182ce7d71471",
+    "bronze_dependencies": "3d073d6e56a09946c725f06cd8997394f5063e0f751f565d22c54efd3d212249",
+    "bronze_dependency_checks": "7ee805d505496b2344d6da73f888958845c1119e9bf1f3e00a253717a477e909",
+    "bronze_dependency_state": "dec5f4b7fdc30571d085b59e769266e4230fdbc04afd7839f419b26994aa8136",
+    "bronze_document_links": "9e1de20783b177863f8ce7d549d8ec7e6993609d820cab7d15e12abf5a965b3e",
+    "bronze_inventory_discovery": "76aa714e8f91be3204576746eebe02b1ad98f1a89e28da00bf0e5eb905bd5531",
+    "bronze_inventory_links": "7886e320097c7596b96793281b8a45aa9e95134c706f9a5755533b66c1fe1a69",
+    "bronze_object_state": "cc21fa1a55d8066e8b45f62d1317ee74431d8c1af7edae4b4e8a7784ee37e102",
+    "bronze_objects": "27a8a524c6384c04b81b58c76141c9a3977654e48d8889fc5081694b7d313ca2",
+    "bronze_schema_migrations": "08db62f7139c1dfb6261a2d040552480b98d768e9db987ba0a35376ff2d633b9",
+    "catalog_state": "67ce78b6fcefcb1c2ef32e06998eea736c53b8c33deeec3b6c72c89cb2ffdb88",
+    "chunk_catalogs": "18a51294d4ccae0a4f9e80f41903d239491cb4d70429fdf1687b026628512662",
+    "chunk_sets": "1fbc547ae3f6ce6d5f04eac3b2a6058c1bc8c7603f2c2b14f7ffc30971cd0cfd",
+    "chunk_state": "0d6f0dff2c48a6d3551951aefa1769710817ea8c7fe682b1033fdb94fadeb833",
+    "chunks": "1dbb4662231e023892a48d81706d85fb5f803c11677486b1770904ea4320d464",
+    "inventory_documents": "3141b62c5d6247f5b5855b274106dbc1d645c803c3aceb94fe83496b81d97f68",
+    "inventory_entries": "040da136573e0de6f3a7e00d2361178e82d687e97fbc730a977332d35fb271fd",
+    "inventory_meetings": "c74532c3f14ae673f38bae58f474671fa5f1b0cfba7731bfd6be4e9e549817f7",
+    "inventory_pages": "79bdf1e81ea9025bac1907b5cdcfa87285e3269f017bd499ed3ed7d7a7c904c1",
+    "inventory_runs": "4fa1dc6fcafa78409fc7f2e4d444d8803da6478ff5ba4df80105c276a32616a1",
+    "operation_records": "f1e52ea253b1b2dc7c59a731abd8fb0e5d23f4e375bb4eb29db266ef65493246",
+    "operation_runs": "7cdfa0c422370a58a37a4c7c7f3f58fd47e94286a4311691f89ee964ccb89200",
+    "operation_state": "cd37b084a91bb256f51fa7e365f0f6f0c95609cb344e42bf7f1a60c1530c237f",
+    "text_capture_links": "6f880c8274f1790d74a95412eb278b98216cda300ee0aaced29eda7c9e299cac",
+    "text_catalogs": "af6fd21e5286292023ab798caeb0bbe97196ac1477abe526db4a1d7a6c5464cd",
+    "text_extractions": "a829a0cbaa3e80dee6b2aa62e6c6f64398b05f0dbe37e89c51f28ddf0c85b24d",
+    "text_state": "89928aa8ccce57d9268adca12449302bdd2ad84080206250675ba308010ee3a5",
+    "text_units": "01377f1af7235c2b16b9f6d8df8c088a1a3dc5b7a2ebdd678fae214e615a1fae"
+  },
+  "catalogs": {
+    "inventory": "8412cb07-f4c8-4531-bed2-30fc1133b6bf",
+    "text": "ec2aa8964537b58a03395c4e8f662f9a42ee543681a050a9dee48b38503fd38c",
+    "chunk": "fb409de85ee39c332c4be9671d8673acb87ff17c19e02da0f0f1ad2b46431ca0"
+  },
+  "http_extraction_and_chunking_disabled": true,
+  "request_performed": false,
+  "check": {
+    "schema_id": "fomc-quality-review-check/1",
+    "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+    "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+    "pack_id": "ef923548503eeef50a167ff939b55e702bc88fdf773b38b0943b199fb7b07b37",
+    "status": "reviewed",
+    "reviewed_cases": 8,
+    "review_ids": [
+      "01285368f2722a0e07c0a2bbd2b0e9d33fbdebd87fdf3362fe28e762164c9b4b",
+      "1e26be41bb314f7f0c5bb69d032e4b5fac7d58ce2779ed1742de1ecf500351ac",
+      "32fb3dff3763d8a6f07647b5ccba48fd27c56105267b969cfceba1673f19e90c",
+      "676486aa67bd9f57b881675aca5ee014725b965547a2cfcb2504a5d085cd56d8",
+      "732b9565eed3493cebf6716116f35b72a8a382e233eb69d4740fb4b760b33714",
+      "8d91c529d9e6258c5cb1db47f4fc33c04ea618b5bfca688c3acf2baf6a618e83",
+      "ad56cc7d6aeef20c150ba21cfb0b2777a6e7a70c8fabbf1ff5088370c7b0da7d",
+      "d12852ee4695a01e1f393326b60cfee59d36601dc05b13dbc1fc08853998143d"
+    ],
+    "pending_case_ids": [],
+    "dispositions": {
+      "chart_or_image": 4,
+      "ocr_candidate": 1,
+      "sample_text_matches": 1,
+      "unresolved": 2
+    },
+    "confirmed_native_defects": [],
+    "unresolved_cases": [
+      "03a0f2a779f2db1d3c4f720725d7d0d881aa8863e62b27caa7806027540626ab",
+      "25324efabb0d84b42c1f7ce0e77f72a2e40c91268e41bdefd086a36b29c43170",
+      "160a329eeee8baf5ed04c7b316f451981eff8f3d0ae53db1d52b9140e1bbf3cb"
+    ],
+    "eligibility_changed": false,
+    "whole_corpus_quality_certified": false,
+    "request_performed": false,
+    "check_id": "13771910459fad0a108bc37e9ee0e4bb2d9fdcf98bc14a67da66c0367527db78"
+  },
+  "reviews": [
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [
+          "https://www.federalreserve.gov/monetarypolicy/files/SEP20120125_figure3a.gif"
+        ],
+        "capture_ids": [
+          "e506181a-8e58-42fc-89eb-6cbdb06ca55c"
+        ],
+        "case_id": "2675930edc23b9acf6e446bf8d79022768f57ff0f14fef9ab46058e04e455981",
+        "chunk_ids": [
+          "cfc9704a4473706af839e38b973285e39f25d931bd5e388c7f004a3a5134ef6c"
+        ],
+        "current": true,
+        "document_version_id": "6cbd6b899bca99c96d5850b5334bbbc0b9ec879b0c04c3804f12ed842391c8c9",
+        "end": 19170,
+        "extraction_id": "0d40525c07364adc0d2f91c66e2a36cd096c3bbf3e0911dcc28fe435c1768837",
+        "first_seen_at": "2026-11-13T08:05:22.408082Z",
+        "format": "html",
+        "heading": "Figure 3.A. Distribution of participants' projections for the change in real GDP, 2012-14 and over the longer run *",
+        "issues": [
+          "image_content"
+        ],
+        "meeting_dates": [
+          "2012-01-24",
+          "2012-01-25"
+        ],
+        "meeting_ids": [
+          "fm_1312fae00ad03098a95990c3b029c1e187dbc3dee709a0ed9e294792f2b15a19"
+        ],
+        "page": null,
+        "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+        "release_claims": [],
+        "source_sha256": "b1fa0e0da4bf96ba6b011fee8bc52d5eded0f056f09e984ab65655fc306988f2",
+        "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20120125ep.htm",
+        "start": 18804,
+        "status": "review_required",
+        "unit_ordinal": 4,
+        "unit_text_sha256": "c88fb9d4a5ce4b57262d27149ff61990c0370183c8a6305275b0d295aaeb626c",
+        "years": [
+          2012
+        ]
+      },
+      "disposition": "chart_or_image",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/2675930edc23b9acf6e446bf8d79022768f57ff0f14fef9ab46058e04e455981.png",
+        "sha256": "974d9834f8f92ec6e6b4cab706aef2f62f6a22705800ac8501c3f38e8f541e38",
+        "input_sha256": "6c6cb2515471e55d4734be0eb30ab5d57bc7b18b4bbdbc84bcdbde30d5e24ab4",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      "observations": [
+        "Inspected the archived Figure 3.A GIF and adjacent heading/footnote. It contains four distribution panels for real GDP projections; the chart labels and bars are image content.",
+        "The selected unit retains its image reference/alt text. No chart values were reconstructed or promoted as prose. This is a bounded figure review, not validation of every chart or the complete SEP."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "d12852ee4695a01e1f393326b60cfee59d36601dc05b13dbc1fc08853998143d"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [
+          "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart2b.gif"
+        ],
+        "capture_ids": [
+          "80fa6f9e-b6b5-4cd1-99f8-a45d6d47ad9c"
+        ],
+        "case_id": "b36230bb62450ef0456d449931e5f0ba64bf16219aa2e9a24f700776a9331b33",
+        "chunk_ids": [
+          "4ba33ef5d3ca873d72a1e24db3bb7bf28ab26517404a53d9521998b59b4e0577"
+        ],
+        "current": true,
+        "document_version_id": "7212651e503bbb9cbd7d88d7068156bb6eb9c6ed8fa5706da3889492e5a85444",
+        "end": 17093,
+        "extraction_id": "b8bdc686693475e15f23c1578133dcea5881e2d55f0fcbd5b89f48e63e742a6e",
+        "first_seen_at": "2026-11-13T07:17:24.041355Z",
+        "format": "html",
+        "heading": "Chart 2(b): Distribution of Participants' Projections (percent) *",
+        "issues": [
+          "image_content"
+        ],
+        "meeting_dates": [
+          "2007-10-30",
+          "2007-10-31"
+        ],
+        "meeting_ids": [
+          "fm_3577df52eee77826a049aaf4a4616c7fb0700e4d729e6b1a0ec4361a4e0c631f"
+        ],
+        "page": null,
+        "profile_sha256": "6229ef52c5926aedc8ada1f838701f919e5308ae117b5b7aa0fc0714582b381b",
+        "release_claims": [],
+        "source_sha256": "740ce6581ab2a393b2521233bb635dd0976f5fad463a379b5794a306d735c21a",
+        "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20071031ep.htm",
+        "start": 13544,
+        "status": "review_required",
+        "unit_ordinal": 7,
+        "unit_text_sha256": "d600390ebf1db578403d673f5782c6396e35b8274f941d93bf8ef0aa25966303",
+        "years": [
+          2007
+        ]
+      },
+      "disposition": "chart_or_image",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/b36230bb62450ef0456d449931e5f0ba64bf16219aa2e9a24f700776a9331b33.png",
+        "sha256": "07ddc0f8e3f9754d00851893fc0b5730f8d260dcf0e08c941ca2471028d8ba84",
+        "input_sha256": "2c99aff18634afb1e5cf34188d6c418fa7bc78c0318827bebb25120290d8b416",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      "observations": [
+        "Inspected archived Chart 2(b) and adjacent notes. The image contains PCE/core-PCE inflation projection panels and numeric axes; the original image bytes are retained.",
+        "The source image has an empty alt attribute; its surrounding heading/notes remain in extracted text. No inferred chart transcription or eligibility override was made."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "01285368f2722a0e07c0a2bbd2b0e9d33fbdebd87fdf3362fe28e762164c9b4b"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [],
+        "capture_ids": [
+          "c0924087-823b-4bfa-83e2-efcd587aad72"
+        ],
+        "case_id": "03a0f2a779f2db1d3c4f720725d7d0d881aa8863e62b27caa7806027540626ab",
+        "chunk_ids": [
+          "34524da3a89b15c4606ed9a48ce42b683febdcd56f4e1dea5b1d38af3289cdeb"
+        ],
+        "current": true,
+        "document_version_id": "2b5df7b8760d4c9c681cb11b3fbe010d2127566752159a6196a3d408ccc43ed4",
+        "end": 34275,
+        "extraction_id": "3d8d221fd5e45e488e33a3153c4c4a585d9200c730ff0ce771f52122647edda0",
+        "first_seen_at": "2026-11-11T17:55:32.830130Z",
+        "format": "pdf",
+        "heading": "",
+        "issues": [
+          "image_content"
+        ],
+        "meeting_dates": [
+          "1990-02-06",
+          "1990-02-07"
+        ],
+        "meeting_ids": [
+          "fm_b6eea3c0e6e2df08a068391feed2eac1e0a233f74f0c5c9897fe43357a84cdb7"
+        ],
+        "page": 15,
+        "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+        "release_claims": [
+          {
+            "meeting_id": "fm_b6eea3c0e6e2df08a068391feed2eac1e0a233f74f0c5c9897fe43357a84cdb7",
+            "provider_release_date": null,
+            "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1990.htm"
+          }
+        ],
+        "source_sha256": "bc9ca5b56a873fbf639f7cb4bd3218fe1d4625031a64e8095629e74821a20401",
+        "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcmoa19900207.pdf",
+        "start": 31860,
+        "status": "review_required",
+        "unit_ordinal": 14,
+        "unit_text_sha256": "b719a9111171217e2f29bd2788a3a8938f6db11f657c41dbc4cc1b476fcd4f07",
+        "years": [
+          1990
+        ]
+      },
+      "disposition": "ocr_candidate",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/03a0f2a779f2db1d3c4f720725d7d0d881aa8863e62b27caa7806027540626ab.png",
+        "sha256": "995c29292ec6f87bcba9ef3923458e93a22082a248e1285236ff596f0e6961de",
+        "input_sha256": "bc9ca5b56a873fbf639f7cb4bd3218fe1d4625031a64e8095629e74821a20401",
+        "tool": "pdftoppm 26.06.0"
+      },
+      "observations": [
+        "Inspected complete rendered PDF page 15 and its complete extracted unit. Body paragraphs, the 5.3 percent value and closing continuation agree in the inspected text.",
+        "The printed page marker -15- is visible in the scan but absent from both pypdf native text and independent pdftotext 26.06.0 output. The unit citation still correctly identifies PDF page 15.",
+        "This is a source text-layer/OCR completeness candidate, not a demonstrated native-parser defect. Keep image_content and review eligibility; no OCR service was run."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "676486aa67bd9f57b881675aca5ee014725b965547a2cfcb2504a5d085cd56d8"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [],
+        "capture_ids": [
+          "22be9065-19fa-4899-8b39-aea8d99dddd4"
+        ],
+        "case_id": "25324efabb0d84b42c1f7ce0e77f72a2e40c91268e41bdefd086a36b29c43170",
+        "chunk_ids": [
+          "07cf2d380a053f8373dd796d32bb61cca1391ad3fb927f80aeaf2c629c6de1ca",
+          "4abc1924e404586776fcd4f212eda688ee12d8f57ad6d332d00e0ced0045bd07",
+          "51dd6b5ce7b51c262c5917d21c57965e28cb77683cddce416a905608bb0501df",
+          "5885684e2a6673ab05aa7f068acaa32fc28f99d89a17c9efc16b2b391f86772b",
+          "592bc048abdb36e845d8819f3f06066620b1ca92d00c3531794146caa0768701",
+          "67b56df5e2aec980ac4419d0ca378c4f1c8535f8149ae751375c67fde708294d",
+          "73f0da0aa4ff6904fd1bd4b806fcd472573c0526ac76e2f5cc0e92e796981204",
+          "7e533544998a5e467cca5e3bedd0de4d8f222639687256d15cc47892fea8fc97",
+          "81be98e3f9b2812d283ebdcf24bc0c1a542e477efbd1d468afe7ab127cc31a48",
+          "972653659038e570983208ed169cd95d62e7fa2bee0ab63591bbfd9e036fa250",
+          "a0b21986c4eb3ec4adab779153562b728179e0687faa354a1e74d0f8575220e4",
+          "d3e3b81b8435f389839e6a93d5a2d96cf20d12622554f839689b32b4ec73e542",
+          "de523eec10d8b3c712ae32b1e18ae6915a63066838616cee3f1a0c725d4b5488"
+        ],
+        "current": true,
+        "document_version_id": "4ed53705b04736c9f2506bedc69312564c55166d259e194f71594d477e8e82ad",
+        "end": 39193,
+        "extraction_id": "ccfc56c8aa5fe4bf606b6c4aba6009ac01bb1734a52a9ecc5a1eaaeda1507398",
+        "first_seen_at": "2026-11-13T06:29:53.095521Z",
+        "format": "html",
+        "heading": "",
+        "issues": [
+          "replacement_character"
+        ],
+        "meeting_dates": [
+          "1999-06-29",
+          "1999-06-30"
+        ],
+        "meeting_ids": [
+          "fm_043da336514e6177224b45aa5b4e9aca0706db83eb0f1b681497d6d0ab7b8aef"
+        ],
+        "page": null,
+        "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+        "release_claims": [
+          {
+            "meeting_id": "fm_043da336514e6177224b45aa5b4e9aca0706db83eb0f1b681497d6d0ab7b8aef",
+            "provider_release_date": "1999-08-26",
+            "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical1999.htm"
+          }
+        ],
+        "source_sha256": "8c18685d1d53c15587178ee69bc829d0a001d32da13d2f23464dff8e18396e8a",
+        "source_url": "https://www.federalreserve.gov/fomc/minutes/19990629.htm",
+        "start": 0,
+        "status": "review_required",
+        "unit_ordinal": 0,
+        "unit_text_sha256": "f81b6056fb71cb7b343a2794b65988ab7fa6928906d5d46627aa7308770b95fd",
+        "years": [
+          1999
+        ]
+      },
+      "disposition": "unresolved",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/25324efabb0d84b42c1f7ce0e77f72a2e40c91268e41bdefd086a36b29c43170.png",
+        "sha256": "46b4e5cd8d79015acf0e960a6fd3589f7f8b1f692b858c8953e06ee6f72602ec",
+        "input_sha256": "da74223425b828a36b889c7bd89674bb5b47e6c16ee339340053b2e16e4a16b7",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      "observations": [
+        "Inspected the first replacement-character paragraph and adjacent content in the archived HTML preview. The fractional policy amount is visibly damaged in both the source preview and extracted text.",
+        "The archived original contains a literal UTF-8 U+FFFD at the affected text. No replacement numeric value was guessed. Source reconciliation remains unresolved; no native-extractor repair is demonstrated."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "1e26be41bb314f7f0c5bb69d032e4b5fac7d58ce2779ed1742de1ecf500351ac"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [
+          "https://www.federalreserve.gov/monetarypolicy/images/sep20200916figure4.png"
+        ],
+        "capture_ids": [
+          "0fd5de0c-4701-4d96-bb2d-b3a7acb667d6"
+        ],
+        "case_id": "fbf3fe12e96d63ad8d9df8790811aca05d2619c0901a3e4cd0ccea6910ad5946",
+        "chunk_ids": [
+          "f4d7f36f74a6aeeebaa12c62500d015a332e86ed7c0cd95347eeedb39da04233",
+          "fbcb92596e30f418feb20750e7f86e2066ea574e8dc2cd05dc5a8cf603902bfe"
+        ],
+        "current": true,
+        "document_version_id": "551a7ec2c3820ba1970ead4a549674834f3f9002bafbd0307d34ce7eb8718ee9",
+        "end": 19702,
+        "extraction_id": "da66c7d982c3a1fd73ea9f4320c0130fcfa9a787eb641d5d6d163ac8af1a87ef",
+        "first_seen_at": "2026-11-13T09:44:47.122510Z",
+        "format": "html",
+        "heading": "Figure 4. Uncertainty and risks in economic projections",
+        "issues": [
+          "image_content"
+        ],
+        "meeting_dates": [
+          "2020-09-15",
+          "2020-09-16"
+        ],
+        "meeting_ids": [
+          "fm_01a806f3dea99c5fd2f47803750dac49e8c9e9134c0213da4ecf7e44895ca5ab"
+        ],
+        "page": null,
+        "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+        "release_claims": [],
+        "source_sha256": "df53b071d711e88a905770755d3ca63c3445cbe0bed61be1d0c69732e7e7aea1",
+        "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20200916ep.htm",
+        "start": 15647,
+        "status": "review_required",
+        "unit_ordinal": 9,
+        "unit_text_sha256": "f670cc7a5ce81141bc1490da2bd5987fb2a5e1b2ba3403e2f3c6c9ed2bcd00a2",
+        "years": [
+          2020
+        ]
+      },
+      "disposition": "chart_or_image",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/fbf3fe12e96d63ad8d9df8790811aca05d2619c0901a3e4cd0ccea6910ad5946.png",
+        "sha256": "7ce474bf5066737f146075dd538aa877fd15913ee8fd0cd9fdb36fd5f4748201",
+        "input_sha256": "d7379b7929965ff70fac48d435445d9711929227c86be4de4f3343b333864f73",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      "observations": [
+        "Inspected archived Figure 4 and adjacent paragraphs. Uncertainty and risk distributions are supplied as a PNG chart with multiple panels and numeric labels.",
+        "The selected unit retains the source image reference/alt text. Chart interpretation or structured-value extraction is outside this bounded review; flags remain."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "732b9565eed3493cebf6716116f35b72a8a382e233eb69d4740fb4b760b33714"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [
+          "https://www.federalreserve.gov/monetarypolicy/gifjpg/SEP20111122_figure3d.gif"
+        ],
+        "capture_ids": [
+          "324666e9-0011-4ff6-b517-baa43c0e52c2"
+        ],
+        "case_id": "cfe5747e8f44affe265ffc6f9d58a87889219e5e3f51348bff880b10e8ea7d1f",
+        "chunk_ids": [
+          "9c4bfaa11317ec96513aaf6a414d1bc06477d30e8c7008c9cca01139c08cef59",
+          "bc65c3516f32ea79674d8d035f40cfcdc79150b104a40f811775da572fee40bc"
+        ],
+        "current": true,
+        "document_version_id": "991fe4d178a6edd5f201cd83c6e3df50389c9d3893d26d5dbd910f2f9324ecd2",
+        "end": 26689,
+        "extraction_id": "6ae8fdb913d80c4119b400b68fb289320316443bc8f8b30020b7d87b518a7483",
+        "first_seen_at": "2026-11-13T07:56:32.127316Z",
+        "format": "html",
+        "heading": "Figure 3.D. Distribution of participants' projections for core PCE information, 2011-14 *",
+        "issues": [
+          "image_content"
+        ],
+        "meeting_dates": [
+          "2011-11-01",
+          "2011-11-02"
+        ],
+        "meeting_ids": [
+          "fm_9fb29ea95d366d7ab1f63289f7271b6925ca4c25ff64fdc4cfe401a9b8a76f4b"
+        ],
+        "page": null,
+        "profile_sha256": "6229ef52c5926aedc8ada1f838701f919e5308ae117b5b7aa0fc0714582b381b",
+        "release_claims": [],
+        "source_sha256": "3f13e3350c2cf4b24e63763dea72f33f24248554720c47d3a2c2ad79dbe305dd",
+        "source_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20111102ep.htm",
+        "start": 22825,
+        "status": "review_required",
+        "unit_ordinal": 6,
+        "unit_text_sha256": "14f0f26f2078f020d7aabbd200893fb691445373b99dd8b0ef90a97e298b5776",
+        "years": [
+          2011
+        ]
+      },
+      "disposition": "chart_or_image",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/cfe5747e8f44affe265ffc6f9d58a87889219e5e3f51348bff880b10e8ea7d1f.png",
+        "sha256": "a99d9eb6376c7c8761f8ed44052f4ac6897d34219773e8ba4d9dae95390d3a7f",
+        "input_sha256": "50695413b02059652341f15663ab6f7424fdb6eff60e635c6638ab4b694fce6f",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      "observations": [
+        "Inspected archived Figure 3.D, its heading, explanatory note and GIF panels. Chart values remain in the retained image.",
+        "The source heading/alt text uses the word information while the figure concerns inflation. The existing extraction preserves the source wording; it was not silently corrected or treated as a parser defect."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "32fb3dff3763d8a6f07647b5ccba48fd27c56105267b969cfceba1673f19e90c"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [],
+        "capture_ids": [
+          "1fd11d8a-8e20-4b16-b724-f55fffc1ae83"
+        ],
+        "case_id": "d367cf4b002f9a1c00585401c93984b7c865e8eb9c2b65838b29e083416eb51b",
+        "chunk_ids": [
+          "9b7fc80d97d0eb6eeb43373a3eb5a04a14732b5ecd7b637fdaf4d38e25bab09b"
+        ],
+        "current": true,
+        "document_version_id": "9759320248ed9ff91383dd217be0ad1b8adb10e32cda2a36cb57a8d900fba375",
+        "end": 109,
+        "extraction_id": "68aed1774fc9eaffbf3bcb2329a308b982ea6c0d481a6ad9e56a1ac4e5f385c1",
+        "first_seen_at": "2026-11-13T06:31:10.075029Z",
+        "format": "pdf",
+        "heading": "",
+        "issues": [
+          "image_content"
+        ],
+        "meeting_dates": [
+          "2026-09-15",
+          "2026-09-16"
+        ],
+        "meeting_ids": [
+          "fm_1d8bbae1721c0ddc5314ca277efb3267ecdc786976a321e9288f930c47b21fa7"
+        ],
+        "page": 1,
+        "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+        "release_claims": [
+          {
+            "meeting_id": "fm_1d8bbae1721c0ddc5314ca277efb3267ecdc786976a321e9288f930c47b21fa7",
+            "provider_release_date": "2026-10-07",
+            "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+          }
+        ],
+        "source_sha256": "073f2e27e5e08c288249473bbaf966590c5e3be804c22f5c4034e98bd7a88745",
+        "source_url": "https://www.federalreserve.gov/monetarypolicy/files/fomcminutes20260916.pdf",
+        "start": 0,
+        "status": "review_required",
+        "unit_ordinal": 0,
+        "unit_text_sha256": "bafd7dba8c98dd7170c50f2f4b45d702c0ca7bf718e4914fe77130dd65f200df",
+        "years": [
+          2026
+        ]
+      },
+      "disposition": "sample_text_matches",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/d367cf4b002f9a1c00585401c93984b7c865e8eb9c2b65838b29e083416eb51b.png",
+        "sha256": "7471b28692d05abf964102b716ec5966fda664bbc789b75828ec712c06faa91a",
+        "input_sha256": "073f2e27e5e08c288249473bbaf966590c5e3be804c22f5c4034e98bd7a88745",
+        "tool": "pdftoppm 26.06.0"
+      },
+      "observations": [
+        "Inspected the complete PDF cover page and complete native-text unit. The FOMC label, minutes title, September 15\u201316, 2026 date and Federal Reserve System attribution are present.",
+        "The page also contains a seal and decorative background image. Image presence remains explicit; this sampled cover comparison does not certify other PDF pages or authorize flag clearing."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "ad56cc7d6aeef20c150ba21cfb0b2777a6e7a70c8fabbf1ff5088370c7b0da7d"
+    },
+    {
+      "schema_id": "fomc-quality-review/1",
+      "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+      "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+      "case": {
+        "assets": [],
+        "capture_ids": [
+          "a26a3d49-18a6-4aa7-a8c8-1f92aabe61ec"
+        ],
+        "case_id": "160a329eeee8baf5ed04c7b316f451981eff8f3d0ae53db1d52b9140e1bbf3cb",
+        "chunk_ids": [
+          "031005c2b181fdce287585ed9f0aff5613ecf2bbf77902d9743fe74c99262d73",
+          "0f2829bf4523e2348857b30bc0aaf5fd50fef64f077d5fb5879156a850b75179",
+          "271e66a1fe8f1c23cdf38ca6c8d74b2e3eb0b4f10648b0b88c70eea30aa5c58f",
+          "9381b7b353fc278d8cb6344a2ae722fdd537c8299bfe74b427beadc360684a81",
+          "9889adcea7303cef2c08d1a29f60803e0af8500b814bcfb77e241e68df64a890",
+          "9c754a67e12aaecc87a926ab8b1f48a9474b8f1dda3efd288a49fc5f37a5af38",
+          "b3d7086be41d04e1766769db66877060e11a2cb0151ed9ff16228772ace29353",
+          "b98b7271e085ca0021f8d0e9f36f7c0c65149b05cd626c9dfee6927ec9bee1b8",
+          "eca66950ae3c65526eb8b29093d820ac69afe6b9f3015e7f584ade1d12e0635e",
+          "fff0425b0674928643315e00e2f29ac55276bce102570d68112ea3df1e619c2a"
+        ],
+        "current": true,
+        "document_version_id": "1540a916a410bfb1980afd52c3dcf90d23cc1ab4a7e3e33870f403cc8cafe2cd",
+        "end": 28135,
+        "extraction_id": "19f1ed719fca1072f907f59d5e37565c40251c4f4ff568d015e839d8bee77b41",
+        "first_seen_at": "2026-11-13T06:57:38.153229Z",
+        "format": "html",
+        "heading": "",
+        "issues": [
+          "replacement_character"
+        ],
+        "meeting_dates": [
+          "2007-05-09"
+        ],
+        "meeting_ids": [
+          "fm_045f95f514675c2e941c0a9af02dcdd28799a12174b31bb34a143b3130dbd2ad"
+        ],
+        "page": null,
+        "profile_sha256": "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f",
+        "release_claims": [
+          {
+            "meeting_id": "fm_045f95f514675c2e941c0a9af02dcdd28799a12174b31bb34a143b3130dbd2ad",
+            "provider_release_date": "2007-05-30",
+            "source_page_url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2007.htm"
+          }
+        ],
+        "source_sha256": "c6fa0babec90ac171a73d6af1cf8d6c3b20a28ab67bed1d6c3666c79e558ea90",
+        "source_url": "https://www.federalreserve.gov/fomc/minutes/20070509.htm",
+        "start": 0,
+        "status": "review_required",
+        "unit_ordinal": 0,
+        "unit_text_sha256": "0cd46c4b148b53adbee609edb263c3c17c3850aafeac8148280c7faa0cd8c088",
+        "years": [
+          2007
+        ]
+      },
+      "disposition": "unresolved",
+      "reviewer": "Codex source-page review",
+      "reviewed_at": "2026-11-13T11:42:22.137340Z",
+      "render": {
+        "path": "renders/160a329eeee8baf5ed04c7b316f451981eff8f3d0ae53db1d52b9140e1bbf3cb.png",
+        "sha256": "e37cd8db001a74031d05c0e5b37fa9a47fdd0e3b42b16c481123fd713319646a",
+        "input_sha256": "7c50ab385930984d30609a19e6493e899c07140508a7d498174b7c7769edaeed",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      "observations": [
+        "Inspected the first replacement-character paragraph and adjacent content. The rate fraction is rendered as a replacement glyph in both archived HTML and extracted text.",
+        "The original UTF-8 bytes already contain that U+FFFD. Do not infer a missing fraction from historical knowledge; retain the flag and unresolved source-reconciliation work."
+      ],
+      "eligibility_changed": false,
+      "whole_corpus_quality_certified": false,
+      "review_id": "8d91c529d9e6258c5cb1db47f4fc33c04ea618b5bfca688c3acf2baf6a618e83"
+    }
+  ],
+  "rendering": {
+    "external_page_requests": 0,
+    "scopes": [
+      {
+        "kind": "selected_archived_image_and_adjacent_content",
+        "asset_url": "https://www.federalreserve.gov/monetarypolicy/files/SEP20120125_figure3a.gif",
+        "asset_sha256": "c67bbd1bdf9c8266dd0bd11c1e79fae0bea2908e7295fd90c319bf5023f64320",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked",
+        "image_width": 665,
+        "image_height": 916
+      },
+      {
+        "kind": "selected_archived_image_and_adjacent_content",
+        "asset_url": "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart2b.gif",
+        "asset_sha256": "fabd822fa8f682daac411459808c3a466a75c94f16f0cec709fb5e95d26d707d",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked",
+        "image_width": 650,
+        "image_height": 738
+      },
+      {
+        "kind": "complete_pdf_page",
+        "page": 15,
+        "tool": "pdftoppm 26.06.0"
+      },
+      {
+        "kind": "first_source_replacement_paragraph_and_adjacent_content",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      },
+      {
+        "kind": "selected_archived_image_and_adjacent_content",
+        "asset_url": "https://www.federalreserve.gov/monetarypolicy/images/sep20200916figure4.png",
+        "asset_sha256": "4ed744288e47dfacc06f62aae8b8f1bfc2c02fecb9855dc6537b66030f7c3da2",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked",
+        "image_width": 560,
+        "image_height": 761
+      },
+      {
+        "kind": "selected_archived_image_and_adjacent_content",
+        "asset_url": "https://www.federalreserve.gov/monetarypolicy/gifjpg/SEP20111122_figure3d.gif",
+        "asset_sha256": "1687c6a72394e98bdabbced2fc7a9a3bb935287e1a5ca2968e0980d8bf6ee34b",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked",
+        "image_width": 670,
+        "image_height": 737
+      },
+      {
+        "kind": "complete_pdf_page",
+        "page": 1,
+        "tool": "pdftoppm 26.06.0"
+      },
+      {
+        "kind": "first_source_replacement_paragraph_and_adjacent_content",
+        "tool": "Google Chrome 157.0.8103.78; CDP; HTTP(S) blocked"
+      }
+    ]
+  },
+  "independent_pdf_text_check": {
+    "tool": "pdftotext 26.06.0",
+    "pdf_page": 15,
+    "printed_page_marker_returned": false,
+    "native_body_comparison": "sampled body paragraphs agree; no whole-corpus accuracy certificate"
+  },
+  "text_or_ocr_accuracy_certified": false,
+  "validation": {
+    "offline_regression": {
+      "passed": 1112,
+      "optional_skips": 91
+    },
+    "focused_with_isolated_postgres": {
+      "passed": 42
+    },
+    "all_four_script_commands_passed": true,
+    "ruff_and_build_passed": true,
+    "temporary_review_browser_closed": true
+  },
+  "source_files_sha256": {
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality_review.py": "89a80d1274b7236a6a52df347bcd00b8bbb5254a3aaefbdb284051b0db58535e",
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality_preview.py": "58264880e6eb5f026c541b529e57f7f798bc0b4ee3379612d036cfddcb5054f1",
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/quality_review.py": "5ad27a001863134abe25293ac0c2310d027dbcf41730d43dd9c731d32f04575c",
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/quality.py": "99d1d5cf35911eea34b279a8f318207b84102e616496920a95ec57ecc6f5b369",
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/cli.py": "a3f43faeec3b2a60a8ca079d8023514c6654badd5aabfa279d6b1821ef817107"
+  }
+}

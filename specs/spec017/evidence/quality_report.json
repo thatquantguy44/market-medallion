@@ -1,0 +1,349 @@
+{
+  "schema_id": "fomc-quality-report-acceptance/1",
+  "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+  "catalogs": {
+    "inventory": "8412cb07-f4c8-4531-bed2-30fc1133b6bf",
+    "text": "ec2aa8964537b58a03395c4e8f662f9a42ee543681a050a9dee48b38503fd38c",
+    "chunk": "fb409de85ee39c332c4be9671d8673acb87ff17c19e02da0f0f1ad2b46431ca0"
+  },
+  "totals": {
+    "selected_versions": 522,
+    "units": 4018,
+    "chunks": 9790,
+    "source_unit_characters": 25530400,
+    "representations": 522,
+    "extractions": 522,
+    "review_versions": 167,
+    "representations_without_units": 0,
+    "eligible_chunks": 8270,
+    "review_chunks": 1520,
+    "empty_units": 0,
+    "eligible_characters": 22505946,
+    "review_characters": 3024454,
+    "separator_characters": 6992,
+    "findings": 1087
+  },
+  "status_counts": {
+    "native_extracted": 355,
+    "review_required": 167
+  },
+  "groups": {
+    "year": {
+      "1990": {
+        "selected_versions": 16,
+        "units": 207,
+        "chunks": 207,
+        "source_unit_characters": 361107
+      },
+      "1991": {
+        "selected_versions": 16,
+        "units": 195,
+        "chunks": 195,
+        "source_unit_characters": 341024
+      },
+      "1992": {
+        "selected_versions": 16,
+        "units": 190,
+        "chunks": 190,
+        "source_unit_characters": 340044
+      },
+      "1993": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 114,
+        "source_unit_characters": 331066
+      },
+      "1994": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 111,
+        "source_unit_characters": 329901
+      },
+      "1995": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 106,
+        "source_unit_characters": 311656
+      },
+      "1996": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 94,
+        "source_unit_characters": 288070
+      },
+      "1997": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 90,
+        "source_unit_characters": 279870
+      },
+      "1998": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 97,
+        "source_unit_characters": 311343
+      },
+      "1999": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 91,
+        "source_unit_characters": 286942
+      },
+      "2000": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 81,
+        "source_unit_characters": 256129
+      },
+      "2001": {
+        "selected_versions": 9,
+        "units": 9,
+        "chunks": 96,
+        "source_unit_characters": 310641
+      },
+      "2002": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 76,
+        "source_unit_characters": 241087
+      },
+      "2003": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 76,
+        "source_unit_characters": 238776
+      },
+      "2004": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 82,
+        "source_unit_characters": 244657
+      },
+      "2005": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 77,
+        "source_unit_characters": 224024
+      },
+      "2006": {
+        "selected_versions": 8,
+        "units": 8,
+        "chunks": 81,
+        "source_unit_characters": 233221
+      },
+      "2007": {
+        "selected_versions": 11,
+        "units": 41,
+        "chunks": 148,
+        "source_unit_characters": 394413
+      },
+      "2008": {
+        "selected_versions": 20,
+        "units": 150,
+        "chunks": 353,
+        "source_unit_characters": 910132
+      },
+      "2009": {
+        "selected_versions": 20,
+        "units": 177,
+        "chunks": 427,
+        "source_unit_characters": 1071259
+      },
+      "2010": {
+        "selected_versions": 20,
+        "units": 156,
+        "chunks": 394,
+        "source_unit_characters": 1016999
+      },
+      "2011": {
+        "selected_versions": 20,
+        "units": 165,
+        "chunks": 423,
+        "source_unit_characters": 1083472
+      },
+      "2012": {
+        "selected_versions": 21,
+        "units": 222,
+        "chunks": 484,
+        "source_unit_characters": 1196635
+      },
+      "2013": {
+        "selected_versions": 20,
+        "units": 198,
+        "chunks": 454,
+        "source_unit_characters": 1130366
+      },
+      "2014": {
+        "selected_versions": 20,
+        "units": 202,
+        "chunks": 472,
+        "source_unit_characters": 1178591
+      },
+      "2015": {
+        "selected_versions": 20,
+        "units": 207,
+        "chunks": 486,
+        "source_unit_characters": 1209223
+      },
+      "2016": {
+        "selected_versions": 20,
+        "units": 215,
+        "chunks": 511,
+        "source_unit_characters": 1295178
+      },
+      "2017": {
+        "selected_versions": 20,
+        "units": 232,
+        "chunks": 517,
+        "source_unit_characters": 1305013
+      },
+      "2018": {
+        "selected_versions": 20,
+        "units": 224,
+        "chunks": 491,
+        "source_unit_characters": 1244308
+      },
+      "2019": {
+        "selected_versions": 20,
+        "units": 249,
+        "chunks": 574,
+        "source_unit_characters": 1473685
+      },
+      "2020": {
+        "selected_versions": 18,
+        "units": 169,
+        "chunks": 456,
+        "source_unit_characters": 1211853
+      },
+      "2021": {
+        "selected_versions": 16,
+        "units": 121,
+        "chunks": 378,
+        "source_unit_characters": 1058677
+      },
+      "2022": {
+        "selected_versions": 16,
+        "units": 112,
+        "chunks": 347,
+        "source_unit_characters": 966791
+      },
+      "2023": {
+        "selected_versions": 16,
+        "units": 95,
+        "chunks": 290,
+        "source_unit_characters": 812608
+      },
+      "2024": {
+        "selected_versions": 16,
+        "units": 117,
+        "chunks": 270,
+        "source_unit_characters": 770074
+      },
+      "2025": {
+        "selected_versions": 16,
+        "units": 158,
+        "chunks": 283,
+        "source_unit_characters": 811625
+      },
+      "2026": {
+        "selected_versions": 12,
+        "units": 104,
+        "chunks": 179,
+        "source_unit_characters": 493962
+      }
+    },
+    "format": {
+      "html": {
+        "selected_versions": 322,
+        "units": 818,
+        "chunks": 4904,
+        "source_unit_characters": 13853524
+      },
+      "pdf": {
+        "selected_versions": 200,
+        "units": 3200,
+        "chunks": 4886,
+        "source_unit_characters": 11676876
+      }
+    },
+    "profile": {
+      "2f13e9aba73aa95ced375a81ae463bd5feb91d13afea73f5d3c1fd3c2ebf4c6f": {
+        "selected_versions": 471,
+        "units": 3857,
+        "chunks": 9027,
+        "source_unit_characters": 23497474
+      },
+      "6229ef52c5926aedc8ada1f838701f919e5308ae117b5b7aa0fc0714582b381b": {
+        "selected_versions": 51,
+        "units": 161,
+        "chunks": 763,
+        "source_unit_characters": 2032926
+      }
+    },
+    "issue": {
+      "image_content": {
+        "selected_versions": 141,
+        "units": 1061,
+        "chunks": 1253,
+        "source_unit_characters": 2213596
+      },
+      "replacement_character": {
+        "selected_versions": 26,
+        "units": 26,
+        "chunks": 267,
+        "source_unit_characters": 810858
+      }
+    }
+  },
+  "source_tables_unchanged": {
+    "bronze_capture_objects": "9299e19c1ebcc2fd86b938bc5803bd25b857545eb47ee5c8cb04b3bdf7a9ecd3",
+    "bronze_captures": "9a2cd3110eab1b7addd3126a66554c8242134e6fd8c2806ab2ec182ce7d71471",
+    "bronze_dependencies": "3d073d6e56a09946c725f06cd8997394f5063e0f751f565d22c54efd3d212249",
+    "bronze_dependency_checks": "7ee805d505496b2344d6da73f888958845c1119e9bf1f3e00a253717a477e909",
+    "bronze_dependency_state": "dec5f4b7fdc30571d085b59e769266e4230fdbc04afd7839f419b26994aa8136",
+    "bronze_document_links": "9e1de20783b177863f8ce7d549d8ec7e6993609d820cab7d15e12abf5a965b3e",
+    "bronze_inventory_discovery": "76aa714e8f91be3204576746eebe02b1ad98f1a89e28da00bf0e5eb905bd5531",
+    "bronze_inventory_links": "7886e320097c7596b96793281b8a45aa9e95134c706f9a5755533b66c1fe1a69",
+    "bronze_object_state": "cc21fa1a55d8066e8b45f62d1317ee74431d8c1af7edae4b4e8a7784ee37e102",
+    "bronze_objects": "27a8a524c6384c04b81b58c76141c9a3977654e48d8889fc5081694b7d313ca2",
+    "bronze_schema_migrations": "08db62f7139c1dfb6261a2d040552480b98d768e9db987ba0a35376ff2d633b9",
+    "catalog_state": "67ce78b6fcefcb1c2ef32e06998eea736c53b8c33deeec3b6c72c89cb2ffdb88",
+    "chunk_catalogs": "18a51294d4ccae0a4f9e80f41903d239491cb4d70429fdf1687b026628512662",
+    "chunk_sets": "1fbc547ae3f6ce6d5f04eac3b2a6058c1bc8c7603f2c2b14f7ffc30971cd0cfd",
+    "chunk_state": "0d6f0dff2c48a6d3551951aefa1769710817ea8c7fe682b1033fdb94fadeb833",
+    "chunks": "1dbb4662231e023892a48d81706d85fb5f803c11677486b1770904ea4320d464",
+    "inventory_documents": "3141b62c5d6247f5b5855b274106dbc1d645c803c3aceb94fe83496b81d97f68",
+    "inventory_entries": "040da136573e0de6f3a7e00d2361178e82d687e97fbc730a977332d35fb271fd",
+    "inventory_meetings": "c74532c3f14ae673f38bae58f474671fa5f1b0cfba7731bfd6be4e9e549817f7",
+    "inventory_pages": "79bdf1e81ea9025bac1907b5cdcfa87285e3269f017bd499ed3ed7d7a7c904c1",
+    "inventory_runs": "4fa1dc6fcafa78409fc7f2e4d444d8803da6478ff5ba4df80105c276a32616a1",
+    "operation_records": "f1e52ea253b1b2dc7c59a731abd8fb0e5d23f4e375bb4eb29db266ef65493246",
+    "operation_runs": "7cdfa0c422370a58a37a4c7c7f3f58fd47e94286a4311691f89ee964ccb89200",
+    "operation_state": "cd37b084a91bb256f51fa7e365f0f6f0c95609cb344e42bf7f1a60c1530c237f",
+    "text_capture_links": "6f880c8274f1790d74a95412eb278b98216cda300ee0aaced29eda7c9e299cac",
+    "text_catalogs": "af6fd21e5286292023ab798caeb0bbe97196ac1477abe526db4a1d7a6c5464cd",
+    "text_extractions": "a829a0cbaa3e80dee6b2aa62e6c6f64398b05f0dbe37e89c51f28ddf0c85b24d",
+    "text_state": "89928aa8ccce57d9268adca12449302bdd2ad84080206250675ba308010ee3a5",
+    "text_units": "01377f1af7235c2b16b9f6d8df8c088a1a3dc5b7a2ebdd678fae214e615a1fae"
+  },
+  "canonical_files_unchanged": 10207,
+  "http_extraction_and_chunking_disabled": true,
+  "request_performed": false,
+  "text_or_ocr_accuracy_certified": false,
+  "validation": {
+    "offline_regression": {
+      "passed": 1100,
+      "optional_skips": 88
+    },
+    "focused_with_isolated_postgres": {
+      "passed": 27
+    },
+    "script_report_matches_adapter": true,
+    "ruff_and_build_passed": true
+  },
+  "source_files_sha256": {
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality.py": "8674aeed8a4b5655d4dd80020846a7b7cf98800e5fe567037fa4ef2fcbed659f",
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/quality.py": "496fa4adfa096df43b9ebc1ec4eac90f751210a4e8be248d8fedeb99e54666cb",
+    "src/market_data_pipeline/pipelines/fomc_meeting_minutes/cli.py": "b93f58cef2ffa2da5a9b3c609741a42e7643dffe8d63c08eec371fba84a29c01"
+  }
+}

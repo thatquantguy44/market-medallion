@@ -31,9 +31,14 @@ unavailable/not-listed claims and text/OCR review stay explicit. The latest
 listed 2026 meeting is 2026-09-16.
 The existing [Dagster job](docs/deployment/fomc_runbook.md#dagster) and
 [`scripts/run_fomc.sh`](scripts/run_fomc.sh) share the bounded runner; other users
-supply their own config. Next FOMC work: extraction-quality review and deliberate
-recent-year refreshes for new releases/corrections. Acquisition schedules stay
-stopped; NAAIM remains paused and FINRA stays at SSV-T05.
+supply their own config. The three [quality slices](specs/spec017/quality_contract.md)
+are implemented on `feat/fomc-text-quality` in [PR #19](https://github.com/thatquantguy44/market-medallion/pull/19):
+offline reporting, an eight-case source-page review and an evidence-bound
+remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
+records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
+stay explicit, with no flags cleared or derivative publication. Recent-year
+refreshes cover new releases/corrections. Acquisition schedules stay stopped;
+NAAIM remains paused and FINRA stays at SSV-T05.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →

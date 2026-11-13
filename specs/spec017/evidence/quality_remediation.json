@@ -1,0 +1,513 @@
+{
+  "schema_id": "fomc-quality-remediation-acceptance/1",
+  "verified_at": "2026-11-13T11:56:54.603492+00:00",
+  "assessment": {
+    "assessment_id": "0447b29fe5ccc8fb7db124f083916946e4e57e930e9e5a390b14127ddc3b3766",
+    "confirmed_native_defect_case_ids": [],
+    "deferred_boundaries": [],
+    "derivative_publication_performed": false,
+    "eligibility_changed": false,
+    "operational_restore_replay": "not_required_no_derivative_publication",
+    "plan_id": "34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda",
+    "publication_required": false,
+    "report_id": "4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001",
+    "request_performed": false,
+    "review_check_id": "13771910459fad0a108bc37e9ee0e4bb2d9fdcf98bc14a67da66c0367527db78",
+    "review_ids": [
+      "01285368f2722a0e07c0a2bbd2b0e9d33fbdebd87fdf3362fe28e762164c9b4b",
+      "1e26be41bb314f7f0c5bb69d032e4b5fac7d58ce2779ed1742de1ecf500351ac",
+      "32fb3dff3763d8a6f07647b5ccba48fd27c56105267b969cfceba1673f19e90c",
+      "676486aa67bd9f57b881675aca5ee014725b965547a2cfcb2504a5d085cd56d8",
+      "732b9565eed3493cebf6716116f35b72a8a382e233eb69d4740fb4b760b33714",
+      "8d91c529d9e6258c5cb1db47f4fc33c04ea618b5bfca688c3acf2baf6a618e83",
+      "ad56cc7d6aeef20c150ba21cfb0b2777a6e7a70c8fabbf1ff5088370c7b0da7d",
+      "d12852ee4695a01e1f393326b60cfee59d36601dc05b13dbc1fc08853998143d"
+    ],
+    "reviewed_cases": 8,
+    "schema_id": "fomc-quality-remediation/1",
+    "status": "no_confirmed_native_defect",
+    "uncovered_strata": [],
+    "unresolved_case_ids": [
+      "03a0f2a779f2db1d3c4f720725d7d0d881aa8863e62b27caa7806027540626ab",
+      "160a329eeee8baf5ed04c7b316f451981eff8f3d0ae53db1d52b9140e1bbf3cb",
+      "25324efabb0d84b42c1f7ce0e77f72a2e40c91268e41bdefd086a36b29c43170"
+    ],
+    "unselected_flagged_unit_count": 1079,
+    "whole_corpus_quality_certified": false
+  },
+  "source_replacement_counts": [
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20070321.htm",
+      "source_sha256": "5baa124b2b8d7bd848c9c4ecfa8156e402a04b8fc44706fbc7751efa1bc3353e",
+      "extraction_id": "a2d6e466808dbfcff16ccd07734b60f51de67410030a08f09d8b02cc62706c83",
+      "source_utf8_replacement_literals": 25,
+      "extracted_replacement_characters": 25
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20031028.htm",
+      "source_sha256": "26e668bd037cd8caabc057a06341854fba313ac28c73247a128d93c2a3c0ef3d",
+      "extraction_id": "5d064f0fb9e4f60360fd43e40413e468b1ceced4b7bfad02d025e0ddb89f6cde",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20070509.htm",
+      "source_sha256": "c6fa0babec90ac171a73d6af1cf8d6c3b20a28ab67bed1d6c3666c79e558ea90",
+      "extraction_id": "19f1ed719fca1072f907f59d5e37565c40251c4f4ff568d015e839d8bee77b41",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20040921.htm",
+      "source_sha256": "61f431c60da4658902f9456382c93692419901ea051c771e203d502d4d70d7ab",
+      "extraction_id": "3283814132b31a002eb521eaf56e0238e707253802bed24a7475dff7cb94a9d2",
+      "source_utf8_replacement_literals": 5,
+      "extracted_replacement_characters": 5
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20041214.htm",
+      "source_sha256": "998345f3a5b1e3e43db7a7c9fe607332e64dcdf78208d42fc14c6fe5b61a24d1",
+      "extraction_id": "5c2ca0bd0a88eb111e80d2aeaefacd6289fabbe78979b2d485db3a206082ec1c",
+      "source_utf8_replacement_literals": 17,
+      "extracted_replacement_characters": 17
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/19990824.htm",
+      "source_sha256": "5f3f433d6bf08c818885c1553a871737199874423effe0d107d22e132c6c874e",
+      "extraction_id": "6f9132c648a75ca35338c82398e0c7a828e041c64c4035e6cacf2aa3187241e4",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20000202.htm",
+      "source_sha256": "45fdb7c1c25a7da8fc024bca7f6dedd68c576b42d85550f87c014e18719ee9f6",
+      "extraction_id": "ad37e68e0db6e2d7111f80df01d2df38a122419af603641eac45d991ebc81fff",
+      "source_utf8_replacement_literals": 2,
+      "extracted_replacement_characters": 2
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20060510.htm",
+      "source_sha256": "cc4f388460fc26f3784d5996196f648ec2cf164c744a78aef464d3ab8a1a0257",
+      "extraction_id": "06ec0a447fe6646f472340ff38b1c707dbca4ef89cb780854d9d4b7af9c7b1eb",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20060808.htm",
+      "source_sha256": "d03548bbfdd7386825c39e69ebfc368cade98ac7ddb63ee1f916be97ae18392e",
+      "extraction_id": "e913a38d7f2926c98ed6e3f0436482369ee085c05b78121feff437cd6c35e94f",
+      "source_utf8_replacement_literals": 11,
+      "extracted_replacement_characters": 11
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/19990629.htm",
+      "source_sha256": "8c18685d1d53c15587178ee69bc829d0a001d32da13d2f23464dff8e18396e8a",
+      "extraction_id": "ccfc56c8aa5fe4bf606b6c4aba6009ac01bb1734a52a9ecc5a1eaaeda1507398",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20000516.htm",
+      "source_sha256": "499a52e74a096d134ecc0c366e49146bc060e620e60cc8101b41462dbef583d1",
+      "extraction_id": "e8f028c741e5fb01d0954e400542bf53073d4cb0839f965a2eb11da7c52deaad",
+      "source_utf8_replacement_literals": 2,
+      "extracted_replacement_characters": 2
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20041110.htm",
+      "source_sha256": "47131d6ea929f98b7b7ef6570415fbd09e6055ac54766ce9d818af2110f87cb0",
+      "extraction_id": "a9f123daa5c632ea341a6349cf44e769f9fd72dd71a67b3a3a0f0ccaf8ea5be3",
+      "source_utf8_replacement_literals": 12,
+      "extracted_replacement_characters": 12
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20060131.htm",
+      "source_sha256": "1b55019639a3f789f6ae27bafdd2a1155dace6f564c5a422cae922d5ee2b3dea",
+      "extraction_id": "27a21a3155916dd1eb7af6ba653a5d26d1537ba7334a457d8a0e5d7f3010ea6f",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20011002.htm",
+      "source_sha256": "d9c14f49e131af2de4d56a28685b9794a72923edc4c92329232be5989c5b831e",
+      "extraction_id": "f47092feb11f3398811c99caf0ce8a3fb95520181a0bd8626917221103e80e38",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20050809.htm",
+      "source_sha256": "a462157ca0dac3ebe284eac173a11e3163193ffa60b11452e81565d2954250d6",
+      "extraction_id": "924e3a5b6735fd4802cc01983107e93f88cb84d22ed69f7c381afc5e6416fe5e",
+      "source_utf8_replacement_literals": 3,
+      "extracted_replacement_characters": 3
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20050202.htm",
+      "source_sha256": "3a9e924ef8e57259a86263f1d1795a45446aebe85d3f2f36ced0924cacb78eff",
+      "extraction_id": "891a99bf57812c91d47171c6ff660babe2ae3b230c073d650be7caf9b321ee82",
+      "source_utf8_replacement_literals": 10,
+      "extracted_replacement_characters": 10
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20030625.htm",
+      "source_sha256": "164fbc7ff861126b2cc31ee19011bb65897d731ca70ba6b58b50c32a23cd6ab9",
+      "extraction_id": "b6e44de51129dc914ca07cde370d695638d09abfff30fed7bd063fd02fb3ab7b",
+      "source_utf8_replacement_literals": 5,
+      "extracted_replacement_characters": 5
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20051101.htm",
+      "source_sha256": "638448cd352b8ba226043800b2f50c8fbe28f445c0f2df6f853f8ba0849cc9ad",
+      "extraction_id": "a544ea6bf6312ae2f9c6df7187269840c859854918568e7ddced1a008a4415ac",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/19991221.htm",
+      "source_sha256": "be7e11601fa75bea9670778022de9fab904821451dcdd981d85bd2c8df4700e5",
+      "extraction_id": "f6c448f5f8f84173b201e47b5edd77136ff83873c7c2257ab957bb6f2bc18514",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20050322.htm",
+      "source_sha256": "2746dbf4e611a89827148bf1f0394442220149bb31a3d860fc97b56b6057fb00",
+      "extraction_id": "6a7a2683c003a9108dc619d269d73bbdd2c0bfac4258e389fe4e45ce0341de34",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20060328.htm",
+      "source_sha256": "11cdcfa929f8ceff1eb5eb0fffd4ac404ee2be80eb298911004fefaa0625c449",
+      "extraction_id": "6a7da42fc87cfe1ab9f4e8786eda7de8032f3c9e0adbea894fb7eae9e2f0d6cd",
+      "source_utf8_replacement_literals": 4,
+      "extracted_replacement_characters": 4
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20000321.htm",
+      "source_sha256": "08e2de5a05b16defc69cadf9dbc28ac4a3ecb5381d739f298d76cb421a493fab",
+      "extraction_id": "5634144fa8be9d1a89b708dc6aea444aaa7fcc8ad3c13013dad7fa4dc5dc2f90",
+      "source_utf8_replacement_literals": 2,
+      "extracted_replacement_characters": 2
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/19991005.htm",
+      "source_sha256": "293ac124aa54df15b05815d4eecb69324fdfa1932d1b9628e682adb0b5fed536",
+      "extraction_id": "742ed3dd8b687f0d04a927959596fe762aa20b98a59a31d9918637a17ac17742",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20010821.htm",
+      "source_sha256": "1e0c1d83e333d48063a27b0f697ddbb44594d49ae1ef990b1183cca2b28e86ba",
+      "extraction_id": "fa222efd27e3a685d8ecd97b31ad4b1ee082056a1497757b060239b3ce35b1c1",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20000628.htm",
+      "source_sha256": "126510fa423a7ecc8e8c45d54dbc4040355722cff0241a6bcc542a5845318c94",
+      "extraction_id": "dd3a0583822694678155516840d26c543f44aa1892acf3c8cee9ed12d46bcb7f",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    },
+    {
+      "source_url": "https://www.federalreserve.gov/fomc/minutes/20010515.htm",
+      "source_sha256": "c10b1d3d318a14b15e5f63fcdbb282b68936a4a32d825ebe7993ed38ce6d8dfb",
+      "extraction_id": "64dcdd43d208fbde38ec86191698745b08bea21d01c4237290b2ab21508f326d",
+      "source_utf8_replacement_literals": 1,
+      "extracted_replacement_characters": 1
+    }
+  ],
+  "unchanged_since_restore_verified_backfill_checkpoint": {
+    "source_tables": {
+      "bronze_capture_objects": {
+        "rows": 1081,
+        "sha256": "35e17df1a74007e6190535eba65041a563739a86132741b9475902c97a81edb3"
+      },
+      "bronze_captures": {
+        "rows": 1081,
+        "sha256": "3495bf1858516c635aff83172dd4ca34c2443bbbf43ee7cfd11e7e81f0f959ee"
+      },
+      "bronze_dependencies": {
+        "rows": 446,
+        "sha256": "2bb3d515e03802e21579dd7c3d731b1058c9d108bee7070d9a29e3c77c60f177"
+      },
+      "bronze_dependency_checks": {
+        "rows": 322,
+        "sha256": "48572518b5820c7b099cfef519cbd1de6d356544c2ad46e7e3b1b7e112a8e500"
+      },
+      "bronze_dependency_state": {
+        "rows": 1,
+        "sha256": "d31f68b3a084f5cea7949f7ea6e6c2a5e2c64e43ac147d017859f148821dc382"
+      },
+      "bronze_document_links": {
+        "rows": 6778,
+        "sha256": "39695f2447f51efa7924f9c1171db5343d4f4233354d12113f3be57267ebef03"
+      },
+      "bronze_inventory_discovery": {
+        "rows": 30,
+        "sha256": "0af69b4879e88967e322f85cdd7376d8db5f8574d31fe255e1af5196e6c9428d"
+      },
+      "bronze_inventory_links": {
+        "rows": 990,
+        "sha256": "7b402309f0653da57a7b9583cb866474add6d5dcc931df61885dbad992c3c938"
+      },
+      "bronze_object_state": {
+        "rows": 1,
+        "sha256": "b6643d921e622a3da39228f23d0e8df7006374afe96816d7d615cebb6e1ace22"
+      },
+      "bronze_objects": {
+        "rows": 1081,
+        "sha256": "ab9029b27be2a90af7ee6da60ed094a405b5734c68dcf987874e426a9fac8d41"
+      },
+      "bronze_schema_migrations": {
+        "rows": 3,
+        "sha256": "9d7b0c04433a9ce0a2bf3f8997ea506fc969ce3dfe20b9c0c96cdb0d84289374"
+      },
+      "catalog_state": {
+        "rows": 1,
+        "sha256": "552b31345e9fff802943da624d1069c0ac268a00c1a431b75b518c82805d39ca"
+      },
+      "chunk_catalogs": {
+        "rows": 30,
+        "sha256": "53959abf4d1c1e2b2ce1b15f3e17662525a274461e8511a0216b9a4efbf25d1f"
+      },
+      "chunk_sets": {
+        "rows": 522,
+        "sha256": "d004fc272082e57bcc735065686b9f6d008bd1b86736e0af8e6f2b043bb4cb8b"
+      },
+      "chunk_state": {
+        "rows": 1,
+        "sha256": "91b823fb6da8220a2827c9e4dad476beab42d5aae299ba9a50e66a8ceb842c77"
+      },
+      "chunks": {
+        "rows": 9790,
+        "sha256": "063bcbc9e92d520995122f884070ad43c59bb9144c90cfd30139fc589412ba3c"
+      },
+      "inventory_documents": {
+        "rows": 14100,
+        "sha256": "7ed36621a65f50eec7e55f6e4f1ed356c6add219dc68b63d2bacde94f12e2c69"
+      },
+      "inventory_entries": {
+        "rows": 16822,
+        "sha256": "d9e558d307942036e35e49be936a05a37fb72d8d8c87e4b203c84cc83d4e7d2a"
+      },
+      "inventory_meetings": {
+        "rows": 11122,
+        "sha256": "878280b026315dcbb964c56bb1190ce1041960fd67058032f3ed44f62c9a991c"
+      },
+      "inventory_pages": {
+        "rows": 990,
+        "sha256": "c531433c1251fefc8cadf209198eb98518d974aa52cc26b5630419b11eecbf86"
+      },
+      "inventory_runs": {
+        "rows": 30,
+        "sha256": "fbafa891512d0e4f7fa7c415cb51ee5d8c14c2cb8b33cec192a7bce8d2dc66d6"
+      },
+      "operation_records": {
+        "rows": 2565,
+        "sha256": "3d393b161922462523aa0c226e2a9cbd8fb9d681bf10fc58aa3c4c533f10282c"
+      },
+      "operation_runs": {
+        "rows": 39,
+        "sha256": "b9b2b446d4d81507d17bdbce9181f115f6ddc602fec68df2c401784f18c99bd4"
+      },
+      "operation_state": {
+        "rows": 1,
+        "sha256": "4f3c3ef67dcfcec7fc99f578288702e5314b9d0bf4e87d4ea85de41818cf1e5b"
+      },
+      "text_capture_links": {
+        "rows": 522,
+        "sha256": "888c884de2f1777a878e276ab9f6ce01f817e036ee99117d37e4d27ea56fcec4"
+      },
+      "text_catalogs": {
+        "rows": 30,
+        "sha256": "8049977ce3bae7575d6f623b13c9f6301f81375c73436ac7722c92e1b900bdde"
+      },
+      "text_extractions": {
+        "rows": 522,
+        "sha256": "6aa36a7471ef161ffc0a433878e16acc4ecb4114884c878eb6f04517d244dd4c"
+      },
+      "text_state": {
+        "rows": 1,
+        "sha256": "22ef856c301e5c994cb45d58bfcece802254d744fa0bab5a520c276dae45cbf8"
+      },
+      "text_units": {
+        "rows": 4018,
+        "sha256": "509e560a1147aebc1891047f13e7b3af93f7f073b7793e3a125fd6c5780cd2d6"
+      }
+    },
+    "canonical_files": 10207,
+    "all_capture_receipts_bytes_and_clocks": 1081,
+    "publication_pointers": {
+      "inventory": "8412cb07-f4c8-4531-bed2-30fc1133b6bf",
+      "text": "ec2aa8964537b58a03395c4e8f662f9a42ee543681a050a9dee48b38503fd38c",
+      "chunk": "fb409de85ee39c332c4be9671d8673acb87ff17c19e02da0f0f1ad2b46431ca0"
+    },
+    "schema_and_filesystem_backup_sha256_reconfirmed": true,
+    "canonical_files_equal_retained_restored_archive": true,
+    "original_extractor_module_hashes_unchanged": {
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/native.py": "c5b7b3762d653fdb6bf4b8b39851cc58e541c16572e55b9dd3e1e80388fcec1e",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/dependencies.py": "0871b719d5297f03b1931afcb0d0429dc8891d21218933fb81f62eb1687765e4",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/text.py": "6558fb2d8deddbc0cf72737e7230a39e63401cc56891ffbd60b7045848edfaab",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/assets.py": "c24d85e91dfbbfc64212e6735ce2d31fde0977554c705e321c993abac805321a",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/manifest.py": "14e30613989b65c4ee10ef761eee3934b07da678e3250e868a21727de8caff43",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/batch.py": "06cc180211c25d82993ef6069991f8f1c6aa1a40986e37f21fe2b084a07dc8bc",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/dependencies.py": "73c5b2a777fe86a28e45119ba4ce5d1e5b012d6c5f8ea8b4f17afd10e46c117d"
+    }
+  },
+  "final_health": {
+    "schema_id": "fomc-health/1",
+    "status": "healthy",
+    "issues": [],
+    "pointers": {
+      "inventory": "8412cb07-f4c8-4531-bed2-30fc1133b6bf",
+      "text": "ec2aa8964537b58a03395c4e8f662f9a42ee543681a050a9dee48b38503fd38c",
+      "chunk": "fb409de85ee39c332c4be9671d8673acb87ff17c19e02da0f0f1ad2b46431ca0"
+    },
+    "last_operation_status": "completed",
+    "last_operation_id": "107ef72e-879f-47ab-bb2e-7e8cd4ef6c3c",
+    "last_operation_age_hours": 1.5660052625,
+    "inventory_meetings": 371,
+    "inventory_document_references": 470,
+    "source_gap_outcomes": {
+      "review_required": 167,
+      "not_listed": 49,
+      "unavailable": 1
+    },
+    "chunk_coverage": {
+      "sets": 522,
+      "chunks": 9790,
+      "empty_units": 0,
+      "review_chunks": 1520,
+      "eligible_chunks": 8270,
+      "review_characters": 3024454,
+      "covered_characters": 25530400,
+      "eligible_characters": 22505946,
+      "separator_characters": 6992,
+      "source_unit_characters": 25530400,
+      "complete_selected_unit_coverage": true
+    },
+    "request_performed": false,
+    "full_history_complete": false,
+    "text_or_ocr_accuracy_certified": false
+  },
+  "runtime_automation": [
+    {
+      "name": "aaii_thursday_local_import",
+      "type": "SCHEDULE",
+      "status": "STOPPED"
+    },
+    {
+      "name": "aaii_weekly_live",
+      "type": "SCHEDULE",
+      "status": "STOPPED"
+    },
+    {
+      "name": "fomc_meeting_minutes_weekday_refresh",
+      "type": "SCHEDULE",
+      "status": "STOPPED"
+    },
+    {
+      "name": "naaim_delayed_daily_live",
+      "type": "SCHEDULE",
+      "status": "STOPPED"
+    },
+    {
+      "name": "reg_sho_threshold_lists_daily_live",
+      "type": "SCHEDULE",
+      "status": "STOPPED"
+    },
+    {
+      "name": "sec_fails_to_deliver_daily_live",
+      "type": "SCHEDULE",
+      "status": "STOPPED"
+    },
+    {
+      "name": "aaii_slack_failure",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "aaii_slack_success",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "fomc_meeting_minutes_slack_failure",
+      "type": "SENSOR",
+      "status": "RUNNING"
+    },
+    {
+      "name": "fomc_meeting_minutes_slack_success",
+      "type": "SENSOR",
+      "status": "RUNNING"
+    },
+    {
+      "name": "naaim_exposure_public_delayed_slack_failure",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "naaim_exposure_public_delayed_slack_success",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "reg_sho_thresholds_slack_failure",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "reg_sho_thresholds_slack_success",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "sec_fails_to_deliver_slack_failure",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    },
+    {
+      "name": "sec_fails_to_deliver_slack_success",
+      "type": "SENSOR",
+      "status": "STOPPED"
+    }
+  ],
+  "new_restore_performed": false,
+  "new_replay_performed": false,
+  "not_required_reason": "No extraction/profile/schema/catalog/eligibility change or derivative publication; exact state matches the previous full restore/replay checkpoint.",
+  "validation": {
+    "offline_regression": {
+      "passed": 1120,
+      "optional_skips": 92
+    },
+    "fomc_with_isolated_postgres": {
+      "passed": 395
+    },
+    "focused_with_isolated_postgres": {
+      "passed": 51
+    },
+    "actual_remediation_script_passed": true,
+    "http_and_transforms_disabled": true,
+    "source_files_sha256": {
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality.py": "8674aeed8a4b5655d4dd80020846a7b7cf98800e5fe567037fa4ef2fcbed659f",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality_review.py": "89a80d1274b7236a6a52df347bcd00b8bbb5254a3aaefbdb284051b0db58535e",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality_preview.py": "58264880e6eb5f026c541b529e57f7f798bc0b4ee3379612d036cfddcb5054f1",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/data/quality_remediation.py": "875176c65eb9fb922ed427bd89d7e8cd384dceba8d8afe35f815cfbdd358146f",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/quality.py": "99d1d5cf35911eea34b279a8f318207b84102e616496920a95ec57ecc6f5b369",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/io/quality_review.py": "5ad27a001863134abe25293ac0c2310d027dbcf41730d43dd9c731d32f04575c",
+      "src/market_data_pipeline/pipelines/fomc_meeting_minutes/cli.py": "f65221f7e4a12a33e93307842c5a04496f267fca3eb36957be7c52c06ea5662d"
+    },
+    "built_artifact_sha256": {
+      "market_medallion-0.1.0-py3-none-any.whl": "bbb8636f4fcff3c175da897cddeefe0555d656d769d0c79db2f5bf1ba6ad960c",
+      "market_medallion-0.1.0.tar.gz": "d6178bd1a86796b3169e98097c2ed10b1c918371c4d44a72d67779768bd44827"
+    },
+    "wheel_sdist_source_bytes_match": true,
+    "local_data_and_secrets_absent": true
+  },
+  "whole_corpus_quality_certified": false,
+  "eligibility_changed": false,
+  "request_performed": false
+}
