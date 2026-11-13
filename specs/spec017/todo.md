@@ -4,7 +4,10 @@ Updated: 2026-11-13. T01–T05 merged through PR #11, T06 through PR #12,
 the portable script/1991 through PR #13 and 1992–1994 through PR #14. The
 Dagster job, port configuration and per-pipeline Slack status alerts merged
 through PRs #15–#17. Current continuation is the accepted 1995–1996 batch on
-`feat/fomc-1995-1996-backfill`; see its contract, evidence and next scope below.
+`feat/fomc-1995-1996-backfill` in
+[PR #18](https://github.com/thatquantguy44/market-medallion/pull/18); track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks) and
+current review threads. See its contract, evidence and next scope below.
 No acquisition schedule or embedding service was selected.
 
 ## Current bounded continuation

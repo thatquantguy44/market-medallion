@@ -22,7 +22,11 @@ new live schedules default stopped.
 ## 2026-11-13 current pickup — bounded FOMC 1995–1996 accepted
 
 The user authorized the next historical batch after merged PR #17. Current branch:
-`feat/fomc-1995-1996-backfill`, from main `f3925f8`. Read
+`feat/fomc-1995-1996-backfill`, from main `f3925f8`, in
+[PR #18](https://github.com/thatquantguy44/market-medallion/pull/18). Track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks) and
+[review threads](https://github.com/thatquantguy44/market-medallion/pull/18/files)
+against the current head before merging; no merge or acquisition activation is implied. Read
 [acceptance](../../specs/spec017/1995_1996_acceptance.md),
 [contract](../../specs/spec017/1995_1996_contract.md),
 [evidence](../../specs/spec017/evidence/1995_1996_dagster_backfill.json) and the
