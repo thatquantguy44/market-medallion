@@ -1,5 +1,5 @@
 # Optional: copy to alerts.local.yml, supply the secret in the daemon environment,
-# enable Slack below and start naaim_exposure_public_delayed_slack_failure in Dagster.
+# enable the desired statuses below and start their matching sensors in Dagster.
 slack:
   enabled: false
   on_failure: true

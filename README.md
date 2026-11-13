@@ -213,9 +213,10 @@ See [the orchestration decision](docs/development/adr001-dagster.md). For a manu
 bounded live job, use [the live run config](resources/dagster-aaii-live.yml) and
 inject the password into the worker environment.
 
-Each implemented pipeline also has optional [Slack failure alerts](docs/deployment/slack_alerts.md)
+Each implemented pipeline also has optional [Slack success/failure alerts](docs/deployment/slack_alerts.md)
 with its own YAML under `config/<pipeline_name>/`. Defaults are disabled and the
-alert sensors are stopped; webhook secrets stay in environment variables.
+alert sensors default stopped; `slack.on_success`/`slack.on_failure` select statuses,
+and webhook secrets stay in environment variables.
 
 ## Operations, history and recovery
 

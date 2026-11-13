@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-12.
+Last updated: 2026-11-13.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -19,7 +19,35 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — optional pipeline-owned Slack alerts
+## 2026-11-13 current pickup — configurable success and failure alerts
+
+The user requested success alerts through configuration and a real rerun.
+`slack.on_success` defaults false; `slack.on_failure` defaults true, preserving
+existing YAML behavior. Each pipeline now owns two stopped-by-default status
+sensors. FOMC's ignored alert YAML enables both flags, and both FOMC sensors are
+**RUNNING**. All six schedules and the other eight alert sensors remain **STOPPED**.
+The existing failure sensor name/cursor is retained. Current work stays on
+`feat/pipeline-slack-alerts` in [PR #17](https://github.com/thatquantguy44/market-medallion/pull/17).
+
+Live run `cfa76508-63c2-43fa-bf05-52a0cddea51b` succeeded for the same manual
+1990 backfill: all 16 originals reused, three data GETs plus two probes, 350,095
+bytes, coherent promotion and healthy archive readback. Success-sensor tick 55
+was SUCCESS and logged acknowledgement-backed `slack_alert_delivered` for that
+exact run with `status=success`. Local evidence is ignored
+`data/dagster/fomc-success-alert-rerun.json`. The prior live rerun
+`1187ee91-bfd8-4a8e-8b71-0434648f14da` also succeeded before success alerts
+were enabled. Historical coverage remains bounded through the accepted 1990–1994
+batches; chunks remain 993 (368 eligible, 625 review-flagged). Next historical
+batch remains 1995–1996. NAAIM acquisition remains paused.
+
+Verification: **1,050 regression tests passed, 80 optional skips; 313 FOMC checks
+passed with isolated PostgreSQL enabled**. Status flag gates, defaults, labels,
+real success event/cursor behavior and legacy failure routing pass. See
+[Spec018](../../specs/spec018/README.md) and the
+[updated runbook](../deployment/slack_alerts.md). Secrets stay ignored; no
+acquisition schedule, dependency, storage schema or provider semantic was changed.
+
+## 2026-11-12 accepted checkpoint — optional pipeline-owned Slack alerts
 
 **Subsequent operational verification:** the user configured the FOMC webhook and
 requested a real job-driven alert. The manual local Dagster UI/daemon is running

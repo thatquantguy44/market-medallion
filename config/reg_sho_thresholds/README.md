@@ -86,4 +86,5 @@ acceptance.
 ignored `alerts.local.yml` when needed; see the
 [Slack setup/runbook](../../docs/deployment/slack_alerts.md). Absent or disabled
 settings make no request; credentials stay in the named environment variable.
-The pipeline's failure sensor defaults stopped.
+The pipeline's success/failure sensors default stopped. Set `slack.on_success` and
+`slack.on_failure` independently; defaults are false/true respectively.

@@ -1,16 +1,16 @@
-# Optional per-pipeline Slack failure alerts
+# Optional per-pipeline Slack run alerts
 
 Slack alerts are available for the five implemented Dagster jobs. Each pipeline
-owns an independent configuration file and stopped-by-default sensor. Alerts do
+owns an independent configuration file and stopped-by-default success/failure sensors. Alerts do
 not require enabling an acquisition schedule. NAAIM acquisition remains paused.
 
-| Pipeline / config folder | Failure sensor | Config-path environment override |
-| --- | --- | --- |
-| `aaii` | `aaii_slack_failure` | `AAII_ALERTS_CONFIG` |
-| `naaim_exposure_public_delayed` | `naaim_exposure_public_delayed_slack_failure` | `NAAIM_EXPOSURE_PUBLIC_DELAYED_ALERTS_CONFIG` |
-| `sec_fails_to_deliver` | `sec_fails_to_deliver_slack_failure` | `SEC_FAILS_TO_DELIVER_ALERTS_CONFIG` |
-| `reg_sho_thresholds` | `reg_sho_thresholds_slack_failure` | `REG_SHO_THRESHOLDS_ALERTS_CONFIG` |
-| `fomc_meeting_minutes` | `fomc_meeting_minutes_slack_failure` | `FOMC_MEETING_MINUTES_ALERTS_CONFIG` |
+| Pipeline / config folder | Failure sensor | Success sensor | Config-path environment override |
+| --- | --- | --- | --- |
+| `aaii` | `aaii_slack_failure` | `aaii_slack_success` | `AAII_ALERTS_CONFIG` |
+| `naaim_exposure_public_delayed` | `naaim_exposure_public_delayed_slack_failure` | `naaim_exposure_public_delayed_slack_success` | `NAAIM_EXPOSURE_PUBLIC_DELAYED_ALERTS_CONFIG` |
+| `sec_fails_to_deliver` | `sec_fails_to_deliver_slack_failure` | `sec_fails_to_deliver_slack_success` | `SEC_FAILS_TO_DELIVER_ALERTS_CONFIG` |
+| `reg_sho_thresholds` | `reg_sho_thresholds_slack_failure` | `reg_sho_thresholds_slack_success` | `REG_SHO_THRESHOLDS_ALERTS_CONFIG` |
+| `fomc_meeting_minutes` | `fomc_meeting_minutes_slack_failure` | `fomc_meeting_minutes_slack_success` | `FOMC_MEETING_MINUTES_ALERTS_CONFIG` |
 
 ## Configure one pipeline
 
@@ -23,6 +23,8 @@ cp config/fomc_meeting_minutes/alerts.example.yml config/fomc_meeting_minutes/al
 ```yaml
 slack:
   enabled: true
+  on_failure: true
+  on_success: true
   webhook_url_env: FOMC_MEETING_MINUTES_SLACK_WEBHOOK_URL
   dagster_url: http://127.0.0.1:3030
 network:
@@ -40,8 +42,14 @@ Store the URL only in the named environment variable, for example in the ignored
 channel; YAML does not override that channel. Different pipelines can name
 separate secret variables or intentionally share one webhook variable.
 
+`on_failure` defaults to true and `on_success` to false, preserving existing
+failure-only configurations. Set either flag independently; both require the
+matching sensor to be running. The FOMC example above enables both statuses.
+The checked-in templates retain `on_success: false` until deliberately enabled.
+
 Both the local file and secret are optional until alerts are enabled. Missing
-`alerts.local.yml` or `slack.enabled: false` means no delivery, secret resolution
+`alerts.local.yml`, `slack.enabled: false`, or the matching status flag false
+means no delivery, secret resolution
 or HTTP probe. A path explicitly set by the environment override must exist;
 malformed, duplicate and unknown YAML keys are configuration errors. Do not put
 raw webhook URLs, tokens or credentials in YAML. Only classic HTTPS incoming
@@ -54,11 +62,11 @@ Network settings use the [shared HTTP contract](../development/outbound_http.md)
 including environment-only proxies and relative CA bundle paths. Alert request
 and probe timeouts must each be at most ten seconds.
 
-## Enable the failure sensor
+## Enable the selected status sensors
 
 Load the new definitions in the existing Dagster code location. The daemon needs
 the webhook environment variable (restart its process after environment changes).
-Then start only the desired alert sensor in the UI, or from the checkout root:
+Then start only the desired status sensors in the UI, or from the checkout root:
 
 ```bash
 set -a
@@ -66,6 +74,8 @@ source .env
 set +a
 DAGSTER_HOME="$PWD/.dagster" .venv/bin/dagster sensor start \
   fomc_meeting_minutes_slack_failure -m market_data_pipeline.orchestration.dagster_defs
+DAGSTER_HOME="$PWD/.dagster" .venv/bin/dagster sensor start \
+  fomc_meeting_minutes_slack_success -m market_data_pipeline.orchestration.dagster_defs
 ```
 
 Stop it with the corresponding `dagster sensor stop` command, or set
@@ -73,16 +83,17 @@ Stop it with the corresponding `dagster sensor stop` command, or set
 there is no code-location import-time file or secret access. No sensor, service
 or schedule is activated by installing these definitions or examples.
 
-These run-failure sensors monitor their named jobs in the same code location,
-including terminal failures before any asset step executes. They report failed
+These run-status sensors monitor their named jobs in the same code location,
+including terminal failures before any asset step executes. They report selected successful/failed
 Dagster runs, not standalone pipeline CLI commands, archive staleness, missed
 schedules, daemon outages or individual step retries that later succeed.
 A running Dagster daemon is required. On its first evaluation a sensor initializes
-its cursor at the latest event; older failures are not backfilled automatically.
+its cursor at the latest event; older terminal events are not backfilled automatically. Each status sensor keeps
+its own cursor; enabling success alerts preserves the existing failure cursor.
 
 ## Delivery and recovery
 
-Messages contain only pipeline/job names, run ID, FAILED status and an optional
+Messages contain only pipeline/job names, run ID, SUCCESS/FAILED status and an optional
 run link. Run config, tags, exception text, provider data and credentials are never
 forwarded. Link previews are disabled. Inspect sensitive diagnostic details in
 your access-controlled Dagster instance.
@@ -98,7 +109,7 @@ Inspect sensor tick errors and run reactions in Dagster when delivery fails.
 Errors expose safe configuration/delivery phases and discard original exception
 context. Fix the file, environment, webhook or network before the next event.
 Dagster advances the run-status cursor even for a callback error; this change
-adds no durable outbox or automatic redelivery. Disabled events are also consumed.
+adds no durable outbox or automatic redelivery. Disabled events/statuses are also consumed.
 Normal ticks do not repost handled runs, but crashes after delivery or deliberate
 cursor resets can duplicate messages. Slack delivery is not exactly once or
 lossless. Review a missed alert manually; cursor replay should be deliberate.

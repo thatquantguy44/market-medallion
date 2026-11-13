@@ -1,4 +1,4 @@
-# Spec 018 — Optional per-pipeline Slack failure alerts
+# Spec 018 — Optional per-pipeline Slack status alerts
 
 **Status:** implemented and accepted locally; delivery/activation remain operator-configured.
 User-selected 2026-11-12, on `feat/pipeline-slack-alerts`. Add independent Slack
@@ -7,7 +7,7 @@ Absent/default configuration disables delivery. Credentials stay environment-onl
 
 ## Contract and boundaries
 
-- Each existing job owns one stopped-by-default Dagster run-failure sensor in its
+- Each existing job owns stopped-by-default Dagster success/failure sensors in its
   pipeline definitions. It monitors that named job only, including failures before
   an asset executes; it does not launch ingestion or change the failed run.
 - Each pipeline has `alerts.example.yml`; an optional ignored `alerts.local.yml`
@@ -15,13 +15,13 @@ Absent/default configuration disables delivery. Credentials stay environment-onl
   different file. Missing default files mean disabled; explicit missing paths,
   malformed/duplicate/unknown fields and missing/invalid enabled secrets fail the
   sensor visibly, with safe codes. No file/secret access during definition import.
-- Separate settings: `slack.enabled`, `slack.webhook_url_env`, optional
+- Separate settings: `slack.enabled`, `slack.on_success`, `slack.on_failure`, `slack.webhook_url_env`, optional
   `slack.dagster_url`, and pipeline-owned `network` using the shared HTTP contract.
   Incoming webhook destinations are selected in Slack, not overridden in YAML.
 - Only HTTPS Slack/GovSlack incoming-webhook URLs without credentials/query/fragment
   are accepted. No raw webhook URL, exception text, run config, tags, provider data
   or connection configuration enters messages/logs. Payload contains pipeline/job,
-  run ID, failure status and an optional escaped Dagster run link.
+  run ID, SUCCESS/FAILED status and an optional escaped Dagster run link.
 - Route selection uses `shared/http.py` once per enabled alert after config/secret
   gates, probing the public unauthenticated `api.test` endpoint rather than the
   secret webhook. The selected client posts JSON with verified TLS and redirects
@@ -106,3 +106,16 @@ Keep all acquisition schedules stopped and other pipeline sensors unchanged.
 Tests must cover strict flags, defaults, both enabled/disabled status paths,
 actual Dagster success ticks, unrelated jobs and cursor non-replay. Run regression,
 FOMC isolated PostgreSQL checks, lint/format and build. Track work in PR #17.
+
+Extension acceptance: implementation `745b27d`; **1,050 regression tests passed,
+80 optional skips; 313 FOMC/PostgreSQL checks passed**. Twelve additional cases
+cover strict/default status flags, disabled-status no-HTTP gates, truthful message
+labels, real success ticks and cursor non-replay. Both FOMC flags/sensors are now
+enabled locally, with the existing failure cursor preserved. Run `cfa76508-63c2-43fa-bf05-52a0cddea51b`
+completed the live 1990 backfill: 16 originals reused, three data GETs plus two
+probes, 350,095 bytes and healthy archive readback. Success-sensor tick 55 was
+SUCCESS for that run and logged `slack_alert_delivered ... status=success` after
+acknowledgement. Local evidence: ignored
+`data/dagster/fomc-success-alert-rerun.json`. All six acquisition schedules and
+the other eight status sensors remain stopped. No provider/data semantics,
+dependency or schema change was made.
