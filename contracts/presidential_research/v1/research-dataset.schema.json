@@ -1,0 +1,335 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.market-medallion.local/presidential-research-dataset/1",
+  "title": "PRES pipeline ResearchDataset v1 structural schema",
+  "description": "Structural shape only. Semantic date, identity, source-reference, numeric-safety, duplicate-key and overlap rules are enforced by the paired validators.",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "locator"
+      ]
+    },
+    "level": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "date",
+        "value",
+        "sourceId"
+      ]
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "startDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "endDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "presidentId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "presidentName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "presidentParty": {
+          "enum": [
+            "D",
+            "R",
+            "OTHER",
+            "TIED",
+            "UNKNOWN"
+          ]
+        },
+        "houseControl": {
+          "enum": [
+            "D",
+            "R",
+            "OTHER",
+            "TIED",
+            "UNKNOWN"
+          ]
+        },
+        "senateControl": {
+          "enum": [
+            "D",
+            "R",
+            "OTHER",
+            "TIED",
+            "UNKNOWN"
+          ]
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "id",
+        "startDate",
+        "endDate",
+        "presidentId",
+        "presidentName",
+        "presidentParty",
+        "houseControl",
+        "senateControl",
+        "sourceId"
+      ]
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "kind": {
+          "enum": [
+            "CALENDAR_YEAR",
+            "PRESIDENTIAL_PERIOD"
+          ]
+        },
+        "startDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "endDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "decisionDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "complete": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind",
+        "startDate",
+        "endDate",
+        "decisionDate",
+        "complete"
+      ]
+    },
+    "fundamental": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "availableDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "valuation": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "valuationDefinition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "policyRatePct": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "date",
+        "availableDate",
+        "valuation",
+        "valuationDefinition",
+        "policyRatePct",
+        "sourceId"
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "kind": {
+      "const": "USER_SUPPLIED"
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "nominalReal": {
+      "const": "NOMINAL"
+    },
+    "returnBasis": {
+      "enum": [
+        "TOTAL_RETURN",
+        "PRICE_RETURN"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "levels": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "$ref": "#/$defs/level"
+      }
+    },
+    "controls": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "$ref": "#/$defs/control"
+      }
+    },
+    "windows": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "$ref": "#/$defs/window"
+      }
+    },
+    "fundamentals": {
+      "type": "array",
+      "maxItems": 100000,
+      "items": {
+        "$ref": "#/$defs/fundamental"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "kind",
+    "currency",
+    "nominalReal",
+    "returnBasis",
+    "sources",
+    "levels",
+    "controls",
+    "windows",
+    "fundamentals"
+  ]
+}

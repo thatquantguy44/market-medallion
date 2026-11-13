@@ -22,8 +22,13 @@ from market_data_pipeline.pipelines.fomc_meeting_minutes.dagster_defs import def
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.dagster_defs import (
     defs as naaim_defs,
 )
+from market_data_pipeline.pipelines.presidential_research.dagster_defs import (
+    defs as presidential_defs,
+)
 from market_data_pipeline.pipelines.reg_sho_thresholds.dagster_defs import defs as threshold_defs
 from market_data_pipeline.pipelines.sec_fails_to_deliver.dagster_defs import defs as sec_ftd_defs
 
-defs = dg.Definitions.merge(aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs)
-del aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs
+defs = dg.Definitions.merge(
+    aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs, presidential_defs
+)
+del aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs, presidential_defs

@@ -1,6 +1,6 @@
 # Presidential pipeline migration and PRES integration plan
 
-Status: **proposed implementation sequence**, 2026-11-04.
+Status: **implementation and local parity verified on feature branches**; the original sequence below is retained for design history.
 Requirements: [Spec016](README.md). Boundary: [data contract](data_contract.md).
 Executable work tracker: [todo.md](todo.md). This file is the coordinated plan
 for all three repositories; existing root `tasks/` files remain untouched.
@@ -183,38 +183,12 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover \
   -s docs/research/002_PresidentialImpact/pipeline/tests -v
 ```
 
-Future target commands below are **proposed and do not exist yet**. They extend
-the nine donor capabilities and add publication/replay/health as slices land:
-
-```bash
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research init \
-  --workspace data/presidential_research-demo
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research import-archive \
-  --config config/presidential_research/sources.toml \
-  --input tests/fixtures/presidential_research/archive \
-  --workspace data/presidential_research-demo
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research parse \
-  --config config/presidential_research/sources.toml \
-  --workspace data/presidential_research-demo
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research export-approved-controls \
-  --config config/presidential_research/sources.toml \
-  --workbook tests/fixtures/presidential_research/approved-controls.xlsx \
-  --controls data/presidential_research-demo/inputs/controls.csv
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research publish \
-  --config config/presidential_research/sources.toml \
-  --workspace data/presidential_research-demo \
-  --controls data/presidential_research-demo/inputs/controls.csv \
-  --decision-policy window_start --profile public-reconstruction-2026-11-03
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research check \
-  --workspace data/presidential_research-demo
-.venv/bin/python -m market_data_pipeline.pipelines.presidential_research replay \
-  --source-root data/presidential_research-demo \
-  --workspace data/presidential_research-replayed
-```
-
-Config and fixture source names in these future examples must be created by the
-owning tasks. `publish` has no implicit fetch. A replay destination must be empty.
-Do not execute a README example against an existing production root by substitution.
+The current installed-package entrypoint is `python -m market_data_pipeline
+presidential`. Run `--help` for the current options. The principal offline
+migration is `import-frozen --donor-pipeline <path> --workbook <path> --workspace
+<new-path>`; `check`, `health`, `replay`, `backup` and `restore` are separate
+commands. The frozen import is bounded to the named checksummed archives and
+does not fetch providers. Use an absent destination for import or replay.
 
 After implementation, MarketMedallion focused tests are
 `.venv/bin/python -m pytest -q tests/test_presidential_*.py`, followed once by the
