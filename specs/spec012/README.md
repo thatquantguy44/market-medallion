@@ -1,15 +1,14 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T04 complete for the selected three-TRF Public API profile:
-approved-use admission, strict manifest/schema/version, disjoint facility
-registry, acquisition-date guards, pure receipt-bound JSON parsing, exact quantity
-text round trips and per-observation ratio arithmetic are implemented. Connector,
-jobs and published data products remain absent. Next: SSV-T05 raw/rejected-capture
-archiving and redacted receipts.
-**Reviewed:** 2026-11-10. **Delivery order:** 2 of 5.
+**Status:** SSV-T01–T05 complete for the selected three-TRF Public API profile:
+approved-use admission, manifest/registry, pure Decimal parser, quantity/ratio
+helpers and immutable Bronze with sanitized rejection evidence are implemented.
+Acquisition, warehouse, published products and jobs remain absent.
+Next: **SSV-T06**, one invented local SQLite partition.
+**Reviewed:** 2026-11-13. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
 **Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
-(source contract, registry, pure parser and numeric helpers). The [source review](source_review.md) records the user's
+(source contract, registry, pure parser/numeric helpers and local Bronze). The [source review](source_review.md) records the user's
 personal noncommercial scope and Public API terms acknowledgement. The selected
 [API profile](api_contract.md) explicitly amends the file-first plan for JSON and
 page completeness. G0 is ready for the explicit three-TRF profile; TXT, ADF,
@@ -26,64 +25,51 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 ## Next agent handoff
 
-**Start here:** this section, then [SSV-T05 in the task list](todo.md#ssv-t05--archive-input-and-rejected-capture-evidence).
-Continue on `feat/spec012-finra-access-review`. The last implementation checkpoint
-is commit `9a506d3` (T04), already pushed; T01–T04 are complete and T05–T16 have
-not started. G0 and parser Checkpoint A are ready for the selected three-TRF API
-profile; G1/G2 and local publication remain open.
+**Start here:** [T05 acceptance](t05_acceptance.md), then
+[SSV-T06 in the task list](todo.md#ssv-t06--deliver-one-local-sqlite-partition).
+Continue on `feat/finra-daily-short-sale-volume` in [PR #20](https://github.com/thatquantguy44/market-medallion/pull/20),
+based on merged main `b580689`.
+T01–T05 are complete; T06–T16 have not started. G0/parser Checkpoint A are ready
+for the three-TRF API profile; G1/G2 and local publication remain open.
 
-Before coding, read the root [AGENTS.md](../../AGENTS.md), the
-[master handoff](../../docs/handoffs/project_bootstrap.md), this spec's
-[plan](plan.md), [data contract](data_contract.md),
-[API contract](api_contract.md) and [source review](source_review.md).
-Use the repository's pinned engineering workflows and retain the documented
-QuantSmith working-tree verification caveat; do not refresh either library.
+Before coding, read root [AGENTS.md](../../AGENTS.md), the
+[master handoff](../../docs/handoffs/project_bootstrap.md), [plan](plan.md),
+[data contract](data_contract.md), [API contract](api_contract.md),
+[source review](source_review.md) and [Bronze contract](bronze_contract.md).
+Use pinned engineering workflows. QuantSmith checkout drift remains documented;
+61 pinned Git objects were verified without refreshing either library.
 
-**Next bounded slice — SSV-T05 / SSV-REQ05 / SSV-AC05:** implement immutable raw
-input and rejected-capture evidence in the planned source-owned `io/bronze.py`
-and characterize it with `tests/test_ssv_bronze.py`. Add the package initializer
-only as needed. Start with invented valid and malformed API JSON plus scope
-receipts, using the existing fixtures and pure parser. Required outcomes:
+**Next bounded slice — SSV-T06 / SSV-REQ06 / SSV-AC06:** import one invented,
+complete API response through the existing Bronze and pure parser into audited
+SQLite Silver/Gold. Implement source-owned `pipeline.py`, `io/warehouse.py`,
+`cli.py`, `__main__.py` and `tests/test_ssv_pipeline.py`, splitting the task if
+necessary. Transaction/validation failures must preserve the prior committed
+publication. Prove approved-use checks before I/O and lossless quantity readback.
+Do not count a partial API page as a complete partition or replace missing rows
+without authoritative completeness. Cross-page assembly/replacements, revisions,
+typed Parquet, replay, acquisition, export and Dagster remain later slices.
 
-- Archive the original bytes and SHA-256, manifest/schema identity, run/capture
-  lineage and sanitized request/response scope evidence before parsing.
-- Preserve the same raw evidence when parsing rejects the input. A rejection
-  must not become a successful observation, coverage result or publication.
-- Enforce the applicable approved-use admission before I/O. Characterize
-  credential redaction before anything is persisted or logged; authentication
-  secrets, tokens, authorization/cookie headers and proxy credentials do not
-  belong in Bronze or receipts.
+Reuse `archive_input`, `read_capture` and `parse_capture` from
+[`io/bronze.py`](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/io/bronze.py).
+Keep the existing parser, quantity codec and fixed T04 ratio method unchanged.
+T05 `archived_at` records local archive observation under the writer lock before
+publication; it is not provider publication or retrieval completion. Use nullable
+explicit `retrieved_at`; T02 `captured_at` was request start, never Silver first-seen.
+Do not backdate knowledge or apply today's acquisition window to archived input.
+Preserve original capture sequences/clocks for later replay. Raw provider samples,
+credentials and runtime stores remain ignored. NAAIM stays paused; schedules stay stopped.
 
-Use [the existing parser](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/api.py),
-[quantity codec](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/quantities.py)
-and [ratio helpers](../../src/market_data_pipeline/pipelines/finra_short_sale_volume/data/gold.py).
-Preserve fractional Decimal shares and the fixed T04 ratio method. The retained
-T02 `captured_at` is request start, not a Silver first-seen clock; do not backdate
-knowledge or apply today's acquisition window to archived input. Complete-partition
-proof and cross-page replacement remain later work. No provider acquisition,
-warehouse, export or Dagster job is part of T05. Keep NAAIM paused and schedules
-stopped. Secrets and retained provider payloads remain ignored.
+**Verified T05:** 49 Bronze tests / 315 focused FINRA tests; full offline suite
+**1,169 passed, 92 optional skips**. Lint/format, wheel/sdist source readback and
+invented-only conformance pass. [Evidence](evidence/t05_bronze_conformance.json)
+records four exact-byte captures, including fractional, valid empty and rejected
+input; no real observations were acquired or promoted. All five existing FINRA
+core modules are byte-identical to merged main. See [acceptance](t05_acceptance.md)
+for failure-boundary coverage and runnable fixture usage.
 
-**Verification and closeout:** after adding the Bronze tests, run:
-
-```bash
-.venv/bin/python -m pytest -q tests/test_ssv_bronze.py
-.venv/bin/python -m pytest -q
-.venv/bin/ruff check .
-.venv/bin/ruff format --check .
-.venv/bin/python -m build --no-isolation
-```
-
-Last code verification at T04: **748 passed, 10 optional integrations skipped**;
-266 focused FINRA tests, Ruff and package checks passed. [T04 offline evidence](evidence/t04_semantics_conformance.json)
-reconciles 18 exact quantity round trips and 12 ratio checks in six unchanged
-retained source rows; all sampled pages remain partial and no observations were
-promoted. Ordinary tests must not depend on those ignored provider samples.
-When T05 passes, update [todo.md](todo.md), this section, the
-[master pipeline register](../../docs/pipelines.md),
-[program readiness tracker](../../docs/securities_finance/roadmap.md) and
-[master handoff](../../docs/handoffs/project_bootstrap.md) with actual evidence.
-The next planned slice after T05 is **SSV-T06**, one invented local SQLite partition.
+When T06 passes, update this section, [todo.md](todo.md), the
+[master register](../../docs/pipelines.md), [program tracker](../../docs/securities_finance/roadmap.md)
+and [master handoff](../../docs/handoffs/project_bootstrap.md) with actual evidence.
 
 ## Objective and research questions
 
@@ -155,10 +141,11 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. SSV-AC01–04 have 266 focused tests:
-84 admission/registry, 111 parser and 71 arithmetic/codec checks. Acquisition/export entry points do
-not exist, so their integrated guards and delivery acceptance remain pending.
-Full offline regression: 748 passed, 10 optional skips.
+Every task/test must cite these stable IDs. SSV-AC01–05 have 315 focused tests:
+84 admission/registry, 111 parser, 71 arithmetic/codec and 49 Bronze checks.
+Storage/parse entrypoints enforce admission before I/O. Acquisition/export
+entrypoints and delivery acceptance remain pending. Full offline regression:
+1,169 passed, 92 optional skips. [T05 acceptance](t05_acceptance.md).
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |

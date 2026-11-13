@@ -1,0 +1,93 @@
+{
+  "task": "SSV-T05",
+  "requirements": [
+    "SSV-REQ05",
+    "SSV-AC05",
+    "SSV-AC01"
+  ],
+  "reviewed_date": "2026-11-13",
+  "executed_at": "2026-11-13T14:30:13.219046+00:00",
+  "method": "Invented API fixtures only; temporary isolated filesystem; no provider data, credentials, databases or services.",
+  "storage_contract": "finra-ssv-bronze/1",
+  "parser_profile": "finra-ssv-api-page/1",
+  "captures": [
+    {
+      "fixture": "valid",
+      "bytes": 571,
+      "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+      "capture_sequence": 1,
+      "status": "parsed",
+      "exact_readback": true,
+      "retry_unchanged": true,
+      "published": false,
+      "rows": 2
+    },
+    {
+      "fixture": "fractional",
+      "bytes": 287,
+      "payload_sha256": "c37ab1ff431a4d47b7847a6405274f028e8e544c8a8c7a08592f691df6f7e9ad",
+      "capture_sequence": 2,
+      "status": "parsed",
+      "exact_readback": true,
+      "retry_unchanged": true,
+      "published": false,
+      "rows": 1
+    },
+    {
+      "fixture": "empty",
+      "bytes": 0,
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "capture_sequence": 3,
+      "status": "parsed",
+      "exact_readback": true,
+      "retry_unchanged": true,
+      "published": false,
+      "rows": 0
+    },
+    {
+      "fixture": "malformed",
+      "bytes": 2,
+      "payload_sha256": "8b351adb56355ffc40a4986ab30267eecae89710c63d09cba764a35adfda3ef5",
+      "capture_sequence": 4,
+      "status": "rejected",
+      "exact_readback": true,
+      "retry_unchanged": true,
+      "published": false,
+      "rows": null
+    }
+  ],
+  "files_verified": 18,
+  "secret_sentinel_excluded": true,
+  "original_core_bytes_unchanged_from_main": true,
+  "module_sha256": {
+    "manifest.py": "c245a122c5d4e6766ff36013f9825a35eaa68eef0148233c3d52df42cb297016",
+    "registry.py": "2ff33cc86d1ec657a88a084cf195318a2e12c79647b00237d535a07865b28df7",
+    "data/api.py": "6bd8b5543b900eee92c2e2e62ac242676c102a8e30e815355a4e4720a881313c",
+    "data/quantities.py": "04286db168e205fb4c76b0c854f58bdac918bbf27c3f7c78e69b5c5f65477547",
+    "data/gold.py": "c339c8f11583cf820ad253582ff828a5a141ff28b1e9231b562c1a7d53d2c8ad",
+    "data/capture.py": "4a00bcfa8e8f0c98de4e8140ef54f968236f2aa7039081132f7e1cb1894e2b2d",
+    "io/__init__.py": "ac2cc2b8f2fe9271952539a66e98ebe12706d0e5848e09562b8ca3495187dd44",
+    "io/bronze.py": "37a76dcbed01cae6a6765e1559ff9aff32b791550fd576a4a511b0b6936a33d7"
+  },
+  "verification": {
+    "bronze_tests_passed": 49,
+    "finra_tests_passed": 315,
+    "offline_tests_passed": 1169,
+    "optional_skipped": 92,
+    "ruff_check": "pass",
+    "ruff_format": "pass",
+    "wheel_and_sdist_source_readback": "pass",
+    "agent_skills": "188 entries verified",
+    "quantsmith_checkout": "existing revision/tree drift; not repinned",
+    "quantsmith_pinned_git_objects_verified": 61
+  },
+  "boundaries": {
+    "provider_data_requests": 0,
+    "promoted_observations": 0,
+    "sqlite": false,
+    "warehouse": false,
+    "published_outputs": false,
+    "job": false
+  },
+  "next_task": "SSV-T06"
+}

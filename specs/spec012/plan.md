@@ -1,9 +1,9 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T04 complete for the selected three-TRF API profile, 2026-11-10.
+**Status:** SSV-T01–T05 complete for the selected three-TRF API profile, 2026-11-13.
 Use [todo.md](todo.md) as the single task list.
 The [next-agent handoff](README.md#next-agent-handoff) is the canonical pickup
-point for SSV-T05 on `feat/spec012-finra-access-review`.
+point for SSV-T06 on `feat/finra-daily-short-sale-volume`.
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
 
@@ -23,8 +23,11 @@ integer-only assumption: all API share quantities are exact Decimal values.
 See the [amendment and evidence](api_contract.md#ssv-t03-fractional-quantity-amendment).
 T04 adds shared quantity validation/text readback and pure per-observation ratios
 with fixed 34-digit half-even arithmetic. Its 71 tests and retained six-row
-reconciliation pass. Next is SSV-T05 immutable raw and rejected-capture evidence
-with redacted receipts. Reusable acquisition, warehouse, export and job remain absent.
+reconciliation pass. T05 adds immutable local API-response capture, safe receipts
+and sanitized parse/rejection outcomes, with admission before filesystem I/O.
+[Acceptance](t05_acceptance.md) records 49 Bronze checks and exact-byte conformance.
+Next is SSV-T06, one invented local SQLite partition. Reusable acquisition,
+warehouse, export and job remain absent.
 
 ## Decisions and dependency flow
 
