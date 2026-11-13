@@ -19,15 +19,48 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — released 1997–2026 backfill accepted
+## 2026-11-13 current pickup — FOMC quality slices packaged
+
+The user selected the next three quality slices after the completed backfill.
+Branch **`feat/fomc-text-quality`** starts from merged main `1bd4ab5`
+([PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)). Read the
+[quality contract](../../specs/spec017/quality_contract.md),
+[plan](../../specs/spec017/quality_plan.md) and
+[ordered tasks](../../specs/spec017/quality_tasks.md).
+
+- **FOMC-Q01:** deterministic offline quality report, reconciled to pinned
+  verified inventory/text/chunk catalogs and exposed through the existing script.
+- **FOMC-Q02:** bounded original-page review with deterministic strata selection,
+  source/render hashes and explicit dispositions; no automatic flag clearing.
+- **FOMC-Q03:** only confirmed native-extraction defects, with failing baseline
+  fixtures, new immutable profiles/derivatives and publication/recovery gates.
+  If no native defect is demonstrated, record the bounded no-fix outcome and keep
+  OCR candidates/unresolved cases visible.
+
+**Packaging is complete; implementation is planned.** Start at Q01.1 in the
+quality task file, not at a historical backfill task. The 167 review-required
+representations and 1,520 flagged chunks are the dated archive-wide baseline;
+images/charts do not automatically imply missing text or OCR work. Pin fresh
+catalog IDs for the report and keep overlap/empty-unit accounting explicit.
+FOMC-T07 remains optional embeddings, separate from this Q-series.
+
+This branch's package changes documentation only. The accepted archive,
+configuration, source clocks, publication pointers and automation state are
+unchanged. No new provider request, OCR/model integration, migration, acquisition
+schedule or Slack message is part of packaging. Keep both configured FOMC status
+sensors as they are, all acquisition schedules stopped and NAAIM paused. FINRA
+remains at SSV-T05. QuantSmith checkout drift remains reported; use verified pinned
+Git guidance without repinning the external checkout.
+
+## 2026-11-13 accepted checkpoint — released 1997–2026 backfill
 
 The user-requested 1997–2026 expansion passed all 21 bounded Dagster batches and
 final per-year reconciliation on the existing `feat/fomc-1995-1996-backfill`
-branch in [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18).
+branch in merged [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18).
 Read [acceptance](../../specs/spec017/1997_2026_acceptance.md),
 [contract](../../specs/spec017/1997_2026_contract.md) and
 [evidence](../../specs/spec017/evidence/1997_2026_dagster_backfill.json).
-Track current-head checks/reviews; no merge or recurring acquisition is implied.
+Its final checks passed before merge; recurring acquisition remains stopped.
 
 All 390 unique selected primary URLs are
 archived. The current archive has 1,081 captures,

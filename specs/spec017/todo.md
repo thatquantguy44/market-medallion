@@ -1,10 +1,9 @@
 # FOMC implementation tasks and pickup
 
 Updated: 2026-11-13. T01–T06, portable scripts, the Dagster job and configurable
-Slack status alerts are implemented. Current PR #18 adds accepted 1995–1996 and
-1997–2026 backfills on `feat/fomc-1995-1996-backfill`.
-Track its [checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks)
-and current review threads; no merge or recurring acquisition is implied.
+Slack status alerts are implemented. [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)
+merged the accepted 1995–1996 and 1997–2026 backfills. The next three slices are
+packaged on `feat/fomc-text-quality`; implementation remains planned.
 
 ## Current continuation
 
@@ -16,8 +15,12 @@ Listed-reference archival coverage now extends from 1990 through released 2026
 minutes as of November 13. No unacquired inventory references remain; source
 availability and text/OCR quality limitations remain explicit.
 
-Next: review flagged extraction/page quality; deliberately run a bounded recent
-refresh after the next official release. Keep capture-time first-seen clocks,
+Next: **FOMC-Q01 → Q02 → Q03**, defined in the [quality contract](quality_contract.md),
+[plan](quality_plan.md) and [task checklist](quality_tasks.md). These cover offline
+quality reporting, evidence-bound original-page review and confirmed extraction
+fixes. All implementation tasks remain open. FOMC-T07 keeps its separate optional
+embeddings scope. Deliberately run a bounded recent refresh after the next official
+release. Keep capture-time first-seen clocks,
 observed corrections and finite limits. Schedules remain stopped; embeddings
 remain independently selected, NAAIM paused and FINRA at SSV-T05.
 

@@ -17,9 +17,14 @@ Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_mi
 The [runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
 [Dagster job delivery](dagster_job_acceptance.md) and [Spec018](../spec018/README.md)
 provide bounded refreshes, health gating and configurable success/failure alerts.
-Next core work: extraction-quality review and deliberate recent-year refresh for
-new releases/corrections. All schedules stay stopped; FINRA remains at SSV-T05,
-NAAIM remains paused and embeddings remain independently selected.
+The next three quality slices are **planned** on `feat/fomc-text-quality`:
+**FOMC-Q01** offline reporting → **Q02** original-page review → **Q03** confirmed
+extraction remediation. Read the [contract](quality_contract.md),
+[implementation plan](quality_plan.md) and [ordered tasks](quality_tasks.md).
+No quality-report command, review acceptance or remediation is implemented by
+this planning package. Deliberate recent-year refreshes remain the operating
+path for new releases/corrections. All schedules stay stopped; FINRA remains at
+SSV-T05, NAAIM remains paused and embeddings remain independently selected.
 
 ## Objective and scope
 
