@@ -86,11 +86,16 @@ class _Runner:
         self.expires = 0
         self.metadata_sha256 = None
 
+    def safe_body(self, body):
+        if self.token and self.token.encode() in body:
+            raise ValueError("FINRA credential-bearing response refused")
+        reject_credentials(body)
+
     def capture(self, reply, partition, query, evidence_only=False):
         if reply.status is None:
             return dict(status="TRANSPORT_FAILED", capture_id=None, error_code=reply.error_code)
         try:
-            reject_credentials(reply.body)
+            self.safe_body(reply.body)
         except ValueError:
             return dict(
                 status="UNSAFE_PAYLOAD", capture_id=None, error_code="credential_body_refused"
@@ -359,7 +364,7 @@ class _Runner:
         try:
             if reply.status != 200 or not reply.complete:
                 raise ValueError
-            reject_credentials(reply.body)
+            self.safe_body(reply.body)
             validate_metadata(json.loads(reply.body, object_pairs_hook=_unique_object))
             self.run.metadata(reply.body)
             self.metadata_sha256 = hashlib.sha256(reply.body).hexdigest()

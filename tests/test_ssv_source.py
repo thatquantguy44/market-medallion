@@ -351,3 +351,14 @@ def test_ssv_ac12_changed_verification_pass_never_replaces_prior_membership(
     result = run(cfg, Script(manifest, collection_responses(changed=changed, shrink=shrink)))
     assert result["status"] == "INCOMPLETE"
     assert gold(tmp_path, manifest) == before
+
+
+def test_ssv_ac12_reflected_current_bearer_token_never_enters_raw_or_journal(tmp_path, manifest):
+    token = "invented-access-token"
+    body = json.dumps({"message": "Rejected credential " + token}).encode()
+    result = run(
+        config(tmp_path, manifest), Script(manifest, [data_reply(payload=body, status=401)])
+    )
+    assert result["partitions"][0]["status"] == "UNSAFE_PAYLOAD"
+    assert not (tmp_path / "bronze").exists()
+    assert all(token not in p.read_text() for p in tmp_path.rglob("*.json"))
