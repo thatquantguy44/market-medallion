@@ -1,7 +1,8 @@
 # FOMC quality implementation plan
 
-Status: **Q01/Q02 accepted; Q03 implementation in progress** on `feat/fomc-text-quality`.
-[Contract](quality_contract.md) · [Tasks](quality_tasks.md)
+Status: **Q01/Q02 accepted; Q03 bounded no-native-fix path accepted** on `feat/fomc-text-quality`.
+[Contract](quality_contract.md) · [Tasks](quality_tasks.md) ·
+[Three-slice closeout](quality_remediation_acceptance.md)
 
 ## Architecture and interfaces
 
@@ -93,10 +94,12 @@ bash -n scripts/run_fomc.sh
 ./scripts/run_fomc.sh --help
 ```
 
-Q01/Q02 focused test module names and executable report/review commands will be
-added with implementation; this package does not document invented working CLI
-flags. Documentation-only packaging is verified with local-link checks,
-requirement/task traceability and `git diff --check`, without source/warehouse runs.
+Implemented focused modules are `tests/test_fomc_quality*.py`;
+[Q01](quality_report_acceptance.md), [Q02](quality_review_acceptance.md) and
+[Q03](quality_remediation_acceptance.md) document the working CLI/script commands.
+Final verification records 1,120 offline checks and all 395 FOMC checks with
+isolated PostgreSQL. Q03 took the evidence-backed no-native-fix branch;
+new transforms/publication/restore/replay were not required or performed.
 
 ## Acceptance-to-task traceability
 

@@ -2,28 +2,31 @@
 
 Updated: 2026-11-13. T01–T06, portable scripts, the Dagster job and configurable
 Slack status alerts are implemented. [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)
-merged the accepted 1995–1996 and 1997–2026 backfills. The next three slices are
-packaged on `feat/fomc-text-quality`; [Q01 reporting is accepted](quality_report_acceptance.md),
-with Q02 accepted and Q03 in progress.
+merged the accepted 1995–1996 and 1997–2026 backfills. The three quality slices
+are implemented on `feat/fomc-text-quality` in
+[PR #19](https://github.com/thatquantguy44/market-medallion/pull/19).
 
 ## Current continuation
 
-All 21 bounded 1997–2026 Dagster batches and final annual reconciliation passed.
-Read [acceptance](1997_2026_acceptance.md), [contract](1997_2026_contract.md) and
-[evidence](evidence/1997_2026_dagster_backfill.json) for the current coverage,
-original/text/chunk checks, acknowledged Slack success and recovery gates.
-Listed-reference archival coverage now extends from 1990 through released 2026
-minutes as of November 13. No unacquired inventory references remain; source
-availability and text/OCR quality limitations remain explicit.
+Q01 reporting and Q02's eight-case source review are accepted. Q03's working
+remediation gate closes the bounded no-native-fix path, with no extractor/profile
+change or new publication; [closeout](quality_remediation_acceptance.md) records
+all tests, remaining flags and unchanged-state recovery qualification.
+[Contract](quality_contract.md), [plan](quality_plan.md) and
+[task outcomes](quality_tasks.md) retain the separate QAC gates, including the
+conditional publication/restore/replay steps marked not required for this outcome.
 
-Next: **FOMC-Q01 → Q02 → Q03**, defined in the [quality contract](quality_contract.md),
-[plan](quality_plan.md) and [task checklist](quality_tasks.md). These cover offline
-quality reporting, evidence-bound original-page review and confirmed extraction
-fixes. Q01/Q02 are accepted; Q03 tasks remain open. FOMC-T07 keeps its separate optional
-embeddings scope. Deliberately run a bounded recent refresh after the next official
-release. Keep capture-time first-seen clocks,
-observed corrections and finite limits. Schedules remain stopped; embeddings
-remain independently selected, NAAIM paused and FINRA at SSV-T05.
+All listed references through released 2026 minutes remain archived; the original
+[backfill acceptance](1997_2026_acceptance.md) is historical evidence. No
+unacquired references remain, while unavailable/not-listed source claims and all
+167 review-required representations / 1,520 flagged chunks remain explicit.
+
+Next scoped work: additional source-page review beyond the sample, verified
+source reconciliation for damaged HTML and an explicit OCR/text-layer policy.
+Deliberately refresh recent years for new releases/corrections. Preserve source
+bytes, capture-time first-seen and observed corrections. FOMC-T07 retains its
+separately selected optional embeddings scope. Schedules remain stopped, NAAIM
+paused and FINRA at SSV-T05.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 

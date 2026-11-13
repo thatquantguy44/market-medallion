@@ -1,6 +1,7 @@
 # FOMC extraction-quality contract
 
-Status: **Q01/Q02 accepted; Q03 implementation in progress**.
+Status: **Q01/Q02 accepted; Q03 bounded no-native-fix path accepted**.
+[Three-slice closeout](quality_remediation_acceptance.md).
 [Q01 acceptance](quality_report_acceptance.md). Selected 2026-11-13 after
 [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18) merged.
 Delivery branch: `feat/fomc-text-quality`, based on merged main `1bd4ab5`.
@@ -41,12 +42,15 @@ must fail visibly; do not fall back to directory globbing or a newer orphan.
 
 **FOMC-QAC02:** Emit deterministic JSON with per-year, representation-format,
 extraction-profile and issue-code summaries plus drill-down rows. A finding's
-grain is observed source-version ID + extraction ID + unit ordinal + issue code; retain its capture/source
-hash, source URL, meeting IDs/dates, page/section, exact unit offsets and affected
+grain is observed source-version ID + extraction ID + unit ordinal + issue code.
+Retain its capture/source hash, source URL, meeting IDs/dates, page/section, exact
+unit offsets and affected
 chunk IDs. Preserve all meeting associations for shared/bundled references.
 Distinguish unique representation/unit/chunk totals from overlapping issue/year
 memberships. Report union character coverage rather than summing overlapping
-chunk text. Empty or failed units remain visible even when they have no chunks.
+chunk text. Empty units remain visible even when they have no chunks. Failed
+upstream outcomes remain explicit in catalog gaps; a successful committed chunk
+generation cannot select a failed extraction or an uncommitted orphan.
 Unknown release time remains unknown; report generation never backdates capture
 or first-seen clocks.
 

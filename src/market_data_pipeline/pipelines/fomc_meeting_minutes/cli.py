@@ -7,6 +7,9 @@ from pathlib import Path
 from market_data_pipeline.pipelines.fomc_meeting_minutes.config import load_config
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.operations import load_operations
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.quality import validate_report
+from market_data_pipeline.pipelines.fomc_meeting_minutes.data.quality_remediation import (
+    assess_remediation,
+)
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.quality_review import (
     make_review,
     select_cases,
@@ -63,7 +66,13 @@ def _local_review(cfg, args):
                 "request_performed": False,
             }
         else:
-            value = check_reviews(report, plan, json.loads(args.reviews.read_bytes()), args.pack)
+            reviews = json.loads(args.reviews.read_bytes())
+            check = check_reviews(report, plan, reviews, args.pack)
+            value = (
+                assess_remediation(report, plan, reviews, check)
+                if args.command == "quality-remediation-plan"
+                else check
+            )
             result = value
     write_quality_artifact(cfg, args.output, value)
     return result
@@ -83,6 +92,7 @@ def main(argv=None):
         "quality-review-pack",
         "quality-review-record",
         "quality-review-check",
+        "quality-remediation-plan",
         "recover-capture",
         "recover-run",
     ]:
@@ -95,7 +105,7 @@ def main(argv=None):
             command.add_argument("--mode", choices=["backfill", "refresh"], default="backfill")
         if name.startswith("quality-"):
             command.add_argument("--output", type=Path, required=True)
-        if name.startswith("quality-review-"):
+        if name.startswith("quality-review-") or name == "quality-remediation-plan":
             command.add_argument("--report", type=Path, required=True)
             if name == "quality-review-plan":
                 command.add_argument("--max-cases", type=int, default=12)
@@ -104,7 +114,7 @@ def main(argv=None):
             if name == "quality-review-record":
                 command.add_argument("--case-id", required=True)
                 command.add_argument("--observation", type=Path, required=True)
-            if name == "quality-review-check":
+            if name in {"quality-review-check", "quality-remediation-plan"}:
                 command.add_argument("--reviews", type=Path, required=True)
                 command.add_argument("--pack", type=Path, required=True)
         if name == "run":
@@ -130,6 +140,7 @@ def main(argv=None):
             "quality-review-plan",
             "quality-review-record",
             "quality-review-check",
+            "quality-remediation-plan",
         }:
             result = _local_review(cfg, args)
         else:
@@ -212,7 +223,7 @@ def main(argv=None):
         return (
             2
             if result.get("status")
-            in {"partial", "failed", "degraded", "interrupted", "pending_review"}
+            in {"partial", "failed", "degraded", "interrupted", "pending_review", "fix_required"}
             else 0
         )
     except Exception:

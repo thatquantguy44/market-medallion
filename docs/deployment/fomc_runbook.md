@@ -285,3 +285,29 @@ Current-year coverage stops at the latest listed September meeting, released
 October 7. Not-listed/unavailable claims and text/OCR quality review remain
 explicit. Next: review extraction quality and deliberately refresh recent years
 for later releases/corrections. The bulk run is complete; do not relaunch it.
+
+## Offline extraction-quality workflow
+
+The [Q01–Q03 closeout](../../specs/spec017/quality_remediation_acceptance.md)
+records the implemented reporting/review/assessment workflow and actual eight-case
+review. Use [Q01](../../specs/spec017/quality_report_acceptance.md#run-with-your-own-configuration)
+and [Q02](../../specs/spec017/quality_review_acceptance.md#portable-review-workflow)
+for complete commands through `scripts/run_fomc.sh`:
+
+- `quality-report`: verified current inventory/text/chunk snapshot and deterministic
+  report; owned PostgreSQL access, no provider request or transform.
+- `quality-review-plan`: up to 12 deterministic earliest/latest strata cases.
+- `quality-review-pack`: exact source/text inputs and inert HTML previews; rechecks
+  the pinned generation with read-only PostgreSQL access.
+- `quality-review-record`: validated source/render-bound observation record.
+- `quality-review-check`: actual pack/render hashes and review completeness.
+- `quality-remediation-plan`: completed-evidence gate for native fixes or a bounded
+  no-native-fix outcome; it rechecks the pack before assessing.
+
+All commands use explicit `--config`, `--operations` and `--output`; review/
+assessment commands also use their documented report/plan/evidence inputs.
+Plan/record/check/assessment operate locally without PostgreSQL or provider access.
+Missing/incomplete evidence fails; `pending_review` and `fix_required` exit 2.
+No command silently clears flags, invokes OCR, publishes derivatives or changes
+schedules. The accepted bounded result found no native-parser defect; source
+reconciliation, additional review and an explicit OCR policy remain future work.

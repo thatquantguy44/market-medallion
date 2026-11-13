@@ -88,8 +88,21 @@ def test_stale_plan_bad_pack_paths_and_duplicate_reviews_are_refused(operation_a
         export_review_pack(cfg, report, plan, cfg.root / "text", inventory_store=store)
 
 
+@pytest.mark.parametrize(
+    "disposition,assessment_status,assessment_exit",
+    [
+        ("unresolved", "no_confirmed_native_defect", 0),
+        ("confirmed_native_defect", "fix_required", 2),
+    ],
+)
 def test_review_cli_plan_record_and_check_are_local(
-    operation_archive, tmp_path, monkeypatch, capsys
+    operation_archive,
+    tmp_path,
+    monkeypatch,
+    capsys,
+    disposition,
+    assessment_status,
+    assessment_exit,
 ):
     import json
     from contextlib import nullcontext
@@ -155,7 +168,7 @@ def test_review_cli_plan_record_and_check_are_local(
     image = output / "renders" / "page.png"
     image.write_bytes(b"\x89PNG\r\n\x1a\nfixture")
     observation = {
-        "disposition": "unresolved",
+        "disposition": disposition,
         "reviewer": "fixture",
         "reviewed_at": "2026-11-13T15:00:00Z",
         "render": {
@@ -206,3 +219,41 @@ def test_review_cli_plan_record_and_check_are_local(
         == 0
     )
     assert json.loads(capsys.readouterr().out)["status"] == "reviewed"
+
+    assert (
+        cli.main(
+            [
+                "quality-remediation-plan",
+                *common,
+                "--plan",
+                str(plan_path),
+                "--reviews",
+                str(reviews),
+                "--pack",
+                str(output),
+                "--output",
+                str(tmp_path / "remediation.json"),
+            ]
+        )
+        == assessment_exit
+    )
+    assert json.loads(capsys.readouterr().out)["status"] == assessment_status
+    image.write_bytes(b"corrupt render")
+    assert (
+        cli.main(
+            [
+                "quality-remediation-plan",
+                *common,
+                "--plan",
+                str(plan_path),
+                "--reviews",
+                str(reviews),
+                "--pack",
+                str(output),
+                "--output",
+                str(tmp_path / "bad-remediation.json"),
+            ]
+        )
+        == 2
+    )
+    assert json.loads(capsys.readouterr().out)["request_performed"] is False

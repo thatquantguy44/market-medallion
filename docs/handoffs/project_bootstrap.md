@@ -19,43 +19,57 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — FOMC quality slices packaged
+## 2026-11-13 current pickup — FOMC quality Q01–Q03 accepted
 
-The user selected the next three quality slices after the completed backfill.
-Branch **`feat/fomc-text-quality`** starts from merged main `1bd4ab5`
-([PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)). Read the
-[quality contract](../../specs/spec017/quality_contract.md),
-[plan](../../specs/spec017/quality_plan.md) and
-[ordered tasks](../../specs/spec017/quality_tasks.md).
+Branch **`feat/fomc-text-quality`**, from merged main `1bd4ab5`, packages the
+three user-selected working slices in [PR #19](https://github.com/thatquantguy44/market-medallion/pull/19).
+Read the [contract](../../specs/spec017/quality_contract.md),
+[plan](../../specs/spec017/quality_plan.md), [closed tasks](../../specs/spec017/quality_tasks.md)
+and [three-slice closeout](../../specs/spec017/quality_remediation_acceptance.md).
+Track current-head checks/reviews before merging; no merge or acquisition activation.
 
-- **FOMC-Q01:** deterministic offline quality report, reconciled to pinned
-  verified inventory/text/chunk catalogs and exposed through the existing script.
-- **FOMC-Q02:** bounded original-page review with deterministic strata selection,
-  source/render hashes and explicit dispositions; no automatic flag clearing.
-- **FOMC-Q03:** only confirmed native-extraction defects, with failing baseline
-  fixtures, new immutable profiles/derivatives and publication/recovery gates.
-  If no native defect is demonstrated, record the bounded no-fix outcome and keep
-  OCR candidates/unresolved cases visible.
+- **Q01 accepted:** deterministic offline report over pinned verified catalogs;
+  522 versions, 4,018 units, 9,790 chunks and 1,087 unit/issue findings reconcile.
+- **Q02 accepted for eight cases:** source/render-hash-bound review covers all
+  four observed strata: four charts/images, one sampled text match, one OCR
+  candidate and two unresolved source-damaged passages. No native parser defect
+  was confirmed. Another 1,079 flagged units remain outside this sample.
+- **Q03 bounded no-native-fix path accepted:** working `quality-remediation-plan`
+  revalidates the actual pack/reviews and refuses incomplete evidence. All 26
+  replacement-character representations have the same 112 literal UTF-8 U+FFFDs
+  in their originals as in extracted text. No number was inferred, flag cleared,
+  extractor/profile changed or new derivative published. New restore/replay were
+  not required or performed; do not report them as passing executions.
 
-**Q01/Q02 are accepted; Q03 is in progress.** Read
-[Q01 acceptance](../../specs/spec017/quality_report_acceptance.md) and continue
-at Q03.1 in the quality task file, not at a historical backfill task. The 167 review-required
-representations and 1,520 flagged chunks are the dated archive-wide baseline;
-images/charts do not automatically imply missing text or OCR work. Pin fresh
-catalog IDs for the report and keep overlap/empty-unit accounting explicit.
-[Q02 acceptance](../../specs/spec017/quality_review_acceptance.md) records eight
-actual source-page reviews across four strata: four charts/images, one sampled
-text match, one OCR candidate and two unresolved source-damaged passages. No native
-parser defect is confirmed in this bounded sample; Q03 must record the no-fix
-outcome honestly. FOMC-T07 remains optional embeddings, separate from this Q-series.
+The actual portable commands are `quality-report`, `quality-review-plan`,
+`quality-review-pack`, `quality-review-record`, `quality-review-check` and
+`quality-remediation-plan`, all through `scripts/run_fomc.sh`. Q01/report and pack
+export use the owned PostgreSQL config; plan/record/check/assessment are local
+and do not connect to PostgreSQL. Consult the acceptance records for exact flags.
 
-Q01 adds offline reporting and its tests. The accepted archive,
-configuration, source clocks, publication pointers and automation state are
-unchanged. No new provider request, OCR/model integration, migration, acquisition
-schedule or Slack message is part of packaging. Keep both configured FOMC status
-sensors as they are, all acquisition schedules stopped and NAAIM paused. FINRA
-remains at SSV-T05. QuantSmith checkout drift remains reported; use verified pinned
-Git guidance without repinning the external checkout.
+Final read-only qualification matches **all 29 tables, 1,081 capture originals/
+receipts/clocks, 10,207 canonical files and all pointers** to the accepted
+backfill's last restore-verified checkpoint; health remains healthy. All seven
+old extractor/acquisition module hashes remain exact. All 167 review-required
+representations and 1,520 flagged chunks remain explicit. Tests: **1,120 offline
+passed (92 optional skips), all 395 FOMC checks with isolated PostgreSQL, and 51
+focused checks**. Lint/format, build/source-byte checks and actual scripts pass.
+
+Ignored report/review artifacts live under
+`data/fomc_meeting_minutes/quality/4e4d302658dd7040b91a78cdd08adb25ba68181a359441921c0674c426f05001/`.
+Its `review-plan.json` and `review-34a710fc4639429c5b4a75a2a3d234e71439bb89471a828f4b630e2fe7878bda/`
+contain the source pack, PNG evidence, `reviews.json`, `review-check.json` and
+`remediation.json`. The temporary review browser is closed; no new service was
+installed. Raw documents and rendered evidence stay ignored; sanitized evidence
+is committed alongside each slice's acceptance.
+
+Next scoped work: additional source-page review beyond the sample, verified
+source reconciliation for damaged HTML, and an explicit OCR/text-layer policy.
+No OCR engine/service or new publication is selected. Deliberate recent-year
+refreshes remain the path for later releases/corrections. T07 optional embeddings
+stay separate. Only the two configured FOMC status sensors run; all acquisition
+schedules remain stopped, NAAIM paused and FINRA at SSV-T05. QuantSmith checkout
+drift remains reported; pinned Git guidance was verified without repinning.
 
 ## 2026-11-13 accepted checkpoint — released 1997–2026 backfill
 

@@ -1,6 +1,7 @@
 # FOMC quality slice tasks
 
-Status: **Q01/Q02 accepted; Q03 in progress**.
+Status: **Q01/Q02 accepted; Q03 bounded no-native-fix path accepted**.
+[Q03 closeout](quality_remediation_acceptance.md) records final tests and unchanged-state qualification.
 [Q01 acceptance](quality_report_acceptance.md) and
 [Q02 acceptance](quality_review_acceptance.md) record the working slices.
 [Contract and capability map](quality_contract.md) · [Plan](quality_plan.md)
@@ -63,21 +64,26 @@ remain explicit backlog, not fabricated extraction work.
 
 ## FOMC-Q03 — confirmed extraction defects and versioned derivatives
 
-- [ ] **Q03.1 — pre-fix regression evidence** (QAC08–09, QAC12).
+- [x] **Q03.1 — pre-fix regression evidence** (QAC08–09, QAC12).
   For each selected confirmed defect, bind a reduced fixture to the Q02 evidence
   and capture the baseline failure. Acceptance: the assertion detects the observed
   missing/corrupted text or citation behavior and passes only after a real fix.
   Proposed files: focused FOMC extraction regression tests/fixtures. If Q02 found
   no confirmed native defect, record that bounded no-fix result and its evidence;
   leave unresolved/OCR work visible rather than inventing a change.
-- [ ] **Q03.2 — narrow transform/profile changes** (QAC08–09, QAC11–12).
+- [x] **Q03.2 — narrow transform/profile changes** (QAC08–09, QAC11–12).
+  **Outcome: not required for this bounded review; no native defect was confirmed.**
+  No transform/profile change was made; all original module hashes remain exact.
   Fix only confirmed behavior; use new immutable profiles/derivatives and compare
   the complete selected unchanged-source input set. Acceptance: every changed
   extraction is explained, historical artifacts/IDs remain readable and exact
   source spans/citations survive. Likely files: FOMC `data/text.py` and the narrow
   dependency/parser helper actually implicated by Q02, plus regression tests.
   Verify focused red/green cases, compatibility diffs and full regression suite.
-- [ ] **Q03.3 — publication and recovery qualification** (QAC09–10, QAC12).
+- [x] **Q03.3 — publication and recovery qualification** (QAC09–10, QAC12).
+  **Outcome: new publication/restore/replay not required and not performed.**
+  Final table/file/receipt fingerprints exactly match the prior restore-verified
+  checkpoint; see Q03 evidence. These are not claimed as new restore/replay runs.
   First prove coherent candidate publication and prior-pointer preservation on
   failure using isolated backend fixtures, including old-generation rollback.
   Then restore-test a fresh operational checkpoint, publish verified derivatives
@@ -85,7 +91,7 @@ remain explicit backlog, not fabricated extraction work.
   post-publication restore and empty-target offline replay. Acceptance: all
   checks match and disposable targets are removed. If the no-native-fix path was
   taken, record publication/recovery as not required with its reason, not passed.
-- [ ] **Q03.4 — closeout and PR tracking** (QAC08–12).
+- [x] **Q03.4 — closeout and PR tracking** (QAC08–12).
   Record actual before/after counts, changed profiles, remaining flags, tests,
   source/render evidence and recovery results. Update acceptance/evidence,
   master register, runbook and handoff. Verify lint/format, required regression/

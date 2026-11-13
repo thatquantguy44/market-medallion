@@ -269,3 +269,15 @@ ignored `alerts.local.yml` when needed; see the
 settings make no request; credentials stay in the named environment variable.
 The pipeline's success/failure sensors default stopped. Set `slack.on_success` and
 `slack.on_failure` independently; defaults are false/true respectively.
+
+## Offline quality commands
+
+[Q01–Q03](../../specs/spec017/quality_remediation_acceptance.md) implements the
+quality report, portable source-page review and remediation assessment through
+`scripts/run_fomc.sh`. Reuse your own pipeline/operations config and explicit
+output paths; no live flag, alert configuration or new quality YAML is required.
+`quality-report` and `quality-review-pack` use verified read-only PostgreSQL
+access; plan/record/check/assessment read local artifacts without connecting.
+See the [runbook](../../docs/deployment/fomc_runbook.md#offline-extraction-quality-workflow)
+for commands and acceptance links. A no-native-fix assessment is scoped to its
+completed review batch; it does not certify all text or change chunk eligibility.
