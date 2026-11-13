@@ -5,7 +5,7 @@ from pathlib import Path
 
 import dagster as dg
 
-from market_data_pipeline.orchestration.slack_alerts import slack_failure_sensor
+from market_data_pipeline.orchestration.slack_alerts import slack_alert_sensors
 from market_data_pipeline.pipelines.sec_fails_to_deliver.pipeline import acquire_and_run
 
 
@@ -84,5 +84,5 @@ defs = dg.Definitions(
     assets=[sec_fails_to_deliver],
     jobs=[job],
     schedules=[schedule],
-    sensors=[slack_failure_sensor(pipeline="sec_fails_to_deliver", job=job)],
+    sensors=slack_alert_sensors(pipeline="sec_fails_to_deliver", job=job),
 )

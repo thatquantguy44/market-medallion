@@ -91,3 +91,18 @@ FOMC's ignored YAML/secret are configured locally; other sensors and all six
 acquisition/import schedules remain stopped. No warehouse migration, source data
 change, LaunchAgent installation or new runtime code was needed. A sanitized
 local record is at ignored `data/dagster/fomc-alert-test-result.json`.
+
+## Success alert extension — selected 2026-11-13
+
+Add strict per-pipeline `slack.on_success` (default false) and `slack.on_failure`
+(default true). Existing files retain failure-only delivery. Disabled/global or
+status-specific gates resolve no webhook and make no HTTP request. Each job gains
+one stopped success sensor alongside its existing failure sensor; preserve failure
+sensor names/cursors. Both share safe delivery/routing/redaction and truthful
+SUCCESS/FAILED message labels. FOMC's local YAML should enable both statuses;
+load the definitions, initialize the new success sensor before a bounded live
+1990 rerun, then verify the actual successful run and Slack acknowledgement.
+Keep all acquisition schedules stopped and other pipeline sensors unchanged.
+Tests must cover strict flags, defaults, both enabled/disabled status paths,
+actual Dagster success ticks, unrelated jobs and cursor non-replay. Run regression,
+FOMC isolated PostgreSQL checks, lint/format and build. Track work in PR #17.

@@ -103,7 +103,7 @@ def test_explicit_missing_alert_path_is_a_visible_error(failed_context, monkeypa
         sensor()(failed_context)
 
 
-def test_root_exposes_one_stopped_sensor_per_implemented_pipeline():
+def test_root_exposes_both_stopped_status_sensors_per_implemented_pipeline():
     from market_data_pipeline.orchestration.dagster_defs import defs
 
     expected = {
@@ -114,7 +114,9 @@ def test_root_exposes_one_stopped_sensor_per_implemented_pipeline():
         "fomc_meeting_minutes",
     }
     sensors = defs.get_repository_def().sensor_defs
-    assert {s.name for s in sensors} == {p + "_slack_failure" for p in expected}
+    assert {s.name for s in sensors} == {
+        p + "_slack_" + status for p in expected for status in ("failure", "success")
+    }
     assert all(s.default_status == dg.DefaultSensorStatus.STOPPED for s in sensors)
     for pipeline in expected:
         settings = Path("config") / pipeline / "alerts.example.yml"
@@ -221,3 +223,38 @@ def test_sensor_to_webhook_flow_does_not_forward_run_tags(failed_context, monkey
     assert failed_context.dagster_run.run_id in payload["text"]
     assert "NEVER_FORWARD_THIS" not in repr(payload)
     assert "PRIVATE" not in repr(payload)
+
+
+@pytest.mark.parametrize("on_success", [True, False])
+def test_success_sensor_uses_config_and_does_not_replay(tmp_path, monkeypatch, on_success):
+    from market_data_pipeline.shared.slack_alerts import SlackAlerts
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        module, "load_alerts", lambda *a, **k: SlackAlerts(enabled=True, on_success=on_success)
+    )
+    calls = []
+    monkeypatch.setattr(module, "send_success", lambda *a, **k: calls.append(k))
+    definition = module.slack_success_sensor(pipeline="example", job=example_alert_job)
+    with dg.DagsterInstance.ephemeral() as instance:
+        initial = definition.evaluate_tick(dg.build_sensor_context(instance=instance))
+
+        @dg.job(name="example_alert_job")
+        def successful_job():
+            pass
+
+        success = successful_job.execute_in_process(instance=instance)
+        example_alert_job.execute_in_process(instance=instance, raise_on_error=False)
+        tick = definition.evaluate_tick(
+            dg.build_sensor_context(instance=instance, cursor=initial.cursor)
+        )
+        assert calls == (
+            [{"pipeline": "example", "job": "example_alert_job", "run_id": success.run_id}]
+            if on_success
+            else []
+        )
+        again = definition.evaluate_tick(
+            dg.build_sensor_context(instance=instance, cursor=tick.cursor)
+        )
+        assert again.cursor == tick.cursor
+        assert len(calls) == int(on_success)

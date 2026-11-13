@@ -19,13 +19,16 @@ from market_data_pipeline.shared.yaml import UniqueLoader
 @dataclass(frozen=True)
 class SlackAlerts:
     enabled: bool = False
+    on_success: bool = False
+    on_failure: bool = True
     webhook_url_env: str = "SLACK_WEBHOOK_URL"
     dagster_url: str | None = None
     network: NetworkConfig = NetworkConfig(timeout_seconds=10, probe_timeout_seconds=5)
 
     def __post_init__(self):
-        if type(self.enabled) is not bool:
-            raise ValueError("slack.enabled requires a boolean")
+        for key in ("enabled", "on_success", "on_failure"):
+            if type(getattr(self, key)) is not bool:
+                raise ValueError("slack." + key + " requires a boolean")
         if not isinstance(self.webhook_url_env, str) or not re.fullmatch(
             r"[A-Za-z_][A-Za-z0-9_]*", self.webhook_url_env
         ):
@@ -74,7 +77,13 @@ def load_alerts(path: Path, *, missing_ok=False) -> SlackAlerts:
     if not isinstance(value, dict) or set(value) - {"slack", "network"} or "slack" not in value:
         raise ValueError("alert YAML requires slack and optional network sections")
     slack = value["slack"]
-    if not isinstance(slack, dict) or set(slack) - {"enabled", "webhook_url_env", "dagster_url"}:
+    if not isinstance(slack, dict) or set(slack) - {
+        "enabled",
+        "on_success",
+        "on_failure",
+        "webhook_url_env",
+        "dagster_url",
+    }:
         raise ValueError("unknown Slack settings; credentials belong in environment")
     network_value = value.get("network", {})
     if not isinstance(network_value, dict):
@@ -86,9 +95,17 @@ def load_alerts(path: Path, *, missing_ok=False) -> SlackAlerts:
     return SlackAlerts(**slack, network=network)
 
 
-def send_failure(settings, *, pipeline, job, run_id, environ=None):
+def send_failure(settings, **kwargs):
+    return _send_status(settings, status="failure", **kwargs)
+
+
+def send_success(settings, **kwargs):
+    return _send_status(settings, status="success", **kwargs)
+
+
+def _send_status(settings, *, status, pipeline, job, run_id, environ=None):
     """One delivery attempt; callers own safe sensor errors and cursor semantics."""
-    if not settings.enabled:
+    if not settings.enabled or not getattr(settings, "on_" + status):
         return False
     env = os.environ if environ is None else environ
     webhook = env.get(settings.webhook_url_env, "")
@@ -97,7 +114,8 @@ def send_failure(settings, *, pipeline, job, run_id, environ=None):
         webhook,
     ):
         raise ValueError("slack_webhook_missing_or_invalid")
-    text = f"MarketMedallion FAILED: {escape(pipeline)} / {escape(job)} — run {escape(run_id)}"
+    label = "SUCCESS" if status == "success" else "FAILED"
+    text = f"MarketMedallion {label}: {escape(pipeline)} / {escape(job)} — run {escape(run_id)}"
     if settings.dagster_url:
         text += f"\n<{settings.dagster_url.rstrip('/')}/runs/{quote(run_id, safe='')}|View run>"
     payload = {"text": text, "unfurl_links": False, "unfurl_media": False}

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import dagster as dg
 
-from market_data_pipeline.orchestration.slack_alerts import slack_failure_sensor
+from market_data_pipeline.orchestration.slack_alerts import slack_alert_sensors
 from market_data_pipeline.pipelines.aaii.config import load_config, resolve_runtime
 from market_data_pipeline.pipelines.aaii.operations import weekly_window
 from market_data_pipeline.pipelines.aaii.pipeline import run
@@ -128,5 +128,5 @@ defs = dg.Definitions(
     assets=[aaii_sentiment],
     jobs=[job],
     schedules=[schedule, live_schedule],
-    sensors=[slack_failure_sensor(pipeline="aaii", job=job)],
+    sensors=slack_alert_sensors(pipeline="aaii", job=job),
 )

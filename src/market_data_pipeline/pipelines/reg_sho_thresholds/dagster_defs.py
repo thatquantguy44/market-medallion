@@ -5,7 +5,7 @@ from pathlib import Path
 
 import dagster as dg
 
-from market_data_pipeline.orchestration.slack_alerts import slack_failure_sensor
+from market_data_pipeline.orchestration.slack_alerts import slack_alert_sensors
 from market_data_pipeline.pipelines.reg_sho_thresholds.pipeline import acquire_and_run
 
 
@@ -89,5 +89,5 @@ defs = dg.Definitions(
     assets=[reg_sho_threshold_list],
     jobs=[job],
     schedules=[schedule],
-    sensors=[slack_failure_sensor(pipeline="reg_sho_thresholds", job=job)],
+    sensors=slack_alert_sensors(pipeline="reg_sho_thresholds", job=job),
 )

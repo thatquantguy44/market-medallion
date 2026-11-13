@@ -2,6 +2,8 @@
 # enable Slack below and start aaii_slack_failure in Dagster.
 slack:
   enabled: false
+  on_failure: true
+  on_success: false
   webhook_url_env: AAII_SLACK_WEBHOOK_URL
   dagster_url: http://127.0.0.1:3030
 network:

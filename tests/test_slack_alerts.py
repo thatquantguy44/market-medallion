@@ -172,3 +172,64 @@ def test_delivery_failures_are_safe_and_do_not_retry_ambiguous_posts(monkeypatch
             environ={"SLACK_WEBHOOK_URL": WEBHOOK},
         )
     assert len(posts) == 1 and "SECRET" not in str(error.value)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "slack: {on_success: 'true'}",
+        "slack: {on_success: 1}",
+        "slack: {on_failure: 'false'}",
+        "slack: {on_failure: null}",
+    ],
+)
+def test_status_flags_require_booleans(tmp_path, text):
+    with pytest.raises(ValueError):
+        alerts.load_alerts(config(tmp_path, text))
+
+
+def test_status_flag_defaults_and_explicit_yaml(tmp_path):
+    defaults = alerts.load_alerts(config(tmp_path, "slack: {}"))
+    assert defaults.on_failure is True and defaults.on_success is False
+    explicit = alerts.load_alerts(config(tmp_path, "slack: {on_failure: false, on_success: true}"))
+    assert explicit.on_failure is False and explicit.on_success is True
+
+
+@pytest.mark.parametrize(
+    "enabled,on_success,on_failure,status,expected",
+    [
+        (True, True, True, "success", True),
+        (True, False, True, "success", False),
+        (True, True, False, "failure", False),
+        (True, True, True, "failure", True),
+        (False, True, True, "success", False),
+    ],
+)
+def test_status_delivery_gates_and_labels(
+    monkeypatch, enabled, on_success, on_failure, status, expected
+):
+    calls = []
+
+    def prepare(*args, **kwargs):
+        def post(request):
+            calls.append(json.loads(request.data))
+            return Response()
+
+        return post
+
+    monkeypatch.setattr(alerts, "prepare_http", prepare)
+    settings = alerts.SlackAlerts(enabled=enabled, on_success=on_success, on_failure=on_failure)
+    sender = alerts.send_success if status == "success" else alerts.send_failure
+    assert (
+        sender(
+            settings,
+            pipeline="example",
+            job="job",
+            run_id="id",
+            environ={"SLACK_WEBHOOK_URL": WEBHOOK} if expected else {},
+        )
+        is expected
+    )
+    assert len(calls) == int(expected)
+    if expected:
+        assert ("SUCCESS" if status == "success" else "FAILED") in calls[0]["text"]
