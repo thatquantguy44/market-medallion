@@ -74,3 +74,11 @@ actual dev and built-server registries returned the Python-produced fictional
 fixture over localhost, and a cross-origin built-server request returned 403.
 No real source history was admitted by this check. The routes require explicit
 local environment configuration and are not enabled in hosted environments.
+
+T09 adds an explicit catalog check and pinned dataset load to PRES. A failed,
+late or superseded load retains the current analysis and notes; update checks
+do not replace it. The generated fixture is visibly labeled fictional in the
+workspace, CSV, figure exports and v1 manifest limitations. Ninety-six focused
+consumer tests and all seven PRES browser tests passed, including CSV/SVG/PNG
+exports and responsive checks; typecheck and production build passed. This is
+a one-dataset fixture integration, not real-source qualification or a v2 replay.
