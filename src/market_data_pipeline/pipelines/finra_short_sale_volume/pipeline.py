@@ -137,19 +137,39 @@ def read_gold(
 ):
     _admit(manifest, approved_use, operation, {"fixture", "transform"})
     day, facility = store.scope(manifest, trade_date, facility_id)
-    if as_of is not None or as_of_sequence is not None:
-        raise ValueError("cutoff selection requires SSV-T07")
+    cutoff = _clock(as_of) if as_of is not None else None
+    if as_of_sequence is not None and (
+        cutoff is None or type(as_of_sequence) is not int or not 1 <= as_of_sequence < 2**63
+    ):
+        raise ValueError("FINRA sequence cutoff requires an aware time and positive integer")
     with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
         db.execute("BEGIN")
-        selected = db.execute(
-            "SELECT capture_id FROM partitions WHERE trade_date=? AND facility_id=?",
-            (day, facility),
-        ).fetchone()
+        if cutoff is None:
+            selected = db.execute(
+                "SELECT capture_id FROM partitions WHERE trade_date=? AND facility_id=?",
+                (day, facility),
+            ).fetchone()
+        else:
+            selected = db.execute(
+                "SELECT capture_id FROM captures WHERE trade_date=? AND facility_id=? "
+                "AND status='APPLIED' AND (archived_at<? "
+                "OR (archived_at=? AND capture_sequence<=?)) "
+                "ORDER BY archived_at DESC,capture_sequence DESC LIMIT 1",
+                (
+                    day,
+                    facility,
+                    cutoff,
+                    cutoff,
+                    as_of_sequence if as_of_sequence is not None else 2**63 - 1,
+                ),
+            ).fetchone()
         capture_id = selected[0] if selected else None
         return {
             "trade_date": day,
             "facility_id": facility,
             "capture_id": capture_id,
+            "as_of": cutoff,
+            "as_of_sequence": as_of_sequence,
             "knowledge_basis": "CURRENT_VINTAGE",
             "clock_basis": "LOCAL_CAPTURE",
             "rows": store.rows(db, capture_id) if capture_id else [],
@@ -215,3 +235,33 @@ def coverage(root, manifest, *, approved_use, operation, trade_date, facility_id
                 "UNKNOWN" if committed is None else ("REPORTED" if found else "NO_REPORTED_ROW")
             )
         return result
+
+
+def history(root, manifest, *, approved_use, operation, trade_date, facility_id, symbol, limit=100):
+    _admit(manifest, approved_use, operation, {"fixture", "transform"})
+    day, facility = store.scope(manifest, trade_date, facility_id)
+    if (
+        type(limit) is not int
+        or not 1 <= limit <= 1000
+        or not isinstance(symbol, str)
+        or not symbol
+        or len(symbol) > 255
+    ):
+        raise ValueError("FINRA history requires a symbol and limit 1..1000")
+    with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
+        result = []
+        for row in db.execute(
+            "SELECT version_id,body FROM versions WHERE trade_date=? "
+            "AND facility_id=? AND symbol_raw=? "
+            "ORDER BY first_seen_at DESC,capture_sequence DESC LIMIT ?",
+            (day, facility, symbol, limit),
+        ):
+            value = store._document(row["body"])
+            identity = value.pop("version_id")
+            from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import digest
+
+            if identity != row["version_id"] or digest(value) != identity:
+                raise ValueError("FINRA stored version integrity mismatch")
+            value["version_id"] = identity
+            result.append(value)
+        return list(reversed(result))

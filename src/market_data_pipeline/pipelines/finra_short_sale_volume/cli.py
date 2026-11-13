@@ -21,7 +21,15 @@ def _read(path, limit):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="FINRA short-sale-volume local pipeline")
     commands = parser.add_subparsers(dest="command", required=True)
-    for name in ("validate-config", "run", "ingest-capture", "gold", "coverage", "audit"):
+    for name in (
+        "validate-config",
+        "run",
+        "ingest-capture",
+        "gold",
+        "coverage",
+        "audit",
+        "history",
+    ):
         command = commands.add_parser(name)
         command.add_argument("--config", required=True, type=Path)
         if name == "run":
@@ -31,7 +39,7 @@ def main(argv=None):
             command.add_argument("--run-id")
         if name == "ingest-capture":
             command.add_argument("--capture-id", required=True)
-        if name in ("gold", "coverage"):
+        if name in ("gold", "coverage", "history"):
             command.add_argument("--trade-date", required=True)
             command.add_argument("--facility", required=True)
         if name == "gold":
@@ -39,6 +47,9 @@ def main(argv=None):
             command.add_argument("--as-of-sequence", type=int)
         if name == "coverage":
             command.add_argument("--symbol")
+        if name == "history":
+            command.add_argument("--symbol", required=True)
+            command.add_argument("--limit", type=int, default=100)
         if name == "audit":
             command.add_argument("--limit", type=int, default=20)
     args = parser.parse_args(argv)
@@ -86,6 +97,16 @@ def main(argv=None):
                 facility_id=args.facility,
                 as_of=args.as_of,
                 as_of_sequence=args.as_of_sequence,
+            )
+        elif args.command == "history":
+            result = pipeline.history(
+                config.root,
+                config.manifest,
+                **shared,
+                trade_date=args.trade_date,
+                facility_id=args.facility,
+                symbol=args.symbol,
+                limit=args.limit,
             )
         elif args.command == "coverage":
             result = pipeline.coverage(

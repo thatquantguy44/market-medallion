@@ -210,36 +210,42 @@ def apply(db, saved, page, parsed, profile, attempt, now, checkpoint):
     db.execute("BEGIN IMMEDIATE")
     try:
         if status == "APPLIED":
-            if db.execute(
-                "SELECT 1 FROM partitions WHERE trade_date=? AND facility_id=?", (day, facility)
-            ).fetchone():
-                raise RuntimeError("revision processing requires SSV-T07")
+            previous = db.execute(
+                "SELECT capture_id FROM partitions WHERE trade_date=? AND facility_id=?",
+                (day, facility),
+            ).fetchone()
+            old = {item["symbol_raw"]: item for item in rows(db, previous[0])} if previous else {}
+            if set(old) - {row.symbol_raw for row in page.rows}:
+                raise RuntimeError("removal processing requires SSV-T08")
             if (
                 db.execute("SELECT COUNT(*) FROM versions").fetchone()[0] + len(page.rows)
                 > MAX_VERSIONS
             ):
                 raise ValueError("FINRA version budget exceeded")
             for row in page.rows:
-                value = version(observation(row), saved)
-                db.execute(
-                    "INSERT INTO versions VALUES (?,?,?,?,?,?,?,?,?)",
-                    (
-                        value["version_id"],
-                        day,
-                        facility,
-                        row.symbol_raw,
-                        saved["archived_at"],
-                        saved["capture_sequence"],
-                        saved["capture_id"],
-                        0,
-                        encoded(value).decode(),
-                    ),
-                )
+                body = observation(row)
+                value = old.get(row.symbol_raw)
+                if value is None or value["value_sha256"] != body["value_sha256"]:
+                    value = version(body, saved)
+                    db.execute(
+                        "INSERT INTO versions VALUES (?,?,?,?,?,?,?,?,?)",
+                        (
+                            value["version_id"],
+                            day,
+                            facility,
+                            row.symbol_raw,
+                            saved["archived_at"],
+                            saved["capture_sequence"],
+                            saved["capture_id"],
+                            0,
+                            encoded(value).decode(),
+                        ),
+                    )
+                    result["new_versions"] += 1
                 db.execute(
                     "INSERT INTO capture_rows VALUES (?,?,?,?)",
                     (saved["capture_id"], row.symbol_raw, value["version_id"], row.source_row),
                 )
-                result["new_versions"] += 1
             checkpoint("after_versions")
         db.execute(
             "INSERT INTO captures VALUES (?,?,?,?,?,?,?)",

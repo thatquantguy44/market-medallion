@@ -75,6 +75,29 @@ def test_ssv_ac06_cli_and_script_complete_local_loop(tmp_path):
             else []
         )
         assert invoke(config, command, *args).returncode == 0
+    revisions = invoke(
+        config,
+        "history",
+        "--trade-date",
+        "2026-11-09",
+        "--facility",
+        "nyse_trf",
+        "--symbol",
+        "000SYN.A",
+    )
+    assert revisions.returncode == 0 and len(json.loads(revisions.stdout)) == 1
+    assert json.loads(revisions.stdout)[0]["short_volume"] == "40"
+    cutoff = invoke(
+        config,
+        "gold",
+        "--trade-date",
+        "2026-11-09",
+        "--facility",
+        "nyse_trf",
+        "--as-of",
+        "1900-01-01T00:00:00+00:00",
+    )
+    assert cutoff.returncode == 0 and json.loads(cutoff.stdout)["rows"] == []
     env = dict(os.environ, FINRA_SSV_PYTHON=sys.executable)
     result = subprocess.run(
         [
