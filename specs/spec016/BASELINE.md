@@ -101,3 +101,11 @@ fixture produces 3/2/2/2/2 windows and one cycle row; independent calculations
 check both return constructions and sample/fundamental pairing. Frozen-profile
 admission, complete atomic bundle publication and consumer support remain open.
 The complete producer presidential test group passed 93 tests.
+
+The T11 fictional complete bundle now publishes all five datasets and seven
+artifacts in one generation. It journals the pending/published state in SQLite,
+rechecks every file, and retains or recovers a coherent pointer across injected
+interruptions. Missing artifacts block replacement. The producer presidential
+suite passed 100 tests. The application reader still supports only the
+single-dataset generation, and the frozen real-input profile remains blocked;
+T11 and its consumer acceptance are not complete.
