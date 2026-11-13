@@ -19,6 +19,12 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
+**Presidential research:** [Spec016](specs/spec016/README.md) is implemented
+and its frozen local reconstruction matches a fresh donor rebuild. The receiving
+feature branches include the local pipeline, PRES reader and research handoff;
+see [acceptance](specs/spec016/acceptance.md). Live source refresh and release
+of those branches remain separate decisions.
+
 **Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 and listed
 references for **1990 through released 2026 minutes** are accepted locally as of
 November 13. [Latest acceptance](specs/spec017/1997_2026_acceptance.md) records

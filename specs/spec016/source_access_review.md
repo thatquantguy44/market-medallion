@@ -22,7 +22,10 @@ No API key is read and no provider is probed by a blocked run.
 - Manual official control evidence is reviewed separately and is not fetched by
   automated source loops.
 
-The frozen historical inputs and previously dated controls are not newly
-retrieved. Their exact bytes, capture provenance and applicable use rights must
-be checked before the real-data acceptance is recorded. Fictional test
-transports are always classified as synthetic and cannot enable a live source.
+The 2026-11-03 donor decision authorizes reprocessing its existing archives; the
+selected bytes, source clocks, control workbook and historical evidence have
+been pinned and locally reconciled as described in [acceptance](acceptance.md).
+This did not authorize a new provider refresh or establish redistribution rights.
+The application of current FRED terms to any proposed future use or distribution
+still requires appropriate review. Fictional injected transports remain labeled
+synthetic and cannot enable a live source.

@@ -1,9 +1,19 @@
 # Presidential research: local operations
 
-This branch contains a fixture-qualified local producer and consumer. It does not
-contain an admitted historical bundle, and no live provider is approved. Keep
+This branch contains a locally qualified frozen historical bundle and consumer.
+No live provider is approved. Keep
 workspace data and credentials outside Git. Preserve prior snapshots and backups;
 do not replace or delete historical evidence as a routine rollback.
+
+To reconstruct the selected frozen study into a **new absent** workspace, use
+`python -m market_data_pipeline presidential import-frozen --donor-pipeline
+/path/to/research/pipeline --workbook /path/to/political_control_review_workbook.xlsx
+--workspace /absolute/new/workspace`. This verifies each named input and retains
+the two original manifests, five control evidence files and original retrieval
+clocks. It does not contact a provider. The installed package requires its
+standard `xlrd` dependency for the retained Shiller workbook.
+
+For individually selected alternate local inputs:
 
 1. Initialize a dedicated workspace with `python -m market_data_pipeline presidential
    init --workspace /absolute/private/path`.
@@ -19,7 +29,7 @@ do not replace or delete historical evidence as a routine rollback.
    after publication validates successfully.
 4. The offline `presidential_rebuild_job` takes explicit capture and review IDs
    and performs no fetch. The separate `presidential_live_fetch_job` applies the
-   source gate before network setup. `presidential_live_fetch_schedule` defaults
+   source gate before network setup. `presidential_research_refresh` defaults
    STOPPED. The actual state of any separately running Dagster instance was not
    changed or inspected. Even when manually enabled, live requests remain blocked
    until source-specific access and transport are reviewed in code.
@@ -30,4 +40,4 @@ do not replace or delete historical evidence as a routine rollback.
 
 Use `python -m market_data_pipeline presidential <command> --help` for exact
 required arguments. See [source access review](source_access_review.md) and
-[acceptance tracker](todo.md) before treating any real-data study as qualified.
+[acceptance tracker](todo.md) for the exact scope of the frozen-history qualification.
