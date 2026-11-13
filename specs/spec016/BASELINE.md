@@ -47,3 +47,13 @@ workbook expansion failures are rejected. The version stores separate workbook,
 catalog, controls and manifest hashes, and its loader rechecks them. Source
 workbooks and existing control files are never overwritten. Review timestamps
 provided only as dates remain date-level evidence, not fabricated intraday times.
+
+T06 publishes a single strict v1 baseline from an explicitly selected raw capture
+and reviewed control version. Source and review kinds must match, fictional
+inputs carry fictional labels and cannot use the frozen historical profile,
+and a verified snapshot is atomically selected. Tests cover staged writes,
+interrupted publication boundaries, pointer failure, corrupted raw/review/output
+and idempotent publication. The presidential test group passed 75 tests; a built
+wheel executed the publication fixture tests outside the source and donor
+checkouts. No real historical data has been admitted or published. The shared
+Python/TypeScript contract still requires the independently pinned T07 vectors.
