@@ -416,7 +416,7 @@ def test_concurrent_operation_is_refused_before_intent_or_probe(operation_archiv
     assert calls == probes == []
 
 
-@pytest.mark.parametrize("image_format", ["gif", "jpg"])
+@pytest.mark.parametrize("image_format", ["gif", "jpg", "png"])
 def test_legacy_print_bytes_encoding_profile_and_chunks_survive_backfill(
     operation_archive, image_format
 ):
@@ -435,22 +435,23 @@ def test_legacy_print_bytes_encoding_profile_and_chunks_survive_backfill(
     payloads[BASE + "fomchistorical1990.htm"] = payloads[BASE + "fomchistorical1990.htm"].replace(
         b"invented19900103.htm", b"fomc20080625.htm"
     )
+    image_path, image = {
+        "gif": (
+            "gifjpg/fomcminutes20080716Chart1.gif",
+            bytes.fromhex(
+                "47494638396101000100800000000000ffffff21f90401000000002c00000000010001000002024401003b"
+            ),
+        ),
+        "jpg": ("gifjpg/fomcminutes20080716Chart1.jpg", b"\xff\xd8invented framed JPEG\xff\xd9"),
+        "png": ("images/sep20170315_figure1.png", b"\x89PNG\r\n\x1a\ninvented PNG"),
+    }[image_format]
     document = HTML.replace(
         b"Last: vote and footnote 1.</p>",
-        b"Last: vote and footnote 1.</p><img "
-        b'src="/monetarypolicy/gifjpg/fomcminutes20080716Chart1.gif">',
+        b"Last: vote and footnote 1.</p><img " + f'src="/monetarypolicy/{image_path}">'.encode(),
     )
-    if image_format == "jpg":
-        document = document.replace(b"Chart1.gif", b"Chart1.jpg")
     payloads[URL] = document
-    gif_url = BASE + "gifjpg/fomcminutes20080716Chart1.gif"
-    gif = bytes.fromhex(
-        "47494638396101000100800000000000ffffff21f90401000000002c00000000010001000002024401003b"
-    )
-    if image_format == "jpg":
-        gif_url = gif_url.replace(".gif", ".jpg")
-        gif = b"\xff\xd8invented framed JPEG\xff\xd9"
-    payloads[gif_url] = gif
+    image_url = BASE + image_path
+    payloads[image_url] = image
     payloads[BASE + "fomcminutes20080625ep.htm"] = (
         b'<div id="article"><p>Invented complete SEP addendum.</p></div>'
     )
@@ -483,13 +484,13 @@ def test_legacy_print_bytes_encoding_profile_and_chunks_survive_backfill(
     assert (
         PostgresTextCatalog(text).read(manifest, root=cfg.root)["bindings"] == catalog["bindings"]
     )
-    gif_capture_id = store.connection.execute(
+    image_capture_id = store.connection.execute(
         store._query("SELECT capture_id FROM {schema}.bronze_captures WHERE source_url=%s"),
-        (gif_url,),
+        (image_url,),
     ).fetchone()[0]
-    assert bronze.read_capture(str(gif_capture_id))[1] == gif
+    assert bronze.read_capture(str(image_capture_id))[1] == image
     pointers = repeated["pointers_after"]
-    payloads[gif_url] = gif[:-1]
+    payloads[image_url] = image[:7] if image_format == "png" else image[:-1]
     failed = run_operation(
         cfg,
         settings,

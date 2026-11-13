@@ -205,6 +205,7 @@ def test_april_2008_chart_dependencies_preserve_source_owned_filename_variation(
     "url",
     [
         "https://other.example/monetarypolicy/gifjpg/chart1.jpg",
+        "https://www.federalreserve.gov/images/ui.png",
         "https://www.federalreserve.gov/monetarypolicy/unreviewed/chart1.gif",
         "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart1.svg",
         "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart1.jpg?token=x",
@@ -268,3 +269,26 @@ def test_2014_sep_acronym_requires_local_definition_and_explicit_addendum(manife
     result = discover_html_dependencies(payload, URL, manifest)
     assert any(d.relation == "minutes_addendum" for d in result.dependencies) == defined
     assert ("unresolved_sep_association" in {i.code for i in result.issues}) == (not defined)
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "sep20170315_figure1.png",
+        "sep20170315_figure2.png",
+        "sep20170315_figure3e.png",
+        "sep20170315_figure5.png",
+    ],
+)
+def test_2017_declared_png_charts_in_monetary_policy_images_folder(manifest, filename):
+    payload = HTML.replace(
+        b"Last: vote and footnote 1.</p>",
+        b"Last: vote and footnote 1.</p><img "
+        + f'src="/monetarypolicy/images/{filename}">'.encode(),
+    )
+    result = extract_text(payload, URL, manifest)
+    assert result["status"] == "review_required", result["issues"]
+    assert result["issues"] == ["image_content"]
+    deps = discover_html_dependencies(payload, URL, manifest)
+    assert not deps.issues
+    assert any(d.href_raw.endswith(filename) and d.kind == "asset" for d in deps.dependencies)

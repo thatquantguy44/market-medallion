@@ -185,3 +185,12 @@ define “Summary of Economic Projections (SEP)” and later explicitly identify
 when that definition appears in the same substantive article; undefined acronyms
 and navigation labels alone remain unresolved. HTML spacing around the acronym's
 parentheses does not change the association. Original labels/hrefs are retained.
+
+The [March 2017 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20170315ep.htm)
+declares eleven PNG charts under `/monetarypolicy/images/`, including
+`sep20170315_figure1.png`. The reviewed content-image folders are now
+`/monetarypolicy/files/`, `/monetarypolicy/gifjpg/` and `/monetarypolicy/images/`,
+alongside the retained legacy root SEP-PNG pattern. Original filenames/URLs are
+preserved. The same format framing, byte/lineage checks and explicit image-review
+status apply. The site-wide `/images/` folder and unsupported formats stay rejected;
+regression coverage includes PNG/GIF/JPEG original readback, reuse and failure rollback.

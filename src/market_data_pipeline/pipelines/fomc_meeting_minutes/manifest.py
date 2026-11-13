@@ -92,7 +92,7 @@ class Manifest:
             or re.fullmatch(r"/monetarypolicy/files/[^/]+\.png", resolved.path)
             or re.fullmatch(r"/monetarypolicy/files/[A-Za-z0-9_.-]+\.(?:gif|jpg)", resolved.path)
             or re.fullmatch(
-                r"/monetarypolicy/gifjpg/[A-Za-z0-9_.-]+\.(?:png|gif|jpg)", resolved.path
+                r"/monetarypolicy/(?:gifjpg|images)/[A-Za-z0-9_.-]+\.(?:png|gif|jpg)", resolved.path
             )
         ):
             raise ValueError("unreviewed FOMC content-asset path or format")
