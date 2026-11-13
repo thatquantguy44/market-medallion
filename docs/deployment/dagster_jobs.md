@@ -121,12 +121,12 @@ DAGSTER_HOME="$PWD/.dagster" .venv/bin/dagster schedule list \
 Start the local service when it is intended to remain available:
 
 ```bash
-set -a
-source .env
-set +a
-DAGSTER_HOME="$PWD/.dagster" .venv/bin/dagster dev \
-  -m market_data_pipeline.orchestration.dagster_defs
+./scripts/run_local_dagster.sh
 ```
+
+The launcher loads `.env` and binds the UI to `http://127.0.0.1:3030` by default.
+Set `DAGSTER_PORT` in `.env` to choose another port. A running process keeps its
+existing port until restarted.
 
 For a future restart-at-login review on macOS, install the tracked LaunchAgent template
 after replacing `__PROJECT_ROOT__` with the absolute checkout path. The service

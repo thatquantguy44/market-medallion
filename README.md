@@ -189,13 +189,15 @@ so existing volumes and DBeaver connections continue to use the same data.
 ## Dagster
 
 The lockfile includes the optional Dagster dependencies. For a minimal runtime,
-install `.[dagster,postgres]` instead. Start the UI from the repository root:
+install `.[dagster,postgres]` instead. With your local `.env` prepared, start the
+UI from the repository root:
 
 ```bash
-mkdir -p .dagster
-DAGSTER_HOME="$PWD/.dagster" .venv/bin/dagster dev \
-  -m market_data_pipeline.orchestration.dagster_defs
+./scripts/run_local_dagster.sh
 ```
+
+The UI binds to `http://127.0.0.1:3030` by default. Set `DAGSTER_PORT` in `.env`
+to use another port.
 
 Launch `aaii_sentiment_job` using [the example run configuration](resources/dagster-aaii.yml).
 Both Thursday 10:00 America/New_York schedules are **stopped by default**.
