@@ -168,3 +168,12 @@ config is `t04-verification.local.yml`; data lives under
 `data/sec_fails_to_deliver/t04-verification`. An unchanged repeat adds zero facts.
 Aggregate evidence is `data/sec_ftd/t04-verification.json`. This does not change
 the PostgreSQL operational default or enable Databricks.
+
+## Optional Slack alerts
+
+`alerts.example.yml` is independent of acquisition/runtime settings. Copy it to
+ignored `alerts.local.yml` when needed; see the
+[Slack setup/runbook](../../docs/deployment/slack_alerts.md). Absent or disabled
+settings make no request; credentials stay in the named environment variable.
+The pipeline's success/failure sensors default stopped. Set `slack.on_success` and
+`slack.on_failure` independently; defaults are false/true respectively.

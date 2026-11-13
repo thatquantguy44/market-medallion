@@ -1,0 +1,14 @@
+# Optional: copy to alerts.local.yml, supply the secret in the daemon environment,
+# enable the desired statuses below and start their matching sensors in Dagster.
+slack:
+  enabled: false
+  on_failure: true
+  on_success: false
+  webhook_url_env: SEC_FAILS_TO_DELIVER_SLACK_WEBHOOK_URL
+  dagster_url: http://127.0.0.1:3030
+network:
+  mode: auto
+  preferred_route: proxy
+  fallback: true
+  probe_timeout_seconds: 5
+  timeout_seconds: 10

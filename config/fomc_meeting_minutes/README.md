@@ -259,3 +259,12 @@ and 897,899 text characters. All 897,405 unit characters are covered by 406 chun
 494 extraction separators are accounted for separately. Nineteen representations
 require review. The actual 26/29-table restores and offline capture/catalog/audit
 replay passed; this does not certify full historical acquisition or accuracy.
+
+## Optional Slack alerts
+
+`alerts.example.yml` is independent of acquisition/runtime settings. Copy it to
+ignored `alerts.local.yml` when needed; see the
+[Slack setup/runbook](../../docs/deployment/slack_alerts.md). Absent or disabled
+settings make no request; credentials stay in the named environment variable.
+The pipeline's success/failure sensors default stopped. Set `slack.on_success` and
+`slack.on_failure` independently; defaults are false/true respectively.

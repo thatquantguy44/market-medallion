@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-12.
+Last updated: 2026-11-13.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -19,7 +19,77 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — local Dagster launcher port
+## 2026-11-13 current pickup — configurable success and failure alerts
+
+The user requested success alerts through configuration and a real rerun.
+`slack.on_success` defaults false; `slack.on_failure` defaults true, preserving
+existing YAML behavior. Each pipeline now owns two stopped-by-default status
+sensors. FOMC's ignored alert YAML enables both flags, and both FOMC sensors are
+**RUNNING**. All six schedules and the other eight alert sensors remain **STOPPED**.
+The existing failure sensor name/cursor is retained. Current work stays on
+`feat/pipeline-slack-alerts` in [PR #17](https://github.com/thatquantguy44/market-medallion/pull/17).
+
+Live run `cfa76508-63c2-43fa-bf05-52a0cddea51b` succeeded for the same manual
+1990 backfill: all 16 originals reused, three data GETs plus two probes, 350,095
+bytes, coherent promotion and healthy archive readback. Success-sensor tick 55
+was SUCCESS and logged acknowledgement-backed `slack_alert_delivered` for that
+exact run with `status=success`. Local evidence is ignored
+`data/dagster/fomc-success-alert-rerun.json`. The prior live rerun
+`1187ee91-bfd8-4a8e-8b71-0434648f14da` also succeeded before success alerts
+were enabled. Historical coverage remains bounded through the accepted 1990–1994
+batches; chunks remain 993 (368 eligible, 625 review-flagged). Next historical
+batch remains 1995–1996. NAAIM acquisition remains paused.
+
+Verification: **1,050 regression tests passed, 80 optional skips; 313 FOMC checks
+passed with isolated PostgreSQL enabled**. Status flag gates, defaults, labels,
+real success event/cursor behavior and legacy failure routing pass. See
+[Spec018](../../specs/spec018/README.md) and the
+[updated runbook](../deployment/slack_alerts.md). Secrets stay ignored; no
+acquisition schedule, dependency, storage schema or provider semantic was changed.
+
+## 2026-11-12 accepted checkpoint — optional pipeline-owned Slack alerts
+
+**Subsequent operational verification:** the user configured the FOMC webhook and
+requested a real job-driven alert. The manual local Dagster UI/daemon is running
+on `http://127.0.0.1:3030`. FOMC's alert YAML is enabled and its failure sensor is
+**RUNNING**; the other four sensors and all six schedules remain **STOPPED**.
+Intentional test run `621d5cfc-d83e-46b2-974b-ea189c31b153` failed at the closed
+live-access gate (`preflight_failed`) before source acquisition/database access.
+Sensor tick 4 completed successfully, associated that exact run and logged
+`slack_alert_delivered`. Ignored local evidence is
+`data/dagster/fomc-alert-test-result.json`; webhook/config secrets remain ignored.
+No LaunchAgent or durable installation was added. The earlier disabled-only
+feature acceptance below remains historical; this paragraph owns current runtime
+alert state.
+
+PR #16 is merged; local Dagster defaults to port 3030. The user requested a new
+branch for configurable Slack alerts with separate optional YAML per pipeline.
+Current branch: `feat/pipeline-slack-alerts`, based on merged main, in
+[PR #17](https://github.com/thatquantguy44/market-medallion/pull/17). Track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/17/checks) and
+review threads against the current head before merging. See
+[Spec018](../../specs/spec018/README.md) and the
+[Slack runbook](../deployment/slack_alerts.md).
+
+Each of the five existing Dagster jobs owns a stopped `<pipeline>_slack_failure`
+sensor and `config/<pipeline>/alerts.example.yml`. Users may copy it to ignored
+`alerts.local.yml`, set `slack.enabled`, provide the named webhook environment
+variable and deliberately start only that alert sensor. Missing/disabled config
+makes no probe; explicit broken config is a visible safe sensor error. Import
+loads no local file or secret. Alerts contain only job/pipeline/run IDs and an
+optional Dagster link, use the shared HTTP route with redirects blocked, and
+require a bounded acknowledgement. Delivery is best-effort with one POST, no
+automatic retry/outbox, and documented Dagster cursor consumption/replay limits.
+
+Verification: **1,038 regression tests passed, 80 optional skips; all 313 FOMC
+checks passed with isolated PostgreSQL enabled**. Forty-seven added checks cover
+config gates, routing, redaction, real failure/pre-step/success/unrelated-job
+status events and cursor behavior. Root registration reports all five sensors
+stopped, and all six schedules remain stopped. No real webhook was configured
+or message sent; no service restart, acquisition or migration was performed.
+NAAIM remains paused; the next historical FOMC batch remains 1995–1996.
+
+## 2026-11-12 accepted checkpoint — local Dagster launcher port
 
 PR #15 is merged. The user requested a different default port for
 `scripts/run_local_dagster.sh`. The follow-up branch is

@@ -25,6 +25,27 @@ No other Dagster jobs or schedules are defined in the repository. A schedule
 being listed or enabled does not establish provider rights, start a persistent
 service, or grant a downstream redistribution right.
 
+## Optional Slack status sensors
+
+Each of the five implemented pipelines owns `<pipeline_name>_slack_failure` and
+`<pipeline_name>_slack_success` run-status sensors, registered through the root
+code location. All ten default **STOPPED**. YAML flags `slack.on_failure` (default
+true) and `slack.on_success` (default false) independently select notifications. Each independently reads optional
+`config/<pipeline_name>/alerts.local.yml`; missing/disabled settings send nothing.
+Examples contain environment-variable names rather than webhook secrets. See the
+[Slack alert runbook](slack_alerts.md) for all names, setup, network policy and
+cursor/delivery limitations. On 2026-11-12 the user configured FOMC's webhook and
+requested a real Dagster alert test. The manual local service is running on port
+3030. As of 2026-11-13, **both FOMC status sensors are RUNNING**, with both flags
+enabled. The other eight alert sensors and all six acquisition/import schedules
+remain stopped. The FOMC test
+run `621d5cfc-d83e-46b2-974b-ea189c31b153` failed intentionally before acquisition
+(`preflight_failed`, `live: false`); sensor tick 4 succeeded and logged delivery.
+No provider acquisition or warehouse mutation was performed by that failure test.
+The subsequent live 1990 rerun `cfa76508-63c2-43fa-bf05-52a0cddea51b` succeeded,
+reused 16 documents and passed archive health; success-sensor tick 55 delivered
+its SUCCESS alert. No acquisition schedule was enabled.
+
 ## Ownership and job behavior
 
 ### AAII

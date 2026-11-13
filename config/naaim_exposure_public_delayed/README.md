@@ -19,3 +19,12 @@ Use `mode: direct` where proxy use is prohibited, or `mode: proxy` where direct
 fallback is prohibited. In auto mode, `preferred_route` chooses which route is
 tested first and `fallback: false` pins it. Explicit NO_PROXY rules always select
 direct for excluded hosts, including redirects.
+
+## Optional Slack alerts
+
+`alerts.example.yml` is independent of acquisition/runtime settings. Copy it to
+ignored `alerts.local.yml` when needed; see the
+[Slack setup/runbook](../../docs/deployment/slack_alerts.md). Absent or disabled
+settings make no request; credentials stay in the named environment variable.
+The pipeline's success/failure sensors default stopped. Set `slack.on_success` and
+`slack.on_failure` independently; defaults are false/true respectively.
