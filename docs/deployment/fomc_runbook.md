@@ -3,7 +3,7 @@
 The FOMC pipeline owns its CLI, source adapters, archive, PostgreSQL namespace and
 Dagster definitions under `pipelines/fomc_meeting_minutes/`. Active acquisition
 starts in 1990. [T06 acceptance](../../specs/spec017/t06_acceptance.md) records the
-bounded local T06 result. The [1993–1994 acceptance](../../specs/spec017/1993_1994_acceptance.md)
+bounded local T06 result. The [1995–1996 acceptance](../../specs/spec017/1995_1996_acceptance.md)
 is the latest checkpoint; neither certifies full history or text/OCR accuracy.
 
 ## Checkout setup and script entrypoint
@@ -124,8 +124,8 @@ migration of your own target:
   --operations config/fomc_meeting_minutes/operations.local.yml
 ```
 
-The local 1990–1994 batches are accepted for listed references; the next core
-batch is 1995–1996. The two-year example uses the default `max_years: 2` limit.
+The local 1990–1996 batches are accepted for listed references; the next core
+batch is 1997–1998. The two-year example uses the default `max_years: 2` limit.
 Change only the explicit year bounds for another bounded batch; the operation
 settings still enforce all finite limits. `migrate`, `recover-capture` and
 `recover-run` also work through the same script with their documented arguments.
@@ -231,7 +231,8 @@ before service access.
 
 For deliberate historical batches, use
 [`resources/dagster-fomc-backfill.yml`](../../resources/dagster-fomc-backfill.yml),
-which shows the next 1995–1996 batch with live access disabled. Set explicit
+which shows a representative 1995–1996 batch with live access disabled. The next
+core batch is 1997–1998; update explicit bounds deliberately. Set explicit
 bounds and review them before enabling live access. Ordinary configs omitting
 both bounds and `recent_years` retain the original 1990-only backfill default.
 This job delivery did not acquire a new historical batch.
@@ -266,3 +267,14 @@ persistent worker/service, schedule activation, external alert destination or
 off-machine backup destination is installed by this job delivery. External
 integrations remain configurable future work. See the
 [job acceptance](../../specs/spec017/dagster_job_acceptance.md) for verification.
+
+## Latest bounded batch — 1995–1996
+
+Dagster run `12d67c3f-4aab-41a1-bdb1-83a5c0532d9c` acquired all 16 selected
+HTML references and passed coherent publication, archive readback and Slack success
+delivery. The archive has 172 captures, 89 representations and 1,193 chunks
+(568 eligible, 625 review-flagged). Before/after backups restored all 29 tables
+and exact canonical file hashes. Actual empty-target replay and offline health/
+plan/recovery checks passed; all 152 prior originals/clocks remain intact.
+See [acceptance](../../specs/spec017/1995_1996_acceptance.md). This checkpoint
+changes no runtime, dependency, schema, acquisition schedule or review policy.

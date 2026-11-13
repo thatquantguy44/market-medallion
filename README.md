@@ -20,19 +20,17 @@ permission reference is required for any live request. Other connectors remain
 planned.
 
 **Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 and bounded
-**1990–1994** batches are accepted locally for listed references in the
-1990-onward archive. [Latest acceptance](specs/spec017/1993_1994_acceptance.md)
-records 146 captures and 73 text representations: 624 PDF pages and 993 chunks
-(368 eligible, 625 review-flagged). The current inventory has 371 meeting claims
-and 470 references, with earlier snapshots preserved. Full history and text/OCR
-accuracy review remain incomplete. Other users can run
-[`scripts/run_fomc.sh`](scripts/run_fomc.sh) with their own config; see the
-[setup guide](docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint).
-PR #14 merged the 1992–1994 batches. The
-[Dagster job](docs/deployment/fomc_runbook.md#dagster) supports recent refresh or
-explicit backfill, with post-run health and observable failure metadata.
-Next core batch: 1995–1996. All schedules stay stopped; NAAIM remains paused and
-FINRA stays at SSV-T05.
+**1990–1996** batches are accepted locally for listed references in the
+1990-onward archive. [Latest acceptance](specs/spec017/1995_1996_acceptance.md)
+records 172 captures and 89 text representations: 624 PDF pages and 1,193 chunks
+(568 eligible, 625 review-flagged). The current inventory has 371 meeting claims
+and 470 references. Full history and text/OCR accuracy review remain incomplete.
+The existing [Dagster job](docs/deployment/fomc_runbook.md#dagster) and
+[`scripts/run_fomc.sh`](scripts/run_fomc.sh) share the bounded source runner;
+other users supply their own config. Both FOMC success/failure Slack sensors are
+configured locally. Latest backup/restore, offline replay and immutable-history
+checks pass. Next core batch: **1997–1998**. Acquisition schedules stay stopped;
+NAAIM remains paused and FINRA stays at SSV-T05.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →

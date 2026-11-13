@@ -24,7 +24,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
-| [017](spec017/README.md) | fomc-meeting-minutes | T01–T05 accepted for the 1990-onward bounded archive/native-text/chunk foundation: 12 representations, 74 PDF pages, 241 chunks (166 eligible, 75 review-flagged), coherent mirrors and replay. Next T06 bounded acquisition/operations. Full backfill/accuracy review and optional embeddings remain separate. |
+| [017](spec017/README.md) | fomc-meeting-minutes | T01–T06 and bounded 1990–1996 listed references accepted: 172 captures, 89 text representations and 1,193 chunks (568 eligible, 625 review), coherent publication, backup/restore and offline replay. Next bounded batch: 1997–1998. Full history/accuracy review and optional embeddings remain separate. |
 | [018](spec018/README.md) | pipeline-slack-alerts | Optional pipeline-owned alert YAML and stopped Dagster success/failure sensors for the five existing jobs. Credentials, live delivery and activation remain operator-configured. |
 
 ## Presidential pipeline integration planning

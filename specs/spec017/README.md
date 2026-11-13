@@ -1,26 +1,26 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** T01–T06 and bounded **1990–1994 batches** are accepted locally for
-listed references in the 1990-onward archive. Merged PR #14 covers 1992 plus the added
-1993–1994 HTML minutes through [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh).
-The archive has 146 captures and 73 representations: 624 PDF pages, 2,172,146 text
-characters and 993 chunks (368 eligible, 625 review-flagged). The current 33-page
-inventory has 371 meeting claims and 470 references, with prior snapshots
-preserved. Full history and text/OCR accuracy review remain incomplete.
-[1993–1994 acceptance](1993_1994_acceptance.md) and
-[evidence](evidence/1993_1994_script_backfill.json) are current;
-[1992](1992_acceptance.md), [1991](1991_acceptance.md), [T06](t06_acceptance.md),
-[T05](t05_acceptance.md), [T04](t04_acceptance.md) and [T03](t03_acceptance.md)
-remain earlier checkpoints.
-**Reviewed:** 2026-11-12. **Pipeline ID:** `fomc-meeting-minutes`.
+**Status:** T01–T06 and bounded **1990–1996 batches** are accepted locally for
+listed references in the 1990-onward archive. The latest 1995–1996 batch ran through
+the existing Dagster job with Slack success delivery and recovery verified.
+The archive has **172 captures and 89 text representations**: 624 PDF pages,
+2,771,872 characters and 1,193 chunks (568 eligible, 625 review-flagged). Current
+inventory remains 33 pages, 371 meeting claims and 470 references. Full history
+and text/OCR accuracy review remain incomplete.
+[1995–1996 acceptance](1995_1996_acceptance.md),
+[contract](1995_1996_contract.md) and [evidence](evidence/1995_1996_dagster_backfill.json)
+are current. [1993–1994](1993_1994_acceptance.md), [1992](1992_acceptance.md),
+[1991](1991_acceptance.md) and T03–T06 remain earlier checkpoints.
+**Reviewed:** 2026-11-13. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
 The [runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
 The [Dagster job delivery](dagster_job_acceptance.md) adds recent-refresh launch
 configuration, post-run health gating and failure metadata, with unit and isolated
 backend regression coverage. Deployment scope is the job in the existing code
-location; alert/remote-backup destinations remain deferred.
-Next core batch: 1995–1996. All FOMC schedules stay stopped; FINRA remains at
+location. Slack success/failure alerts are configured locally through Spec018;
+off-machine backup storage remains deferred.
+Next core batch: 1997–1998. All FOMC schedules stay stopped; FINRA remains at
 SSV-T05 and NAAIM remains paused. Embeddings remain independently selected work.
 
 ## Objective and scope
@@ -246,7 +246,7 @@ for referenced documents/versions initially; no automatic deletion is planned.
 | FOMC-AC11 | Own config folder loads without secrets/service access; isolated PostgreSQL inventory imports round-trip exactly, retain history, reject namespace/run conflicts, and survive rollback/concurrent retries without a false current pointer. T02 evidence is recorded separately. |
 | FOMC-AC12 | Future archive/text/chunk slices mirror original bytes and complete text/lineage into the FOMC PostgreSQL schema; byte hashes, Unicode text, pages/chunks, revisions and DB/file publication recovery reconcile with filesystem artifacts. Bounded archive/text/chunk/operation reconciliation is verified through T06; full-history reconciliation remains incomplete. |
 
-**Current pickup:** a bounded 1995–1996 backfill using the [T06 runbook](../../docs/deployment/fomc_runbook.md).
+**Current pickup:** a bounded 1997–1998 backfill using the [T06 runbook](../../docs/deployment/fomc_runbook.md).
 The archive remains bounded; full historical acquisition and accuracy review are pending.
 Embeddings remain an independently selected enhancement.
 

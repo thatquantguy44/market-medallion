@@ -19,7 +19,53 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — configurable success and failure alerts
+## 2026-11-13 current pickup — bounded FOMC 1995–1996 accepted
+
+The user authorized the next historical batch after merged PR #17. Current branch:
+`feat/fomc-1995-1996-backfill`, from main `f3925f8`. Read
+[acceptance](../../specs/spec017/1995_1996_acceptance.md),
+[contract](../../specs/spec017/1995_1996_contract.md),
+[evidence](../../specs/spec017/evidence/1995_1996_dagster_backfill.json) and the
+[runbook](../deployment/fomc_runbook.md).
+
+The existing Dagster job acquired all **16 listed 1995–1996 HTML minutes**, eight
+per year, using unchanged finite settings and source code. Run
+`12d67c3f-4aab-41a1-bdb1-83a5c0532d9c` and operation
+`db6830d0-2415-46ff-8279-6ed9351e6c17` completed in **20 data GETs plus two
+probes, 1,155,323 bytes**. Four inventories refreshed; 29 verified nonselected
+pages retained their old clocks. All three pointers and the successful result
+committed together; archive health passed. Slack success-sensor tick **147**
+acknowledged this exact run. Both FOMC alert sensors remain RUNNING; the other
+eight alert sensors and all six acquisition/import schedules remain STOPPED.
+
+Current archive: **172 captures** (61 inventories, 89 documents, 22 PNGs),
+**89 text representations, 624 PDF pages, 689 units and 2,771,872 characters**.
+Chunks: **1,193 total, 568 eligible and 625 review-flagged**. New HTML minutes add
+599,726 characters and 200 eligible chunks; native outcomes are 38 extracted and
+51 review-required. Current inventory is unchanged: 33 pages, 371 meeting claims,
+470 references and 561 associations. Gaps: 383 unacquired references, 49 not-listed
+claims, one unavailable 1994 href and 51 review cases. Complete history and
+text/OCR accuracy remain uncertified; no OCR/model service was called.
+
+All **152 prior originals/receipt bytes/clocks and append-only rows** are intact.
+The six intervening inventory captures from live 1990 reruns explain the increase
+from the older 146-capture acceptance to the pre-batch 152. Fresh before/after
+backups restored all **29 tables** and exact canonical file hashes (1,337/1,546
+files). Actual empty-target replay preserved all 172 originals, selected catalogs,
+chunk rows/eligibility and the latest operation audit with HTTP and transforms
+disabled. Offline health/plan/recovery passed; disposable databases/roots were
+removed and other operational namespaces remained unchanged. Backups, configs,
+credentials and raw/derived data remain ignored.
+
+Verification: **1,050 regression tests passed, 80 optional skips; all 313 FOMC
+checks passed with isolated PostgreSQL enabled**, including 70 backend checks.
+No runtime, dependency, schema or provider semantic change was needed. The local
+workflow snapshot and 61 pinned QuantSmith Git objects were verified; external
+working-tree drift was left untouched. **Next core batch: bounded 1997–1998**
+through the same job or script with the same recovery gates. Keep NAAIM paused,
+embeddings independently selected and FINRA at SSV-T05.
+
+## 2026-11-13 accepted checkpoint — configurable success and failure alerts
 
 The user requested success alerts through configuration and a real rerun.
 `slack.on_success` defaults false; `slack.on_failure` defaults true, preserving
@@ -769,10 +815,10 @@ retention continue within the existing internal-research scope.
 ## Next work
 
 Preserve the NAAIM pause and all disabled acquisition/schedule defaults. Spec011
-T17 and Spec012 T01–T04 are merged. FOMC T01–T06 and the bounded 1990–1994
+T17 and Spec012 T01–T04 are merged. FOMC T01–T06 and the bounded 1990–1996
 batches are accepted locally and PR #14 is merged. The current deployment slice
 is the verified Dagster job on `feat/fomc-dagster-job`; see the current pickup.
-The next historical operation is bounded 1995–1996 through the script or job. Read the current pickup above and Spec017 tasks.
+The next historical operation is bounded 1997–1998 through the script or job. Read the current pickup above and Spec017 tasks.
 When FINRA resumes, its next task is SSV-T05 immutable raw/rejected-capture
 archiving and redacted lineage receipts. G0 and parser
 Checkpoint A are ready for this scope; local publication and G1/G2 remain open.

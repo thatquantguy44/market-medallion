@@ -1,19 +1,24 @@
 # FOMC implementation tasks and pickup
 
-Updated: 2026-11-12. The user selected implementation, reuse of this project's
-PostgreSQL location and a pipeline-owned configuration folder. No recurring
-schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merged in
-[PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
-script and 1991 continuation merged in
-[PR #13](https://github.com/thatquantguy44/market-medallion/pull/13). The accepted
-1992–1994 continuation merged through
-[PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); track its
-[live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
-and current review threads. The current job-only deployment slice is on
-`feat/fomc-dagster-job` in
-[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15); track its
-[checks](https://github.com/thatquantguy44/market-medallion/pull/15/checks) and
-review threads. See its acceptance below.
+Updated: 2026-11-13. T01–T05 merged through PR #11, T06 through PR #12,
+the portable script/1991 through PR #13 and 1992–1994 through PR #14. The
+Dagster job, port configuration and per-pipeline Slack status alerts merged
+through PRs #15–#17. Current continuation is the accepted 1995–1996 batch on
+`feat/fomc-1995-1996-backfill`; see its contract, evidence and next scope below.
+No acquisition schedule or embedding service was selected.
+
+## Current bounded continuation
+
+The 1995–1996 batch is accepted on `feat/fomc-1995-1996-backfill`, from merged
+PR #17. See [acceptance](1995_1996_acceptance.md),
+[contract](1995_1996_contract.md) and [evidence](evidence/1995_1996_dagster_backfill.json).
+All 16 listed HTML references were acquired through Dagster, with healthy
+publication and acknowledged Slack success delivery. Before/after 29-table and
+canonical-file restores and actual offline replay passed; all 152 earlier
+captures/clocks and append-only rows remain intact. The archive now has 172
+captures, 89 text representations and 1,193 chunks (568 eligible, 625 review).
+Verification: 1,050 regression tests with 80 optional skips; 313 FOMC checks with
+isolated PostgreSQL, including 70 backend checks. **Next core batch: 1997–1998**.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 
