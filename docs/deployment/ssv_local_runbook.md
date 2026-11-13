@@ -98,7 +98,7 @@ New versions are bounded at 250,000; raw reservations at T05's 100,000. Audit/hi
 queries accept limits 1–1,000. Database changes and the partition pointer commit in
 one transaction. T10 separately publishes immutable database/file generations;
 see the recovery protocol below.
-Replay/backup tooling is not delivered here. Existing operational databases,
+T11 adds replay below; database-free backup/restore tooling remains absent. Existing operational databases,
 source samples, services and schedules were not used for local acceptance.
 
 ## T09 research Gold
@@ -185,10 +185,139 @@ only verified owned uncommitted staging orphans. No published files are deleted.
 A fresh catalog with no committed generation returns NO_PUBLICATION on recovery;
 `published` returns exit2 until a generation exists.
 
-Default publication/read budgets are250000 rows and128MiB total logical/Arrow/file
+Default publication/read budgets are250000 rows and 128MiB total logical/Arrow/file
 bytes. Flags `--max-rows`/`--max-bytes` are separate from input YAML limits; bounded
 overrides are documented in the config guide. Publication history caps at10000
 generations. A root-bound catalog cannot be moved to another root as a restore.
-This is local POSIX publication; replay, backup tooling, research exchange and
+This is local POSIX publication; backup tooling, research exchange and
 orchestration remain later tasks. [T10 acceptance](../../specs/spec012/t10_acceptance.md)
 records the seven injected failure boundaries, numeric parity and CLI evidence.
+
+## T11 offline replay
+
+Use the original Bronze archive **and** verified terminal source warehouse.
+Replay is not a database-free backup. Copy the example to a new ignored
+`replay.local.yml`, set its `root` to a separate absent/empty destination, and keep
+compatible manifest, operation grants and parser limits. Never point the replay
+config at the original root or an existing operational store.
+
+```bash
+./scripts/run_finra_short_sale_volume.sh replay --source-root data/finra_short_sale_volume/local-demo \
+  --config config/finra_short_sale_volume/replay.local.yml
+./scripts/run_finra_short_sale_volume.sh gold --config config/finra_short_sale_volume/replay.local.yml \
+  --trade-date 2026-11-09 --facility nyse_trf
+```
+
+The source root is a CLI path; the destination `root` resolves relative to its
+YAML. No `.env`, credentials, HTTP, network probe or service is used. Source
+archive/ingestion locks freeze capture inventory and terminal ledger during the
+rebuild. Unresolved STARTED, failed-only or unprocessed captures, missing original
+parse outcomes, unsupported profiles, corrupt lineage or clock regression refuse
+before destination creation. Resume/investigate the original source capture first;
+replay cannot convert execution failure into successful observation history.
+Historical failed/interrupted attempts followed by terminal retries are retained.
+Partial/rejected captures remain unpromoted and cannot retract prior membership.
+
+Reparse original payloads/profiles in sequence order, retain clocks/UUIDs/slots,
+and compare exact versions, removals, membership, partition pointers, Gold and
+original audit attempts. The private sibling stage is exposed only after parity
+and final-path identity sealing. A fresh warehouse UUID is expected; source
+version IDs and cutoff results must match. This sealing initializes a newly
+reconstructed store and does not permit relocating arbitrary existing stores.
+Failures before installation remove only owned staging and leave destination
+contents intact. Concurrent destination content is never overwritten.
+
+Success writes `replay.json` with source/destination IDs, original capture
+inventory, logical-state hash, counts and a separate replay completion clock.
+A response/fsync failure after installation can leave a complete target: inspect
+that report and verify the target with ordinary readers. A repeated replay into
+any populated target refuses; it is not an implicit overwrite/resume operation.
+A hard process interruption may leave an ignored private sibling staging directory;
+there is no automatic adoption of such leftovers. Preserve it for investigation
+and rerun into a fresh empty destination. Never manually promote an unverified stage.
+
+Default bounds are 1000 captures, 250000 logical state rows and 128MiB combined
+archive/state bytes, with explicit finite overrides in the config guide. Original
+unused sequence reservations remain allocator-only evidence, preserving the next
+sequence without manufacturing observations. Up to 16 original parse profiles per
+capture are reparsed and compared. Source root bindings and all original source
+files remain unchanged.
+
+Replay does not copy source T10 publication files/catalog/UUIDs. Run `publish`
+with an explicit date/scope on the destination to create its own verified event;
+its logical tables should match the corresponding source publication. Compare
+warehouse facts/cutoff answers, not warehouse/publication UUIDs or replay wall time.
+[Acceptance](../../specs/spec012/t11_acceptance.md) records actual script and failure
+checks. T12 bounded acquisition, source-aware health, interchange and jobs remain
+later work; G1/G2 and real-source coverage stay open.
+
+## T12 bounded admitted acquisition
+
+Use separate [acquisition YAML](../../config/finra_short_sale_volume/acquisition.example.yml)
+and its [configuration guide](../../config/finra_short_sale_volume/README.md).
+The checked-in example has pending admission and live execution disabled. Record
+applicable Public API terms/operation grants, export credential variables privately,
+choose an output root and validate a bounded plan before explicit execution:
+
+```bash
+./scripts/run_finra_short_sale_volume.sh acquisition-plan --config config/finra_short_sale_volume/acquisition.local.yml \
+  --start-date 2026-11-09 --end-date 2026-11-09 --scope nasdaq_chicago_trf --overlap-days 0
+./scripts/run_finra_short_sale_volume.sh acquire --config config/finra_short_sale_volume/acquisition.local.yml \
+  --start-date 2026-11-09 --end-date 2026-11-09 --scope nasdaq_chicago_trf --overlap-days 0 --live
+```
+
+Execution requires config `live:true` too. The script does not load `.env`.
+A plan performs no network/credential read/store creation. Default overlap expands
+backward 2 calendar days and re-fetches existing complete dates; expanded days and
+all scopes count against budgets. Dates obey the current New York rolling
+12-month guard. ADF/consolidated/ORF/TXT, paid credentials and async jobs remain
+excluded. Network config never grants source access.
+
+The run selects one shared HTTP route with a fixed FIP HEAD probe and redirects
+disabled. Basic credentials go only to that trusted endpoint; POST obtains an
+in-memory expiring bearer token, then metadata GET validates the selected schema.
+Raw response requests use exact date/market filters, reviewed fields and raw-symbol
+sort. Auth/token/cookie material never enters receipts or tracked evidence.
+
+Complete single responses use the original transaction path. Larger partitions
+collect bounded contiguous pages with stable counts and unique symbols, then fetch
+a second complete pass and require exact normalized equality. Each original page
+is retained separately; verification/subsequent pages have an evidence-only tag.
+A new derived collection manifest binds both ordered pass-ID lists. Its payload
+hash describes that manifest; it is not a fabricated HTTP body. Only a complete
+verified collection changes membership. Its new clock/sequence follows all input
+pages; original page clocks/offsets/hashes remain available. Observed agreement
+does not establish a provider snapshot token or historical publication time.
+
+`acquisition/runs/<uuid>/request.json`, immutable `events/` and atomic `result.json`
+record plans, auth/metadata/probe/data failures and per-partition outcomes. The
+root binding must match manifest/input kind/root identity; damaged or foreign
+bound journals refuse recreation. `COMPLETE` means all planned partition outcomes
+are APPLIED. `INCOMPLETE` returns exit2, including partial pages, changed verification,
+denial, schema/rejection, resource limits and NOT_ATTEMPTED partitions. Request
+counts include a conservative two-probe allowance; `http_attempts` counts the
+post-probe requests. No-response transport errors have no fabricated raw capture.
+Truncated/oversized responses preserve only bounded incomplete evidence.
+
+Retry-After and transient retries use the same client and budgets. Redirects,
+auth/access/schema errors are not followed/retried into success. A later failed
+network refresh can leave prior committed Gold intact; consult acquisition
+journals as well as `coverage`/`audit`. Local coverage alone is not source-aware
+freshness. Release/holiday/pending/stale interpretation is T13, not proof from
+HTTP success or zero rows.
+
+A crash can leave a RUNNING journal or archived unprocessed capture. Preserve its
+evidence, inspect capture/audit, and resume that original capture through admitted
+local `ingest-capture` before another acquisition. Existing unresolved captures
+block new network work. A newly archived collection can report ARCHIVED until its
+transaction finishes. A new acquisition run explicitly re-fetches its bounded
+range/overlap; it does not silently adopt or skip a previous run's partitions.
+Ensure local/replay limits cover collection profiles (default 15000 rows/18MB).
+Original unused sequence slots remain reserved. Never delete bindings to bypass
+refusal. Acquisition history caps at10000 runs; source storage bounds still apply.
+
+Parquet publication stays explicit. [T12 acceptance](../../specs/spec012/t12_acceptance.md)
+records one real Chicago date with 5849 rows, two-pass agreement, offline replay
+and typed publication. It does not certify all facilities/history or advance
+G1/G2. No recurring FINRA job, Slack alert or schedule is activated. T13 health/
+retention, T14 interchange and T15 stopped orchestration remain later work.

@@ -1,0 +1,30 @@
+schema_id: finra-ssv-acquisition-config/1
+root: ../../data/finra_short_sale_volume/acquired
+manifest: ../../manifests/finra-short-sale-volume.yml
+operation: acquire
+live: false
+approved_use:
+  purpose: personal_noncommercial_internal_research
+  route: finra_query_api
+  authorization: pending
+  permission_reference: null
+  operations: [acquire, transform]
+  credential_type: public
+credentials:
+  client_id_env: FINRA_API_KEY
+  client_secret_env: FINRA_PASSWORD_SECRET
+network:
+  mode: auto
+  preferred_route: proxy
+  fallback: true
+limits:
+  max_days: 7
+  max_partitions: 21
+  max_requests: 500
+  max_response_bytes: 3000000
+  max_total_bytes: 20971520
+  page_rows: 5000
+  max_pages: 3
+  max_attempts: 3
+  max_wait_seconds: 60
+  max_duration_seconds: 300
