@@ -27,7 +27,8 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 **Start here:** [T05 acceptance](t05_acceptance.md), then
 [SSV-T06 in the task list](todo.md#ssv-t06--deliver-one-local-sqlite-partition).
-Continue on `feat/finra-daily-short-sale-volume`, based on merged main `b580689`.
+Continue on `feat/finra-daily-short-sale-volume` in [PR #20](https://github.com/thatquantguy44/market-medallion/pull/20),
+based on merged main `b580689`.
 T01–T05 are complete; T06–T16 have not started. G0/parser Checkpoint A are ready
 for the three-TRF API profile; G1/G2 and local publication remain open.
 

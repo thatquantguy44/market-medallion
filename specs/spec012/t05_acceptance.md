@@ -1,7 +1,7 @@
 # SSV-T05 acceptance — immutable local API-response Bronze
 
 Accepted 2026-11-13 on `feat/finra-daily-short-sale-volume`, based on merged main
-`b580689`. Traces **SSV-REQ05 / SSV-AC05**, with **SSV-AC01** admission.
+`b580689`; delivered in [PR #20](https://github.com/thatquantguy44/market-medallion/pull/20). Traces **SSV-REQ05 / SSV-AC05**, with **SSV-AC01** admission.
 [Contract](bronze_contract.md), [tasks](todo.md) and
 [sanitized conformance](evidence/t05_bronze_conformance.json).
 

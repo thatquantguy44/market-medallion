@@ -22,7 +22,8 @@ new live schedules default stopped.
 ## 2026-11-13 current pickup — FINRA SSV-T05 accepted; T06 next
 
 The user selected working implementation on **`feat/finra-daily-short-sale-volume`**,
-based on merged main `b580689` (FOMC quality PR #19). **SSV-T01–T05 are complete**
+based on merged main `b580689` (FOMC quality PR #19), delivered in
+[PR #20](https://github.com/thatquantguy44/market-medallion/pull/20). **SSV-T01–T05 are complete**
 for the selected three-TRF API profile. Read [T05 acceptance](../../specs/spec012/t05_acceptance.md),
 [Bronze contract](../../specs/spec012/bronze_contract.md),
 [sanitized evidence](../../specs/spec012/evidence/t05_bronze_conformance.json) and
@@ -52,9 +53,9 @@ data request, credential loading, live DB/service operation or Slack message was
 needed. Schedules remain stopped; NAAIM remains paused. The earlier FOMC accepted
 archive and quality results below remain unchanged.
 
-Commit/push this bounded slice and track its PR's current-head checks and review
-threads before handoff. The user's prior commit/push/PR authorization persists;
-no merge or schedule activation is implied.
+The implementation is committed and pushed in PR #20. Track its current-head
+checks and review threads before merging. The user's prior commit/push/PR
+authorization persists; no merge or schedule activation is implied.
 
 ## 2026-11-13 accepted checkpoint — FOMC quality Q01–Q03
 
