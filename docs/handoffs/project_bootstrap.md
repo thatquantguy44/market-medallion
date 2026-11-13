@@ -24,7 +24,13 @@ new live schedules default stopped.
 PR #14 merged at `3bbb0c1426f399b7ec85d6f2eea9ed4d32cb49ef`. The user first
 selected a local Mac/Docker productionization target, then narrowed deployment
 to **a Dagster job**. Backup and alert destinations should be configurable later.
-The current branch is `feat/fomc-dagster-job`. [Job acceptance](../../specs/spec017/dagster_job_acceptance.md),
+The current branch is `feat/fomc-dagster-job`, with
+[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15) open to `main`.
+Track its [checks](https://github.com/thatquantguy44/market-medallion/pull/15/checks)
+and [review threads](https://github.com/thatquantguy44/market-medallion/pull/15/files).
+Acceptance head: `e73640e4df41b8cabfb1000c52e4abd041466faf`; on continuation
+recheck the current head SHA, check results and unresolved threads. No merge or
+schedule activation is implied. [Job acceptance](../../specs/spec017/dagster_job_acceptance.md),
 [contract](../../specs/spec017/dagster_job_contract.md),
 [evidence](../../specs/spec017/evidence/dagster_job.json) and
 [runbook](../deployment/fomc_runbook.md#dagster) record the bounded delivery.

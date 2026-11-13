@@ -10,7 +10,10 @@ script and 1991 continuation merged in
 [PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); track its
 [live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
 and current review threads. The current job-only deployment slice is on
-`feat/fomc-dagster-job`; see its acceptance below.
+`feat/fomc-dagster-job` in
+[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15); track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/15/checks) and
+review threads. See its acceptance below.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 
