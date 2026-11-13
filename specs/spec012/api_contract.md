@@ -2,10 +2,11 @@
 
 Selected 2026-11-10 for personal noncommercial internal research. This explicitly
 amends the original TXT-first plan; it does not enable website downloads.
-Traces: SSV-T01–SSV-T04 / SSV-REQ01–SSV-REQ04. Runtime implementation now includes
+Traces: SSV-T01–SSV-T05 / SSV-REQ01–SSV-REQ05. Runtime implementation now includes
 approved-use admission, the source schema/facility registry and a pure receipt-bound
 JSON parser plus pure quantity validation/text conversion and per-observation
-ratios. Data acquisition, warehouse and jobs are not implemented.
+ratios, plus [immutable local Bronze and sanitized outcomes](bronze_contract.md).
+Data acquisition, warehouse and jobs are not implemented.
 
 ## Approved route and evidence
 
@@ -103,14 +104,16 @@ publication time unknown unless source-owned evidence establishes it.
 
 ## Implemented parser and next bounded scope
 
-SSV-T01–T04 are complete for the selected source profile: strict schema/version,
+SSV-T01–T05 are complete for the selected source profile: strict schema/version,
 explicit scope exclusions, disjoint selection, acquisition-date guards and a pure
 receipt-bound parser are implemented. It rejects truncated JSON, unknown/duplicate
 fields, duplicate logical keys, malformed dates, invalid symbols and impossible
 or nonfinite/negative quantities. Whole and fractional quantities are exact Decimal
 shares; binary floating point and integer truncation are forbidden. A complete
 empty response is distinct from missing, pending, denied or failed extraction.
-**Next: SSV-T05**, raw/rejected-capture archiving and redacted lineage receipts.
+T05 now archives admitted exact bytes before parsing, with safe request evidence,
+immutable sequence/clocks and sanitized rejection outcomes. [Acceptance](t05_acceptance.md).
+**Next: SSV-T06**, one invented local SQLite partition.
 T04's pure ratios and quantity codec do not constitute published Gold or persistence.
 
 Future local input is an approved archived JSON response and its request/scope
@@ -229,4 +232,5 @@ defines source quantity exactness, text representation and caller-context isolat
 [Offline evidence](evidence/t04_semantics_conformance.json) reconciles all 18
 quantity tuples and 12 ratios in the retained six-row sample; bytes are unchanged,
 pages remain partial and no observation was promoted or clock assigned. G1/G2
-remain open. Next: SSV-T05 archival receipts, not provider acquisition or scheduling.
+remain open. T05 subsequently added [Bronze receipts](bronze_contract.md); next
+is T06 SQLite. Provider acquisition and scheduling remain later slices.

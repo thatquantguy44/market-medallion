@@ -1,11 +1,11 @@
 # Delivery roadmap — securities-finance research data
 
-**Updated:** 2026-11-10. **Planning horizon:** milestone based, without invented
+**Updated:** 2026-11-13. **Planning horizon:** milestone based, without invented
 completion dates or throughput estimates. Spec011 G2 is accepted for its bounded
 native-source scope and merged through PR #8. Spec012 has approved-use/schema,
 three-TRF registry checks, a pure receipt-bound Decimal JSON parser, exact quantity
-text readback and per-observation ratios with invented fixtures and retained
-sample reconciliation. Its connector/jobs and
+text readback, per-observation ratios and immutable local API-response Bronze
+with sanitized parse/rejection evidence. Its connector/jobs and
 Specs013–015 remain unimplemented. NAAIM remains paused.
 
 ## Priority and backlog relationship
@@ -132,7 +132,7 @@ connector; the source-owned contract and gaps determine the final boundary.
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
 | 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete, merged PR #8 | Not started | Deferred | Ten authentic lists and both SEC archives reconcile; current source-build work is Spec012 |
-| 012 | Ready for selected three-TRF API profile; T01–T04 complete / parser Checkpoint A | Not complete; no local publication | Not started | Not started | Deferred | User-attested Public terms; source version 1/three TRF pairs and six retained rows reconcile offline, including fractional quantities. [266 focused tests / T04 evidence](../../specs/spec012/todo.md). Per-observation ratios and exact quantity text readback pass. Next T05 raw/rejected-capture receipts; full partition/history coverage and wider scopes remain open. |
+| 012 | Ready for selected three-TRF API profile; T01–T05 complete / parser Checkpoint A | Not complete; no local publication | Not started | Not started | Deferred | User-attested Public terms; source version 1/three TRF pairs and six retained rows reconcile offline, including fractional quantities. [315 focused tests / T05 acceptance](../../specs/spec012/t05_acceptance.md). Ratios, exact quantity readback and immutable Bronze pass. Next T06 one invented SQLite partition; full partition/history coverage and wider scopes remain open. |
 | 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |

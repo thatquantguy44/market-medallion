@@ -84,9 +84,9 @@ insufficient. Other audiences, routes and unknown fields are rejected.
 An internally exported artifact stays within the same authorized user's
 research scope. Its future writer must preserve FINRA attribution and source
 scope. No redistribution grant is inferred here. The pure T03 parser performs
-no I/O; future acquisition, storage, transform and export entry points must invoke
-this gate before their own I/O. None exist yet, so there is no end-to-end
-acquisition-refusal claim.
+no I/O. T05 archive/read/parse entrypoints invoke the gate before filesystem I/O;
+future acquisition/export adapters must do the same. Those adapters remain absent,
+so there is no end-to-end acquisition-refusal claim.
 
 ## Next bounded action
 
@@ -103,7 +103,8 @@ the earlier integer-only assumption; the [API amendment](api_contract.md#ssv-t03
 requires exact Decimal shares. No new provider-data request was made.
 SSV-T04 is complete: pure per-observation ratios and exact quantity text readback
 pass 71 semantic tests and retained-sample reconciliation.
-Next is **SSV-T05**, immutable raw/rejected-capture archiving and redacted receipts.
+SSV-T05 is complete: [immutable raw/rejected evidence](t05_acceptance.md) and
+sanitized receipts pass 49 new checks. Next is **SSV-T06**, one invented SQLite partition.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -153,3 +154,13 @@ checks against the unchanged six-row sample. T04 uses no provider-data requests,
 new clocks or promoted observations; partial pages stay partial. The selected
 access profile and exclusions are unchanged. G1/G2, local storage, complete
 history and operation remain open.
+
+## SSV-T05 verification checkpoint
+
+November 13: local Bronze and sanitized outcomes are implemented. 315 focused
+FINRA checks and **1,169 offline regressions pass, 92 optional skips**; lint,
+format and build/source-byte checks pass. [Invented-only evidence](evidence/t05_bronze_conformance.json)
+contains no provider payloads or actual credentials. Official API headers and
+terms were rechecked through the [T05 contract references](bronze_contract.md);
+no new provider-data request or use grant occurred. Admission precedes filesystem
+I/O; unsafe scope and recognizable credential bodies refuse before storage.
