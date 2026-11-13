@@ -109,3 +109,12 @@ interruptions. Missing artifacts block replacement. The producer presidential
 suite passed 100 tests. The application reader still supports only the
 single-dataset generation, and the frozen real-input profile remains blocked;
 T11 and its consumer acceptance are not complete.
+
+QuantMeridian now reads the complete fictional generation, verifies all five
+dataset hashes and seven evidence hashes, and renders matched common-sample and
+inherited-condition comparisons. Both series run independently through the PRES
+engine and reconcile to the evidence; unequal windows or inputs fail closed.
+The full paired summary remains visible alongside symmetric sensitivity results.
+The 103 focused consumer tests, typecheck, build and complete-fixture browser
+check passed. T11/T12 remain open until the frozen source/profile bindings and
+real-input qualification are completed; no historical results were claimed here.
