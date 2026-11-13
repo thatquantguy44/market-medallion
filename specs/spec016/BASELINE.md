@@ -93,3 +93,11 @@ decimal bounds reject unrepresentable/rounded tokens. Queries recheck selected
 facts against archived inputs; corrupt inputs fail closed. The presidential suite
 passed 90 tests and an installed-wheel archive/publication/warehouse run passed
 32 tests. These are fictional tests, not historical admission or a live feed.
+
+T11 is in progress. A private, non-publishing assembly step now requires the
+three exact admitted captures, matching configuration and reviewed controls,
+then creates all five datasets and seven evidence artifacts. Its fictional
+fixture produces 3/2/2/2/2 windows and one cycle row; independent calculations
+check both return constructions and sample/fundamental pairing. Frozen-profile
+admission, complete atomic bundle publication and consumer support remain open.
+The complete producer presidential test group passed 93 tests.
