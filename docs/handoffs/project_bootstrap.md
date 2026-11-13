@@ -23,7 +23,10 @@ new live schedules default stopped.
 
 PR #16 is merged; local Dagster defaults to port 3030. The user requested a new
 branch for configurable Slack alerts with separate optional YAML per pipeline.
-Current branch: `feat/pipeline-slack-alerts`, based on merged main. See
+Current branch: `feat/pipeline-slack-alerts`, based on merged main, in
+[PR #17](https://github.com/thatquantguy44/market-medallion/pull/17). Track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/17/checks) and
+review threads against the current head before merging. See
 [Spec018](../../specs/spec018/README.md) and the
 [Slack runbook](../deployment/slack_alerts.md).
 
