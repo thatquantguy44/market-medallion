@@ -66,3 +66,27 @@ def test_profile_binds_capture_clocks_review_and_all_evidence(tmp_path, monkeypa
     (root / "manual-evidence" / digest).unlink()
     with pytest.raises(ValueError, match="evidence"):
         frozen.validate_frozen_inputs(root, receipts, review)
+
+
+def test_offline_import_preflight_rejects_existing_or_unpinned_inputs(tmp_path):
+    from unittest.mock import patch
+
+    from market_data_pipeline.pipelines.presidential_research.frozen_import import (
+        import_frozen_study,
+    )
+
+    donor = tmp_path / "donor"
+    (donor / "config").mkdir(parents=True)
+    (donor / "config" / "sources.toml").write_text("invalid")
+    workbook = tmp_path / "review.xlsx"
+    workbook.write_bytes(b"fictional")
+    existing = tmp_path / "existing"
+    existing.mkdir()
+    (existing / "keep").write_text("untouched")
+    with patch("socket.socket", side_effect=AssertionError("network forbidden")):
+        with pytest.raises(ValueError, match="destination"):
+            import_frozen_study(donor, workbook, existing)
+        with pytest.raises(ValueError, match="digest"):
+            import_frozen_study(donor, workbook, tmp_path / "new")
+    assert (existing / "keep").read_text() == "untouched"
+    assert not (tmp_path / "new").exists()
