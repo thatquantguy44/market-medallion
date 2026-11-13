@@ -65,3 +65,12 @@ invalid dates and unsafe integers. The Python presidential suite passed 77 tests
 the QuantMeridian contract, engine and export suites passed 83 tests and its
 typecheck passed. This is a format/validation boundary, not a source-authenticity
 claim, a deployed API, or a loaded PRES dataset.
+
+T08 adds disabled-by-default loopback-only catalog and immutable snapshot routes
+in QuantMeridian. The socket peer, origin and request parameters are checked;
+reads are bounded, reject symlinks and changed files, verify hashes, and pin the
+selected generation. Thirty-two focused contract/reader/route tests pass. The
+actual dev and built-server registries returned the Python-produced fictional
+fixture over localhost, and a cross-origin built-server request returned 403.
+No real source history was admitted by this check. The routes require explicit
+local environment configuration and are not enabled in hosted environments.
