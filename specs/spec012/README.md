@@ -30,9 +30,10 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 **Start here:** [T11 acceptance](t11_acceptance.md), [replay contract](replay_contract.md),
 [evidence](evidence/t11_replay_conformance.json) and [SSV-T12](todo.md#ssv-t12--implement-bounded-admitted-acquisition).
-The user added T11 to **`feat/finra-parquet-publication`** /
-[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24), originally created
-from merged T09 main `55dcd5d`. T01–T11 are accepted with invented local input.
+The user added T11 to **`feat/finra-parquet-publication`**, originally created
+from merged T09 main `55dcd5d`. T10 PR #24 merged during this work; T11 is delivered
+in [PR #25](https://github.com/thatquantguy44/market-medallion/pull/25) on the same
+branch, with merged main `ac4d520` integrated. T01–T11 are accepted with invented local input.
 T12–T16, real complete-partition/history coverage and G1/G2 remain open.
 
 Read root [AGENTS.md](../../AGENTS.md), the [master handoff](../../docs/handoffs/project_bootstrap.md),

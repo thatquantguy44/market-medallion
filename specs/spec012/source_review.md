@@ -207,7 +207,8 @@ G1/G2 remain open, and T11 replay is next. The T09 checkpoint above is historica
 
 ## SSV-T11 offline replay checkpoint
 
-Added to the same PR #24 at the user's request. [Acceptance](t11_acceptance.md)
+Added to the same branch at the user's request. T10 PR #24 merged during this
+work; T11 is delivered in follow-up PR #25. [Acceptance](t11_acceptance.md)
 records 41 new / **551 FINRA tests** and full offline **1,539 passed /92 optional
 skips**. 24 actual portable-script commands across eight invented captures verify
 original clocks, revisions/removals, audit/Gold/research and new publication-table

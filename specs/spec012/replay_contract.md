@@ -1,6 +1,7 @@
 # SSV-T11 — deterministic empty-target replay
 
-Selected 2026-11-13 as an extension to `feat/finra-parquet-publication` / PR #24.
+Selected 2026-11-13 on the existing `feat/finra-parquet-publication` branch.
+Delivered in PR #25 after T10 PR #24 merged while T11 was in progress.
 Traces SSV-REQ11 / SSV-AC11 and common C05–C07. No source/provider schema or
 access-policy change: replay uses only this pipeline's existing local artifacts.
 

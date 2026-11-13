@@ -220,7 +220,8 @@ Operational schema/ingestion stays compatible; publication is an explicit comman
 
 ## SSV-T11 — Replay archived captures
 
-**Status:** complete locally, 2026-11-13, added to `feat/finra-parquet-publication` / PR #24.
+**Status:** complete locally, 2026-11-13, on `feat/finra-parquet-publication` / [PR #25](https://github.com/thatquantguy44/market-medallion/pull/25).
+T10 PR #24 merged while T11 was in progress; the same branch now delivers this follow-up.
 **Depends:** SSV-T10; **traces:** SSV-REQ11 / SSV-AC11.
 - [x] Empty-target replay preserves ordering, versions and original first-seen clocks.
 - [x] Replay makes no network request and refuses a populated destination.

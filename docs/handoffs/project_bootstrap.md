@@ -19,11 +19,13 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — FINRA T11 replay added to PR #24; T12 next
+## 2026-11-13 current pickup — FINRA T11 replay in PR #25; T12 next
 
-The user added **SSV-T11** to the existing **`feat/finra-parquet-publication`** /
-[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24). It remains based
-on merged T09 main `55dcd5d`. T01–T11 are accepted for the selected three-TRF
+The user added **SSV-T11** to the existing **`feat/finra-parquet-publication`**.
+T10 PR #24 merged while T11 was in progress; this same branch now delivers
+[PR #25](https://github.com/thatquantguy44/market-medallion/pull/25). Its original
+base is T09 main `55dcd5d`; merged T10 main `ac4d520` was integrated without
+changing the validated implementation tree. T01–T11 are accepted for the selected three-TRF
 invented local profile. Read [T11 acceptance](../../specs/spec012/t11_acceptance.md),
 [replay contract](../../specs/spec012/replay_contract.md),
 [evidence](../../specs/spec012/evidence/t11_replay_conformance.json) and
@@ -64,7 +66,7 @@ real complete-source coverage stay open. No provider-data request, credential
 loading, operational-store change, Slack message or service/schedule activation
 occurred. Keep NAAIM paused.
 
-Track PR #24's new T11 head checks/review threads; earlier T10 CI alone does not
+Track PR #25's T11 head checks/review threads; earlier T10 CI alone does not
 verify this extension. No merge is implied. Earlier handoffs below are historical.
 
 ## 2026-11-13 current pickup — FINRA T10 typed publication; T11 next

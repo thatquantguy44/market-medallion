@@ -1,8 +1,9 @@
 # SSV-T11 — offline replay acceptance
 
 Accepted locally 2026-11-13 on `feat/finra-parquet-publication`, added to
-[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24) at the user's
-request. Traces SSV-REQ11 / SSV-AC11 and common C05–C07.
+[PR #25](https://github.com/thatquantguy44/market-medallion/pull/25) at the user's
+request to extend the same branch. T10 PR #24 merged while T11 was in progress;
+merged main `ac4d520` was integrated without changing the validated tree. Traces SSV-REQ11 / SSV-AC11 and common C05–C07.
 [Contract](replay_contract.md), [conformance](evidence/t11_replay_conformance.json),
 [runbook](../../docs/deployment/ssv_local_runbook.md#t11-offline-replay).
 T11 is complete for invented local input; G1/G2 and real complete-source coverage remain open.

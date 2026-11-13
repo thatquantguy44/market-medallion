@@ -213,8 +213,9 @@
     "Unresolved captures refuse replay; partial/rejected remain unpromoted",
     "T10 publication stays explicit; G1/G2 and real complete-source coverage remain open"
   ],
-  "pr": 24,
+  "pr": 25,
   "preserved_source_files": 38,
+  "prior_publication_pr": 24,
   "provider_requests": 0,
   "recorded_at": "2026-11-13T20:13:10.614743+00:00",
   "replay": {
