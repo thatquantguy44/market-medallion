@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "presidential-boundary-vectors/1",
+  "datasetCases": [
+    {
+      "name": "valid-fixture",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "fd62477d09414cf03458801231d36cb453c6dbbe9083cb6537b3b930f774bf79",
+      "valid": true,
+      "canonical": "{\"controls\":[{\"endDate\":\"1937-01-03\",\"houseControl\":\"D\",\"id\":\"c\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\",\"startDate\":\"1935-01-03\"}],\"currency\":\"USD\",\"fundamentals\":[],\"id\":\"fixture\",\"kind\":\"USER_SUPPLIED\",\"levels\":[{\"date\":\"1935-12-31\",\"sourceId\":\"f\",\"value\":1e-7},{\"date\":\"1936-12-31\",\"sourceId\":\"f\",\"value\":110}],\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"schemaVersion\":1,\"sources\":[{\"id\":\"f\",\"locator\":null,\"title\":\"Fixture\"}],\"title\":\"Fictional fixture — café\",\"windows\":[{\"complete\":true,\"decisionDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"id\":\"y1936\",\"kind\":\"CALENDAR_YEAR\",\"label\":\"1936\",\"startDate\":\"1935-12-31\"}]}",
+      "canonicalSha256": "77529eeec5f0e7c62d86232663ad83c1ed4045ab7e2ab690bdea61a8210c8492"
+    },
+    {
+      "name": "extra-field",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[],\"extra\":1}",
+      "sha256": "eb41b0225e5677c87c64ef2889ed4b85eb2ac28e01a074a3882a2e6587d3c106",
+      "valid": false
+    },
+    {
+      "name": "numeric-string",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":\"100\",\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "d5f7dd2d92728170b0fdf57069c62699435eaccd92181d87fb9ddc3a13215d25",
+      "valid": false
+    },
+    {
+      "name": "boolean-number",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":true,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "3db4d4048df08ae328d3a623af6eea48f58ab6f9b842b3a303e75aa53a565c61",
+      "valid": false
+    },
+    {
+      "name": "invalid-date",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-02-30\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "134d75512fc8f0b9f4041b36a58595c2eebf6846cead63476b86387e46b28233",
+      "valid": false
+    },
+    {
+      "name": "unknown-source",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"unknown\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "1631cc4d000b32fc267e4ff8c214573a0b9fd62a99d64a45fbee5b593acc1188",
+      "valid": false
+    },
+    {
+      "name": "duplicate-level",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"},{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "c9e709088a0fccac5e42466e2ca30203a82040d3c6e5e636a30e4c1b41d8346c",
+      "valid": false
+    },
+    {
+      "name": "overlap",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"},{\"id\":\"c2\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "f6084425708e49368ecf95d7bbb405bf63d10fd572fb45e1f84ef801157869d1",
+      "valid": false
+    },
+    {
+      "name": "future-decision",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1936-01-01\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "dd87d2cafecc8b1a232b16dd076c9e86419b4ebb1e65cf94c27c79498bc8c0d3",
+      "valid": false
+    },
+    {
+      "name": "illustrative",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"ILLUSTRATIVE\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "72c1420be541096f08c29f6df239cfb6c1b2ce4f4513265b1d90d475f81bc5e1",
+      "valid": false
+    },
+    {
+      "name": "missing-field",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "7957db49d6af27eae12123dd54525ad0bc6721ecaa343f310ce31475669d631a",
+      "valid": false
+    },
+    {
+      "name": "non-nominal",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"REAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "0b10c1480ae4e921c6290b11c6908a91cdf2f088c610bb46bdde0240f3772db9",
+      "valid": false
+    },
+    {
+      "name": "duplicate-json-key",
+      "payload": "{\"schemaVersion\":1,\"schemaVersion\":1}",
+      "sha256": "950d251e6335eef09862c2347a88367fcc4a55e0651cd7865ea7d5a2760efa4c",
+      "valid": false
+    },
+    {
+      "name": "year-zero",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"0000-01-01\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "98c8c606e0e9285f5389e5fc7aef4bf5b86c26758b9cb01bdbe88e6202ea990a",
+      "valid": false
+    },
+    {
+      "name": "unsafe-integer",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"Fictional fixture — café\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":9007199254740992,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "f3cfa4ce6fb5ca6201c62afd07b1b19953f0831d10b115d40fa59ea440b8c4ff",
+      "valid": false
+    },
+    {
+      "name": "blank-js-whitespace",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"﻿\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "b1250e58b5d54a56858bdf53fa13b0abed4418ad828f37263bdad5993039cbef",
+      "valid": false
+    },
+    {
+      "name": "utf16-length-overflow",
+      "payload": "{\"schemaVersion\":1,\"id\":\"fixture\",\"title\":\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\",\"kind\":\"USER_SUPPLIED\",\"currency\":\"USD\",\"nominalReal\":\"NOMINAL\",\"returnBasis\":\"TOTAL_RETURN\",\"sources\":[{\"id\":\"f\",\"title\":\"Fixture\",\"locator\":null}],\"levels\":[{\"date\":\"1935-12-31\",\"value\":1e-07,\"sourceId\":\"f\"},{\"date\":\"1936-12-31\",\"value\":110.0,\"sourceId\":\"f\"}],\"controls\":[{\"id\":\"c\",\"startDate\":\"1935-01-03\",\"endDate\":\"1937-01-03\",\"presidentId\":\"p\",\"presidentName\":\"Fictional\",\"presidentParty\":\"D\",\"houseControl\":\"D\",\"senateControl\":\"D\",\"sourceId\":\"f\"}],\"windows\":[{\"id\":\"y1936\",\"label\":\"1936\",\"kind\":\"CALENDAR_YEAR\",\"startDate\":\"1935-12-31\",\"endDate\":\"1936-12-31\",\"decisionDate\":\"1935-12-31\",\"complete\":true}],\"fundamentals\":[]}",
+      "sha256": "6836f06728608a3bd69223d262236aba51ae5ce063a6cba15d7e9e775c9aa913",
+      "valid": false
+    }
+  ],
+  "canonicalCases": [
+    {
+      "name": "ecmascript-numbers",
+      "value": {
+        "z": -0.0,
+        "a": [
+          1.0,
+          1e-07,
+          1e-06,
+          1e+20,
+          1e+21
+        ]
+      },
+      "expected": "{\"a\":[1,1e-7,0.000001,100000000000000000000,1e+21],\"z\":0}"
+    },
+    {
+      "name": "unicode",
+      "value": {
+        "text": "é😀"
+      },
+      "expected": "{\"text\":\"é😀\"}"
+    }
+  ]
+}

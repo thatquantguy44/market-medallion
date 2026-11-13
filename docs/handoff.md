@@ -28,3 +28,12 @@ can now publish its local, attributed `naaim-exposure-research/1` artifact for
 the separately owned QuantMeridian research display; see
 [Spec 007](../specs/spec007/README.md). It remains a three-month-delayed local
 research capability, not a public service or current-data feed.
+
+## Presidential research local handoff
+
+The spec 016 pipeline, PRES integration and research-site transition have
+merged. The frozen archive matched a fresh donor rebuild and passed browser
+replay; see [acceptance](../specs/spec016/acceptance.md) and
+[runbook](../specs/spec016/runbook.md). No live source or schedule was enabled
+by this delivery; the current local Dagster code location is unreachable, so
+its runtime schedule state remains unverified.

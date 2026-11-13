@@ -1,0 +1,37 @@
+{
+  "donor_revision": "37c9307e86711ffadc391b6cc49079812fb09c14",
+  "expected_factors": [
+    {
+      "date": "1936-01-31",
+      "market_return_decimal": "0.021",
+      "source_id": "FF_MKT_001"
+    },
+    {
+      "date": "1936-02-29",
+      "market_return_decimal": "-0.0095",
+      "source_id": "FF_MKT_001"
+    }
+  ],
+  "invented_factor_table": "Notes\n,Mkt-RF,SMB,HML,RF\n193601, 2.00, 0.00, 0.00, 0.10\n193602,-1.00,0.00,0.00,0.05\nAnnual Factors: January-December\n",
+  "invented_factor_table_sha256": "78d6aaf1cb602c59b0d08f18e1b26bb365d2f44c1c592a6a9364ba4b2e0a6d28",
+  "invented_shiller": {
+    "annual_dividend": "12",
+    "expected_monthly_return": "0.03",
+    "price": "102",
+    "prior_price": "100"
+  },
+  "offline_tests_passed": 29,
+  "schema": "presidential-donor-baseline/1",
+  "source_file_sha256": {
+    "config/sources.toml": "da1803275ce3d1d6f26d823a51e29e34a5c45dfd2e09b5576c2aa53ef96376e8",
+    "src/presidential_data_pipeline/assemble.py": "2575b13dcead89ad279877bef8eacb56475ba3af39c7678ba6e0687c4307490a",
+    "src/presidential_data_pipeline/config.py": "12ec7a5641b46798db19976f290be3d3a64ac06bef021927f286a05b3a07b33b",
+    "src/presidential_data_pipeline/parsers.py": "52746f572adedba800639d700460480d6fca8ef55e5fec3427c18e611f7d645d",
+    "src/presidential_data_pipeline/provenance.py": "49dfc9134a0d422a5b32c55b9e4bc4f356a751cd41b27c723833a9aad3d832ba",
+    "src/presidential_data_pipeline/quality.py": "1e8377dd580cb1537cd79a277d28c9882295202ab4d918de75e60f6f57430a2f",
+    "src/presidential_data_pipeline/review_workbook.py": "3b083b70073ea4125bba662150fcca03bfa00f68fe9e557fcfb164ffeddd0e3e",
+    "tests/test_build.py": "a014b8805963ef100ca6b3858ef19a6fc2aee2acdd96963280fb992661dacc55",
+    "tests/test_parsers.py": "04f521c00036e82826b92742293b53d2b7e7988a1548e01962acf7a1950d7312",
+    "tests/test_review_workbook.py": "96389d26493b28f2633bf330c2c81dd2caa26f524a7c764af68000079942cdb3"
+  }
+}

@@ -178,6 +178,19 @@ provider:
   --root data/naaim-exposure-public-delayed --check
 ```
 
+## Presidential research (PRES)
+
+`presidential_rebuild_job` republishes explicitly selected local captures and
+reviewed controls without source requests. `presidential_live_fetch_job` is
+separate and all sources are currently blocked pending access review. The
+`presidential_research_refresh` defaults **STOPPED**; actual state in any
+existing Dagster instance is not assessed. Its optional configuration uses
+`PRES_SCHEDULED_LIVE_ACCESS`, `PRES_WORKSPACE`, `PRES_SOURCE_CONFIG` and
+`PRES_SOURCE_IDS`, `PRES_REVIEW_ID`, `PRES_PROFILE_ID` and optional
+`PRES_NETWORK_CONFIG`; these settings do not override source approval. Workspaces are
+operator-selected local paths; retained snapshots and backups are not pruned
+by these jobs. See [operations runbook](../../specs/spec016/runbook.md).
+
 ## Update rule
 
 When adding, removing, enabling, disabling or materially changing a Dagster job

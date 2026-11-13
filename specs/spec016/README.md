@@ -1,16 +1,15 @@
 # Spec 016 — Presidential data pipeline port and complete PRES integration
 
-Status: **draft specification and implementation plan; no port or consumer integration implemented by this change**.
+Status: **local pipeline, PRES integration and research-site handoff merged**; live acquisition remains separately gated.
 Created: **2026-11-04**, America/New_York.
 Capability ID: `presidential-research-data`.
-Target package: `src/market_data_pipeline/pipelines/presidential_research/` (proposed; absent).
+Target package: `src/market_data_pipeline/pipelines/presidential_research/`.
 
 This is the authoritative multi-repository specification. Read the
 [data contract](data_contract.md), [implementation plan](plan.md),
 [task tracker](todo.md), and [inspection inventory](source_inventory.json).
-The user requested both a specification and a plan; both are supplied for review
-here. Implementation tasks remain unchecked. This request does not reprioritize
-the existing securities-finance implementation program or resume NAAIM.
+For current acceptance evidence and remaining release boundaries, see the
+[acceptance record](acceptance.md). NAAIM has not been resumed.
 
 ## Objective and definition of complete
 
@@ -28,7 +27,7 @@ have separate source-rights and operational gates and are not prerequisites for
 local completeness. No historical return series becomes independently verified
 merely because this integration succeeds.
 
-## Inspected repositories and current state
+## Original repository inspection (2026-11-04)
 
 Paths below are workspace discovery references, never runtime dependencies.
 
@@ -43,14 +42,13 @@ The inventory hashes relevant working-tree files as well as recording HEAD;
 these are inspection baselines, not a claim that all observed content is committed.
 Implementation must establish isolated branches and record the actual merge SHAs.
 
-The donor package currently exposes nine CLI commands, generated-fixture tests,
+At the original inspection, the donor package exposed nine CLI commands, generated-fixture tests,
 raw fetch manifests, workbook approval export, five PRES-compatible datasets,
 paired ledgers and cycle outputs. It has no MarketMedallion warehouse/revision
 adapter, atomic multi-file publication protocol or source-owned Dagster integration.
-PRES currently starts empty, accepts a single local JSON up to 5 MiB, and uses
-`METHOD_VERSION = presidential-impact/0.2.0`. It has no presidential pipeline
-catalog reader/API or native paired-series/cycle workflow. Its run manifest
-currently has null code/raw-input provenance fields.
+At that inspection, PRES started empty, accepted a single local JSON up to 5 MiB, and used
+`METHOD_VERSION = presidential-impact/0.2.0`. It did not yet have the local pipeline catalog reader or native paired/cycle
+workflow. See [acceptance](acceptance.md) for their current implementation.
 
 ## Capability map and ownership
 
@@ -153,7 +151,8 @@ while writing this spec.
 
 ## Structure, conventions and commands
 
-Planned MarketMedallion layout:
+Original planned MarketMedallion layout (the implementation also includes
+`frozen.py`, `frozen_import.py`, `backup.py` and `bundle_assembly.py`):
 
 ```text
 src/market_data_pipeline/pipelines/presidential_research/
@@ -226,6 +225,5 @@ as causal/predictive evidence.
   Relevant guidance was read from the pinned commit
   `5deea85438f6d46a8a14ddb85e3821a65fa62f4e` using `git show` and individually
   checked against the registered SHA-256 digests; no pin was changed.
-- This evidence validates the inspection and donor baseline only. Target port,
-  warehouse, API and UI acceptance tests have not run because those slices do
-  not yet exist.
+- This historical evidence validates the original inspection and donor baseline;
+  current implementation checks are recorded in [acceptance](acceptance.md).

@@ -1,0 +1,12 @@
+# Review inventory only. Actual live authorization is the exact-URL mapping in
+# presidential_research/source.py; this file cannot enable a provider request.
+schema_version: 1
+reviewed_at: '2026-11-13'
+sources:
+  FF_MKT_001: {live: BLOCKED, reason: 'Recurring use and redistribution review incomplete'}
+  SHILLER_001: {live: BLOCKED, reason: 'Historical endpoint used unauthenticated HTTP'}
+  FEDFUNDS_001: {live: BLOCKED, reason: 'Current FRED terms and API use need review'}
+  HOUSE_GOV_001: {live: BLOCKED, reason: 'Recurring access and retention not reviewed'}
+  WIKI_CONGRESS_001: {live: BLOCKED, reason: 'Recurring access and attribution not reviewed'}
+  CTRL_074_A: {live: NOT_AUTOMATED, reason: 'Manual reviewed evidence only'}
+  CTRL_GOV_001: {live: NOT_AUTOMATED, reason: 'Manual reviewed evidence only'}

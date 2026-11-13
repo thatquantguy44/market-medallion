@@ -1,0 +1,8 @@
+# Optional fetch transport configuration. No entry here approves a source.
+network:
+  mode: direct
+  preferred_route: direct
+  fallback: false
+  use_environment_no_proxy: false
+  probe_timeout_seconds: 10
+  timeout_seconds: 30
