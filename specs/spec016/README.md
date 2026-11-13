@@ -1,6 +1,6 @@
 # Spec 016 — Presidential data pipeline port and complete PRES integration
 
-Status: **local implementation and frozen-history parity verified on feature branches**; live acquisition and merged-release cutover remain separate.
+Status: **local pipeline, PRES integration and research-site handoff merged**; live acquisition remains separately gated.
 Created: **2026-11-04**, America/New_York.
 Capability ID: `presidential-research-data`.
 Target package: `src/market_data_pipeline/pipelines/presidential_research/`.

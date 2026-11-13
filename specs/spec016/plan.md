@@ -1,6 +1,6 @@
 # Presidential pipeline migration and PRES integration plan
 
-Status: **implementation and local parity verified on feature branches**; the original sequence below is retained for design history.
+Status: **implementation and local parity merged**; the original sequence below is retained for design history.
 Requirements: [Spec016](README.md). Boundary: [data contract](data_contract.md).
 Executable work tracker: [todo.md](todo.md). This file is the coordinated plan
 for all three repositories; existing root `tasks/` files remain untouched.

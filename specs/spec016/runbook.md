@@ -1,6 +1,6 @@
 # Presidential research: local operations
 
-This branch contains a locally qualified frozen historical bundle and consumer.
+The release contains a locally qualified frozen historical bundle and consumer.
 No live provider is approved. Keep
 workspace data and credentials outside Git. Preserve prior snapshots and backups;
 do not replace or delete historical evidence as a routine rollback.
@@ -30,8 +30,9 @@ For individually selected alternate local inputs:
 4. The offline `presidential_rebuild_job` takes explicit capture and review IDs
    and performs no fetch. The separate `presidential_live_fetch_job` applies the
    source gate before network setup. `presidential_research_refresh` defaults
-   STOPPED. The actual state of any separately running Dagster instance was not
-   changed or inspected. Even when manually enabled, live requests remain blocked
+   STOPPED. No runtime schedule was changed. The local Dagster webserver was
+   reachable on 2026-11-13 but its code location was unreachable, so runtime
+   schedule state could not be verified. Even when manually enabled, live requests remain blocked
    until source-specific access and transport are reviewed in code.
 5. Roll back by choosing an earlier verified backup and restoring it into a new
    workspace; re-point the local reader after checking the restored selection.

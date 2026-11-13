@@ -39,12 +39,9 @@ The fictional fixture has separate synthetic labels and separate counts.
 
 ## Operational and release boundaries
 
-MarketMedallion and QuantMeridian changes are on their respective local
-`feat/pres-data-integration` branches, with the website handoff on its matching
-branch. These branch commits are not yet a merged release; commit identities can
-be obtained from `git rev-parse HEAD` in each branch. The selected historical
-snapshot retains its source-tree digest and capture/review identities in the
-catalog. New live fetches remain blocked; the schedule definition is stopped by
+MarketMedallion, QuantMeridian and research-site handoff PRs have merged; the
+release identities are recorded below. The selected historical snapshot retains
+its source-tree digest and capture/review identities in the catalog. New live fetches remain blocked; the schedule definition is stopped by
 default and no existing runtime schedule was altered. Recurring access, hosted
 publication, source redistribution, S&P 500 licensing, and real-time historical
 availability require separate decisions. See [source review](source_access_review.md).
@@ -74,3 +71,31 @@ supplied presidential-period datasets remain supported under the existing schema
   `c76f1de` (operations and this handoff follow it), QuantMeridian `b653028`,
   research website `e66ae71`. These are feature-branch commits, not merged
   release SHAs; obtain final merge SHAs during the coordinated release.
+
+## Coordinated release progress
+
+- MarketMedallion [PR #21](https://github.com/thatquantguy44/market-medallion/pull/21)
+  merged as `36e4f5c1162a76d1507a03b741b927b7652825ee` after both CI runs passed.
+- QuantMeridian [PR #220](https://github.com/thatquantguy44/QuantMeridian/pull/220)
+  merged as `ad986a84dda4a301d6d2ae4cbb3a917b5c0fe3a6` after GitHub CI passed.
+- [Research-site PR #22](https://github.com/thatquantguy44/thatquantguy44.github.io/pull/22)
+  merged as `3e051f98e099843fb11d8f6871e9517ba08b9920`.
+- QuantMeridian documentation [PR #221](https://github.com/thatquantguy44/QuantMeridian/pull/221)
+  merged as `ece4d99f2fb9b22c093c4419a9af9952551ab595` after GitHub CI passed.
+- The merged MarketMedallion wheel was built and installed outside its source
+  checkout; the installed CLI verified the selected five-dataset snapshot.
+  Producer and consumer contract files were byte-identical.
+
+Vercel preview provisioning failed before a build started, including on a retry;
+prior preview deployments reported the same error before this branch existed.
+The production deployment for QuantMeridian merge `ad986a84` reached READY.
+The separate QuantMeridian-Core sync workflow still fails its pre-existing patch,
+secret-scan and subset checks; no downstream synchronization is claimed.
+
+The `presidential_research_refresh` schedule is defined stopped by default and
+was not started by this delivery. On 2026-11-13, the local Dagster webserver was
+reachable but its code location reported `DagsterUserCodeUnreachableError`, so
+its effective runtime schedule state could not be independently verified. A
+read-only query of the local instance schedule database found no persisted row
+for `presidential_research_refresh`. Keep live acquisition blocked and
+investigate the local code server before relying on its operational status.
