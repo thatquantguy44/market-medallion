@@ -21,7 +21,7 @@ apply before filesystem access; no permission is inferred from source data alone
 
 The destination is explicitly absent or empty, disjoint from the source and
 selected by the destination YAML. Both logical paths and resolved paths must be
-safe; aliases, overlapping roots and populated destinations refuse. Source
+safe; direct root symlinks, resolved overlapping roots and populated destinations refuse. Source
 archive and ingestion locks pin one capture/ledger inventory during replay.
 Resource limits bound capture count, each input, total archive bytes and database
 row/byte projection before loading documents. Defaults:1000 captures,128MiB total
@@ -47,7 +47,8 @@ to the intended destination while it is still private, then atomically rename it
 into place and fsync its parent. This is a replay-only initialization step, not a
 supported way to relocate an existing bound warehouse. Failures remove only the
 owned private staging root and leave the source and destination contents intact.
-Concurrent destination population must never be overwritten. A successful replay
+Concurrent destination population must never be overwritten. A response failure after installation can leave a complete verified target;
+inspect its report and ordinary readers rather than overwriting it. A successful replay
 writes `replay.json` with source/destination warehouse IDs, inventory and logical
 hashes, counts, original knowledge labels and a separate replay completion clock.
 An existing replay destination is never an implicit resume or overwrite target.

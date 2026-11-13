@@ -9,8 +9,8 @@ captures and sanitized outcomes. T06–T08 implement audited local SQLite
 versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/script.
 [Storage contract](local_storage_contract.md), [local acceptance](t06_t08_acceptance.md)
 and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
-T10 implements typed local Parquet and coherent publication/recovery. Replay,
-downstream exchange, acquisition and jobs remain unimplemented.
+T10 implements typed local Parquet and coherent publication/recovery. T11 implements
+verified empty-target replay. Downstream exchange, acquisition and jobs remain unimplemented.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -236,3 +236,16 @@ journal state. Operational SQLite remains the mutable ingestion store. Published
 consumers select only `parquet/current.json`, verify its manifest/files against
 catalog facts and never join them to operational Gold as if they were one snapshot.
 This local projection is not the T14 research interchange contract.
+
+## SSV-T11 local replay
+
+[Replay contract](replay_contract.md) requires original Bronze, supported parser/
+transform versions and a terminal source ledger. Reparse in original sequence
+order, reject clock regression, recompute exact versions/membership/results and
+compare all operational tables plus Gold. Original audit attempts and source
+clocks/UUIDs are preserved after their terminal links are validated; execution
+failures are evidence, not newly promoted captures. Unresolved source captures
+refuse replay. The empty disjoint destination receives a fresh warehouse identity
+and separate replay completion metadata only after a private verified rebuild.
+`replay.json` records inventory/state hashes, counts and original knowledge labels.
+T10 publication remains explicit and creates new publication event identities.

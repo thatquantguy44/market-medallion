@@ -1,12 +1,13 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T10 complete for the selected three-TRF Public API profile.
+**Status:** SSV-T01–T11 complete for the selected three-TRF Public API profile.
 Immutable Bronze, audited SQLite Silver/Gold, revisions/removals and UTC/sequence
 cutoffs feed scope-safe research and explicit typed Parquet publication. A separate
 catalog freezes publication facts and journals COMMITTED/PUBLISHED generations;
 `parquet/current.json` selects coherent files and database facts. The configured
-CLI/script includes publication, inspection and recovery. **Next: SSV-T11 replay.**
-Acquisition, replay, exchange and jobs remain absent; G1/G2 are open.
+CLI/script includes publication/recovery and verified empty-target replay preserving
+original clocks, revisions, membership and audit. **Next: SSV-T12 acquisition.**
+Acquisition, exchange and jobs remain absent; G1/G2 are open.
 **Reviewed:** 2026-11-13. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
 **Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
@@ -27,55 +28,61 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 ## Next agent handoff
 
-**Start here:** [T10 acceptance](t10_acceptance.md), [publication contract](parquet_contract.md),
-[evidence](evidence/t10_parquet_conformance.json) and [SSV-T11](todo.md#ssv-t11--replay-archived-captures).
-The user requested a fresh branch from latest main: **`feat/finra-parquet-publication`**
-starts at merged T09 main `55dcd5d` (PR #23), delivered in
-[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24). T01–T10 and local Checkpoints B/C
-are accepted with invented input. T11–T16, real complete-partition/history coverage
-and G1/G2 remain open.
+**Start here:** [T11 acceptance](t11_acceptance.md), [replay contract](replay_contract.md),
+[evidence](evidence/t11_replay_conformance.json) and [SSV-T12](todo.md#ssv-t12--implement-bounded-admitted-acquisition).
+The user added T11 to **`feat/finra-parquet-publication`** /
+[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24), originally created
+from merged T09 main `55dcd5d`. T01–T11 are accepted with invented local input.
+T12–T16, real complete-partition/history coverage and G1/G2 remain open.
 
 Read root [AGENTS.md](../../AGENTS.md), the [master handoff](../../docs/handoffs/project_bootstrap.md),
 [plan](plan.md), [data contract](data_contract.md), [API contract](api_contract.md),
 [source review](source_review.md) and common C04–C08. Use pinned workflows.
-QuantSmith checkout drift remains reported; all 61 pinned guidance objects were
-verified without refreshing either library. agent-skills verifies all 188 entries.
+agent-skills verifies 188 entries. QuantSmith checkout drift remains reported;
+all 61 pinned guidance objects were verified without refreshing either library.
 
-**Next bounded slice — SSV-T11 / SSV-REQ11 / SSV-AC11:** replay archived captures
-into an explicitly empty destination without HTTP. Preserve capture order,
-original first-seen clocks/sequences, versions/removals and complete replacement
-membership; compare logical history and Gold to the source. Do not relabel fixture
-or provider input, manufacture older availability or copy a root-bound SQLite
-file to a new path. Specify destination identity and incomplete-capture handling
-before coding. Publication generation UUIDs are events, not logical replay keys.
-Keep acquisition as T12.
+**Next bounded slice — SSV-T12 / SSV-NFR01 / SSV-AC12:** implement admitted,
+bounded acquisition using the existing official API schema, provider-owned retry
+policy and run-scoped `shared/http.py` client. Recheck official access/schema
+references before coding. Define finite dates, pages, rows, bytes, requests and
+correction overlap; preserve raw outcomes and never claim full extraction after
+partial/failed responses. Cross-page assembly is currently absent and needs an
+explicit completeness design. Test injected transports first. Any real conformance
+is a separate permitted bounded run, not an archive-scale default. Network
+configuration never grants access. Keep acquisition and schedules inactive until
+implemented and explicitly admitted; retain stopped orchestration as T15.
 
-T10 adds fixed date32/UTC/int64/bool/string schemas and an exact-decimal struct
-(sign, coefficient digits, exponent), preserving values wider than decimal256.
-Readers validate schemas, counts, hashes and every typed field against canonical
-records and catalog facts. The publication catalog is separate from the operational
-ingestion warehouse: `run` does not automatically publish. A pending generation
-recovers its frozen files before another snapshot is collected. Never glob final
-files or manually move the pointer; `recover-publication` completes verified work.
-A verified COMMITTED pointer reports `recovery_required` and no PUBLISHED watermark.
+T11 replays original Bronze plus a verified terminal operational ledger into a
+separate absent/empty destination. It refuses unresolved/failed-only captures,
+reparses original profiles, recomputes versions and exact terminal outcomes, and
+retains original attempt evidence. A private sibling rebuild is compared across
+all logical tables before its fresh identity is sealed to the destination and
+atomically installed. This initialization is not a general store-relocation tool.
+Original UUIDs, capture times/sequences, retrieval/publication nulls and allocator
+slots survive; the new warehouse UUID and replay completion clock are separate.
+Publication stays explicit: replay does not copy source Parquet generations.
 
-Reuse the admitted Bronze, immutable versions and capture membership. T09 research
-pins all requested dates/facilities to one read transaction; missing population
-metrics stay withheld, and prior selection uses the nearest earlier complete
-population at the same cutoff. Calendar gaps do not infer trading sessions.
-Preserve clocks, component lineage, exact quantities and fixed ratio arithmetic.
+T10 [publication](parquet_contract.md) uses exact-decimal structs and frozen
+COMMITTED/PUBLISHED catalog facts. `parquet/current.json` is the sole selector;
+never glob files, manually repoint, or combine files with newer operational Gold.
+Pending generations recover exact bytes before new publication. Source ingestion
+and publication remain separate. T09 research preserves disjoint matching,
+missing-population semantics, nearest earlier complete population, local cutoffs
+and calendar gaps without inferring trading sessions.
 
 Run commands through [the portable script](../../scripts/run_finra_short_sale_volume.sh)
 and [per-pipeline YAML](../../config/finra_short_sale_volume/README.md).
-[Local runbook](../../docs/deployment/ssv_local_runbook.md) covers publication and
-recovery. No FINRA Dagster/Slack integration exists. NAAIM stays paused.
+[Runbook](../../docs/deployment/ssv_local_runbook.md#t11-offline-replay) covers replay,
+limits, refusal and installed-result inspection. No FINRA Dagster/Slack integration
+exists; NAAIM stays paused.
 
-**Verified T10:** 79 new checks / **510 FINRA tests**; full offline suite
-**1,498 passed, 92 optional skips**. Lint/format and package readback pass. Eight
-actual script commands verify retry, catalog/file equality and pending-pointer
-recovery while retaining all ten original source files unchanged. Automated tests
-cover seven failure boundaries, uncertain commit, newer ingestion, large/fractional
-values, empty/removal/partial states, cutoffs, corruption and concurrency.
+**Verified T11:** 41 new checks / **551 FINRA tests**; full offline **1,539 passed,
+92 optional skips**. Lint/format and package readback pass. Twenty-four actual
+script commands across eight invented captures verify exact audit/Gold/research,
+original cutoffs and new publication-table parity; 38 original source files remain
+unchanged. Tests cover failure cleanup, concurrent destination population,
+post-install response failure, corruption/provenance/clock/budget refusal,
+allocator-only slots, multiple profiles and 4096-digit/fractional quantities.
 
 Update [tasks](todo.md), [master register](../../docs/pipelines.md),
 [program tracker](../../docs/securities_finance/roadmap.md) and
@@ -151,13 +158,12 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. **431 focused FINRA tests** cover
-84 admission/registry, 111 parser, 71 arithmetic/codec, 49 Bronze and 64 local
-SQLite/config/CLI/revision/replacement checks, plus 52 T09 arithmetic/query/CLI
-checks. Implemented data entrypoints enforce
-admission before I/O. Acquisition/export and broader delivery acceptance remain
-pending. Full offline regression: **1,419 passed, 92 optional skips**.
-[T09 acceptance](t09_acceptance.md).
+Every task/test must cite these stable IDs. **551 focused FINRA tests** cover
+431 existing source/parser/arithmetic/Bronze/SQLite/research checks, 79 T10 typed
+publication/recovery checks and 41 T11 replay checks. Data entrypoints enforce
+admission before I/O. Full offline regression: **1,539 passed, 92 optional skips**.
+[T11 acceptance](t11_acceptance.md). Acquisition/export and broader delivery remain
+pending; invented fixtures do not establish real-source coverage.
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |
 | --- | --- | --- |
@@ -219,29 +225,22 @@ The [T04 numeric contract](data_contract.md#ssv-t04-arithmetic-and-quantity-text
 and [offline evidence](evidence/t04_semantics_conformance.json) define the quantity
 codec, zero/null behavior, method version and remaining publication boundary.
 
-## Verification commands and CLI proposal
-
-Existing repository checks remain executable:
+## Verification commands and local CLI
 
 ```bash
-.venv/bin/python -m pytest -q
-.venv/bin/python -m ruff check .
-.venv/bin/python -m ruff format --check .
+.venv/bin/python -m pytest -q tests/test_ssv*
+.venv/bin/ruff check .
+.venv/bin/ruff format --check .
 .venv/bin/python -m build --no-isolation
+./scripts/run_finra_short_sale_volume.sh validate-config --config config/finra_short_sale_volume/pipeline.local.yml
+./scripts/run_finra_short_sale_volume.sh replay --source-root data/ssv-demo --config config/finra_short_sale_volume/replay.local.yml
 ```
 
-Future commands below are a proposed interface, absent until SSV tasks implement
-and test them. Validation/check/replay never contact FINRA; local run does not
-implicitly fetch. A later acquisition command must require bounded dates and
-an admitted use profile, and print scope plus coverage, never a misleading
-market-wide short-interest label.
-
-```bash
-.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume validate --manifest manifests/finra-short-sale-volume.yml
-.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume run --input tests/fixtures/finra_short_sale_volume/current.json --root data/ssv-demo
-.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume check --root data/ssv-demo
-.venv/bin/python -m market_data_pipeline.pipelines.finra_short_sale_volume replay --source-root data/ssv-demo --root data/ssv-replay
-```
+The destination YAML's `root` must be absent or empty and disjoint from the source;
+copy the fixture example and choose a new root. See [configuration](../../config/finra_short_sale_volume/README.md)
+and the [local runbook](../../docs/deployment/ssv_local_runbook.md) for implemented
+run, inspection, research, publication and recovery commands. Validation and replay
+make no network request. Acquisition and source-aware health remain later work.
 
 ## Testing, rollout and boundaries
 

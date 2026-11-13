@@ -98,7 +98,7 @@ New versions are bounded at 250,000; raw reservations at T05's 100,000. Audit/hi
 queries accept limits 1–1,000. Database changes and the partition pointer commit in
 one transaction. T10 separately publishes immutable database/file generations;
 see the recovery protocol below.
-Replay/backup tooling is not delivered here. Existing operational databases,
+T11 adds replay below; database-free backup/restore tooling remains absent. Existing operational databases,
 source samples, services and schedules were not used for local acceptance.
 
 ## T09 research Gold
@@ -185,10 +185,68 @@ only verified owned uncommitted staging orphans. No published files are deleted.
 A fresh catalog with no committed generation returns NO_PUBLICATION on recovery;
 `published` returns exit2 until a generation exists.
 
-Default publication/read budgets are250000 rows and128MiB total logical/Arrow/file
+Default publication/read budgets are250000 rows and 128MiB total logical/Arrow/file
 bytes. Flags `--max-rows`/`--max-bytes` are separate from input YAML limits; bounded
 overrides are documented in the config guide. Publication history caps at10000
 generations. A root-bound catalog cannot be moved to another root as a restore.
-This is local POSIX publication; replay, backup tooling, research exchange and
+This is local POSIX publication; backup tooling, research exchange and
 orchestration remain later tasks. [T10 acceptance](../../specs/spec012/t10_acceptance.md)
 records the seven injected failure boundaries, numeric parity and CLI evidence.
+
+## T11 offline replay
+
+Use the original Bronze archive **and** verified terminal source warehouse.
+Replay is not a database-free backup. Copy the example to a new ignored
+`replay.local.yml`, set its `root` to a separate absent/empty destination, and keep
+compatible manifest, operation grants and parser limits. Never point the replay
+config at the original root or an existing operational store.
+
+```bash
+./scripts/run_finra_short_sale_volume.sh replay --source-root data/finra_short_sale_volume/local-demo \
+  --config config/finra_short_sale_volume/replay.local.yml
+./scripts/run_finra_short_sale_volume.sh gold --config config/finra_short_sale_volume/replay.local.yml \
+  --trade-date 2026-11-09 --facility nyse_trf
+```
+
+The source root is a CLI path; the destination `root` resolves relative to its
+YAML. No `.env`, credentials, HTTP, network probe or service is used. Source
+archive/ingestion locks freeze capture inventory and terminal ledger during the
+rebuild. Unresolved STARTED, failed-only or unprocessed captures, missing original
+parse outcomes, unsupported profiles, corrupt lineage or clock regression refuse
+before destination creation. Resume/investigate the original source capture first;
+replay cannot convert execution failure into successful observation history.
+Historical failed/interrupted attempts followed by terminal retries are retained.
+Partial/rejected captures remain unpromoted and cannot retract prior membership.
+
+Reparse original payloads/profiles in sequence order, retain clocks/UUIDs/slots,
+and compare exact versions, removals, membership, partition pointers, Gold and
+original audit attempts. The private sibling stage is exposed only after parity
+and final-path identity sealing. A fresh warehouse UUID is expected; source
+version IDs and cutoff results must match. This sealing initializes a newly
+reconstructed store and does not permit relocating arbitrary existing stores.
+Failures before installation remove only owned staging and leave destination
+contents intact. Concurrent destination content is never overwritten.
+
+Success writes `replay.json` with source/destination IDs, original capture
+inventory, logical-state hash, counts and a separate replay completion clock.
+A response/fsync failure after installation can leave a complete target: inspect
+that report and verify the target with ordinary readers. A repeated replay into
+any populated target refuses; it is not an implicit overwrite/resume operation.
+A hard process interruption may leave an ignored private sibling staging directory;
+there is no automatic adoption of such leftovers. Preserve it for investigation
+and rerun into a fresh empty destination. Never manually promote an unverified stage.
+
+Default bounds are 1000 captures, 250000 logical state rows and 128MiB combined
+archive/state bytes, with explicit finite overrides in the config guide. Original
+unused sequence reservations remain allocator-only evidence, preserving the next
+sequence without manufacturing observations. Up to 16 original parse profiles per
+capture are reparsed and compared. Source root bindings and all original source
+files remain unchanged.
+
+Replay does not copy source T10 publication files/catalog/UUIDs. Run `publish`
+with an explicit date/scope on the destination to create its own verified event;
+its logical tables should match the corresponding source publication. Compare
+warehouse facts/cutoff answers, not warehouse/publication UUIDs or replay wall time.
+[Acceptance](../../specs/spec012/t11_acceptance.md) records actual script and failure
+checks. T12 bounded acquisition, source-aware health, interchange and jobs remain
+later work; G1/G2 and real-source coverage stay open.

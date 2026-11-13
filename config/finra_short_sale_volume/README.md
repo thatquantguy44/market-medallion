@@ -25,7 +25,7 @@ date/facility responses publish; a partial page remains audit/Bronze evidence.
 The fixture receipt accompanies `tests/fixtures/finra_short_sale_volume/invented-valid.json`.
 All values there are invented, not provider history. See the
 [local runbook](../../docs/deployment/ssv_local_runbook.md) for actual commands,
-root identity, retry and missing/pending states. Replay, live acquisition,
+root identity, retry and missing/pending states. Live acquisition,
 research exchange, jobs and alerts remain later tasks. No network probe, service
 startup, `.env` loading or schedule activation occurs through these commands.
 
@@ -50,3 +50,18 @@ verifying the whole generation. Recovery may require the larger original budgets
 when a generation was published with explicit overrides. Local publication history
 is capped at10000 generations; there is no automatic deletion/retention in T10.
 See [publication/recovery](../../docs/deployment/ssv_local_runbook.md#t10-typed-publication-and-recovery).
+
+T11 adds `replay --source-root <original-root> --config <destination-yaml>`.
+The config's `root` selects a separate absent/empty destination, while its
+manifest/grants and input limits must admit the original input kind and parser
+profiles. Start from another copy of the example and choose a new root; existing
+store roots are refused. No new YAML keys or credentials are required.
+
+Replay-specific flags: `--max-captures` defaults to 1000 (range1–10000),
+`--max-state-rows` to 250000 (range1–1000000), and `--max-total-bytes` to 134217728
+(range1–1073741824). The total byte limit covers the logical state plus archived
+payload/receipt/outcome/sequence files. YAML `limits` bound each input and original
+parser profile. At most 16 original profiles per capture and 100000 original
+sequence reservations are accepted. Replay never probes the network. It requires
+Bronze plus the verified terminal source warehouse, not a database-free backup.
+See [replay operations](../../docs/deployment/ssv_local_runbook.md#t11-offline-replay).

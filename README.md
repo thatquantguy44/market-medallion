@@ -44,7 +44,7 @@ remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
 records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
 stay explicit, with no flags cleared or derivative publication. Recent-year
 refreshes cover new releases/corrections. Acquisition schedules stay stopped;
-NAAIM remains paused; FINRA T01–T10 are accepted locally and T11 replay is next.
+NAAIM remains paused; FINRA T01–T11 are accepted locally and T12 acquisition is next.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
@@ -68,11 +68,14 @@ adds audited SQLite Silver/Gold, revisions/reversions/removals and UTC/sequence
 cutoffs on top of immutable Bronze. [T09 research Gold](specs/spec012/t09_acceptance.md)
 adds exact scope-safe aggregation, prior complete dates and calendar gaps;
 [T10 typed publication](specs/spec012/t10_acceptance.md) adds lossless Parquet,
-frozen catalog facts and a recoverable committed pointer; **510 FINRA tests pass**.
+frozen catalog facts and a recoverable committed pointer.
+[T11 offline replay](specs/spec012/t11_acceptance.md) rebuilds an empty destination
+with exact source clocks, history and audit evidence; **551 FINRA tests pass**.
 The [portable script](scripts/run_finra_short_sale_volume.sh) uses
 [per-pipeline YAML](config/finra_short_sale_volume/README.md). Publication is explicit
-through `publish`, `published` and `recover-publication`. Next is SSV-T11 replay.
-Acquisition, replay, exports/jobs and complete real-source coverage remain unimplemented. Public API terms acceptance is user-attested. Databricks
+through `publish`, `published` and `recover-publication`; `replay` takes a source
+root and an empty destination config. Next is SSV-T12 bounded acquisition.
+Acquisition, exports/jobs and complete real-source coverage remain unimplemented. Public API terms acceptance is user-attested. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).

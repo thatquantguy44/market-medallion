@@ -3,12 +3,12 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03–T10 are **complete locally**; SSV-T11–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03–T11 are **complete locally**; SSV-T12–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01–T10 suites.
+Tests below are future targets except the implemented SSV-T01–T11 suites.
 [README.md](README.md) defines their acceptance IDs.
-The [next-agent handoff](README.md#next-agent-handoff) records the exact T11 pickup
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T12 pickup
 scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -220,11 +220,19 @@ Operational schema/ingestion stays compatible; publication is an explicit comman
 
 ## SSV-T11 — Replay archived captures
 
+**Status:** complete locally, 2026-11-13, added to `feat/finra-parquet-publication` / PR #24.
 **Depends:** SSV-T10; **traces:** SSV-REQ11 / SSV-AC11.
-- [ ] Empty-target replay preserves ordering, versions and original first-seen clocks.
-- [ ] Replay makes no network request and refuses a populated destination.
-**Verify:** compare logical versions/Gold before and after clean replay.
-**Files:** `replay.py`, `cli.py`, `tests/test_ssv_replay.py`.
+- [x] Empty-target replay preserves ordering, versions and original first-seen clocks.
+- [x] Replay makes no network request and refuses a populated destination.
+**Verify:** exact logical tables/audit, capture-bound cutoffs, scoped research and new
+Parquet table parity. 41 new / **551 FINRA tests**; full offline **1,539 passed /
+92 optional skips**; Ruff and package readback pass.24 actual script commands,
+eight invented captures,38 unchanged original source files.
+[Acceptance](t11_acceptance.md), [contract](replay_contract.md),
+[evidence](evidence/t11_replay_conformance.json).
+**Files:** `replay.py`, `io/replay_archive.py`, `cli.py`, and three replay test modules.
+Requires original Bronze plus a verified terminal source ledger; no database-free
+bundle or implicit publication. Private rebuild/install leaves populated roots intact.
 
 ## SSV-T12 — Implement bounded admitted acquisition
 
@@ -239,7 +247,7 @@ acceptance of local mode. Fixtures alone do not prove real-source coverage.
 
 ### Checkpoint D — Reproducible acquisition
 
-- [ ] Offline replay works independently of transport; no archive-scale run is implicit.
+- [x] Offline replay works independently of transport; no archive-scale run is implicit.
 - [ ] Live conformance, if performed, is identified separately from fixture evidence.
 
 ## SSV-T13 — Add release-aware health and retention dry run

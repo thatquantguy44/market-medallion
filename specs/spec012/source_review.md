@@ -109,7 +109,8 @@ observed revisions and complete membership](t06_t08_acceptance.md); 379 focused
 checks pass. T09 [research acceptance](t09_acceptance.md) adds matched-population
 metrics and prior-date evidence, bringing the FINRA total to 431 passing checks.
 T10 [typed publication acceptance](t10_acceptance.md) brings the total to 510 checks.
-Next is **SSV-T11**, offline replay.
+T11 [offline replay acceptance](t11_acceptance.md) brings the total to 551 checks.
+Next is **SSV-T12**, bounded admitted acquisition.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -203,3 +204,14 @@ uncertain commit, corruption, large/fractional values and newer source ingestion
 are tested. Source schema, access grants and real provider coverage are unchanged.
 Publication is explicit and local; it does not activate acquisition or services.
 G1/G2 remain open, and T11 replay is next. The T09 checkpoint above is historical.
+
+## SSV-T11 offline replay checkpoint
+
+Added to the same PR #24 at the user's request. [Acceptance](t11_acceptance.md)
+records 41 new / **551 FINRA tests** and full offline **1,539 passed /92 optional
+skips**. 24 actual portable-script commands across eight invented captures verify
+original clocks, revisions/removals, audit/Gold/research and new publication-table
+parity; 38 original source files remain unchanged. No source/provider request or
+schema/admission change. Replay requires verified original Bronze and terminal
+source ledger; unresolved captures refuse. T12 acquisition is next. G1/G2 and
+real complete-partition/history coverage remain open. Prior checkpoints are historical.
