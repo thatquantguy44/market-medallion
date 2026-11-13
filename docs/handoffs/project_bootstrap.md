@@ -19,13 +19,28 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — FOMC Dagster job delivery
+## 2026-11-12 current pickup — local Dagster launcher port
+
+PR #15 is merged. The user requested a different default port for
+`scripts/run_local_dagster.sh`. The follow-up branch is
+`fix/dagster-default-port` in
+[PR #16](https://github.com/thatquantguy44/market-medallion/pull/16); track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/16/checks) and
+review threads on the current head. The launcher defaults to `127.0.0.1:3030`, with
+`DAGSTER_PORT` configurable in ignored `.env` or the inherited environment.
+README and the job register use the launcher consistently. Port 3001 was already
+occupied during verification; 3030 had no listener. Syntax and isolated launcher
+smoke checks passed for default, `.env`, inherited and empty-value fallback.
+No running service was restarted or schedule activated; the default applies at
+the next launch. The accepted FOMC archive/job state below remains unchanged.
+
+## 2026-11-12 accepted checkpoint — FOMC Dagster job delivery
 
 PR #14 merged at `3bbb0c1426f399b7ec85d6f2eea9ed4d32cb49ef`. The user first
 selected a local Mac/Docker productionization target, then narrowed deployment
 to **a Dagster job**. Backup and alert destinations should be configurable later.
-The current branch is `feat/fomc-dagster-job`, with
-[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15) open to `main`.
+The job delivery branch was `feat/fomc-dagster-job`, merged through
+[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15).
 Track its [checks](https://github.com/thatquantguy44/market-medallion/pull/15/checks)
 and [review threads](https://github.com/thatquantguy44/market-medallion/pull/15/files).
 Acceptance head: `e73640e4df41b8cabfb1000c52e4abd041466faf`; on continuation
