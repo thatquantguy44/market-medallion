@@ -166,8 +166,8 @@ def discover_html_dependencies(
 
     sep_declared = bool(
         re.search(
-            r"Summary of Economic Projections(?: \(SEP\))?\s*, "
-            r"which is (?:attached as )?an addendum to these minutes",
+            r"Summary of Economic Projections(?: \(SEP\))?"
+            r"(?:\s*, which| that)? is (?:attached as )?an addendum to these minutes",
             article.text(),
             re.I,
         )

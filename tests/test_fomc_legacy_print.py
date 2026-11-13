@@ -213,3 +213,18 @@ def test_april_2008_chart_dependencies_preserve_source_owned_filename_variation(
 def test_image_folder_admission_keeps_host_format_and_query_boundaries(manifest, url):
     with pytest.raises(ValueError):
         manifest.canonical_asset_url(url)
+
+
+@pytest.mark.parametrize("connector", [" that", ""])
+def test_january_2009_explicit_attached_sep_association(manifest, connector):
+    payload = HTML.replace(
+        b"</em>, which is attached as an addendum",
+        f"</em>{connector} is attached as an addendum".encode(),
+    )
+    deps = discover_html_dependencies(payload, URL, manifest)
+    assert not deps.issues
+    assert any(d.relation == "minutes_addendum" for d in deps.dependencies)
+    unrelated = payload.replace(b"is attached as an addendum to these minutes", b"is unrelated")
+    assert "unresolved_sep_association" in {
+        i.code for i in discover_html_dependencies(unrelated, URL, manifest).issues
+    }

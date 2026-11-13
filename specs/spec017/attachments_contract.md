@@ -164,3 +164,10 @@ source-shaped regression cases cover first/last text, names/punctuation, tables,
 explicit SEP lineage, exact decorative exclusions, ambiguity and encoding
 refusal. An isolated operation test verifies original-byte readback, stored
 profile/text/chunks and repeat-backfill reuse.
+
+The [January 2009 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20090128.htm)
+use a relative clause with “that” in the explicit attached-addendum declaration.
+The declaration rule accepts direct statements and “which”/“that” clauses while
+requiring the named SEP to be an addendum to these minutes. A matching navigation
+label alone still records an unresolved association. Offline regressions verify
+both explicit declarations and refusal after that association is removed.

@@ -31,7 +31,7 @@ The local operator process uses the existing Dagster job and writes durable
 progress to ignored `data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`.
 Its plan and per-batch `verified.json`/`checkpoint.json` records are in that same
 directory. The current operator script is `/tmp/fomc_1997_2026_bulk.py` (execution
-session 52013, resumed after verified historical HTML/GIF support). Read the state
+session 44479, resumed after verified historical HTML/GIF support). Read the state
 before resuming;
 the operator skips accepted batches and resumes an already-launched active run.
 Do not launch duplicate batches. A separate completed 2025–2026 source operation
@@ -44,10 +44,11 @@ verified by offline fixtures and isolated operation checks; all 194 existing
 selected extraction results/IDs recompute
 exactly. Failed-attempt originals/audit are retained and a fresh restore-tested
 checkpoint passed before retry. The second attempt additionally exposed source-declared GIF charts; their
-reviewed path/framing and rollback regressions now pass. Six failed attempts
-remain retained/restored (320, 325, 333, 338, 348 and 358 captures), including
-source-declared dated/undated GIF and JPEG charts. Dagster retry `abb13408-f2db-4884-a534-1772183d558c` succeeded and is completing
-its recovery gates; read `state.json`
+reviewed path/framing and rollback regressions now pass. Seven failed attempts
+remain retained/restored (the last at 387 captures), including
+source-declared dated/undated GIF and JPEG charts. Dagster retry `abb13408-f2db-4884-a534-1772183d558c` passed every recovery/Slack
+gate: 1997–2008 is accepted (6 of 21 batches). The 2009 retry is active after
+a fixture-proven explicit addendum-language fix; read `state.json`
 before any launch.
 On failure, diagnose its recorded phase and code
 rather than skipping references or widening budgets blindly.
@@ -57,8 +58,8 @@ publication and health, schema/filesystem backup+restore, offline selected-catal
 latest-operation replay and acknowledged Slack success before the next batch.
 A completed checkpoint serves as the next before-state. The initial fresh
 checkpoint preserves all 172 captures from the accepted 1990–1996 archive.
-The source fix is pushed through `2f44771`. Verification: 1,077 regression tests
-passed with 82 optional skips; all 342 FOMC checks passed with isolated PostgreSQL.
+The source fix is pushed through `2f44771`. Verification: 1,079 regression tests
+passed with 82 optional skips; all 344 FOMC checks passed with isolated PostgreSQL.
 Do not claim full-range acceptance until all planned batches and final per-year
 reference reconciliation pass. Unreleased, unavailable, not-listed and extraction
 review outcomes remain explicit, with actual capture-time first-seen clocks.
