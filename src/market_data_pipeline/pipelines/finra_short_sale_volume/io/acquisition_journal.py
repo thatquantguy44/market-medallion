@@ -54,10 +54,11 @@ class Run:
         self.events += 1
 
     def finish(self, value):
-        replace(
-            self.path / "result.json",
-            dict(value, run_id=self.run_id, completed_at=_clock(self.clock()), events=self.events),
+        result = dict(
+            value, run_id=self.run_id, completed_at=_clock(self.clock()), events=self.events
         )
+        replace(self.path / "result.json", result)
+        return result
 
     def metadata(self, body):
         _put(self.path / "metadata.json", body)

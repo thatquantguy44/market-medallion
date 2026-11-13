@@ -159,6 +159,10 @@ class Session:
                 or int(length) != len(payload)
             ):
                 problem = problem or "truncated_body"
+            try:
+                self.budget.time()
+            except Stop:
+                problem = "duration_budget"
             return Reply(
                 status, payload, headers, problem is None, problem, headers.get("retry-after")
             )
