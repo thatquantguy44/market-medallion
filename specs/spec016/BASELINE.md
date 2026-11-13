@@ -145,3 +145,14 @@ absent destination. Tests exclude unrelated .env files and reject corruption,
 traversal, duplicates, oversized archives, backdated restores and existing
 destinations. The full producer presidential suite passed 111 tests. These
 results are fixture-only; historical manual-evidence admission remains open.
+
+T18 is in progress. The installed package exposes explicit local import, parse,
+review, candidate, build, publication, health, replay, backup and restore
+commands. Captures/review classifications and selected IDs are required; control
+shape validation does not claim approval. The historical donor
+`calendar_year_start` option is explicitly rejected because it conflicts with
+PRES v1's at-or-before-origin date rule. `fetch` refuses without network access
+until T19 source review is implemented. The producer suite passed 117 tests;
+the installed wheel loaded its packaged seven-source catalog and passed five
+CLI tests outside both source checkouts. Frozen real-input qualification and
+live-source admission remain open.

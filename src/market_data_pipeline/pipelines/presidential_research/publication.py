@@ -246,8 +246,8 @@ def _write(path, data):
         os.fsync(handle.fileno())
 
 
-def publish_baseline(root, capture_id, review_id, *, profile_id, created_at: datetime, fault=None):
-    """Validate explicit archived inputs and publish one baseline generation."""
+def build_baseline(root, capture_id, review_id, *, profile_id):
+    """Build a validated baseline without publishing or writing user outputs."""
     if not isinstance(profile_id, str) or not _PROFILE.fullmatch(profile_id):
         raise ValueError("Invalid profile.")
     capture, raw, config_bytes = load_capture(root, "FF_MKT_001", capture_id)
@@ -303,8 +303,17 @@ def publish_baseline(root, capture_id, review_id, *, profile_id, created_at: dat
         manifest["reason"] = "Invented test data; this is not historical research."
     manifest["input_kind"] = capture["input_kind"]
     manifest["dataset_sha256"] = _sha(donor_canonical_json(dataset).encode())
+    parse_dataset_bytes(_bytes(dataset))
+    return dataset, manifest, capture, review, config
+
+
+def publish_baseline(root, capture_id, review_id, *, profile_id, created_at: datetime, fault=None):
+    """Validate explicit archived inputs and publish one baseline generation."""
+    dataset, manifest, capture, review, config = build_baseline(
+        root, capture_id, review_id, profile_id=profile_id
+    )
+    fixture = capture["input_kind"] == "SYNTHETIC_FIXTURE"
     data_bytes, manifest_bytes = _bytes(dataset), _bytes(manifest)
-    parse_dataset_bytes(data_bytes)
     producer = {
         "repository": "https://github.com/thatquantguy44/market-medallion",
         "commit": None,

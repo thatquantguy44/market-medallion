@@ -18,3 +18,6 @@ recursive-include specs/spec012/evidence *.json
 recursive-include specs/spec017/evidence *.json
 
 include scripts/run_fomc.sh
+
+recursive-include config/presidential_research *.toml *.json
+recursive-include contracts/presidential_research *.json
