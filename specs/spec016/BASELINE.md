@@ -20,3 +20,8 @@ commit and tree were available locally; the engineering, point-in-time,
 provenance, testing and file-ingestion guidance used here was read from that
 commit and individually matched against the reference SHA-256 inventory.
 The pinned agent-skills snapshot verified without network access.
+
+The target parser/config/quality port passes 10 tests, including donor golden
+factor values and source-role checks. It performs no provider requests; the
+retained historical catalog locators are not authorization for future fetches.
+The donor code is attributed to That Quant Guy research under its MIT metadata.

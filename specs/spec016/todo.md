@@ -1,6 +1,6 @@
 # Spec016 cross-repository tasks and acceptance tracker
 
-Status: **T01 baseline complete; remaining implementation tasks open**. Scope/requirements:
+Status: **T01–T02 complete; remaining implementation tasks open**. Scope/requirements:
 [README](README.md); design/gates: [plan](plan.md); interfaces:
 [data contract](data_contract.md). Task IDs are stable. Each row is one focused
 slice with no more than about five intended files; split a row before starting
@@ -15,7 +15,7 @@ and command evidence before checking it. Gate reviews assess concrete evidence.
 | Done / task | Owner / depends on | Requirement | Acceptance and verification | Intended files / scope |
 | --- | --- | --- | --- | --- |
 | [x] T01 Capture reproducible donor baseline | MM / none | R01,R02,N01 | Generate independent small numerical expectations and donor golden outputs with input digests. Original 29 tests pass; inventory source permissions and dirty trees. | `source_inventory.json`, new `tests/fixtures/presidential_research/baseline.json`, new baseline test, source admission notes (4). |
-| [ ] T02 Port parser/config layer | MM / T01 | R01,N01 | Five source parsers retain IDs, missingness and source dates. Run adapted parser tests without network or sibling imports. | new package `__init__.py`, `config.py`, `parsers.py`, `quality.py`, `tests/test_presidential_parsers.py` (5). |
+| [x] T02 Port parser/config layer | MM / T01 | R01,N01 | Five source parsers retain IDs, missingness and source dates. Run adapted parser tests without network or sibling imports. | new package `__init__.py`, `config.py`, `parsers.py`, `quality.py`, `tests/test_presidential_parsers.py` (5). |
 | [ ] T03 Port assembly methods | MM / T02 | R01,R03 | Baseline/robustness/inherited/cycle pure outputs match donor including flags, rounding and exclusions. Run adapted build tests and golden comparisons. | new `assemble.py`, `provenance.py`, source config, `tests/test_presidential_build.py`, golden output fixture (5). |
 
 **G1 checkpoint:** no new provider call; donor behavior and package imports agree.
