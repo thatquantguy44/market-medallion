@@ -32,3 +32,10 @@ cycle outputs. It preserves source metadata while writing its derived Shiller
 intermediate to private temporary storage instead of overwriting an input
 directory; callers must explicitly publish returned monthly rows. Targeted
 parser/assembly tests: 26 passed. No real source was imported or published.
+
+T04 adds explicitly selected local raw capture, source-catalog bytes and parser
+identity before offline parsing. It records destination admission/first-seen
+separately from optional evidenced retrieval time, retains failed-parse receipts,
+checks byte lengths/hashes and rejects symlinked payloads and oversized ZIP
+expansion. Six targeted archive tests pass without network. No historical raw
+input has yet been admitted to the new pipeline.

@@ -10,6 +10,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from zipfile import ZipFile
 
+MAX_FACTOR_TABLE_BYTES = 50 * 1024 * 1024
+
 
 class ParseError(ValueError):
     pass
@@ -28,7 +30,14 @@ def parse_fama_french_monthly_zip(payload: bytes, source_id: str) -> list[dict[s
             ]
             if len(candidates) != 1:
                 raise ParseError("Fama/French archive must contain exactly one CSV or text table")
-            text = archive.read(candidates[0]).decode("utf-8-sig")
+            info = archive.getinfo(candidates[0])
+            if info.file_size > MAX_FACTOR_TABLE_BYTES:
+                raise ParseError("Fama/French expanded table exceeds size limit")
+            with archive.open(info) as stream:
+                content = stream.read(MAX_FACTOR_TABLE_BYTES + 1)
+            if len(content) > MAX_FACTOR_TABLE_BYTES:
+                raise ParseError("Fama/French expanded table exceeds size limit")
+            text = content.decode("utf-8-sig")
     except OSError as exc:
         raise ParseError(f"Invalid Fama/French ZIP: {exc}") from exc
     header_index = next(
