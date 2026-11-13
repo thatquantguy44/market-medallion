@@ -19,6 +19,7 @@ def import_local_capture(
     payload: bytes,
     *,
     admitted_at: datetime,
+    input_kind: str,
     retrieved_at: datetime | None = None,
     expected_sha256: str | None = None,
 ) -> tuple[dict, dict]:
@@ -39,6 +40,7 @@ def import_local_capture(
         payload,
         config_bytes,
         admitted_at=admitted_at,
+        input_kind=input_kind,
         retrieved_at=retrieved_at,
         expected_sha256=expected_sha256,
         parser_id=source.parser,

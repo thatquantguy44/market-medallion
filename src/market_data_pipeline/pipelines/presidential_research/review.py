@@ -18,9 +18,11 @@ from .storage import MAX_CONFIG_BYTES, _read_bounded, _safe_child
 
 
 def promote_review_workbook(
-    root: Path, config: PipelineConfig, workbook: Path, *, admitted_at: datetime
+    root: Path, config: PipelineConfig, workbook: Path, *, admitted_at: datetime, evidence_kind: str
 ) -> dict:
     """Copy and validate reviewed evidence into a fresh immutable review version."""
+    if evidence_kind not in ("REVIEWED_HISTORY", "SYNTHETIC_FIXTURE"):
+        raise ValueError("An explicit evidence kind is required.")
     admitted = utc_timestamp(admitted_at)
     workbook_bytes = _read_bounded(Path(workbook), MAX_WORKBOOK_BYTES)
     config_bytes = _read_bounded(config.path, MAX_CONFIG_BYTES)
@@ -53,6 +55,7 @@ def promote_review_workbook(
             atomic_json(manifest_path, manifest)
             receipt = {
                 "schema": "presidential-review-receipt/1",
+                "evidence_kind": evidence_kind,
                 "review_id": review_id,
                 "admitted_at": admitted,
                 "workbook_sha256": hashlib.sha256(workbook_bytes).hexdigest(),
@@ -93,6 +96,7 @@ def load_review_version(root: Path, review_id: str) -> tuple[dict, bytes, dict]:
     manifest = json.loads(manifest_bytes)
     expected_keys = {
         "schema",
+        "evidence_kind",
         "review_id",
         "admitted_at",
         "workbook_sha256",
@@ -122,6 +126,7 @@ def load_review_version(root: Path, review_id: str) -> tuple[dict, bytes, dict]:
 
     if (
         receipt["schema"] != "presidential-review-receipt/1"
+        or receipt["evidence_kind"] not in ("REVIEWED_HISTORY", "SYNTHETIC_FIXTURE")
         or receipt["review_id"] != review_id
         or type(receipt["approved_count"]) is not int
         or receipt["approved_count"] < 1

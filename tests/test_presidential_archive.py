@@ -23,11 +23,13 @@ def test_malformed_parse_preserves_exact_capture_and_separate_admission_clock(tm
             "FEDFUNDS_001",
             payload,
             expected_sha256=hashlib.sha256(payload).hexdigest(),
+            input_kind="SYNTHETIC_FIXTURE",
             admitted_at=NOW,
             retrieved_at=None,
         )
     saved, original, config_bytes = load_capture(tmp_path, "FEDFUNDS_001", receipt["capture_id"])
     assert original == payload
+    assert saved["input_kind"] == "SYNTHETIC_FIXTURE"
     assert saved["retrieved_at"] is None
     assert saved["admitted_at"] == "2026-11-13T12:00:00.000000Z"
     assert saved["first_seen_at"] == saved["admitted_at"]
@@ -41,7 +43,13 @@ def test_bad_expected_digest_and_tampered_bytes_fail_closed(tmp_path):
     config = load_config(CATALOG)
     with pytest.raises(ValueError, match="digest"):
         import_local_capture(
-            tmp_path, config, "FEDFUNDS_001", payload, expected_sha256="0" * 64, admitted_at=NOW
+            tmp_path,
+            config,
+            "FEDFUNDS_001",
+            payload,
+            expected_sha256="0" * 64,
+            input_kind="SYNTHETIC_FIXTURE",
+            admitted_at=NOW,
         )
     receipt, outcome = import_local_capture(
         tmp_path,
@@ -49,6 +57,7 @@ def test_bad_expected_digest_and_tampered_bytes_fail_closed(tmp_path):
         "FEDFUNDS_001",
         payload,
         expected_sha256=hashlib.sha256(payload).hexdigest(),
+        input_kind="SYNTHETIC_FIXTURE",
         admitted_at=NOW,
         retrieved_at=datetime(2020, 1, 1, tzinfo=UTC),
     )
@@ -64,7 +73,9 @@ def test_bad_expected_digest_and_tampered_bytes_fail_closed(tmp_path):
 def test_unknown_source_and_path_escape_are_rejected(tmp_path):
     config = load_config(CATALOG)
     with pytest.raises(ValueError):
-        import_local_capture(tmp_path, config, "../outside", b"x", admitted_at=NOW)
+        import_local_capture(
+            tmp_path, config, "../outside", b"x", input_kind="SYNTHETIC_FIXTURE", admitted_at=NOW
+        )
     with pytest.raises(ValueError):
         load_capture(tmp_path, "FEDFUNDS_001", "../../outside")
 
@@ -77,6 +88,7 @@ def test_future_retrieval_and_tampered_receipt_are_rejected(tmp_path):
             config,
             "FEDFUNDS_001",
             b"fixture",
+            input_kind="SYNTHETIC_FIXTURE",
             admitted_at=NOW,
             retrieved_at=datetime(2026, 11, 14, tzinfo=UTC),
         )
@@ -85,6 +97,7 @@ def test_future_retrieval_and_tampered_receipt_are_rejected(tmp_path):
         config,
         "FEDFUNDS_001",
         b"fixture",
+        input_kind="SYNTHETIC_FIXTURE",
         admitted_at=NOW,
     )
     path = tmp_path / "bronze" / "FEDFUNDS_001" / receipt["capture_id"] / "receipt.json"
@@ -113,11 +126,21 @@ def test_factor_archive_rejects_excessive_expansion():
 
 def test_capture_paths_reject_symlink_and_sequence_advances(tmp_path):
     config = load_config(CATALOG)
-    first, _ = import_local_capture(tmp_path, config, "FEDFUNDS_001", b"x", admitted_at=NOW)
-    second, _ = import_local_capture(tmp_path, config, "FEDFUNDS_001", b"y", admitted_at=NOW)
+    first, _ = import_local_capture(
+        tmp_path, config, "FEDFUNDS_001", b"x", input_kind="SYNTHETIC_FIXTURE", admitted_at=NOW
+    )
+    second, _ = import_local_capture(
+        tmp_path, config, "FEDFUNDS_001", b"y", input_kind="SYNTHETIC_FIXTURE", admitted_at=NOW
+    )
     assert [first["capture_sequence"], second["capture_sequence"]] == [1, 2]
     capture = tmp_path / "bronze" / "FEDFUNDS_001" / first["capture_id"]
     (capture / "payload").unlink()
     (capture / "payload").symlink_to(capture / "config.toml")
     with pytest.raises(ValueError, match="Symlink"):
         load_capture(tmp_path, "FEDFUNDS_001", first["capture_id"])
+
+
+def test_capture_requires_explicit_input_classification(tmp_path):
+    config = load_config(CATALOG)
+    with pytest.raises(ValueError, match="input kind"):
+        import_local_capture(tmp_path, config, "FEDFUNDS_001", b"x", admitted_at=NOW, input_kind="")

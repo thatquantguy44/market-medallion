@@ -53,6 +53,7 @@ def archive_capture(
     config_bytes: bytes,
     *,
     admitted_at: datetime,
+    input_kind: str,
     retrieved_at: datetime | None = None,
     expected_sha256: str | None = None,
     parser_id: str,
@@ -66,6 +67,8 @@ def archive_capture(
         raise ValueError("Source configuration is invalid or exceeds the size limit.")
     if not isinstance(parser_id, str) or not re.fullmatch(r"[a-z][a-z0-9_]{0,79}", parser_id):
         raise ValueError("Invalid parser ID.")
+    if input_kind not in ("CAPTURED_SOURCE", "SYNTHETIC_FIXTURE"):
+        raise ValueError("An explicit input kind is required.")
     digest = _digest(payload)
     if expected_sha256 is not None and (
         not isinstance(expected_sha256, str)
@@ -119,6 +122,7 @@ def archive_capture(
             "first_seen_at": admitted,
             "provider_published_at": None,
             "transport": "local_import",
+            "input_kind": input_kind,
         }
         try:
             for name, data in (("payload", payload), ("config.toml", config_bytes)):
@@ -167,6 +171,7 @@ def load_capture(root: Path, source_id: str, capture_id: str) -> tuple[dict, byt
         "first_seen_at",
         "provider_published_at",
         "transport",
+        "input_kind",
     }
     try:
         if not isinstance(receipt, dict) or set(receipt) != expected_keys:
@@ -179,6 +184,7 @@ def load_capture(root: Path, source_id: str, capture_id: str) -> tuple[dict, byt
             or receipt["first_seen_at"] != admitted
             or receipt["provider_published_at"] is not None
             or receipt["transport"] != "local_import"
+            or receipt["input_kind"] not in ("CAPTURED_SOURCE", "SYNTHETIC_FIXTURE")
             or receipt["method_version"] != "presidential-donor/0.1.0"
             or not isinstance(receipt["parser_id"], str)
             or not re.fullmatch(r"[a-z][a-z0-9_]{0,79}", receipt["parser_id"])

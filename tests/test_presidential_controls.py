@@ -26,7 +26,11 @@ def test_approved_review_preserves_immutable_source_and_hashes(tmp_path):
     fixtures._workbook_fixture(workbook, "APPROVED")
     source_hash = hashlib.sha256(workbook.read_bytes()).hexdigest()
     result = promote_review_workbook(
-        tmp_path / "store", load_config(CATALOG), workbook, admitted_at=NOW
+        tmp_path / "store",
+        load_config(CATALOG),
+        workbook,
+        evidence_kind="SYNTHETIC_FIXTURE",
+        admitted_at=NOW,
     )
     archive = tmp_path / "store" / "review" / result["review_id"]
     manifest = json.loads((archive / "controls.manifest.json").read_text())
@@ -47,7 +51,13 @@ def test_unapproved_or_evidenceless_rows_never_promote(tmp_path):
         workbook = tmp_path / f"{status.replace(' ', '-')}.xlsx"
         fixtures._workbook_fixture(workbook, status, evidence)
         with pytest.raises(ReviewWorkbookError):
-            promote_review_workbook(tmp_path / "store", config, workbook, admitted_at=NOW)
+            promote_review_workbook(
+                tmp_path / "store",
+                config,
+                workbook,
+                evidence_kind="SYNTHETIC_FIXTURE",
+                admitted_at=NOW,
+            )
     assert not list((tmp_path / "store" / "review").glob("[0-9a-f]*"))
 
 
@@ -106,7 +116,9 @@ def test_review_version_rejects_tampered_controls_and_invalid_id(tmp_path):
     workbook = tmp_path / "source.xlsx"
     fixtures._workbook_fixture(workbook, "APPROVED")
     root = tmp_path / "store"
-    result = promote_review_workbook(root, load_config(CATALOG), workbook, admitted_at=NOW)
+    result = promote_review_workbook(
+        root, load_config(CATALOG), workbook, evidence_kind="SYNTHETIC_FIXTURE", admitted_at=NOW
+    )
     receipt, controls, manifest = load_review_version(root, result["review_id"])
     assert receipt["approved_count"] == 1
     assert b"CTRL_074_A" in controls
@@ -163,3 +175,12 @@ def test_promotion_never_overwrites_existing_controls(tmp_path):
     with pytest.raises(ReviewWorkbookError, match="already exists"):
         export_approved_controls(load_config(CATALOG), workbook, output)
     assert output.read_text() == "existing controls"
+
+
+def test_review_requires_explicit_evidence_classification(tmp_path):
+    workbook = tmp_path / "source.xlsx"
+    fixtures._workbook_fixture(workbook, "APPROVED")
+    with pytest.raises(ValueError, match="evidence kind"):
+        promote_review_workbook(
+            tmp_path / "store", load_config(CATALOG), workbook, admitted_at=NOW, evidence_kind=""
+        )
