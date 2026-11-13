@@ -1,12 +1,13 @@
 # FOMC quality slice tasks
 
-Status: **planned; all implementation checkboxes remain open**.
+Status: **Q01 accepted; Q02 in progress; Q03 planned**.
+[Q01 acceptance](quality_report_acceptance.md) records the first working slice.
 [Contract and capability map](quality_contract.md) · [Plan](quality_plan.md)
 Branch: `feat/fomc-text-quality`, from merged main `1bd4ab5`.
 
 ## FOMC-Q01 — deterministic offline quality report
 
-- [ ] **Q01.1 — characterize report grain and counts** (QAC01–03, QAC12).
+- [x] **Q01.1 — characterize report grain and counts** (QAC01–03, QAC12).
   Add fixtures/tests for shared/multiyear representations, overlapping issue
   memberships/chunks, all-clean inputs, blank units without chunks, extraction
   failures and unknown issue codes. Acceptance: exact unique/grouped counts,
@@ -14,14 +15,14 @@ Branch: `feat/fomc-text-quality`, from merged main `1bd4ab5`.
   Proposed files: `tests/test_fomc_quality.py`, reduced `tests/fixtures/fomc_meeting_minutes/`
   inputs, `data/quality.py` under the FOMC package. Verify pre-implementation
   failures, then focused tests for the pure builder.
-- [ ] **Q01.2 — verified read-only reporting** (QAC01, QAC04, QAC11–12).
+- [x] **Q01.2 — verified read-only reporting** (QAC01, QAC04, QAC11–12).
   Pin coherent generations, verify originals/mirrors, build the report and refuse
   unsafe/conflicting output. Acceptance: no HTTP, extraction, source write or
   pointer change; corrupted/stale evidence fails. Proposed files: `io/quality.py`,
   `tests/test_fomc_quality_postgres.py`; reuse existing backend fixtures. Verify
   isolated PostgreSQL success/corruption/concurrency cases and unchanged source
   hashes/pointers.
-- [ ] **Q01.3 — CLI/script and first acceptance** (QAC03–04, QAC12).
+- [x] **Q01.3 — CLI/script and first acceptance** (QAC03–04, QAC12).
   Add/report the supported command through the existing CLI/script; document
   other-user setup and exact options. Acceptance: accepted local archive report
   reconciles with its pinned catalogs and has a sanitized acceptance summary.

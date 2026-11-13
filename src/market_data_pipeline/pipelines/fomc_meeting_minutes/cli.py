@@ -16,6 +16,10 @@ from market_data_pipeline.pipelines.fomc_meeting_minutes.io.object_postgres impo
 )
 from market_data_pipeline.pipelines.fomc_meeting_minutes.io.operation_store import OperationStore
 from market_data_pipeline.pipelines.fomc_meeting_minutes.io.postgres import PostgresInventoryStore
+from market_data_pipeline.pipelines.fomc_meeting_minutes.io.quality import (
+    quality_report,
+    write_report,
+)
 from market_data_pipeline.pipelines.fomc_meeting_minutes.io.recovery import recover_attempt
 from market_data_pipeline.pipelines.fomc_meeting_minutes.io.text import PostgresTextStore
 from market_data_pipeline.pipelines.fomc_meeting_minutes.operations import (
@@ -35,6 +39,7 @@ def main(argv=None):
         "plan",
         "run",
         "health",
+        "quality-report",
         "recover-capture",
         "recover-run",
     ]:
@@ -45,6 +50,8 @@ def main(argv=None):
             command.add_argument("--start-year", type=int, required=True)
             command.add_argument("--end-year", type=int, required=True)
             command.add_argument("--mode", choices=["backfill", "refresh"], default="backfill")
+        if name == "quality-report":
+            command.add_argument("--output", type=Path, required=True)
         if name == "run":
             command.add_argument("--live", action="store_true")
         if name == "recover-capture":
@@ -108,6 +115,15 @@ def main(argv=None):
                     )
                 elif args.command == "health":
                     result = health(cfg, settings, inventory_store=store)
+                elif args.command == "quality-report":
+                    report = quality_report(cfg, inventory_store=store)
+                    write_report(cfg, args.output, report)
+                    result = {
+                        "status": "reported",
+                        "report_id": report["report_id"],
+                        "totals": report["totals"],
+                        "request_performed": False,
+                    }
                 elif args.command == "recover-capture":
                     result = recover_attempt(cfg.root, args.capture_id, PostgresBronzeStore(store))
                     result = {**result, "request_performed": False}

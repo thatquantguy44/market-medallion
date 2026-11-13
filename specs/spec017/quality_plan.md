@@ -1,12 +1,13 @@
 # FOMC quality implementation plan
 
-Status: **three-slice planning package** on `feat/fomc-text-quality`.
+Status: **Q01 accepted; Q02/Q03 implementation in progress** on `feat/fomc-text-quality`.
 [Contract](quality_contract.md) · [Tasks](quality_tasks.md)
 
 ## Architecture and interfaces
 
 Q01 adds a pure `data/quality.py` report builder and a pipeline-owned
-`io/quality.py` adapter. These paths are proposed, not implemented commands.
+`io/quality.py` adapter. These Q01 paths and the `quality-report` command are implemented; see
+[acceptance](quality_report_acceptance.md).
 The adapter pins the existing inventory/text/chunk generations using verified
 catalog readers and a stable source-operation lock/read transaction, then hands
 plain verified records to the pure builder. It must not call extraction,
@@ -23,10 +24,9 @@ actual capture clocks. Source-year membership uses explicit meeting associations
 a document associated with multiple years appears in each year's membership but
 only once in the overall unique total. Issue groups likewise overlap explicitly.
 
-Add `quality-report` to the existing FOMC CLI and forward it through
+The implemented `quality-report` command uses the existing FOMC CLI and
 `scripts/run_fomc.sh`. Follow existing config/error conventions, with explicit
-`--output` and bounded scope. Document the exact supported options when Q01 lands;
-until then only existing commands in the runbook are executable. The output root
+`--output` and bounded scope. Supported invocation and options are in [Q01 acceptance](quality_report_acceptance.md). The output root
 must be distinct from canonical `captures`, `objects`, `text`, `operations`,
 `attempts` and `attempt_outcomes` locations. Refuse conflicting existing content.
 Config loading and reporting never resolve a webhook secret or select HTTP.

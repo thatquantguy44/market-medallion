@@ -1,6 +1,7 @@
 # FOMC extraction-quality contract
 
-Status: **planned; not implemented or accepted**. Selected 2026-11-13 after
+Status: **Q01 accepted; Q02/Q03 implementation in progress**.
+[Q01 acceptance](quality_report_acceptance.md). Selected 2026-11-13 after
 [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18) merged.
 Delivery branch: `feat/fomc-text-quality`, based on merged main `1bd4ab5`.
 This package scopes the next three slices under Spec017; it does not reopen
@@ -40,7 +41,7 @@ must fail visibly; do not fall back to directory globbing or a newer orphan.
 
 **FOMC-QAC02:** Emit deterministic JSON with per-year, representation-format,
 extraction-profile and issue-code summaries plus drill-down rows. A finding's
-grain is extraction ID + unit ordinal + issue code; retain its capture/source
+grain is observed source-version ID + extraction ID + unit ordinal + issue code; retain its capture/source
 hash, source URL, meeting IDs/dates, page/section, exact unit offsets and affected
 chunk IDs. Preserve all meeting associations for shared/bundled references.
 Distinguish unique representation/unit/chunk totals from overlapping issue/year
@@ -149,7 +150,7 @@ remains configurable future work.
 ## Completion evidence
 
 Each acceptance record maps its QAC IDs to actual tests/evidence and states what
-remains unresolved. The package is planned until those gates pass. Preserve the
+remains unresolved. Each remaining slice is planned until its own gates pass. Preserve the
 [backfill acceptance](1997_2026_acceptance.md) as historical evidence rather than
 rewriting its counts after later quality work. Update the master register,
 Spec017 pickup and runbook at each implemented checkpoint.
