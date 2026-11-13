@@ -1,6 +1,6 @@
 # Spec016 cross-repository tasks and acceptance tracker
 
-Status: **T01–T06 complete; remaining implementation tasks open**. Scope/requirements:
+Status: **T01–T07 complete; remaining implementation tasks open**. Scope/requirements:
 [README](README.md); design/gates: [plan](plan.md); interfaces:
 [data contract](data_contract.md). Task IDs are stable. Each row is one focused
 slice with no more than about five intended files; split a row before starting
@@ -35,7 +35,7 @@ snapshot without the donor checkout or provider access.
 
 | Done / task | Owner / depends on | Requirement | Acceptance and verification | Intended files / scope |
 | --- | --- | --- | --- | --- |
-| [ ] T07 Pin language-neutral boundary | MM then QM / T06 | R06,N02 | Valid and adversarial fixtures have identical Python/TS outcomes. Verify unknown fields, numeric strings, hash mismatch, canonical numbers and exact bytes. | MM contract schema and test-vector JSON; QM contract pin and contract test (4 total; coordinated commits). |
+| [x] T07 Pin language-neutral boundary | MM then QM / T06 | R06,N02 | Valid and adversarial fixtures have identical Python/TS outcomes. Verify unknown fields, numeric strings, hash mismatch, canonical numbers and exact bytes. | MM contract schema and test-vector JSON; QM contract pin and contract test (4 total; coordinated commits). |
 | [ ] T08 Implement local catalog/snapshot API | QM / T07 | R07,N02 | Fixed-root bounded reads validate digests, trusted peer/origin and immutable ID selection; no outbound request or subprocess. Route tests cover 400/403/503, traversal/symlink/race and changing pointer. | new `server/presidential/reader.ts`, `reader.test.ts`, two research `route.ts` files, combined route test (5). |
 | [ ] T09 Add explicit dataset loading | QM / T08 | R08 | Empty start, selected load/refresh, manual/demo flows and safe asynchronous replacement work. Browser test proves failed load retains dataset/config/notes and no late response wins. | `ResearchInputs.tsx`, `presidential-impact/page.tsx`, new `bundle.ts`, bundle test, `test/presidential-impact.spec.ts` (5). |
 

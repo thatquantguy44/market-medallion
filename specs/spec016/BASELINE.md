@@ -57,3 +57,11 @@ and idempotent publication. The presidential test group passed 75 tests; a built
 wheel executed the publication fixture tests outside the source and donor
 checkouts. No real historical data has been admitted or published. The shared
 Python/TypeScript contract still requires the independently pinned T07 vectors.
+
+T07 pins a structural schema and exact boundary-vector bytes in both producer
+and consumer. Python and TypeScript tests agree on valid and adversarial records,
+source-byte hashes, canonical hashes, escaped duplicate keys, UTF-16 text limits,
+invalid dates and unsafe integers. The Python presidential suite passed 77 tests;
+the QuantMeridian contract, engine and export suites passed 83 tests and its
+typecheck passed. This is a format/validation boundary, not a source-authenticity
+claim, a deployed API, or a loaded PRES dataset.

@@ -20,8 +20,19 @@ def _object(value, required, optional=()):
     return value
 
 
+_JS_WHITESPACE = (
+    "\u0009\u000a\u000b\u000c\u000d\u0020\u00a0\u1680"
+    + "".join(chr(codepoint) for codepoint in range(0x2000, 0x200B))
+    + "\u2028\u2029\u202f\u205f\u3000\ufeff"
+)
+
+
 def _text(value, limit=1000):
-    if not isinstance(value, str) or not value.strip() or len(value) > limit:
+    if (
+        not isinstance(value, str)
+        or not value.strip(_JS_WHITESPACE)
+        or len(value.encode("utf-16-le", errors="surrogatepass")) // 2 > limit
+    ):
         raise ValueError("Invalid dataset text.")
     return value
 
@@ -42,7 +53,10 @@ def _number(value, *, positive=False, nullable=False):
         return None
     try:
         valid = (
-            not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value)
+            not isinstance(value, bool)
+            and isinstance(value, (int, float))
+            and math.isfinite(value)
+            and (value % 1 != 0 or abs(value) <= 9_007_199_254_740_991)
         )
     except OverflowError:
         valid = False
