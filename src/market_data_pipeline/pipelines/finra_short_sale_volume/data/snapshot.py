@@ -5,6 +5,7 @@ from decimal import Decimal, InvalidOperation, localcontext
 
 from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import digest
 from market_data_pipeline.pipelines.finra_short_sale_volume.data.gold import (
+    RATIO_METHOD,
     RATIO_PRECISION,
     SUM_DIGITS,
 )
@@ -186,6 +187,9 @@ def fingerprint(name):
             "fields": FIELDS[name],
             "record_json": "canonical-utf8-json/1",
             "decimal_codec": DECIMAL_CODEC,
+            "quantity_unit": "shares",
+            "ratio_unit": "1",
+            "ratio_method": RATIO_METHOD,
             "component_fields": COMPONENT,
         }
     )

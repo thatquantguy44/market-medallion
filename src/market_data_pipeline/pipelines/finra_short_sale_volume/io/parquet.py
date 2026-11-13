@@ -11,6 +11,7 @@ import pyarrow.parquet as pq
 
 from market_data_pipeline.pipelines.finra_short_sale_volume.data.api import _day
 from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import digest, encoded
+from market_data_pipeline.pipelines.finra_short_sale_volume.data.gold import RATIO_METHOD
 from market_data_pipeline.pipelines.finra_short_sale_volume.data.snapshot import (
     COMPONENT,
     CONTRACT,
@@ -61,6 +62,9 @@ def schema(name):
             b"contract": CONTRACT.encode(),
             b"table": name.encode(),
             b"decimal_codec": DECIMAL_CODEC.encode(),
+            b"quantity_unit": b"shares",
+            b"ratio_unit": b"1",
+            b"ratio_method": RATIO_METHOD.encode(),
             b"schema_sha256": checksum.encode(),
         },
     )

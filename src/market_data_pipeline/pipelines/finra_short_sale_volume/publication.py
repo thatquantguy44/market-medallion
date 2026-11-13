@@ -247,7 +247,9 @@ def _recover(root, db, max_rows, max_bytes, clock, fault):
     pending = catalog.pending(db)
     if pending:
         latest = catalog.latest(db)
-        if pending[0]["previous_id"] != (latest["generation_id"] if latest else None):
+        if pending[0]["previous_id"] != (latest["generation_id"] if latest else None) or pending[0][
+            "ordinal"
+        ] != (latest["ordinal"] + 1 if latest else 1):
             raise ValueError("FINRA pending publication chain mismatch")
         head = _finish(root, db, pending[0], max_rows, max_bytes, clock, fault)
     return head

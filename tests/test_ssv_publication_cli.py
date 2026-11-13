@@ -50,7 +50,7 @@ def test_ssv_ac10_cli_and_portable_script_publish_inspect_recover(tmp_path):
         "--trade-date",
         "2026-11-09",
         "--scope",
-        "all_trfs",
+        "listed_trfs",
         "--scope",
         "nyse_trf",
     )

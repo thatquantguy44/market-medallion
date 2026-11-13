@@ -299,3 +299,21 @@ def test_ssv_ac10_publication_preserves_removal_nulls_and_partial_audit(tmp_path
     assert tables["audit"][-1]["status"] == "PARTIAL"
     assert tables["coverage"][0]["latest_attempt_status"] == "PARTIAL"
     assert tables["coverage"][0]["committed_rows"] == 0
+
+
+def test_ssv_ac10_uncertain_commit_keeps_durable_stage_for_recovery(
+    tmp_path, manifest, load, monkeypatch
+):
+    load()
+    original = catalog.commit
+
+    def committed_then_failed(*args, **kwargs):
+        original(*args, **kwargs)
+        raise OSError("invented response failure after durable commit")
+
+    monkeypatch.setattr(catalog, "commit", committed_then_failed)
+    with pytest.raises(OSError):
+        publish(tmp_path, manifest)
+    assert len(list((tmp_path / "parquet/.staging").iterdir())) == 1
+    assert recover(tmp_path, manifest)["state"] == "PUBLISHED"
+    assert read(tmp_path, manifest)["tables"]["gold"][0]["short_volume"] == "40"
