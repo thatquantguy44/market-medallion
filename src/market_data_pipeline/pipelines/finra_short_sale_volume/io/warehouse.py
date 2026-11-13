@@ -405,3 +405,42 @@ def capture_result(db, capture_id):
         raise ValueError("FINRA terminal capture integrity mismatch")
     value["result_sha256"] = checksum
     return value
+
+
+def partition_snapshot(db, day, facility, cutoff=None, sequence=None):
+    """Read one complete committed membership inside the caller's pinned transaction."""
+    if cutoff is None:
+        selected = db.execute(
+            "SELECT capture_id FROM partitions WHERE trade_date=? AND facility_id=?",
+            (day, facility),
+        ).fetchone()
+    else:
+        selected = db.execute(
+            "SELECT capture_id FROM captures WHERE trade_date=? AND facility_id=? "
+            "AND status='APPLIED' AND (archived_at<? OR (archived_at=? AND capture_sequence<=?)) "
+            "ORDER BY archived_at DESC,capture_sequence DESC LIMIT 1",
+            (day, facility, cutoff, cutoff, sequence if sequence is not None else 2**63 - 1),
+        ).fetchone()
+    capture_id = selected[0] if selected else None
+    if capture_id is None:
+        return {
+            "capture_id": None,
+            "rows": [],
+            "archived_at": None,
+            "capture_sequence": None,
+            "receipt_sha256": None,
+        }
+    result = capture_result(db, capture_id)
+    if result is None or (result["trade_date"], result["facility_id"], result["status"]) != (
+        day,
+        facility,
+        "APPLIED",
+    ):
+        raise ValueError("FINRA committed partition scope mismatch")
+    return dict(
+        capture_id=capture_id,
+        rows=rows(db, capture_id),
+        archived_at=result["archived_at"],
+        capture_sequence=result["capture_sequence"],
+        receipt_sha256=result["receipt_sha256"],
+    )

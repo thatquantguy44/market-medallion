@@ -96,3 +96,13 @@ def test_ssv_ac09_ratio_change_is_defined_only_for_two_available_ratios(current,
 def test_ssv_ac09_ratio_change_refuses_non_ratios(value):
     with pytest.raises(ValueError):
         ratio_change(value, Decimal("0.5"))
+
+
+def test_ssv_ac09_derived_ratio_exponent_budget_includes_rounded_coefficient_digits():
+    smallest = Decimal("1E-4096")
+    largest = Decimal("9" * 4096)
+    result = matched_metrics([(smallest, Decimal(0), largest)] * 3)
+    ratio = Decimal(result["short_share"])
+    assert ratio.is_finite() and ratio > 0
+    expected = Fraction(smallest) / Fraction(largest)
+    assert abs(Fraction(ratio) - expected) / expected < Fraction(1, 10**33)

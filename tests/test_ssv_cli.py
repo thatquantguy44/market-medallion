@@ -160,3 +160,52 @@ def test_ssv_ac06_cli_rejected_input_returns_nonzero_without_diagnostics(tmp_pat
 def test_ssv_ac06_config_example_is_fixture_only_and_has_no_io():
     config = load_config(REPO / "config/finra_short_sale_volume/pipeline.example.yml")
     assert config.operation == "fixture" and config.approved_use["route"] == "invented_fixture"
+
+
+def test_ssv_ac09_research_command_reports_metrics_and_incomplete_population(tmp_path):
+    config = config_file(tmp_path)
+    result = invoke(
+        config,
+        "run",
+        "--input",
+        str((FIXTURES / "invented-valid.json").resolve()),
+        "--receipt",
+        str((FIXTURES / "invented-valid.receipt.json").resolve()),
+    )
+    assert result.returncode == 0
+    individual = invoke(
+        config, "research-gold", "--trade-date", "2026-11-09", "--scope", "nyse_trf"
+    )
+    assert individual.returncode == 0, individual.stderr
+    report = json.loads(individual.stdout)
+    assert report["rows"][0]["short_share"] == "0.4" and report["prior_trade_date"] is None
+    assert report["rows"][0]["prior_status"] == "NO_PRIOR_COMPLETE_DATE"
+    incomplete = invoke(
+        config, "research-gold", "--trade-date", "2026-11-09", "--scope", "listed_trfs"
+    )
+    assert (
+        incomplete.returncode == 2
+        and json.loads(incomplete.stdout)["status"] == "INCOMPLETE_POPULATION"
+    )
+    overlap = invoke(
+        config,
+        "research-gold",
+        "--trade-date",
+        "2026-11-09",
+        "--scope",
+        "listed_trfs",
+        "--scope",
+        "nyse_trf",
+    )
+    assert overlap.returncode == 2 and not overlap.stdout
+    cutoff = invoke(
+        config,
+        "research-gold",
+        "--trade-date",
+        "2026-11-09",
+        "--scope",
+        "nyse_trf",
+        "--as-of",
+        "1900-01-01T00:00:00+00:00",
+    )
+    assert cutoff.returncode == 2 and json.loads(cutoff.stdout)["rows"] == []

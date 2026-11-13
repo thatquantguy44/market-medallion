@@ -70,7 +70,10 @@ def decimal_text(value: Decimal | None) -> str | None:
         return None
     if not isinstance(value, Decimal) or not value.is_finite():
         raise ValueError("FINRA derived values require finite Decimal numbers")
-    if len(value.as_tuple().digits) > SUM_DIGITS or abs(value.as_tuple().exponent) > SUM_DIGITS:
+    if (
+        len(value.as_tuple().digits) > SUM_DIGITS
+        or abs(value.as_tuple().exponent) > SUM_DIGITS + RATIO_PRECISION
+    ):
         raise ValueError("FINRA derived value exceeds its numeric budget")
     with localcontext(capitals=1):
         return str(value)

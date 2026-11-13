@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from market_data_pipeline.pipelines.finra_short_sale_volume import pipeline
+from market_data_pipeline.pipelines.finra_short_sale_volume import pipeline, research
 from market_data_pipeline.pipelines.finra_short_sale_volume.config import load_config
 
 
@@ -29,6 +29,7 @@ def main(argv=None):
         "coverage",
         "audit",
         "history",
+        "research-gold",
     ):
         command = commands.add_parser(name)
         command.add_argument("--config", required=True, type=Path)
@@ -39,10 +40,15 @@ def main(argv=None):
             command.add_argument("--run-id")
         if name == "ingest-capture":
             command.add_argument("--capture-id", required=True)
-        if name in ("gold", "coverage", "history"):
+        if name in ("gold", "coverage", "history", "research-gold"):
             command.add_argument("--trade-date", required=True)
+        if name in ("gold", "coverage", "history"):
             command.add_argument("--facility", required=True)
-        if name == "gold":
+        if name == "research-gold":
+            command.add_argument("--scope", action="append", required=True)
+            command.add_argument("--lookback-days", type=int, default=366)
+            command.add_argument("--max-symbols", type=int, default=15000)
+        if name in ("gold", "research-gold"):
             command.add_argument("--as-of", type=datetime.fromisoformat)
             command.add_argument("--as-of-sequence", type=int)
         if name == "coverage":
@@ -88,6 +94,18 @@ def main(argv=None):
                 max_bytes=config.max_bytes,
                 max_rows=config.max_rows,
             )
+        elif args.command == "research-gold":
+            result = research.research_gold(
+                config.root,
+                config.manifest,
+                **shared,
+                trade_date=args.trade_date,
+                scopes=args.scope,
+                as_of=args.as_of,
+                as_of_sequence=args.as_of_sequence,
+                lookback_days=args.lookback_days,
+                max_symbols=args.max_symbols,
+            )
         elif args.command == "gold":
             result = pipeline.read_gold(
                 config.root,
@@ -121,7 +139,10 @@ def main(argv=None):
             result = pipeline.audit(config.root, config.manifest, **shared, limit=args.limit)
         print(json.dumps(result, sort_keys=True, allow_nan=False))
         return (
-            2 if isinstance(result, dict) and result.get("status") in {"PARTIAL", "REJECTED"} else 0
+            2
+            if isinstance(result, dict)
+            and result.get("status") in {"PARTIAL", "REJECTED", "INCOMPLETE_POPULATION"}
+            else 0
         )
     except (OSError, ValueError, PermissionError, RuntimeError, RecursionError):
         print(

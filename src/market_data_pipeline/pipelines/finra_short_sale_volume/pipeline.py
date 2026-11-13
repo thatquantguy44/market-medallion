@@ -144,43 +144,16 @@ def read_gold(
         raise ValueError("FINRA sequence cutoff requires an aware time and positive integer")
     with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
         db.execute("BEGIN")
-        if cutoff is None:
-            selected = db.execute(
-                "SELECT capture_id FROM partitions WHERE trade_date=? AND facility_id=?",
-                (day, facility),
-            ).fetchone()
-        else:
-            selected = db.execute(
-                "SELECT capture_id FROM captures WHERE trade_date=? AND facility_id=? "
-                "AND status='APPLIED' AND (archived_at<? "
-                "OR (archived_at=? AND capture_sequence<=?)) "
-                "ORDER BY archived_at DESC,capture_sequence DESC LIMIT 1",
-                (
-                    day,
-                    facility,
-                    cutoff,
-                    cutoff,
-                    as_of_sequence if as_of_sequence is not None else 2**63 - 1,
-                ),
-            ).fetchone()
-        capture_id = selected[0] if selected else None
-        if capture_id:
-            stored = store.capture_result(db, capture_id)
-            if stored is None or (
-                stored["trade_date"],
-                stored["facility_id"],
-                stored["status"],
-            ) != (day, facility, "APPLIED"):
-                raise ValueError("FINRA committed partition scope mismatch")
+        snapshot = store.partition_snapshot(db, day, facility, cutoff, as_of_sequence)
         return {
             "trade_date": day,
             "facility_id": facility,
-            "capture_id": capture_id,
+            "capture_id": snapshot["capture_id"],
             "as_of": cutoff,
             "as_of_sequence": as_of_sequence,
             "knowledge_basis": "CURRENT_VINTAGE",
             "clock_basis": "LOCAL_CAPTURE",
-            "rows": store.rows(db, capture_id) if capture_id else [],
+            "rows": snapshot["rows"],
         }
 
 
