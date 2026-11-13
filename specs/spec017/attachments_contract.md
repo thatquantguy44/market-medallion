@@ -171,3 +171,10 @@ The declaration rule accepts direct statements and “which”/“that” clause
 requiring the named SEP to be an addendum to these minutes. A matching navigation
 label alone still records an unresolved association. Offline regressions verify
 both explicit declarations and refusal after that association is removed.
+
+The [January 2012 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20120125ep.htm)
+declares GIF charts in `/monetarypolicy/files/`, including
+`SEP20120125_figure1.gif`. That already reviewed content-image folder also admits
+source-declared GIF/JPEG files with the same framing/lineage checks. Existing
+PNG admission is preserved exactly. Unsupported formats, other hosts/folders,
+queries and wrong/truncated image framing still fail; image text stays review-required.

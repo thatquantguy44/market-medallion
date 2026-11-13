@@ -90,6 +90,7 @@ class Manifest:
         if resolved.fragment or not (
             re.fullmatch(r"/sep[0-9]{8}figure[0-9]+[a-z]?\.png", resolved.path)
             or re.fullmatch(r"/monetarypolicy/files/[^/]+\.png", resolved.path)
+            or re.fullmatch(r"/monetarypolicy/files/[A-Za-z0-9_.-]+\.(?:gif|jpg)", resolved.path)
             or re.fullmatch(
                 r"/monetarypolicy/gifjpg/[A-Za-z0-9_.-]+\.(?:png|gif|jpg)", resolved.path
             )

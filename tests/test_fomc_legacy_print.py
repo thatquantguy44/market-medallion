@@ -64,7 +64,7 @@ def test_print_dependencies_include_attached_sep_and_exclude_only_reviewed_site_
         )
     ]
     assert len([e for e in r.exclusions if e.reason == "legacy_site_image"]) == 4
-    substantive = HTML.replace(b"/gifjpg/UPARROW.GIF", b"/monetarypolicy/files/unknown.gif")
+    substantive = HTML.replace(b"/gifjpg/UPARROW.GIF", b"/monetarypolicy/files/unknown.svg")
     assert "unreviewed_asset_url" in {
         i.code for i in discover_html_dependencies(substantive, URL, manifest).issues
     }
@@ -205,7 +205,7 @@ def test_april_2008_chart_dependencies_preserve_source_owned_filename_variation(
     "url",
     [
         "https://other.example/monetarypolicy/gifjpg/chart1.jpg",
-        "https://www.federalreserve.gov/monetarypolicy/files/chart1.gif",
+        "https://www.federalreserve.gov/monetarypolicy/unreviewed/chart1.gif",
         "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart1.svg",
         "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart1.jpg?token=x",
     ],
@@ -228,3 +228,26 @@ def test_january_2009_explicit_attached_sep_association(manifest, connector):
     assert "unresolved_sep_association" in {
         i.code for i in discover_html_dependencies(unrelated, URL, manifest).issues
     }
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "SEP20120125_figure1.gif",
+        "SEP20120125_figure2.gif",
+        "SEP20120125_figure3a.gif",
+        "SEP20120125_figure4.gif",
+    ],
+)
+def test_2012_declared_gif_charts_in_official_files_folder_are_required(manifest, filename):
+    payload = HTML.replace(
+        b"Last: vote and footnote 1.</p>",
+        b"Last: vote and footnote 1.</p><img "
+        + f'src="/monetarypolicy/files/{filename}">'.encode(),
+    )
+    result = extract_text(payload, URL, manifest)
+    assert result["status"] == "review_required", result["issues"]
+    assert result["issues"] == ["image_content"]
+    deps = discover_html_dependencies(payload, URL, manifest)
+    assert not deps.issues
+    assert any(d.href_raw.endswith(filename) and d.kind == "asset" for d in deps.dependencies)

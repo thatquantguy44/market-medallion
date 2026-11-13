@@ -21,48 +21,59 @@ new live schedules default stopped.
 
 ## 2026-11-13 current pickup — 1997–2026 backfill in progress
 
-The user extended this same PR to all listed, officially released minutes from
-1997 through 2026. PR #18 is draft while the range is processed. The no-HTTP plan
-has 21 bounded batches (individual years for 2009–2020) and 391 planned references, including reused/shared
-references; all fit unchanged operation limits. Only the two FOMC status sensors
-are active; acquisition schedules remain stopped and NAAIM stays paused.
+The user extended the same draft [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)
+to all listed, officially released 1997–2026 minutes. The no-HTTP plan has **21
+bounded batches** and 391 primary-reference selections, including reused/shared
+references. Individual years for 2009–2020 leave room for source-declared SEP
+addenda/images under unchanged 40-document/100-request limits. The original
+15-batch plan is retained locally. Read the [contract](../../specs/spec017/1997_2026_contract.md).
 
-The local operator process uses the existing Dagster job and writes durable
-progress to ignored `data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`.
-Its plan and per-batch `verified.json`/`checkpoint.json` records are in that same
-directory. The current operator script is `/tmp/fomc_1997_2026_bulk.py` (execution
-session 44479, resumed after verified historical HTML/GIF support). Read the state
-before resuming;
-the operator skips accepted batches and resumes an already-launched active run.
-Do not launch duplicate batches. A separate completed 2025–2026 source operation
-advanced the archive during the 1999–2000 readback. The operator retained that
-work, now locks the verification snapshot and validates the completed pointer
-chain; additional completed operations are recorded in checkpoint evidence.
-The 2007–2008 attempt stopped safely at `invalid_document` for the June 2008
-legacy-encoded print layout. A fixture-proven, narrowly bounded parser fix is
-verified by offline fixtures and isolated operation checks; all 194 existing
-selected extraction results/IDs recompute
-exactly. Failed-attempt originals/audit are retained and a fresh restore-tested
-checkpoint passed before retry. The second attempt additionally exposed source-declared GIF charts; their
-reviewed path/framing and rollback regressions now pass. Seven failed attempts
-remain retained/restored (the last at 387 captures), including
-source-declared dated/undated GIF and JPEG charts. Dagster retry `abb13408-f2db-4884-a534-1772183d558c` passed every recovery/Slack
-gate: 1997–2008 is accepted (6 of 21 batches). The 2009 retry is active after
-a fixture-proven explicit addendum-language fix; read `state.json`
-before any launch.
-On failure, diagnose its recorded phase and code
-rather than skipping references or widening budgets blindly.
+**Current accepted checkpoint: 1997–2011, 9 of 21 batches.** Latest accepted
+archive: 508 captures, 285 text representations and 4,187 chunks. The **2012
+retry is active**, after a fixture-proven addition for source-declared GIF charts
+in the existing official files folder. Eight failed attempts retain original
+responses/audit, unchanged published pointers and additional restored checkpoints;
+the last failed-attempt checkpoint contains 521 captures. Do not skip references
+or increase budgets to bypass a failure.
 
-Each batch must pass source-span/coverage, immutable original/row checks, coherent
-publication and health, schema/filesystem backup+restore, offline selected-catalog/
-latest-operation replay and acknowledged Slack success before the next batch.
-A completed checkpoint serves as the next before-state. The initial fresh
-checkpoint preserves all 172 captures from the accepted 1990–1996 archive.
-The source fix is pushed through `2f44771`. Verification: 1,079 regression tests
-passed with 82 optional skips; all 344 FOMC checks passed with isolated PostgreSQL.
-Do not claim full-range acceptance until all planned batches and final per-year
-reference reconciliation pass. Unreleased, unavailable, not-listed and extraction
-review outcomes remain explicit, with actual capture-time first-seen clocks.
+Durable ignored state is
+`data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`; the same directory
+holds `plan.json`, per-batch `verified.json`/`checkpoint.json`, extra failed-attempt
+checkpoints and `parser-fix-verification.json`. **Read state before any launch.**
+The active local driver is `/tmp/fomc_1997_2026_bulk.py` (execution session **2100**).
+It skips accepted batches and resumes an already-launched run: do not duplicate it.
+On a genuine failed attempt, diagnose first; only after a verified fix use
+`/tmp/fomc_1997_2026_prepare_retry.py` to preserve/restore-test its state and prepare
+a uniquely tagged retry. A separate completed 2025–2026 operation was explicitly
+retained in the 1999–2000 checkpoint chain. Verification now holds the source
+operation advisory lock and records additional completed operations.
+
+Each batch passes original/receipt-clock and append-only checks, exact text/chunk
+spans and PDF citations, coherent publication/health, full-schema/canonical-file
+restore, empty-target selected-catalog/latest-operation replay with HTTP/transforms
+disabled, and acknowledged Slack success before advancing. The initial checkpoint
+preserves all 172 accepted 1990–1996 captures. Scratch databases/roots are removed;
+retained backups and verification receipts remain ignored under the FOMC root.
+
+Historical print-container, declared Windows-1252, explicit SEP association and
+PNG/GIF/JPEG support are fixture-proven; source fixes are pushed through `e19b8fd`,
+whose CI passed. The 2012 folder change now passes 1,083 regressions (82 optional
+skips), all 348 FOMC checks with isolated PostgreSQL, exact 194-extraction
+compatibility and matching wheel/sdist source hashes. Refreshed evidence is in `/tmp/fomc-bulk-regression.log`,
+`/tmp/fomc-bulk-postgres.log` and `/tmp/fomc-parser-compatibility.log`. The immutable
+pre-fix catalog has 194 extraction results/IDs; its final-runtime proof pins seven
+source-module hashes. Never use the operational database as a generic test DSN.
+
+After all batches, run `/tmp/fomc_1997_2026_finalize.py` for stable final annual
+reconciliation, then `/tmp/fomc_1997_2026_docs.py` to generate acceptance/registers
+from verified evidence. Refresh the finalizer's exact test/build guards after any
+source change. Check every year, retained archive checksum/restore receipt,
+Dagster/Slack reaction and cleanup before claiming full-range acceptance. Commit
+and push the final evidence/docs on this branch, mark the PR ready and track its
+current-head CI/reviews; no merge is authorized. Keep unavailable/not-listed/
+unreleased claims and extraction review explicit, with actual capture-time clocks.
+Only the two FOMC sensors run; all acquisition schedules stay stopped. NAAIM stays
+paused, FINRA stays at SSV-T05 and embeddings remain independently selected.
 
 ## 2026-11-13 accepted checkpoint — bounded FOMC 1995–1996 accepted
 
@@ -76,7 +87,7 @@ The requested originals/text/chunks/health/Slack/restore/replay gates are explic
 closed in the [acceptance checklist](../../specs/spec017/1995_1996_acceptance.md#acceptance-gate-checklist).
 A fresh read-only audit reconfirmed all current tables, originals, text/chunk spans,
 retained archive checksums/restore receipts and the exact Slack reaction, with no
-provider HTTP or source mutation. The 1997–1998 batch has not started. Read
+provider HTTP or source mutation. This gate review preceded the expanded backfill above. Read
 [acceptance](../../specs/spec017/1995_1996_acceptance.md),
 [contract](../../specs/spec017/1995_1996_contract.md),
 [evidence](../../specs/spec017/evidence/1995_1996_dagster_backfill.json) and the
