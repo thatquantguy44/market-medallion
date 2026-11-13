@@ -31,8 +31,9 @@ research capability, not a public service or current-data feed.
 
 ## Presidential research local handoff
 
-The spec 016 feature branches contain the pipeline, PRES integration and
-research-site transition. The frozen archive has matched a fresh donor rebuild
-and passed browser replay; see [acceptance](../specs/spec016/acceptance.md) and
-[runbook](../specs/spec016/runbook.md). The feature branches are not merged, and
-no live source or schedule has been enabled.
+The spec 016 pipeline, PRES integration and research-site transition have
+merged. The frozen archive matched a fresh donor rebuild and passed browser
+replay; see [acceptance](../specs/spec016/acceptance.md) and
+[runbook](../specs/spec016/runbook.md). No live source or schedule was enabled
+by this delivery; the current local Dagster code location is unreachable, so
+its runtime schedule state remains unverified.

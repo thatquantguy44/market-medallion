@@ -21,9 +21,9 @@ planned.
 
 **Presidential research:** [Spec016](specs/spec016/README.md) is implemented
 and its frozen local reconstruction matches a fresh donor rebuild. The receiving
-feature branches include the local pipeline, PRES reader and research handoff;
-see [acceptance](specs/spec016/acceptance.md). Live source refresh and release
-of those branches remain separate decisions.
+merged releases include the local pipeline, PRES reader and research handoff;
+see [acceptance](specs/spec016/acceptance.md). Live source refresh remains a
+separate decision.
 
 **Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 and listed
 references for **1990 through released 2026 minutes** are accepted locally as of

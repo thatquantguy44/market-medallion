@@ -1,6 +1,6 @@
 # Spec016 cross-repository tasks and acceptance tracker
 
-Status: **local implementation and frozen-history acceptance verified; release cutover remains pending.** Scope/requirements:
+Status: **T01–T24 local implementation, acceptance and coordinated handoff complete.** Live source admission and optional hosted/backend work remain separately gated. Scope/requirements:
 [README](README.md); design/gates: [plan](plan.md); interfaces:
 [data contract](data_contract.md). Task IDs are stable. Each row is one focused
 slice with no more than about five intended files; split a row before starting
@@ -83,14 +83,15 @@ as blocked separately; local rebuild and complete consumer acceptance can pass.
 
 | Done / task | Owner / depends on | Requirement | Acceptance and verification | Intended files / scope |
 | --- | --- | --- | --- | --- |
-| [ ] T22 Update receiving repository handoff | MM / T20,T21 | R14,R13 | Register source package/status, verified commands/gates, release SHAs, health ownership and actual schedule state. Check links and reconcile every completion claim with evidence. | README, pipeline register, master handoff, this task tracker, acceptance report (5). |
-| [ ] T23 Update PRES documentation | QM / T15,T20 | R08,R11,R14 | Help/whitepaper explain explicit snapshot workflow, paired/cycle assignments, limitations and replay. Module spec links here and release evidence; no false live/verified badge. | PRES help, whitepaper, module spec, module handoff (4). |
-| [ ] T24 Retire duplicate donor implementation | WEB / T22,T23 | R14 | Canonical install/export instructions replace duplicate ownership after parity is accepted; old research artifacts/protocols remain inspectable. Verify old run exports and new clean-checkout commands; retain rollback release. | pipeline TRANSFER/README, project README/MASTER_HANDOFF, migration note (5); remove executable duplicates only in a separately reviewed follow-up patch with explicit inventory. |
+| [x] T22 Update receiving repository handoff | MM / T20,T21 | R14,R13 | Register source package/status, verified commands/gates, release SHAs, health ownership and actual schedule state. Check links and reconcile every completion claim with evidence. | README, pipeline register, master handoff, this task tracker, acceptance report (5). |
+| [x] T23 Update PRES documentation | QM / T15,T20 | R08,R11,R14 | Help/whitepaper explain explicit snapshot workflow, paired/cycle assignments, limitations and replay. Module spec links here and release evidence; no false live/verified badge. | PRES help, whitepaper, module spec, module handoff (4). |
+| [x] T24 Retire duplicate donor implementation | WEB / T22,T23 | R14 | Canonical install/export instructions replace duplicate ownership after parity is accepted; old research artifacts/protocols remain inspectable. Verify old run exports and new clean-checkout commands; retain rollback release. | pipeline TRANSFER/README, project README/MASTER_HANDOFF, migration note (5); remove executable duplicates only in a separately reviewed follow-up patch with explicit inventory. |
 
-**Cutover checkpoint:** handoff documentation is prepared in all three feature
-branches, and the legacy executable remains available for rollback. T22–T24
-remain open until the coordinated branches are reviewed/merged and actual
-release SHAs are recorded. No live deployment or optional backend is claimed.
+**Cutover checkpoint:** producer, PRES consumer and research-site handoff are
+merged, with release SHAs in [acceptance](acceptance.md). The legacy executable
+remains available for rollback; its removal needs a separate reviewed change.
+No live-source admission or optional backend is claimed. The local Dagster code
+location is unreachable, so its effective runtime schedule state is unverified.
 
 ## Requirement coverage and optional follow-on
 
