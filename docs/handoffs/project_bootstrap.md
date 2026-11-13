@@ -23,7 +23,7 @@ new live schedules default stopped.
 
 The user extended this same PR to all listed, officially released minutes from
 1997 through 2026. PR #18 is draft while the range is processed. The no-HTTP plan
-has 15 two-year batches and 391 planned references, including reused/shared
+has 21 bounded batches (individual years for 2009–2020) and 391 planned references, including reused/shared
 references; all fit unchanged operation limits. Only the two FOMC status sensors
 are active; acquisition schedules remain stopped and NAAIM stays paused.
 
@@ -31,9 +31,25 @@ The local operator process uses the existing Dagster job and writes durable
 progress to ignored `data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`.
 Its plan and per-batch `verified.json`/`checkpoint.json` records are in that same
 directory. The current operator script is `/tmp/fomc_1997_2026_bulk.py` (execution
-session 20405); source/runtime code is unchanged. Read the state before resuming;
+session 52013, resumed after verified historical HTML/GIF support). Read the state
+before resuming;
 the operator skips accepted batches and resumes an already-launched active run.
-Do not launch duplicate batches. On failure, diagnose its recorded phase and code
+Do not launch duplicate batches. A separate completed 2025–2026 source operation
+advanced the archive during the 1999–2000 readback. The operator retained that
+work, now locks the verification snapshot and validates the completed pointer
+chain; additional completed operations are recorded in checkpoint evidence.
+The 2007–2008 attempt stopped safely at `invalid_document` for the June 2008
+legacy-encoded print layout. A fixture-proven, narrowly bounded parser fix is
+verified by offline fixtures and isolated operation checks; all 194 existing
+selected extraction results/IDs recompute
+exactly. Failed-attempt originals/audit are retained and a fresh restore-tested
+checkpoint passed before retry. The second attempt additionally exposed source-declared GIF charts; their
+reviewed path/framing and rollback regressions now pass. Six failed attempts
+remain retained/restored (320, 325, 333, 338, 348 and 358 captures), including
+source-declared dated/undated GIF and JPEG charts. Dagster retry `abb13408-f2db-4884-a534-1772183d558c` succeeded and is completing
+its recovery gates; read `state.json`
+before any launch.
+On failure, diagnose its recorded phase and code
 rather than skipping references or widening budgets blindly.
 
 Each batch must pass source-span/coverage, immutable original/row checks, coherent
@@ -41,6 +57,8 @@ publication and health, schema/filesystem backup+restore, offline selected-catal
 latest-operation replay and acknowledged Slack success before the next batch.
 A completed checkpoint serves as the next before-state. The initial fresh
 checkpoint preserves all 172 captures from the accepted 1990–1996 archive.
+The source fix is pushed through `2f44771`. Verification: 1,077 regression tests
+passed with 82 optional skips; all 342 FOMC checks passed with isolated PostgreSQL.
 Do not claim full-range acceptance until all planned batches and final per-year
 reference reconciliation pass. Unreleased, unavailable, not-listed and extraction
 review outcomes remain explicit, with actual capture-time first-seen clocks.

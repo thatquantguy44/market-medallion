@@ -14,7 +14,8 @@ canonical operational inventory.
 ## Current build sequence and status
 
 The user-selected 1997–2026 FOMC expansion is **in progress** on the same draft
-PR #18: 15 bounded two-year Dagster batches under existing limits, with per-batch
+PR #18: 21 bounded Dagster batches under existing limits (individual years for
+2009–2020 leave room for source-declared addenda/images), with per-batch
 backup/restore, offline replay and Slack verification. Current progress is in
 the [handoff](handoffs/project_bootstrap.md); the formal prior checkpoint below
 remains 1990–1996 until the full range passes final reconciliation.
