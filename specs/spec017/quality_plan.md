@@ -1,6 +1,6 @@
 # FOMC quality implementation plan
 
-Status: **Q01 accepted; Q02/Q03 implementation in progress** on `feat/fomc-text-quality`.
+Status: **Q01/Q02 accepted; Q03 implementation in progress** on `feat/fomc-text-quality`.
 [Contract](quality_contract.md) · [Tasks](quality_tasks.md)
 
 ## Architecture and interfaces

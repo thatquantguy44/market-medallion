@@ -35,7 +35,7 @@ supply their own config. The next three [quality slices](specs/spec017/quality_c
 are selected on `feat/fomc-text-quality`: offline report → original-page review →
 confirmed extraction fixes. The [plan](specs/spec017/quality_plan.md) and
 [tasks](specs/spec017/quality_tasks.md) define their separate acceptance gates;
-[Q01 reporting is accepted](specs/spec017/quality_report_acceptance.md), with Q02/Q03
+[Q01 reporting is accepted](specs/spec017/quality_report_acceptance.md), with Q02 accepted and Q03
 in progress. Recent-year refreshes cover new releases and
 corrections. Acquisition schedules stay
 stopped; NAAIM remains paused and FINRA stays at SSV-T05.

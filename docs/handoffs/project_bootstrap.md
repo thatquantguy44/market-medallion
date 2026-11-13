@@ -37,13 +37,17 @@ Branch **`feat/fomc-text-quality`** starts from merged main `1bd4ab5`
   If no native defect is demonstrated, record the bounded no-fix outcome and keep
   OCR candidates/unresolved cases visible.
 
-**Q01 is accepted; Q02/Q03 are in progress.** Read
+**Q01/Q02 are accepted; Q03 is in progress.** Read
 [Q01 acceptance](../../specs/spec017/quality_report_acceptance.md) and continue
-at Q02.1 in the quality task file, not at a historical backfill task. The 167 review-required
+at Q03.1 in the quality task file, not at a historical backfill task. The 167 review-required
 representations and 1,520 flagged chunks are the dated archive-wide baseline;
 images/charts do not automatically imply missing text or OCR work. Pin fresh
 catalog IDs for the report and keep overlap/empty-unit accounting explicit.
-FOMC-T07 remains optional embeddings, separate from this Q-series.
+[Q02 acceptance](../../specs/spec017/quality_review_acceptance.md) records eight
+actual source-page reviews across four strata: four charts/images, one sampled
+text match, one OCR candidate and two unresolved source-damaged passages. No native
+parser defect is confirmed in this bounded sample; Q03 must record the no-fix
+outcome honestly. FOMC-T07 remains optional embeddings, separate from this Q-series.
 
 Q01 adds offline reporting and its tests. The accepted archive,
 configuration, source clocks, publication pointers and automation state are

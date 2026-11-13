@@ -21,8 +21,8 @@ The next three quality slices are **selected** on `feat/fomc-text-quality`:
 **FOMC-Q01** offline reporting → **Q02** original-page review → **Q03** confirmed
 extraction remediation. Read the [contract](quality_contract.md),
 [implementation plan](quality_plan.md) and [ordered tasks](quality_tasks.md).
-[Q01 offline reporting is accepted](quality_report_acceptance.md); Q02 original-page
-review and Q03 remediation remain in progress. Deliberate recent-year refreshes remain the operating
+[Q01 offline reporting is accepted](quality_report_acceptance.md); [Q02 bounded source-page review is accepted](quality_review_acceptance.md);
+Q03 remediation assessment remains in progress. Deliberate recent-year refreshes remain the operating
 path for new releases/corrections. All schedules stay stopped; FINRA remains at
 SSV-T05, NAAIM remains paused and embeddings remain independently selected.
 

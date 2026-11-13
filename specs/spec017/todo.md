@@ -4,7 +4,7 @@ Updated: 2026-11-13. T01–T06, portable scripts, the Dagster job and configurab
 Slack status alerts are implemented. [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)
 merged the accepted 1995–1996 and 1997–2026 backfills. The next three slices are
 packaged on `feat/fomc-text-quality`; [Q01 reporting is accepted](quality_report_acceptance.md),
-with Q02/Q03 in progress.
+with Q02 accepted and Q03 in progress.
 
 ## Current continuation
 
@@ -19,7 +19,7 @@ availability and text/OCR quality limitations remain explicit.
 Next: **FOMC-Q01 → Q02 → Q03**, defined in the [quality contract](quality_contract.md),
 [plan](quality_plan.md) and [task checklist](quality_tasks.md). These cover offline
 quality reporting, evidence-bound original-page review and confirmed extraction
-fixes. Q01 is accepted; Q02/Q03 tasks remain open. FOMC-T07 keeps its separate optional
+fixes. Q01/Q02 are accepted; Q03 tasks remain open. FOMC-T07 keeps its separate optional
 embeddings scope. Deliberately run a bounded recent refresh after the next official
 release. Keep capture-time first-seen clocks,
 observed corrections and finite limits. Schedules remain stopped; embeddings

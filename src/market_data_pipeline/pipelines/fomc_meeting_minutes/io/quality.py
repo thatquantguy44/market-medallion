@@ -79,7 +79,7 @@ def quality_report(cfg, *, inventory_store):
         return build_report(*read_quality_inputs(cfg, inventory_store))
 
 
-def write_quality_artifact(cfg, path, value):
+def write_quality_bytes(cfg, path, body):
     """Exclusive content write outside canonical inputs; identical retries are safe."""
     path = Path(path).resolve()
     protected = [
@@ -97,13 +97,18 @@ def write_quality_artifact(cfg, path, value):
     if path == Path(cfg.root).resolve() or any(path.is_relative_to(p) for p in protected):
         raise ValueError("FOMC quality output overlaps canonical source state")
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-    body = encoded(value)
+    if not isinstance(body, bytes):
+        raise ValueError("FOMC quality output requires bytes")
     try:
         _write(path, body)
     except FileExistsError:
         if path.read_bytes() != body:
             raise ValueError("FOMC quality output conflict") from None
     return path
+
+
+def write_quality_artifact(cfg, path, value):
+    return write_quality_bytes(cfg, path, encoded(value))
 
 
 def write_report(cfg, path, value):

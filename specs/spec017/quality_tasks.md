@@ -1,7 +1,8 @@
 # FOMC quality slice tasks
 
-Status: **Q01 accepted; Q02 in progress; Q03 planned**.
-[Q01 acceptance](quality_report_acceptance.md) records the first working slice.
+Status: **Q01/Q02 accepted; Q03 in progress**.
+[Q01 acceptance](quality_report_acceptance.md) and
+[Q02 acceptance](quality_review_acceptance.md) record the working slices.
 [Contract and capability map](quality_contract.md) · [Plan](quality_plan.md)
 Branch: `feat/fomc-text-quality`, from merged main `1bd4ab5`.
 
@@ -35,21 +36,21 @@ this exact report ID rather than an unpinned later catalog.
 
 ## FOMC-Q02 — source-page review and dispositions
 
-- [ ] **Q02.1 — deterministic case selection and review records** (QAC05, QAC07,
+- [x] **Q02.1 — deterministic case selection and review records** (QAC05, QAC07,
   QAC11–12). Select at most 12 cases per batch with issue/format/profile strata,
   early/late coverage and explicit uncovered strata. Validate hash-bound review
   records and reject stale/unknown records. Proposed files: FOMC
   `data/quality_review.py`, `tests/test_fomc_quality_review.py` and minimal review
   fixtures. Verify shuffled input, empty strata, cap/truncation disclosure,
   duplicate cases, source/profile mismatch and unknown dispositions.
-- [ ] **Q02.2 — inspect the selected original pages** (QAC05–07).
+- [x] **Q02.2 — inspect the selected original pages** (QAC05–07).
   Verify original hashes, render the named archived PDF pages and inspect HTML
   with archived assets/network disabled. Record tool versions, render hashes,
   observed text/citation differences, disposition and actual review time.
   Acceptance: every selected case has evidence; unresolved/uncovered scope stays
   explicit and no eligibility/status is silently changed. Proposed artifacts:
   ignored local review ledger/renders plus sanitized Q02 review evidence.
-- [ ] **Q02.3 — publish the bounded review findings** (QAC06–07, QAC12).
+- [x] **Q02.3 — publish the bounded review findings** (QAC06–07, QAC12).
   Record confirmed native defects separately from charts, OCR candidates and
   unresolved cases; add reduced reproduction fixtures for Q03 candidates.
   Acceptance: review summaries link to exact report/source/profile/page IDs and

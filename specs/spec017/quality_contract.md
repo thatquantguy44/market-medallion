@@ -1,6 +1,6 @@
 # FOMC extraction-quality contract
 
-Status: **Q01 accepted; Q02/Q03 implementation in progress**.
+Status: **Q01/Q02 accepted; Q03 implementation in progress**.
 [Q01 acceptance](quality_report_acceptance.md). Selected 2026-11-13 after
 [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18) merged.
 Delivery branch: `feat/fomc-text-quality`, based on merged main `1bd4ab5`.
