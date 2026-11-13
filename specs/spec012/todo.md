@@ -3,12 +3,12 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03/T04 are **complete**; SSV-T05–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03–T05 are **complete**; SSV-T06–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01–T04 suites.
+Tests below are future targets except the implemented SSV-T01–T05 suites.
 [README.md](README.md) defines their acceptance IDs.
-The [next-agent handoff](README.md#next-agent-handoff) records the exact T05 pickup
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T06 pickup
 scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -121,11 +121,19 @@ skips**; Ruff lint/format and source distribution/wheel builds pass. Next: SSV-T
 
 ## SSV-T05 — Archive input and rejected-capture evidence
 
-**Depends:** SSV-T03; **traces:** SSV-REQ05 / SSV-AC05.
-- [ ] Archive exact bytes/hash with manifest/schema/run receipts before parsing.
-- [ ] Preserve rejected payloads and redact credential-bearing request material.
-**Verify:** compare byte-for-byte input and rejected-capture receipts offline.
-**Files:** `io/bronze.py`, `tests/test_ssv_bronze.py`.
+**Status:** complete, 2026-11-13. [Contract](bronze_contract.md),
+[acceptance](t05_acceptance.md) and [sanitized evidence](evidence/t05_bronze_conformance.json).
+**Depends:** SSV-T03; **traces:** SSV-REQ05 / SSV-AC05, with SSV-AC01 admission.
+- [x] Archive exact bytes/hash with manifest/schema/run receipts before parsing.
+- [x] Preserve rejected data payloads and sanitize credential-bearing request material.
+  Recognizable credential bodies and unsafe request identities refuse before writing.
+- [x] Verify readback, immutable retries/conflicts, corruption refusal, interrupted
+  publication, sequence gaps, concurrent writers and original clocks.
+**Verify:** 49 Bronze tests; 315 focused FINRA checks; full offline suite
+**1,169 passed, 92 optional skips**. Lint/format and wheel/sdist source-byte
+checks pass. Four invented captures reconcile without network or publication.
+**Files:** `data/capture.py`, `io/__init__.py`, `io/bronze.py`, `tests/test_ssv_bronze.py`.
+**Next:** SSV-T06; no warehouse, CLI, connector, export or job was added.
 
 ## SSV-T06 — Deliver one local SQLite partition
 

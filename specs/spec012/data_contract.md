@@ -3,8 +3,10 @@
 **Version:** design v1 with the 2026-11-10 SSV-T03 fractional amendment and T04 numeric policy.
 **Implementation status:** pure approved-use, manifest/schema/version,
 facility/date-window registry, receipt-bound Decimal JSON parser, shared quantity
-validation/text codec and per-observation ratio helpers implemented; connector
-and storage absent. Storage and downstream output remain proposals.
+validation/text codec, per-observation ratio helpers and selected API-response
+Bronze implemented. The [T05 contract](bronze_contract.md) defines immutable
+captures and sanitized outcomes. Warehouse/downstream output remain proposals;
+connector and jobs are absent.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -23,7 +25,8 @@ six bounded TRF rows and a partition inventory; their raw field/version pairs
 reconcile, but complete partitions and historical observations are not verified. The [API profile](api_contract.md)
 defines the JSON schema/partition amendment, verified mapping and exact decimal quantities.
 The TXT-oriented sections below remain a separate, unadmitted file profile.
-Future I/O entry points must call the gate; none are implemented yet.
+T05 archive/read/parse entrypoints call the gate before filesystem I/O. Future
+acquisition/export adapters must do the same; none exist yet.
 
 ## Evidence register and remaining conformance
 

@@ -19,7 +19,45 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — FOMC quality Q01–Q03 accepted
+## 2026-11-13 current pickup — FINRA SSV-T05 accepted; T06 next
+
+The user selected working implementation on **`feat/finra-daily-short-sale-volume`**,
+based on merged main `b580689` (FOMC quality PR #19), delivered in
+[PR #20](https://github.com/thatquantguy44/market-medallion/pull/20). **SSV-T01–T05 are complete**
+for the selected three-TRF API profile. Read [T05 acceptance](../../specs/spec012/t05_acceptance.md),
+[Bronze contract](../../specs/spec012/bronze_contract.md),
+[sanitized evidence](../../specs/spec012/evidence/t05_bronze_conformance.json) and
+[the next-agent handoff](../../specs/spec012/README.md#next-agent-handoff).
+
+T05 stores exact admitted API-response bytes plus manifest/schema/run/capture
+lineage before parsing, and appends immutable sanitized parse/rejection outcomes.
+It enforces approved use before I/O, refuses unsafe request identities and
+recognizable credential bodies, excludes opaque auth/cookie/proxy evidence,
+verifies readback and refuses corruption. UUID retries preserve original clocks
+and sequences; concurrent writers and interrupted capture publication are tested.
+Local archive observation is distinct from explicit nullable retrieval completion;
+provider publication stays unknown and no Silver first-seen is assigned.
+
+**Verification:** 49 Bronze / 315 focused FINRA checks; full offline suite
+**1,169 passed, 92 optional skips**. Lint/format, wheel/sdist source-byte readback
+and four invented captures pass. Existing five FINRA core modules are unchanged.
+Agent-skills integrity passes; QuantSmith checkout drift persists, with all 61
+pinned guidance objects verified independently. No library refresh was performed.
+
+**Next: SSV-T06**, one invented complete API partition into audited SQLite
+Silver/Gold, with transaction/validation failure preserving prior committed
+publication. Follow the task's limits; cross-page assembly/replacements, revision
+history, Parquet, replay, acquisition, export and jobs remain later work.
+T05 makes no G1/G2, full-history or whole-pipeline production claim. No provider
+data request, credential loading, live DB/service operation or Slack message was
+needed. Schedules remain stopped; NAAIM remains paused. The earlier FOMC accepted
+archive and quality results below remain unchanged.
+
+The implementation is committed and pushed in PR #20. Track its current-head
+checks and review threads before merging. The user's prior commit/push/PR
+authorization persists; no merge or schedule activation is implied.
+
+## 2026-11-13 accepted checkpoint — FOMC quality Q01–Q03
 
 Branch **`feat/fomc-text-quality`**, from merged main `1bd4ab5`, packages the
 three user-selected working slices in [PR #19](https://github.com/thatquantguy44/market-medallion/pull/19).
