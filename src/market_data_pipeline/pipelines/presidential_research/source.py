@@ -13,7 +13,7 @@ from .storage import MAX_RAW_BYTES
 
 # Admission requires a reviewed code change with source-specific evidence.
 # Neither a CLI switch nor an environment variable can bypass these entries.
-_APPROVED_LIVE_SOURCES: frozenset[str] = frozenset()
+_APPROVED_LIVE_SOURCES: dict[str, str] = {}
 
 
 def fetch_selected(root, config, source_ids, *, network=None, transport=None, clock=None):
@@ -38,19 +38,22 @@ def fetch_selected(root, config, source_ids, *, network=None, transport=None, cl
             or parts.port not in (None, 443)
         ):
             raise ValueError("Source requires reviewed HTTPS transport.")
-        if transport is None and source.id not in _APPROVED_LIVE_SOURCES:
+        if transport is None and _APPROVED_LIVE_SOURCES.get(source.id) != source.url:
             raise ValueError("SOURCE_ACCESS_NOT_REVIEWED: live acquisition is disabled.")
     requests = [
         Request(source.url, headers={"User-Agent": "MarketMedallion-PRES/1.0"}, method="GET")
         for source in sources
     ]
-    client = transport or prepare_http(
-        requests[0], network or NetworkConfig(), allow_redirects=False
+    client = (
+        transport
+        if transport is not None
+        else prepare_http(requests[0], network or NetworkConfig(), allow_redirects=False)
     )
+    injected = transport is not None
     results = []
     for source, request in zip(sources, requests, strict=True):
         try:
-            payload = _download(client, request)
+            payload, headers = _download(client, request)
             now = (clock or (lambda: datetime.now(UTC)))()
             receipt, outcome = import_local_capture(
                 Path(root),
@@ -59,7 +62,14 @@ def fetch_selected(root, config, source_ids, *, network=None, transport=None, cl
                 payload,
                 admitted_at=now,
                 retrieved_at=now,
-                input_kind="SYNTHETIC_FIXTURE" if transport else "CAPTURED_SOURCE",
+                input_kind="SYNTHETIC_FIXTURE" if injected else "CAPTURED_SOURCE",
+                acquisition={
+                    "transport": "injected_fixture" if injected else "https_fetch",
+                    "http_status": 200,
+                    "route": "injected" if injected else client.route,
+                    "startup_fallback_used": False if injected else client.fallback_used,
+                    **headers,
+                },
             )
             results.append(
                 {
@@ -107,7 +117,19 @@ def _download(client, request):
                     raise ValueError("Empty or excessive source response.")
                 if length is not None and len(payload) != int(length):
                     raise ValueError("Incomplete source response.")
-                return payload
+                headers = {}
+                for header, key in (
+                    ("Content-Type", "content_type"),
+                    ("ETag", "etag"),
+                    ("Last-Modified", "last_modified"),
+                ):
+                    value = response.headers.get(header)
+                    if value is not None and (
+                        len(value) > 512 or any(ord(c) < 32 or ord(c) == 127 for c in value)
+                    ):
+                        raise ValueError("Invalid source response metadata.")
+                    headers[key] = value
+                return payload, headers
         except HTTPError as exc:
             if exc.code in (500, 502, 503, 504) and attempt == 0:
                 exc.close()

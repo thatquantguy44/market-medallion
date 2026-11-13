@@ -24,6 +24,7 @@ def import_local_capture(
     input_kind: str,
     retrieved_at: datetime | None = None,
     expected_sha256: str | None = None,
+    acquisition: dict | None = None,
 ) -> tuple[dict, dict]:
     """Preserve raw input before parsing, including explicit rejection evidence."""
     with config.path.open("rb") as source_file:
@@ -46,6 +47,7 @@ def import_local_capture(
         retrieved_at=retrieved_at,
         expected_sha256=expected_sha256,
         parser_id=source.parser,
+        acquisition=acquisition,
     )
     try:
         rows = parse_payload(source.parser, payload, source_id)

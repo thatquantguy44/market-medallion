@@ -110,3 +110,30 @@ def test_changed_nonselected_audit_mapping_is_not_silently_repaired(tmp_path, mo
     with pytest.raises(ValueError, match="audit records"):
         replay_selected_snapshot(root, destination, replayed_at=NOW + timedelta(hours=1))
     assert not destination.exists()
+
+
+def test_replay_retains_verified_transport_receipt(tmp_path, monkeypatch):
+    from test_presidential_source import Response
+
+    from market_data_pipeline.pipelines.presidential_research.source import fetch_selected
+    from market_data_pipeline.pipelines.presidential_research.storage import load_capture
+
+    root, _, _ = source(tmp_path, monkeypatch)
+    result = fetch_selected(
+        root,
+        load_config(tmp_path / "sources.toml"),
+        ["FEDFUNDS_001"],
+        transport=lambda request: Response(
+            b"observation_date,FEDFUNDS\n1935-10-01,4.20\n", {"ETag": '"fictional"'}
+        ),
+        clock=lambda: NOW + timedelta(seconds=3),
+    )
+    capture_id = result["sources"][0]["capture_id"]
+    ingest_capture(root, "FEDFUNDS_001", capture_id)
+    destination = tmp_path / "with-transport"
+    replay_selected_snapshot(root, destination, replayed_at=NOW + timedelta(hours=1))
+    before, _, _ = load_capture(root, "FEDFUNDS_001", capture_id)
+    after, _, _ = load_capture(destination, "FEDFUNDS_001", capture_id)
+    assert before == after
+    assert after["acquisition"]["etag"] == '"fictional"'
+    assert after["input_kind"] == "SYNTHETIC_FIXTURE"

@@ -12,6 +12,8 @@ from datetime import UTC, datetime, timedelta
 from importlib.resources import files
 from pathlib import Path
 
+from market_data_pipeline.shared.http import load_network_config
+
 from .backup import backup_selected_snapshot, restore_backup
 from .bundle_assembly import build_full_bundle
 from .candidate_review import prepare_candidates, validate_control_rows
@@ -178,6 +180,7 @@ def _parser():
     workspace(fetch)
     config(fetch)
     fetch.add_argument("--source", action="append", required=True)
+    fetch.add_argument("--network-config", type=Path)
     return parser
 
 
@@ -239,7 +242,10 @@ def main(argv=None):
             args.workspace.mkdir(parents=True, exist_ok=True)
             _print({"status": "INITIALIZED"})
         elif command == "fetch":
-            result = fetch_selected(args.workspace, load_config(args.config), args.source)
+            network = load_network_config(args.network_config) if args.network_config else None
+            result = fetch_selected(
+                args.workspace, load_config(args.config), args.source, network=network
+            )
             _print(result)
             return 0 if result["status"] == "SUCCEEDED" else 1
         elif command == "import-frozen":

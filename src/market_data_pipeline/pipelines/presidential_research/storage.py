@@ -57,6 +57,7 @@ def archive_capture(
     retrieved_at: datetime | None = None,
     expected_sha256: str | None = None,
     parser_id: str,
+    acquisition: dict | None = None,
 ) -> dict:
     """Archive bytes before parsing; caller must select an admitted source catalog entry."""
     if not isinstance(source_id, str) or not _ID.fullmatch(source_id):
@@ -67,6 +68,8 @@ def archive_capture(
         raise ValueError("Source configuration is invalid or exceeds the size limit.")
     if not isinstance(parser_id, str) or not re.fullmatch(r"[a-z][a-z0-9_]{0,79}", parser_id):
         raise ValueError("Invalid parser ID.")
+    if acquisition is not None:
+        _validate_acquisition(acquisition, input_kind)
     if input_kind not in ("CAPTURED_SOURCE", "SYNTHETIC_FIXTURE"):
         raise ValueError("An explicit input kind is required.")
     digest = _digest(payload)
@@ -107,7 +110,7 @@ def archive_capture(
             raise ValueError("Capture identity already exists.")
         staging = Path(tempfile.mkdtemp(prefix=".capture-", dir=source))
         receipt = {
-            "schema": "presidential-raw-capture/1",
+            "schema": "presidential-raw-capture/2" if acquisition else "presidential-raw-capture/1",
             "capture_id": capture_id,
             "capture_sequence": sequence,
             "source_id": source_id,
@@ -121,9 +124,11 @@ def archive_capture(
             "admitted_at": admitted,
             "first_seen_at": admitted,
             "provider_published_at": None,
-            "transport": "local_import",
+            "transport": acquisition["transport"] if acquisition else "local_import",
             "input_kind": input_kind,
         }
+        if acquisition is not None:
+            receipt["acquisition"] = acquisition
         try:
             for name, data in (("payload", payload), ("config.toml", config_bytes)):
                 with (staging / name).open("xb") as handle:
@@ -141,6 +146,42 @@ def archive_capture(
             if staging.exists():
                 shutil.rmtree(staging)
     return receipt
+
+
+def _validate_acquisition(value, input_kind):
+    keys = {
+        "transport",
+        "http_status",
+        "route",
+        "startup_fallback_used",
+        "content_type",
+        "etag",
+        "last_modified",
+    }
+    if not isinstance(value, dict) or set(value) != keys:
+        raise ValueError("Invalid acquisition receipt.")
+    if (
+        value["http_status"] != 200
+        or type(value["startup_fallback_used"]) is not bool
+        or value["route"] not in ("direct", "proxy", "injected")
+        or (
+            input_kind == "SYNTHETIC_FIXTURE"
+            and (value["transport"] != "injected_fixture" or value["route"] != "injected")
+        )
+        or (
+            input_kind == "CAPTURED_SOURCE"
+            and (value["transport"] != "https_fetch" or value["route"] not in ("direct", "proxy"))
+        )
+    ):
+        raise ValueError("Invalid acquisition receipt.")
+    for field in ("content_type", "etag", "last_modified"):
+        item = value[field]
+        if item is not None and (
+            not isinstance(item, str)
+            or len(item) > 512
+            or any(ord(char) < 32 or ord(char) == 127 for char in item)
+        ):
+            raise ValueError("Invalid acquisition metadata.")
 
 
 def load_capture(root: Path, source_id: str, capture_id: str) -> tuple[dict, bytes, bytes]:
@@ -174,7 +215,19 @@ def load_capture(root: Path, source_id: str, capture_id: str) -> tuple[dict, byt
         "input_kind",
     }
     try:
-        if not isinstance(receipt, dict) or set(receipt) != expected_keys:
+        if not isinstance(receipt, dict):
+            raise ValueError("Invalid capture receipt.")
+        if receipt.get("schema") == "presidential-raw-capture/2":
+            expected_keys.add("acquisition")
+            _validate_acquisition(receipt.get("acquisition"), receipt.get("input_kind"))
+            if receipt.get("transport") != receipt["acquisition"]["transport"]:
+                raise ValueError("Invalid capture transport.")
+        elif (
+            receipt.get("schema") != "presidential-raw-capture/1"
+            or receipt.get("transport") != "local_import"
+        ):
+            raise ValueError("Invalid capture receipt.")
+        if set(receipt) != expected_keys:
             raise ValueError("Invalid capture receipt.")
         admitted = receipt["admitted_at"]
         retrieved = receipt["retrieved_at"]
@@ -183,7 +236,6 @@ def load_capture(root: Path, source_id: str, capture_id: str) -> tuple[dict, byt
             or utc_timestamp(datetime.fromisoformat(admitted.replace("Z", "+00:00"))) != admitted
             or receipt["first_seen_at"] != admitted
             or receipt["provider_published_at"] is not None
-            or receipt["transport"] != "local_import"
             or receipt["input_kind"] not in ("CAPTURED_SOURCE", "SYNTHETIC_FIXTURE")
             or receipt["method_version"] != "presidential-donor/0.1.0"
             or not isinstance(receipt["parser_id"], str)
@@ -201,8 +253,7 @@ def load_capture(root: Path, source_id: str, capture_id: str) -> tuple[dict, byt
     except (TypeError, AttributeError, ValueError) as exc:
         raise ValueError("Invalid capture receipt.") from exc
     if (
-        receipt.get("schema") != "presidential-raw-capture/1"
-        or receipt.get("source_id") != source_id
+        receipt.get("source_id") != source_id
         or receipt.get("capture_id") != capture_id
         or receipt.get("bytes") != len(payload)
         or receipt.get("sha256") != _digest(payload)
