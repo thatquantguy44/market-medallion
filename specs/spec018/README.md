@@ -1,5 +1,6 @@
 # Spec 018 — Optional per-pipeline Slack failure alerts
 
+**Status:** implemented and accepted locally; delivery/activation remain operator-configured.
 User-selected 2026-11-12, on `feat/pipeline-slack-alerts`. Add independent Slack
 alert YAML under each implemented pipeline's `config/<pipeline_name>/` directory.
 Absent/default configuration disables delivery. Credentials stay environment-only.
@@ -53,3 +54,26 @@ Official API references reviewed against installed Dagster 1.12.21:
 https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/
 https://dagster.io/docs/guides/automate/sensors/run-status-sensors
 https://dagster.io/docs/api/dagster/schedules-sensors
+
+## Verified acceptance
+
+Implementation: `c953c78` (settings/transport) and `b44197d` (owned sensors/configs).
+Full offline regression: **1,038 passed, 80 optional skips**; all **313 FOMC checks
+passed with isolated PostgreSQL enabled**. Forty-seven new behavioral cases cover
+strict configuration and secret gates, default network limits, Slack/GovSlack,
+redirect blocking, safe payloads/errors, bounded acknowledgements and actual
+Dagster failure/success/unrelated-job/pre-step events, cursor consumption and
+non-replay. Provider HTTP remains fixture-only during regression. No secret was
+configured, webhook POST made, sensor enabled, service restarted, acquisition
+schedule activated or operational schema migrated. Existing capture clocks,
+source data and storage semantics remain unchanged.
+
+A read-only public Slack `api.test` HEAD probe was accepted on the direct route;
+webhook delivery and GovSlack remain offline-fixture verified only.
+Root code-location listing exposes all five alert sensors stopped; all six
+acquisition/import schedules remain stopped. Ruff lint/format, local docs links,
+wheel/source build and extracted-source registration/config checks pass. The
+workflow snapshot and all 61 adopted QuantSmith Git objects were verified;
+external QuantSmith working-tree drift was left unchanged. Setup, error recovery
+and best-effort cursor/delivery limitations are in the
+[Slack runbook](../../docs/deployment/slack_alerts.md).

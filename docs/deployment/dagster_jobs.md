@@ -25,6 +25,17 @@ No other Dagster jobs or schedules are defined in the repository. A schedule
 being listed or enabled does not establish provider rights, start a persistent
 service, or grant a downstream redistribution right.
 
+## Optional Slack failure sensors
+
+Each of the five implemented pipelines owns one `<pipeline_name>_slack_failure`
+run-failure sensor, registered through the root code location. All five default
+**STOPPED**. Each independently reads optional
+`config/<pipeline_name>/alerts.local.yml`; missing/disabled settings send nothing.
+Examples contain environment-variable names rather than webhook secrets. See the
+[Slack alert runbook](slack_alerts.md) for all names, setup, network policy and
+cursor/delivery limitations. No local secret or live delivery is configured by
+this change, and acquisition schedules remain stopped.
+
 ## Ownership and job behavior
 
 ### AAII

@@ -79,3 +79,11 @@ that client for the exact configured Download GET with `Accept: */*`. It records
 the probe URL in the capture metadata. All other routing/TLS and configuration
 gates remain in force; no recurring job or public display is enabled by this
 acceptance.
+
+## Optional Slack alerts
+
+`alerts.example.yml` is independent of acquisition/runtime settings. Copy it to
+ignored `alerts.local.yml` when needed; see the
+[Slack setup/runbook](../../docs/deployment/slack_alerts.md). Absent or disabled
+settings make no request; credentials stay in the named environment variable.
+The pipeline's failure sensor defaults stopped.

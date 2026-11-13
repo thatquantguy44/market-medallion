@@ -113,3 +113,13 @@ HTTP errors do not trigger a new route. Provider/market manifest mismatch fails
 before probing. Offline tests cover exact raw bytes/provenance, one startup
 selection, denied startup and provider mismatch. The ten selected authentic
 files reconcile; the local sample config is disabled again after capture.
+
+## Optional Slack alert transport
+
+Pipeline-owned alert YAML exposes the same `network` settings. Enabled alerts
+select once through `prepare_http` using a public Slack `api.test` startup URL,
+then reuse that client for a single webhook POST. `allow_redirects=False` blocks
+redirects for both probe and delivery; provider callers retain the default redirect
+behavior and injectable opener contract. Missing/disabled alert settings resolve
+no secret and make no probe. See the [alert runbook](../deployment/slack_alerts.md)
+for bounded timeouts, safe errors and best-effort delivery/cursor semantics.

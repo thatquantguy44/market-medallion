@@ -19,7 +19,33 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-12 current pickup — local Dagster launcher port
+## 2026-11-12 current pickup — optional pipeline-owned Slack alerts
+
+PR #16 is merged; local Dagster defaults to port 3030. The user requested a new
+branch for configurable Slack alerts with separate optional YAML per pipeline.
+Current branch: `feat/pipeline-slack-alerts`, based on merged main. See
+[Spec018](../../specs/spec018/README.md) and the
+[Slack runbook](../deployment/slack_alerts.md).
+
+Each of the five existing Dagster jobs owns a stopped `<pipeline>_slack_failure`
+sensor and `config/<pipeline>/alerts.example.yml`. Users may copy it to ignored
+`alerts.local.yml`, set `slack.enabled`, provide the named webhook environment
+variable and deliberately start only that alert sensor. Missing/disabled config
+makes no probe; explicit broken config is a visible safe sensor error. Import
+loads no local file or secret. Alerts contain only job/pipeline/run IDs and an
+optional Dagster link, use the shared HTTP route with redirects blocked, and
+require a bounded acknowledgement. Delivery is best-effort with one POST, no
+automatic retry/outbox, and documented Dagster cursor consumption/replay limits.
+
+Verification: **1,038 regression tests passed, 80 optional skips; all 313 FOMC
+checks passed with isolated PostgreSQL enabled**. Forty-seven added checks cover
+config gates, routing, redaction, real failure/pre-step/success/unrelated-job
+status events and cursor behavior. Root registration reports all five sensors
+stopped, and all six schedules remain stopped. No real webhook was configured
+or message sent; no service restart, acquisition or migration was performed.
+NAAIM remains paused; the next historical FOMC batch remains 1995–1996.
+
+## 2026-11-12 accepted checkpoint — local Dagster launcher port
 
 PR #15 is merged. The user requested a different default port for
 `scripts/run_local_dagster.sh`. The follow-up branch is
