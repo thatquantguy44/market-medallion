@@ -1,18 +1,19 @@
 # FOMC meeting-minutes configuration
 
-T01–T06 and bounded **1990–1994** batches are accepted locally for listed
-references in the 1990-onward archive. Latest [acceptance](../../specs/spec017/1993_1994_acceptance.md)
-and [evidence](../../specs/spec017/evidence/1993_1994_script_backfill.json) record
-146 captures and 73 text representations, with 993 chunks: 368 eligible and 625
-review-flagged. The added 1993–1994 HTML minutes are in the same PR #14 as 1992.
-Full history and text/OCR accuracy remain incomplete; the unavailable 1994 href
-and existing review flags remain visible. All schedules stay stopped.
+T01–T06 and listed **1990–released-2026** references are accepted locally as of
+November 13. [Latest acceptance](../../specs/spec017/1997_2026_acceptance.md) and
+[evidence](../../specs/spec017/evidence/1997_2026_dagster_backfill.json) record
+1,081 captures, 522 text representations and
+9,790 chunks (8,270 eligible,
+1,520 review-flagged). No unacquired inventory references remain;
+unavailable/not-listed claims and text/OCR review remain explicit.
 
 Other users can run [`scripts/run_fomc.sh`](../../scripts/run_fomc.sh) with their
 own config. See [fresh-checkout setup](../../docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint)
 for dependencies, environment-backed credentials and bounded plan/run/health
 examples. The script does not load `.env` or activate access automatically.
-Next core batch: 1995–1996.
+Next: extraction-quality review and deliberate recent refreshes for new releases
+or corrections. All acquisition schedules stay stopped.
 
 ## Configuration and scope
 
@@ -35,16 +36,16 @@ Network settings use the shared run-scoped direct/proxy contract.
 
 ## Current local state and inspection
 
-There is one native metadata snapshot: 33 official source pages, 371 meeting
-records, 470 declared document references and 561 source associations. One empty
-official minutes href is explicitly unavailable. The archive holds 72 captures
-(38 inventories, 12 document representations and 22 PNGs), with eight dependency
-checks. T04 extracts all 12 archived document representations into 74 PDF pages /
-108 text units (616,712 characters): seven native-extracted, five review-required.
-The text catalog records the bounded selection and outstanding archive/review gaps.
-T05 adds 12 chunk sets: 241 chunks (166 eligible, 75 review-flagged), with exact
-source-unit coverage and all 74 PDF page citations. Full acquisition of all
-declared documents and accuracy review remain incomplete.
+Current normalized inventory contains 33 source pages,
+371 meeting claims, 470 references and
+561 associations. Historical inventories remain retained. The
+archive has 1,081 captures and 522 text
+representations: 3,200 PDF pages, 4,018 units and
+25,537,392 characters. Native outcomes are
+`{"native_extracted": 355, "review_required": 167}`. All 9,790 chunks have
+exact source spans/citations and complete selected source-unit coverage;
+review eligibility remains explicit. The latest listed 2026 meeting is
+2026-09-16, released 2026-10-07.
 
 With this project's trusted `.env` loaded, inspect without provider requests:
 

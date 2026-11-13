@@ -24,7 +24,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [014](spec014/README.md) | sec-nport | Fourth: public fund holdings/lending disclosures with accession-safe joins, amendments and availability eras. Full planning set; connector absent. |
 | [015](spec015/README.md) | nyfed-primary-dealers | Fifth: aggregate dealer positions/transactions/financing/fails with exact series metadata, units, suppression and definition eras. Full planning set; connector absent. |
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
-| [017](spec017/README.md) | fomc-meeting-minutes | T01–T06 and bounded 1990–1996 listed references accepted: 172 captures, 89 text representations and 1,193 chunks (568 eligible, 625 review), coherent publication, backup/restore and offline replay. Next bounded batch: 1997–1998. Full history/accuracy review and optional embeddings remain separate. |
+| [017](spec017/README.md) | fomc-meeting-minutes | T01–T06 and listed 1990–released-2026 references accepted as of November 13: 1,081 captures, 522 text representations and 9,790 chunks (8,270 eligible, 1,520 review); 21 Dagster batches, restore/replay and Slack success verified. Next: extraction-quality review and deliberate recent refreshes. Unavailable/not-listed claims and optional embeddings remain separate. |
 | [018](spec018/README.md) | pipeline-slack-alerts | Optional pipeline-owned alert YAML and stopped Dagster success/failure sensors for the five existing jobs. Credentials, live delivery and activation remain operator-configured. |
 
 ## Presidential pipeline integration planning

@@ -1,27 +1,25 @@
 # Spec 017 — Complete FOMC meeting-minutes archive
 
-**Status:** T01–T06 and bounded **1990–1996 batches** are accepted locally for
-listed references in the 1990-onward archive. The latest 1995–1996 batch ran through
-the existing Dagster job with Slack success delivery and recovery verified.
-The archive has **172 captures and 89 text representations**: 624 PDF pages,
-2,771,872 characters and 1,193 chunks (568 eligible, 625 review-flagged). Current
-inventory remains 33 pages, 371 meeting claims and 470 references. Full history
-and text/OCR accuracy review remain incomplete.
-[1995–1996 acceptance](1995_1996_acceptance.md),
-[contract](1995_1996_contract.md) and [evidence](evidence/1995_1996_dagster_backfill.json)
-are current. [1993–1994](1993_1994_acceptance.md), [1992](1992_acceptance.md),
-[1991](1991_acceptance.md) and T03–T06 remain earlier checkpoints.
+**Status:** T01–T06 and listed references for **1990 through released 2026
+minutes** are accepted locally as of 2026-11-13. All 21 bounded 1997–2026 Dagster
+batches passed original/text/chunk, health, restore, offline replay and Slack
+success gates. The archive has **1,081 captures, 522
+text representations, 3,200 PDF pages and 9,790 chunks**
+(8,270 eligible, 1,520 review-flagged).
+No unacquired inventory references remain; unavailable/not-listed claims and
+extraction review flags remain explicit. Full source availability and text/OCR
+accuracy are not certified. Read [latest acceptance](1997_2026_acceptance.md),
+[contract](1997_2026_contract.md) and [evidence](evidence/1997_2026_dagster_backfill.json).
+[1995–1996](1995_1996_acceptance.md) and earlier records remain historical checkpoints.
 **Reviewed:** 2026-11-13. **Pipeline ID:** `fomc-meeting-minutes`.
 **Package:** `src/market_data_pipeline/pipelines/fomc_meeting_minutes/`.
 Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_minutes/README.md).
 The [runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
-The [Dagster job delivery](dagster_job_acceptance.md) adds recent-refresh launch
-configuration, post-run health gating and failure metadata, with unit and isolated
-backend regression coverage. Deployment scope is the job in the existing code
-location. Slack success/failure alerts are configured locally through Spec018;
-off-machine backup storage remains deferred.
-Next core batch: 1997–1998. All FOMC schedules stay stopped; FINRA remains at
-SSV-T05 and NAAIM remains paused. Embeddings remain independently selected work.
+[Dagster job delivery](dagster_job_acceptance.md) and [Spec018](../spec018/README.md)
+provide bounded refreshes, health gating and configurable success/failure alerts.
+Next core work: extraction-quality review and deliberate recent-year refresh for
+new releases/corrections. All schedules stay stopped; FINRA remains at SSV-T05,
+NAAIM remains paused and embeddings remain independently selected.
 
 ## Objective and scope
 

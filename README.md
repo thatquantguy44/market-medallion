@@ -19,18 +19,21 @@ public research feed has an initial fixture-backed local slice; an explicit
 permission reference is required for any live request. Other connectors remain
 planned.
 
-**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 and bounded
-**1990–1996** batches are accepted locally for listed references in the
-1990-onward archive. [Latest acceptance](specs/spec017/1995_1996_acceptance.md)
-records 172 captures and 89 text representations: 624 PDF pages and 1,193 chunks
-(568 eligible, 625 review-flagged). The current inventory has 371 meeting claims
-and 470 references. Full history and text/OCR accuracy review remain incomplete.
+**Current FOMC build:** [Spec017](specs/spec017/README.md) T01–T06 and listed
+references for **1990 through released 2026 minutes** are accepted locally as of
+November 13. [Latest acceptance](specs/spec017/1997_2026_acceptance.md) records
+1,081 captures, 522 text representations,
+3,200 PDF pages and 9,790 chunks (8,270
+eligible, 1,520 review-flagged). All 21 requested 1997–2026
+Dagster batches passed health, immutable-history, backup/restore, offline replay
+and acknowledged Slack success checks. No unacquired inventory references remain;
+unavailable/not-listed claims and text/OCR review stay explicit. The latest
+listed 2026 meeting is 2026-09-16.
 The existing [Dagster job](docs/deployment/fomc_runbook.md#dagster) and
-[`scripts/run_fomc.sh`](scripts/run_fomc.sh) share the bounded source runner;
-other users supply their own config. Both FOMC success/failure Slack sensors are
-configured locally. Latest backup/restore, offline replay and immutable-history
-checks pass. Next core batch: **1997–1998**. Acquisition schedules stay stopped;
-NAAIM remains paused and FINRA stays at SSV-T05.
+[`scripts/run_fomc.sh`](scripts/run_fomc.sh) share the bounded runner; other users
+supply their own config. Next FOMC work: extraction-quality review and deliberate
+recent-year refreshes for new releases/corrections. Acquisition schedules stay
+stopped; NAAIM remains paused and FINRA stays at SSV-T05.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →

@@ -1,27 +1,25 @@
 # FOMC implementation tasks and pickup
 
-Updated: 2026-11-13. T01–T05 merged through PR #11, T06 through PR #12,
-the portable script/1991 through PR #13 and 1992–1994 through PR #14. The
-Dagster job, port configuration and per-pipeline Slack status alerts merged
-through PRs #15–#17. Current continuation is the accepted 1995–1996 batch on
-`feat/fomc-1995-1996-backfill` in
-[PR #18](https://github.com/thatquantguy44/market-medallion/pull/18); track its
-[checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks) and
-current review threads. See its contract, evidence and next scope below.
-No acquisition schedule or embedding service was selected.
+Updated: 2026-11-13. T01–T06, portable scripts, the Dagster job and configurable
+Slack status alerts are implemented. Current PR #18 adds accepted 1995–1996 and
+1997–2026 backfills on `feat/fomc-1995-1996-backfill`.
+Track its [checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks)
+and current review threads; no merge or recurring acquisition is implied.
 
-## Current bounded continuation
+## Current continuation
 
-The 1995–1996 batch is accepted on `feat/fomc-1995-1996-backfill`, from merged
-PR #17. See [acceptance](1995_1996_acceptance.md),
-[contract](1995_1996_contract.md) and [evidence](evidence/1995_1996_dagster_backfill.json).
-All 16 listed HTML references were acquired through Dagster, with healthy
-publication and acknowledged Slack success delivery. Before/after 29-table and
-canonical-file restores and actual offline replay passed; all 152 earlier
-captures/clocks and append-only rows remain intact. The archive now has 172
-captures, 89 text representations and 1,193 chunks (568 eligible, 625 review).
-Verification: 1,050 regression tests with 80 optional skips; 313 FOMC checks with
-isolated PostgreSQL, including 70 backend checks. **Next core batch: 1997–1998**.
+All 21 bounded 1997–2026 Dagster batches and final annual reconciliation passed.
+Read [acceptance](1997_2026_acceptance.md), [contract](1997_2026_contract.md) and
+[evidence](evidence/1997_2026_dagster_backfill.json) for the current coverage,
+original/text/chunk checks, acknowledged Slack success and recovery gates.
+Listed-reference archival coverage now extends from 1990 through released 2026
+minutes as of November 13. No unacquired inventory references remain; source
+availability and text/OCR quality limitations remain explicit.
+
+Next: review flagged extraction/page quality; deliberately run a bounded recent
+refresh after the next official release. Keep capture-time first-seen clocks,
+observed corrections and finite limits. Schedules remain stopped; embeddings
+remain independently selected, NAAIM paused and FINRA at SSV-T05.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 

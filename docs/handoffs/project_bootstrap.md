@@ -19,61 +19,49 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — 1997–2026 backfill in progress
+## 2026-11-13 current pickup — released 1997–2026 backfill accepted
 
-The user extended the same draft [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18)
-to all listed, officially released 1997–2026 minutes. The no-HTTP plan has **21
-bounded batches** and 391 primary-reference selections, including reused/shared
-references. Individual years for 2009–2020 leave room for source-declared SEP
-addenda/images under unchanged 40-document/100-request limits. The original
-15-batch plan is retained locally. Read the [contract](../../specs/spec017/1997_2026_contract.md).
+The user-requested 1997–2026 expansion passed all 21 bounded Dagster batches and
+final per-year reconciliation on the existing `feat/fomc-1995-1996-backfill`
+branch in [PR #18](https://github.com/thatquantguy44/market-medallion/pull/18).
+Read [acceptance](../../specs/spec017/1997_2026_acceptance.md),
+[contract](../../specs/spec017/1997_2026_contract.md) and
+[evidence](../../specs/spec017/evidence/1997_2026_dagster_backfill.json).
+Track current-head checks/reviews; no merge or recurring acquisition is implied.
 
-**Current accepted checkpoint: 1997–2016, 14 of 21 batches.** Read latest accepted
-counts in `state.json` and its referenced `verified.json`. The **2017
-retry is active**, after a fixture-proven addition for source-declared PNG charts
-in the monetary-policy images folder. Ten failed attempts retain original
-responses/audit, unchanged published pointers and additional restored checkpoints;
-the last failed-attempt checkpoint contains 812 captures. Do not skip references
-or increase budgets to bypass a failure.
+All 390 unique selected primary URLs are
+archived. The current archive has 1,081 captures,
+522 text representations, 3,200 PDF pages,
+25,537,392 characters and 9,790 chunks
+(8,270 eligible, 1,520 review-flagged).
+All 172 baseline receipt bytes/clocks and append-only rows are intact. No
+unacquired inventory references remain. Other source outcomes are
+`{"not_listed": 49, "review_required": 167, "unavailable": 1}`; original-byte coverage does
+not certify source availability or extraction/OCR quality. Latest listed 2026
+meeting: 2026-09-16, explicit release
+2026-10-07. October/December minutes have no listed link.
 
-Durable ignored state is
-`data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`; the same directory
-holds `plan.json`, per-batch `verified.json`/`checkpoint.json`, extra failed-attempt
-checkpoints and `parser-fix-verification.json`. **Read state before any launch.**
-The active local driver is `/tmp/fomc_1997_2026_bulk.py` (execution session **96059**).
-It skips accepted batches and resumes an already-launched run: do not duplicate it.
-On a genuine failed attempt, diagnose first; only after a verified fix use
-`/tmp/fomc_1997_2026_prepare_retry.py` to preserve/restore-test its state and prepare
-a uniquely tagged retry. A separate completed 2025–2026 operation was explicitly
-retained in the 1999–2000 checkpoint chain. Verification now holds the source
-operation advisory lock and records additional completed operations.
+All 32 schema/filesystem checkpoints were restored and all 21 selected-catalog
+replays passed with HTTP/transforms disabled; the final read-only audit confirmed
+all 29 tables, original readbacks, exact source spans/citations and retained
+archive checksums/receipts. Each requested Dagster run has acknowledged Slack
+success. A separate completed 2025–2026 operation was explicitly retained in the
+1999–2000 checkpoint pointer chain; subsequent verification snapshots hold the
+source advisory lock. Historical HTML and asset fixes were needed; all 194
+pre-fix selected extraction results/IDs remain exact. Capture-time semantics,
+schema and dependencies are unchanged.
 
-Each batch passes original/receipt-clock and append-only checks, exact text/chunk
-spans and PDF citations, coherent publication/health, full-schema/canonical-file
-restore, empty-target selected-catalog/latest-operation replay with HTTP/transforms
-disabled, and acknowledged Slack success before advancing. The initial checkpoint
-preserves all 172 accepted 1990–1996 captures. Scratch databases/roots are removed;
-retained backups and verification receipts remain ignored under the FOMC root.
+Durable ignored local records are under
+`data/fomc_meeting_minutes/1997-2026-backfill-review/` (`state.json`, per-batch
+`verified.json`/`checkpoint.json`, `final-acceptance.json`). All batches are
+accepted; **do not relaunch the completed bulk run**. Backups and their verification
+receipts remain under the ignored FOMC `backups/` directory. Scratch targets were
+removed. Both FOMC sensors remain running; all six acquisition/import schedules
+and the other eight status sensors remain stopped. NAAIM stays paused.
 
-Historical print-container, declared Windows-1252, explicit SEP association and
-PNG/GIF/JPEG support are fixture-proven; source fixes are pushed through `69a0104`,
-whose CI passed. Historical-source changes now pass 1,091 regressions (83 optional
-skips), all 357 FOMC checks with isolated PostgreSQL, exact 194-extraction
-compatibility and matching wheel/sdist source hashes. Refreshed evidence is in `/tmp/fomc-bulk-regression.log`,
-`/tmp/fomc-bulk-postgres.log` and `/tmp/fomc-parser-compatibility.log`. The immutable
-pre-fix catalog has 194 extraction results/IDs; its final-runtime proof pins seven
-source-module hashes. Never use the operational database as a generic test DSN.
-
-After all batches, run `/tmp/fomc_1997_2026_finalize.py` for stable final annual
-reconciliation, then `/tmp/fomc_1997_2026_docs.py` to generate acceptance/registers
-from verified evidence. Refresh the finalizer's exact test/build guards after any
-source change. Check every year, retained archive checksum/restore receipt,
-Dagster/Slack reaction and cleanup before claiming full-range acceptance. Commit
-and push the final evidence/docs on this branch, mark the PR ready and track its
-current-head CI/reviews; no merge is authorized. Keep unavailable/not-listed/
-unreleased claims and extraction review explicit, with actual capture-time clocks.
-Only the two FOMC sensors run; all acquisition schedules stay stopped. NAAIM stays
-paused, FINRA stays at SSV-T05 and embeddings remain independently selected.
+Next FOMC work: flagged extraction/page-quality review and deliberate bounded
+recent-year refresh after the next official release. Preserve captured revisions
+and first-seen semantics. FINRA stays at SSV-T05; embeddings remain independent.
 
 ## 2026-11-13 accepted checkpoint — bounded FOMC 1995–1996 accepted
 
