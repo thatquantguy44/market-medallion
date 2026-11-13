@@ -1,0 +1,21 @@
+{
+  "counts": {
+    "comparison": 88,
+    "cycle_ledger": 87,
+    "fundamentals": 68,
+    "primary_windows": 88,
+    "shiller_windows": 88
+  },
+  "fixture_description": "Wholly invented donor-test inputs; not historical data.",
+  "hashes": {
+    "comparison": "d81db2f53579e7fc44d0dbc09d47a3b58dae3582b961e7505820fe2a21012790",
+    "cycle_ledger": "8bf3794e89ffdbb74c7def96f3f67bfc634f22a11c1fc65bec0ce5d8a21d5439",
+    "cycle_summary": "0245908cc2c083741bb5a4e9b2928c97e86522275f62255f11bb8f84201feb7a",
+    "fundamentals": "6cb23671a0e12c70389b4c310bece6d697ce57da6caace325d5de6b6dd683dda",
+    "inherited_audit": "8a0a2eff0b81a2fab8f7c99101c8dc68923c4ffc373c24531eb029b9a04bdcd1",
+    "primary_dataset": "cc14b4bbf15e4e8efcac2ee020850f17b342d8baf97b84dd00c84fc48978eb91",
+    "shiller_dataset": "05855f03bc6b17de59dbe1fdba2730ccdca7d8b28fbbd6a7c21ef54c4356958d",
+    "shiller_monthly": "8b741b6e71bb98591ce07663b6fbfd7d1e2c2e553f62afbadb2d4f945949e451"
+  },
+  "schema": "presidential-donor-assembly-goldens/1"
+}
