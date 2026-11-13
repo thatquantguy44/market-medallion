@@ -128,3 +128,11 @@ tests restored paired and cycle views while the pipeline routes were blocked;
 legacy v1 replay and corrupted-replay rejection also passed. The focused
 consumer suite passed 118 tests; typecheck and build passed. T13–T15 remain
 conditional on the required real frozen-input parity and migration gates.
+
+T16 adds offline replay of the selected complete or baseline snapshot into an
+initially absent separate root. It preserves capture IDs, clocks, fact and audit
+versions, failed outcomes and catalog identity, while recording a separate
+destination admission time. Corrupt raw inputs, altered parse/audit records,
+ambiguous ordering and existing destinations fail closed. The 104-test producer
+suite passed. This remains fixture evidence; real archived manual evidence and
+the frozen research profile still require admission and qualification.

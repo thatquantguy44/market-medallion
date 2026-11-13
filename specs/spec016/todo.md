@@ -1,6 +1,6 @@
 # Spec016 cross-repository tasks and acceptance tracker
 
-Status: **T01–T10 complete; remaining implementation tasks open**. Scope/requirements:
+Status: **T01–T10 and T16 complete; remaining implementation tasks open**. Scope/requirements:
 [README](README.md); design/gates: [plan](plan.md); interfaces:
 [data contract](data_contract.md). Task IDs are stable. Each row is one focused
 slice with no more than about five intended files; split a row before starting
@@ -69,7 +69,7 @@ cycle results and exported views agree. Do not claim real 86-window parity yet.
 
 | Done / task | Owner / depends on | Requirement | Acceptance and verification | Intended files / scope |
 | --- | --- | --- | --- | --- |
-| [ ] T16 Implement deterministic replay/recovery | MM / T10,T11 | R04,R13 | Empty-root replay preserves IDs/clocks/outcomes and snapshot selection; corrupted/missing inventory fails; interrupted publication recovers coherently. | new `replay.py`, `operations.py`, replay test, recovery test, `publication.py` (5). |
+| [x] T16 Implement deterministic replay/recovery | MM / T10,T11 | R04,R13 | Empty-root replay preserves IDs/clocks/outcomes and snapshot selection; corrupted/missing inventory fails; interrupted publication recovers coherently. | new `replay.py`, `operations.py`, replay test, recovery test, `publication.py` (5). |
 | [ ] T17 Add health and backup/restore | MM / T16 | R13 | No-request health distinguishes stale capture, inadequate data/approval coverage and publication failure. Backup restores verified state into empty destination without secrets. | `operations.py`, `storage.py`, operations test, backup test (4). |
 | [ ] T18 Complete CLI/package surface | MM / T05,T17 | R01,R12,N01 | Nine donor command capabilities plus import/publish/replay/check are installed and isolated; source selects/options validated. Help/smoke and wheel resource tests pass. | new `cli.py`, `__main__.py`, root `cli.py`, `MANIFEST.in`, CLI/package test (5). |
 | [ ] T19 Specify and implement bounded fetch | MM / T18 | R12,N03 | First record current official access/schema/transport evidence; then use shared run-scoped client with gates before probe. Injected transient/HTTP/oversize/partial-batch tests preserve all successful raw captures. Block unresolved live sources explicitly. | new `source.py`, source manifest, network config, source test, source-review note (5). |
