@@ -39,3 +39,11 @@ separately from optional evidenced retrieval time, retains failed-parse receipts
 checks byte lengths/hashes and rejects symlinked payloads and oversized ZIP
 expansion. Six targeted archive tests pass without network. No historical raw
 input has yet been admitted to the new pipeline.
+
+T05 ports reviewed workbook promotion into an immutable local review version.
+Only evidenced APPROVED rows from eligible manual-control sources promote;
+missing/invalid review fields, overlaps, source roles, incomplete coverage and
+workbook expansion failures are rejected. The version stores separate workbook,
+catalog, controls and manifest hashes, and its loader rechecks them. Source
+workbooks and existing control files are never overwritten. Review timestamps
+provided only as dates remain date-level evidence, not fabricated intraday times.

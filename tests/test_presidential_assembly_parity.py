@@ -104,3 +104,30 @@ def test_shiller_provenance_uses_original_archives_not_private_intermediate(tmp_
         == hashlib.sha256(manifest.read_bytes()).hexdigest()
     )
     assert not (normalized / "shiller_total_return_monthly.csv").exists()
+
+
+def test_reviewed_controls_must_cover_all_required_decision_dates(tmp_path):
+    import csv
+
+    import pytest
+
+    from market_data_pipeline.pipelines.presidential_research.assemble import (
+        BuildError,
+        build_annual_dataset,
+    )
+
+    case = fixture_helpers.BuildTests()
+    case.setUp()
+    market, controls = tmp_path / "market.csv", tmp_path / "controls.csv"
+    case.write_market(market)
+    case.write_controls(controls)
+    with controls.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        fields, rows = reader.fieldnames, list(reader)
+    rows[0]["endDate"] = "1936-01-01"
+    with controls.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    with pytest.raises(BuildError, match="No reviewed political control interval covers"):
+        build_annual_dataset(case.config, market, controls, "window_start")

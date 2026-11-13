@@ -1,6 +1,6 @@
 # Spec016 cross-repository tasks and acceptance tracker
 
-Status: **T01–T04 complete; remaining implementation tasks open**. Scope/requirements:
+Status: **T01–T05 complete; remaining implementation tasks open**. Scope/requirements:
 [README](README.md); design/gates: [plan](plan.md); interfaces:
 [data contract](data_contract.md). Task IDs are stable. Each row is one focused
 slice with no more than about five intended files; split a row before starting
@@ -25,7 +25,7 @@ and command evidence before checking it. Gate reviews assess concrete evidence.
 | Done / task | Owner / depends on | Requirement | Acceptance and verification | Intended files / scope |
 | --- | --- | --- | --- | --- |
 | [x] T04 Archive local inputs | MM / T03 | R02,N02 | Immutable bytes and config receipts survive malformed parse; raw digest mismatch rejected. Test injected bad input and no-network import. | new `pipeline.py`, `storage.py`, `tests/test_presidential_archive.py`, receipt fixture (4). |
-| [ ] T05 Preserve approval gate | MM / T04 | R03,R02 | Only evidenced APPROVED rows with eligible manual sources promote. Test overlap, absent evidence, candidate source and missing coverage failures. | new `review_workbook.py`, `tests/test_presidential_controls.py`, invented workbook fixture, controls fixture (4). |
+| [x] T05 Preserve approval gate | MM / T04 | R03,R02 | Only evidenced APPROVED rows with eligible manual sources promote. Test overlap, absent evidence, candidate source and missing coverage failures. | new `review_workbook.py`, `tests/test_presidential_controls.py`, invented workbook fixture, controls fixture (4). |
 | [ ] T06 Publish one atomic baseline | MM / T05 | R05,R06,N02 | One strict v1 dataset+sidecar/catalog/pointer is coherent; crash at each file/pointer boundary retains previous valid state. | new `publication.py`, `tests/test_presidential_publication.py`, schema fixture, `storage.py`, `pipeline.py` (5). |
 
 **G2 checkpoint:** installed-package fixture path produces a recoverable immutable
