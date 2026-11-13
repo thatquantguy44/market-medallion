@@ -129,7 +129,7 @@ def test_five_dataset_and_evidence_counts_are_explicitly_fictional(tmp_path, mon
 
 def test_frozen_label_missing_capture_and_unadmitted_version_block_build(tmp_path, monkeypatch):
     root, ids, review = fixture(tmp_path, monkeypatch)
-    with pytest.raises(ValueError, match="profile"):
+    with pytest.raises(ValueError, match="Frozen review"):
         build_full_bundle(
             root, ids, review["review_id"], profile_id="public-reconstruction-2026-11-03"
         )

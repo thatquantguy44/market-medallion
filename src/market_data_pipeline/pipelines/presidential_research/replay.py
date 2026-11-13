@@ -12,6 +12,7 @@ from zipfile import BadZipFile
 
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
 
+from .frozen import evidence_inventory
 from .parsers import ParseError, parse_payload
 from .publication import _sync_dir, _write, publish_baseline, publish_full_bundle, read_current
 from .review import load_review_version
@@ -121,6 +122,7 @@ def replay_selected_snapshot(source_root, destination, *, replayed_at: datetime)
         current = read_current(source)
         captures = _capture_inventory(source)
         reviews = _review_inventory(source)
+        manual_evidence = evidence_inventory(source)
         connection = _database(source, create=False)
         try:
             audit = connection.execute(
@@ -175,6 +177,11 @@ def replay_selected_snapshot(source_root, destination, *, replayed_at: datetime)
                 _write(directory / name, value)
             if parse_bytes is not None:
                 _write(directory / "parse.json", parse_bytes)
+        if manual_evidence:
+            directory = staging / "manual-evidence"
+            directory.mkdir(mode=0o700)
+            for identity, value in manual_evidence.items():
+                _write(directory / identity, value)
         for receipt, files in reviews:
             directory = staging / "review" / receipt["review_id"]
             directory.mkdir(parents=True, mode=0o700)

@@ -66,6 +66,7 @@ def _tree_digest():
         "canonical.py",
         "config.py",
         "dataset.py",
+        "frozen.py",
         "parsers.py",
         "pipeline.py",
         "provenance.py",

@@ -118,3 +118,32 @@ def test_untrusted_manifest_types_and_size_limits_fail_cleanly(tmp_path, monkeyp
         restore_backup(archive, tmp_path / "oversized", restored_at=NOW + timedelta(hours=2))
     assert not (tmp_path / "invalid").exists()
     assert not (tmp_path / "oversized").exists()
+
+
+def test_content_pinned_evidence_survives_replay_backup_and_restore(tmp_path, monkeypatch):
+    import hashlib
+
+    from market_data_pipeline.pipelines.presidential_research.frozen import (
+        evidence_inventory,
+        import_manual_evidence,
+    )
+    from market_data_pipeline.pipelines.presidential_research.replay import replay_selected_snapshot
+
+    root, _ = prepared(tmp_path, monkeypatch)
+    source = tmp_path / "review-evidence"
+    source.write_bytes(b"fictional review evidence")
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    import_manual_evidence(root, source, digest)
+    replay = tmp_path / "replayed"
+    replay_selected_snapshot(root, replay, replayed_at=NOW + timedelta(hours=1))
+    assert evidence_inventory(replay)[digest] == source.read_bytes()
+    archive = tmp_path / "evidence.zip"
+    backup_selected_snapshot(root, archive, backed_up_at=NOW + timedelta(hours=1))
+    restored = tmp_path / "restored-evidence"
+    restore_backup(archive, restored, restored_at=NOW + timedelta(hours=2))
+    assert evidence_inventory(restored)[digest] == source.read_bytes()
+    (root / "manual-evidence" / digest).write_bytes(b"tampered")
+    with pytest.raises(ValueError, match="digest"):
+        backup_selected_snapshot(
+            root, tmp_path / "tampered.zip", backed_up_at=NOW + timedelta(hours=1)
+        )

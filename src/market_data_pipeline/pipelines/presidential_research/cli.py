@@ -16,6 +16,7 @@ from .backup import backup_selected_snapshot, restore_backup
 from .bundle_assembly import build_full_bundle
 from .candidate_review import prepare_candidates, validate_control_rows
 from .config import load_config
+from .frozen import import_manual_evidence
 from .operations import research_health
 from .pipeline import import_local_capture
 from .publication import (
@@ -28,8 +29,8 @@ from .publication import (
 )
 from .replay import replay_selected_snapshot
 from .review import load_review_version, promote_review_workbook
-from .storage import MAX_CONFIG_BYTES, MAX_RAW_BYTES, _read_bounded, load_capture
 from .source import fetch_selected
+from .storage import MAX_CONFIG_BYTES, MAX_RAW_BYTES, _read_bounded, load_capture
 from .warehouse import ingest_capture
 
 _SOURCE = re.compile(r"^[A-Z][A-Z0-9_]{0,79}$")
@@ -77,6 +78,10 @@ def _parser():
     )
     imported.add_argument("--sha256")
     imported.add_argument("--retrieved-at", help="evidenced ISO timestamp, distinct from admission")
+    evidence = commands.add_parser("import-evidence", help="archive content-pinned manual evidence")
+    workspace(evidence)
+    evidence.add_argument("--file", type=Path, required=True)
+    evidence.add_argument("--sha256", required=True)
     parse = commands.add_parser("parse", help="admit explicitly selected captured versions")
     workspace(parse)
     config(parse)
@@ -230,6 +235,9 @@ def main(argv=None):
             result = fetch_selected(args.workspace, load_config(args.config), args.source)
             _print(result)
             return 0 if result["status"] == "SUCCEEDED" else 1
+        elif command == "import-evidence":
+            digest = import_manual_evidence(args.workspace, args.file, args.sha256)
+            _print({"status": "IMPORTED", "sha256": digest})
         elif command == "import-local":
             config = load_config(args.config)
             retrieved = (

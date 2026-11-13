@@ -29,6 +29,8 @@ def _allowed(name):
     parts = name.split("/")
     if any(part in ("", ".", "..") for part in parts):
         return False
+    if len(parts) == 2 and parts[0] == "manual-evidence":
+        return bool(_HASH.fullmatch(parts[1]))
     if len(parts) == 4 and parts[0] == "bronze":
         return bool(
             _SOURCE.fullmatch(parts[1])

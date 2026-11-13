@@ -23,6 +23,7 @@ from .assemble import (
 )
 from .config import load_config
 from .dataset import parse_dataset_bytes
+from .frozen import PROFILE, validate_frozen_inputs
 from .provenance import canonical_json, write_json
 from .quality import read_csv
 from .review import load_review_version
@@ -75,7 +76,9 @@ def build_full_bundle(root, selected_captures, review_id, *, profile_id):
     fixture = input_kind == "SYNTHETIC_FIXTURE"
     if fixture != (review["evidence_kind"] == "SYNTHETIC_FIXTURE"):
         raise ValueError("Selected input and review classifications do not match.")
-    if (fixture and not profile_id.startswith("fixture-")) or (
+    if profile_id == PROFILE:
+        validate_frozen_inputs(root, receipts, review)
+    elif (fixture and not profile_id.startswith("fixture-")) or (
         not fixture and not profile_id.startswith("local-")
     ):
         raise ValueError("profile is not admitted for these selected inputs.")
@@ -133,7 +136,9 @@ def build_full_bundle(root, selected_captures, review_id, *, profile_id):
             additional_sources=[inherited_source],
             additional_inputs=inherited_inputs,
             dataset_id_suffix="-inherited-conditions",
-            title_suffix=" with inherited conditions",
+            title_suffix=" with frozen inherited conditions"
+            if profile_id == PROFILE
+            else " with inherited conditions",
         )
         robustness_inherited, robustness_inherited_manifest = build_annual_dataset(
             inherited_config,
@@ -145,7 +150,9 @@ def build_full_bundle(root, selected_captures, review_id, *, profile_id):
             additional_sources=[inherited_source],
             additional_inputs=inherited_inputs,
             dataset_id_suffix="-inherited-conditions",
-            title_suffix=" with inherited conditions",
+            title_suffix=" with frozen inherited conditions"
+            if profile_id == PROFILE
+            else " with inherited conditions",
         )
         if common["windows"] != robustness["windows"]:
             raise ValueError("Common-sample windows do not match.")
@@ -169,6 +176,10 @@ def build_full_bundle(root, selected_captures, review_id, *, profile_id):
                 robustness_inherited_manifest,
             ),
         }
+        if profile_id == PROFILE:
+            expected = (88, 87, 87, 68, 68)
+            if tuple(len(dataset["windows"]) for dataset, _ in datasets.values()) != expected:
+                raise ValueError("Frozen dataset sample counts do not match profile.")
         for dataset, manifest in datasets.values():
             if fixture:
                 dataset["title"] = "Fictional fixture — " + dataset["title"]
@@ -190,6 +201,10 @@ def build_full_bundle(root, selected_captures, review_id, *, profile_id):
             comparison, read_csv(controls_path)
         )
         write_presidential_cycle_analysis(work, cycle_ledger, cycle_summary)
+        if profile_id == PROFILE and (
+            len(cycle_ledger) != 86 or cycle_summary["observations"] != 86
+        ):
+            raise ValueError("Frozen cycle sample does not match profile.")
         names = (
             "public-series-comparison.json",
             "public-series-comparison.csv",
