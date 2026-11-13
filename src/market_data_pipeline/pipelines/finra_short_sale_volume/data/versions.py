@@ -90,3 +90,29 @@ def content_hash(body):
 def _ratio_text(value):
     with localcontext(capitals=1):
         return str(value)
+
+
+def removal(previous):
+    body = {
+        k: previous[k]
+        for k in (
+            "trade_date",
+            "facility_id",
+            "symbol_raw",
+            "reporting_facility_code",
+            "market_raw",
+            "ratio_method",
+            "ratio_unit",
+        )
+    }
+    body.update(
+        short_volume=None,
+        short_exempt_volume=None,
+        total_volume=None,
+        short_share=None,
+        short_exempt_share=None,
+        source_row=None,
+        removed=True,
+    )
+    body["value_sha256"] = content_hash(body)
+    return body

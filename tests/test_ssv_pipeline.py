@@ -101,6 +101,7 @@ def test_ssv_ac06_exact_bronze_silver_gold_reopen_and_audit(tmp_path, manifest, 
         and snapshot["clock_basis"] == "LOCAL_CAPTURE"
     )
     assert audits(tmp_path, manifest)[0]["status"] == "APPLIED"
+    assert audits(tmp_path, manifest)[0]["profile"]["parser"]["max_rows"] == 5000
     assert state(tmp_path, manifest)["latest_attempt_status"] == "COMPLETE"
     saved = json.loads(next((tmp_path / "bronze" / "captures").glob("*/receipt.json")).read_text())
     assert (

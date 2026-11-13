@@ -105,7 +105,7 @@ def ingest_capture(
         existing = store.terminal(db, saved, profile)
         if existing is not None:
             return existing
-        attempt = store.start(db, saved, day.isoformat(), facility.id, now())
+        attempt = store.start(db, saved, day.isoformat(), facility.id, now(), profile)
         try:
             checkpoint("after_start")
             page, parsed = parse_capture(
@@ -118,7 +118,7 @@ def ingest_capture(
                 max_rows=max_rows,
             )
             parsed = dict(parsed, trade_date=day.isoformat(), facility_id=facility.id)
-            return store.apply(db, saved, page, parsed, profile, attempt, now(), checkpoint)
+            return store.apply(db, saved, page, parsed, profile, attempt, now, checkpoint)
         except Exception:
             store.failed(db, attempt, now())
             raise RuntimeError("FINRA local execution failed; original capture retained") from None
@@ -164,6 +164,14 @@ def read_gold(
                 ),
             ).fetchone()
         capture_id = selected[0] if selected else None
+        if capture_id:
+            stored = store.capture_result(db, capture_id)
+            if stored is None or (
+                stored["trade_date"],
+                stored["facility_id"],
+                stored["status"],
+            ) != (day, facility, "APPLIED"):
+                raise ValueError("FINRA committed partition scope mismatch")
         return {
             "trade_date": day,
             "facility_id": facility,
@@ -181,15 +189,18 @@ def audit(root, manifest, *, approved_use, operation, limit=20):
     if type(limit) is not int or not 1 <= limit <= 1000:
         raise ValueError("FINRA audit limit must be 1..1000")
     with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
-        return [
-            dict(row)
-            for row in db.execute(
-                "SELECT attempt_id,capture_id,run_id,trade_date,facility_id,archived_at,capt"
-                "ure_sequence,started_at,completed_at,status,error_code FROM attempts ORDER "
-                "BY rowid DESC LIMIT ?",
-                (limit,),
-            )
-        ]
+        result = []
+        for row in db.execute(
+            "SELECT attempt_id,capture_id,run_id,trade_date,facility_id,"
+            "archived_at,capture_sequence,"
+            "started_at,completed_at,status,error_code,profile FROM attempts "
+            "ORDER BY rowid DESC LIMIT ?",
+            (limit,),
+        ):
+            value = dict(row)
+            value["profile"] = store._document(value["profile"])
+            result.append(value)
+        return result
 
 
 def coverage(root, manifest, *, approved_use, operation, trade_date, facility_id, symbol=None):
@@ -207,9 +218,15 @@ def coverage(root, manifest, *, approved_use, operation, trade_date, facility_id
             (day, facility),
         ).fetchone()
         committed = current[0] if current else None
-        count = db.execute(
-            "SELECT COUNT(*) FROM capture_rows WHERE capture_id=?", (committed,)
-        ).fetchone()[0]
+        if committed:
+            stored = store.capture_result(db, committed)
+            if stored is None or (
+                stored["trade_date"],
+                stored["facility_id"],
+                stored["status"],
+            ) != (day, facility, "APPLIED"):
+                raise ValueError("FINRA committed partition scope mismatch")
+        count = len(store.rows(db, committed)) if committed else 0
         states = {
             "APPLIED": "COMPLETE" if count else "VALID_EMPTY",
             "REJECTED": "FAILED",
@@ -251,17 +268,11 @@ def history(root, manifest, *, approved_use, operation, trade_date, facility_id,
     with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
         result = []
         for row in db.execute(
-            "SELECT version_id,body FROM versions WHERE trade_date=? "
+            "SELECT version_id,trade_date,facility_id,symbol_raw,first_seen_at,capture_sequence,"
+            "capture_id,removed,body FROM versions WHERE trade_date=? "
             "AND facility_id=? AND symbol_raw=? "
             "ORDER BY first_seen_at DESC,capture_sequence DESC LIMIT ?",
             (day, facility, symbol, limit),
         ):
-            value = store._document(row["body"])
-            identity = value.pop("version_id")
-            from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import digest
-
-            if identity != row["version_id"] or digest(value) != identity:
-                raise ValueError("FINRA stored version integrity mismatch")
-            value["version_id"] = identity
-            result.append(value)
+            result.append(store.version_document(row))
         return list(reversed(result))

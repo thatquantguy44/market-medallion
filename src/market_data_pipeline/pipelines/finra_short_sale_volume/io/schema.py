@@ -8,7 +8,7 @@ CREATE TABLE attempts (
  attempt_id TEXT PRIMARY KEY, capture_id TEXT NOT NULL, run_id TEXT NOT NULL,
  trade_date TEXT NOT NULL, facility_id TEXT NOT NULL, archived_at TEXT NOT NULL,
  capture_sequence INTEGER NOT NULL, started_at TEXT NOT NULL, completed_at TEXT,
- status TEXT NOT NULL, error_code TEXT
+ status TEXT NOT NULL, error_code TEXT, profile TEXT NOT NULL
 );
 CREATE TABLE captures (
  capture_id TEXT PRIMARY KEY, capture_sequence INTEGER NOT NULL UNIQUE,

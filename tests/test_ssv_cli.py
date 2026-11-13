@@ -52,7 +52,8 @@ def test_ssv_ac06_cli_and_script_complete_local_loop(tmp_path):
     config = config_file(tmp_path)
     payload = (FIXTURES / "invented-valid.json").read_bytes()
     wire = tmp_path / "receipt.json"
-    wire.write_text(json.dumps(receipt(payload)))
+    wire.write_bytes((FIXTURES / "invented-valid.receipt.json").read_bytes())
+    assert json.loads(wire.read_bytes()) == receipt(payload)
     result = invoke(
         config,
         "run",
