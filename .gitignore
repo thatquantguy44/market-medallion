@@ -26,3 +26,7 @@ config/naaim-delayed.yml
 .aws/
 
 /config/fomc_meeting_minutes/*.local.yml
+
+/config/aaii/*.local.yml
+
+/config/reg_sho_thresholds/*.local.yml

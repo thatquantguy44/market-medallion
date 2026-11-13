@@ -5,6 +5,7 @@ from pathlib import Path
 
 import dagster as dg
 
+from market_data_pipeline.orchestration.slack_alerts import slack_failure_sensor
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.operations import (
     retain_captures,
 )
@@ -106,4 +107,9 @@ def daily_schedule(_context):
     )
 
 
-defs = dg.Definitions(assets=[naaim_delayed_capture], jobs=[job], schedules=[daily_schedule])
+defs = dg.Definitions(
+    assets=[naaim_delayed_capture],
+    jobs=[job],
+    schedules=[daily_schedule],
+    sensors=[slack_failure_sensor(pipeline="naaim_exposure_public_delayed", job=job)],
+)

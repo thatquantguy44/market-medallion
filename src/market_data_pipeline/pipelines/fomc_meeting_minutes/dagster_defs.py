@@ -6,6 +6,7 @@ from pathlib import Path
 
 import dagster as dg
 
+from market_data_pipeline.orchestration.slack_alerts import slack_failure_sensor
 from market_data_pipeline.pipelines.fomc_meeting_minutes.config import load_config
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.operations import (
     load_operations,
@@ -188,4 +189,9 @@ def schedule(context):
     )
 
 
-defs = dg.Definitions(assets=[fomc_meeting_minutes_refresh], jobs=[job], schedules=[schedule])
+defs = dg.Definitions(
+    assets=[fomc_meeting_minutes_refresh],
+    jobs=[job],
+    schedules=[schedule],
+    sensors=[slack_failure_sensor(pipeline="fomc_meeting_minutes", job=job)],
+)
