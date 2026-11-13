@@ -190,3 +190,190 @@ def test_ssv_ac11_preflight_budgets_leave_no_destination(tmp_path, manifest, lim
     with pytest.raises(ValueError, match="budget"):
         rebuild(source, target, manifest, **limit)
     assert not target.exists()
+
+
+@pytest.mark.parametrize("damage", ["missing_profile", "boolean_slot"])
+def test_ssv_ac11_malformed_but_self_hashed_metadata_refuses(tmp_path, manifest, damage):
+    import sqlite3
+
+    from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import digest, encoded
+
+    source, target = tmp_path / "source", tmp_path / "target"
+    saved = ingest(source, manifest)
+    if damage == "missing_profile":
+        with sqlite3.connect(source / "warehouse/ssv.sqlite") as db:
+            body = json.loads(db.execute("SELECT body FROM captures").fetchone()[0])
+            body.pop("profile")
+            body.pop("result_sha256")
+            body["result_sha256"] = digest(body)
+            db.execute("UPDATE captures SET body=?", (encoded(body).decode(),))
+    else:
+        path = source / "bronze/sequences" / f"{saved['capture_sequence']:020d}.json"
+        value = json.loads(path.read_bytes())
+        value["capture_sequence"] = True
+        path.write_bytes(encoded(value))
+    with pytest.raises(ValueError):
+        rebuild(source, target, manifest)
+    assert not target.exists()
+
+
+def test_ssv_ac11_install_response_failure_leaves_a_complete_verified_target(tmp_path, manifest):
+    source, target = tmp_path / "source", tmp_path / "target"
+    ingest(source, manifest)
+
+    def fail(at):
+        if at == "installed":
+            raise OSError("invented response failure")
+
+    with pytest.raises(OSError):
+        rebuild(source, target, manifest, _fault=fail)
+    assert logical(source, manifest) == logical(target, manifest)
+    assert json.loads((target / "replay.json").read_bytes())["status"] == "SUCCEEDED"
+    with pytest.raises(ValueError, match="empty destination"):
+        rebuild(source, target, manifest)
+
+
+def test_ssv_ac11_concurrent_destination_population_is_preserved(tmp_path, manifest):
+    source, target = tmp_path / "source", tmp_path / "target"
+    ingest(source, manifest)
+
+    def competing_writer(at):
+        if at == "before_install":
+            target.mkdir()
+            (target / "owned.txt").write_text("preserve concurrent content")
+
+    with pytest.raises(ValueError, match="empty destination"):
+        rebuild(source, target, manifest, _fault=competing_writer)
+    assert (target / "owned.txt").read_text() == "preserve concurrent content"
+    assert len(list(target.iterdir())) == 1 and not list(tmp_path.glob(".target.replay-*"))
+
+
+def test_ssv_ac11_replay_retains_allocator_only_slots_and_extra_parse_profiles(tmp_path, manifest):
+    from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import encoded
+    from market_data_pipeline.pipelines.finra_short_sale_volume.io import bronze
+
+    source, target = tmp_path / "source", tmp_path / "target"
+    saved = ingest(source, manifest)
+    bronze.parse_capture(source, saved["capture_id"], manifest, **OPTIONS, max_rows=500)
+    slot = dict(schema_id=bronze.CONTRACT, capture_sequence=2, capture_id=str(uuid4()))
+    (source / "bronze/sequences/00000000000000000002.json").write_bytes(encoded(slot))
+    before = inventory(source)
+    rebuild(source, target, manifest)
+    assert inventory(source) == before
+    assert (target / "bronze/sequences/00000000000000000002.json").read_bytes() == encoded(slot)
+    assert len(list((target / "bronze/outcomes").glob("*/*.json"))) == 2
+    assert ingest(target, manifest, clock=NOW + timedelta(seconds=1))["capture_sequence"] == 3
+
+
+@pytest.mark.parametrize(
+    "fixture,total",
+    [("invented-fractional.json", 1), ("invented-valid.json", 2), ("4096digits", 2)],
+)
+def test_ssv_ac11_replay_preserves_wide_and_fractional_quantities(
+    tmp_path, manifest, fixture, total
+):
+    from test_ssv_parser import FIXTURES
+
+    source, target = tmp_path / "source", tmp_path / "target"
+    raw = (FIXTURES / ("invented-valid.json" if fixture == "4096digits" else fixture)).read_bytes()
+    if fixture == "4096digits":
+        raw = raw.replace(b'"shortParQuantity": 40', b'"shortParQuantity": ' + b"9" * 4096)
+        raw = raw.replace(b'"totalParQuantity": 100', b'"totalParQuantity": ' + b"9" * 4096)
+    ingest(source, manifest, payload=raw, total=total)
+    rebuild(source, target, manifest)
+    assert gold(source, manifest) == gold(target, manifest)
+    assert logical(source, manifest) == logical(target, manifest)
+
+
+def test_ssv_ac11_research_and_new_publication_match_across_dates_and_facilities(
+    tmp_path, manifest
+):
+    from test_ssv_parser import FIXTURES, receipt
+
+    from market_data_pipeline.pipelines.finra_short_sale_volume import (
+        pipeline,
+        publication,
+        research,
+    )
+
+    source, target = tmp_path / "source", tmp_path / "target"
+    raw = (FIXTURES / "invented-valid.json").read_bytes()
+    for index, (day, facility) in enumerate(
+        [
+            ("2026-11-06", "nyse_trf"),
+            ("2026-11-06", "nasdaq_carteret_trf"),
+            ("2026-11-09", "nyse_trf"),
+            ("2026-11-09", "nasdaq_carteret_trf"),
+        ]
+    ):
+        selected = next(f for f in manifest.facilities if f.id == facility)
+        payload = (
+            raw.replace(b"2026-11-09", day.encode())
+            .replace(b'"NYTRF"', json.dumps(selected.reporting_facility_code).encode())
+            .replace(b'"N"', json.dumps(selected.market_code).encode())
+        )
+        pipeline.run(
+            source,
+            payload,
+            manifest,
+            receipt(payload, day=day, market=selected.market_code),
+            **OPTIONS,
+            clock=lambda index=index: NOW + timedelta(seconds=index),
+        )
+    rebuild(source, target, manifest)
+    request = dict(trade_date="2026-11-09", scopes=["nyse_trf", "nasdaq_carteret_trf"])
+    assert research.research_gold(source, manifest, **OPTIONS, **request) == research.research_gold(
+        target, manifest, **OPTIONS, **request
+    )
+    first = publication.publish(source, manifest, **OPTIONS, **request)
+    second = publication.publish(target, manifest, **OPTIONS, **request)
+    assert first["generation_id"] != second["generation_id"]
+    assert (
+        publication.read(source, manifest, **OPTIONS)["tables"]
+        == publication.read(target, manifest, **OPTIONS)["tables"]
+    )
+
+
+@pytest.mark.parametrize(
+    "limit",
+    [
+        {"max_captures": 0},
+        {"max_captures": True},
+        {"max_captures": 10001},
+        {"max_total_bytes": 0},
+        {"max_state_rows": True},
+    ],
+)
+def test_ssv_ac11_invalid_limits_refuse_before_root_io(tmp_path, manifest, limit):
+    with pytest.raises(ValueError):
+        rebuild(tmp_path / "absent", tmp_path / "target", manifest, **limit)
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_ssv_ac11_populated_replay_and_fixture_kind_relabelling_refuse(tmp_path, manifest):
+    from test_ssv_bronze import provider_grant
+
+    source, target = tmp_path / "source", tmp_path / "target"
+    ingest(source, manifest)
+    with pytest.raises(PermissionError):
+        replay.replay(
+            source, target, manifest, approved_use=provider_grant(), operation="transform"
+        )
+    assert not target.exists()
+    rebuild(source, target, manifest)
+    before = inventory(target)
+    with pytest.raises(ValueError, match="empty destination"):
+        rebuild(source, target, manifest)
+    assert inventory(target) == before
+
+
+def test_ssv_ac11_capture_limit_preflight_precedes_state_materialization(
+    tmp_path, manifest, monkeypatch
+):
+    source, target = tmp_path / "source", tmp_path / "target"
+    ingest(source, manifest)
+    ingest(source, manifest, clock=NOW + timedelta(seconds=1))
+    monkeypatch.setattr(replay, "_state", lambda *a: pytest.fail("oversized ledger materialized"))
+    with pytest.raises(ValueError, match="budget"):
+        rebuild(source, target, manifest, max_captures=1)
+    assert not target.exists()

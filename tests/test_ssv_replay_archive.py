@@ -60,3 +60,29 @@ def test_ssv_ac11_archive_metadata_damage_refuses(tmp_path, manifest, damage):
         path.write_bytes(encoded(value))
     with pytest.raises(ValueError):
         selected(source, manifest)
+
+
+def test_ssv_ac11_archive_clock_regression_refuses_original_sequence_order(tmp_path, manifest):
+    from datetime import timedelta
+    from uuid import uuid4
+
+    from test_ssv_bronze import NOW
+    from test_ssv_parser import FIXTURES, receipt
+
+    from market_data_pipeline.pipelines.finra_short_sale_volume.io import bronze
+
+    source = tmp_path / "source"
+    ingest(source, manifest)
+    payload = (FIXTURES / "invented-valid.json").read_bytes()
+    saved = bronze.archive_input(
+        source,
+        payload,
+        manifest,
+        receipt(payload),
+        **OPTIONS,
+        run_id=str(uuid4()),
+        archived_at=NOW - timedelta(seconds=1),
+    )
+    bronze.parse_capture(source, saved["capture_id"], manifest, **OPTIONS)
+    with pytest.raises(ValueError, match="regressed"):
+        selected(source, manifest)

@@ -227,6 +227,8 @@ def replay(
         store.connect(source, manifest, **shared) as db,
     ):
         db.execute("BEGIN")
+        if db.execute("SELECT COUNT(*) FROM captures").fetchone()[0] > max_captures:
+            raise ValueError("FINRA replay capture count budget exceeded")
         original, state_bytes = _state(db, max_state_rows, max_total_bytes)
         archive = replay_archive.inventory(
             source,
@@ -237,7 +239,10 @@ def replay(
             max_rows=max_rows,
             max_total_bytes=max_total_bytes - state_bytes,
         )
-        terminal = _ledger(db, original, archive, max_bytes, max_rows)
+        try:
+            terminal = _ledger(db, original, archive, max_bytes, max_rows)
+        except (KeyError, TypeError, AttributeError):
+            raise ValueError("FINRA replay source ledger is malformed") from None
         source_identity = bronze._json(source / "warehouse/identity.json")
         _empty(destination)
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -331,6 +336,7 @@ def replay(
             _empty(destination)
             os.rename(stage, destination)
             bronze._sync(destination.parent)
+            _fault("installed")
             return result
         finally:
             if stage.exists():

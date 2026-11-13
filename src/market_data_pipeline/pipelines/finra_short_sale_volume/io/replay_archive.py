@@ -46,7 +46,7 @@ def inventory(
     files = [base / "format.json"]
     for directory in captures:
         bronze._identity(directory.name)
-        if not directory.is_dir() or {p.name for p in directory.iterdir()} != {
+        if not directory.is_dir() or {p.name for p in _paths(directory, 2)} != {
             "payload.bin",
             "receipt.json",
         }:
@@ -80,10 +80,15 @@ def inventory(
     for slot in slots:
         number = int(slot.stem)
         value = bronze._json(slot)
-        if not 1 <= number < 2**63 or value != dict(
-            schema_id=bronze.CONTRACT,
-            capture_sequence=number,
-            capture_id=bronze._identity(value.get("capture_id")),
+        if (
+            type(value.get("capture_sequence")) is not int
+            or not 1 <= number < 2**63
+            or value
+            != dict(
+                schema_id=bronze.CONTRACT,
+                capture_sequence=number,
+                capture_id=bronze._identity(value.get("capture_id")),
+            )
         ):
             raise ValueError("FINRA replay sequence identity mismatch")
         reservations[number] = value
