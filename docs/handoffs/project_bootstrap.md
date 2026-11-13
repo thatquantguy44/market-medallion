@@ -19,7 +19,33 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — bounded FOMC 1995–1996 accepted
+## 2026-11-13 current pickup — 1997–2026 backfill in progress
+
+The user extended this same PR to all listed, officially released minutes from
+1997 through 2026. PR #18 is draft while the range is processed. The no-HTTP plan
+has 15 two-year batches and 391 planned references, including reused/shared
+references; all fit unchanged operation limits. Only the two FOMC status sensors
+are active; acquisition schedules remain stopped and NAAIM stays paused.
+
+The local operator process uses the existing Dagster job and writes durable
+progress to ignored `data/fomc_meeting_minutes/1997-2026-backfill-review/state.json`.
+Its plan and per-batch `verified.json`/`checkpoint.json` records are in that same
+directory. The current operator script is `/tmp/fomc_1997_2026_bulk.py` (execution
+session 20405); source/runtime code is unchanged. Read the state before resuming;
+the operator skips accepted batches and resumes an already-launched active run.
+Do not launch duplicate batches. On failure, diagnose its recorded phase and code
+rather than skipping references or widening budgets blindly.
+
+Each batch must pass source-span/coverage, immutable original/row checks, coherent
+publication and health, schema/filesystem backup+restore, offline selected-catalog/
+latest-operation replay and acknowledged Slack success before the next batch.
+A completed checkpoint serves as the next before-state. The initial fresh
+checkpoint preserves all 172 captures from the accepted 1990–1996 archive.
+Do not claim full-range acceptance until all planned batches and final per-year
+reference reconciliation pass. Unreleased, unavailable, not-listed and extraction
+review outcomes remain explicit, with actual capture-time first-seen clocks.
+
+## 2026-11-13 accepted checkpoint — bounded FOMC 1995–1996 accepted
 
 The user authorized the next historical batch after merged PR #17. Current branch:
 `feat/fomc-1995-1996-backfill`, from main `f3925f8`, in
