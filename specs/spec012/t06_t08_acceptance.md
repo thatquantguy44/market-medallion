@@ -1,7 +1,8 @@
 # SSV-T06–T08 acceptance — audited local partitions and observed membership
 
 Accepted 2026-11-13 on `feat/finra-local-revisions`, from merged T05 PR #20
-(main `9f211ce`). Traces **SSV-REQ06–08 / SSV-AC06–08**, with C04–C07 and
+(main `9f211ce`), delivered in [PR #23](https://github.com/thatquantguy44/market-medallion/pull/23).
+Current main `6790882` was integrated, preserving the presidential-research release. Traces **SSV-REQ06–08 / SSV-AC06–08**, with C04–C07 and
 unchanged T01–T05 admission, schema, parser, numeric and Bronze behavior.
 [Storage contract](local_storage_contract.md), [tasks](todo.md),
 [sanitized conformance](evidence/t06_t08_local_conformance.json),
@@ -44,7 +45,7 @@ clocks stay null; first-seen never borrows trade date or T02 request start.
 
 - **64 new checks:** 17 pipeline, eight CLI/config, 17 revision/cutoff/context and
   22 replacement/absence/integrity/failure tests. All **379 FINRA tests** pass.
-- Full offline suite: **1,233 passed, 92 optional integration skips**. External
+- Full offline suite: **1,367 passed, 92 optional integration skips**. External
   database variables were unset. Existing AAII/NAAIM/FOMC/SEC code and tests were
   unchanged. CI separately checks the repository's isolated PostgreSQL paths.
 - Ruff lint/format, wheel/sdist builds and source/config/script readback pass.

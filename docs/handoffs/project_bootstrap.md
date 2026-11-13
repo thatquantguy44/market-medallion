@@ -22,7 +22,8 @@ new live schedules default stopped.
 ## 2026-11-13 current pickup — FINRA T06–T08 accepted; T09 next
 
 Branch **`feat/finra-local-revisions`** starts from merged T05 PR #20 / main
-`9f211ce`. The user selected the next few working tasks; **SSV-T01–T08 are complete**
+`9f211ce`, delivered in [PR #23](https://github.com/thatquantguy44/market-medallion/pull/23). Current main `6790882`
+was integrated before final verification. The user selected the next few working tasks; **SSV-T01–T08 are complete**
 for the selected three-TRF API profile. Read [acceptance](../../specs/spec012/t06_t08_acceptance.md),
 [storage contract](../../specs/spec012/local_storage_contract.md),
 [evidence](../../specs/spec012/evidence/t06_t08_local_conformance.json),
@@ -38,7 +39,7 @@ must resume before another capture. Root/schema/kind identity and version/result
 membership integrity refuse missing or damaged stores rather than recreating them.
 
 **Verification:** 64 new checks / **379 FINRA tests**; full offline suite
-**1,233 passed, 92 optional skips**. Lint/format and package source/config/script
+**1,367 passed, 92 optional skips**. Lint/format and package source/config/script
 readback pass. Nine invented CLI/script captures reconcile nine audits, eight
 versions, eleven complete-membership rows and all cutoff counts. All seven prior
 FINRA core/Bronze modules are unchanged. Agent-skills integrity passes; QuantSmith
@@ -53,7 +54,7 @@ replay, acquisition, health/export and Dagster remain later tasks. No provider-d
 request, credential loading, operational-store change, Slack message or service
 activation was part of this slice. NAAIM remains paused and schedules stopped.
 
-Commit/push the completed slice and track the new PR's current-head checks/reviews.
+The completed slice is committed and pushed in PR #23. Track its current-head checks/reviews.
 The user's prior commit/push/PR authorization persists; no merge is implied.
 Earlier FINRA and FOMC acceptance records below remain historical and unchanged.
 

@@ -172,7 +172,7 @@ I/O; unsafe scope and recognizable credential bodies refuse before storage.
 November 13: [local acceptance](t06_t08_acceptance.md) records audited SQLite,
 revisions/reversions/removals and cutoff membership, exercised through the
 configured CLI/script. 64 new checks / 379 FINRA tests and full offline suite
-**1,233 passed / 92 optional skips** pass. [Nine invented captures](evidence/t06_t08_local_conformance.json)
+**1,367 passed / 92 optional skips** pass. [Nine invented captures](evidence/t06_t08_local_conformance.json)
 reconcile without provider-data requests, credential loading or operational-store
 changes. Existing admission, source schema, parser and T05 raw storage remain
 unchanged. The bounded fixture slice does not establish real complete-partition

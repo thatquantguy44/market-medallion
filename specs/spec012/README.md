@@ -29,7 +29,8 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 **Start here:** [T06–T08 acceptance](t06_t08_acceptance.md),
 [local storage contract](local_storage_contract.md) and
 [SSV-T09](todo.md#ssv-t09--add-scope-safe-research-gold).
-Continue on `feat/finra-local-revisions`, based on merged T05 PR #20 / main `9f211ce`.
+Continue on `feat/finra-local-revisions` in [PR #23](https://github.com/thatquantguy44/market-medallion/pull/23),
+from merged T05 PR #20 / main `9f211ce`, with current main `6790882` integrated.
 T01–T08 are complete; T09–T16 have not started. Checkpoint B is accepted for
 invented local input; real complete-partition/history coverage and G1/G2 remain open.
 
@@ -66,7 +67,7 @@ work. Existing provider payloads/stores remain ignored; do not substitute fixtur
 evidence for a source coverage claim. NAAIM stays paused and schedules stay stopped.
 
 **Verified:** 64 new local checks / **379 FINRA tests**; full offline suite
-**1,233 passed, 92 optional skips**. Lint/format and package checks pass.
+**1,367 passed, 92 optional skips**. Lint/format and package checks pass.
 [Nine-capture conformance](evidence/t06_t08_local_conformance.json) verifies
 nine audits/captures, eight immutable versions, eleven published memberships,
 two final Gold rows and cutoffs `[2,2,2,2,2,1,0,2,2]` using invented fixtures only.
@@ -150,7 +151,7 @@ Every task/test must cite these stable IDs. **379 focused FINRA tests** cover
 84 admission/registry, 111 parser, 71 arithmetic/codec, 49 Bronze and 64 local
 SQLite/config/CLI/revision/replacement checks. Implemented data entrypoints enforce
 admission before I/O. Acquisition/export and broader delivery acceptance remain
-pending. Full offline regression: **1,233 passed, 92 optional skips**.
+pending. Full offline regression: **1,367 passed, 92 optional skips**.
 [T06–T08 acceptance](t06_t08_acceptance.md).
 
 | Requirement | Acceptance criterion and planned evidence | Owning task |

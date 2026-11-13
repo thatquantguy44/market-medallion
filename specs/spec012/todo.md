@@ -175,7 +175,7 @@ not round source values; every original response remains in Bronze.
 **Verify:** 22 replacement/absence/integrity/failure cases. Nine-capture script
 conformance reconciles eight versions and all cutoff memberships.
 **Files:** `io/warehouse.py`, `data/versions.py`, `pipeline.py`, replacement tests.
-**Combined closeout:** **379 FINRA tests**, full offline **1,233 passed / 92 optional
+**Combined closeout:** **379 FINRA tests**, full offline **1,367 passed / 92 optional
 skips**, lint/format and package source readback pass. [Acceptance](t06_t08_acceptance.md).
 Next is SSV-T09; G1/G2 and complete real-source coverage remain open.
 

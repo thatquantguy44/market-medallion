@@ -177,9 +177,11 @@
     "version_tests": 17,
     "replacement_tests": 22,
     "finra_tests": 379,
-    "offline_tests_passed": 1233,
-    "optional_skips": 92
+    "offline_tests_passed": 1367,
+    "optional_skips": 92,
+    "pre_main_integration_offline_tests_passed": 1233
   },
   "coverage_limit": "Invented one-page partitions only. G1/G2, real-source coverage, cross-page assembly, Parquet, replay, acquisition, exports and jobs remain open.",
-  "next_task": "SSV-T09"
+  "next_task": "SSV-T09",
+  "integrated_main_revision": "6790882f470c2a9cb33f5efc274135c1f994a597"
 }
