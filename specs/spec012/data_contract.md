@@ -9,7 +9,8 @@ captures and sanitized outcomes. T06–T08 implement audited local SQLite
 versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/script.
 [Storage contract](local_storage_contract.md), [local acceptance](t06_t08_acceptance.md)
 and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
-Parquet/downstream exchange, acquisition and jobs remain unimplemented.
+T10 implements typed local Parquet and coherent publication/recovery. Replay,
+downstream exchange, acquisition and jobs remain unimplemented.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -147,8 +148,9 @@ T04 implements pure per-observation `short_share` and `short_exempt_share`.
 T06–T08 persist local per-observation Gold. T09 implements a separate read-only
 research query with exact disjoint aggregation, prior complete scope dates,
 calendar-day gaps and ratio changes. [Research contract](research_gold_contract.md)
-defines missingness, cutoff, population and rounding behavior. Typed snapshots,
-research interchange and acquisition remain later work. Compute `short_volume / total_volume` and
+defines missingness, cutoff, population and rounding behavior. T10 implements
+[typed snapshots and recovery](parquet_contract.md). Research interchange and
+acquisition remain later work. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
@@ -202,7 +204,8 @@ a value-version hash policy. The codec is not a provider JSON reader or an expor
 schema. T06–T08 store these exact text values inside canonical version documents in SQLite,
 with explicit key/time columns and hashed membership. Ratio text uses the fixed
 T04 method and a capital-E representation independent of ambient context.
-Parquet/storage-engine parity and research exchange remain later work.
+T10 adds verified Parquet parity through the exact-decimal struct described below.
+Research exchange remains later work.
 
 Python 3.12 [Decimal contexts and conversion](https://docs.python.org/3.12/library/decimal.html)
 define the local arithmetic and exact text behavior. **71 SSV-AC04 tests pass**
@@ -210,3 +213,26 @@ for invented inputs, exact Fraction checks and parser-to-JSON-text round trips.
 [Retained sample evidence](evidence/t04_semantics_conformance.json) additionally
 reconciles 18 quantity tuples and 12 ratios offline, without changing raw bytes,
 assigning clocks or promoting observations.
+
+## SSV-T10 local typed publication
+
+[Publication contract](parquet_contract.md) defines seven bounded tables: Silver
+history/removals, requested-day per-facility Gold, scoped research, observed-date
+coverage, terminal captures, membership and run attempts. All share one verified
+source read transaction and the T09 date/facility/cutoff semantics. Current
+partitions must be complete; valid empty is allowed. Capture/audit evidence
+retains later partial/failure states without replacing committed membership.
+
+Date32, UTC microsecond clocks, int64 counters, flags and identifiers are typed.
+Quantities/ratios use `finra-exact-decimal-tuple/1`, a struct containing boolean
+`negative`, string `digits` and int32 `exponent`. Decode with
+`data.snapshot.decode_decimal`; generic SQL decimal casts cannot represent the
+whole supported range. Shares and unit-1 ratios/method are explicit schema metadata
+and fingerprint inputs. `record_json` preserves each full canonical document;
+readback must match every typed column, not merely parse that JSON.
+
+The publication catalog owns immutable generation rows and COMMITTED/PUBLISHED
+journal state. Operational SQLite remains the mutable ingestion store. Published
+consumers select only `parquet/current.json`, verify its manifest/files against
+catalog facts and never join them to operational Gold as if they were one snapshot.
+This local projection is not the T14 research interchange contract.

@@ -2,13 +2,14 @@
 
 Selected 2026-11-10 for personal noncommercial internal research. This explicitly
 amends the original TXT-first plan; it does not enable website downloads.
-Traces: SSV-T01–SSV-T09 / SSV-REQ01–SSV-REQ09. Runtime implementation now includes
+Traces: SSV-T01–SSV-T10 / SSV-REQ01–SSV-REQ10. Runtime implementation now includes
 approved-use admission, the source schema/facility registry and a pure receipt-bound
 JSON parser plus pure quantity validation/text conversion and per-observation
 ratios, plus [immutable local Bronze and sanitized outcomes](bronze_contract.md).
 T06–T08 add [audited local SQLite and observed membership](local_storage_contract.md),
-with strict per-pipeline configuration and a tested CLI/script. Data acquisition,
-Parquet, replay, downstream exchange and jobs are not implemented.
+with strict per-pipeline configuration and a tested CLI/script. T09 research and
+[T10 typed local publication](parquet_contract.md) are implemented. Data acquisition,
+replay, downstream exchange and jobs are not implemented.
 
 ## Approved route and evidence
 
@@ -106,7 +107,7 @@ publication time unknown unless source-owned evidence establishes it.
 
 ## Implemented parser and next bounded scope
 
-SSV-T01–T09 are complete for the selected source profile: strict schema/version,
+SSV-T01–T10 are complete for the selected source profile: strict schema/version,
 explicit scope exclusions, disjoint selection, acquisition-date guards and a pure
 receipt-bound parser are implemented. It rejects truncated JSON, unknown/duplicate
 fields, duplicate logical keys, malformed dates, invalid symbols and impossible
@@ -119,7 +120,7 @@ T06–T08 subsequently deliver the [local loop](t06_t08_acceptance.md), revision
 complete replacement/removal and local UTC/sequence cutoffs. Partial pages never
 publish rows or infer removals. T09 adds [scope-safe research Gold](research_gold_contract.md),
 with exact matched sums, prior complete dates and local cutoff evidence.
-**Next: SSV-T10**, typed Parquet with a coherent publication journal.
+T10 adds [typed publication and C07 recovery](t10_acceptance.md). **Next: SSV-T11 replay.**
 T04's pure ratios and quantity codec do not constitute published Gold or persistence.
 
 Future local input is an approved archived JSON response and its request/scope
@@ -239,5 +240,5 @@ defines source quantity exactness, text representation and caller-context isolat
 quantity tuples and 12 ratios in the retained six-row sample; bytes are unchanged,
 pages remain partial and no observation was promoted or clock assigned. G1/G2
 remain open. T05 subsequently added [Bronze receipts](bronze_contract.md); next
-is T10 typed publication after accepted T06–T09 local SQLite/research slices. Provider
+is T11 replay after accepted T10 local typed publication. Provider
 acquisition and scheduling remain later tasks.

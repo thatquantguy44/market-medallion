@@ -1,0 +1,152 @@
+{
+  "automated_failure_boundaries": [
+    "staged",
+    "before_commit",
+    "committed",
+    "finalized",
+    "pointer",
+    "before_mark",
+    "published"
+  ],
+  "automated_precision_cases": [
+    "4096-digit coefficient",
+    "1E-4096 quantity",
+    "ratio exponent below -8192",
+    "exact fractional shares",
+    "signed zero and scale",
+    "null removals",
+    "empty fixed-schema tables"
+  ],
+  "automated_tests": {
+    "finra": 510,
+    "full_offline_passed": 1498,
+    "optional_skipped": 92
+  },
+  "base_main": "55dcd5d1baf3d84a8099b6c9286daf0222d387b4",
+  "branch": "feat/finra-parquet-publication",
+  "capture_status": "APPLIED",
+  "checks": {
+    "committed_pointer_has_no_published_watermark": true,
+    "original_source_inventory_unchanged": true,
+    "pending_journal_empty_after_recovery": true,
+    "pointer_and_manifest_equal_catalog": true,
+    "recovery_finishes_exact_pending_generation": true,
+    "typed_files_equal_catalog": true,
+    "unchanged_retry_reuses_generation": true
+  },
+  "cli_invocations": [
+    {
+      "command": "run",
+      "exit_code": 0
+    },
+    {
+      "command": "publish",
+      "exit_code": 0
+    },
+    {
+      "command": "published",
+      "exit_code": 0
+    },
+    {
+      "command": "publish",
+      "exit_code": 0
+    },
+    {
+      "command": "recover-publication",
+      "exit_code": 0
+    },
+    {
+      "command": "published",
+      "exit_code": 0
+    },
+    {
+      "command": "recover-publication",
+      "exit_code": 0
+    },
+    {
+      "command": "published",
+      "exit_code": 0
+    }
+  ],
+  "contract": "finra-ssv-parquet/1",
+  "files": {
+    "audit": {
+      "arrow_bytes": 720,
+      "bytes": 7396,
+      "file_sha256": "a3be98ebda03a80b09a803f91e5518acccb5066da72ead9fd65295447096105f",
+      "logical_sha256": "0df937c9688b662e4078fb3378eeaf4cd37d1e2ebe180732a1884a11dc72237c",
+      "rows": 1,
+      "schema_sha256": "c36001d1285268f61ec147964bf7ad70fb35fe7ffc3096618f9c439254c6eaad"
+    },
+    "captures": {
+      "arrow_bytes": 1066,
+      "bytes": 9597,
+      "file_sha256": "10fd9f53cb4e3a1f7acc870e9ac85b5095ea6e1c71a11409f7961bfe25bffd33",
+      "logical_sha256": "39470a4d9e6204cabc0443495fbed806f4bd85eedefb6ffd77b0746b8e85f86a",
+      "rows": 1,
+      "schema_sha256": "9c4b2f6ae35d84047bcc6c45f972063535bec1753a7bc1915e96ecda861c75fc"
+    },
+    "coverage": {
+      "arrow_bytes": 346,
+      "bytes": 4491,
+      "file_sha256": "cf0e28fb8e73a43999461808ba5f6e8789af2de62ca129da0b248b90a2d0f30c",
+      "logical_sha256": "fe88827fd6d5f4e06ec67dc4329db6ef92b02e2c38de428281152904f2722775",
+      "rows": 1,
+      "schema_sha256": "ce71b3d837497c029b2f43c44c7fc1c76a6e97006316f133f7da11c486bf8125"
+    },
+    "gold": {
+      "arrow_bytes": 2842,
+      "bytes": 15362,
+      "file_sha256": "437d814f19c1644b63ca1b4e757b015effb61afbae2ad985c0b5762514772fd8",
+      "logical_sha256": "0c6c1a5d561b27d0d6c19739dea571cffccbe916da81817046d0fd12ec4e0d6e",
+      "rows": 2,
+      "schema_sha256": "f8cc75c19b9f4ed57912765916471f6a799cb034448aa158a523704632282a6f"
+    },
+    "membership": {
+      "arrow_bytes": 606,
+      "bytes": 3806,
+      "file_sha256": "c589f268a0f11fdc8424bec8591cc5a922059bcc5611b038bf0282987b213b86",
+      "logical_sha256": "eba426c5269792d985313524020ba42515e6f5df139e8013bdf8b6b1dc581231",
+      "rows": 2,
+      "schema_sha256": "f3ba1d6cc05e1329569bbbe9cb65b86426509477bc46f8ee9dc07b5864308fc7"
+    },
+    "research": {
+      "arrow_bytes": 2813,
+      "bytes": 25771,
+      "file_sha256": "ba19b60e7351d5a2eaa951f93910a007a0a9f66c15a40b592dee30ef6069bacf",
+      "logical_sha256": "664e1dbb76f25a23be96524bf8742dda82f27f1896e26853adf8f6b1acf8a13b",
+      "rows": 2,
+      "schema_sha256": "e607d5289935e3e64c1103f74015ed254e8c11022b60fd1e0069f5b21b41cd7b"
+    },
+    "silver": {
+      "arrow_bytes": 2576,
+      "bytes": 14233,
+      "file_sha256": "0db7ec18469abb47416f6406607da556ee80610ad38a34524ae371e0a57414c0",
+      "logical_sha256": "85a750468b7cfab99fa811a46915e620401ae507a09d74f28e8dc7e8761d7e92",
+      "rows": 2,
+      "schema_sha256": "70eeeb80ca9e6a3c9989f1f544794100518917a5bb3b899885ccedebbfe317e4"
+    }
+  },
+  "initial_generation_id": "b79066e8-1330-4e75-a348-7c618581f850",
+  "input_kind": "invented_fixture",
+  "limitations": [
+    "Local POSIX snapshots; explicit publication command",
+    "G1/G2 and complete real-source coverage open",
+    "Replay is T11; no source acquisition, service, Slack or schedule activation"
+  ],
+  "preserved_source_files": 10,
+  "provider_requests": 0,
+  "recorded_at": "2026-11-13T19:01:18.828249+00:00",
+  "recovered_generation_id": "1588cf26-7481-4fbc-a31c-e2e11940faab",
+  "row_counts": {
+    "audit": 1,
+    "captures": 1,
+    "coverage": 1,
+    "gold": 2,
+    "membership": 2,
+    "research": 2,
+    "silver": 2
+  },
+  "schema_id": "finra-ssv-t10-conformance/1",
+  "source_inventory_sha256": "a34f733959e9b30a0678845aa307a028583a458307e62014d73afecbe52b6bfb"
+}

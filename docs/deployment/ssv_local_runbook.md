@@ -1,8 +1,9 @@
-# FINRA short-sale-volume — local SQLite runbook
+# FINRA short-sale-volume — local SQLite and Parquet runbook
 
 Delivered by [SSV-T06–T08](../../specs/spec012/t06_t08_acceptance.md).
 This is an offline local source-owned pipeline with strict configuration, immutable
-Bronze, audited SQLite Silver/Gold and observed revisions/removals. G1/G2,
+Bronze, audited SQLite Silver/Gold, observed revisions/removals and explicit typed
+Parquet publication with a frozen catalog. G1/G2,
 real-source conformance and recurring operation remain open. No FINRA Dagster job
 or Slack alert sensor exists yet.
 
@@ -95,7 +96,8 @@ Do not move/copy a bound warehouse to a new root as a restore procedure.
 
 New versions are bounded at 250,000; raw reservations at T05's 100,000. Audit/history
 queries accept limits 1–1,000. Database changes and the partition pointer commit in
-one transaction; file/Parquet publication and its recovery journal remain T10.
+one transaction. T10 separately publishes immutable database/file generations;
+see the recovery protocol below.
 Replay/backup tooling is not delivered here. Existing operational databases,
 source samples, services and schedules were not used for local acceptance.
 
@@ -134,4 +136,59 @@ the report, not provider publication. Operational freshness remains separately
 inspectable with `coverage` and `audit`.
 
 [T09 acceptance](../../specs/spec012/t09_acceptance.md) records numeric, missingness,
-cutoff, concurrency and actual-script evidence. Typed file publication remains T10.
+cutoff, concurrency and actual-script evidence. T10 adds the publication below.
+
+## T10 typed publication and recovery
+
+After a complete local ingestion, explicitly publish the requested date/facility
+projection. The example includes Silver history within the bounded lookback,
+current Gold, scoped research, observed coverage, capture/membership and audit:
+
+```bash
+./scripts/run_finra_short_sale_volume.sh publish --config config/finra_short_sale_volume/pipeline.local.yml \
+  --trade-date 2026-11-09 --scope nyse_trf
+./scripts/run_finra_short_sale_volume.sh published --config config/finra_short_sale_volume/pipeline.local.yml --table gold
+./scripts/run_finra_short_sale_volume.sh recover-publication --config config/finra_short_sale_volume/pipeline.local.yml
+```
+
+Use `--scope listed_trfs` only when all three current partitions are complete.
+`publish` accepts research cutoff/lookback/symbol options. Current incomplete
+population refuses; empty/removal and partial-refresh evidence remain distinct.
+Resume any STARTED source attempt with `ingest-capture` before publishing.
+
+The operational warehouse can advance after publication. Published consumers use
+`parquet/current.json` and the frozen `parquet/catalog.sqlite` facts; they must
+not glob `snapshots/` or combine published files with newer operational Gold.
+`published` verifies the whole selected generation even with `--table` filtering.
+It checks root/source/catalog identity, schema, row/file hashes, typed fields and
+all catalog rows. Decimal quantities/ratios use an exact struct (negative, digits,
+exponent), with shares/unit-1 metadata; use `data.snapshot.decode_decimal` to
+reconstruct exact text, including large values, scale and signed zero.
+
+Publication shares `.ingest.lock` with source writers. It stages private files,
+commits frozen facts plus COMMITTED journal metadata, finalizes/fsyncs files,
+atomically replaces the sole pointer, then marks PUBLISHED. An ingestion APPLIED
+record does not prove publication. If interrupted, run `recover-publication`
+before a new publish. Recovery uses the original staged/final files and frozen
+facts even if ingestion is newer. It never rebuilds a pending snapshot from
+current operational tables. An unchanged current request/state reuses its UUID;
+returning to an earlier projection creates a new event. Supplying an old UUID
+cannot roll the pointer back.
+
+While the final mark is pending, a verified new pointer can report COMMITTED,
+null `published_at` and `recovery_required: true`. Otherwise the prior coherent
+PUBLISHED pointer remains readable, with recovery required. Missing/corrupt
+pending artifacts block recovery and new publication. A corrupt selected pointer,
+file, schema, catalog or binding refuses; do not delete/recreate bindings or edit
+the pointer to bypass this. Preserve evidence and investigate. Recovery removes
+only verified owned uncommitted staging orphans. No published files are deleted.
+A fresh catalog with no committed generation returns NO_PUBLICATION on recovery;
+`published` returns exit2 until a generation exists.
+
+Default publication/read budgets are250000 rows and128MiB total logical/Arrow/file
+bytes. Flags `--max-rows`/`--max-bytes` are separate from input YAML limits; bounded
+overrides are documented in the config guide. Publication history caps at10000
+generations. A root-bound catalog cannot be moved to another root as a restore.
+This is local POSIX publication; replay, backup tooling, research exchange and
+orchestration remain later tasks. [T10 acceptance](../../specs/spec012/t10_acceptance.md)
+records the seven injected failure boundaries, numeric parity and CLI evidence.

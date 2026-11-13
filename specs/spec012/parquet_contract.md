@@ -92,6 +92,6 @@ all FINRA/full offline tests, lint/format and package/source readback.
 
 References reviewed before coding: [Arrow structs](https://arrow.apache.org/docs/python/generated/pyarrow.struct.html),
 [Arrow decimal256 precision](https://arrow.apache.org/docs/python/generated/pyarrow.decimal256.html),
-[Parquet](https://arrow.apache.org/docs/python/parquet.html) and
+[Parquet](https://arrow.apache.org/docs/python/generated/pyarrow.parquet.write_table.html) and
 [FINRA API contract](https://developer.finra.org/docs). Runtime remains pinned to
 PyArrow23.0.1; no provider schema or use-grant change is inferred.
