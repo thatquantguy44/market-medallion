@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from market_data_pipeline.pipelines.finra_short_sale_volume import pipeline, research
+from market_data_pipeline.pipelines.finra_short_sale_volume import pipeline, publication, research
 from market_data_pipeline.pipelines.finra_short_sale_volume.config import load_config
 
 
@@ -30,6 +30,9 @@ def main(argv=None):
         "audit",
         "history",
         "research-gold",
+        "publish",
+        "published",
+        "recover-publication",
     ):
         command = commands.add_parser(name)
         command.add_argument("--config", required=True, type=Path)
@@ -40,17 +43,24 @@ def main(argv=None):
             command.add_argument("--run-id")
         if name == "ingest-capture":
             command.add_argument("--capture-id", required=True)
-        if name in ("gold", "coverage", "history", "research-gold"):
+        if name in ("gold", "coverage", "history", "research-gold", "publish"):
             command.add_argument("--trade-date", required=True)
         if name in ("gold", "coverage", "history"):
             command.add_argument("--facility", required=True)
-        if name == "research-gold":
+        if name in ("research-gold", "publish"):
             command.add_argument("--scope", action="append", required=True)
             command.add_argument("--lookback-days", type=int, default=366)
             command.add_argument("--max-symbols", type=int, default=15000)
-        if name in ("gold", "research-gold"):
+        if name in ("gold", "research-gold", "publish"):
             command.add_argument("--as-of", type=datetime.fromisoformat)
             command.add_argument("--as-of-sequence", type=int)
+        if name in ("publish", "published", "recover-publication"):
+            command.add_argument("--max-rows", type=int, default=250000)
+            command.add_argument("--max-bytes", type=int, default=128 * 1024 * 1024)
+        if name == "publish":
+            command.add_argument("--generation-id")
+        if name == "published":
+            command.add_argument("--table", choices=tuple(publication.FIELDS))
         if name == "coverage":
             command.add_argument("--symbol")
         if name == "history":
@@ -94,6 +104,28 @@ def main(argv=None):
                 max_bytes=config.max_bytes,
                 max_rows=config.max_rows,
             )
+        elif args.command in ("publish", "published", "recover-publication"):
+            options = dict(max_rows=args.max_rows, max_bytes=args.max_bytes)
+            if args.command == "publish":
+                result = publication.publish(
+                    config.root,
+                    config.manifest,
+                    **shared,
+                    **options,
+                    trade_date=args.trade_date,
+                    scopes=args.scope,
+                    as_of=args.as_of,
+                    as_of_sequence=args.as_of_sequence,
+                    lookback_days=args.lookback_days,
+                    max_symbols=args.max_symbols,
+                    generation_id=args.generation_id,
+                )
+            elif args.command == "published":
+                result = publication.read(
+                    config.root, config.manifest, **shared, **options, table=args.table
+                )
+            else:
+                result = publication.recover(config.root, config.manifest, **shared, **options)
         elif args.command == "research-gold":
             result = research.research_gold(
                 config.root,

@@ -154,6 +154,14 @@ def read_table(path, name, receipt, *, max_rows=DEFAULT_ROWS, max_bytes=DEFAULT_
             schema(name), check_metadata=True
         ):
             raise ValueError
+        # Bound decompression before allocating Arrow buffers, including record_json.
+        uncompressed = sum(
+            source.metadata.row_group(group).column(column).total_uncompressed_size
+            for group in range(source.metadata.num_row_groups)
+            for column in range(source.metadata.num_columns)
+        )
+        if uncompressed < 0 or uncompressed > max_bytes:
+            raise ValueError
         actual = source.read()
         rows = []
         for raw in actual.column("record_json").to_pylist():
