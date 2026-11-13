@@ -2,8 +2,10 @@
 
 import math
 from dataclasses import asdict, dataclass
+from datetime import datetime
 from email.utils import parsedate_to_datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -83,6 +85,15 @@ def selected_years(start, end, floor, settings):
     ):
         raise ValueError("FOMC operation requires an explicit bounded year range in scope")
     return tuple(range(start, end + 1))
+
+
+def recent_refresh_years(floor, settings, at):
+    """Resolve a bounded overlap window from an explicit New York calendar clock."""
+    if not isinstance(at, datetime) or at.utcoffset() is None:
+        raise ValueError("FOMC recent refresh requires an aware datetime")
+    validate_start_year(floor)
+    year = at.astimezone(ZoneInfo("America/New_York")).year
+    return selected_years(max(floor, year - settings.overlap_years), year, floor, settings)
 
 
 def select_documents(inventory, years, settings):
