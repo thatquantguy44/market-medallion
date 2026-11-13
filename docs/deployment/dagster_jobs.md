@@ -8,8 +8,9 @@ delivery status; this document owns operational execution details.
 ## Current local state
 
 The status below was verified in the local Dagster instance on 2026-11-03.
-Schedule state is runtime state, so recheck it before assuming a job will run. FOMC definitions and stopped defaults were
-verified on 2026-11-12; no FOMC schedule was activated.
+Schedule state is runtime state, so recheck it before assuming a job will run.
+FOMC job registration and all six stopped schedule states were verified through
+the root code location on 2026-11-12; no schedule was activated.
 
 | Pipeline | Job | Schedule | Cadence | Local state | Data root / retention | Activation boundary |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -77,8 +78,15 @@ a date/market or treat a failed list as empty. See the
 FOMC owns its manual bounded acquisition/publication job and stopped overlapping-
 year refresh in `fomc_meeting_minutes/dagster_defs.py`. Both call the source-owned
 runner; raw acquisition precedes one coherent inventory/text/chunk promotion.
-Live/scheduled gates are rechecked during execution, and health/recovery are local
-commands without HTTP. The 1990-onward scope, finite budgets and actual bounded
+Manual configs support explicit bounded backfills or opt-in `recent_years: true`
+refreshes. Both run source acquisition followed by no-HTTP archive health/readback
+before materialization. Metadata exposes operation commit status, catalog IDs,
+coverage and gaps; post-commit health failure fails the job while retaining the
+committed evidence. Whole-run and op retries default to zero, preserving
+source-owned bounded HTTP retries. Live/scheduled gates are rechecked during
+execution. Nonsecret [refresh](../../resources/dagster-fomc-refresh.yml) and
+[backfill](../../resources/dagster-fomc-backfill.yml) launch examples default to
+`live: false`. The 1990-onward scope, finite budgets and actual bounded
 acceptance are in the [FOMC runbook](fomc_runbook.md). No FOMC schedule is activated.
 
 ## Local operation

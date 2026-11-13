@@ -1,0 +1,12 @@
+# Supply your own ignored local configs and environment-backed credentials.
+# Set live: true explicitly after reviewing source access and finite budgets.
+ops:
+  fomc_meeting_minutes_refresh:
+    config:
+      config_path: config/fomc_meeting_minutes/pipeline.local.yml
+      operations_path: config/fomc_meeting_minutes/operations.local.yml
+      mode: backfill
+      start_year: 1995
+      end_year: 1996
+      live: false
+      scheduled: false

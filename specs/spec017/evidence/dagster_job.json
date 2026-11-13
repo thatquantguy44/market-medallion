@@ -1,0 +1,97 @@
+{
+  "all_six_schedules_stopped": true,
+  "asset": "fomc_meeting_minutes_refresh",
+  "base_merge_commit": "3bbb0c1426f399b7ec85d6f2eea9ed4d32cb49ef",
+  "branch": "feat/fomc-dagster-job",
+  "code_location": "market_data_pipeline.orchestration.dagster_defs",
+  "default_op_retries": 0,
+  "default_run_retries": 0,
+  "deployment_scope": "job_in_existing_code_location",
+  "examples_live_access": false,
+  "external_alert_destination_configured": false,
+  "external_integrations_deferred": true,
+  "fomc_with_isolated_postgres": {
+    "backend_checks": 70,
+    "new_job_backend_checks": 9,
+    "passed": 313
+  },
+  "full_history_complete": false,
+  "implementation_commit": "dd3913c",
+  "job": "fomc_meeting_minutes_job",
+  "launch_examples": [
+    "resources/dagster-fomc-refresh.yml",
+    "resources/dagster-fomc-backfill.yml"
+  ],
+  "live_provider_requests": 0,
+  "new_behavioral_cases": 46,
+  "next_historical_batch": [
+    1995,
+    1996
+  ],
+  "off_machine_backup_destination_configured": false,
+  "offline_http_fixtures_only": true,
+  "operational_captures": 146,
+  "operational_health": {
+    "chunk_coverage": {
+      "chunks": 993,
+      "complete_selected_unit_coverage": true,
+      "covered_characters": 2170946,
+      "eligible_characters": 1067452,
+      "eligible_chunks": 368,
+      "empty_units": 0,
+      "review_characters": 1103494,
+      "review_chunks": 625,
+      "separator_characters": 1200,
+      "sets": 73,
+      "source_unit_characters": 2170946
+    },
+    "full_history_complete": false,
+    "inventory_document_references": 470,
+    "inventory_meetings": 371,
+    "issues": [],
+    "last_operation_age_hours": 6.496419961111111,
+    "last_operation_id": "76d3b509-90a4-401d-b387-a93fc3c73c03",
+    "last_operation_status": "completed",
+    "pointers": {
+      "chunk": "f78b91e75d39c866ccde3d1701b8840f5944d131157fd95bd69f1b69b01713bf",
+      "inventory": "92ce7a64-3d00-4986-a997-fb3deba49961",
+      "text": "dec5dc5e3cf86a438ba4b95452358bb9ae6bc95a1f022dea414d5df385e555fa"
+    },
+    "request_performed": false,
+    "schema_id": "fomc-health/1",
+    "source_gap_outcomes": {
+      "not_listed": 49,
+      "review_required": 51,
+      "unacquired": 399,
+      "unavailable": 1
+    },
+    "status": "healthy",
+    "text_or_ocr_accuracy_certified": false
+  },
+  "operational_owned_tables": 29,
+  "operational_schema_migrations": 0,
+  "persistent_service_installed": false,
+  "post_run_health_required": true,
+  "recent_refresh_timezone": "America/New_York",
+  "registration_verified": true,
+  "schema_id": "fomc-dagster-job-acceptance/1",
+  "source_owned_bounded_http_retries_preserved": true,
+  "status": "accepted_locally",
+  "text_or_ocr_accuracy_certified": false,
+  "unit_and_regression": {
+    "optional_skipped": 80,
+    "passed": 991
+  },
+  "verification": {
+    "build_wheel_and_sdist": true,
+    "launch_config_schema_and_closed_gate": true,
+    "local_schedule_list": true,
+    "quantsmith_61_pinned_guidance_objects_verified": true,
+    "quantsmith_working_tree_matches_pin": false,
+    "root_job_list": true,
+    "ruff_check": true,
+    "ruff_format_check": true,
+    "workflow_snapshot_verified": true
+  },
+  "verified_at": "2026-11-12"
+}

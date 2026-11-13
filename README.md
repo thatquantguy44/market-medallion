@@ -28,8 +28,11 @@ and 470 references, with earlier snapshots preserved. Full history and text/OCR
 accuracy review remain incomplete. Other users can run
 [`scripts/run_fomc.sh`](scripts/run_fomc.sh) with their own config; see the
 [setup guide](docs/deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint).
-PR #14 now includes the 1992–1994 batches. Next core batch: 1995–1996. All
-schedules stay stopped; NAAIM remains paused and FINRA stays at SSV-T05.
+PR #14 merged the 1992–1994 batches. The
+[Dagster job](docs/deployment/fomc_runbook.md#dagster) supports recent refresh or
+explicit backfill, with post-run health and observable failure metadata.
+Next core batch: 1995–1996. All schedules stay stopped; NAAIM remains paused and
+FINRA stays at SSV-T05.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →

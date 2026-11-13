@@ -6,10 +6,14 @@ schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merg
 [PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
 script and 1991 continuation merged in
 [PR #13](https://github.com/thatquantguy44/market-medallion/pull/13). The accepted
-1992–1994 continuation is on `feat/fomc-1992-backfill` in
+1992–1994 continuation merged through
 [PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); track its
 [live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
-and current review threads.
+and current review threads. The current job-only deployment slice is on
+`feat/fomc-dagster-job` in
+[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15); track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/15/checks) and
+review threads. See its acceptance below.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 
@@ -207,6 +211,26 @@ PostgreSQL, including 61 backend checks. Full history and text/OCR accuracy rema
 incomplete. **Next core operation: bounded 1995–1996** through the same script
 with health/readback and recovery gates. Keep schedules stopped and embeddings
 separately selected.
+
+## Dagster job delivery (complete)
+
+Accepted locally 2026-11-12 on `feat/fomc-dagster-job`, from merged PR #14.
+The user narrowed deployment to a Dagster job. Reuse the registered FOMC job;
+no new service or schedule activation is included. The
+[contract](dagster_job_contract.md), [acceptance](dagster_job_acceptance.md) and
+[runbook](../../docs/deployment/fomc_runbook.md#dagster) record execution-time
+recent refresh, explicit historical bounds, post-run archive health, commit-aware
+failure metadata and redacted exceptions. Launch examples default to closed live
+gates. Source-owned HTTP retries and the advisory lock remain authoritative;
+Dagster automatic run/op retries default to zero.
+
+Verification: **991 regression tests passed, 80 optional skips; 313 FOMC checks
+passed with PostgreSQL enabled**, including 70 backend checks. Root registration,
+all six stopped schedules, lint/format and package checks passed. The unchanged
+operational archive remains healthy at 146 captures and 993 chunks; no provider
+request, migration or additional historical batch was performed. Alert and
+off-machine backup destinations remain configurable future work. Next core
+operation remains bounded 1995–1996.
 
 ## Later slices (not started)
 

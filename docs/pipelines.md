@@ -14,12 +14,16 @@ canonical operational inventory.
 ## Current build sequence and status
 
 FOMC T01–T06 and bounded 1990–1994 batches are accepted locally for listed
-references in the user-selected 1990-onward archive. PR #14 includes the 1992
+references in the user-selected 1990-onward archive. Merged PR #14 includes the 1992
 batch and the added 1993–1994 HTML minutes batch. Other users can run
 [`scripts/run_fomc.sh`](../scripts/run_fomc.sh) with their own config using the
 [setup guide](deployment/fomc_runbook.md#checkout-setup-and-script-entrypoint).
 No-request health/recovery, 29-table restore and offline replay are verified.
-Full history and text/OCR accuracy review remain incomplete. Next core batch:
+The [Dagster job delivery](../specs/spec017/dagster_job_acceptance.md) adds
+recent-refresh launch configs, post-run health gating and failure metadata with
+isolated backend coverage. The deployment scope is this job; recurrence and
+external alert/backup destinations remain deferred. Full history and text/OCR
+accuracy review remain incomplete. Next core batch:
 1995–1996. All FOMC schedules remain stopped; FINRA stays at SSV-T05 and NAAIM
 remains paused.
 
@@ -49,7 +53,7 @@ queue is retained but deferred behind this program. NAAIM remains paused.
 
 | Pipeline ID | Purpose | Status | Package under `src/market_data_pipeline/pipelines/` | Contract / evidence | Next scoped work |
 | --- | --- | --- | --- | --- | --- |
-| `fomc-meeting-minutes` | Official FOMC minutes and action/policy predecessors from 1990 onward | T01–T06 and 1990–1994 batches accepted locally for listed references: portable script, CLI/health/recovery, coherent publication and stopped Dagster; 371 current meeting claims, 470 references, 146 captures, 73 text representations, 624 PDF pages, 993 chunks (368 eligible, 625 review-flagged); full history/accuracy review incomplete | [`fomc_meeting_minutes/`](../src/market_data_pipeline/pipelines/fomc_meeting_minutes/); [`scripts/run_fomc.sh`](../scripts/run_fomc.sh) delegates to its CLI | [Spec017](../specs/spec017/README.md), [1993–1994 acceptance](../specs/spec017/1993_1994_acceptance.md), [evidence](../specs/spec017/evidence/1993_1994_script_backfill.json), [runbook](deployment/fomc_runbook.md) | Bounded 1995–1996 batch through the same script, then no-request health/readback and recovery gates; preserve source kinds, clocks and review gaps; schedule stays stopped. |
+| `fomc-meeting-minutes` | Official FOMC minutes and action/policy predecessors from 1990 onward | T01–T06 and 1990–1994 batches accepted locally for listed references: portable script, CLI/health/recovery, coherent publication and verified Dagster job with recent refresh, post-run health and safe failure metadata; schedule stopped; 371 current meeting claims, 470 references, 146 captures, 73 text representations, 624 PDF pages, 993 chunks (368 eligible, 625 review-flagged); full history/accuracy review incomplete | [`fomc_meeting_minutes/`](../src/market_data_pipeline/pipelines/fomc_meeting_minutes/); [`scripts/run_fomc.sh`](../scripts/run_fomc.sh) delegates to its CLI | [Spec017](../specs/spec017/README.md), [1993–1994 acceptance](../specs/spec017/1993_1994_acceptance.md), [evidence](../specs/spec017/evidence/1993_1994_script_backfill.json), [runbook](deployment/fomc_runbook.md), [job acceptance](../specs/spec017/dagster_job_acceptance.md) | Bounded 1995–1996 batch through the same script, then no-request health/readback and recovery gates; preserve source kinds, clocks and review gaps; schedule stays stopped. |
 | `presidential-research-data` | Reviewed political-control and public equity-return research inputs for QuantMeridian PRES | Spec016 draft and multi-repository plan saved; donor standalone pipeline exists in research website; no target port, jobs or consumer additions implemented | Proposed `presidential_research/`; absent | [Spec016](../specs/spec016/README.md), [integration plan](../specs/spec016/plan.md), [tasks](../specs/spec016/todo.md) | Review contract and start T01 baseline when implementation is selected; preserve existing source-build priority and NAAIM pause. |
 | `aaii-investor-sentiment` | Weekly investor sentiment shares and bull/bear spread | Implemented locally; recurring acquisition gated | [`aaii/`](../src/market_data_pipeline/pipelines/aaii/) | [Spec 002](../specs/spec002/README.md), [Spec 003](../specs/spec003/README.md), [checkpoint](handoffs/aaii_checkpoint.md), [runbook](deployment/aaii_runbook.md) | Local completion merged; November 10 manual Dagster refresh is healthy. Establish recurring access and production operations before scheduling. |
 | `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for authorized research | Local Bronze/Silver/delayed-latest slice, manual smoke, health check, stopped-by-user daily Dagster schedule and versioned research export verified; each scheduled run retains 365 days; every output explicitly labels the 3-month provider delay | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md), [job register](deployment/dagster_jobs.md) | **Paused.** Do not capture or restart the schedule until the user resumes NAAIM. On resumption, automate export after a successful capture, then retain attribution/delay labels. No warehouse or public service is added. |
