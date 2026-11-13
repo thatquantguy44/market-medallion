@@ -1,19 +1,25 @@
 # FOMC implementation tasks and pickup
 
-Updated: 2026-11-12. The user selected implementation, reuse of this project's
-PostgreSQL location and a pipeline-owned configuration folder. No recurring
-schedule or embedding service was selected. T01–T05 merged in PR #11. T06 merged in
-[PR #12](https://github.com/thatquantguy44/market-medallion/pull/12). The portable
-script and 1991 continuation merged in
-[PR #13](https://github.com/thatquantguy44/market-medallion/pull/13). The accepted
-1992–1994 continuation merged through
-[PR #14](https://github.com/thatquantguy44/market-medallion/pull/14); track its
-[live checks](https://github.com/thatquantguy44/market-medallion/pull/14/checks)
-and current review threads. The current job-only deployment slice is on
-`feat/fomc-dagster-job` in
-[PR #15](https://github.com/thatquantguy44/market-medallion/pull/15); track its
-[checks](https://github.com/thatquantguy44/market-medallion/pull/15/checks) and
-review threads. See its acceptance below.
+Updated: 2026-11-13. T01–T06, portable scripts, the Dagster job and configurable
+Slack status alerts are implemented. Current PR #18 adds accepted 1995–1996 and
+1997–2026 backfills on `feat/fomc-1995-1996-backfill`.
+Track its [checks](https://github.com/thatquantguy44/market-medallion/pull/18/checks)
+and current review threads; no merge or recurring acquisition is implied.
+
+## Current continuation
+
+All 21 bounded 1997–2026 Dagster batches and final annual reconciliation passed.
+Read [acceptance](1997_2026_acceptance.md), [contract](1997_2026_contract.md) and
+[evidence](evidence/1997_2026_dagster_backfill.json) for the current coverage,
+original/text/chunk checks, acknowledged Slack success and recovery gates.
+Listed-reference archival coverage now extends from 1990 through released 2026
+minutes as of November 13. No unacquired inventory references remain; source
+availability and text/OCR quality limitations remain explicit.
+
+Next: review flagged extraction/page quality; deliberately run a bounded recent
+refresh after the next official release. Keep capture-time first-seen clocks,
+observed corrections and finite limits. Schedules remain stopped; embeddings
+remain independently selected, NAAIM paused and FINRA at SSV-T05.
 
 ## FOMC-T01 — normalized inventory contract (complete)
 

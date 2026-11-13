@@ -4,6 +4,7 @@ import hashlib
 from dataclasses import asdict
 from pathlib import Path
 
+from market_data_pipeline.pipelines.fomc_meeting_minutes.data.assets import asset_framing_valid
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.dependencies import (
     discover_html_dependencies,
 )
@@ -128,8 +129,8 @@ class PostgresDependencyStore:
             identity, child, body = children[dependency.source_url]
             if child["kind"] != dependency.kind:
                 raise ValueError("FOMC dependency capture kind mismatch")
-            if dependency.kind == "asset" and not body.startswith(b"\x89PNG\r\n\x1a\n"):
-                raise ValueError("FOMC dependency image lacks the reviewed PNG signature")
+            if dependency.kind == "asset" and not asset_framing_valid(body, dependency.source_url):
+                raise ValueError("FOMC dependency image lacks the reviewed format framing")
             if dependency.kind == "document":
                 if dependency.source_url.lower().endswith(".pdf"):
                     if not body.startswith(b"%PDF-") or not body.rstrip().endswith(b"%%EOF"):

@@ -414,3 +414,91 @@ def test_concurrent_operation_is_refused_before_intent_or_probe(operation_archiv
         finally:
             other.connection.execute("SELECT pg_advisory_unlock(hashtextextended(%s,0))", (key,))
     assert calls == probes == []
+
+
+@pytest.mark.parametrize("image_format", ["gif", "jpg", "png"])
+def test_legacy_print_bytes_encoding_profile_and_chunks_survive_backfill(
+    operation_archive, image_format
+):
+    from test_fomc_legacy_print import HTML, URL
+
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.bronze import PostgresBronzeStore
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.catalog import PostgresTextCatalog
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.chunk_catalog import (
+        PostgresChunkCatalog,
+    )
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.chunks import PostgresChunkStore
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.io.text import PostgresTextStore
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.manifest import load_manifest
+
+    store, cfg, settings, payloads, calls, _, _ = operation_archive
+    payloads[BASE + "fomchistorical1990.htm"] = payloads[BASE + "fomchistorical1990.htm"].replace(
+        b"invented19900103.htm", b"fomc20080625.htm"
+    )
+    image_path, image = {
+        "gif": (
+            "gifjpg/fomcminutes20080716Chart1.gif",
+            bytes.fromhex(
+                "47494638396101000100800000000000ffffff21f90401000000002c00000000010001000002024401003b"
+            ),
+        ),
+        "jpg": ("gifjpg/fomcminutes20080716Chart1.jpg", b"\xff\xd8invented framed JPEG\xff\xd9"),
+        "png": ("images/sep20170315_figure1.png", b"\x89PNG\r\n\x1a\ninvented PNG"),
+    }[image_format]
+    document = HTML.replace(
+        b"Last: vote and footnote 1.</p>",
+        b"Last: vote and footnote 1.</p><img " + f'src="/monetarypolicy/{image_path}">'.encode(),
+    )
+    payloads[URL] = document
+    image_url = BASE + image_path
+    payloads[image_url] = image
+    payloads[BASE + "fomcminutes20080625ep.htm"] = (
+        b'<div id="article"><p>Invented complete SEP addendum.</p></div>'
+    )
+    first = run_operation(
+        cfg, settings, inventory_store=store, start_year=1990, end_year=1990, live=True
+    )
+    assert first["status"] == "completed", first
+    manifest = load_manifest(cfg.manifest)
+    bronze = PostgresBronzeStore(store)
+    text = PostgresTextStore(bronze)
+    catalog = PostgresTextCatalog(text).read(manifest, root=cfg.root)
+    binding = next(
+        b
+        for b in catalog["bindings"]
+        if bronze.read_capture(b["capture_id"])[0]["source_url"] == URL
+    )
+    assert bronze.read_capture(binding["capture_id"])[1] == document
+    extraction = text.read_extraction(binding["extraction_id"], root=cfg.root)
+    assert extraction["profile"]["html_encoding"] == "windows-1252"
+    assert "Zakrajšek’s" in extraction["full_text"]
+    chunks = PostgresChunkCatalog(PostgresChunkStore(text))
+    rows = chunks.read_chunks(manifest, root=cfg.root, eligible_only=False, current_only=False)
+    assert any("Zakrajšek’s" in row["text"] for row in rows)
+    before = len(calls)
+    repeated = run_operation(
+        cfg, settings, inventory_store=store, start_year=1990, end_year=1990, live=True
+    )
+    assert repeated["status"] == "completed"
+    assert len(calls) - before == 3  # Inventory refresh only; original documents are reused.
+    assert (
+        PostgresTextCatalog(text).read(manifest, root=cfg.root)["bindings"] == catalog["bindings"]
+    )
+    image_capture_id = store.connection.execute(
+        store._query("SELECT capture_id FROM {schema}.bronze_captures WHERE source_url=%s"),
+        (image_url,),
+    ).fetchone()[0]
+    assert bronze.read_capture(str(image_capture_id))[1] == image
+    pointers = repeated["pointers_after"]
+    payloads[image_url] = image[:7] if image_format == "png" else image[:-1]
+    failed = run_operation(
+        cfg,
+        settings,
+        inventory_store=store,
+        start_year=1990,
+        end_year=1990,
+        mode="refresh",
+        live=True,
+    )
+    assert failed["status"] == "partial" and failed["error_code"] == "invalid_asset"
+    assert failed["pointers_after"] == pointers

@@ -216,7 +216,7 @@ def _row(label, days, docs, body="fomc", kind="meeting", session=None, pending=F
     }
 
 
-def _parse_tree(payload, max_bytes):
+def _parse_tree(payload, max_bytes, *, encoding="utf-8-sig"):
     if (
         type(max_bytes) is not int
         or max_bytes <= 0
@@ -225,9 +225,13 @@ def _parse_tree(payload, max_bytes):
     ):
         raise ValueError("FOMC HTML payload exceeds the configured bound")
     try:
-        content = payload.decode("utf-8-sig")
+        content = payload.decode(encoding)
     except UnicodeError:
-        raise ValueError("FOMC HTML must be UTF-8") from None
+        raise ValueError(
+            "FOMC HTML must be UTF-8"
+            if encoding == "utf-8-sig"
+            else "FOMC HTML does not match its declared encoding"
+        ) from None
     tree = _Tree()
     tree.feed(content)
     return tree

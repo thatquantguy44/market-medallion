@@ -114,3 +114,83 @@ and contains the conference transcript/presentation material, not minutes. An
 empty minutes href is `unavailable`; raw exclusions and cross-reference claims
 are saved in the committed inventory evidence. See the acceptance record for
 source coverage, backup/restore and the one known source gap.
+
+## Historical print-container profile — 2007-era pages
+
+Reviewed 2026-11-13 during the 1997–2026 backfill. The official
+[June 2008 minutes](https://www.federalreserve.gov/monetarypolicy/fomc20080625.htm)
+use `#content > .generalContentText#printThis`, with a minutes heading and
+`#subNavLinks` linking the SEP explicitly described as “attached as an addendum”.
+The bounded profile accepts one such container on the reviewed
+`/monetarypolicy/fomc[minutes]YYYYMMDD[ep].htm` URL shapes. Missing/ambiguous
+containers and unsupported embedded resources still fail. The exact site
+image URLs for print, masthead, RSS and return-to-top are recorded as decorative
+exclusions. Source-declared GIF charts under
+`/monetarypolicy/gifjpg/fomcminutesYYYYMMDDChartN[suffix].gif` are additionally
+reviewed from the [June 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080625ep.htm).
+The [October 2007 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20071031.htm)
+also exercise inline emphasis before the declaration comma and an RSS control.
+Its [SEP addendum](https://www.federalreserve.gov/monetarypolicy/fomcminutes20071031ep.htm)
+declares the three additional exact `/monetarypolicy/gifjpg/chart1.gif`,
+`chart2a.gif` and `chart2b.gif` paths. They retain the same strict GIF framing,
+raw-byte and explicit image-review rules; no filenames are generated.
+The [January 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080130ep.htm)
+also declares date-prefixed GIFs without `fomcminutes` and one JPEG chart. The
+reviewed dated pattern therefore permits that optional prefix and GIF/JPEG
+extensions, with JPEG SOI/EOI framing from [ITU T.81 Table B.1](https://www.w3.org/Graphics/JPEG/itu-t81.pdf).
+The [April 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080430ep.htm)
+adds underscore-separated names. Admission therefore follows the reviewed
+`/monetarypolicy/gifjpg/` content-image folder, ASCII source-owned filenames and
+PNG/GIF/JPEG formats, alongside the prior PNG paths. Every URL must actually be
+declared inside the reviewed substantive container; none is generated. Other
+hosts/folders/formats and query-bearing URLs remain rejected. Source-owned framing checks match the URL
+format, GIF87a/GIF89a header, positive logical-screen dimensions and trailer;
+truncated/wrong-format assets cannot publish. Full raw chart bytes and lineage
+are retained, while extracted image content remains review-required. This is
+container framing, without image decoding or OCR. See the [GIF format](https://www.w3.org/Graphics/GIF/spec-gif89a.txt).
+
+These pages declare `iso-8859-1` in an early HTML meta element and contain
+Windows-1252 punctuation/names. Per the [HTML encoding labels](https://encoding.spec.whatwg.org/#names-and-labels),
+that label and `windows-1252` decode strictly with Windows-1252 on these reviewed
+document paths. Conflicting/unknown declarations and undefined bytes fail; no
+lossy replacement or inferred fallback is used. Inventories keep UTF-8 decoding
+and original response bytes/hashes remain canonical.
+
+Dependency receipts record `fomc-html-print/1`; new print extractions record
+`reviewed_print_container_blocks/1` and the canonical `html_encoding`. Existing
+UTF-8 article/body profiles remain unchanged. Offline reproduction of all 194
+pre-fix selected extractions preserved exact results and IDs. Invented reduced
+source-shaped regression cases cover first/last text, names/punctuation, tables,
+explicit SEP lineage, exact decorative exclusions, ambiguity and encoding
+refusal. An isolated operation test verifies original-byte readback, stored
+profile/text/chunks and repeat-backfill reuse.
+
+The [January 2009 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20090128.htm)
+use a relative clause with “that” in the explicit attached-addendum declaration.
+The declaration rule accepts direct statements and “which”/“that” clauses while
+requiring the named SEP to be an addendum to these minutes. A matching navigation
+label alone still records an unresolved association. Offline regressions verify
+both explicit declarations and refusal after that association is removed.
+
+The [January 2012 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20120125ep.htm)
+declares GIF charts in `/monetarypolicy/files/`, including
+`SEP20120125_figure1.gif`. That already reviewed content-image folder also admits
+source-declared GIF/JPEG files with the same framing/lineage checks. Existing
+PNG admission is preserved exactly. Unsupported formats, other hosts/folders,
+queries and wrong/truncated image framing still fail; image text stays review-required.
+
+The [March 2014 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20140319.htm)
+define “Summary of Economic Projections (SEP)” and later explicitly identify
+“SEP” as the attached minutes addendum. Acronym declarations are eligible only
+when that definition appears in the same substantive article; undefined acronyms
+and navigation labels alone remain unresolved. HTML spacing around the acronym's
+parentheses does not change the association. Original labels/hrefs are retained.
+
+The [March 2017 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20170315ep.htm)
+declares eleven PNG charts under `/monetarypolicy/images/`, including
+`sep20170315_figure1.png`. The reviewed content-image folders are now
+`/monetarypolicy/files/`, `/monetarypolicy/gifjpg/` and `/monetarypolicy/images/`,
+alongside the retained legacy root SEP-PNG pattern. Original filenames/URLs are
+preserved. The same format framing, byte/lineage checks and explicit image-review
+status apply. The site-wide `/images/` folder and unsupported formats stay rejected;
+regression coverage includes PNG/GIF/JPEG original readback, reuse and failure rollback.

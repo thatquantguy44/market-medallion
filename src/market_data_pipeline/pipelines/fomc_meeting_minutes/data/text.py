@@ -8,8 +8,8 @@ from io import BytesIO
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.dependencies import (
     discover_html_dependencies,
     document_container,
+    document_tree,
 )
-from market_data_pipeline.pipelines.fomc_meeting_minutes.data.native import _parse_tree
 
 PDF_VERSION = "7.0.1"
 
@@ -148,10 +148,19 @@ def _pdf(payload, url, settings):
 def _html(payload, url, manifest, settings):
     try:
         result = discover_html_dependencies(payload, url, manifest, max_bytes=settings["max_bytes"])
-        tree = _parse_tree(payload, settings["max_bytes"])
+        tree, encoding = document_tree(payload, url, settings["max_bytes"])
         article, _ = document_container(tree, url)
     except ValueError:
         return _finish(payload, url, settings, [], ["unsupported_html"])
+    printed = result.profile_id == "fomc-html-print/1"
+    if printed or encoding != "utf-8":
+        settings = {
+            **settings,
+            "html_mode": "reviewed_print_container_blocks/1"
+            if printed
+            else "reviewed_container_blocks/2",
+            "html_encoding": encoding,
+        }
     units, pieces, assets = [], [], []
     heading = ""
     block_tags = {
@@ -194,6 +203,8 @@ def _html(payload, url, manifest, settings):
             pieces.append(node if pre else re.sub(r"\s+", " ", node))
             return
         if node.tag in {"script", "style"}:
+            return
+        if printed and node.attrs.get("id") == "printIcon":
             return
         if node.tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
             flush()

@@ -38,9 +38,58 @@ class Dependencies:
     profile_id: str = "fomc-html-article/1"
 
 
+def _print_path(parent):
+    return bool(
+        re.fullmatch(r"/monetarypolicy/fomc(?:minutes)?[0-9]{8}(?:ep)?\.htm", urlsplit(parent).path)
+    )
+
+
+def document_tree(payload, parent, max_bytes):
+    """Decode declared legacy document encodings; inventories remain UTF-8.
+
+    The reviewed 2008 print pages declare ISO-8859-1, whose HTML encoding label
+    maps to Windows-1252 (encoding.spec.whatwg.org/#names-and-labels). No guessing
+    or replacement decoding is allowed. Original bytes retain their own hash.
+    """
+    encoding = "utf-8-sig"
+    if isinstance(payload, bytes) and _print_path(parent):
+        labels = {
+            label.lower()
+            for label in re.findall(
+                rb"<meta\b[^>]*\bcharset\s*=\s*[\"']?\s*([a-zA-Z0-9_-]+)", payload[:4096], re.I
+            )
+        }
+        if labels & {b"iso-8859-1", b"windows-1252"}:
+            if len(labels) != 1:
+                raise ValueError("FOMC HTML has conflicting encoding declarations")
+            encoding = "cp1252"
+        elif labels - {b"utf-8"}:
+            raise ValueError("FOMC HTML encoding is not reviewed")
+    return _parse_tree(payload, max_bytes, encoding=encoding), (
+        "windows-1252" if encoding == "cp1252" else "utf-8"
+    )
+
+
 def document_container(tree, parent):
     """Select the same reviewed substantive container for dependencies and text."""
     articles = [n for n in tree.root.descendants() if n.attrs.get("id") == "article"]
+    if not articles and _print_path(parent):
+        prints = [n for n in tree.root.descendants() if n.attrs.get("id") == "printThis"]
+        contents = [n for n in tree.root.descendants() if n.attrs.get("id") == "content"]
+        if (
+            len(prints) == len(contents) == 1
+            and "generalContentText" in prints[0].attrs.get("class", "").split()
+            and any(n is prints[0] for n in contents[0].descendants())
+            and any(
+                re.search(
+                    r"Minutes of the Federal Open Market Committee|Summary of Economic Projections",
+                    n.text(),
+                    re.I,
+                )
+                for n in prints[0].descendants(tag="h1")
+            )
+        ):
+            return prints[0], False
     legacy = False
     bodies = list(tree.root.descendants(tag="body"))
     if (
@@ -74,8 +123,9 @@ def discover_html_dependencies(
         raise ValueError("FOMC dependency discovery requires a canonical HTML document URL")
     if type(max_dependencies) is not int or not 1 <= max_dependencies <= 1000:
         raise ValueError("FOMC dependency limit must be an integer in [1,1000]")
-    tree = _parse_tree(payload, max_bytes)
+    tree, _ = document_tree(payload, parent, max_bytes)
     article, legacy = document_container(tree, parent)
+    printed = article.attrs.get("id") == "printThis"
     issues, exclusions, embedded, dependencies = [], [], set(), set()
     if any("href" in node.attrs for node in tree.root.descendants(tag="base")):
         issues.append(Issue("unsupported_base_url", "HTML base URL"))
@@ -114,10 +164,14 @@ def discover_html_dependencies(
         if len(dependencies) > max_dependencies:
             raise ValueError("FOMC dependency count exceeds the configured bound")
 
+    article_text = article.text()
+    sep_name = r"Summary of Economic Projections(?:\s*\(SEP\))?"
+    if re.search(r"\bSummary of Economic Projections\s*\(SEP\)", article_text, re.I):
+        sep_name = rf"(?:{sep_name}|\bSEP)"
     sep_declared = bool(
         re.search(
-            r"Summary of Economic Projections(?: \(SEP\))?, which is an addendum to these minutes",
-            article.text(),
+            sep_name + r"(?:\s*, which| that)? is (?:attached as )?an addendum to these minutes",
+            article_text,
             re.I,
         )
     )
@@ -155,13 +209,25 @@ def discover_html_dependencies(
     legacy_last_script = legacy_scripts[-1] if legacy_scripts else None
     for node in article.descendants():
         if (
-            legacy
+            (legacy or printed)
             and node.tag == "img"
             and urljoin(parent, node.attrs.get("src", ""))
-            in {
-                "https://www.federalreserve.gov/GIFJPG/sm_head2.gif",
-                "https://www.federalreserve.gov/gifjpg/uparrow.gif",
-            }
+            in (
+                {
+                    "https://www.federalreserve.gov/GIFJPG/sm_head2.gif",
+                    "https://www.federalreserve.gov/gifjpg/uparrow.gif",
+                }
+                | (
+                    {
+                        "https://www.federalreserve.gov/gifjpg/UPARROW.GIF",
+                        "https://www.federalreserve.gov/gifjpg/printIcon.gif",
+                        "https://www.federalreserve.gov/monetarypolicy/gifjpg/rss_small.jpg",
+                        "https://www.federalreserve.gov/monetarypolicy/gifjpg/masthead2.jpg",
+                    }
+                    if printed
+                    else set()
+                )
+            )
         ):
             exclusions.append(
                 Exclusion(node.attrs.get("alt", ""), node.attrs.get("src", ""), "legacy_site_image")
@@ -211,5 +277,9 @@ def discover_html_dependencies(
         tuple(sorted(embedded)),
         tuple(exclusions),
         tuple(issues),
-        "fomc-legacy-body/1" if legacy else "fomc-html-article/1",
+        "fomc-legacy-body/1"
+        if legacy
+        else "fomc-html-print/1"
+        if printed
+        else "fomc-html-article/1",
     )
