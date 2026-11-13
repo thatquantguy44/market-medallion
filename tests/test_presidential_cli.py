@@ -136,7 +136,7 @@ def test_complete_comparison_command_and_fetch_refusal(tmp_path, monkeypatch, ca
         arguments.extend(["--capture", f"{source}={capture_id}"])
     with patch("socket.socket", side_effect=AssertionError("network forbidden")):
         assert cli.main(arguments) == 0
-        assert cli.main(["fetch", "--workspace", str(root)]) == 2
+        assert cli.main(["fetch", "--workspace", str(root), "--source", "FF_MKT_001"]) == 2
     assert len(list(output.glob("*-annual.json"))) == 5
     assert json.loads((output / "bundle-info.json").read_text())["inputKind"] == "SYNTHETIC_FIXTURE"
     assert "SOURCE_ACCESS_NOT_REVIEWED" in capsys.readouterr().out

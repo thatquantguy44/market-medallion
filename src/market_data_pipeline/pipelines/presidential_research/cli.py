@@ -29,6 +29,7 @@ from .publication import (
 from .replay import replay_selected_snapshot
 from .review import load_review_version, promote_review_workbook
 from .storage import MAX_CONFIG_BYTES, MAX_RAW_BYTES, _read_bounded, load_capture
+from .source import fetch_selected
 from .warehouse import ingest_capture
 
 _SOURCE = re.compile(r"^[A-Z][A-Z0-9_]{0,79}$")
@@ -164,7 +165,7 @@ def _parser():
     )
     workspace(fetch)
     config(fetch)
-    fetch.add_argument("--source", action="append", default=[])
+    fetch.add_argument("--source", action="append", required=True)
     return parser
 
 
@@ -226,14 +227,9 @@ def main(argv=None):
             args.workspace.mkdir(parents=True, exist_ok=True)
             _print({"status": "INITIALIZED"})
         elif command == "fetch":
-            _print(
-                {
-                    "error": "SOURCE_ACCESS_NOT_REVIEWED",
-                    "message": "Live acquisition is disabled until source access "
-                    "and transport are reviewed.",
-                }
-            )
-            return 2
+            result = fetch_selected(args.workspace, load_config(args.config), args.source)
+            _print(result)
+            return 0 if result["status"] == "SUCCEEDED" else 1
         elif command == "import-local":
             config = load_config(args.config)
             retrieved = (
