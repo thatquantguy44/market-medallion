@@ -17,9 +17,18 @@ Configuration owns [`config/fomc_meeting_minutes/`](../../config/fomc_meeting_mi
 The [runbook](../../docs/deployment/fomc_runbook.md) documents setup and commands.
 [Dagster job delivery](dagster_job_acceptance.md) and [Spec018](../spec018/README.md)
 provide bounded refreshes, health gating and configurable success/failure alerts.
-Next core work: extraction-quality review and deliberate recent-year refresh for
-new releases/corrections. All schedules stay stopped; FINRA remains at SSV-T05,
-NAAIM remains paused and embeddings remain independently selected.
+The three quality slices are implemented on `feat/fomc-text-quality`, in
+[PR #19](https://github.com/thatquantguy44/market-medallion/pull/19):
+[Q01 offline reporting](quality_report_acceptance.md),
+[Q02 eight-case source review](quality_review_acceptance.md), and
+[Q03 remediation assessment](quality_remediation_acceptance.md).
+The bounded review found no confirmed native-parser defect; source-damaged HTML,
+OCR candidates and charts remain flagged. No extractor/profile change or new
+derivative publication was required. [Contract](quality_contract.md),
+[plan](quality_plan.md) and [tasks](quality_tasks.md) retain the separate gates.
+Additional quality review and deliberate recent-year refreshes remain next work.
+Schedules stay stopped; FINRA remains at SSV-T05, NAAIM paused and optional
+embeddings independently selected.
 
 ## Objective and scope
 
