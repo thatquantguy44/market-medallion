@@ -114,3 +114,40 @@ and contains the conference transcript/presentation material, not minutes. An
 empty minutes href is `unavailable`; raw exclusions and cross-reference claims
 are saved in the committed inventory evidence. See the acceptance record for
 source coverage, backup/restore and the one known source gap.
+
+## Historical print-container profile — 2007-era pages
+
+Reviewed 2026-11-13 during the 1997–2026 backfill. The official
+[June 2008 minutes](https://www.federalreserve.gov/monetarypolicy/fomc20080625.htm)
+use `#content > .generalContentText#printThis`, with a minutes heading and
+`#subNavLinks` linking the SEP explicitly described as “attached as an addendum”.
+The bounded profile accepts one such container on the reviewed
+`/monetarypolicy/fomc[minutes]YYYYMMDD[ep].htm` URL shapes. Missing/ambiguous
+containers and unsupported embedded resources still fail. The exact site
+image URLs for print, masthead, RSS and return-to-top are recorded as decorative
+exclusions. Source-declared GIF charts under
+`/monetarypolicy/gifjpg/fomcminutesYYYYMMDDChartN[suffix].gif` are additionally
+reviewed from the [June 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080625ep.htm).
+The [October 2007 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20071031.htm)
+also exercise inline emphasis before the declaration comma and an RSS control.
+Other GIF/JPEG paths remain unreviewed. Source-owned framing checks match the URL
+format, GIF87a/GIF89a header, positive logical-screen dimensions and trailer;
+truncated/wrong-format assets cannot publish. Full raw chart bytes and lineage
+are retained, while extracted image content remains review-required. This is
+container framing, without image decoding or OCR. See the [GIF format](https://www.w3.org/Graphics/GIF/spec-gif89a.txt).
+
+These pages declare `iso-8859-1` in an early HTML meta element and contain
+Windows-1252 punctuation/names. Per the [HTML encoding labels](https://encoding.spec.whatwg.org/#names-and-labels),
+that label and `windows-1252` decode strictly with Windows-1252 on these reviewed
+document paths. Conflicting/unknown declarations and undefined bytes fail; no
+lossy replacement or inferred fallback is used. Inventories keep UTF-8 decoding
+and original response bytes/hashes remain canonical.
+
+Dependency receipts record `fomc-html-print/1`; new print extractions record
+`reviewed_print_container_blocks/1` and the canonical `html_encoding`. Existing
+UTF-8 article/body profiles remain unchanged. Offline reproduction of all 194
+pre-fix selected extractions preserved exact results and IDs. Invented reduced
+source-shaped regression cases cover first/last text, names/punctuation, tables,
+explicit SEP lineage, exact decorative exclusions, ambiguity and encoding
+refusal. An isolated operation test verifies original-byte readback, stored
+profile/text/chunks and repeat-backfill reuse.

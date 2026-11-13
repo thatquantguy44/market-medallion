@@ -4,6 +4,7 @@ import time
 from collections import Counter
 from datetime import UTC, datetime
 
+from market_data_pipeline.pipelines.fomc_meeting_minutes.data.assets import asset_framing_valid
 from market_data_pipeline.pipelines.fomc_meeting_minutes.data.dependencies import (
     discover_html_dependencies,
 )
@@ -112,7 +113,7 @@ class Batch:
         if receipt["kind"] != kind:
             return False
         if kind == "asset":
-            return payload.startswith(b"\x89PNG\r\n\x1a\n")
+            return asset_framing_valid(payload, receipt["source_url"])
         if kind == "inventory":
             return True
         result = extract_text(payload, receipt["source_url"], self.manifest)
