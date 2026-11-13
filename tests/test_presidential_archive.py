@@ -144,3 +144,18 @@ def test_capture_requires_explicit_input_classification(tmp_path):
     config = load_config(CATALOG)
     with pytest.raises(ValueError, match="input kind"):
         import_local_capture(tmp_path, config, "FEDFUNDS_001", b"x", admitted_at=NOW, input_kind="")
+
+
+def test_malformed_zip_is_archived_with_rejection_receipt(tmp_path):
+    receipt, outcome = import_local_capture(
+        tmp_path,
+        load_config(CATALOG),
+        "FF_MKT_001",
+        b"not a zip",
+        input_kind="SYNTHETIC_FIXTURE",
+        admitted_at=NOW,
+    )
+    assert outcome["status"] == "REJECTED"
+    _, raw, _ = load_capture(tmp_path, "FF_MKT_001", receipt["capture_id"])
+    assert raw == b"not a zip"
+    assert (tmp_path / "bronze" / "FF_MKT_001" / receipt["capture_id"] / "parse.json").is_file()

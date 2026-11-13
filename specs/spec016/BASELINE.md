@@ -82,3 +82,14 @@ workspace, CSV, figure exports and v1 manifest limitations. Ninety-six focused
 consumer tests and all seven PRES browser tests passed, including CSV/SVG/PNG
 exports and responsive checks; typecheck and production build passed. This is
 a one-dataset fixture integration, not real-source qualification or a v2 replay.
+
+T10 adds source-owned observed-version SQLite facts and typed Parquet exports.
+Identical captures retain audit links without duplicating versions; corrections
+and reversions create new versions, equal-clock ordering uses capture sequence,
+and ambiguous backwards admission clocks are rejected. Original source tokens,
+missing policy values and review-only political candidates remain inspectable;
+Shiller workbook numbers are explicitly labeled as binary-decoded. Exact
+decimal bounds reject unrepresentable/rounded tokens. Queries recheck selected
+facts against archived inputs; corrupt inputs fail closed. The presidential suite
+passed 90 tests and an installed-wheel archive/publication/warehouse run passed
+32 tests. These are fictional tests, not historical admission or a live feed.

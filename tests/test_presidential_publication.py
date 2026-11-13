@@ -215,3 +215,27 @@ def test_staged_file_write_failure_keeps_previous_snapshot(tmp_path, monkeypatch
             created_at=NOW,
         )
     assert read_current(root)["catalog"]["snapshotId"] == first["snapshotId"]
+
+
+def test_unrepresentable_source_preserves_previous_snapshot(tmp_path):
+    root, capture, review = setup_fixture(tmp_path)
+    first = publish_baseline(
+        root, capture["capture_id"], review["review_id"], profile_id="fixture-v1", created_at=NOW
+    )
+    buffer = io.BytesIO()
+    with ZipFile(buffer, "w", ZIP_DEFLATED) as archive:
+        archive.writestr("factors.csv", ",Mkt-RF,SMB,HML,RF\n193601,0.1234567890123456789,0,0,0\n")
+    bad, outcome = import_local_capture(
+        root,
+        load_config(tmp_path / "sources.toml"),
+        "FF_MKT_001",
+        buffer.getvalue(),
+        admitted_at=NOW,
+        input_kind="SYNTHETIC_FIXTURE",
+    )
+    assert outcome["status"] == "PARSED"
+    with pytest.raises(ValueError, match="decimal128"):
+        publish_baseline(
+            root, bad["capture_id"], review["review_id"], profile_id="fixture-v2", created_at=NOW
+        )
+    assert read_current(root)["catalog"]["snapshotId"] == first["snapshotId"]

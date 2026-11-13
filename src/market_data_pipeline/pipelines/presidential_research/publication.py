@@ -18,10 +18,10 @@ from .assemble import build_annual_dataset, write_monthly_returns
 from .canonical import canonical_sha256
 from .config import load_config
 from .dataset import MAX_DATASET_BYTES, parse_dataset_bytes
-from .parsers import parse_payload
 from .provenance import canonical_json as donor_canonical_json
 from .review import load_review_version
 from .storage import _read_bounded, _safe_child, load_capture
+from .warehouse import _normalize
 
 _ID = re.compile(r"^[0-9a-f]{64}$")
 _PROFILE = re.compile(r"^[a-z][a-z0-9-]{0,79}$")
@@ -56,6 +56,7 @@ def _tree_digest():
         "review.py",
         "review_workbook.py",
         "storage.py",
+        "warehouse.py",
     )
     files = {name: _sha((directory / name).read_bytes()) for name in names}
     files["shared/files.py"] = _sha((directory.parent.parent / "shared" / "files.py").read_bytes())
@@ -194,7 +195,10 @@ def publish_baseline(root, capture_id, review_id, *, profile_id, created_at: dat
         config = load_config(work / "sources.toml")
         if config.source("FF_MKT_001").parser != capture["parser_id"]:
             raise ValueError("Archived parser differs from configuration.")
-        rows = parse_payload(capture["parser_id"], raw, "FF_MKT_001")
+        rows = [
+            {key: row[key] for key in ("date", "market_return_decimal", "source_id")}
+            for _, _, row in _normalize(capture["parser_id"], raw, "FF_MKT_001")
+        ]
         market_path = work / "monthly.csv"
         controls_path = work / "controls.csv"
         write_monthly_returns(market_path, rows)

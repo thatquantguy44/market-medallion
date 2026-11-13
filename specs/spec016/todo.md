@@ -1,6 +1,6 @@
 # Spec016 cross-repository tasks and acceptance tracker
 
-Status: **T01–T09 complete; remaining implementation tasks open**. Scope/requirements:
+Status: **T01–T10 complete; remaining implementation tasks open**. Scope/requirements:
 [README](README.md); design/gates: [plan](plan.md); interfaces:
 [data contract](data_contract.md). Task IDs are stable. Each row is one focused
 slice with no more than about five intended files; split a row before starting
@@ -47,7 +47,7 @@ pipeline provenance export is completed in T15.
 
 | Done / task | Owner / depends on | Requirement | Acceptance and verification | Intended files / scope |
 | --- | --- | --- | --- | --- |
-| [ ] T10 Add captured versions and Parquet | MM / T06 | R04,N01 | Identical/corrected/reverted facts preserve proper version history and cutoff ordering. SQLite reopen and exact typed Parquet roundtrip pass with equal-clock fixtures. | new `warehouse.py`, `storage.py`, `pipeline.py`, two storage/version tests (5). |
+| [x] T10 Add captured versions and Parquet | MM / T06 | R04,N01 | Identical/corrected/reverted facts preserve proper version history and cutoff ordering. SQLite reopen and exact typed Parquet roundtrip pass with equal-clock fixtures. | new `warehouse.py`, `storage.py`, `pipeline.py`, two storage/version tests (5). |
 | [ ] T11 Publish complete frozen bundle | MM / T10,T07 | R05,R09,R10 | All five datasets and required supplementary evidence are atomic and profile-bound. Missing required member blocks publication. Verify golden counts and source/approval bindings. | `assemble.py`, `publication.py`, frozen profile, publication test, comparison fixture (5). |
 | [ ] T12 Add paired/inherited views | QM / T09,T11 | R09 | Exact sample joins reconcile to two independent engine runs; inherited fields expose individual assumed dates. Mismatch/unequal samples fail; symmetric sensitivity exclusions verified. | new `comparison.ts`, comparison test, paired component, `page.tsx`, browser test (5). |
 

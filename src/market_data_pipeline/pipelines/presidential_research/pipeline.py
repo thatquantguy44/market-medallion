@@ -1,9 +1,11 @@
 """Explicit offline import; there is no provider network operation here."""
 
+from csv import Error as CSVError
 from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from zipfile import BadZipFile
 
 from market_data_pipeline.shared.files import atomic_json
 
@@ -48,7 +50,7 @@ def import_local_capture(
     try:
         rows = parse_payload(source.parser, payload, source_id)
         outcome = {"status": "PARSED", "row_count": len(rows), "error_code": None}
-    except (ParseError, ValueError, UnicodeError):
+    except (BadZipFile, CSVError, EOFError, ParseError, ValueError, UnicodeError):
         outcome = {"status": "REJECTED", "row_count": 0, "error_code": "PARSE_REJECTED"}
     atomic_json(Path(root) / "bronze" / source_id / receipt["capture_id"] / "parse.json", outcome)
     return receipt, outcome
