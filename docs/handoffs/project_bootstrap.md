@@ -23,7 +23,10 @@ new live schedules default stopped.
 
 PR #15 is merged. The user requested a different default port for
 `scripts/run_local_dagster.sh`. The follow-up branch is
-`fix/dagster-default-port`: the launcher now defaults to `127.0.0.1:3030`, with
+`fix/dagster-default-port` in
+[PR #16](https://github.com/thatquantguy44/market-medallion/pull/16); track its
+[checks](https://github.com/thatquantguy44/market-medallion/pull/16/checks) and
+review threads on the current head. The launcher defaults to `127.0.0.1:3030`, with
 `DAGSTER_PORT` configurable in ignored `.env` or the inherited environment.
 README and the job register use the launcher consistently. Port 3001 was already
 occupied during verification; 3030 had no listener. Syntax and isolated launcher
