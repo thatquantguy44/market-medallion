@@ -116,6 +116,30 @@ def research_gold(
     max_symbols=15000,
 ):
     _admit(manifest, approved_use, operation, {"fixture", "transform"})
+    request = validated_request(
+        manifest,
+        trade_date,
+        scopes,
+        as_of=as_of,
+        as_of_sequence=as_of_sequence,
+        lookback_days=lookback_days,
+        max_symbols=max_symbols,
+    )
+    with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
+        db.execute("BEGIN")
+        return report(db, request)
+
+
+def validated_request(
+    manifest,
+    trade_date,
+    scopes,
+    *,
+    as_of=None,
+    as_of_sequence=None,
+    lookback_days=366,
+    max_symbols=15000,
+):
     day = _day(trade_date)
     facilities = [f.id for f in select_scopes(scopes)]
     if set(facilities) - {f.id for f in manifest.facilities}:
@@ -133,70 +157,86 @@ def research_gold(
         earliest = (day - timedelta(days=lookback_days)).isoformat()
     except OverflowError:
         raise ValueError("FINRA research lookback exceeds date range") from None
-    with store.connect(root, manifest, approved_use=approved_use, operation=operation) as db:
-        db.execute("BEGIN")
-        current = _partitions(db, day.isoformat(), facilities, cutoff, as_of_sequence, max_symbols)
-        prior_day, skipped = _prior_date(
-            db, day.isoformat(), earliest, facilities, cutoff, as_of_sequence
-        )
-        prior = (
-            _partitions(db, prior_day, facilities, cutoff, as_of_sequence, max_symbols)
-            if prior_day
-            else {}
-        )
-        current_index = {f: {r["symbol_raw"]: r for r in p["rows"]} for f, p in current.items()}
-        prior_index = {f: {r["symbol_raw"]: r for r in p["rows"]} for f, p in prior.items()}
-        symbols = sorted({symbol for rows in current_index.values() for symbol in rows})
-        if len(symbols) > max_symbols:
-            raise ValueError("FINRA research symbol budget exceeded")
-        rows = []
-        for symbol in symbols:
-            row = dict(symbol_raw=symbol, **_metric(symbol, current, current_index))
-            old = _metric(symbol, prior, prior_index) if prior_day else None
-            row["prior_status"] = old["status"] if old else "NO_PRIOR_COMPLETE_DATE"
-            row["prior_null_reason"] = old["null_reason"] if old else "NO_PRIOR_COMPLETE_DATE"
-            row["prior_components"] = old["components"] if old else []
-            for key in _RATIOS:
-                value = row[key]
-                previous = old[key] if old else None
-                row["prior_" + key] = previous
-                row[key + "_change"] = decimal_text(
-                    ratio_change(
-                        Decimal(value) if value is not None else None,
-                        Decimal(previous) if previous is not None else None,
-                    )
+    return dict(
+        trade_date=day.isoformat(),
+        facility_ids=facilities,
+        as_of=cutoff,
+        as_of_sequence=as_of_sequence,
+        lookback_days=lookback_days,
+        max_symbols=max_symbols,
+        earliest_trade_date=earliest,
+    )
+
+
+def report(db, request):
+    """Internal query on an already admitted, transaction-pinned source connection."""
+    day = _day(request["trade_date"])
+    facilities = request["facility_ids"]
+    cutoff = request["as_of"]
+    as_of_sequence = request["as_of_sequence"]
+    lookback_days = request["lookback_days"]
+    max_symbols = request["max_symbols"]
+    earliest = request["earliest_trade_date"]
+    current = _partitions(db, day.isoformat(), facilities, cutoff, as_of_sequence, max_symbols)
+    prior_day, skipped = _prior_date(
+        db, day.isoformat(), earliest, facilities, cutoff, as_of_sequence
+    )
+    prior = (
+        _partitions(db, prior_day, facilities, cutoff, as_of_sequence, max_symbols)
+        if prior_day
+        else {}
+    )
+    current_index = {f: {r["symbol_raw"]: r for r in p["rows"]} for f, p in current.items()}
+    prior_index = {f: {r["symbol_raw"]: r for r in p["rows"]} for f, p in prior.items()}
+    symbols = sorted({symbol for rows in current_index.values() for symbol in rows})
+    if len(symbols) > max_symbols:
+        raise ValueError("FINRA research symbol budget exceeded")
+    rows = []
+    for symbol in symbols:
+        row = dict(symbol_raw=symbol, **_metric(symbol, current, current_index))
+        old = _metric(symbol, prior, prior_index) if prior_day else None
+        row["prior_status"] = old["status"] if old else "NO_PRIOR_COMPLETE_DATE"
+        row["prior_null_reason"] = old["null_reason"] if old else "NO_PRIOR_COMPLETE_DATE"
+        row["prior_components"] = old["components"] if old else []
+        for key in _RATIOS:
+            value = row[key]
+            previous = old[key] if old else None
+            row["prior_" + key] = previous
+            row[key + "_change"] = decimal_text(
+                ratio_change(
+                    Decimal(value) if value is not None else None,
+                    Decimal(previous) if previous is not None else None,
                 )
-            rows.append(row)
-        missing = [f for f, p in current.items() if p["capture_id"] is None]
-        clocks = [
-            p["archived_at"]
-            for p in list(current.values()) + list(prior.values())
-            if p["archived_at"]
-        ]
-        return dict(
-            method=METHOD,
-            source="finra",
-            dataset="finra-short-sale-volume",
-            trade_date=day.isoformat(),
-            facility_ids=facilities,
-            quantity_unit="shares",
-            ratio_method=RATIO_METHOD,
-            ratio_unit="1",
-            knowledge_basis="CURRENT_VINTAGE",
-            clock_basis="LOCAL_CAPTURE",
-            population_basis="LATEST_COMPLETE_PARTITION_PER_FACILITY_AT_CUTOFF",
-            status="INCOMPLETE_POPULATION" if missing else ("COMPLETE" if rows else "VALID_EMPTY"),
-            as_of=cutoff,
-            as_of_sequence=as_of_sequence,
-            evidence_known_at=max(clocks, default=None),
-            lookback_days=lookback_days,
-            max_symbols=max_symbols,
-            prior_trade_date=prior_day,
-            calendar_day_gap=(day - _day(prior_day)).days if prior_day else None,
-            gap_basis="CALENDAR_DAYS",
-            incomplete_prior_dates=skipped,
-            missing_facilities=missing,
-            current_partitions=_provenance(current),
-            prior_partitions=_provenance(prior),
-            rows=rows,
-        )
+            )
+        rows.append(row)
+    missing = [f for f, p in current.items() if p["capture_id"] is None]
+    clocks = [
+        p["archived_at"] for p in list(current.values()) + list(prior.values()) if p["archived_at"]
+    ]
+    return dict(
+        method=METHOD,
+        source="finra",
+        dataset="finra-short-sale-volume",
+        trade_date=day.isoformat(),
+        facility_ids=facilities,
+        quantity_unit="shares",
+        ratio_method=RATIO_METHOD,
+        ratio_unit="1",
+        knowledge_basis="CURRENT_VINTAGE",
+        clock_basis="LOCAL_CAPTURE",
+        population_basis="LATEST_COMPLETE_PARTITION_PER_FACILITY_AT_CUTOFF",
+        status="INCOMPLETE_POPULATION" if missing else ("COMPLETE" if rows else "VALID_EMPTY"),
+        as_of=cutoff,
+        as_of_sequence=as_of_sequence,
+        evidence_known_at=max(clocks, default=None),
+        lookback_days=lookback_days,
+        max_symbols=max_symbols,
+        prior_trade_date=prior_day,
+        calendar_day_gap=(day - _day(prior_day)).days if prior_day else None,
+        gap_basis="CALENDAR_DAYS",
+        incomplete_prior_dates=skipped,
+        missing_facilities=missing,
+        current_partitions=_provenance(current),
+        prior_partitions=_provenance(prior),
+        rows=rows,
+    )
