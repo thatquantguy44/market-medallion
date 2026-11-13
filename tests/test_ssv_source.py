@@ -234,7 +234,9 @@ def test_ssv_ac12_live_client_selected_once_after_gates_and_reused(tmp_path, man
     script.fallback_used = False
 
     def prepare(request, network, **options):
-        assert request.full_url == METADATA_URL and request.get_header("Authorization") is None
+        assert request.full_url == source.NETWORK_STARTUP_URL == TOKEN_URL
+        assert request.get_method() == "HEAD"
+        assert request.get_header("Authorization").startswith("Basic ")
         assert options == {"allow_redirects": False}
         selected.append(network)
         return script
@@ -290,3 +292,19 @@ def test_ssv_ac12_valid_empty_can_replace_but_truncation_preserves_membership(tm
     assert result["status"] == "INCOMPLETE" and gold(tmp_path, manifest) == previous
     result = run(cfg, Script(manifest, [data_reply(payload=b"[]", total=0)]))
     assert result["status"] == "COMPLETE" and gold(tmp_path, manifest)["rows"] == []
+
+
+def test_ssv_ac12_probe_failure_records_only_sanitized_http_status(tmp_path, manifest, monkeypatch):
+    from test_ssv_bronze import provider_grant
+
+    def rejected(*args, **kwargs):
+        raise ValueError("network startup rejected: HTTP 401")
+
+    monkeypatch.setattr(source, "prepare_http", rejected)
+    cfg = config(tmp_path, manifest, operation="acquire", approved_use=provider_grant())
+    result = run(cfg, None)
+    assert result["error_code"] == "startup_probe_rejected" and result["http_attempts"] == 0
+    events = [
+        json.loads(p.read_bytes()) for p in (tmp_path / "acquisition/runs").glob("*/events/*.json")
+    ]
+    assert any(e.get("phase") == "probe" and e.get("http_status") == 401 for e in events)

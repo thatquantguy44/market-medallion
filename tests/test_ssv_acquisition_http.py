@@ -108,3 +108,24 @@ def test_ssv_ac12_credentials_and_auth_response_never_appear_in_repr():
     client, _ = session(Response(b'{"access_token":"invented-private-secret"}'))
     reply = client.exchange(Request(URL, method="POST"), limit=100)
     assert "secret" not in repr(reply)
+
+
+def test_ssv_ac12_repeated_cookie_headers_are_ignored_but_duplicate_source_claims_refuse():
+    from email.message import Message
+
+    for critical in (False, True):
+        headers = Message()
+        headers["Content-Type"] = "application/json"
+        headers["Content-Length"] = "2"
+        headers["Set-Cookie"] = "invented-private-cookie-one"
+        headers["Set-Cookie"] = "invented-private-cookie-two"
+        if critical:
+            headers["Data-Version"] = "1"
+            headers["Data-Version"] = "2"
+        response = Response(b"[]")
+        response.headers = headers
+        client, _ = session(response)
+        reply = client.exchange(Request(URL, method="POST"), limit=100)
+        assert reply.complete is (not critical)
+        assert "set-cookie" not in reply.headers
+        assert reply.error_code == ("duplicate_headers" if critical else None)

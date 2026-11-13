@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import re
 import time
 from datetime import UTC, datetime
 from urllib.request import Request
@@ -33,6 +34,7 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.io.acquisition_journ
 from market_data_pipeline.pipelines.finra_short_sale_volume.manifest import validate_metadata
 from market_data_pipeline.shared.http import prepare_http
 
+NETWORK_STARTUP_URL = TOKEN_URL
 _TRANSIENT = {429, 500, 502, 503, 504}
 
 
@@ -330,11 +332,29 @@ def acquire(
             budget.probes(config.network.probe_timeout_seconds)
             opener = transport
             if opener is None:
-                opener = prepare_http(
-                    Request(METADATA_URL, headers={"Accept": "application/json"}),
-                    config.network,
-                    allow_redirects=False,
-                )
+                try:
+                    opener = prepare_http(
+                        Request(
+                            NETWORK_STARTUP_URL,
+                            headers={"Authorization": credentials.basic()},
+                            method="HEAD",
+                        ),
+                        config.network,
+                        allow_redirects=False,
+                    )
+                except ValueError as error:
+                    rejected = re.fullmatch(
+                        r"network startup rejected: HTTP ([0-9]{3})", str(error)
+                    )
+                    code = "startup_probe_rejected" if rejected else "network_startup_failed"
+                    run.event(
+                        dict(
+                            phase="probe",
+                            error_code=code,
+                            http_status=int(rejected[1]) if rejected else None,
+                        )
+                    )
+                    raise Stop(code) from None
                 route, fallback = opener.route, opener.fallback_used
             else:
                 route = "injected"

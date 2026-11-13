@@ -36,7 +36,11 @@ compatible and do not load credentials or probe. Fixture execution requires an
 explicit injected transport; it cannot reach the network.
 
 After gates and bounded plan validation, select/probe a single run-scoped client
-through `shared/http.py`, with redirects disabled. Reuse it for fixed FINRA FIP,
+through `shared/http.py`, with redirects disabled. The startup HEAD uses the fixed
+FIP authentication endpoint, with Basic credentials sent only to that trusted URL.
+The initial metadata HEAD returned404 and the documentation HEAD returned403;
+those attempts made no data request. The run still authenticates with POST and
+verifies metadata with an authenticated GET. Reuse the client for fixed FINRA FIP,
 metadata and data URLs. No process-global opener, cross-host authorization redirect,
 proxy-credential logging, automatic `.env` loading or paid credential scope.
 Credentials/tokens remain in memory and never enter receipts or journals. Obtain

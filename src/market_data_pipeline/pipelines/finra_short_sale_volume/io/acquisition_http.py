@@ -9,6 +9,8 @@ from email.utils import parsedate_to_datetime
 from http.client import IncompleteRead
 from urllib.error import HTTPError, URLError
 
+from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import HEADERS
+
 TOKEN_URL = (
     "https://ews.fip.finra.org/fip/rest/ews/oauth2/access_token?grant_type=client_credentials"
 )
@@ -131,6 +133,8 @@ class Session:
                     problem = "invalid_headers"
                     break
                 name = key.lower()
+                if name not in HEADERS | {"retry-after"}:
+                    continue
                 if name in headers:
                     problem = "duplicate_headers"
                 headers[name] = value
