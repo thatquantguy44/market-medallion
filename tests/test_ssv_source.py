@@ -308,3 +308,44 @@ def test_ssv_ac12_probe_failure_records_only_sanitized_http_status(tmp_path, man
         json.loads(p.read_bytes()) for p in (tmp_path / "acquisition/runs").glob("*/events/*.json")
     ]
     assert any(e.get("phase") == "probe" and e.get("http_status") == 401 for e in events)
+
+
+def collection_responses(*, changed=False, shrink=False):
+    raw = (FIXTURES / "invented-valid.json").read_bytes()
+    third = json.loads(raw)[:1]
+    third[0]["securitiesInformationProcessorSymbolIdentifier"] = "ZZSYN"
+    tail = json.dumps(third).encode()
+    first = data_reply(total=3)
+    second = data_reply(payload=tail, total=3, headers={"Record-Offset": "2"})
+    verification = data_reply(total=2 if shrink else 3)
+    if changed:
+        third[0]["shortParQuantity"] = 50
+    last = data_reply(payload=json.dumps(third).encode(), total=3, headers={"Record-Offset": "2"})
+    return [first, second, verification, last]
+
+
+def test_ssv_ac12_complete_two_pass_collection_promotes_once_and_replays(tmp_path, manifest):
+    from market_data_pipeline.pipelines.finra_short_sale_volume import replay
+
+    source_root, target = tmp_path / "source", tmp_path / "replayed"
+    cfg = config(source_root, manifest)
+    result = run(cfg, Script(manifest, collection_responses()))
+    assert result["status"] == "COMPLETE" and result["partitions"][0]["accepted_rows"] == 3
+    assert result["partitions"][0]["consistency_basis"] == "TWO_PASS_EQUALITY"
+    assert len(list((source_root / "bronze/captures").iterdir())) == 5
+    replay.replay(
+        source_root, target, manifest, approved_use=fixture_grant(), operation="fixture", max_rows=6
+    )
+    assert gold(source_root, manifest) == gold(target, manifest)
+
+
+@pytest.mark.parametrize("changed,shrink", [(True, False), (False, True)])
+def test_ssv_ac12_changed_verification_pass_never_replaces_prior_membership(
+    tmp_path, manifest, changed, shrink
+):
+    cfg = config(tmp_path, manifest)
+    run(cfg, Script(manifest, [data_reply()]))
+    before = gold(tmp_path, manifest)
+    result = run(cfg, Script(manifest, collection_responses(changed=changed, shrink=shrink)))
+    assert result["status"] == "INCOMPLETE"
+    assert gold(tmp_path, manifest) == before

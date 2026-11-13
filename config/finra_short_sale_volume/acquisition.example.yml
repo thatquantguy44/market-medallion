@@ -20,10 +20,11 @@ network:
 limits:
   max_days: 7
   max_partitions: 21
-  max_requests: 100
+  max_requests: 500
   max_response_bytes: 3000000
   max_total_bytes: 20971520
   page_rows: 5000
+  max_pages: 3
   max_attempts: 3
   max_wait_seconds: 60
   max_duration_seconds: 300

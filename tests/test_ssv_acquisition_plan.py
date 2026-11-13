@@ -23,7 +23,7 @@ def test_ssv_ac12_plan_expands_correction_overlap_in_date_facility_order(manifes
     assert all(r["facility_id"] == "nyse_trf" for r in result["partitions"])
     assert result["requested_start"] == "2026-11-09" and result["effective_start"] == "2026-11-07"
     assert result["page_limit"] == 5000 and result["offset"] == 0
-    assert result["request_budget_upper_bound"] == 20
+    assert result["request_budget_upper_bound"] == 80
 
 
 @pytest.mark.parametrize(

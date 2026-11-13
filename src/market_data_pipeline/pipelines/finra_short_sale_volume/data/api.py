@@ -53,10 +53,11 @@ class ParsedPage:
     schema_id: str
     data_version: int
     http_status: int
+    evidence_only: bool = False
 
     @property
     def partition_complete(self) -> bool:
-        return self.offset == 0 and len(self.rows) == self.record_total
+        return not self.evidence_only and self.offset == 0 and len(self.rows) == self.record_total
 
 
 def _day(value: object) -> date:
@@ -108,9 +109,13 @@ def _request(
     if (
         not isinstance(query, Mapping)
         or not required <= query.keys()
-        or query.keys() - required - {"fields", "async"}
+        or query.keys() - required - {"fields", "async", "sortFields"}
     ):
         raise ValueError("unsupported FINRA query shape")
+    if "sortFields" in query and query["sortFields"] != [
+        "securitiesInformationProcessorSymbolIdentifier"
+    ]:
+        raise ValueError("FINRA pagination requires the reviewed raw-symbol sort")
     limit, offset = query["limit"], query["offset"]
     if type(limit) is not int or not 0 < limit <= max_rows:
         raise ValueError("FINRA query limit must be positive and within parser budget")

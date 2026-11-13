@@ -40,7 +40,7 @@ class Run:
         self.events = 0
 
     def event(self, value):
-        if self.events >= 2000:
+        if self.events >= 5000:
             raise ValueError("FINRA acquisition event budget exceeded")
         value = dict(
             value,

@@ -88,3 +88,37 @@ Primary references checked before coding:
 [API terms](https://developer.finra.org/finra-api-terms-service) and
 [Equity terms](https://developer.finra.org/specific-terms-equity-data).
 The existing user-attested noncommercial scope remains unchanged.
+
+## T12b — verified page collection amendment
+
+The first live Chicago query returned5000 of5849 rows. Complete the synchronous
+path with bounded pagination rather than treating primary TRF partitions as
+permanently partial. Add `max_pages` (default3, maximum20) and a stable raw-symbol
+sort, with exact date/market equality filters. Advance offsets by actual returned
+rows, honor effective limits/payload caps, and require an unchanged total,
+contiguous offsets, unique symbols and complete coverage within each pass.
+
+For a multi-page partition, fetch a second complete pass under the same query
+and require exact normalized row equality (including scale and global source-row
+positions) before promotion. This is observed two-pass agreement, not a provider
+snapshot token or a guarantee of historical publication time. Any change, missing
+page or budget failure leaves prior membership intact. Single-response complete
+partitions need no assembly; their atomic HTTP response remains the original path.
+
+Retain every original page as an independent raw capture. Verification/subsequent
+pages use an explicit evidence-only Bronze format so even a changed, now-short
+verification response cannot promote early. A distinct page-collection capture
+contains only a canonical manifest of the two ordered page-ID lists and limits;
+it is a derived collection, never a fabricated provider response. Its receipt
+binds the first original request, all original page hashes through capture IDs,
+and a new collection clock/sequence after all inputs. Its payload hash describes
+the manifest. Parsing validates each original page and both passes, then supplies
+one complete logical partition to the unchanged version/membership transaction.
+Source rows use offset plus original page row; the original pages retain local
+row positions. Provider publication remains null. Collection/schema tags preserve
+these distinctions through T11 replay. No existing capture or schema is relabelled.
+
+Request preflight includes both passes and every allowed page/retry. Configurable
+partition row capacity is `page_rows * max_pages`; count/version, byte, request,
+wait and duration limits remain enforced. Full partition replay requires destination
+row/byte limits covering its original collection parser profile.

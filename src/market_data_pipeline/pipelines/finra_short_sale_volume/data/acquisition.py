@@ -14,10 +14,11 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.registry import (
 class Limits:
     max_days: int = 7
     max_partitions: int = 21
-    max_requests: int = 100
+    max_requests: int = 500
     max_response_bytes: int = 3000000
     max_total_bytes: int = 20 * 1024**2
     page_rows: int = 5000
+    max_pages: int = 3
     max_attempts: int = 3
     max_wait_seconds: int = 60
     max_duration_seconds: int = 300
@@ -30,6 +31,7 @@ class Limits:
             max_response_bytes=(1, 3000000),
             max_total_bytes=(1, 1024**3),
             page_rows=(1, 5000),
+            max_pages=(1, 20),
             max_attempts=(1, 5),
             max_wait_seconds=(0, 300),
             max_duration_seconds=(1, 3600),
@@ -56,7 +58,7 @@ def plan(manifest, start, end, scopes, *, as_of, overlap_days=2, limits=None):
         raise ValueError("FINRA acquisition scope is outside the selected manifest")
     days = (last - effective).days + 1
     count = days * len(facilities)
-    upper = 2 + (count + 2) * limits.max_attempts
+    upper = 2 + (count * limits.max_pages * 2 + 2) * limits.max_attempts
     if days > limits.max_days or count > limits.max_partitions or upper > limits.max_requests:
         raise ValueError("FINRA acquisition plan exceeds day/partition/request budget")
     return dict(

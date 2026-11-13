@@ -19,7 +19,11 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.data.capture import 
     encoded,
     reject_credentials,
 )
-from market_data_pipeline.pipelines.finra_short_sale_volume.io import bronze, warehouse
+from market_data_pipeline.pipelines.finra_short_sale_volume.io import (
+    bronze,
+    page_collection,
+    warehouse,
+)
 from market_data_pipeline.pipelines.finra_short_sale_volume.io.acquisition_http import (
     DATA_URL,
     METADATA_URL,
@@ -82,7 +86,7 @@ class _Runner:
         self.expires = 0
         self.metadata_sha256 = None
 
-    def capture(self, reply, partition):
+    def capture(self, reply, partition, query, evidence_only=False):
         if reply.status is None:
             return dict(status="TRANSPORT_FAILED", capture_id=None, error_code=reply.error_code)
         try:
@@ -91,7 +95,6 @@ class _Runner:
             return dict(
                 status="UNSAFE_PAYLOAD", capture_id=None, error_code="credential_body_refused"
             )
-        query = self.query(partition)
         receipt = dict(
             url=DATA_URL,
             method="POST",
@@ -116,6 +119,7 @@ class _Runner:
             retrieved_at=retrieved_at,
             max_bytes=self.config.limits.max_response_bytes,
             max_rows=self.config.limits.page_rows,
+            evidence_only=evidence_only,
         )
         operation = "fixture" if self.config.operation == "fixture" else "transform"
         try:
@@ -142,12 +146,20 @@ class _Runner:
             accepted_rows=result["accepted_rows"],
             new_versions=result["new_versions"],
             receipt_sha256=saved["receipt_sha256"],
+            parsed_rows=result["parsed_rows"],
+            record_total=(
+                int(reply.headers["record-total"])
+                if result["status"] in {"APPLIED", "PARTIAL"}
+                else None
+            ),
+            record_offset=query["offset"],
         )
 
-    def query(self, partition):
+    def query(self, partition, offset=0):
         return dict(
             limit=self.config.limits.page_rows,
-            offset=0,
+            offset=offset,
+            sortFields=["securitiesInformationProcessorSymbolIdentifier"],
             fields=list(self.config.manifest.to_dict()["fields"]),
             compareFilters=[
                 dict(
@@ -161,7 +173,7 @@ class _Runner:
             ],
         )
 
-    def request(self, request, phase, partition=None):
+    def request(self, request, phase, partition=None, evidence_only=False):
         limit = (
             self.config.limits.max_response_bytes
             if phase == "partition"
@@ -169,7 +181,11 @@ class _Runner:
         )
         for attempt in range(1, self.config.limits.max_attempts + 1):
             reply = self.session.exchange(request, limit=limit)
-            details = self.capture(reply, partition) if partition is not None else {}
+            details = (
+                self.capture(reply, partition, json.loads(request.data), evidence_only)
+                if partition is not None
+                else {}
+            )
             if partition is not None:
                 partition.update(details)
             event = dict(
@@ -203,6 +219,95 @@ class _Runner:
                 retry_delay(reply.retry_after, attempt, self.clock()), self.sleep
             )
         raise Stop("retry_budget")
+
+    def fetch(self, partition, offset=0, evidence_only=False):
+        return self.request(
+            Request(
+                DATA_URL,
+                data=encoded(self.query(partition, offset)),
+                headers={**self.headers(), "Content-Type": "application/json"},
+                method="POST",
+            ),
+            "partition",
+            partition,
+            evidence_only=evidence_only,
+        )
+
+    def collect(self, partition):
+        total = partition["record_total"]
+        limits = self.config.limits
+        if total > limits.page_rows * limits.max_pages:
+            partition["error_code"] = "partition_row_budget"
+            return
+        passes = []
+        for verification in (False, True):
+            ids = [] if verification else [partition["capture_id"]]
+            offset = 0 if verification else partition["parsed_rows"]
+            while offset < total:
+                if len(ids) >= limits.max_pages:
+                    raise Stop("partition_page_budget")
+                self.fetch(partition, offset, evidence_only=True)
+                if partition["status"] != "PARTIAL":
+                    return
+                if partition["record_total"] != total or partition["record_offset"] != offset:
+                    raise Stop("collection_changed")
+                ids.append(partition["capture_id"])
+                offset += partition["parsed_rows"]
+            passes.append(ids)
+        try:
+            saved = page_collection.archive(
+                self.config.root,
+                self.config.manifest,
+                passes,
+                approved_use=self.config.approved_use,
+                operation=self.config.operation,
+                run_id=self.run.run_id,
+                archived_at=self.clock(),
+                max_pages=limits.max_pages,
+                page_bytes=limits.max_response_bytes,
+                page_rows=limits.page_rows,
+            )
+            self.run.event(
+                dict(
+                    phase="collection_archived",
+                    capture_id=saved["capture_id"],
+                    status="ARCHIVED",
+                    trade_date=partition["trade_date"],
+                    facility_id=partition["facility_id"],
+                )
+            )
+            partition["capture_id"] = saved["capture_id"]
+            partition["status"] = "ARCHIVED"
+            self.session.budget.time()
+            result = pipeline.ingest_capture(
+                self.config.root,
+                saved["capture_id"],
+                self.config.manifest,
+                approved_use=self.config.approved_use,
+                operation="fixture" if self.config.operation == "fixture" else "transform",
+                **saved["capture_limits"],
+                clock=self.clock,
+            )
+        except ValueError:
+            raise Stop("collection_rejected") from None
+        partition.update(
+            status=result["status"],
+            capture_id=saved["capture_id"],
+            accepted_rows=result["accepted_rows"],
+            new_versions=result["new_versions"],
+            error_code=None,
+            receipt_sha256=saved["receipt_sha256"],
+            consistency_basis="TWO_PASS_EQUALITY",
+        )
+        self.run.event(
+            dict(
+                phase="collection",
+                capture_id=saved["capture_id"],
+                status=result["status"],
+                trade_date=partition["trade_date"],
+                facility_id=partition["facility_id"],
+            )
+        )
 
     def authenticate(self, credentials):
         request = Request(
@@ -370,16 +475,9 @@ def acquire(
             for partition in partitions:
                 if monotonic() >= runner.expires:
                     runner.authenticate(credentials)
-                reply = runner.request(
-                    Request(
-                        DATA_URL,
-                        data=encoded(runner.query(partition)),
-                        headers={**runner.headers(), "Content-Type": "application/json"},
-                        method="POST",
-                    ),
-                    "partition",
-                    partition,
-                )
+                reply = runner.fetch(partition)
+                if partition["status"] == "PARTIAL":
+                    runner.collect(partition)
                 if reply.status in (401, 403):
                     raise Stop("access_denied")
             budget.time()
