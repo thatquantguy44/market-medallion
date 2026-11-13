@@ -567,3 +567,94 @@ def export_parquet(root, destination, cutoff: datetime, *, capture_sequence=None
         "rows": len(records),
         "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
     }
+
+
+def admitted_capture_facts(root, source_id, capture_id):
+    """Return exactly the facts audited for one explicitly admitted capture."""
+    root = Path(root)
+    with writer_lock(root):
+        receipt, raw, _ = load_capture(root, source_id, capture_id)
+        connection = _database(root, create=False)
+        try:
+            audit = connection.execute(
+                "SELECT capture_sequence, source_id, first_seen_at, retrieved_at, input_kind, "
+                "raw_sha256, config_sha256, parser_id, status, row_count FROM captures "
+                "WHERE capture_id=?",
+                (capture_id,),
+            ).fetchone()
+            expected = (
+                receipt["capture_sequence"],
+                source_id,
+                receipt["first_seen_at"],
+                receipt["retrieved_at"],
+                receipt["input_kind"],
+                receipt["sha256"],
+                receipt["config_sha256"],
+                receipt["parser_id"],
+                "PARSED",
+            )
+            if audit is None or audit[:9] != expected:
+                raise ValueError("Capture has not been successfully admitted to the warehouse.")
+            normalized = _normalize(receipt["parser_id"], raw, source_id)
+            by_key = {(kind, key): values for kind, key, values in normalized}
+            mappings = connection.execute(
+                "SELECT cf.fact_type, cf.fact_key, cf.observed_json, cf.version_id, "
+                "f.source_id, f.fact_type, f.fact_key, f.capture_sequence, f.content_hash "
+                "FROM capture_facts cf JOIN facts f ON f.version_id=cf.version_id "
+                "WHERE cf.capture_id=? ORDER BY cf.fact_type, cf.fact_key",
+                (capture_id,),
+            ).fetchall()
+            if len(mappings) != len(by_key) or audit[9] != len(by_key):
+                raise ValueError("Capture fact inventory is incomplete.")
+            output = []
+            for (
+                kind,
+                key,
+                observed,
+                version_id,
+                fact_source,
+                fact_kind,
+                fact_key,
+                sequence,
+                content_hash,
+            ) in mappings:
+                values = by_key.get((kind, key))
+                if values is None or json.loads(observed) != values:
+                    raise ValueError("Capture fact inventory failed integrity checking.")
+                comparable = {
+                    k: v
+                    for k, v in values.items()
+                    if k not in ("source_token", "market_excess_token", "risk_free_token")
+                }
+                expected_hash = _hash({"values": comparable, "input_kind": receipt["input_kind"]})
+                latest = connection.execute(
+                    "SELECT version_id FROM facts WHERE source_id=? AND fact_type=? AND fact_key=? "
+                    "AND capture_sequence<=? ORDER BY capture_sequence DESC LIMIT 1",
+                    (source_id, kind, key, receipt["capture_sequence"]),
+                ).fetchone()
+                if (
+                    fact_source != source_id
+                    or fact_kind != kind
+                    or fact_key != key
+                    or sequence > receipt["capture_sequence"]
+                    or content_hash != expected_hash
+                    or version_id
+                    != _hash(
+                        {
+                            "source_id": source_id,
+                            "fact_type": kind,
+                            "fact_key": key,
+                            "capture_sequence": sequence,
+                            "content_hash": content_hash,
+                        }
+                    )
+                    or latest is None
+                    or latest[0] != version_id
+                ):
+                    raise ValueError("Capture fact version failed integrity checking.")
+                output.append(
+                    {"fact_type": kind, "fact_key": key, "version_id": version_id, "values": values}
+                )
+            return receipt, output
+        finally:
+            connection.close()

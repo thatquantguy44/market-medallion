@@ -224,3 +224,27 @@ def test_shiller_decoded_binary_values_preserve_missingness_and_typed_nulls(tmp_
     row = pq.read_table(output).to_pylist()[0]
     assert str(row["price"]) == "4.440000000000000000"
     assert row["dividend"] is None and row["cape"] is None
+
+
+def test_selected_capture_requires_matching_admitted_facts(tmp_path):
+    import sqlite3
+
+    from market_data_pipeline.pipelines.presidential_research.warehouse import (
+        admitted_capture_facts,
+    )
+
+    first = capture(tmp_path, "1.00")
+    with pytest.raises(ValueError, match="unavailable"):
+        admitted_capture_facts(tmp_path, "FEDFUNDS_001", first["capture_id"])
+    ingest_capture(tmp_path, "FEDFUNDS_001", first["capture_id"])
+    _, facts = admitted_capture_facts(tmp_path, "FEDFUNDS_001", first["capture_id"])
+    assert facts[0]["values"]["source_token"] == "1.00"
+    second = capture(tmp_path, "1.0")
+    ingest_capture(tmp_path, "FEDFUNDS_001", second["capture_id"])
+    _, duplicate = admitted_capture_facts(tmp_path, "FEDFUNDS_001", second["capture_id"])
+    assert duplicate[0]["version_id"] == facts[0]["version_id"]
+    assert duplicate[0]["values"]["source_token"] == "1.0"
+    with sqlite3.connect(tmp_path / "silver" / "presidential.sqlite3") as db:
+        db.execute("DELETE FROM capture_facts WHERE capture_id=?", (second["capture_id"],))
+    with pytest.raises(ValueError, match="inventory"):
+        admitted_capture_facts(tmp_path, "FEDFUNDS_001", second["capture_id"])
