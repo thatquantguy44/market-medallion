@@ -33,8 +33,13 @@ run-failure sensor, registered through the root code location. All five default
 `config/<pipeline_name>/alerts.local.yml`; missing/disabled settings send nothing.
 Examples contain environment-variable names rather than webhook secrets. See the
 [Slack alert runbook](slack_alerts.md) for all names, setup, network policy and
-cursor/delivery limitations. No local secret or live delivery is configured by
-this change, and acquisition schedules remain stopped.
+cursor/delivery limitations. On 2026-11-12 the user configured FOMC's webhook and
+requested a real Dagster alert test. The manual local service is running on port
+3030 and **`fomc_meeting_minutes_slack_failure` is RUNNING**. The other four alert
+sensors and all six acquisition/import schedules remain stopped. The FOMC test
+run `621d5cfc-d83e-46b2-974b-ea189c31b153` failed intentionally before acquisition
+(`preflight_failed`, `live: false`); sensor tick 4 succeeded and logged delivery.
+No provider acquisition or warehouse mutation was performed.
 
 ## Ownership and job behavior
 

@@ -77,3 +77,17 @@ workflow snapshot and all 61 adopted QuantSmith Git objects were verified;
 external QuantSmith working-tree drift was left unchanged. Setup, error recovery
 and best-effort cursor/delivery limitations are in the
 [Slack runbook](../../docs/deployment/slack_alerts.md).
+
+## Subsequent live Dagster alert verification — 2026-11-12
+
+At the user's request, started the manual local UI/daemon, enabled only FOMC's
+failure sensor and initialized its cursor before submitting the actual
+`fomc_meeting_minutes_job`. Run `621d5cfc-d83e-46b2-974b-ea189c31b153` used
+`live: false` and failed intentionally with `preflight_failed`, before provider
+acquisition or PostgreSQL operation entry. The daemon evaluated the genuine run
+failure: sensor tick 4 was SUCCESS, referenced that run and logged
+`slack_alert_delivered`, which requires the webhook HTTP acknowledgement.
+FOMC's ignored YAML/secret are configured locally; other sensors and all six
+acquisition/import schedules remain stopped. No warehouse migration, source data
+change, LaunchAgent installation or new runtime code was needed. A sanitized
+local record is at ignored `data/dagster/fomc-alert-test-result.json`.

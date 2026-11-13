@@ -21,6 +21,19 @@ new live schedules default stopped.
 
 ## 2026-11-12 current pickup — optional pipeline-owned Slack alerts
 
+**Subsequent operational verification:** the user configured the FOMC webhook and
+requested a real job-driven alert. The manual local Dagster UI/daemon is running
+on `http://127.0.0.1:3030`. FOMC's alert YAML is enabled and its failure sensor is
+**RUNNING**; the other four sensors and all six schedules remain **STOPPED**.
+Intentional test run `621d5cfc-d83e-46b2-974b-ea189c31b153` failed at the closed
+live-access gate (`preflight_failed`) before source acquisition/database access.
+Sensor tick 4 completed successfully, associated that exact run and logged
+`slack_alert_delivered`. Ignored local evidence is
+`data/dagster/fomc-alert-test-result.json`; webhook/config secrets remain ignored.
+No LaunchAgent or durable installation was added. The earlier disabled-only
+feature acceptance below remains historical; this paragraph owns current runtime
+alert state.
+
 PR #16 is merged; local Dagster defaults to port 3030. The user requested a new
 branch for configurable Slack alerts with separate optional YAML per pipeline.
 Current branch: `feat/pipeline-slack-alerts`, based on merged main, in

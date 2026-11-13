@@ -15,8 +15,10 @@ canonical operational inventory.
 
 Optional [per-pipeline Slack failure alerts](deployment/slack_alerts.md) are
 implemented for the five existing Dagster jobs under [Spec018](../specs/spec018/README.md).
-Each pipeline owns a separate optional alert YAML and stopped sensor; credentials,
-live delivery and activation remain operator-configured. This adds no connector
+Each pipeline owns a separate optional alert YAML and stopped-by-default sensor.
+FOMC is now locally configured and its failure sensor enabled; a deliberate
+closed-gate Dagster run verified live Slack delivery on 2026-11-12. Other alert
+sensors remain stopped, and all acquisition schedules remain stopped. This adds no connector
 or acquisition schedule and preserves the NAAIM pause.
 
 FOMC T01–T06 and bounded 1990–1994 batches are accepted locally for listed
