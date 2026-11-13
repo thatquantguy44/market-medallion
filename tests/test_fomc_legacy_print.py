@@ -111,20 +111,27 @@ def test_reviewed_legacy_encoding_labels_decode_to_same_unicode(manifest):
     )
 
 
-def test_declared_historical_gif_charts_remain_required_review_content(manifest):
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "fomcminutes20080716Chart2a.gif",
+        "chart1.gif",
+        "chart2a.gif",
+        "chart2b.gif",
+    ],
+)
+def test_declared_historical_gif_charts_remain_required_review_content(manifest, filename):
     payload = HTML.replace(
         b"<p>Last: vote and footnote 1.</p>",
         b"<p>Last: vote and footnote 1.</p><img "
-        b'src="/monetarypolicy/gifjpg/fomcminutes20080716Chart2a.gif" alt="Invented chart">',
+        + f'src="/monetarypolicy/gifjpg/{filename}" alt="Invented chart">'.encode(),
     )
     r = extract_text(payload, URL, manifest)
     assert r["status"] == "review_required", r["issues"]
     assert r["issues"] == ["image_content"]
     deps = discover_html_dependencies(payload, URL, manifest)
     assert not deps.issues
-    assert any(
-        d.kind == "asset" and d.source_url.endswith("Chart2a.gif") for d in deps.dependencies
-    )
+    assert any(d.kind == "asset" and d.source_url.endswith(filename) for d in deps.dependencies)
 
 
 @pytest.mark.parametrize("version", [b"GIF87a", b"GIF89a"])
@@ -140,3 +147,69 @@ def test_gif_asset_framing_matches_url_and_rejects_truncation_or_wrong_formats(v
         assert not asset_framing_valid(bad, url)
     assert not asset_framing_valid(payload[:6] + b"\x00\x00" + payload[8:], url)
     assert not asset_framing_valid(payload, url.replace(".gif", ".png"))
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "20080131Chart2a.gif",
+        "20080131Chart2b.gif",
+        "fomcminutes20080131Chart1.jpg",
+    ],
+)
+def test_january_2008_chart_names_are_source_declared_dependencies(manifest, filename):
+    payload = HTML.replace(
+        b"Last: vote and footnote 1.</p>",
+        b"Last: vote and footnote 1.</p><img "
+        + f'src="/monetarypolicy/gifjpg/{filename}">'.encode(),
+    )
+    r = extract_text(payload, URL, manifest)
+    assert r["status"] == "review_required", r["issues"]
+    assert r["issues"] == ["image_content"]
+    assert not discover_html_dependencies(payload, URL, manifest).issues
+
+
+def test_jpeg_chart_framing_rejects_wrong_format_and_missing_end_marker():
+    from market_data_pipeline.pipelines.fomc_meeting_minutes.data.assets import asset_framing_valid
+
+    url = "https://www.federalreserve.gov/monetarypolicy/gifjpg/fomcminutes20080131Chart1.jpg"
+    framed = b"\xff\xd8invented framed bytes\xff\xd9"
+    assert asset_framing_valid(framed, url)
+    assert not asset_framing_valid(framed[:-1], url)
+    assert not asset_framing_valid(b"<html>login</html>", url)
+    assert not asset_framing_valid(b"GIF89a\x01\x00\x01\x00;", url)
+    assert not asset_framing_valid(framed, url.replace(".jpg", ".gif"))
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "20080430_Chart1.jpg",
+        "20080430_Chart2a.jpg",
+        "20080430_Chart2b.jpg",
+    ],
+)
+def test_april_2008_chart_dependencies_preserve_source_owned_filename_variation(manifest, filename):
+    payload = HTML.replace(
+        b"Last: vote and footnote 1.</p>",
+        b"Last: vote and footnote 1.</p><img "
+        + f'src="/monetarypolicy/gifjpg/{filename}">'.encode(),
+    )
+    assert extract_text(payload, URL, manifest)["status"] == "review_required"
+    deps = discover_html_dependencies(payload, URL, manifest)
+    assert not deps.issues
+    assert any(d.href_raw.endswith(filename) for d in deps.dependencies)
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://other.example/monetarypolicy/gifjpg/chart1.jpg",
+        "https://www.federalreserve.gov/monetarypolicy/files/chart1.gif",
+        "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart1.svg",
+        "https://www.federalreserve.gov/monetarypolicy/gifjpg/chart1.jpg?token=x",
+    ],
+)
+def test_image_folder_admission_keeps_host_format_and_query_boundaries(manifest, url):
+    with pytest.raises(ValueError):
+        manifest.canonical_asset_url(url)

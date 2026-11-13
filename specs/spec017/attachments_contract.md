@@ -130,7 +130,20 @@ exclusions. Source-declared GIF charts under
 reviewed from the [June 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080625ep.htm).
 The [October 2007 minutes](https://www.federalreserve.gov/monetarypolicy/fomcminutes20071031.htm)
 also exercise inline emphasis before the declaration comma and an RSS control.
-Other GIF/JPEG paths remain unreviewed. Source-owned framing checks match the URL
+Its [SEP addendum](https://www.federalreserve.gov/monetarypolicy/fomcminutes20071031ep.htm)
+declares the three additional exact `/monetarypolicy/gifjpg/chart1.gif`,
+`chart2a.gif` and `chart2b.gif` paths. They retain the same strict GIF framing,
+raw-byte and explicit image-review rules; no filenames are generated.
+The [January 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080130ep.htm)
+also declares date-prefixed GIFs without `fomcminutes` and one JPEG chart. The
+reviewed dated pattern therefore permits that optional prefix and GIF/JPEG
+extensions, with JPEG SOI/EOI framing from [ITU T.81 Table B.1](https://www.w3.org/Graphics/JPEG/itu-t81.pdf).
+The [April 2008 SEP](https://www.federalreserve.gov/monetarypolicy/fomcminutes20080430ep.htm)
+adds underscore-separated names. Admission therefore follows the reviewed
+`/monetarypolicy/gifjpg/` content-image folder, ASCII source-owned filenames and
+PNG/GIF/JPEG formats, alongside the prior PNG paths. Every URL must actually be
+declared inside the reviewed substantive container; none is generated. Other
+hosts/folders/formats and query-bearing URLs remain rejected. Source-owned framing checks match the URL
 format, GIF87a/GIF89a header, positive logical-screen dimensions and trailer;
 truncated/wrong-format assets cannot publish. Full raw chart bytes and lineage
 are retained, while extracted image content remains review-required. This is
