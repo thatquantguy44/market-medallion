@@ -332,6 +332,8 @@ def test_ssv_ac12_complete_two_pass_collection_promotes_once_and_replays(tmp_pat
     result = run(cfg, Script(manifest, collection_responses()))
     assert result["status"] == "COMPLETE" and result["partitions"][0]["accepted_rows"] == 3
     assert result["partitions"][0]["consistency_basis"] == "TWO_PASS_EQUALITY"
+    assert result["partitions"][0]["parsed_rows"] == 3
+    assert result["partitions"][0]["record_offset"] == 0
     assert len(list((source_root / "bronze/captures").iterdir())) == 5
     replay.replay(
         source_root, target, manifest, approved_use=fixture_grant(), operation="fixture", max_rows=6
