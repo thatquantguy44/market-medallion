@@ -21,11 +21,14 @@ from .warehouse import _database, ingest_capture
 
 _SOURCE = re.compile(r"^[A-Z][A-Z0-9_]{0,79}$")
 _ID = re.compile(r"^[0-9a-f]{32}$")
+_MAX_INVENTORY_BYTES = 512 * 1024 * 1024
+_MAX_CAPTURES = 20_000
 
 
 def _capture_inventory(root):
     bronze = _safe_child(root, "bronze")
     captures = []
+    total_bytes = 0
     if not bronze.is_dir():
         raise ValueError("Source capture inventory is unavailable.")
     for source_path in bronze.iterdir():
@@ -60,6 +63,9 @@ def _capture_inventory(root):
                     }
                 if parse != expected:
                     raise ValueError("Source parse receipt does not match archived bytes.")
+            total_bytes += len(raw) + len(config) + len(receipt_bytes) + len(parse_bytes or b"")
+            if total_bytes > _MAX_INVENTORY_BYTES or len(captures) >= _MAX_CAPTURES:
+                raise ValueError("Replay capture inventory exceeds size limits.")
             captures.append((receipt, raw, config, receipt_bytes, parse_bytes))
     captures.sort(key=lambda item: item[0]["capture_sequence"])
     if len({item[0]["capture_sequence"] for item in captures}) != len(captures):

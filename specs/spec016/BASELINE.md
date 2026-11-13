@@ -136,3 +136,12 @@ destination admission time. Corrupt raw inputs, altered parse/audit records,
 ambiguous ordering and existing destinations fail closed. The 104-test producer
 suite passed. This remains fixture evidence; real archived manual evidence and
 the frozen research profile still require admission and qualification.
+
+T17 adds no-network health with separate capture freshness/outcome, selected
+observation coverage, snapshot integrity and review status. The allowlisted
+backup contains only replay-verified pipeline state; bounded restore verifies
+member paths, sizes, hashes and snapshot identity before rebuilding into an
+absent destination. Tests exclude unrelated .env files and reject corruption,
+traversal, duplicates, oversized archives, backdated restores and existing
+destinations. The full producer presidential suite passed 111 tests. These
+results are fixture-only; historical manual-evidence admission remains open.
