@@ -7,7 +7,9 @@ Traces SSV-REQ06–08 / SSV-AC06–08, with C04–C07 and existing admission/par
 contracts. Implement in three tested increments: T06 SQLite plus local CLI,
 T07 numeric revision/reversion semantics, T08 complete replacement/removal and
 absence inspection. Acquisition, cross-page assembly, aggregate/temporal Gold,
-Parquet, replay, exports and Dagster remain later slices.
+This T06–T08 contract describes the operational store. T10 subsequently adds
+[typed publication and a separate catalog](parquet_contract.md); replay, exports
+and Dagster remain later slices.
 
 ## State, types and publication
 

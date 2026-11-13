@@ -19,6 +19,51 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
+## 2026-11-13 current pickup — FINRA T10 typed publication; T11 next
+
+The user requested a new branch off latest main for **SSV-T10**.
+**`feat/finra-parquet-publication`** / [PR #24](https://github.com/thatquantguy44/market-medallion/pull/24)
+starts at main **`55dcd5d`**, merged T09 PR #23.
+T01–T10 are accepted for the selected three-TRF invented local profile. Read
+[T10 acceptance](../../specs/spec012/t10_acceptance.md),
+[publication contract](../../specs/spec012/parquet_contract.md),
+[evidence](../../specs/spec012/evidence/t10_parquet_conformance.json) and
+[Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff).
+
+Explicit `publish` freezes one bounded SQLite source transaction into seven typed
+Parquets and a separate immutable-fact publication catalog. A COMMITTED/PUBLISHED
+journal and sole `parquet/current.json` pointer keep published database rows/files
+coherent across failures. Recovery finishes exact frozen bytes before new
+publication, including after newer ingestion. A verified COMMITTED pointer has
+null `published_at` and `recovery_required`; only the final journal mark reports
+PUBLISHED. Existing operational schema and ingestion remain compatible.
+
+Date32/UTC/int64/boolean/string schemas include versioned exact-decimal structs,
+shares/unit-1/method metadata and fingerprints. Values beyond decimal256 retain
+all coefficient digits, scale and sign. Readback compares schemas, counts, hashes,
+all typed fields and catalog facts. Missing/corrupt bindings or artifacts refuse
+repair/reinitialization; do not glob files or manually repoint a snapshot.
+
+**Verification:** 79 new / **510 FINRA tests**, full offline **1,498 passed /
+92 optional skips**; Ruff lint/format and package source readback pass. Seven
+publication failure boundaries, uncertain commit, newer ingestion, corrupt files/
+pointers/catalog, empty/removal/partial evidence, cutoffs, exact extreme quantities
+and concurrent publishers are covered. Eight actual portable-script commands
+leave all ten original source files unchanged. agent-skills verifies188 entries;
+QuantSmith checkout drift is recorded, with61 pinned Git objects independently
+verified; no library refresh or external checkout change.
+
+**Next: SSV-T11 offline replay into an explicitly empty destination**, preserving
+capture ordering, original first-seen clocks/sequences, versions/removals and
+complete membership. Compare logical history/Gold; generation UUIDs are events,
+not logical replay keys. T12 acquisition, health, research exchange and jobs stay
+open. G1/G2 and real complete-partition/history coverage remain open. No provider
+data request, credential loading, operational-store change, Slack message or
+service/schedule activation occurred. Keep NAAIM paused.
+
+Track the T10 branch's current PR head checks and review threads; no merge is
+implied. Earlier handoffs below are historical and unchanged.
+
 ## 2026-11-13 current pickup — FINRA T09 accepted in PR #23; T10 next
 
 The user added working T09 to the existing **`feat/finra-local-revisions`** /

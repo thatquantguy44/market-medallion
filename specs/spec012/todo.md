@@ -3,12 +3,12 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03–T09 are **complete**; SSV-T10–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03–T10 are **complete locally**; SSV-T11–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01–T09 suites.
+Tests below are future targets except the implemented SSV-T01–T10 suites.
 [README.md](README.md) defines their acceptance IDs.
-The [next-agent handoff](README.md#next-agent-handoff) records the exact T10 pickup
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T11 pickup
 scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -203,13 +203,20 @@ and corresponding arithmetic/query/CLI tests.
 
 ## SSV-T10 — Publish typed Parquet snapshots
 
+**Status:** complete locally, 2026-11-13, on `feat/finra-parquet-publication` from
+latest merged main `55dcd5d` / PR #23.
 **Depends:** SSV-T09; **traces:** SSV-REQ10 / SSV-AC10.
-- [ ] Stage typed files and atomically advance a single committed pointer.
-- [ ] Preserve counts/ratios and schema identity through readback.
+- [x] Stage typed files and atomically advance a single committed pointer.
+- [x] Preserve counts/ratios and schema identity through readback.
 **Verify:** precision plus common-C07 failure injection at staging, DB commit,
 file finalization, pointer publication and final journal marking; restart
 selects one coherent generation and no false success watermark.
-**Files:** `io/parquet.py`, `pipeline.py`, `tests/test_ssv_parquet.py`.
+**Evidence:** [acceptance](t10_acceptance.md), [contract](parquet_contract.md),
+[conformance](evidence/t10_parquet_conformance.json). 79 new / **510 FINRA tests**;
+full offline **1,498 passed / 92 optional skips**; lint/format and package readback pass.
+**Files:** `data/snapshot.py`, `io/parquet.py`, `io/snapshot.py`, `io/catalog.py`,
+`publication.py`, `research.py`, `cli.py` and five corresponding test modules.
+Operational schema/ingestion stays compatible; publication is an explicit command.
 
 ## SSV-T11 — Replay archived captures
 

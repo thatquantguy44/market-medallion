@@ -108,7 +108,8 @@ sanitized receipts pass 49 new checks. T06–T08 now deliver [audited local SQLi
 observed revisions and complete membership](t06_t08_acceptance.md); 379 focused
 checks pass. T09 [research acceptance](t09_acceptance.md) adds matched-population
 metrics and prior-date evidence, bringing the FINRA total to 431 passing checks.
-Next is **SSV-T10**, typed publication/journal.
+T10 [typed publication acceptance](t10_acceptance.md) brings the total to 510 checks.
+Next is **SSV-T11**, offline replay.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -190,3 +191,15 @@ CLI captures verify matched sums, prior revisions/absence and local cutoffs;
 research reads preserve raw and SQLite bytes. Calendar gaps do not establish a
 trading calendar. Missing reported rows cannot supply a population denominator.
 T10 and broader source/publication acceptance remain open.
+
+## SSV-T10 local publication checkpoint
+
+[Acceptance](t10_acceptance.md) closes typed Parquet and the C07 journal for
+invented local input: 79 new / **510 FINRA tests**, full offline **1,498 passed /
+92 optional skips**. Eight actual portable-script commands verify frozen
+catalog/file equality and recovery without changing ten original source files.
+The new branch starts at merged PR #23 main `55dcd5d`. Seven failure boundaries,
+uncertain commit, corruption, large/fractional values and newer source ingestion
+are tested. Source schema, access grants and real provider coverage are unchanged.
+Publication is explicit and local; it does not activate acquisition or services.
+G1/G2 remain open, and T11 replay is next. The T09 checkpoint above is historical.
