@@ -151,8 +151,29 @@ review, candidate, build, publication, health, replay, backup and restore
 commands. Captures/review classifications and selected IDs are required; control
 shape validation does not claim approval. The historical donor
 `calendar_year_start` option is explicitly rejected because it conflicts with
-PRES v1's at-or-before-origin date rule. `fetch` refuses without network access
-until T19 source review is implemented. The producer suite passed 117 tests;
+PRES v1's at-or-before-origin date rule. `fetch` applies a reviewed-source gate before network access; all live
+sources remain blocked while T19 is incomplete. The producer suite passed 117 tests;
 the installed wheel loaded its packaged seven-source catalog and passed five
 CLI tests outside both source checkouts. Frozen real-input qualification and
 live-source admission remain open.
+
+T19 source review and partial fetch implementation: the official access review
+is recorded separately in `source_access_review.md`. Every live source remains
+unapproved. Gates run before HTTP client setup; test-only injected transports
+always create `SYNTHETIC_FIXTURE` captures. Bounded responses, transient retry,
+partial batch preservation and malformed payload retention passed tests. This
+is not yet a complete live-source implementation: source-specific admission,
+transport/HTTP receipt provenance and applicable access decisions remain open.
+In particular the historical FRED archive's use in this development workflow
+needs review against the provider's current terms; a saved API key alone is not
+that review. No provider fetch was performed.
+
+T21 partial operations: the explicit local rebuild job and separate live fetch
+job are registered, with the live schedule STOPPED by default; the shared
+Dagster definitions load. The local job selects capture IDs and a review and
+has no acquisition call. A schedule environment switch cannot bypass the live
+source gate. The runbook and job register describe rollback and unverified
+runtime schedule state. T21 remains open until the T19 source gate and broader
+integration acceptance are completed. After merging current main, 137 producer
+and FOMC orchestration tests passed; 122 focused PRES consumer tests and its
+TypeScript typecheck passed. All integration data used here are fictional.
