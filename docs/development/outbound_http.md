@@ -1,6 +1,6 @@
 # Outbound HTTP configuration and run contract
 
-User-requested extension, 2026-11-04. AAII, NAAIM, SEC FTD and Reg SHO thresholds are current HTTP consumers.
+User-requested extension, 2026-11-04. AAII, NAAIM, SEC FTD, Reg SHO thresholds and FINRA short-sale volume are current HTTP consumers.
 Network settings alone do not enable acquisition.
 
 ## Requirements and acceptance
@@ -12,7 +12,11 @@ Network settings alone do not enable acquisition.
    It is normally the data URL. NYSE threshold acquisition uses its canonical
    published source page because the Download endpoint maps GET but returns
    HEAD404; it then reuses the selected client for the exact validated Download
-   URL. The source-owned receipt records `http_probe_url`; injected transports
+   URL. FINRA uses a HEAD to its fixed trusted FIP token endpoint after access
+   gates, with Basic credentials sent only there and redirects disabled; metadata
+   HEAD404 and the documentation HEAD403 were observed during conformance. Its
+   authenticated POST/metadata GET/data requests reuse the selected client. The
+   source-owned receipt records `http_probe_url`; injected transports
    record null because no real probe occurred.
    Try each permitted route at most once. Remember the first working route for
    all data calls/retries in that run. A new run tests again. No process-global

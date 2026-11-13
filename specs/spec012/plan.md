@@ -1,9 +1,9 @@
 # Implementation plan — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T11 complete for the selected three-TRF API profile, 2026-11-13.
+**Status:** SSV-T01–T12 implemented for the selected three-TRF API profile, 2026-11-13.
 Use [todo.md](todo.md) as the single task list.
 The [next-agent handoff](README.md#next-agent-handoff) is the canonical pickup
-point for SSV-T12 after `feat/finra-parquet-publication` (based on main `55dcd5d`).
+point for SSV-T13 after `feat/finra-parquet-publication` (based on main `55dcd5d`).
 The user requested the complete documentation set; this plan does not activate
 acquisition or schedule execution. [Spec012](README.md) defines acceptance.
 
@@ -35,8 +35,10 @@ records 431 FINRA checks and independent rational/concurrency evidence.
 T10 adds [typed publication and recovery](t10_acceptance.md), with a frozen catalog,
 exact-decimal schemas and one committed pointer. T11 adds [verified replay](t11_acceptance.md)
 into an empty disjoint destination, preserving original clocks/history/audit;
-551 FINRA checks pass. Next is T12 bounded admitted acquisition. G1/G2 remain open;
-cross-page assembly, acquisition, export and jobs remain later work.
+T12 now adds [bounded acquisition](t12_acceptance.md), correction overlap, retained
+retries and verified two-pass collections.626 FINRA checks pass; one real Chicago
+TRF date with 5,849 rows reconciles through replay/Parquet. Next is T13 health and
+retention dry run. G1/G2, wider coverage, interchange and jobs remain open.
 
 ## Decisions and dependency flow
 

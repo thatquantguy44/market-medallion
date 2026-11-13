@@ -1,0 +1,185 @@
+{
+  "acquisition": {
+    "accepted_rows": 5849,
+    "consistency_basis": "TWO_PASS_EQUALITY",
+    "http_attempts_after_probe": 6,
+    "metadata_sha256": "0444c8491e61c5160f4a94e302efc7f4aa0fecc721db5d7e87cf09ac5b244d4f",
+    "network_route": "direct",
+    "probe_request_allowance": 2,
+    "request_budget_used": 8,
+    "response_bytes": 2520251,
+    "status": "COMPLETE"
+  },
+  "automated_tests": {
+    "finra": 626,
+    "full_offline_passed": 1614,
+    "new_acquisition_tests": 75,
+    "optional_skipped": 92
+  },
+  "branch": "feat/finra-parquet-publication",
+  "captures": [
+    {
+      "archived_at": "2026-11-13T22:18:40.891677Z",
+      "bytes": 1075374,
+      "capture_id": "0c828fd2-d500-4cd0-9c4b-5c4f50235f28",
+      "capture_sequence": 1,
+      "format": "finra-ssv-bronze/1",
+      "offset": 0,
+      "payload_sha256": "ebf09aed20fd4b0f11fed33b3bcdb2e85e483c529192e29e0e8994690fb4e958",
+      "receipt_sha256": "287fed900acf02ed97c7e096a9f4057c070a0e28660e942806ce8fa9c17a7512",
+      "record_total": "5849",
+      "retrieved_at": "2026-11-13T22:18:40.891672Z"
+    },
+    {
+      "archived_at": "2026-11-13T22:18:41.582095Z",
+      "bytes": 183015,
+      "capture_id": "3ac82afb-18e8-4453-bc59-87fe7d535a1b",
+      "capture_sequence": 2,
+      "format": "finra-ssv-acquisition-page/1",
+      "offset": 5000,
+      "payload_sha256": "0de29395604863914e857ddae8f521085114893c4e0f8c0d1d39f81d987f13fe",
+      "receipt_sha256": "2c06e3a50bfcc72570863dea93e266b83f0353983bab0e6dd846277fdbc72486",
+      "record_total": "5849",
+      "retrieved_at": "2026-11-13T22:18:41.582091Z"
+    },
+    {
+      "archived_at": "2026-11-13T22:18:42.464378Z",
+      "bytes": 1075374,
+      "capture_id": "36bf6050-6895-4016-b795-2ac74608f802",
+      "capture_sequence": 3,
+      "format": "finra-ssv-acquisition-page/1",
+      "offset": 0,
+      "payload_sha256": "ebf09aed20fd4b0f11fed33b3bcdb2e85e483c529192e29e0e8994690fb4e958",
+      "receipt_sha256": "1c2ccdc8bfc5b6dcb9b2c0149e31a964fd2c81debd8769fb453b1ef815e5bfa1",
+      "record_total": "5849",
+      "retrieved_at": "2026-11-13T22:18:42.464373Z"
+    },
+    {
+      "archived_at": "2026-11-13T22:18:43.129458Z",
+      "bytes": 183015,
+      "capture_id": "a6bf7e47-ac96-47bf-97d6-a5ee763903fe",
+      "capture_sequence": 4,
+      "format": "finra-ssv-acquisition-page/1",
+      "offset": 5000,
+      "payload_sha256": "0de29395604863914e857ddae8f521085114893c4e0f8c0d1d39f81d987f13fe",
+      "receipt_sha256": "63183872e3ac175392b3d4ad061e0fe867c7ec435952c56e1e40abde17212477",
+      "record_total": "5849",
+      "retrieved_at": "2026-11-13T22:18:43.129454Z"
+    },
+    {
+      "archived_at": "2026-11-13T22:18:43.174103Z",
+      "bytes": 228,
+      "capture_id": "6b63a35a-1f7f-4f4f-9835-e2e253e93a37",
+      "capture_sequence": 5,
+      "format": "finra-ssv-page-collection/1",
+      "offset": 0,
+      "payload_sha256": "07edf83b7a3c4636faa4f39936c93452fc5e8b8e02578971bc407411e0a9f07d",
+      "receipt_sha256": "b3f199bfe8476414e8eb7c84b03a744f61114c7aab5f73d4d294ac33a2c87b18",
+      "record_total": "5849",
+      "retrieved_at": null
+    }
+  ],
+  "check_id": "69a12b6f-a6b7-4b23-9c27-658ccd87e262",
+  "checks": {
+    "collection_promoted_only_after_verification": true,
+    "exact_original_pages_retained": true,
+    "original_clocks_preserved_by_replay": true,
+    "original_source_inventory_unchanged": true,
+    "published_tables_equal": true,
+    "source_replay_gold_audit_equal": true,
+    "two_pass_rows_agree": true
+  },
+  "input_kind": "provider_api",
+  "limitations": [
+    "One date/one Chicago TRF only; no all-facility/history acceptance or G1/G2 promotion",
+    "Two-pass agreement is an observed consistency check, not a provider snapshot token",
+    "Source-aware release health, interchange and orchestration remain later tasks"
+  ],
+  "local_cli_checks": [
+    {
+      "command": "replay",
+      "exit_code": 0,
+      "root": "target"
+    },
+    {
+      "command": "gold",
+      "exit_code": 0,
+      "root": "source"
+    },
+    {
+      "command": "gold",
+      "exit_code": 0,
+      "root": "target"
+    },
+    {
+      "command": "audit",
+      "exit_code": 0,
+      "root": "source"
+    },
+    {
+      "command": "audit",
+      "exit_code": 0,
+      "root": "target"
+    },
+    {
+      "command": "publish",
+      "exit_code": 0,
+      "root": "source"
+    },
+    {
+      "command": "publish",
+      "exit_code": 0,
+      "root": "target"
+    },
+    {
+      "command": "published",
+      "exit_code": 0,
+      "root": "source"
+    },
+    {
+      "command": "published",
+      "exit_code": 0,
+      "root": "target"
+    }
+  ],
+  "permission_reference": "USER_ATTESTED_PUBLIC_API_TERMS_2026_11_10",
+  "preliminary_findings": [
+    "Metadata HEAD404 and documentation HEAD403 blocked startup before data queries; use fixed trusted FIP HEAD probe.",
+    "FIP repeated non-source cookie headers are ignored and never retained; duplicate completeness headers still reject.",
+    "Initial bounded data page was PARTIAL:5000/5849 rows. Final conformance uses two complete two-page passes."
+  ],
+  "preserved_source_files": 40,
+  "publication": {
+    "replay_generation": "5e138cc0-a9f4-4596-b84c-ea4764a393c7",
+    "row_counts": {
+      "audit": 5,
+      "captures": 5,
+      "coverage": 1,
+      "gold": 5849,
+      "membership": 5849,
+      "research": 5849,
+      "silver": 5849
+    },
+    "source_generation": "6bb3f84a-778b-4951-93f3-9cacfd69af38"
+  },
+  "recorded_at": "2026-11-13T22:21:22.706406+00:00",
+  "replay": {
+    "logical_state_sha256": "d9d73dc2f3eac7f818ed59ae7018d21205bdf98677f27c46707fa996c96883c6",
+    "replayed": 5,
+    "row_counts": {
+      "attempts": 5,
+      "capture_rows": 5849,
+      "captures": 5,
+      "gold": 5849,
+      "partitions": 1,
+      "versions": 5849
+    },
+    "status": "SUCCEEDED"
+  },
+  "schema_id": "finra-ssv-t12-conformance/1",
+  "scope": {
+    "data_version": 1,
+    "facility_id": "nasdaq_chicago_trf",
+    "trade_date": "2026-11-09"
+  }
+}

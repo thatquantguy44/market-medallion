@@ -10,7 +10,8 @@ versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/scri
 [Storage contract](local_storage_contract.md), [local acceptance](t06_t08_acceptance.md)
 and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
 T10 implements typed local Parquet and coherent publication/recovery. T11 implements
-verified empty-target replay. Downstream exchange, acquisition and jobs remain unimplemented.
+verified empty-target replay. T12 implements bounded admitted acquisition and
+verified page collections. Downstream exchange and jobs remain unimplemented.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -249,3 +250,20 @@ refuse replay. The empty disjoint destination receives a fresh warehouse identit
 and separate replay completion metadata only after a private verified rebuild.
 `replay.json` records inventory/state hashes, counts and original knowledge labels.
 T10 publication remains explicit and creates new publication event identities.
+
+## SSV-T12 acquisition and derived collection lineage
+
+[Contract](acquisition_contract.md) defines correction overlap, finite resources,
+source-owned retries, admission and the separate acquisition journal. A current
+successful partition is independent of a later failed network attempt; health
+must consult transport evidence as well as terminal ingestion state.
+
+A collection binds two complete agreeing sets of original page captures. Every
+page's payload/hash/request/clock/sequence remains immutable. Verification pages
+are evidence-only; partial/error evidence never changes membership. The derived
+collection manifest has its own capture UUID/clock/sequence and payload hash;
+source rows use original offset plus local page row. Provider publication stays
+unknown. Complete normalized rows enter the existing atomic membership/version
+transaction once; source counts/ratios and source identifiers retain exactness.
+Single-response complete partitions keep the original path. Replay must admit the
+collection's original parser row/byte profile; publication remains explicit.

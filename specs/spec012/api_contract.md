@@ -2,14 +2,15 @@
 
 Selected 2026-11-10 for personal noncommercial internal research. This explicitly
 amends the original TXT-first plan; it does not enable website downloads.
-Traces: SSV-T01–SSV-T11 / SSV-REQ01–SSV-REQ11. Runtime implementation now includes
+Traces: SSV-T01–SSV-T12 / SSV-REQ01–SSV-REQ11 / SSV-NFR01. Runtime implementation now includes
 approved-use admission, the source schema/facility registry and a pure receipt-bound
 JSON parser plus pure quantity validation/text conversion and per-observation
 ratios, plus [immutable local Bronze and sanitized outcomes](bronze_contract.md).
 T06–T08 add [audited local SQLite and observed membership](local_storage_contract.md),
 with strict per-pipeline configuration and a tested CLI/script. T09 research and
 [T10 typed local publication](parquet_contract.md) and [T11 terminal-ledger replay](replay_contract.md)
-are implemented. Data acquisition, downstream exchange and jobs are not implemented.
+are implemented. T12 adds [bounded admitted acquisition](acquisition_contract.md)
+and verified page collections. Downstream exchange and jobs are not implemented.
 
 ## Approved route and evidence
 
@@ -107,7 +108,7 @@ publication time unknown unless source-owned evidence establishes it.
 
 ## Implemented parser and next bounded scope
 
-SSV-T01–T11 are complete for the selected source profile: strict schema/version,
+SSV-T01–T12 are implemented for the selected source profile: strict schema/version,
 explicit scope exclusions, disjoint selection, acquisition-date guards and a pure
 receipt-bound parser are implemented. It rejects truncated JSON, unknown/duplicate
 fields, duplicate logical keys, malformed dates, invalid symbols and impossible
@@ -120,7 +121,7 @@ T06–T08 subsequently deliver the [local loop](t06_t08_acceptance.md), revision
 complete replacement/removal and local UTC/sequence cutoffs. Partial pages never
 publish rows or infer removals. T09 adds [scope-safe research Gold](research_gold_contract.md),
 with exact matched sums, prior complete dates and local cutoff evidence.
-T10 adds [typed publication and C07 recovery](t10_acceptance.md). T11 adds [offline replay](t11_acceptance.md). **Next: SSV-T12 acquisition.**
+T10 adds [typed publication and C07 recovery](t10_acceptance.md). T11 adds [offline replay](t11_acceptance.md). T12 adds [bounded acquisition](t12_acceptance.md). **Next: SSV-T13 health/retention.**
 T04's pure ratios and quantity codec do not constitute published Gold or persistence.
 
 Future local input is an approved archived JSON response and its request/scope
@@ -240,5 +241,28 @@ defines source quantity exactness, text representation and caller-context isolat
 quantity tuples and 12 ratios in the retained six-row sample; bytes are unchanged,
 pages remain partial and no observation was promoted or clock assigned. G1/G2
 remain open. T05 subsequently added [Bronze receipts](bronze_contract.md); next
-is T12 bounded acquisition after accepted T10 publication and T11 replay. Provider
-acquisition and scheduling remain later tasks.
+is T13 health/retention after accepted T12 bounded acquisition. Scheduling and
+interchange remain later tasks.
+
+## SSV-T12 request/collection amendment
+
+[Acquisition contract](acquisition_contract.md) adds the sole accepted `sortFields`
+shape: `["securitiesInformationProcessorSymbolIdentifier"]`, alongside the existing
+exact trade-date and market filters. Offsets advance by actual returned rows.
+Request/page/row/byte bounds remain finite; synchronous API responses cap at 5000
+rows/3MB. A complete single response can promote directly. Multi-page promotion
+requires contiguous full coverage with stable counts, unique symbols and an exact
+second normalized pass. This is observed agreement, not a provider snapshot token.
+
+Original raw pages/receipts remain separate. `finra-ssv-acquisition-page/1` marks
+verification/subsequent pages as evidence-only even if a changed response becomes
+short/empty. `finra-ssv-page-collection/1` is a derived manifest of both page-ID
+lists; its payload hash is the manifest's hash, not a fabricated HTTP body.
+Its first original API receipt remains unmodified. Collection parsing verifies
+all page identities/scopes/counts/hashes before the unchanged partition transaction.
+T11 replay preserves these explicit formats. Provider publication stays null;
+collection first-seen is the new capture clock after all inputs are observed.
+
+[Real conformance](evidence/t12_acquisition_conformance.json) reconciles one Chicago
+TRF date, 2026-11-09, with 5,849 rows over two two-page passes, replay and typed
+publication. No all-facility/history or release-calendar claim is made.

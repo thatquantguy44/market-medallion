@@ -110,7 +110,8 @@ checks pass. T09 [research acceptance](t09_acceptance.md) adds matched-populatio
 metrics and prior-date evidence, bringing the FINRA total to 431 passing checks.
 T10 [typed publication acceptance](t10_acceptance.md) brings the total to 510 checks.
 T11 [offline replay acceptance](t11_acceptance.md) brings the total to 551 checks.
-Next is **SSV-T12**, bounded admitted acquisition.
+T12 [bounded acquisition acceptance](t12_acceptance.md) brings the total to626 checks.
+Next is **SSV-T13**, release-aware health and retention dry run.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -216,3 +217,23 @@ parity; 38 original source files remain unchanged. No source/provider request or
 schema/admission change. Replay requires verified original Bronze and terminal
 source ledger; unresolved captures refuse. T12 acquisition is next. G1/G2 and
 real complete-partition/history coverage remain open. Prior checkpoints are historical.
+
+## SSV-T12 bounded acquisition checkpoint
+
+[Acceptance](t12_acceptance.md) records 75 new / 626 FINRA tests and full offline
+1,614 passed /92 optional skips, plus separate real-source conformance. Current
+official API/auth/limit and API/Equity terms were checked before coding. Existing
+Public credential and user-attested personal noncommercial scope were used only
+for one isolated Chicago TRF date, 2026-11-09. Four original pages form two agreeing
+passes over 5,849 rows; a derived complete collection, replay and Parquet agree.
+Nine local script checks leave 40 original source files unchanged. Raw rows remain
+ignored; tracked evidence contains counts/hashes rather than licensed rows/secrets.
+
+Metadata HEAD404 and documentation HEAD403 were retained as failed startup checks.
+The fixed trusted FIP HEAD probe selected routing; POST authenticated before
+metadata/data. Repeatable non-source cookie headers are ignored, not logged;
+duplicate completeness/version headers still reject. Tokens never enter archives.
+An initial 5000-row partial query did not promote. Full page collection is now
+explicitly verified, with no synthetic provider response. This acceptance does
+not extend to all facilities/history, source release timing, jobs or G1/G2.
+T13 health/retention is next. NAAIM remains paused.

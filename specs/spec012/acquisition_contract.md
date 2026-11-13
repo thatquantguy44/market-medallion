@@ -2,7 +2,8 @@
 
 Selected 2026-11-13 on the existing `feat/finra-parquet-publication` branch.
 Traces SSV-NFR01 / SSV-AC12 and common C05–C07. Reuses the accepted API/parser,
-Bronze, SQLite, publication and replay contracts without changing their schema.
+Bronze, SQLite, publication and replay contracts. Provider/SQLite schemas remain
+compatible; explicit evidence-page and collection formats extend capture provenance.
 
 ## Selected first acquisition boundary
 
@@ -12,11 +13,11 @@ all planned partitions, including previously complete ones. Do not infer holiday
 or availability from an empty local store. Validate the expanded window against
 the rolling twelve-calendar-month guard using the current New York date.
 
-One synchronous offset-zero response per partition is the supported boundary.
-The API's synchronous cap is5000 records/3MB. Complete validated responses may
-replace membership; a larger/partial response is retained and reported PARTIAL,
-with no removal/promotion. Cross-page assembly and asynchronous jobs remain
-unsupported; no synthetic combined response or false completeness claim is made.
+Synchronous responses cap at 5000 records/3MB. A complete single response may
+replace membership directly. Larger partitions use the bounded two-pass collection
+below; exhausted/incomplete collections retain evidence without changing prior
+membership. Asynchronous jobs remain unsupported. No synthetic provider response
+or false completeness claim is made.
 
 Finite limits cover expanded days, partitions, request attempts (including startup
 probe allowance, auth, metadata and retries), per-response/total bytes, page rows,
@@ -91,9 +92,9 @@ The existing user-attested noncommercial scope remains unchanged.
 
 ## T12b — verified page collection amendment
 
-The first live Chicago query returned5000 of5849 rows. Complete the synchronous
+The first live Chicago query returned 5000 of 5849 rows. Complete the synchronous
 path with bounded pagination rather than treating primary TRF partitions as
-permanently partial. Add `max_pages` (default3, maximum20) and a stable raw-symbol
+permanently partial. Add `max_pages` (default 3, maximum 20) and a stable raw-symbol
 sort, with exact date/market equality filters. Advance offsets by actual returned
 rows, honor effective limits/payload caps, and require an unchanged total,
 contiguous offsets, unique symbols and complete coverage within each pass.
