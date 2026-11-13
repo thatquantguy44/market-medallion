@@ -1,0 +1,185 @@
+{
+  "tasks": [
+    "SSV-T06",
+    "SSV-T07",
+    "SSV-T08"
+  ],
+  "requirements": [
+    "SSV-AC06",
+    "SSV-AC07",
+    "SSV-AC08"
+  ],
+  "reviewed_date": "2026-11-13",
+  "method": "Invented-only temporary-root CLI/script conformance; no provider data, credentials or operational stores.",
+  "captures": [
+    {
+      "capture_id": "67b5ffc8-db8b-46f0-b66d-9ad333230f77",
+      "capture_sequence": 1,
+      "archived_at": "2026-11-13T17:21:22.676934Z",
+      "status": "APPLIED",
+      "new_versions": 2,
+      "removed_rows": 0,
+      "accepted_rows": 2,
+      "receipt_sha256": "9500b5d29e3dd005166ef278ca28088afabaee8fef86be2c9d68cdb2a1c75d49",
+      "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+      "fixture_case": "initial"
+    },
+    {
+      "capture_id": "95627210-4a19-4235-8333-4ec6f7af7f73",
+      "capture_sequence": 2,
+      "archived_at": "2026-11-13T17:21:22.780041Z",
+      "status": "APPLIED",
+      "new_versions": 0,
+      "removed_rows": 0,
+      "accepted_rows": 2,
+      "receipt_sha256": "263488076b2fad8f9797371621ca926a61b9deb972e4715b1de3825000d69cd5",
+      "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+      "fixture_case": "unchanged"
+    },
+    {
+      "capture_id": "ab70e4f4-9149-46e4-8dc5-07a914576ef4",
+      "capture_sequence": 3,
+      "archived_at": "2026-11-13T17:21:22.923443Z",
+      "status": "APPLIED",
+      "new_versions": 1,
+      "removed_rows": 0,
+      "accepted_rows": 2,
+      "receipt_sha256": "51c3b73a74d001df065cba7641dee4a56e0523d44b5cff4d630968f6dfeeed47",
+      "payload_sha256": "bdec56d32a69fbe4d6b22f9cc422b175afb23f198ee24ac7605e49309b468d48",
+      "fixture_case": "correction"
+    },
+    {
+      "capture_id": "78b7577b-2865-4d9a-b861-93969a427944",
+      "capture_sequence": 4,
+      "archived_at": "2026-11-13T17:21:23.033603Z",
+      "status": "APPLIED",
+      "new_versions": 1,
+      "removed_rows": 0,
+      "accepted_rows": 2,
+      "receipt_sha256": "40b6e29246eee62e656519963600c8647b49c3902eaccd93062552e1750d6073",
+      "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+      "fixture_case": "reversion"
+    },
+    {
+      "capture_id": "cc3ef9cc-33e9-4d11-ab88-83830789a8e3",
+      "capture_sequence": 5,
+      "archived_at": "2026-11-13T17:21:23.137833Z",
+      "status": "PARTIAL",
+      "new_versions": 0,
+      "removed_rows": 0,
+      "accepted_rows": 0,
+      "receipt_sha256": "b9c4a0df4cc1dadd3d5f87a213fd8c36b8a457273bcd96365b01d0c516ecc3ff",
+      "payload_sha256": "9e1c9f87c0f6a062409f3a53b44ad3a4fbc2fd63f7bd212170ab9ac2adc3f1e0",
+      "fixture_case": "partial"
+    },
+    {
+      "capture_id": "2acbf9f7-0260-416f-b735-52a8ffb675e8",
+      "capture_sequence": 6,
+      "archived_at": "2026-11-13T17:21:23.240481Z",
+      "status": "APPLIED",
+      "new_versions": 1,
+      "removed_rows": 1,
+      "accepted_rows": 1,
+      "receipt_sha256": "78568c481cfe7edf88667fbf383b0b8494b44a589c889018e23a51c7a018842b",
+      "payload_sha256": "9e1c9f87c0f6a062409f3a53b44ad3a4fbc2fd63f7bd212170ab9ac2adc3f1e0",
+      "fixture_case": "removal"
+    },
+    {
+      "capture_id": "0e665fc5-9484-4e6a-88b3-7ea8c13d9935",
+      "capture_sequence": 7,
+      "archived_at": "2026-11-13T17:21:23.344623Z",
+      "status": "APPLIED",
+      "new_versions": 1,
+      "removed_rows": 1,
+      "accepted_rows": 0,
+      "receipt_sha256": "8c8c8a98964b6728d643d9753af387aeee88bbca9a815c2e06f3f36a2a7f52c6",
+      "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "fixture_case": "empty"
+    },
+    {
+      "capture_id": "f71e7c93-7f94-4b43-9093-a857df1f54e9",
+      "capture_sequence": 8,
+      "archived_at": "2026-11-13T17:21:23.450401Z",
+      "status": "APPLIED",
+      "new_versions": 2,
+      "removed_rows": 0,
+      "accepted_rows": 2,
+      "receipt_sha256": "5bfa6fd1c175d09267eb59e36260436d0d95b31fbe0cb7c78c747fbb3cc82b7e",
+      "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+      "fixture_case": "return"
+    },
+    {
+      "capture_id": "71e90e86-569b-49af-92e0-e9ef3bcb1041",
+      "capture_sequence": 9,
+      "archived_at": "2026-11-13T17:21:23.556921Z",
+      "status": "REJECTED",
+      "new_versions": 0,
+      "removed_rows": 0,
+      "accepted_rows": 0,
+      "receipt_sha256": "92f139a215af411d860acc47332ad146e199c7ffeb423909d7582a9e1cdb9052",
+      "payload_sha256": "8b351adb56355ffc40a4986ab30267eecae89710c63d09cba764a35adfda3ef5",
+      "fixture_case": "rejection"
+    }
+  ],
+  "cutoff_row_counts": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    1,
+    0,
+    2,
+    2
+  ],
+  "table_counts": {
+    "attempts": 9,
+    "captures": 9,
+    "versions": 8,
+    "capture_rows": 11,
+    "partitions": 1,
+    "gold": 2
+  },
+  "privacy_sentinel_excluded": true,
+  "sqlite_integrity": "ok",
+  "foreign_key_violations": 0,
+  "core_modules_unchanged_from_merged_t05": [
+    "manifest.py",
+    "registry.py",
+    "data/api.py",
+    "data/quantities.py",
+    "data/gold.py",
+    "data/capture.py",
+    "io/bronze.py"
+  ],
+  "module_sha256": {
+    "config.py": "3b1f685f8ee714feb3c505216cde10a57dff766e1b66cd0bef841a1c5f0e5f2e",
+    "manifest.py": "c245a122c5d4e6766ff36013f9825a35eaa68eef0148233c3d52df42cb297016",
+    "registry.py": "2ff33cc86d1ec657a88a084cf195318a2e12c79647b00237d535a07865b28df7",
+    "__init__.py": "07dbe0ab071994f5108cdd3f2f9b3abc6d968d0a801a0e353cd25e9dbec93b7d",
+    "cli.py": "baf441ced7f5b4824d891c0d2726468c3373ff36a0388cae91b13420c301e2d8",
+    "pipeline.py": "38556a45faef47a38da6a9b3e35d40678c5e8c3a9455082daf1e7e73b352a48f",
+    "__main__.py": "4a93ffa7b7eed54e9e232fc972f6bcce478e071c6c3afce56f4dc847e75983ea",
+    "io/warehouse.py": "1e1985c989f2f383895fa658d91bd60bb610b60f8f8380a1783d2c1ba924eac2",
+    "io/__init__.py": "ac2cc2b8f2fe9271952539a66e98ebe12706d0e5848e09562b8ca3495187dd44",
+    "io/bronze.py": "37a76dcbed01cae6a6765e1559ff9aff32b791550fd576a4a511b0b6936a33d7",
+    "io/schema.py": "30a4a6c834cbceded23e80a82451b6d8eae1adc056a5e9a254f33abec70936de",
+    "data/__init__.py": "cbcb5fc565035fe00b2e64d423fc611feb706c2ea508e5ec09461f85046fef6a",
+    "data/quantities.py": "04286db168e205fb4c76b0c854f58bdac918bbf27c3f7c78e69b5c5f65477547",
+    "data/api.py": "6bd8b5543b900eee92c2e2e62ac242676c102a8e30e815355a4e4720a881313c",
+    "data/capture.py": "4a00bcfa8e8f0c98de4e8140ef54f968236f2aa7039081132f7e1cb1894e2b2d",
+    "data/gold.py": "c339c8f11583cf820ad253582ff828a5a141ff28b1e9231b562c1a7d53d2c8ad",
+    "data/versions.py": "7605e9e7af0fc7b0de82d307641fc7adbc2822fee5b075fdea85c63625af061f"
+  },
+  "verification": {
+    "local_pipeline_tests": 17,
+    "cli_config_tests": 8,
+    "version_tests": 17,
+    "replacement_tests": 22,
+    "finra_tests": 379,
+    "offline_tests_passed": 1233,
+    "optional_skips": 92
+  },
+  "coverage_limit": "Invented one-page partitions only. G1/G2, real-source coverage, cross-page assembly, Parquet, replay, acquisition, exports and jobs remain open.",
+  "next_task": "SSV-T09"
+}

@@ -1,6 +1,8 @@
 # SSV-T06–T08 — audited local partitions and observed changes
 
 Selected 2026-11-13 on `feat/finra-local-revisions`, from merged T05 PR #20.
+**Status:** implemented and accepted; [acceptance](t06_t08_acceptance.md) and
+[nine-capture evidence](evidence/t06_t08_local_conformance.json).
 Traces SSV-REQ06–08 / SSV-AC06–08, with C04–C07 and existing admission/parser
 contracts. Implement in three tested increments: T06 SQLite plus local CLI,
 T07 numeric revision/reversion semantics, T08 complete replacement/removal and
@@ -93,3 +95,23 @@ Official references checked before coding:
 [Equity use terms](https://developer.finra.org/specific-terms-equity-data), and
 [Python 3.12 SQLite transactions](https://docs.python.org/3.12/library/sqlite3.html#transaction-control).
 The existing admission and verified three-TRF schema remain unchanged.
+
+## Implemented storage details
+
+Silver values are canonical JSON documents with exact decimal text, explicit
+SQLite key/time columns and capture-bound content/version hashes. Membership
+hashes bind symbol, version and source-row order to a terminal result. The Gold
+view joins the committed partition pointer to that complete membership. Reads
+verify identity, actual schema, foreign keys, version/membership checksums and
+partition scope. A separate root binding refuses a lost warehouse directory;
+missing/foreign bindings and symlinked files/SQLite sidecars refuse repair.
+Initialization failures may require explicit investigation; automatic warehouse
+recreation is deliberately absent. No service or existing store was provisioned.
+
+Bound versions at 250,000, audit/history output at 1,000 rows, metadata at 64 KiB
+and default payload/parser limits at 20 MiB / 5,000 rows. Identical captures at
+the version budget still append capture evidence without allocating a version.
+Attempts retain parser/transform settings even on failure. `completed_at` is the
+local precommit completion observation after transformation, not an asserted
+provider clock or exact fsync completion. A postcommit response failure leaves
+APPLIED evidence; retry verifies and returns that original result.

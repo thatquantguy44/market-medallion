@@ -2,11 +2,13 @@
 
 Selected 2026-11-10 for personal noncommercial internal research. This explicitly
 amends the original TXT-first plan; it does not enable website downloads.
-Traces: SSV-T01–SSV-T05 / SSV-REQ01–SSV-REQ05. Runtime implementation now includes
+Traces: SSV-T01–SSV-T08 / SSV-REQ01–SSV-REQ08. Runtime implementation now includes
 approved-use admission, the source schema/facility registry and a pure receipt-bound
 JSON parser plus pure quantity validation/text conversion and per-observation
 ratios, plus [immutable local Bronze and sanitized outcomes](bronze_contract.md).
-Data acquisition, warehouse and jobs are not implemented.
+T06–T08 add [audited local SQLite and observed membership](local_storage_contract.md),
+with strict per-pipeline configuration and a tested CLI/script. Data acquisition,
+Parquet, replay, downstream exchange and jobs are not implemented.
 
 ## Approved route and evidence
 
@@ -104,7 +106,7 @@ publication time unknown unless source-owned evidence establishes it.
 
 ## Implemented parser and next bounded scope
 
-SSV-T01–T05 are complete for the selected source profile: strict schema/version,
+SSV-T01–T08 are complete for the selected source profile: strict schema/version,
 explicit scope exclusions, disjoint selection, acquisition-date guards and a pure
 receipt-bound parser are implemented. It rejects truncated JSON, unknown/duplicate
 fields, duplicate logical keys, malformed dates, invalid symbols and impossible
@@ -113,7 +115,9 @@ shares; binary floating point and integer truncation are forbidden. A complete
 empty response is distinct from missing, pending, denied or failed extraction.
 T05 now archives admitted exact bytes before parsing, with safe request evidence,
 immutable sequence/clocks and sanitized rejection outcomes. [Acceptance](t05_acceptance.md).
-**Next: SSV-T06**, one invented local SQLite partition.
+T06–T08 subsequently deliver the [local loop](t06_t08_acceptance.md), revisions,
+complete replacement/removal and local UTC/sequence cutoffs. Partial pages never
+publish rows or infer removals. **Next: SSV-T09**, scope-safe research Gold.
 T04's pure ratios and quantity codec do not constitute published Gold or persistence.
 
 Future local input is an approved archived JSON response and its request/scope
@@ -233,4 +237,5 @@ defines source quantity exactness, text representation and caller-context isolat
 quantity tuples and 12 ratios in the retained six-row sample; bytes are unchanged,
 pages remain partial and no observation was promoted or clock assigned. G1/G2
 remain open. T05 subsequently added [Bronze receipts](bronze_contract.md); next
-is T06 SQLite. Provider acquisition and scheduling remain later slices.
+is T09 research Gold after the accepted T06–T08 local SQLite slices. Provider
+acquisition and scheduling remain later tasks.
