@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlsplit
 from urllib.request import (
+    HTTPRedirectHandler,
     HTTPSHandler,
     ProxyHandler,
     Request,
@@ -146,10 +147,18 @@ class _RunProxyHandler(ProxyHandler):
         return None
 
 
-def _make_opener(route, proxies, no_proxy, context):
+class _NoRedirectHandler(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def _make_opener(route, proxies, no_proxy, context, *, allow_redirects=True):
     # An explicit empty ProxyHandler disables OS/environment proxy discovery.
     handler = _RunProxyHandler(proxies, no_proxy) if route == "proxy" else ProxyHandler({})
-    return build_opener(handler, HTTPSHandler(context=context)).open
+    handlers = [handler, HTTPSHandler(context=context)]
+    if not allow_redirects:
+        handlers.append(_NoRedirectHandler())
+    return build_opener(*handlers).open
 
 
 def _clone(request):
@@ -182,7 +191,13 @@ class HttpRun:
 
 
 def prepare_http(
-    request: Request, settings=None, *, context=None, opener_factory=None, environ=None
+    request: Request,
+    settings=None,
+    *,
+    context=None,
+    opener_factory=None,
+    environ=None,
+    allow_redirects=True,
 ):
     """Probe the permitted routes once; return a client that never changes route.
 
@@ -195,6 +210,11 @@ def prepare_http(
     if not context.check_hostname or context.verify_mode != ssl.CERT_REQUIRED:
         raise ValueError("network TLS certificate and hostname verification must remain enabled")
     factory = opener_factory or _make_opener
+    if not allow_redirects and opener_factory is None:
+
+        def factory(route, proxies, no_proxy, tls):
+            return _make_opener(route, proxies, no_proxy, tls, allow_redirects=False)
+
     parts = urlsplit(request.full_url)
     if parts.scheme not in ("http", "https") or request.get_method() not in ("GET", "HEAD"):
         raise ValueError("startup routing requires an HTTP(S) GET/HEAD provider request")

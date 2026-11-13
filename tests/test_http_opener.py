@@ -5,6 +5,7 @@ import os
 import threading
 from contextlib import contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.error import HTTPError
 from urllib.request import Request
 
 import pytest
@@ -26,6 +27,10 @@ def server(*, redirect=None, connect_status=407):
         def do_GET(self):
             self.respond()
 
+        def do_POST(self):
+            self.rfile.read(int(self.headers.get("Content-Length", 0)))
+            self.respond()
+
         def do_CONNECT(self):
             calls.append((self.command, self.path, self.headers.get("Proxy-Authorization")))
             self.send_response(connect_status)
@@ -33,7 +38,7 @@ def server(*, redirect=None, connect_status=407):
 
         def respond(self):
             calls.append((self.command, self.path, self.headers.get("Proxy-Authorization")))
-            if redirect and self.command == "GET":
+            if redirect and self.command in ("GET", "POST"):
                 self.send_response(302)
                 self.send_header("Location", redirect)
             else:
@@ -137,3 +142,23 @@ def test_missing_redirect_scheme_proxy_cannot_silently_reach_origin_directly():
         with pytest.raises(URLError, match="no proxy for the destination scheme"):
             open_request(Request(origin), timeout=2)
         assert calls == []
+
+
+@pytest.mark.parametrize("method", ["GET", "POST"])
+def test_sensitive_delivery_can_disable_redirects_without_contacting_target(method):
+    with server() as (target, target_calls):
+        with server(redirect=target + "/leak") as (origin, calls):
+            client = prepare_http(
+                Request(origin), NetworkConfig(mode="direct"), allow_redirects=False
+            )
+            request = Request(
+                origin + "/secret",
+                method=method,
+                data=b"private payload" if method == "POST" else None,
+            )
+            with pytest.raises(HTTPError) as error:
+                client(request)
+            assert error.value.code == 302
+            error.value.close()
+            assert target_calls == []
+            assert [(m, p) for m, p, _ in calls] == [("HEAD", "/"), (method, "/secret")]
