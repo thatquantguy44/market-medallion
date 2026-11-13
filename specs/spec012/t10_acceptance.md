@@ -1,7 +1,9 @@
 # SSV-T10 — typed publication acceptance
 
 Accepted locally 2026-11-13 on `feat/finra-parquet-publication`, created from latest
-merged main `55dcd5d` / PR #23. Traces SSV-REQ10 / SSV-AC10 and common C04–C07.
+merged main `55dcd5d` / PR #23, delivered in
+[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24).
+Traces SSV-REQ10 / SSV-AC10 and common C04–C07.
 [Contract](parquet_contract.md), [conformance](evidence/t10_parquet_conformance.json),
 [runbook](../../docs/deployment/ssv_local_runbook.md#t10-typed-publication-and-recovery).
 This closes T10 for invented local input; G1/G2 and real-source coverage stay open.

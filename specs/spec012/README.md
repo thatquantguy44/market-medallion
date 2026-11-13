@@ -30,7 +30,8 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 **Start here:** [T10 acceptance](t10_acceptance.md), [publication contract](parquet_contract.md),
 [evidence](evidence/t10_parquet_conformance.json) and [SSV-T11](todo.md#ssv-t11--replay-archived-captures).
 The user requested a fresh branch from latest main: **`feat/finra-parquet-publication`**
-starts at merged T09 main `55dcd5d` (PR #23). T01–T10 and local Checkpoints B/C
+starts at merged T09 main `55dcd5d` (PR #23), delivered in
+[PR #24](https://github.com/thatquantguy44/market-medallion/pull/24). T01–T10 and local Checkpoints B/C
 are accepted with invented input. T11–T16, real complete-partition/history coverage
 and G1/G2 remain open.
 

@@ -22,7 +22,8 @@ new live schedules default stopped.
 ## 2026-11-13 current pickup — FINRA T10 typed publication; T11 next
 
 The user requested a new branch off latest main for **SSV-T10**.
-**`feat/finra-parquet-publication`** starts at main **`55dcd5d`**, merged T09 PR #23.
+**`feat/finra-parquet-publication`** / [PR #24](https://github.com/thatquantguy44/market-medallion/pull/24)
+starts at main **`55dcd5d`**, merged T09 PR #23.
 T01–T10 are accepted for the selected three-TRF invented local profile. Read
 [T10 acceptance](../../specs/spec012/t10_acceptance.md),
 [publication contract](../../specs/spec012/parquet_contract.md),
