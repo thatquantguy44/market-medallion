@@ -1,0 +1,14 @@
+schema_id: finra-ssv-local-config/1
+root: ../../data/finra_short_sale_volume/local-demo
+manifest: ../../manifests/finra-short-sale-volume.yml
+operation: fixture
+approved_use:
+  purpose: personal_noncommercial_internal_research
+  route: invented_fixture
+  authorization: pending
+  permission_reference: null
+  operations: [fixture]
+  credential_type: null
+limits:
+  max_bytes: 20971520
+  max_rows: 5000

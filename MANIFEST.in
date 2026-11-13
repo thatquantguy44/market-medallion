@@ -19,5 +19,6 @@ recursive-include specs/spec017/evidence *.json
 
 include scripts/run_fomc.sh
 
+include scripts/run_finra_short_sale_volume.sh
 recursive-include config/presidential_research *.toml *.json
 recursive-include contracts/presidential_research *.json

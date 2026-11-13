@@ -3,12 +3,12 @@
 SSV-T01 is **complete for the selected Public API route**, with source-review,
 user-attested terms, pure admission tests and bounded authentication/metadata
 evidence. SSV-T02 is **complete for the selected three-TRF API profile**;
-SSV-T03–T05 are **complete**; SSV-T06–SSV-T16 are **not started**. Prefix paths below with
+SSV-T03–T09 are **complete**; SSV-T10–SSV-T16 are **not started**. Prefix paths below with
 `src/market_data_pipeline/pipelines/finra_short_sale_volume/` unless a repository
 path is shown. Each task is S/M (at most five likely files); split if it grows.
-Tests below are future targets except the implemented SSV-T01–T05 suites.
+Tests below are future targets except the implemented SSV-T01–T09 suites.
 [README.md](README.md) defines their acceptance IDs.
-The [next-agent handoff](README.md#next-agent-handoff) records the exact T06 pickup
+The [next-agent handoff](README.md#next-agent-handoff) records the exact T10 pickup
 scope, implementation checkpoint and verification commands.
 
 ## SSV-T01 — Resolve rights and approved acquisition route
@@ -137,46 +137,69 @@ checks pass. Four invented captures reconcile without network or publication.
 
 ## SSV-T06 — Deliver one local SQLite partition
 
+**Status:** complete for invented complete one-page API partitions, 2026-11-13.
 **Depends:** SSV-T04, SSV-T05; **traces:** SSV-REQ06 / SSV-AC06.
-- [ ] Import one invented file through Bronze/Silver/Gold and explicit run audit.
-- [ ] A validation/write failure cannot advance the committed publication.
-**Verify:** local end-to-end transaction/failure tests.
-**Files:** `pipeline.py`, `io/warehouse.py`, `cli.py`, `__main__.py`, `tests/test_ssv_pipeline.py`.
+- [x] Import invented input through Bronze/Silver/Gold and explicit run audit.
+- [x] Validation/write failure cannot advance committed membership/publication.
+- [x] Strict fixture-default YAML, local CLI and portable script are exercised.
+**Task split:** T06a owns `data/versions.py`, `io/schema.py`, `io/warehouse.py`,
+`pipeline.py` and pipeline tests. T06b owns `config.py` plus example/guide. T06c
+owns `cli.py`, `__main__.py`, the script and CLI tests. These are independently
+bounded components of the delivered local path, not new acquisition adapters.
+**Verify:** 17 pipeline and eight CLI/config checks; actual temporary-root CLI
+and script conformance. [Acceptance/evidence](t06_t08_acceptance.md).
 
 ### Checkpoint B — Local usable slice
 
-- [ ] One file is inspectable with scoped counts and receipts; no source credentials needed.
-- [ ] Existing AAII/NAAIM tests remain unchanged and pass relevant regressions.
+- [x] One invented input is inspectable with scoped quantities and receipts; no credentials needed.
+- [x] Existing AAII/NAAIM code/tests are unchanged and full offline regressions pass.
 
 ## SSV-T07 — Capture revisions and reversions
 
-**Depends:** SSV-T06; **traces:** SSV-REQ07 / SSV-AC07.
-- [ ] Identical repeats retain run evidence without duplicate value versions.
-- [ ] Changed/reverted rows preserve actual first-seen and observed-as-of selection.
-**Verify:** three-capture fixture with cutoffs around each version, including
-equal UTC timestamps ordered by the original common-C06 capture sequence.
-**Files:** `io/warehouse.py`, `tests/test_ssv_versions.py`.
+**Status:** complete. **Depends:** SSV-T06; **traces:** SSV-REQ07 / SSV-AC07.
+- [x] Identical/numerically equivalent repeats retain capture evidence without duplicate versions.
+- [x] Corrections/reversions preserve local first-seen and UTC/sequence cutoff selection.
+- [x] Refuse clock/order regression; terminal capture retry is immutable and idempotent.
+**Verify:** 17 revision/context/cutoff/retry checks, plus CLI history/as-of.
+Equal timestamps use original capture sequence. Scale/signed-zero equality does
+not round source values; every original response remains in Bronze.
+**Files:** `data/versions.py`, `io/warehouse.py`, `pipeline.py`, revision tests.
 
 ## SSV-T08 — Model complete replacements and absent rows
 
-**Depends:** SSV-T07; **traces:** SSV-REQ08 / SSV-AC08.
-- [ ] Removal versions require a complete authoritative replacement.
-- [ ] Distinguish missing, failed, pending, empty and no-reported-row states.
-**Verify:** incomplete replacement cannot delete; valid empty can revise membership.
-**Files:** `io/warehouse.py`, `pipeline.py`, `tests/test_ssv_completeness.py`.
+**Status:** complete. **Depends:** SSV-T07; **traces:** SSV-REQ08 / SSV-AC08.
+- [x] Removal versions require a complete authoritative replacement; return appends a new version.
+- [x] Partial/rejected/failed refresh cannot change prior committed values or membership.
+- [x] Distinguish local missing/pending/failed/partial, valid empty and no-reported-row.
+- [x] Verify rollback/restart, bound-store loss, membership/scope checks and evidence corruption.
+**Verify:** 22 replacement/absence/integrity/failure cases. Nine-capture script
+conformance reconciles eight versions and all cutoff memberships.
+**Files:** `io/warehouse.py`, `data/versions.py`, `pipeline.py`, replacement tests.
+**Combined closeout:** **379 FINRA tests**, full offline **1,367 passed / 92 optional
+skips**, lint/format and package source readback pass. [Acceptance](t06_t08_acceptance.md).
+Next is SSV-T09; G1/G2 and complete real-source coverage remain open.
 
 ## SSV-T09 — Add scope-safe research Gold
 
+**Status:** complete, 2026-11-13, in the same PR #23 as T06–T08.
 **Depends:** SSV-T08; **traces:** SSV-REQ09 / SSV-AC09.
-- [ ] Calculate denominator-matched ratios and explicit prior-date/gap fields.
-- [ ] Reject constituent/consolidated double counting and return null on zero total.
-**Verify:** independent expected values for individual and disjoint aggregate fixtures.
-**Files:** `data/gold.py`, `tests/test_ssv_gold.py`, `io/warehouse.py`.
+- [x] Calculate denominator-matched individual/disjoint aggregate ratios and prior-date/gap fields.
+- [x] Reject overlapping/excluded scopes; withhold missing-row/population metrics; null on zero total.
+- [x] Preserve exact sums, cutoff membership and component lineage in one read-only transaction.
+**Verify:** 19 pure arithmetic, 32 query/temporal/concurrency and one CLI check;
+**431 FINRA tests** and full offline **1,419 passed / 92 optional skips**.
+Independent rational checks, eight actual CLI capture cases, unchanged-store
+readback, lint/format and package checks pass. [Acceptance](t09_acceptance.md),
+[contract](research_gold_contract.md) and [evidence](evidence/t09_research_gold_conformance.json).
+**Implementation split:** T09a owns pure arithmetic/oracles; T09b owns snapshot
+selection, research queries and CLI integration. Existing ingestion/schema stays compatible.
+**Files:** `data/gold.py`, `research.py`, `io/warehouse.py`, `pipeline.py`, `cli.py`
+and corresponding arithmetic/query/CLI tests.
 
 ### Checkpoint C — Correct changing data
 
-- [ ] Current/as-of results reconcile to capture lineage and replacement membership.
-- [ ] No short-interest, borrow-rate or naked-short label is present in output.
+- [x] Current/as-of results reconcile to capture lineage and replacement membership.
+- [x] Output measures are scoped short-sale flow; no short-interest, borrow-rate or naked-short metric.
 
 ## SSV-T10 — Publish typed Parquet snapshots
 

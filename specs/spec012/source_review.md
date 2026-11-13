@@ -104,7 +104,11 @@ requires exact Decimal shares. No new provider-data request was made.
 SSV-T04 is complete: pure per-observation ratios and exact quantity text readback
 pass 71 semantic tests and retained-sample reconciliation.
 SSV-T05 is complete: [immutable raw/rejected evidence](t05_acceptance.md) and
-sanitized receipts pass 49 new checks. Next is **SSV-T06**, one invented SQLite partition.
+sanitized receipts pass 49 new checks. T06–T08 now deliver [audited local SQLite,
+observed revisions and complete membership](t06_t08_acceptance.md); 379 focused
+checks pass. T09 [research acceptance](t09_acceptance.md) adds matched-population
+metrics and prior-date evidence, bringing the FINRA total to 431 passing checks.
+Next is **SSV-T10**, typed publication/journal.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -164,3 +168,25 @@ contains no provider payloads or actual credentials. Official API headers and
 terms were rechecked through the [T05 contract references](bronze_contract.md);
 no new provider-data request or use grant occurred. Admission precedes filesystem
 I/O; unsafe scope and recognizable credential bodies refuse before storage.
+
+## SSV-T06–T08 local checkpoint
+
+November 13: [local acceptance](t06_t08_acceptance.md) records audited SQLite,
+revisions/reversions/removals and cutoff membership, exercised through the
+configured CLI/script. 64 new checks / 379 FINRA tests and full offline suite
+**1,367 passed / 92 optional skips** pass. [Nine invented captures](evidence/t06_t08_local_conformance.json)
+reconcile without provider-data requests, credential loading or operational-store
+changes. Existing admission, source schema, parser and T05 raw storage remain
+unchanged. The bounded fixture slice does not establish real complete-partition
+coverage, source release timing or G1/G2. Acquisition and jobs remain later work.
+
+## SSV-T09 research checkpoint
+
+[Acceptance](t09_acceptance.md) records 52 new arithmetic/query/CLI checks and
+**431 FINRA tests**; full offline suite **1,419 passed / 92 optional skips**.
+Official API/Equity references were rechecked before coding. No source schema,
+admission grant, acquisition route or source-data request changed. Eight invented
+CLI captures verify matched sums, prior revisions/absence and local cutoffs;
+research reads preserve raw and SQLite bytes. Calendar gaps do not establish a
+trading calendar. Missing reported rows cannot supply a population denominator.
+T10 and broader source/publication acceptance remain open.

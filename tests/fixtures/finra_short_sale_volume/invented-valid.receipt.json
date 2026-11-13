@@ -1,0 +1,31 @@
+{
+  "url": "https://api.finra.org/data/group/otcMarket/name/regShoDaily",
+  "method": "POST",
+  "request_data_version": 1,
+  "request_payload": {
+    "limit": 2,
+    "offset": 0,
+    "compareFilters": [
+      {
+        "compareType": "EQUAL",
+        "fieldName": "tradeReportDate",
+        "fieldValue": "2026-11-09"
+      },
+      {
+        "compareType": "EQUAL",
+        "fieldName": "marketCode",
+        "fieldValue": "N"
+      }
+    ]
+  },
+  "http_status": 200,
+  "headers": {
+    "Content-Type": "application/json",
+    "Data-Version": "1",
+    "Record-Total": "2",
+    "Record-Offset": "0",
+    "Record-Limit": "2"
+  },
+  "bytes": 571,
+  "sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858"
+}

@@ -19,7 +19,84 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
-## 2026-11-13 current pickup — FINRA SSV-T05 accepted; T06 next
+## 2026-11-13 current pickup — FINRA T09 accepted in PR #23; T10 next
+
+The user added working T09 to the existing **`feat/finra-local-revisions`** /
+[PR #23](https://github.com/thatquantguy44/market-medallion/pull/23). **T01–T09 are complete**
+for the three-TRF API profile. Read [T09 acceptance](../../specs/spec012/t09_acceptance.md),
+[research contract](../../specs/spec012/research_gold_contract.md),
+[evidence](../../specs/spec012/evidence/t09_research_gold_conformance.json) and
+[the next-agent handoff](../../specs/spec012/README.md#next-agent-handoff).
+
+`research-gold` sums exact matching quantities across explicit disjoint scopes,
+then applies the fixed ratio method. Missing partitions/rows withhold population
+metrics. The prior date is the nearest earlier population-complete date at the
+same local cutoff; absence there is not skipped. Calendar-day gaps include
+weekends without inferring trading sessions. Component lineage, original capture
+time/sequence and CURRENT_VINTAGE / LOCAL_CAPTURE labels remain explicit.
+All requested dates/facilities share one read-only SQLite transaction. The old
+`gold` interface and ingestion/schema remain compatible.
+
+**Verification:** 52 new checks / **431 FINRA tests**; full offline **1,419 passed,
+92 optional skips**. Lint/format and package source readback pass. Eight invented
+CLI captures reconcile weighted metrics against rational oracles, prior changes,
+empty/partial evidence and original cutoffs. Raw/SQLite inventories remain exact
+across research reads; a concurrent writer cannot mix snapshot generations.
+Agent-skills integrity passes; existing QuantSmith checkout drift remains recorded,
+with all 61 pinned guidance objects independently verified. No library refresh.
+
+**Next: SSV-T10**, lossless typed Parquet and the C07 publication/recovery journal.
+Preserve quantities beyond standard fixed-width decimals, schema fingerprints,
+committed-generation selection and all failure boundaries. T11 replay and later
+acquisition/health/export/jobs remain open. Checkpoints B/C are accepted for
+invented local input; G1/G2 and real complete-partition/history coverage remain
+open. No provider-data requests, credential loading, operational-store change,
+Slack message or service/schedule activation occurred. Keep NAAIM paused.
+
+The T09 extension is committed and pushed to PR #23; track its new head checks/review threads;
+the prior T06–T08 CI result alone does not verify this extension. No merge is implied.
+Earlier accepted checkpoints below are historical and unchanged.
+
+## 2026-11-13 accepted checkpoint — FINRA T06–T08; T09 next
+
+Branch **`feat/finra-local-revisions`** starts from merged T05 PR #20 / main
+`9f211ce`, delivered in [PR #23](https://github.com/thatquantguy44/market-medallion/pull/23). Current main `6790882`
+was integrated before final verification. The user selected the next few working tasks; **SSV-T01–T08 are complete**
+for the selected three-TRF API profile. Read [acceptance](../../specs/spec012/t06_t08_acceptance.md),
+[storage contract](../../specs/spec012/local_storage_contract.md),
+[evidence](../../specs/spec012/evidence/t06_t08_local_conformance.json),
+[next-agent handoff](../../specs/spec012/README.md#next-agent-handoff) and
+[local runbook](../deployment/ssv_local_runbook.md).
+
+T06 supplies audited SQLite Silver/Gold and strict per-pipeline YAML/CLI/script;
+T07 supplies observed corrections/reversions and UTC/sequence cutoffs; T08 supplies
+complete membership/removal/return and honest local absence states. Exact decimal
+text and capture lineage survive reopen. Partial/rejected/failed refreshes cannot
+change committed membership. Attempts retain settings; interrupted STARTED work
+must resume before another capture. Root/schema/kind identity and version/result/
+membership integrity refuse missing or damaged stores rather than recreating them.
+
+**Verification:** 64 new checks / **379 FINRA tests**; full offline suite
+**1,367 passed, 92 optional skips**. Lint/format and package source/config/script
+readback pass. Nine invented CLI/script captures reconcile nine audits, eight
+versions, eleven complete-membership rows and all cutoff counts. All seven prior
+FINRA core/Bronze modules are unchanged. Agent-skills integrity passes; QuantSmith
+checkout drift persists, with all 61 pinned guidance objects verified independently.
+
+**Next: SSV-T09**, scope-safe research Gold with denominator-matched aggregation,
+prior available trade date and explicit gap/population rules. Define those
+semantics before code; preserve fixed ratios, exact quantities and local capture
+knowledge. Checkpoint B is accepted for invented input. G1/G2 and real complete
+partitions/history remain open; cross-page assembly, Parquet/C07 file journaling,
+replay, acquisition, health/export and Dagster remain later tasks. No provider-data
+request, credential loading, operational-store change, Slack message or service
+activation was part of this slice. NAAIM remains paused and schedules stopped.
+
+The completed slice is committed and pushed in PR #23. Track its current-head checks/reviews.
+The user's prior commit/push/PR authorization persists; no merge is implied.
+Earlier FINRA and FOMC acceptance records below remain historical and unchanged.
+
+## 2026-11-13 accepted checkpoint — FINRA SSV-T05; T06 next
 
 The user selected working implementation on **`feat/finra-daily-short-sale-volume`**,
 based on merged main `b580689` (FOMC quality PR #19), delivered in

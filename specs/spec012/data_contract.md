@@ -5,8 +5,11 @@
 facility/date-window registry, receipt-bound Decimal JSON parser, shared quantity
 validation/text codec, per-observation ratio helpers and selected API-response
 Bronze implemented. The [T05 contract](bronze_contract.md) defines immutable
-captures and sanitized outcomes. Warehouse/downstream output remain proposals;
-connector and jobs are absent.
+captures and sanitized outcomes. T06–T08 implement audited local SQLite
+versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/script.
+[Storage contract](local_storage_contract.md), [local acceptance](t06_t08_acceptance.md)
+and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
+Parquet/downstream exchange, acquisition and jobs remain unimplemented.
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -141,8 +144,11 @@ Reject requested-date/file-date mismatches, unknown scopes and unverified market
 codes. A schema drift outcome preserves Bronze and the old committed snapshot.
 
 T04 implements pure per-observation `short_share` and `short_exempt_share`.
-Published Gold, prior available trade date, day gap, ratio change and aggregation
-remain T09 and later work. Compute `short_volume / total_volume` and
+T06–T08 persist local per-observation Gold. T09 implements a separate read-only
+research query with exact disjoint aggregation, prior complete scope dates,
+calendar-day gaps and ratio changes. [Research contract](research_gold_contract.md)
+defines missingness, cutoff, population and rounding behavior. Typed snapshots,
+research interchange and acquisition remain later work. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
@@ -193,7 +199,10 @@ including trailing zeros and signed zero. Readback accepts only that generated
 representation, not floats, nulls, padding, underscores or nonfinite values.
 Equivalent quantities with different scale can have different text; this is not
 a value-version hash policy. The codec is not a provider JSON reader or an export
-schema. SQLite/Parquet adapters and ratio serialization remain later work.
+schema. T06–T08 store these exact text values inside canonical version documents in SQLite,
+with explicit key/time columns and hashed membership. Ratio text uses the fixed
+T04 method and a capital-E representation independent of ambient context.
+Parquet/storage-engine parity and research exchange remain later work.
 
 Python 3.12 [Decimal contexts and conversion](https://docs.python.org/3.12/library/decimal.html)
 define the local arithmetic and exact text behavior. **71 SSV-AC04 tests pass**
