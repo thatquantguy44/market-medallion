@@ -118,3 +118,13 @@ The full paired summary remains visible alongside symmetric sensitivity results.
 The 103 focused consumer tests, typecheck, build and complete-fixture browser
 check passed. T11/T12 remain open until the frozen source/profile bindings and
 real-input qualification are completed; no historical results were claimed here.
+
+The fixture cycle view now recomputes year-end assignments, transition and
+succession flags, group statistics and deterministic ties, including the 1936
+exclusion and unavailable one-observation dispersion. PRES can export labeled
+paired/cycle CSV and SVG/PNG, and v2 replay embeds verified exact catalog,
+dataset, sidecar and evidence bytes plus source/input provenance. Browser
+tests restored paired and cycle views while the pipeline routes were blocked;
+legacy v1 replay and corrupted-replay rejection also passed. The focused
+consumer suite passed 118 tests; typecheck and build passed. T13–T15 remain
+conditional on the required real frozen-input parity and migration gates.
