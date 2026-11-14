@@ -22,7 +22,7 @@ new live schedules default stopped.
 ## 2026-11-14 current pickup — FINRA T13 health/retention implemented; T14 next
 
 T13 is implemented on **`feat/finra-health-retention`**, created from latest main
-`12edd0f` after T11–T12 merged in PR25. Read [T13 acceptance](../../specs/spec012/t13_acceptance.md),
+`12edd0f` after T11–T12 merged in PR25; [PR26](https://github.com/thatquantguy44/market-medallion/pull/26) tracks this branch. Read [T13 acceptance](../../specs/spec012/t13_acceptance.md),
 [operations contract](../../specs/spec012/operations_contract.md),
 [evidence](../../specs/spec012/evidence/t13_operations_conformance.json) and
 [Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff). T01–T13 are
@@ -44,7 +44,8 @@ references. No apply/delete flag, finite approved deletion/backup policy or365-d
 inheritance exists. Reads require existing regular nonblocking lock files and
 bounded transactions; no store creation, HTTP probe, parse-outcome write or repair.
 
-**Verified:**47 new T13 tests. Four actual offline portable-script commands on the
+**Verified:**47 new /673 FINRA tests; full offline1661 passed /92 optional skips,
+Ruff/format and wheel/source readback (35 FINRA modules) pass. Four actual offline portable-script commands on the
 isolated real T12 Chicago2026-11-09 source/replay stores reconcile5 captures,
 5849 versions and four collection input pages in each; all53 source/40 replay files
 stay unchanged. Source SUCCESS and replay LOCAL_ONLY remain distinct; both report

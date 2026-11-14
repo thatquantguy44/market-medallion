@@ -40,9 +40,25 @@ option, finite approved retention/backup policy or inherited NAAIM365-day rule.
 - Missing/corrupt raw/receipt/outcome/binding/plan/events/results, invalid budgets,
   busy/missing/special locks, strict policy loading and actual process-level CLI.
 
-The complete FINRA suite and full offline regression, Ruff/style, pinned library
-integrity and package readback are recorded in the final verification checkpoint.
-Optional PostgreSQL coverage is separate from local-only FINRA state.
+**Full offline regression:**1661 passed /92 optional skips. The preceding focused
+FINRA regression passed670 checks before the final3 lock/policy tests; all47 T13
+checks pass. The completed full suite includes all673 FINRA checks. A redundant
+focused rerun was interrupted during environment I/O after445 passes; the later
+full-suite result is the complete acceptance evidence.
+
+Repository-wide Ruff and formatting pass (323 files). Agent-skills verifies188
+entries; all61 pinned QuantSmith Git guidance objects verify, while the external
+checkout retains its previously recorded revision/tree drift. No refresh/repin.
+Wheel/source build succeeds;35 FINRA modules match current bytes in each artifact.
+The source archive also includes6 checked operator assets (policy, config guide,
+operations contract, acceptance, conformance JSON and portable script), with no
+runtime data/SQLite/local secrets. The Python wheel follows the existing module-only
+layout. The prior master-handoff tail is preserved verbatim.
+
+The [PR26 workflow](https://github.com/thatquantguy44/market-medallion/actions/runs/43626314514)
+for implementation head `022ca144b0770ef842ac22687cbc1e8011352f3b` passes isolated
+PostgreSQL contracts, integrity, style, **1750 passed /3 optional skips**, and packaging. The PR
+tracks final current-head checks separately; no merge is implied.
 
 ## Read-only real-data conformance
 

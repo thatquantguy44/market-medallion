@@ -35,5 +35,19 @@
   ],
   "commands": 4,
   "network_requests": 0,
-  "schema_id": "finra-ssv-t13-conformance/1"
+  "schema_id": "finra-ssv-t13-conformance/1",
+  "verification": {
+    "agent_skills_entries": 188,
+    "implementation_ci_head": "022ca144b0770ef842ac22687cbc1e8011352f3b",
+    "implementation_ci_optional_skips": 3,
+    "implementation_ci_passed": 1750,
+    "implementation_ci_run": 43626314514,
+    "new_t13_tests": 47,
+    "offline_optional_skips": 92,
+    "offline_passed": 1661,
+    "quantsmith_checkout_drift": "unchanged_known_revision_tree_drift",
+    "quantsmith_pinned_git_objects": 61,
+    "total_finra_tests": 673,
+    "verified_finra_modules": 35
+  }
 }

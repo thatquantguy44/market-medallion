@@ -34,7 +34,7 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 **Start here:** [T13 acceptance](t13_acceptance.md), [operations contract](operations_contract.md),
 [evidence](evidence/t13_operations_conformance.json) and [SSV-T14](todo.md#ssv-t14--define-and-write-research-interchange).
 T13 is implemented on **`feat/finra-health-retention`**, created from latest main
-`12edd0f` after T11–T12 merged in PR25. T01–T13 are implemented; T14–T16,
+`12edd0f` after T11–T12 merged in PR25. Track [PR26](https://github.com/thatquantguy44/market-medallion/pull/26). T01–T13 are implemented; T14–T16,
 broader real complete-partition/history coverage and G1/G2 remain open.
 
 Use root [AGENTS.md](../../AGENTS.md), [master handoff](../../docs/handoffs/project_bootstrap.md),
@@ -64,7 +64,7 @@ membership, audit, journal, frozen-publication and both-pass collection referenc
 There is no apply/delete option or inherited365-day policy. All readers use
 existing nonblocking locks/read transactions, make no HTTP probe and never repair.
 
-**Verified T13:**47 new /673 FINRA checks. Four actual portable-script checks on
+**Verified T13:**47 new /673 FINRA checks; full offline1661 passed /92 optional skips. Four actual portable-script checks on
 the existing isolated real Chicago TRF2026-11-09 source/replay stores reconcile
 5 captures,5849 versions and four collection input pages in each; all53 source
 and40 replay files remain unchanged. Release timing is honestly UNKNOWN; source
