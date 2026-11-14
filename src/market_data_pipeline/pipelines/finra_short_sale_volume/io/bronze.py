@@ -5,6 +5,7 @@ import json
 import os
 import re
 import shutil
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 from uuid import UUID, uuid4
@@ -24,6 +25,8 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.manifest import (
 from market_data_pipeline.shared.files import utc_timestamp, writer_lock
 
 CONTRACT = "finra-ssv-bronze/1"
+EVIDENCE = "finra-ssv-acquisition-page/1"
+COLLECTION = "finra-ssv-page-collection/1"
 MARKER = encoded({"schema_id": CONTRACT})
 MAX_RESERVATIONS = 100000
 MAX_RECEIPT_BYTES = 65536
@@ -224,11 +227,14 @@ def _receipt(
     operation,
     limits,
     payload,
+    capture_schema=CONTRACT,
 ):
+    if capture_schema not in {CONTRACT, EVIDENCE, COLLECTION}:
+        raise ValueError("unknown FINRA capture format")
     if retrieved is not None and retrieved > clock:
         raise ValueError("FINRA retrieval completion follows archive time")
     value = {
-        "schema_id": CONTRACT,
+        "schema_id": capture_schema,
         "source_schema_id": manifest.schema_id,
         "manifest": manifest.to_dict(),
         "manifest_sha256": digest(manifest.to_dict()),
@@ -270,9 +276,12 @@ def archive_input(
     retrieved_at=None,
     max_bytes=20 * 1024 * 1024,
     max_rows=5000,
+    evidence_only=False,
 ):
     """Archive admitted response bytes before dataset parsing. No provider request."""
     kind = _admit(manifest, approved_use, operation, {"fixture", "local_import", "acquire"})
+    if type(evidence_only) is not bool:
+        raise ValueError("FINRA evidence-only flag requires a boolean")
     limits = {k: v for k, v in settings(max_bytes, max_rows).items() if k != "algorithm"}
     run_id = _identity(run_id)
     capture_id = _identity(capture_id) if capture_id is not None else str(uuid4())
@@ -297,6 +306,7 @@ def archive_input(
         operation=operation,
         limits=limits,
         payload=payload,
+        capture_schema=EVIDENCE if evidence_only else CONTRACT,
     )
     root = Path(root)
     if (root / ".writer.lock").is_symlink():
@@ -338,6 +348,7 @@ def archive_input(
             operation=operation,
             limits=limits,
             payload=payload,
+            capture_schema=EVIDENCE if evidence_only else CONTRACT,
         )
         if stored is not None:
             if stored != value or raw != payload:
@@ -378,7 +389,7 @@ def read_capture(
         if (
             set(value) != _CAPTURE_KEYS
             or identity != digest(body)
-            or value["schema_id"] != CONTRACT
+            or value["schema_id"] not in {CONTRACT, EVIDENCE, COLLECTION}
             or value["source_schema_id"] != manifest.schema_id
             or value["manifest"] != manifest.to_dict()
             or value["manifest_sha256"] != digest(manifest.to_dict())
@@ -420,11 +431,25 @@ def read_capture(
         settings(**limits)
         if len(payload) > limits["max_bytes"]:
             raise ValueError
-        public, issues = public_receipt(
-            value["api_receipt"], payload, manifest, max_rows=limits["max_rows"]
-        )
-        if public != value["api_receipt"] or set(issues) - set(value["receipt_issues"]):
-            raise ValueError
+        if value["schema_id"] == COLLECTION:
+            from market_data_pipeline.pipelines.finra_short_sale_volume.io import page_collection
+
+            page_collection.parse(
+                root,
+                value,
+                payload,
+                manifest,
+                approved_use=approved_use,
+                operation=operation,
+                max_bytes=min(max_bytes, limits["max_bytes"]),
+                max_rows=limits["max_rows"],
+            )
+        else:
+            public, issues = public_receipt(
+                value["api_receipt"], payload, manifest, max_rows=limits["max_rows"]
+            )
+            if public != value["api_receipt"] or set(issues) - set(value["receipt_issues"]):
+                raise ValueError
         sequence = value["capture_sequence"]
         if type(sequence) is not int or not 1 <= sequence < 2**63:
             raise ValueError
@@ -461,9 +486,27 @@ def parse_capture(
     error = "receipt_rejected" if saved["receipt_issues"] else None
     if error is None:
         try:
-            page = parse_page(
-                payload, manifest, saved["api_receipt"], max_bytes=max_bytes, max_rows=max_rows
-            )
+            if saved["schema_id"] == COLLECTION:
+                from market_data_pipeline.pipelines.finra_short_sale_volume.io import (
+                    page_collection,
+                )
+
+                page = page_collection.parse(
+                    root,
+                    saved,
+                    payload,
+                    manifest,
+                    approved_use=approved_use,
+                    operation=operation,
+                    max_bytes=max_bytes,
+                    max_rows=max_rows,
+                )
+            else:
+                page = parse_page(
+                    payload, manifest, saved["api_receipt"], max_bytes=max_bytes, max_rows=max_rows
+                )
+                if saved["schema_id"] == EVIDENCE:
+                    page = replace(page, evidence_only=True)
         except ValueError:
             error = "parse_rejected"
         except Exception:

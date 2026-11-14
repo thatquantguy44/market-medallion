@@ -19,6 +19,115 @@ CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
 
+## 2026-11-13 current pickup — FINRA T12 acquisition added; T13 next
+
+The user added **SSV-T12** to **`feat/finra-parquet-publication`** /
+[PR #25](https://github.com/thatquantguy44/market-medallion/pull/25), following T11.
+T01–T12 are implemented. Read [T12 acceptance](../../specs/spec012/t12_acceptance.md),
+[acquisition contract](../../specs/spec012/acquisition_contract.md),
+[evidence](../../specs/spec012/evidence/t12_acquisition_conformance.json) and
+[Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff). T10 merged in
+PR #24; main `ac4d520` is integrated. Track this PR's current T12 head, not old T11 CI.
+
+`acquisition-plan` previews an admitted explicit date/facility range and backward
+correction overlap without credentials/network/store creation. `acquire` uses
+separate strict YAML and both config/CLI live opt-ins. Defaults stay disabled.
+All expanded dates, partitions, pages, requests/retries, bytes, sleeps and duration
+are bounded. Re-fetch complete dates under overlap; never permanently skip revisions.
+Source-owned network settings use the shared client once per run, fixed trusted
+endpoints, verified TLS and no redirects. FIP HEAD establishes routing where
+metadata HEAD404/documentation HEAD403 failed; POST authenticates and metadata GET
+checks schema. Tokens/cookie material never enter evidence. Existing Public access
+and the prior user-attested noncommercial scope are unchanged.
+
+Complete single responses retain their accepted path. Multi-page partitions use
+raw-symbol sort, contiguous actual offsets, stable totals and unique rows, then
+require exact agreement with a second complete pass. Retain every original page;
+verification/subsequent pages are explicitly evidence-only. A separately tagged
+derived manifest binds both page-ID lists and receives a new capture clock/sequence.
+It is not a fabricated provider response. Changed/shrunk/missing/unsafe/budget-
+exhausted evidence cannot remove or replace prior membership. Two-pass equality
+is observed consistency, not a provider snapshot token. Source publication stays
+unknown; local first-seen is actual capture/collection time, never trade date.
+
+Acquisition journals record plan/events/atomic results, transport failures and
+NOT_ATTEMPTED states. A later failed network refresh can leave old Gold valid;
+local coverage alone is not source freshness. T11 replay preserves all page/
+collection formats and original versions/membership/audit, with destination input
+limits covering the original collection profile (default 15000 rows/18MB).
+T10 Parquet publication remains explicit. Do not delete bindings or manually
+promote an unverified capture/stage to bypass refusal.
+
+**Verification:** 75 new / **626 FINRA tests**, full offline **1,614 passed /
+92 optional skips**; Ruff and package/source readback pass. Real conformance is
+**Chicago TRF 2026-11-09 only: 5,849 rows**, two agreeing two-page passes,6 post-probe
+HTTP attempts / 8 charged units. Four raw pages plus one derived collection replay
+exactly. Nine actual local script commands match Gold/audit and all typed tables;
+40 original source files remain unchanged. Raw licensed rows remain ignored;
+tracked evidence contains aggregate counts/hashes/IDs. Pinned agent-skills 188
+entries and QuantSmith 61 Git guidance objects verify; existing external checkout
+drift is unchanged, with no refresh.
+
+**Next: SSV-T13 release-aware health and lineage-safe retention dry run.** Combine
+acquisition journals, terminal outcomes, committed partitions and publication
+state; distinguish failed refresh, incomplete/no-response, valid empty, pending/
+unknown release and stale capture. Verify official FINRA calendar/release evidence;
+empty responses do not establish holidays. Keep retention dry-run-only and account
+for page/collection/version/publication references. T14 interchange and T15 stopped
+jobs remain later. One real date/facility does not advance all-history/facility
+acceptance or G1/G2. No other operational store, Slack destination, service or
+schedule changed. NAAIM stays paused. No merge is implied.
+
+## 2026-11-13 current pickup — FINRA T11 replay in PR #25; T12 next
+
+The user added **SSV-T11** to the existing **`feat/finra-parquet-publication`**.
+T10 PR #24 merged while T11 was in progress; this same branch now delivers
+[PR #25](https://github.com/thatquantguy44/market-medallion/pull/25). Its original
+base is T09 main `55dcd5d`; merged T10 main `ac4d520` was integrated without
+changing the validated implementation tree. T01–T11 are accepted for the selected three-TRF
+invented local profile. Read [T11 acceptance](../../specs/spec012/t11_acceptance.md),
+[replay contract](../../specs/spec012/replay_contract.md),
+[evidence](../../specs/spec012/evidence/t11_replay_conformance.json) and
+[Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff).
+
+`replay --source-root ... --config <destination-yaml>` uses original Bronze plus a
+verified terminal source ledger, rebuilding only an empty disjoint destination.
+It reparses original profiles and recomputes versions, exact terminal outcomes,
+membership, removals and partition pointers. Original source clocks, capture/run/
+version IDs, sequence slots and validated attempt evidence survive. Failed-only,
+STARTED, unprocessed or corrupt source captures refuse before target creation;
+historical failed retries stay evidence and partial/rejected rows stay unpromoted.
+
+A private sibling rebuild must match every logical table/Gold before final-path
+identity sealing and atomic installation. This initializes a fresh replay store;
+it is not a relocation tool for existing bound databases. The new warehouse UUID
+and replay completion time differ from original knowledge. Installed `replay.json`
+records inventory/state hashes/counts. Publication stays explicit: T10 catalog/
+files/event IDs are not copied. A new publication reconciles to source table values.
+
+**Verification:** 41 new / **551 FINRA tests**; full offline **1,539 passed,
+92 optional skips**. 24 actual portable-script commands across eight invented
+captures verify audit/Gold/research, original cutoffs and new Parquet-table parity;
+38 original source files remain unchanged. Failure cleanup, concurrent target
+population, installed-response failure, ordering/provenance/corruption/budget
+refusal, original allocator-only slots, extra profiles, fractional and 4096-digit
+quantities pass. Ruff and package source readback pass. Pinned agent-skills 188
+entries and QuantSmith 61 Git guidance objects verify; external checkout drift is
+unchanged, with no library refresh.
+
+**Next: SSV-T12 bounded admitted acquisition.** Read official access/schema
+references before coding; define finite dates/pages/requests/rows/bytes and
+correction overlap. Cross-page assembly is absent and needs an explicit complete
+partition design. Use `shared/http.py` after source access gates, preserve raw
+retries/outcomes, test injected transport first and keep live conformance separate.
+T13 health/retention, T14 interchange and T15 stopped jobs remain open. G1/G2 and
+real complete-source coverage stay open. No provider-data request, credential
+loading, operational-store change, Slack message or service/schedule activation
+occurred. Keep NAAIM paused.
+
+Track PR #25's T11 head checks/review threads; earlier T10 CI alone does not
+verify this extension. No merge is implied. Earlier handoffs below are historical.
+
 ## 2026-11-13 current pickup — FINRA T10 typed publication; T11 next
 
 The user requested a new branch off latest main for **SSV-T10**.

@@ -1,0 +1,309 @@
+{
+  "automated_tests": {
+    "finra": 551,
+    "full_offline_passed": 1539,
+    "new_replay_tests": 41,
+    "optional_skipped": 92
+  },
+  "branch": "feat/finra-parquet-publication",
+  "capture_cases": [
+    {
+      "archived_at": "2026-11-13T20:13:08.373677Z",
+      "capture_id": "a7aec921-e4f8-4172-93e3-feeddc677da5",
+      "case": "prior",
+      "new_versions": 2,
+      "sequence": 1,
+      "status": "APPLIED"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:08.505912Z",
+      "capture_id": "40d863e5-abfd-4d10-b051-81ed6bd94dea",
+      "case": "current",
+      "new_versions": 2,
+      "sequence": 2,
+      "status": "APPLIED"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:08.634410Z",
+      "capture_id": "3248267b-0bf7-48d2-980d-45e5ed9d93a5",
+      "case": "unchanged",
+      "new_versions": 0,
+      "sequence": 3,
+      "status": "APPLIED"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:08.732862Z",
+      "capture_id": "ca4129e8-1a7b-4608-8668-3b5f7915bfe6",
+      "case": "corrected",
+      "new_versions": 1,
+      "sequence": 4,
+      "status": "APPLIED"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:08.828821Z",
+      "capture_id": "d66289a3-e2b1-47e8-815d-adbeb8af6d79",
+      "case": "reverted",
+      "new_versions": 1,
+      "sequence": 5,
+      "status": "APPLIED"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:08.962199Z",
+      "capture_id": "848de154-e451-43f5-8e68-da625f189bde",
+      "case": "removed",
+      "new_versions": 2,
+      "sequence": 6,
+      "status": "APPLIED"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:09.053836Z",
+      "capture_id": "90fa5173-071d-4231-b33f-2341e73e913c",
+      "case": "partial",
+      "new_versions": 0,
+      "sequence": 7,
+      "status": "PARTIAL"
+    },
+    {
+      "archived_at": "2026-11-13T20:13:09.140828Z",
+      "capture_id": "901dc7e6-f158-4831-badd-c868c5087edc",
+      "case": "rejected",
+      "new_versions": 0,
+      "sequence": 8,
+      "status": "REJECTED"
+    }
+  ],
+  "checks": {
+    "audit_equal": true,
+    "coverage_equal": true,
+    "distinct_warehouse_identity": true,
+    "gold_equal": true,
+    "logical_tables_equal": true,
+    "no_implicit_publication": true,
+    "original_cutoff_equal": true,
+    "populated_destination_refused": true,
+    "published_tables_equal": true,
+    "research-gold_equal": true,
+    "source_inventory_unchanged": true
+  },
+  "cli_invocations": [
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 2
+    },
+    {
+      "command": "run",
+      "config": "source",
+      "exit_code": 2
+    },
+    {
+      "command": "replay",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "gold",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "gold",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "coverage",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "coverage",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "audit",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "audit",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "research-gold",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "research-gold",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "gold",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "gold",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "publish",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "publish",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "published",
+      "config": "source",
+      "exit_code": 0
+    },
+    {
+      "command": "published",
+      "config": "target",
+      "exit_code": 0
+    },
+    {
+      "command": "replay",
+      "config": "target",
+      "exit_code": 2
+    }
+  ],
+  "input_kind": "invented_fixture",
+  "limitations": [
+    "Requires original Bronze plus verified terminal operational ledger",
+    "Unresolved captures refuse replay; partial/rejected remain unpromoted",
+    "T10 publication stays explicit; G1/G2 and real complete-source coverage remain open"
+  ],
+  "pr": 25,
+  "preserved_source_files": 38,
+  "prior_publication_pr": 24,
+  "provider_requests": 0,
+  "recorded_at": "2026-11-13T20:13:10.614743+00:00",
+  "replay": {
+    "archive_bytes": 25782,
+    "capture_inventory": [
+      {
+        "archived_at": "2026-11-13T20:13:08.373677Z",
+        "capture_id": "a7aec921-e4f8-4172-93e3-feeddc677da5",
+        "capture_sequence": 1,
+        "payload_sha256": "c34862355e165b0f43508ab3a80adfc0bc72acf6167378271f8926ec15b789fc",
+        "receipt_sha256": "8c2337de7904761353c4380dc4248bf84e65d8ff6efc3961ed31f393239bfc6c"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:08.505912Z",
+        "capture_id": "40d863e5-abfd-4d10-b051-81ed6bd94dea",
+        "capture_sequence": 2,
+        "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+        "receipt_sha256": "6010b4b2a0fa22d2cac3a5e2c8d5b03975dfcd07fabac2f2397a7b918395a283"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:08.634410Z",
+        "capture_id": "3248267b-0bf7-48d2-980d-45e5ed9d93a5",
+        "capture_sequence": 3,
+        "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+        "receipt_sha256": "f5e662893f5d37e67fd9a78bf8d82eb61ccc427cb7f8bcb45692657ff860021a"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:08.732862Z",
+        "capture_id": "ca4129e8-1a7b-4608-8668-3b5f7915bfe6",
+        "capture_sequence": 4,
+        "payload_sha256": "bdec56d32a69fbe4d6b22f9cc422b175afb23f198ee24ac7605e49309b468d48",
+        "receipt_sha256": "ed648ce8bfe815a8df03f4d8e2a8e4192e02367296bcd5e291b6806eb5a59d79"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:08.828821Z",
+        "capture_id": "d66289a3-e2b1-47e8-815d-adbeb8af6d79",
+        "capture_sequence": 5,
+        "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+        "receipt_sha256": "da652686838605b5adc925d371be12f97a2d53a46c101cd9e24dbc51321792f4"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:08.962199Z",
+        "capture_id": "848de154-e451-43f5-8e68-da625f189bde",
+        "capture_sequence": 6,
+        "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "receipt_sha256": "58765e6adc98af8de017b951d09feb38a4594c54deaf7aac1ed34f6d1b42aa26"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:09.053836Z",
+        "capture_id": "90fa5173-071d-4231-b33f-2341e73e913c",
+        "capture_sequence": 7,
+        "payload_sha256": "25d242e0c6897599d15143ded5e8f7d56845b136b8cbb9c447958baf89480858",
+        "receipt_sha256": "39222a8e9e184f7146cb703ca00dfc6faef89c658022dec19854fde22d183967"
+      },
+      {
+        "archived_at": "2026-11-13T20:13:09.140828Z",
+        "capture_id": "901dc7e6-f158-4831-badd-c868c5087edc",
+        "capture_sequence": 8,
+        "payload_sha256": "8b351adb56355ffc40a4986ab30267eecae89710c63d09cba764a35adfda3ef5",
+        "receipt_sha256": "652039048f52442b758507a88d472d6cb2e09dd0f83c857610be05f774f32309"
+      }
+    ],
+    "capture_inventory_sha256": "aff9d81e8fd17e7de310e669bf2709a96c32f5925adf9a1378b7b44e8d0e0d0a",
+    "capture_statuses": {
+      "APPLIED": 6,
+      "PARTIAL": 1,
+      "REJECTED": 1
+    },
+    "clock_basis": "LOCAL_CAPTURE",
+    "knowledge_basis": "CURRENT_VINTAGE",
+    "logical_state_sha256": "11f446116fe819f58aa2ff7c1cc7290706f807fe00b9114593bb4e0695185b9f",
+    "publication": "EXPLICIT_PUBLISH_REQUIRED",
+    "replayed": 8,
+    "replayed_at": "2026-11-13T20:13:09.264833Z",
+    "row_counts": {
+      "attempts": 8,
+      "capture_rows": 10,
+      "captures": 8,
+      "gold": 2,
+      "partitions": 2,
+      "versions": 8
+    },
+    "schema_id": "finra-ssv-replay/1",
+    "source_warehouse_id": "c845adba-be73-4417-8d41-ac3deeb1e191",
+    "state_bytes": 29247,
+    "status": "SUCCEEDED",
+    "warehouse_id": "c808271e-fb70-484b-93a1-ae4728ec767f"
+  },
+  "schema_id": "finra-ssv-t11-conformance/1",
+  "source_inventory_sha256": "d5a6c2a5c561d3d0151801a7fd62612db4334318e5909f4c40b7ea7f0ee16621"
+}

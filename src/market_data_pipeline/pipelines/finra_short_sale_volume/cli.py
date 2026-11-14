@@ -6,7 +6,16 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from market_data_pipeline.pipelines.finra_short_sale_volume import pipeline, publication, research
+from market_data_pipeline.pipelines.finra_short_sale_volume import (
+    pipeline,
+    publication,
+    replay,
+    research,
+    source,
+)
+from market_data_pipeline.pipelines.finra_short_sale_volume.acquisition_config import (
+    load_config as load_acquisition_config,
+)
 from market_data_pipeline.pipelines.finra_short_sale_volume.config import load_config
 
 
@@ -33,9 +42,24 @@ def main(argv=None):
         "publish",
         "published",
         "recover-publication",
+        "replay",
+        "acquisition-plan",
+        "acquire",
     ):
         command = commands.add_parser(name)
         command.add_argument("--config", required=True, type=Path)
+        if name in ("acquisition-plan", "acquire"):
+            command.add_argument("--start-date", required=True)
+            command.add_argument("--end-date", required=True)
+            command.add_argument("--scope", action="append", required=True)
+            command.add_argument("--overlap-days", type=int, default=2)
+        if name == "acquire":
+            command.add_argument("--live", action="store_true")
+        if name == "replay":
+            command.add_argument("--source-root", required=True, type=Path)
+            command.add_argument("--max-captures", type=int, default=1000)
+            command.add_argument("--max-total-bytes", type=int, default=128 * 1024 * 1024)
+            command.add_argument("--max-state-rows", type=int, default=250000)
         if name == "run":
             command.add_argument("--input", required=True, type=Path)
             command.add_argument("--receipt", required=True, type=Path)
@@ -70,6 +94,21 @@ def main(argv=None):
             command.add_argument("--limit", type=int, default=20)
     args = parser.parse_args(argv)
     try:
+        if args.command in ("acquisition-plan", "acquire"):
+            config = load_acquisition_config(args.config)
+            options = dict(
+                start=args.start_date,
+                end=args.end_date,
+                scopes=args.scope,
+                overlap_days=args.overlap_days,
+            )
+            result = (
+                source.make_plan(config, **options)
+                if args.command == "acquisition-plan"
+                else source.acquire(config, **options, live=args.live)
+            )
+            print(json.dumps(result, sort_keys=True, allow_nan=False))
+            return 2 if result.get("status") == "INCOMPLETE" else 0
         config = load_config(args.config)
         shared = {"approved_use": config.approved_use, "operation": config.transform_operation}
         if args.command == "validate-config":
@@ -80,6 +119,18 @@ def main(argv=None):
                 "max_bytes": config.max_bytes,
                 "max_rows": config.max_rows,
             }
+        elif args.command == "replay":
+            result = replay.replay(
+                args.source_root,
+                config.root,
+                config.manifest,
+                **shared,
+                max_captures=args.max_captures,
+                max_total_bytes=args.max_total_bytes,
+                max_state_rows=args.max_state_rows,
+                max_bytes=config.max_bytes,
+                max_rows=config.max_rows,
+            )
         elif args.command == "run":
             payload = _read(args.input, config.max_bytes)
             receipt = json.loads(_read(args.receipt, 65536))
