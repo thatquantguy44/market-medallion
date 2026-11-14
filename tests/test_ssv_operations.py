@@ -319,7 +319,7 @@ def test_ssv_ac13_corrupt_acquisition_journal_fails_closed(tmp_path, manifest, d
     else:
         path = run_dir / "result.json"
         if damage in {"event_sequence", "missing_event"}:
-            path = next((run_dir / "events").iterdir())
+            path = sorted((run_dir / "events").iterdir())[0]
         elif damage == "plan":
             path = run_dir / "request.json"
         elif damage == "binding":
@@ -328,7 +328,7 @@ def test_ssv_ac13_corrupt_acquisition_journal_fails_closed(tmp_path, manifest, d
         if damage == "result_status":
             value["complete_partitions"] = 0
         elif damage == "event_sequence":
-            value["event_sequence"] = 2
+            value["event_sequence"] += 1
         elif damage == "plan":
             value["plan"]["partitions"][0]["market_code"] = "D"
         elif damage == "binding":
