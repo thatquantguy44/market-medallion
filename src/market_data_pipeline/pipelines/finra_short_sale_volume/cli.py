@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 
 from market_data_pipeline.pipelines.finra_short_sale_volume import (
+    operations,
     pipeline,
     publication,
     replay,
@@ -45,14 +46,25 @@ def main(argv=None):
         "replay",
         "acquisition-plan",
         "acquire",
+        "health",
+        "retention-dry-run",
     ):
         command = commands.add_parser(name)
         command.add_argument("--config", required=True, type=Path)
-        if name in ("acquisition-plan", "acquire"):
+        if name in ("acquisition-plan", "acquire", "health"):
             command.add_argument("--start-date", required=True)
             command.add_argument("--end-date", required=True)
             command.add_argument("--scope", action="append", required=True)
-            command.add_argument("--overlap-days", type=int, default=2)
+            if name != "health":
+                command.add_argument("--overlap-days", type=int, default=2)
+        if name in ("health", "retention-dry-run"):
+            command.add_argument("--policy", type=Path)
+            command.add_argument("--max-captures", type=int, default=1000)
+            command.add_argument("--max-state-rows", type=int, default=250000)
+            command.add_argument("--max-total-bytes", type=int, default=128 * 1024 * 1024)
+            command.add_argument("--max-files", type=int, default=50000)
+            command.add_argument("--max-runs", type=int, default=1000)
+            command.add_argument("--max-events", type=int, default=10000)
         if name == "acquire":
             command.add_argument("--live", action="store_true")
         if name == "replay":
@@ -119,6 +131,31 @@ def main(argv=None):
                 "max_bytes": config.max_bytes,
                 "max_rows": config.max_rows,
             }
+        elif args.command in ("health", "retention-dry-run"):
+            options = dict(
+                policy=operations.load_policy(args.policy) if args.policy else None,
+                max_captures=args.max_captures,
+                max_rows=args.max_state_rows,
+                max_total_bytes=args.max_total_bytes,
+                max_bytes=config.max_bytes,
+                max_files=args.max_files,
+                max_runs=args.max_runs,
+                max_events=args.max_events,
+            )
+            if args.command == "health":
+                result = operations.health(
+                    config.root,
+                    config.manifest,
+                    **shared,
+                    **options,
+                    start=args.start_date,
+                    end=args.end_date,
+                    scopes=args.scope,
+                )
+            else:
+                result = operations.retention_dry_run(
+                    config.root, config.manifest, **shared, **options
+                )
         elif args.command == "replay":
             result = replay.replay(
                 args.source_root,
@@ -224,7 +261,8 @@ def main(argv=None):
         return (
             2
             if isinstance(result, dict)
-            and result.get("status") in {"PARTIAL", "REJECTED", "INCOMPLETE_POPULATION"}
+            and result.get("status")
+            in {"PARTIAL", "REJECTED", "INCOMPLETE_POPULATION", "DEGRADED", "UNKNOWN"}
             else 0
         )
     except (OSError, ValueError, PermissionError, RuntimeError, RecursionError):
