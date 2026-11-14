@@ -264,10 +264,18 @@ remains compatible. Network gates, raw retries and local/replay isolation stay e
 ## SSV-T13 — Add release-aware health and retention dry run
 
 **Depends:** SSV-T12; **traces:** SSV-NFR02 / SSV-AC13.
-- [ ] Report requested/observed partitions, last success, trailing failure and pending releases.
-- [ ] Retention dry run explains referenced bytes/versions under the approved policy.
-**Verify:** holiday, late release, empty ADF, failed refresh and retention-reference tests.
-**Files:** `operations.py`, `cli.py`, `tests/test_ssv_operations.py`.
+- [x] Report requested/observed partitions, last success, trailing failure and pending releases.
+- [x] Retention dry run explains referenced bytes/versions under the approved policy.
+**Verified:**47 deterministic health/retention/CLI checks cover2026 holidays,
+early-close/unknown-calendar evidence, configurable API deadlines, pre-release
+empty, excluded ADF, failed/no-response refresh, unresolved captures, publication
+lag/recovery and both-pass collection/version references. Four read-only actual
+script commands reconcile the isolated T12 real source/replay stores;93 files
+unchanged. [Acceptance](t13_acceptance.md) / [contract](operations_contract.md).
+**Boundary:** preserve-all dry run only; API release SLA and broader G1/G2 remain open.
+**Files:** `operations.py`, `data/release.py`, `io/operations_snapshot.py`,
+`io/operations_journal.py`, `cli.py`, operations policy YAML and
+`tests/test_ssv_operations.py`.
 
 ## SSV-T14 — Define and write research interchange
 

@@ -111,7 +111,8 @@ metrics and prior-date evidence, bringing the FINRA total to 431 passing checks.
 T10 [typed publication acceptance](t10_acceptance.md) brings the total to 510 checks.
 T11 [offline replay acceptance](t11_acceptance.md) brings the total to 551 checks.
 T12 [bounded acquisition acceptance](t12_acceptance.md) brings the total to626 checks.
-Next is **SSV-T13**, release-aware health and retention dry run.
+**SSV-T13** now implements release-aware health and preserve-all retention dry run;
+[T13 acceptance](t13_acceptance.md) records evidence. Next is SSV-T14 research interchange.
 ADF, consolidated, ORF, TXT and other source versions remain excluded. There
 is no reusable authentication or data acquisition adapter yet. NAAIM stays
 paused and all schedules remain stopped.
@@ -237,3 +238,13 @@ An initial 5000-row partial query did not promote. Full page collection is now
 explicitly verified, with no synthetic provider response. This acceptance does
 not extend to all facilities/history, source release timing, jobs or G1/G2.
 T13 health/retention is next. NAAIM remains paused.
+
+## SSV-T13 operational evidence — 2026-11-14
+
+[Operations contract](operations_contract.md) records the official FINRA2026
+reporting calendar, daily-file publication target versus unverified API timing,
+and Equity-specific section6 retention boundary. T13 implements read-only health
+and preserve-all retention accounting; T14 interchange is next. [Acceptance](t13_acceptance.md)
+records47 new /673 FINRA checks and four actual offline script commands on the
+existing isolated real Chicago source/replay stores, with93 files unchanged.
+No new provider request or expanded source-use right is implied.
