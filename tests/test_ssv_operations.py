@@ -488,3 +488,32 @@ def test_ssv_ac13_invalid_budgets_refuse_before_read(tmp_path, manifest, budget)
     with pytest.raises(ValueError):
         health(tmp_path / "absent", manifest, **{budget: True})
     assert not (tmp_path / "absent").exists()
+
+
+@pytest.mark.parametrize("damage", ["missing", "fifo"])
+def test_ssv_ac13_lock_files_must_be_existing_regular_files(tmp_path, manifest, damage):
+    import os
+
+    ingest(tmp_path, manifest)
+    path = tmp_path / ".writer.lock"
+    path.unlink()
+    if damage == "fifo":
+        os.mkfifo(path)
+    with pytest.raises(ValueError):
+        health(tmp_path, manifest)
+
+
+def test_ssv_ac13_policy_file_roundtrip_and_duplicate_rejection(tmp_path):
+    from pathlib import Path
+
+    import yaml
+
+    example = (
+        Path(__file__).resolve().parents[1]
+        / "config/finra_short_sale_volume/operations.example.yml"
+    )
+    assert operations.load_policy(str(example)) == operations.default_policy()
+    path = tmp_path / "policy.yml"
+    path.write_text(yaml.safe_dump(operations.default_policy()) + "retention: PRESERVE_ALL\n")
+    with pytest.raises(ValueError):
+        operations.load_policy(path)

@@ -1,6 +1,7 @@
 """SSV-AC13: bounded calendar evidence; API deadlines require a separate reference."""
 
 from datetime import date, datetime, time
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import yaml
@@ -86,7 +87,7 @@ def validate_policy(value):
 
 def load_policy(path):
     try:
-        return validate_policy(yaml.load(_read(path, 65536), Loader=UniqueLoader))
+        return validate_policy(yaml.load(_read(Path(path), 65536), Loader=UniqueLoader))
     except (yaml.YAMLError, RecursionError, UnicodeError):
         raise ValueError("invalid FINRA operations policy") from None
 

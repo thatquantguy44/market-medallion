@@ -29,6 +29,8 @@ def _bounded(value, low, high):
 
 @contextmanager
 def _lock(path):
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("FINRA operations requires existing regular lock files")
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
     try:
         try:
