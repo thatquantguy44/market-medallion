@@ -1,8 +1,11 @@
 # Pipeline package layout and import migration
 
+[DAGSTER.md](../../DAGSTER.md) is the canonical inventory of composed jobs,
+schedules/sensors and their maintenance checks.
+
 The user requested one folder per pipeline under `src/market_data_pipeline/pipelines/`.
-AAII is the only implemented pipeline; future sources get their own packages
-when their implementation is authorized. The [master register](../pipelines.md)
+AAII provides the initial example below; each implemented source owns its own
+package, and future sources get one when implementation is authorized. The [master register](../pipelines.md)
 tracks actual packages and all planned/draft/candidate pipelines.
 
 ```text
@@ -64,9 +67,11 @@ python -m market_data_pipeline.pipelines.aaii run --input tests/fixtures/aaii/se
 ```
 
 Installed `market-data` and `market-medallion` commands remain valid. The existing
-Dagster module `market_data_pipeline.orchestration.dagster_defs` forwards the AAII
-definitions; `market_data_pipeline.pipelines.aaii.dagster_defs` owns them. Job,
-asset and schedule names, run configuration and stopped defaults stay the same.
+Dagster module `market_data_pipeline.orchestration.dagster_defs` composes implemented
+pipeline-owned definitions. AAII owns its definitions in
+`market_data_pipeline.pipelines.aaii.dagster_defs`; other pipelines follow the same
+pattern. [DAGSTER.md](../../DAGSTER.md) owns the current inventory and default states.
+This layout retains existing names, run configuration and activation controls.
 
 Manifests, runtime YAML, fixtures, notebooks and resources retain their existing
 paths. Database/schema/table names, warehouse identity, raw metadata, parser

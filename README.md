@@ -2,6 +2,8 @@
 
 Repository: [market-medallion](https://github.com/thatquantguy44/market-medallion).
 
+**Dagster jobs, schedules and UI:** [DAGSTER.md — canonical master guide](DAGSTER.md).
+
 **Agent starting point:** read [AGENTS.md](AGENTS.md) and the
 [master handoff](docs/handoffs/project_bootstrap.md#agent-start-here) for highest
 priorities, current work, last verified commits/PRs and exact next tasks. Its current
@@ -99,7 +101,7 @@ include an explicit delay label and `provider_delay_months: 3`.
 
 [The master pipeline register](docs/pipelines.md) tracks all implemented, planned,
 draft and candidate pipelines, their package locations, specs and next work.
-[The Dagster job and schedule register](docs/deployment/dagster_jobs.md) tracks
+[The canonical Dagster master guide](DAGSTER.md) tracks
 the operational jobs, schedule state and activation controls.
 Each implemented pipeline owns a subfolder of `src/market_data_pipeline/pipelines/`.
 AAII lives in `pipelines/aaii/`, including its parsers, warehouse/publishers,
@@ -216,37 +218,24 @@ The checked-in example keeps the generic port 55432 and public schema.
 These database and Docker identifiers are preserved across the repository rename
 so existing volumes and DBeaver connections continue to use the same data.
 
-## Dagster
+## Dagster jobs and UI
 
-The lockfile includes the optional Dagster dependencies. For a minimal runtime,
-install `.[dagster,postgres]` instead. With your local `.env` prepared, start the
-UI from the repository root:
+**[DAGSTER.md](DAGSTER.md) is the single master guide** to current jobs,
+schedules/sensors, launch examples, activation controls and maintenance checks.
+Open the local UI at <http://127.0.0.1:3030>, or start it from the repository root:
 
 ```bash
 ./scripts/run_local_dagster.sh
 ```
 
-The UI binds to `http://127.0.0.1:3030` by default. Set `DAGSTER_PORT` in `.env`
-to use another port.
+The launcher loads this project's ignored `.env`; `DAGSTER_PORT` selects a
+nondefault port. Job availability and definition defaults are separate from
+actual running/scheduled state. See the master guide's dated runtime check and
+inspect the UI for current state. [Pipeline runbooks](docs/pipelines.md) retain
+source-specific configuration and recovery details.
 
-Launch `aaii_sentiment_job` using [the example run configuration](resources/dagster-aaii.yml).
-Both Thursday 10:00 America/New_York schedules are **stopped by default**.
-`aaii_thursday_local_import` imports a supplied local file;
-`aaii_weekly_live` calculates overlapping XLS date bounds and also requires
-`operations.scheduled_live_access: true` in the runtime YAML identified by
-`MARKET_MEDALLION_CONFIG`. That acknowledgement records your verified permission;
-it does not establish provider entitlement or start a daemon.
-
-Dagster owns execution and materialization metadata. Pure transforms and the
-pipeline remain callable independently, allowing later Airflow or Mage wrappers.
-See [the orchestration decision](docs/development/adr001-dagster.md). For a manual
-bounded live job, use [the live run config](resources/dagster-aaii-live.yml) and
-inject the password into the worker environment.
-
-Each implemented pipeline also has optional [Slack success/failure alerts](docs/deployment/slack_alerts.md)
-with its own YAML under `config/<pipeline_name>/`. Defaults are disabled and the
-alert sensors default stopped; `slack.on_success`/`slack.on_failure` select statuses,
-and webhook secrets stay in environment variables.
+When changing Dagster definitions, update `DAGSTER.md` in the same change and run
+`.venv/bin/python scripts/verify_dagster_docs.py`; CI rejects inventory drift.
 
 ## Operations, history and recovery
 

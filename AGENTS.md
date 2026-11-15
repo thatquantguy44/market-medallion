@@ -75,3 +75,19 @@ gates, reuse that client for the run, preserve source-owned retries and raw
 capture, and keep local/replay/health paths free of network probes. Future HTTP
 adapters must expose the same pipeline-owned `network` settings. Never install
 a process-global opener or log proxy URLs/credentials.
+
+## Dagster documentation
+
+Read [DAGSTER.md — canonical master guide](DAGSTER.md) before changing Dagster
+jobs, schedules, sensors, root composition, launch configuration or activation
+controls. It is the only master inventory; the old deployment register is a
+compatibility pointer. README links here rather than maintaining another list.
+
+Update `DAGSTER.md` in the same change when adding, removing, renaming or changing
+job/schedule/sensor behavior, cron/time zone, default status, config paths or
+activation gates. Keep README/AGENTS navigation pointing at the master document;
+update `docs/pipelines.md` and the current handoff when scope/deployment facts
+change. Distinguish code defaults from dated observed instance state. Preserve
+explicit user holds, including NAAIM's pause, and do not activate automation while
+maintaining documentation. Run `.venv/bin/python scripts/verify_dagster_docs.py`
+and its focused tests; CI compares the inventory with actual composed definitions.

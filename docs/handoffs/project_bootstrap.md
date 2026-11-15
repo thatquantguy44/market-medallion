@@ -5,35 +5,45 @@ Last updated: 2026-11-15.
 ## Agent start here
 
 **Next implementation: FINRA OTC-T01 source route and reuse contract (Spec013).**
-Spec012 T14 → T15 → T16 are implemented and locally accepted in order on
-`feat/finra-research-orchestration`, created from latest main
-`1daf6b58ed6199fd39dff38f30923d6f55a9b896`. Review/merge this branch before
-starting Spec013 from a fresh latest-main branch. Track [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28),
-open against `main`; no merge has occurred.
+Spec012 T14 → T15 → T16 and the subsequent regression/equivalence review are
+merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as
+`eaec3279dd27c0ee170e78751f234d538d4416b2`. Start Spec013 on a fresh branch from latest
+`origin/main`; the FINRA short-volume delivery's review/merge step is complete.
 This panel owns current priorities; dated checkpoints below retain history.
 Later explicit user instructions take precedence and must be recorded here.
 
-**Status verified:** 2026-11-15, America/New_York. Current runtime schedule/service
-health was not rechecked; acceptance is a bounded evidence snapshot.
+**Status verified:** 2026-11-15 06:23 EST. Local Dagster UI is responding at
+<http://127.0.0.1:3030>, with all eight explicit jobs loaded. All eight acquisition/
+import schedules are STOPPED; only the two FOMC Slack sensors are RUNNING among
+the twelve status sensors. The user-code connection was recovered by restarting
+the existing manual launcher, preserving metadata and stored activation settings.
+No job/source acquisition or schedule activation was performed. See the
+[canonical Dagster master guide](../../DAGSTER.md#current-local-state).
 
 ### Current work and highest priorities
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 1 | Review/merge the verified Spec012 branch | T01–T16 and subsequent regression/equivalence review complete locally; G1/G2 accepted locally for all three selected TRFs on 2026-11-09. Track open [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) from `feat/finra-research-orchestration` to `main`; verify latest-head CI and reviews before merge. | [Acceptance](../../specs/spec012/acceptance.md), [evidence](../../specs/spec012/evidence/t16_delivery_conformance.json), [runbook](../deployment/ssv_runbook.md) |
-| 2 | **Spec013 OTC-T01 — route and reuse contract** | Next implementation after Spec012 review/merge. Recheck official terms and select one bounded weekly report profile before code/provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
-| 3 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
-| 4 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
+| 0 | Dagster canonical documentation cleanup | Implemented and published on `docs/dagster-canonical-register`; [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) is open. Check current-head CI/review before merge. | [DAGSTER.md](../../DAGSTER.md), [checker](../../scripts/verify_dagster_docs.py) |
+| 1 | **Spec013 OTC-T01 — route and reuse contract** | Ready; implementation not started. Create a fresh latest-main branch and verify current official terms for one bounded weekly report profile before provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
+| 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
+| 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Implementation in progress:** branch review is complete locally on
-`feat/finra-research-orchestration`, starting from
-`3f0043a4eb6c5d08807cf4ed2eea75023ad37a38`. Fixed the publication/export generation
-race and consumer lineage/membership contradictions. [Review](../../specs/spec012/branch_review.md)
-records 24 added tests, 756 FINRA checks and 1,777 full-suite passes / 92 optional
-skips. Eight fixture equivalence tests and stricter real-artifact readback pass;
-all 203 source/replay files and both research artifact byte streams are unchanged.
-No provider requests, Slack sends or schedule activation occurred. PR #28 owns
-CI/review tracking; recheck its latest head before merge, then use the Spec013 pickup below.
+**Current delivery:** Dagster documentation cleanup is implemented in `5a1578c`
+on `docs/dagster-canonical-register`, from main `eaec327` plus preserved
+local handoff/runtime checkpoints `1747018` and `468b72a`. The user requested one
+recognizable canonical inventory tied to README/AGENTS. Root
+[DAGSTER.md](../../DAGSTER.md) now owns the job/schedule/sensor tables, UI access,
+operating controls and dated runtime observation. The old register is a pointer.
+An offline definition/doc/navigation check is wired into CI; 50 new regression
+checks and 1,827 full-suite passes / 92 optional skips verify drift, links and
+no instance/network access. The user requested publication;
+[PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) is open against
+`main`. Review current-head CI and the root guide/guard before merge and the next
+pipeline slice; opening the PR does not imply acceptance or merge. Source/wheel
+readback verifies all 185 runtime modules and changed packaged files; lint, format,
+inventory and handoff checks pass. No job definitions, runtime configuration,
+provider behavior or automation activation were changed. OTC-T01 remains ready.
 
 ### Last completed work and commits
 
@@ -45,6 +55,8 @@ CI/review tracking; recheck its latest head before merge, then use the Spec013 p
 | `c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95` | T15 stopped job/schedule and 21 Dagster tests;731 FINRA tests. Verified local commit. |
 | `3f0043a4eb6c5d08807cf4ed2eea75023ad37a38` / T16 | [Acceptance](../../specs/spec012/acceptance.md) and [conformance](../../specs/spec012/evidence/t16_delivery_conformance.json) record the final tests/CLI/source-replay evidence. Resolve its exact commit with the commands below rather than a self-referential SHA. |
 | `9db245ec50c3df6b205a401f942a718ef3664061` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Completed review fixes and 24 added regressions/equivalence tests; 1,777 local passes / 92 optional skips. Branch is pushed; remote checks/reviews are tracked on the PR. |
+| `eaec3279dd27c0ee170e78751f234d538d4416b2` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Merged T14–T16 and reviewed regression/equivalence fixes; Spec013 OTC-T01 is now the next implementation. |
+| `5a1578c11cbcaefe7d19524259a844fdfb0f9ff6` / [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) | Canonical root Dagster guide, README/AGENTS maintenance contract and offline definition/navigation CI guard; 1,827 local passes / 92 optional skips. PR is open; confirm current-head CI/review before merge. |
 
 The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
 approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
@@ -95,7 +107,7 @@ the package/connector is absent now. Do not implement T02+ without a bounded tas
 - Spec011 SEC FTD/exchange-threshold bounded delivery is accepted. AAII recurring
   access and presidential live-source decisions remain independently gated.
 - Existing Slack/service observations in historical sections do not prove current
-  availability. Use [job controls](../deployment/dagster_jobs.md) and recheck runtime
+  availability. Use [Dagster job controls](../../DAGSTER.md) and recheck runtime
   state before describing a service as healthy/running.
 
 ### Keep this panel current
