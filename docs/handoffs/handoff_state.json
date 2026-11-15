@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "7a4639a262340d2da0ef40ad1b4eaaffa7598898d731c323fd71e468710f1cc2",
+  "document_fingerprint": "39c45df33f18cb9112eda42538763b0a42a6ac83bd3ae8369d74b1fc14fc5f12",
   "next_task": "OTC-T01",
-  "panel_fingerprint": "5135a2ffe28872d22a87e7b894234f54bd1ea2f36ef10eac4336967e0bdebda2",
-  "review_summary": "Verified PR #28 merged as eaec327; removed the completed review/merge priority and recorded OTC-T01 ready on latest main, with accepted evidence and activation holds unchanged.",
-  "reviewed_at": "2026-11-15T11:06:08.580668+00:00",
-  "reviewed_commit": "eaec3279dd27c0ee170e78751f234d538d4416b2",
+  "panel_fingerprint": "b134c7bca105f94063339a1bf02484ef1b98d9de260ec739d97e6680f39adc05",
+  "review_summary": "Verified local Dagster UI recovery on port 3030, eight loaded jobs, eight stopped schedules and preserved FOMC-only running alert sensors; no job launch, provider acquisition or metadata reset.",
+  "reviewed_at": "2026-11-15T11:23:30.540334+00:00",
+  "reviewed_commit": "1747018661c1e4e211f9bc15d9ced062ed2ada20",
   "schema_version": 1,
-  "source_fingerprint": "2e9bfffdfa65ca423589963ab4ad7b0f721109a3e827cf40736a78efc6b7ef5e",
+  "source_fingerprint": "5bd87bc296943dbd09f2fac68b20d0d5993a50c84d4723c13e5b102d1d7bec80",
   "task_file": "specs/spec013/todo.md"
 }

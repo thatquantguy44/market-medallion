@@ -7,20 +7,37 @@ delivery status; this document owns operational execution details.
 
 ## Current local state
 
-The status below was verified in the local Dagster instance on 2026-11-03.
-Schedule state is runtime state, so recheck it before assuming a job will run.
-FOMC job registration and all six stopped schedule states were verified through
-the root code location on 2026-11-12; no schedule was activated.
+Verified 2026-11-15 06:23 EST through the running local UI's GraphQL API:
+
+- UI: <http://127.0.0.1:3030>; code location
+  `market_data_pipeline.orchestration.dagster_defs` / `__repository__`.
+- Eight explicit jobs are loaded across seven pipelines. Dagster also owns the
+  implicit `__ASSET_JOB`; it is not another implemented pipeline.
+- All eight acquisition/import schedules are STOPPED, including NAAIM.
+- FOMC Slack success/failure sensors are RUNNING; the other ten alert sensors
+  are STOPPED. Existing stored automation settings were preserved.
+- No active or queued runs were present at the recovery check.
+
+The UI had an unreachable user-code server. Reload alone failed; a restart of
+this project's manual launcher restored the code location. Startup briefly
+reported SQLite metadata read errors for two event-log files; subsequent full
+integrity checks passed for both without repair or replacement. No metadata
+reset, new job launch, source acquisition or schedule activation was performed.
+The underlying cause of the transient metadata reads was not established.
+The service is manually launched, rather than an installed LaunchAgent.
+
+The table records the observed state at this timestamp; recheck runtime state
+before relying on it. Earlier dated checks below retain historical context.
 
 | Pipeline | Job | Schedule | Cadence | Local state | Data root / retention | Activation boundary |
 | --- | --- | --- | --- | --- | --- | --- |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_thursday_local_import` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Local file only; no provider request. |
 | AAII Investor Sentiment | `aaii_sentiment_job` | `aaii_weekly_live` | Thursday, 10:00 America/New_York | Stopped | Runtime-configured root; snapshot retention is a separate dry-run-first operation | Requires `MARKET_MEDALLION_CONFIG` and `operations.scheduled_live_access: true`; provider entitlement remains separately required. |
 | NAAIM delayed public research | `naaim_delayed_capture_job` | `naaim_delayed_daily_live` | Daily, 10:00 America/New_York | **Stopped by user decision on 2026-11-03** | `data/naaim-exposure-public-delayed`; 365-day source-owned retention after a successful capture | Do not restart without explicit user direction; then requires `NAAIM_SCHEDULED_LIVE_ACCESS=true`, `NAAIM_DELAYED_ROOT`, and `NAAIM_PERMISSION_REFERENCE`. |
-| SEC fails-to-deliver | `sec_fails_to_deliver_job` | `sec_fails_to_deliver_daily_live` | Daily, 08:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured pipeline-owned root; immutable Bronze and coherent Parquet retention are operator-managed | Requires local `acquisition.enabled: true`, declared `SEC_FTD_USER_AGENT`, `SEC_FTD_SCHEDULED_LIVE_ACCESS=true`, `SEC_FTD_CONFIG`, and one exact `SEC_FTD_PARTITION`. |
-| Nasdaq/NYSE Reg SHO thresholds | `reg_sho_threshold_list_job` | `reg_sho_threshold_lists_daily_live` | Weekdays, 23:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured threshold root; immutable Bronze and versioned SQLite state | Requires reviewed provider use, local `acquisition.enabled: true`, `REG_SHO_USER_AGENT`, `REG_SHO_SCHEDULED_LIVE_ACCESS=true`, `REG_SHO_CONFIG`, and one exact `REG_SHO_PARTITION`. |
-| FOMC meeting minutes | `fomc_meeting_minutes_job` | `fomc_meeting_minutes_weekday_refresh` | Weekdays, 17:10 America/New_York | Not activated; definition defaults **stopped** | `data/fomc_meeting_minutes/`; retain originals, revisions, derivatives and operation evidence | Manual runs require explicit `live: true`; scheduled execution additionally requires `FOMC_CONFIG`, `FOMC_OPERATIONS_CONFIG` and `scheduled_live_access: true`. |
-| FINRA daily short-sale volume | `finra_short_sale_volume_job` | `finra_short_sale_volume_weekday_refresh` | Weekdays, 09:15 America/New_York | Definition **STOPPED**; one isolated manual in-process acceptance run, no service activation | Configured independent root; PRESERVE_ALL dry run | Job/YAML live flags plus `FINRA_SSV_LIVE_ACCESS=true`; scheduled workers require `FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`, explicit config/scope and reviewed calendar. |
+| SEC fails-to-deliver | `sec_fails_to_deliver_job` | `sec_fails_to_deliver_daily_live` | Daily, 08:30 America/New_York | Loaded; schedule **stopped** | Configured pipeline-owned root; immutable Bronze and coherent Parquet retention are operator-managed | Requires local `acquisition.enabled: true`, declared `SEC_FTD_USER_AGENT`, `SEC_FTD_SCHEDULED_LIVE_ACCESS=true`, `SEC_FTD_CONFIG`, and one exact `SEC_FTD_PARTITION`. |
+| Nasdaq/NYSE Reg SHO thresholds | `reg_sho_threshold_list_job` | `reg_sho_threshold_lists_daily_live` | Weekdays, 23:30 America/New_York | Loaded; schedule **stopped** | Configured threshold root; immutable Bronze and versioned SQLite state | Requires reviewed provider use, local `acquisition.enabled: true`, `REG_SHO_USER_AGENT`, `REG_SHO_SCHEDULED_LIVE_ACCESS=true`, `REG_SHO_CONFIG`, and one exact `REG_SHO_PARTITION`. |
+| FOMC meeting minutes | `fomc_meeting_minutes_job` | `fomc_meeting_minutes_weekday_refresh` | Weekdays, 17:10 America/New_York | Loaded; schedule **stopped** | `data/fomc_meeting_minutes/`; retain originals, revisions, derivatives and operation evidence | Manual runs require explicit `live: true`; scheduled execution additionally requires `FOMC_CONFIG`, `FOMC_OPERATIONS_CONFIG` and `scheduled_live_access: true`. |
+| FINRA daily short-sale volume | `finra_short_sale_volume_job` | `finra_short_sale_volume_weekday_refresh` | Weekdays, 09:15 America/New_York | Loaded; schedule **stopped**; isolated manual acceptance is recorded separately | Configured independent root; PRESERVE_ALL dry run | Job/YAML live flags plus `FINRA_SSV_LIVE_ACCESS=true`; scheduled workers require `FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`, explicit config/scope and reviewed calendar. |
 
 Presidential research also owns `presidential_rebuild_job` (offline) and
 `presidential_live_fetch_job`, with `presidential_research_refresh` stopped by

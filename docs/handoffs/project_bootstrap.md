@@ -12,8 +12,13 @@ merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/
 This panel owns current priorities; dated checkpoints below retain history.
 Later explicit user instructions take precedence and must be recorded here.
 
-**Status verified:** 2026-11-15, America/New_York. Current runtime schedule/service
-health was not rechecked; acceptance is a bounded evidence snapshot.
+**Status verified:** 2026-11-15 06:23 EST. Local Dagster UI is responding at
+<http://127.0.0.1:3030>, with all eight explicit jobs loaded. All eight acquisition/
+import schedules are STOPPED; only the two FOMC Slack sensors are RUNNING among
+the twelve status sensors. The user-code connection was recovered by restarting
+the existing manual launcher, preserving metadata and stored activation settings.
+No job/source acquisition or schedule activation was performed. See the
+[verified job register](../deployment/dagster_jobs.md#current-local-state).
 
 ### Current work and highest priorities
 
