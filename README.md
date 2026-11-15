@@ -2,6 +2,11 @@
 
 Repository: [market-medallion](https://github.com/thatquantguy44/market-medallion).
 
+**Agent starting point:** read [AGENTS.md](AGENTS.md) and the
+[master handoff](docs/handoffs/project_bootstrap.md#agent-start-here) for highest
+priorities, current work, last verified commits/PRs and exact next tasks. Its current
+panel takes precedence over older dated pickup notes.
+
 Independent, manifest-driven **Bronze → Silver → Gold** pipelines for market
 data. The first executable slice imports an authorized local **AAII Investor
 Sentiment Survey CSV or official XLS**, stores observed revisions in SQLite or PostgreSQL, and

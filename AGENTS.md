@@ -3,6 +3,16 @@
 Read `README.md`, `docs/pipelines.md`, `specs/spec001/README.md`, and
 `docs/handoffs/project_bootstrap.md` before substantive work. Keep implemented
 slices distinct from planned connectors; use the current handoff for status.
+
+The current priority queue, active work, last verified commits/PRs and next
+bounded tasks live in the [master handoff's current panel](docs/handoffs/project_bootstrap.md#agent-start-here).
+Dated checkpoints below that panel are history. At implementation start, record
+the bounded task and active branch/PR. When priorities, scope, work status,
+commit/merge status or next actions change, update the panel before handing off;
+include verified SHAs, checks/evidence, blockers and exact pickup instructions.
+Update owning specs/registers too when their facts change, and preserve the dated
+handoff history. Never infer current runtime health from an old checkpoint.
+
 For the AAII slice, also read `specs/spec002/README.md`, `specs/spec003/README.md`, and
 `docs/handoffs/aaii_checkpoint.md`. The checkpoint defines the next bounded scope;
 do not restart from Spec 001's original CFTC-first plan.
