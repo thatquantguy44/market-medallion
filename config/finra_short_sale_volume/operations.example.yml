@@ -1,0 +1,21 @@
+# Offline health only. 24 hours is a local monitoring threshold, not a FINRA SLA.
+# No API deadline is asserted; see specs/spec012/operations_contract.md.
+schema_id: finra-ssv-operations-policy/1
+calendar_start: '2026-01-01'
+calendar_end: '2026-12-31'
+calendar_reference: https://www.finra.org/filing-reporting/market-transparency-reporting/holiday-calendar
+closed_dates:
+- '2026-01-01'
+- '2026-01-19'
+- '2026-02-16'
+- '2026-04-03'
+- '2026-05-25'
+- '2026-06-19'
+- '2026-07-03'
+- '2026-09-07'
+- '2026-11-26'
+- '2026-12-25'
+api_release_time: null
+api_timing_reference: null
+max_capture_age_hours: 24
+retention: PRESERVE_ALL

@@ -2,8 +2,9 @@
 
 **Decision date:** 2026-11-03. **Status:** comprehensive specification and
 planning set. Spec011 is accepted for its bounded native-source delivery;
-Spec012 T01–T04 provide admission, a three-TRF registry, pure Decimal JSON
-parsing, quantity text readback and per-observation ratio arithmetic. Spec012 acquisition/storage/jobs and Specs013–015 remain unimplemented.
+Spec012 T01–T13 implement the three-TRF API profile, Bronze/SQLite revisions,
+research, typed publication, replay, bounded acquisition and offline health/retention
+accounting. Spec012 interchange/jobs and Specs013–015 remain unimplemented.
 **Owner:** MarketMedallion. **Consumer:** local research and a future separately
 scoped QuantMeridian reader. **Priority:** the user's next source-build program.
 

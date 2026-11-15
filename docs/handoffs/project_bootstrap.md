@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-13.
+Last updated: 2026-11-14.
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is
@@ -18,6 +18,49 @@ explicit automatic fallback preference, NO_PROXY, timeouts and verified custom
 CA support. CLI and Dagster forward pipeline-owned settings. SEC/threshold
 validation, health, planning, local ingestion and export make no request. All
 new live schedules default stopped.
+
+## 2026-11-14 current pickup — FINRA T13 health/retention implemented; T14 next
+
+T13 is implemented on **`feat/finra-health-retention`**, created from latest main
+`12edd0f` after T11–T12 merged in PR25; [PR26](https://github.com/thatquantguy44/market-medallion/pull/26) tracks this branch. Read [T13 acceptance](../../specs/spec012/t13_acceptance.md),
+[operations contract](../../specs/spec012/operations_contract.md),
+[evidence](../../specs/spec012/evidence/t13_operations_conformance.json) and
+[Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff). T01–T13 are
+implemented; T14–T16, broader facility/history coverage and G1/G2 remain open.
+
+`health` combines retained Bronze/outcomes, terminal warehouse attempts/membership,
+source acquisition runs and verified frozen publications. A later failed/no-response
+refresh stays visible above valid old Gold. Replay reports LOCAL_ONLY, without
+inventing original network success. Valid empty, missing, stale capture, unresolved
+work, pending/overdue/unknown release and publication lag/recovery stay separate.
+The verified2026 FINRA calendar does not extrapolate. API timing stays unknown;
+the daily-file18:00 target is not an API SLA. Optional strict per-pipeline operations
+YAML allows an evidence-bound API deadline/local age threshold. A pre-release empty
+does not satisfy the later deadline. ADF/TXT/consolidated/ORF remain excluded.
+
+`retention-dry-run` holds every file/version under PRESERVE_ALL, explaining origin,
+membership, attempt, journal, frozen publication and **both-pass** collection-page
+references. No apply/delete flag, finite approved deletion/backup policy or365-day
+inheritance exists. Reads require existing regular nonblocking lock files and
+bounded transactions; no store creation, HTTP probe, parse-outcome write or repair.
+
+**Verified:**47 new /673 FINRA tests; full offline1661 passed /92 optional skips,
+Ruff/format and wheel/source readback (35 FINRA modules) pass. Four actual offline portable-script commands on the
+isolated real T12 Chicago2026-11-09 source/replay stores reconcile5 captures,
+5849 versions and four collection input pages in each; all53 source/40 replay files
+stay unchanged. Source SUCCESS and replay LOCAL_ONLY remain distinct; both report
+UNKNOWN_API_TIMING and valid PUBLISHED snapshots. No new provider request, other
+operational store, service, schedule, Slack message or sibling config changed.
+Pinned agent-skills188 entries and QuantSmith61 Git guidance objects verify;
+known external checkout drift is unchanged. NAAIM stays paused.
+
+**Next: SSV-T14 / SSV-REQ12 / SSV-AC14.** Build a rights-admitted versioned research
+interchange from the verified publication boundary, retaining exact quantity text,
+scope/units, raw symbols, coverage, source, clocks and rights labels. Include an
+invented consumer fixture/readback test and reject disallowed use before writes.
+Keep private runtime paths/credentials/operational details out of the artifact.
+Do not build a QuantMeridian consumer or T15 job in this slice. Track current-head
+PR checks/reviews separately from earlier acceptance. No merge is implied.
 
 ## 2026-11-13 current pickup — FINRA T12 acquisition added; T13 next
 

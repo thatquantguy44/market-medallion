@@ -44,7 +44,7 @@ remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
 records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
 stay explicit, with no flags cleared or derivative publication. Recent-year
 refreshes cover new releases/corrections. Acquisition schedules stay stopped;
-NAAIM remains paused; FINRA T01–T12 are implemented; T13 health/retention is next.
+NAAIM remains paused; FINRA T01–T13 are implemented; T14 research interchange is next.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
@@ -79,7 +79,9 @@ The [portable script](scripts/run_finra_short_sale_volume.sh) uses
 through `publish`, `published` and `recover-publication`; `replay` takes a source
 root and an empty destination config. `acquisition-plan` previews bounds without
 network; `acquire` requires its separate YAML and explicit live opt-ins. Next is
-SSV-T13 health/retention. Exports/jobs and broader real-source coverage remain open. Public API terms acceptance is user-attested. Databricks
+SSV-T14 research interchange. [T13 health/retention](specs/spec012/t13_acceptance.md)
+adds offline release/capture/refresh/publication checks and preserve-all reference
+accounting, with673 FINRA tests and93 real-store files unchanged. Exports/jobs and broader real-source coverage remain open. Public API terms acceptance is user-attested. Databricks
 workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).

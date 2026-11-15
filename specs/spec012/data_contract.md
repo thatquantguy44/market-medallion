@@ -267,3 +267,14 @@ unknown. Complete normalized rows enter the existing atomic membership/version
 transaction once; source counts/ratios and source identifiers retain exactness.
 Single-response complete partitions keep the original path. Replay must admit the
 collection's original parser row/byte profile; publication remains explicit.
+
+## SSV-T13 operations amendment
+
+[Operations contract](operations_contract.md) implements SSV-NFR02/SSV-AC13 for
+the selected API profile. The verified2026 FINRA reporting calendar is bounded;
+API daily timing stays unknown by default. The daily-file18:00 target is not an
+API guarantee. Configured API timing requires separate evidence and pre-release
+captures do not satisfy it. ADF remains excluded, while valid admitted TRF empties
+remain distinct from missing reports. The Equity-specific API terms add no
+dataset-specific retention condition; preserve-all reference accounting is the
+sole dry-run policy. No finite deletion/backup policy is approved here.

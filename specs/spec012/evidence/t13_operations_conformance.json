@@ -1,0 +1,53 @@
+{
+  "basis": "READ_ONLY_T12_ISOLATED_REAL_CHICAGO_2026_11_09",
+  "checked_date": "2026-11-14",
+  "checks": [
+    {
+      "captures": 5,
+      "deletable_bytes": 0,
+      "files_unchanged": 53,
+      "health_status": "UNKNOWN",
+      "inventory_sha256": "e582f2c003187aca5668d7bbed31882b26b502abdaa595b93516c098da0bf8f6",
+      "last_acquisition_success_at": "2026-11-13T22:18:45.495588Z",
+      "protected_collection_inputs": 4,
+      "publication_status": "PUBLISHED",
+      "refresh_status": "SUCCESS",
+      "release_status": "UNKNOWN_API_TIMING",
+      "store": "source",
+      "total_bytes": 42896700,
+      "versions": 5849
+    },
+    {
+      "captures": 5,
+      "deletable_bytes": 0,
+      "files_unchanged": 40,
+      "health_status": "UNKNOWN",
+      "inventory_sha256": "168269f0990d733739d21717ab1050164de62634740ecced18a1ea8edb2efc77",
+      "last_acquisition_success_at": null,
+      "protected_collection_inputs": 4,
+      "publication_status": "PUBLISHED",
+      "refresh_status": "LOCAL_ONLY",
+      "release_status": "UNKNOWN_API_TIMING",
+      "store": "replay",
+      "total_bytes": 42891897,
+      "versions": 5849
+    }
+  ],
+  "commands": 4,
+  "network_requests": 0,
+  "schema_id": "finra-ssv-t13-conformance/1",
+  "verification": {
+    "agent_skills_entries": 188,
+    "implementation_ci_head": "022ca144b0770ef842ac22687cbc1e8011352f3b",
+    "implementation_ci_optional_skips": 3,
+    "implementation_ci_passed": 1750,
+    "implementation_ci_run": 43626314514,
+    "new_t13_tests": 47,
+    "offline_optional_skips": 92,
+    "offline_passed": 1661,
+    "quantsmith_checkout_drift": "unchanged_known_revision_tree_drift",
+    "quantsmith_pinned_git_objects": 61,
+    "total_finra_tests": 673,
+    "verified_finra_modules": 35
+  }
+}

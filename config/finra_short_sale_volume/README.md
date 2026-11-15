@@ -121,3 +121,29 @@ and 18000000 bytes; increase local/replay YAML input limits explicitly when need
 The existing warehouse version/storage bounds still apply. Publication stays
 explicit. [Runbook](../../docs/deployment/ssv_local_runbook.md#t12-bounded-admitted-acquisition)
 explains journals, incomplete exit2 and recovery. Jobs and alerts remain absent.
+
+T13 adds offline `health` and `retention-dry-run` using the local YAML above.
+Optional `--policy` selects a separate [operations policy](operations.example.yml).
+Copy it to ignored `operations.local.yml` to change the local capture-age threshold
+or record reviewed calendar/API timing evidence. The default2026 calendar does not
+extrapolate, early closes remain reporting dates, and API release timing stays
+unknown. Do not transfer the file site's18:00 target into the API setting without
+its own evidence reference. The sole supported retention mode is PRESERVE_ALL.
+
+```bash
+./scripts/run_finra_short_sale_volume.sh health --config config/finra_short_sale_volume/pipeline.local.yml \
+  --start-date 2026-11-09 --end-date 2026-11-09 --scope nasdaq_chicago_trf \
+  --policy config/finra_short_sale_volume/operations.example.yml
+./scripts/run_finra_short_sale_volume.sh retention-dry-run --config config/finra_short_sale_volume/pipeline.local.yml
+```
+
+Health returns JSON and exits2 for DEGRADED/UNKNOWN,0 for HEALTHY/PENDING.
+It separates source refresh failures from still-valid Gold and reports publication
+lag/recovery. Retention accounts for every file/version and protects both page
+collection passes; it has no deletion/apply option. Neither command loads secrets,
+creates locks/stores, probes HTTP, writes parse outcomes or repairs publication.
+They refuse busy writers and corrupt evidence. Limits: `--max-captures`1000,
+`--max-state-rows`250000, `--max-total-bytes`134217728, `--max-files`50000,
+`--max-runs`1000 and `--max-events`10000. YAML input byte limits also apply to raw
+captures. See the [operations contract](../../specs/spec012/operations_contract.md)
+and [runbook](../../docs/deployment/ssv_local_runbook.md#t13-offline-health-and-retention-accounting).

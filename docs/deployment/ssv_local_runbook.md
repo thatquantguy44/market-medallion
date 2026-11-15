@@ -321,3 +321,54 @@ records one real Chicago date with 5849 rows, two-pass agreement, offline replay
 and typed publication. It does not certify all facilities/history or advance
 G1/G2. No recurring FINRA job, Slack alert or schedule is activated. T13 health/
 retention, T14 interchange and T15 stopped orchestration remain later work.
+
+## T13 offline health and retention accounting
+
+Use an admitted local config, without credentials/live flags:
+
+```bash
+./scripts/run_finra_short_sale_volume.sh health --config config/finra_short_sale_volume/pipeline.local.yml \
+  --start-date 2026-11-09 --end-date 2026-11-09 --scope nasdaq_chicago_trf
+./scripts/run_finra_short_sale_volume.sh retention-dry-run --config config/finra_short_sale_volume/pipeline.local.yml
+```
+
+`health` checks explicit requested date/facility partitions against retained
+Bronze, terminal ingestion, acquisition journals and frozen publication evidence.
+Its JSON keeps committed coverage, local/source last success, trailing failure,
+release expectation, capture age and publication state separate. Exit2 means
+DEGRADED/UNKNOWN or refusal; exit0 means HEALTHY/PENDING. Missing API timing causes
+UNKNOWN even when source refresh/Gold/publication are sound. This is an explicit
+policy-evidence gap, not a fetch failure. Check `refresh_status`, `coverage`,
+`release_status` and `publication.status` before choosing a recovery action.
+
+The default verified FINRA calendar covers2026 only. Early closes remain reporting
+dates; federal bank holidays do not establish equity closures. API timing defaults
+to unknown; the file site's18:00 target is a different delivery surface. Use optional
+`--policy config/finra_short_sale_volume/operations.local.yml` after copying the
+[operations example](../../config/finra_short_sale_volume/operations.example.yml).
+An API deadline needs its own evidence reference. A pre-release valid empty cannot
+satisfy a later deadline. The24-hour capture-age threshold is an operator setting,
+not a FINRA SLA; historical partitions may be stale unless explicitly refreshed.
+
+For FAILED source refresh, inspect the linked run/result and retained attempts;
+old committed Gold remains available. Choose a bounded authorized overlapping
+`acquire` only as a separate action. RUNNING/unresolved captures require the T12
+recovery procedure; the reader never resumes them. Busy locks require retry after
+the active writer stops. For SOURCE_ADVANCED, explicitly publish if that scoped
+current-vintage publication is intended. For RECOVERY_REQUIRED, use the existing
+T10 recovery command with original budgets. Corrupt bindings/artifacts refuse;
+preserve them and investigate, without deleting identities or manually promoting.
+
+`retention-dry-run` verifies/counts all root bytes and logical versions. Its JSON
+explains current partitions, version origins, observation memberships, attempts,
+journals, frozen publications and collection inputs across **both** passes. All
+files/versions are held under PRESERVE_ALL, including unknown artifacts/stages.
+There is no apply/delete flag, no approved finite deletion/backup policy and no
+inherited365-day rule. SQL rows are counted separately from physical database bytes.
+
+The read commands take existing nonblocking shared locks and bounded read
+transactions; they make no network call or filesystem mutation. Defaults and
+bounded CLI overrides are documented in [configuration](../../config/finra_short_sale_volume/README.md).
+The [T13 acceptance](../../specs/spec012/t13_acceptance.md) records four actual
+script checks against the isolated T12 real source/replay stores,5849 versions in
+each and93 files unchanged. Jobs/Slack remain absent; NAAIM remains paused.
