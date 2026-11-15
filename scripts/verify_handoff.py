@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import subprocess
+import sys
 from datetime import UTC, datetime, timedelta
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
@@ -204,7 +205,11 @@ def _references(snapshot, document):
             elif item != ".":
                 components.append(item)
         name = "/".join(components)
-        exists = name in snapshot.entries or any(p.startswith(name + "/") for p in snapshot.entries)
+        exists = (
+            name == STATE
+            or name in snapshot.entries
+            or any(p.startswith(name + "/") for p in snapshot.entries)
+        )
         if not exists:
             raise ValueError("handoff has a broken local link: " + target)
         if parts.fragment:
@@ -263,12 +268,18 @@ def _validate(snapshot, metadata, document, *, now, base=None):
     previous = _base(snapshot, base)
     if previous is not None:
         old_document = previous.read(HANDOFF, required=False)
-        if (
-            old_document is not None
-            and previous.fingerprint() != snapshot.fingerprint()
-            and _panel_fingerprint(old_document) == _panel_fingerprint(document)
-        ):
-            raise ValueError("source changes require a meaningful update to the current panel")
+        if old_document is not None and previous.fingerprint() != snapshot.fingerprint():
+            try:
+                previous_panel = _panel_fingerprint(old_document)
+            except ValueError:
+                # Only the first migration may start from a legacy unguarded panel.
+                if previous.read(STATE, required=False) is not None:
+                    raise
+            else:
+                if previous_panel == _panel_fingerprint(document):
+                    raise ValueError(
+                        "source changes require a meaningful update to the current panel"
+                    )
     _references(snapshot, document)
     return dict(
         status="FRESH",
@@ -355,10 +366,14 @@ def main(argv=None):
             result = check(args.repo, staged=args.staged, ref=args.ref, base=args.base)
         print(json.dumps(result, sort_keys=True))
         return 0
-    except (OSError, ValueError, TypeError, KeyError, UnicodeError, subprocess.SubprocessError):
-        import sys
-
-        error = sys.exc_info()[1]
+    except (
+        OSError,
+        ValueError,
+        TypeError,
+        KeyError,
+        UnicodeError,
+        subprocess.SubprocessError,
+    ) as error:
         print("Handoff freshness failed: " + str(error), file=sys.stderr)
         print(
             "Update the current panel, stage changes, run --refresh --summary, "

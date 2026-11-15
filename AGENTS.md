@@ -13,6 +13,16 @@ include verified SHAs, checks/evidence, blockers and exact pickup instructions.
 Update owning specs/registers too when their facts change, and preserve the dated
 handoff history. Never infer current runtime health from an old checkpoint.
 
+Handoff freshness is checked by `python3 scripts/verify_handoff.py` and in CI.
+After editing the current panel, stage all intended changes, run
+`python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"`,
+stage `docs/handoffs/project_bootstrap.md` and `docs/handoffs/handoff_state.json`,
+then run `python3 scripts/verify_handoff.py --staged` before committing. Refresh
+acknowledges the index only. Meaningful source changes need a current-panel update;
+a timestamp/history-only change is insufficient. See
+[the freshness guide](docs/development/handoff_freshness.md). Existing user Git hooks
+remain in place; do not replace a global hooks configuration to install this guard.
+
 For the AAII slice, also read `specs/spec002/README.md`, `specs/spec003/README.md`, and
 `docs/handoffs/aaii_checkpoint.md`. The checkpoint defines the next bounded scope;
 do not restart from Spec 001's original CFTC-first plan.

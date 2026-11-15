@@ -1,6 +1,6 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-14.
+Last updated: 2026-11-15.
 
 ## Agent start here
 
@@ -13,6 +13,21 @@ Explicit later user instructions take precedence and must be recorded here.
 Recheck Git/PR state at pickup; this timestamp is an evidence snapshot, not a
 live service-health claim.
 
+### Objective freshness guard
+
+[Review evidence](handoff_state.json) binds this document and all other tracked
+repository inputs to a reviewed Git snapshot. Run
+`python3 scripts/verify_handoff.py` for committed HEAD or add `--staged` for the
+exact proposed commit. CI checks task status, navigation, known commits, snapshot
+coverage and review age. Code/config/spec changes require a meaningful current-panel
+update; timestamps, comments and history-only edits cannot acknowledge them.
+
+The [daily freshness job](https://github.com/thatquantguy44/market-medallion/actions/workflows/handoff-freshness.yml)
+also publishes current commits/open PRs and fails after seven days without review.
+It starts scheduling once PR #27 is merged. Repair with the staged review workflow
+in the [freshness guide](../development/handoff_freshness.md). The job reports
+objective drift; agents still review priorities and runtime claims themselves.
+
 ### Current work and highest priorities
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
@@ -24,15 +39,18 @@ live service-health claim.
 | 5 | Spec014 — SEC N-PORT | Planned; follows Spec013. | [Spec014](../../specs/spec014/README.md) |
 | 6 | Spec015 — NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
 
+**Repository tooling:** handoff freshness enforcement is implemented in PR #27;
+CI/daily scheduling is verified separately from its source and unit checks.
+
 **Implementation in progress:** none recorded at this checkpoint. T14 is the
 next bounded task, not work already underway. GitHub showed no open PRs at the
 verification time, before this documentation update. Verify again before claiming
-work. This documentation change adds the current panel and maintenance rules;
-it does not implement or activate another pipeline.
+work. This change adds the current panel, maintenance rules and automated freshness
+guard; no FINRA implementation task has started.
 
 **Documentation handoff:** [PR #27](https://github.com/thatquantguy44/market-medallion/pull/27),
-branch `docs/master-agent-handoff`, contains this panel and the agent maintenance
-rules. Its current review/merge state should be checked at pickup.
+branch `docs/master-agent-handoff`, contains the panel, maintenance rules and
+freshness guard. Its current review/merge state should be checked at pickup.
 
 ### Last completed work and commits
 
@@ -44,6 +62,7 @@ Its tree exactly matches tested PR head `c9129e6`. The old
 
 | Commit | Completed work |
 | --- | --- |
+| `7b81559` | Add the offline Git-snapshot freshness verifier and staged-state regressions in PR #27. |
 | [`c53b1e2`](https://github.com/thatquantguy44/market-medallion/commit/c53b1e2ab29294e73953362d03b837e468c77f85) | Merge PR #26 / T13 into main. |
 | [`c9129e6`](https://github.com/thatquantguy44/market-medallion/commit/c9129e614b6d777ff5ca907bd379e85c12852870) | Make the journal-corruption regression fixture deterministic; final tested T13 head. |
 | [`4e2fdfb`](https://github.com/thatquantguy44/market-medallion/commit/4e2fdfb9f6c4c4e1fcb6128e9155691a1548b7b6) | Record full T13 regression and acceptance evidence. |
@@ -124,6 +143,11 @@ off, update this panel in place with:
 The panel owns cross-project navigation and current priorities. Specs own
 requirements/tasks; [docs/pipelines.md](../pipelines.md) owns pipeline/package
 status; the [job register](../deployment/dagster_jobs.md) owns operating controls.
+Stage source and handoff changes, then refresh the machine review evidence with
+`python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"`
+and stage both handoff files. `--staged` checks the exact index without changing it.
+See the [freshness guide](../development/handoff_freshness.md) for the complete flow.
+
 Update those owning records when their facts change and link them here. Preserve
 the dated history below; append a dated checkpoint for substantial new evidence.
 Do not rewrite old checkpoints to look current or record secrets/runtime payloads.

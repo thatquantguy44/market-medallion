@@ -3,6 +3,7 @@
 import json
 import subprocess
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 
 import pytest
 
@@ -287,3 +288,150 @@ def test_cli_checks_committed_and_staged_views(repo):
         )
         assert result.returncode == 0, result.stderr
         assert json.loads(result.stdout)["status"] == "FRESH"
+
+
+@pytest.mark.parametrize(
+    "damage,expected",
+    [("link", "broken local"), ("commit", "Git history/object"), ("task", "next task")],
+)
+def test_refresh_cannot_acknowledge_invalid_navigation_or_task_state(repo, damage, expected):
+    if damage == "link":
+        edit_panel(repo, "Read [missing anchor](../../specs/example/todo.md#missing).")
+    elif damage == "commit":
+        edit_panel(repo, "| `deadbee` | nonexistent commit |")
+    else:
+        path = repo / HANDOFF
+        path.write_text(path.read_text().replace("EX-T02", "EX-T03"))
+    git(repo, "add", ".")
+    before = {p: (repo / p).read_bytes() for p in (HANDOFF, STATE)}
+    with pytest.raises(ValueError, match=expected):
+        refresh(repo, summary="Invalid task state or references cannot be acknowledged.", now=NOW)
+    assert before == {p: (repo / p).read_bytes() for p in before}
+
+
+@pytest.mark.parametrize(
+    "note", ["<!-- comment-only acknowledgement -->", "**Status verified:** just now."]
+)
+def test_invisible_or_timestamp_only_panel_edits_do_not_cover_source(repo, note):
+    (repo / "src/example.py").write_text("value = 2\n")
+    edit_panel(repo, note)
+    git(repo, "add", ".")
+    with pytest.raises(ValueError, match="current panel"):
+        refresh(repo, summary="Invisible or time-only acknowledgements must fail.", now=NOW)
+
+
+def test_task_advance_requires_matching_handoff_pickup(repo):
+    path = repo / "specs/example/todo.md"
+    path.write_text(
+        path.read_text().replace("- [ ] Pending", "- [x] Pending")
+        + "\n## EX-T03 — Following task\n- [ ] New work\n"
+    )
+    path = repo / HANDOFF
+    path.write_text(path.read_text().replace("EX-T02", "EX-T03"))
+    stage_review(repo)
+    assert check(repo, staged=True, now=NOW)["next_task"] == "EX-T03"
+
+
+def test_metadata_duplicates_and_short_review_summaries_refuse(repo):
+    path = repo / STATE
+    before = path.read_bytes()
+    with pytest.raises(ValueError, match="review summary"):
+        refresh(repo, summary="checked", now=NOW)
+    assert path.read_bytes() == before
+    path.write_text(
+        path.read_text().replace('"schema_version": 1', '"schema_version": 1, "schema_version": 1')
+    )
+    git(repo, "add", STATE)
+    with pytest.raises(ValueError, match="duplicate"):
+        check(repo, staged=True, now=NOW)
+
+
+def test_ci_and_daily_workflow_keep_the_guard_enabled():
+    import yaml
+
+    from scripts import verify_handoff
+
+    root = Path(verify_handoff.__file__).resolve().parent.parent
+    workflows = [
+        yaml.load((root / path).read_text(), Loader=yaml.BaseLoader)
+        for path in (".github/workflows/ci.yml", ".github/workflows/handoff-freshness.yml")
+    ]
+    for workflow in workflows:
+        steps = next(iter(workflow["jobs"].values()))["steps"]
+        assert (
+            next(s for s in steps if s.get("uses", "").startswith("actions/checkout@"))["with"][
+                "fetch-depth"
+            ]
+            == "0"
+        )
+        assert any("scripts/verify_handoff.py" in s.get("run", "") for s in steps)
+        for step in steps:
+            command = step.get("run", "")
+            if "scripts/verify_handoff.py" in command or "GITHUB_STEP_SUMMARY" in command:
+                syntax = subprocess.run(
+                    ["bash", "-n"], input=command, text=True, capture_output=True
+                )
+                assert syntax.returncode == 0, syntax.stderr
+            if "python - <<'PY'" in command:
+                code = command.split("python - <<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+                compile(code, "workflow inline Python", "exec")
+    daily = workflows[1]
+    assert {"push", "pull_request", "schedule", "workflow_dispatch"} <= set(daily["on"])
+    assert daily["permissions"] == {"contents": "read", "pull-requests": "read"}
+    assert any(
+        "GITHUB_STEP_SUMMARY" in s.get("run", "")
+        and "gh" in s.get("run", "")
+        and s.get("if") == "always()"
+        for s in daily["jobs"]["freshness"]["steps"]
+    )
+
+
+def test_initial_metadata_can_be_linked_before_it_exists(repo):
+    git(repo, "rm", STATE)
+    edit_panel(repo, "Review [machine evidence](handoff_state.json).")
+    git(repo, "add", HANDOFF)
+    refresh(
+        repo,
+        task_file="specs/example/todo.md",
+        summary="Bootstrap linked metadata only after successful validation.",
+        now=NOW,
+    )
+    git(repo, "add", HANDOFF, STATE)
+    assert check(repo, staged=True, now=NOW)["status"] == "FRESH"
+
+
+def test_first_guard_can_migrate_a_legacy_handoff_without_review_metadata(repo):
+    current = (repo / HANDOFF).read_text()
+    git(repo, "rm", STATE)
+    (repo / HANDOFF).write_text(
+        "# Old handoff\n\nLegacy checkpoint, before a current panel existed.\n"
+    )
+    git(repo, "add", HANDOFF)
+    git(repo, "commit", "--quiet", "-m", "legacy baseline")
+    base = git(repo, "rev-parse", "HEAD")
+    (repo / HANDOFF).write_text(current)
+    (repo / "src/example.py").write_text("value = 2\n")
+    git(repo, "add", ".")
+    refresh(
+        repo,
+        task_file="specs/example/todo.md",
+        summary="Bootstrap the structured panel and review its complete staged inputs.",
+        now=NOW,
+    )
+    git(repo, "add", HANDOFF, STATE)
+    git(repo, "commit", "--quiet", "-m", "first guard")
+    assert check(repo, base=base, now=NOW)["status"] == "FRESH"
+
+
+def test_existing_guard_cannot_bypass_panel_coverage_via_a_broken_base(repo):
+    current = (repo / HANDOFF).read_text()
+    (repo / HANDOFF).write_text("# Broken handoff while metadata already exists\n")
+    git(repo, "add", HANDOFF)
+    git(repo, "commit", "--quiet", "-m", "invalid guarded base")
+    (repo / HANDOFF).write_text(current)
+    (repo / "src/example.py").write_text("value = 2\n")
+    git(repo, "add", ".")
+    with pytest.raises(ValueError, match="current panel"):
+        refresh(
+            repo, summary="An established guard cannot use the legacy migration exemption.", now=NOW
+        )

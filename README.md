@@ -6,6 +6,8 @@ Repository: [market-medallion](https://github.com/thatquantguy44/market-medallio
 [master handoff](docs/handoffs/project_bootstrap.md#agent-start-here) for highest
 priorities, current work, last verified commits/PRs and exact next tasks. Its current
 panel takes precedence over older dated pickup notes.
+[Automated freshness checks](docs/development/handoff_freshness.md) bind the
+handoff to staged/committed source and run in CI plus a daily job.
 
 Independent, manifest-driven **Bronze → Silver → Gold** pipelines for market
 data. The first executable slice imports an authorized local **AAII Investor
