@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "499490813ca9ac41e38201c53e65ad022c7b5dffa694e19f07cedb5b10417b5e",
+  "document_fingerprint": "26ab3a15b52a0707525ca74fea6441271daeb0416086019021d09e347ea55ba1",
   "next_task": "OTC-T01",
-  "panel_fingerprint": "916863e8fdf90c6eb4be81b0dd316569e54f64b66345c43493aa3d9aeea969d4",
-  "review_summary": "Completed branch review: generation binding and current/prior consumer membership/lineage fixes; 24 added tests, 756 FINRA checks, 1777 full passes and 92 optional skips. Eight fixture equivalence scenarios and byte-identical real source/replay exports preserve 203 files, without provider requests or activation.",
-  "reviewed_at": "2026-11-15T10:44:34.221893+00:00",
-  "reviewed_commit": "3f0043a4eb6c5d08807cf4ed2eea75023ad37a38",
+  "panel_fingerprint": "eb0ba55f805201b80e2f1c26bc1ca19e0f05d4ab2c4b8d2148e2844c2dc065d6",
+  "review_summary": "Recorded pushed review commit 9db245e and open PR #28 against main; current-head CI/reviews tracked on the PR, bounded acceptance and stopped activation controls unchanged.",
+  "reviewed_at": "2026-11-15T10:47:48.203293+00:00",
+  "reviewed_commit": "9db245ec50c3df6b205a401f942a718ef3664061",
   "schema_version": 1,
-  "source_fingerprint": "856477d8b95d0003ec03a15b911f62d5d303213b069c5d8196e0e68e5e781a87",
+  "source_fingerprint": "7035436216aa5aa4a091bb8a356bd5d0ba16ce2a2f0cb190bd096a90eebd8c11",
   "task_file": "specs/spec013/todo.md"
 }

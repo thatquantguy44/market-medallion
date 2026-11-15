@@ -12,7 +12,8 @@ For highest priorities, current work, last verified commits/PRs and the next
 bounded task, start at the [master handoff's current panel](handoffs/project_bootstrap.md#agent-start-here).
 FINRA T13 merged in [PR #26](https://github.com/thatquantguy44/market-medallion/pull/26)
 as `c53b1e2`; T14–T16 are implemented and locally accepted on
-`feat/finra-research-orchestration`. Spec013 OTC-T01 follows review/merge.
+`feat/finra-research-orchestration` in [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28).
+Spec013 OTC-T01 follows review/merge.
 See [Spec012 acceptance](../specs/spec012/acceptance.md).
 
 The [Dagster job and schedule register](deployment/dagster_jobs.md) is the

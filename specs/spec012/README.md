@@ -31,8 +31,9 @@ Read the [common contract](../../docs/securities_finance/contract.md),
 T14 → T15 → T16 were completed in order on `feat/finra-research-orchestration`,
 from merged main `1daf6b5`. T14 `2b6fc3b` implements the export; T15 `c6b025a`
 implements stopped orchestration. T16 adds all-three-TRF conformance and the
-complete operating handoff. No PR/merge is claimed. Review/merge this branch
-before starting Spec013 from fresh latest main.
+complete operating handoff. Track open [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28)
+and its latest-head checks/reviews. Review/merge this branch before starting
+Spec013 from fresh latest main.
 
 Final validation: **732 FINRA tests; 1,753 full offline passes; 92 optional
 integration skips**. Ruff lint/format and wheel/sdist build/readback pass.
