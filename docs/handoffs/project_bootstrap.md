@@ -30,6 +30,10 @@ verification time, before this documentation update. Verify again before claimin
 work. This documentation change adds the current panel and maintenance rules;
 it does not implement or activate another pipeline.
 
+**Documentation handoff:** [PR #27](https://github.com/thatquantguy44/market-medallion/pull/27),
+branch `docs/master-agent-handoff`, contains this panel and the agent maintenance
+rules. Its current review/merge state should be checked at pickup.
+
 ### Last completed work and commits
 
 **Latest accepted implementation:** FINRA T13 release-aware health and preserve-all
@@ -43,6 +47,7 @@ Its tree exactly matches tested PR head `c9129e6`. The old
 | [`c53b1e2`](https://github.com/thatquantguy44/market-medallion/commit/c53b1e2ab29294e73953362d03b837e468c77f85) | Merge PR #26 / T13 into main. |
 | [`c9129e6`](https://github.com/thatquantguy44/market-medallion/commit/c9129e614b6d777ff5ca907bd379e85c12852870) | Make the journal-corruption regression fixture deterministic; final tested T13 head. |
 | [`4e2fdfb`](https://github.com/thatquantguy44/market-medallion/commit/4e2fdfb9f6c4c4e1fcb6128e9155691a1548b7b6) | Record full T13 regression and acceptance evidence. |
+| [`864ab75`](https://github.com/thatquantguy44/market-medallion/commit/864ab75b374dde1a8a76eecb23ceb47ac34ea726) | Add the master priority panel and mandatory agent maintenance/navigation rules (documentation checkpoint). |
 | `022ca14` | Record T13 operations acceptance and the T14 handoff. |
 | `991e6bd` | Refuse unsafe health lock files and accept policy path strings. |
 | `3b1afd4` | Implement T13 release-aware health and retention dry run. |
