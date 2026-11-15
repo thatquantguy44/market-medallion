@@ -23,11 +23,22 @@ jobs:
           --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: requirements-dev.lock
+      - name: Verify master handoff freshness
+        env:
+          HANDOFF_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          args=()
+          if [ -n "$HANDOFF_BASE_SHA" ]; then
+            args+=(--base "$HANDOFF_BASE_SHA")
+          fi
+          python scripts/verify_handoff.py "${args[@]}"
       - run: python -m pip install -r requirements-dev.lock
       - run: python -m pip install --no-deps --no-build-isolation -e .
       - run: python scripts/verify_agent_skills.py

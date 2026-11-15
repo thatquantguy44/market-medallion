@@ -22,3 +22,9 @@ include scripts/run_fomc.sh
 include scripts/run_finra_short_sale_volume.sh
 recursive-include config/presidential_research *.toml *.json
 recursive-include contracts/presidential_research *.json
+
+include scripts/verify_handoff.py
+include docs/handoffs/handoff_state.json
+
+include .github/workflows/ci.yml
+include .github/workflows/handoff-freshness.yml

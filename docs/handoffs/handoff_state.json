@@ -1,0 +1,11 @@
+{
+  "document_fingerprint": "7ad51180d2a99c11f5cfbf5aadb53a432fb3ec770fc3865e81853857880807ad",
+  "next_task": "SSV-T14",
+  "panel_fingerprint": "1aa0d7700905bd69e9990979d8497fa53687434dca42c53efe897d5b638fe4c8",
+  "review_summary": "Reviewed all staged inputs, 33 freshness regressions and library checks, T14 pickup, and read-only CI/daily workflow syntax.",
+  "reviewed_at": "2026-11-15T09:25:13.236663+00:00",
+  "reviewed_commit": "7b815590abc47313e1d8ffd0d5ab75e19656f16c",
+  "schema_version": 1,
+  "source_fingerprint": "bcc20e7d4d0309d7b545cacc7176a6fddb7dce5076b4d37ee3446dcb2bd2903d",
+  "task_file": "specs/spec012/todo.md"
+}

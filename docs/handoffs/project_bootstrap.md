@@ -1,6 +1,161 @@
 # MarketMedallion — master handoff and current pickup point
 
-Last updated: 2026-11-14.
+Last updated: 2026-11-15.
+
+## Agent start here
+
+**Next implementation: FINRA SSV-T14 research interchange.** T13 is merged.
+This panel is the current cross-project handoff. The dated checkpoints below
+retain historical evidence; their old “next” tasks do not override this panel.
+Explicit later user instructions take precedence and must be recorded here.
+
+**Status verified:** 2026-11-14 19:35 America/New_York (2026-11-15 00:35 UTC).
+Recheck Git/PR state at pickup; this timestamp is an evidence snapshot, not a
+live service-health claim.
+
+### Objective freshness guard
+
+[Review evidence](handoff_state.json) binds this document and all other tracked
+repository inputs to a reviewed Git snapshot. Run
+`python3 scripts/verify_handoff.py` for committed HEAD or add `--staged` for the
+exact proposed commit. CI checks task status, navigation, known commits, snapshot
+coverage and review age. Code/config/spec changes require a meaningful current-panel
+update; timestamps, comments and history-only edits cannot acknowledge them.
+
+The [daily freshness job](https://github.com/thatquantguy44/market-medallion/actions/workflows/handoff-freshness.yml)
+also publishes current commits/open PRs and fails after seven days without review.
+It starts scheduling once PR #27 is merged. Repair with the staged review workflow
+in the [freshness guide](../development/handoff_freshness.md). The job reports
+objective drift; agents still review priorities and runtime claims themselves.
+
+### Current work and highest priorities
+
+| Order | Work | Status and next action | Canonical task / entrypoint |
+| --- | --- | --- | --- |
+| 1 | **FINRA SSV-T14 — research interchange** | Ready; implementation has not started. Create a fresh branch from current `origin/main`, then build the admitted versioned export and consumer readback fixture. | [T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange), [Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff) |
+| 2 | FINRA SSV-T15 — Dagster orchestration | After T14. Add the source-owned job/resources and a schedule that defaults stopped, with explicit activation tests. | [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration) |
+| 3 | FINRA SSV-T16 — acceptance and operating handoff | After T15. Reconcile acceptance IDs, restart/recovery instructions, actual selected coverage and outstanding G1/G2 evidence before declaring delivery complete. | [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff), [delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery) |
+| 4 | Spec013 — FINRA ATS/non-ATS transparency | Planned; package/connector absent. Begin after Spec012 delivery acceptance, with its source/access review and one bounded report type/tier. | [Spec013](../../specs/spec013/README.md), [tasks](../../specs/spec013/todo.md) |
+| 5 | Spec014 — SEC N-PORT | Planned; follows Spec013. | [Spec014](../../specs/spec014/README.md) |
+| 6 | Spec015 — NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
+
+**Repository tooling:** handoff freshness enforcement is implemented in PR #27;
+CI/daily scheduling is verified separately from its source and unit checks.
+
+**Implementation in progress:** none recorded at this checkpoint. T14 is the
+next bounded task, not work already underway. GitHub showed no open PRs at the
+verification time, before this documentation update. Verify again before claiming
+work. This change adds the current panel, maintenance rules and automated freshness
+guard; no FINRA implementation task has started.
+
+**Documentation handoff:** [PR #27](https://github.com/thatquantguy44/market-medallion/pull/27),
+branch `docs/master-agent-handoff`, contains the panel, maintenance rules and
+freshness guard. Its current review/merge state should be checked at pickup.
+
+### Last completed work and commits
+
+**Latest accepted implementation:** FINRA T13 release-aware health and preserve-all
+retention accounting, [PR #26](https://github.com/thatquantguy44/market-medallion/pull/26),
+merged into `main` as [`c53b1e2`](https://github.com/thatquantguy44/market-medallion/commit/c53b1e2ab29294e73953362d03b837e468c77f85).
+Its tree exactly matches tested PR head `c9129e6`. The old
+`feat/finra-health-retention` branch is completed work, not the next build branch.
+
+| Commit | Completed work |
+| --- | --- |
+| `7b81559` | Add the offline Git-snapshot freshness verifier and staged-state regressions in PR #27. |
+| [`c53b1e2`](https://github.com/thatquantguy44/market-medallion/commit/c53b1e2ab29294e73953362d03b837e468c77f85) | Merge PR #26 / T13 into main. |
+| [`c9129e6`](https://github.com/thatquantguy44/market-medallion/commit/c9129e614b6d777ff5ca907bd379e85c12852870) | Make the journal-corruption regression fixture deterministic; final tested T13 head. |
+| [`4e2fdfb`](https://github.com/thatquantguy44/market-medallion/commit/4e2fdfb9f6c4c4e1fcb6128e9155691a1548b7b6) | Record full T13 regression and acceptance evidence. |
+| [`864ab75`](https://github.com/thatquantguy44/market-medallion/commit/864ab75b374dde1a8a76eecb23ceb47ac34ea726) | Add the master priority panel and mandatory agent maintenance/navigation rules (documentation checkpoint). |
+| `022ca14` | Record T13 operations acceptance and the T14 handoff. |
+| `991e6bd` | Refuse unsafe health lock files and accept policy path strings. |
+| `3b1afd4` | Implement T13 release-aware health and retention dry run. |
+| `12edd0f` | Merge PR #25 / T11 replay and T12 bounded acquisition. |
+
+**Verification:** [CI run 43628223687](https://github.com/thatquantguy44/market-medallion/actions/runs/43628223687)
+passed **1,750 tests / 3 optional skips**, isolated PostgreSQL contracts, pinned
+skill integrity, Ruff/format and package build for `c9129e6`. T13 adds 47 tests;
+completed local offline regression was 1,661 passed / 92 optional skips. Read-only
+source/replay acceptance reconciles 5 captures and 5,849 versions in each store,
+with all 93 files unchanged. These are recorded checks, not a new live run.
+See [T13 acceptance](../../specs/spec012/t13_acceptance.md) and
+[aggregate evidence](../../specs/spec012/evidence/t13_operations_conformance.json).
+
+The latest commit touching this handoff, including documentation-only changes,
+is always available without making the document refer to its own commit hash:
+
+```bash
+git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
+git log -8 --oneline origin/main
+```
+
+### Exact next slice: SSV-T14
+
+Read [AGENTS.md](../../AGENTS.md), the [pipeline register](../pipelines.md),
+[Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff),
+[T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange),
+[data contract](../../specs/spec012/data_contract.md),
+[publication contract](../../specs/spec012/parquet_contract.md) and
+[operations contract](../../specs/spec012/operations_contract.md).
+
+Implement `research_export.py` and its CLI command under
+`src/market_data_pipeline/pipelines/finra_short_sale_volume/`; add the regression
+tests in the repository-level `tests/test_ssv_export.py`. Read the verified T10
+publication boundary.
+Preserve exact quantity text, matched facility scope/units, raw symbols, coverage,
+source/version lineage, actual capture-time knowledge and rights labels. Gate
+output use before writing, and verify an invented consumer fixture/readback.
+Exclude credentials, private runtime paths and operational details from the
+research artifact. T15 jobs and a separate QuantMeridian consumer remain later.
+
+### Operating holds and other workstreams
+
+- **NAAIM remains paused by the user.** Do not capture or restart its schedule.
+- Keep acquisition schedules stopped until their separate activation decision.
+  A merged pipeline or delivered Dagster definition is not permission to start it.
+- FINRA: one real Chicago TRF date (2026-11-09) is accepted in isolation; broader
+  selected coverage and G1/G2 remain open. API release timing stays unknown by
+  default; retention is PRESERVE_ALL dry run. ADF/TXT/consolidated/ORF are excluded.
+- FOMC: listed 1990–released-2026 references and Q01–Q03 quality workflow are
+  implemented. Remaining source/OCR review and deliberate recent refreshes are
+  separate bounded work; they do not replace the current FINRA priority.
+- SEC FTD / exchange thresholds: Spec011 bounded native-source delivery is
+  accepted. AAII recurring access and presidential live-source decisions remain
+  separately gated. Use the [master register](../pipelines.md) for package/status
+  detail and the [Dagster register](../deployment/dagster_jobs.md) for job controls.
+- Record current runtime state only after an actual check. Existing acceptance
+  counts and old service/sensor observations do not establish present availability.
+
+### Keep this panel current
+
+At the start of implementation, verify the worktree, current main and open PRs;
+then record the bounded task, owner/agent if applicable, branch/base and PR when
+one exists. Preserve unrelated work. At a meaningful checkpoint or before handing
+off, update this panel in place with:
+
+1. Highest priorities and any explicit user change in order or operating holds.
+2. Last completed work, actual commit/merge SHA and linked PR; distinguish completed,
+   in-progress, ready, blocked, planned and paused work.
+3. Tests/CI tied to the checked commit, acceptance evidence and concrete limitations.
+4. Current unfinished work/blockers and the exact next action, files and task IDs.
+5. The verification timestamp; recheck merge status rather than copying a prior claim.
+
+The panel owns cross-project navigation and current priorities. Specs own
+requirements/tasks; [docs/pipelines.md](../pipelines.md) owns pipeline/package
+status; the [job register](../deployment/dagster_jobs.md) owns operating controls.
+Stage source and handoff changes, then refresh the machine review evidence with
+`python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"`
+and stage both handoff files. `--staged` checks the exact index without changing it.
+See the [freshness guide](../development/handoff_freshness.md) for the complete flow.
+
+Update those owning records when their facts change and link them here. Preserve
+the dated history below; append a dated checkpoint for substantial new evidence.
+Do not rewrite old checkpoints to look current or record secrets/runtime payloads.
+
+## Historical checkpoints and retained context
+
+The following text is preserved from prior handoffs. For present priorities,
+branches, merged commits and next actions, use [Agent start here](#agent-start-here).
 
 The current repository name is `market-medallion` (MarketMedallion), at
 `https://github.com/thatquantguy44/market-medallion`. The local checkout is

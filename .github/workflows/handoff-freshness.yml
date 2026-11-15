@@ -1,0 +1,59 @@
+name: Handoff freshness
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '37 12 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  freshness:
+    name: Handoff freshness
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify handoff snapshot and task freshness
+        env:
+          HANDOFF_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          args=()
+          if [ -n "$HANDOFF_BASE_SHA" ]; then
+            args+=(--base "$HANDOFF_BASE_SHA")
+          fi
+          python scripts/verify_handoff.py "${args[@]}"
+      - name: Publish current commits and open PRs
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import html
+          import json
+          import os
+          import subprocess
+          from pathlib import Path
+          commits = subprocess.check_output(
+              ["git", "log", "-8", "--format=%h %cs %s", "HEAD"], text=True, timeout=30
+          ).splitlines()
+          prs = json.loads(subprocess.check_output(
+              ["gh", "pr", "list", "--repo", os.environ["GITHUB_REPOSITORY"],
+               "--state", "open", "--limit", "50", "--json",
+               "number,title,headRefName,url,isDraft"], text=True, timeout=60
+          ))
+          facts = json.dumps(dict(commits=commits, open_pull_requests=prs), indent=2)
+          Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text(
+              "## Current handoff repository facts\n\n"
+              "See the verifier step for the freshness verdict and repair instructions. "
+              "These are the latest eight checked-branch commits and up to 50 current open PRs; "
+              "they do not assert runtime pipeline health.\n\n<pre>"
+              + html.escape(facts) + "</pre>\n"
+          )
+          PY

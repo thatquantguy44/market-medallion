@@ -8,6 +8,11 @@ this repository. The [research roadmap](roadmap.md) retains source-selection
 rationale, access reviews and the original 14-addition inventory. Numbered specs
 define contracts; [handoffs](handoffs/project_bootstrap.md) record pickup details.
 A draft spec or proposed package name does not mean a connector exists.
+For highest priorities, current work, last verified commits/PRs and the next
+bounded task, start at the [master handoff's current panel](handoffs/project_bootstrap.md#agent-start-here).
+FINRA T13 merged in [PR #26](https://github.com/thatquantguy44/market-medallion/pull/26)
+as `c53b1e2`; SSV-T14 remains the next implementation slice.
+
 The [Dagster job and schedule register](deployment/dagster_jobs.md) is the
 canonical operational inventory.
 

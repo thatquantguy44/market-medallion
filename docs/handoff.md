@@ -1,39 +1,18 @@
-# Project handoff
+# Project handoff entrypoint
 
-**Current priority:** the [five-stage securities-finance program](securities_finance/README.md)
-and [delivery roadmap](securities_finance/roadmap.md). Spec011's offline SEC
-parser/manifest reconciles both approved September2026 archives. Continue
-S11-T22 threshold Delta publication. SEC T03–T07/T19/T21, threshold T20 and
-shared T18 are complete; see the [runbook](deployment/sec_ftd_runbook.md).
-Threshold Delta parity and final provider-use acceptance remain open. See the
-[checkpoint](../specs/spec011/source_review.md).
-NAAIM is paused; do not resume its capture/schedule without the
-user's explicit direction.
+Start at the [master handoff's current panel](handoffs/project_bootstrap.md#agent-start-here)
+for priorities, active/completed work, commit/PR references and the exact next task.
+The [freshness guard](development/handoff_freshness.md) checks it against source,
+canonical task state and its review evidence in CI and daily.
 
-Start with the [master handoff](handoffs/project_bootstrap.md), then the
-[AAII checkpoint](handoffs/aaii_checkpoint.md) for current implementation,
-local service/data state and the next scoped source task.
+This entrypoint deliberately links the current record instead of maintaining a
+second competing priority queue. The root [AGENTS.md](../AGENTS.md) describes how
+agents must update the master panel before handing off.
 
-- [Master pipeline register](pipelines.md): implementation status and ownership.
-- [Dagster job and schedule register](deployment/dagster_jobs.md): active jobs,
-  schedule state, runtime configuration and operating controls.
-- [Specification index](../specs/README.md): accepted scopes and future contracts.
-- [Agent libraries](../agents/README.md): pinned agent-skills and QuantSmith guidance.
-- [Verification](development/verification.md): test/build evidence and operational limits.
+- [Pipeline register](pipelines.md): implemented/planned packages and ownership.
+- [Dagster register](deployment/dagster_jobs.md): job/schedule controls.
+- [Spec index](../specs/README.md): contracts and acceptance scope.
+- [Agent libraries](../agents/README.md): pinned development workflows.
 
-AAII is implemented locally; recurring acquisition and production deployment
-remain gated. CFTC has a provider contract and web traffic remains a draft;
-neither connector is implemented. NAAIM's delayed source-owned research feed
-can now publish its local, attributed `naaim-exposure-research/1` artifact for
-the separately owned QuantMeridian research display; see
-[Spec 007](../specs/spec007/README.md). It remains a three-month-delayed local
-research capability, not a public service or current-data feed.
-
-## Presidential research local handoff
-
-The spec 016 pipeline, PRES integration and research-site transition have
-merged. The frozen archive matched a fresh donor rebuild and passed browser
-replay; see [acceptance](../specs/spec016/acceptance.md) and
-[runbook](../specs/spec016/runbook.md). No live source or schedule was enabled
-by this delivery; the current local Dagster code location is unreachable, so
-its runtime schedule state remains unverified.
+NAAIM remains paused until the user explicitly resumes it. Historical checkpoints
+remain in the master handoff; old source tasks are not the current priority queue.
