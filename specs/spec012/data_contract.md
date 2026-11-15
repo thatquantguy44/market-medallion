@@ -11,7 +11,7 @@ versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/scri
 and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
 T10 implements typed local Parquet and coherent publication/recovery. T11 implements
 verified empty-target replay. T12 implements bounded admitted acquisition and
-verified page collections. Downstream exchange and jobs remain unimplemented.
+verified page collections. T14 implements admitted research interchange; T15 adds stopped orchestration. See [delivery acceptance](acceptance.md).
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -30,8 +30,7 @@ six bounded TRF rows and a partition inventory; their raw field/version pairs
 reconcile, but complete partitions and historical observations are not verified. The [API profile](api_contract.md)
 defines the JSON schema/partition amendment, verified mapping and exact decimal quantities.
 The TXT-oriented sections below remain a separate, unadmitted file profile.
-T05 archive/read/parse entrypoints call the gate before filesystem I/O. Future
-acquisition/export adapters must do the same; none exist yet.
+T05 archive/read/parse entrypoints call the gate before filesystem I/O. T12 acquisition and T14 export adapters enforce the same gate before dependent I/O.
 
 ## Evidence register and remaining conformance
 
@@ -150,8 +149,7 @@ T06–T08 persist local per-observation Gold. T09 implements a separate read-onl
 research query with exact disjoint aggregation, prior complete scope dates,
 calendar-day gaps and ratio changes. [Research contract](research_gold_contract.md)
 defines missingness, cutoff, population and rounding behavior. T10 implements
-[typed snapshots and recovery](parquet_contract.md). Research interchange and
-acquisition remain later work. Compute `short_volume / total_volume` and
+[typed snapshots and recovery](parquet_contract.md). T14 interchange and T12 acquisition are implemented behind their own admission gates. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
@@ -170,9 +168,9 @@ selects one snapshot; readers must not glob all output partitions into history.
 Dry-run retention must explain every referenced capture/version before deletion.
 Provider retention requirements are unresolved and never inherit NAAIM's 365 days.
 
-## Proposed downstream artifact
+## Downstream artifact
 
-`finra-short-sale-volume-research/1` is a proposed file contract, not implemented.
+T14 implements `finra-short-sale-volume-research/1`.
 It contains dataset/scope/facility, requested/observed coverage, trade date, exact decimal
 share quantities, ratio unit, nullable ratio, version token, capture clocks, method version
 and approved-use/source labels. It excludes credentials, local filesystem paths
@@ -206,7 +204,7 @@ schema. T06–T08 store these exact text values inside canonical version documen
 with explicit key/time columns and hashed membership. Ratio text uses the fixed
 T04 method and a capital-E representation independent of ambient context.
 T10 adds verified Parquet parity through the exact-decimal struct described below.
-Research exchange remains later work.
+T14 implements the narrow research exchange defined below.
 
 Python 3.12 [Decimal contexts and conversion](https://docs.python.org/3.12/library/decimal.html)
 define the local arithmetic and exact text behavior. **71 SSV-AC04 tests pass**

@@ -51,7 +51,7 @@ remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
 records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
 stay explicit, with no flags cleared or derivative publication. Recent-year
 refreshes cover new releases/corrections. Acquisition schedules stay stopped;
-NAAIM remains paused; FINRA T01–T13 are implemented; T14 research interchange is next.
+NAAIM remains paused; FINRA T01–T16 are implemented with bounded three-TRF delivery acceptance; Spec013 OTC-T01 follows review/merge.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
@@ -66,30 +66,24 @@ history and derived episodes as a checksummed source snapshot. T17/G2 is complet
 for the bounded native-source internal-research delivery: both SEC archives and
 ten authentic Nasdaq/NYSE lists reconcile. See the [acceptance record](specs/spec011/acceptance.md)
 for the user-attested permission, evidence and exclusions. The closeout is merged;
-Spec012 now has an [access review](specs/spec012/source_review.md), approved-use
-admission and a strict three-TRF API schema/facility registry. Bounded version 1
-samples reconcile to its pure receipt-bound JSON parser. Whole and fractional
-share quantities remain exact Decimal values, with pure per-observation ratios
-and lossless quantity text readback. [T06–T08 local acceptance](specs/spec012/t06_t08_acceptance.md)
-adds audited SQLite Silver/Gold, revisions/reversions/removals and UTC/sequence
-cutoffs on top of immutable Bronze. [T09 research Gold](specs/spec012/t09_acceptance.md)
-adds exact scope-safe aggregation, prior complete dates and calendar gaps;
-[T10 typed publication](specs/spec012/t10_acceptance.md) adds lossless Parquet,
-frozen catalog facts and a recoverable committed pointer.
-[T11 offline replay](specs/spec012/t11_acceptance.md) rebuilds an empty destination
-with exact source clocks, history and audit evidence. [T12 acquisition](specs/spec012/t12_acceptance.md)
-adds finite correction refreshes, retained retries and verified page collections;
-**626 FINRA tests pass**. A bounded real Chicago TRF check reconciles 5,849 rows
-for November 9 through two agreeing passes, offline replay and typed publication.
-The [portable script](scripts/run_finra_short_sale_volume.sh) uses
-[per-pipeline YAML](config/finra_short_sale_volume/README.md). Publication is explicit
-through `publish`, `published` and `recover-publication`; `replay` takes a source
-root and an empty destination config. `acquisition-plan` previews bounds without
-network; `acquire` requires its separate YAML and explicit live opt-ins. Next is
-SSV-T14 research interchange. [T13 health/retention](specs/spec012/t13_acceptance.md)
-adds offline release/capture/refresh/publication checks and preserve-all reference
-accounting, with673 FINRA tests and93 real-store files unchanged. Exports/jobs and broader real-source coverage remain open. Public API terms acceptance is user-attested. Databricks
-workspace activation remains disabled. See the
+Spec012 now implements the selected three-TRF API profile end to end: admitted
+immutable Bronze, audited SQLite versions/membership, scoped research, exact typed
+Parquet with recoverable publication, offline replay, bounded two-pass acquisition,
+release-aware health, preserve-all retention, versioned research export and stopped
+Dagster orchestration. [Delivery acceptance](specs/spec012/acceptance.md) records
+all 15 acceptance IDs and the user-approved real **2026-11-09** coverage:
+Carteret 12,349, Chicago 5,849 and NYSE 7,032 rows. All 25,230 source observations
+reconcile through publication/export/replay; research output has 12,355 symbols
+with explicit per-facility missingness. API timing remains unknown.
+The [portable script](scripts/run_finra_short_sale_volume.sh),
+[configuration](config/finra_short_sale_volume/README.md) and
+[operating runbook](docs/deployment/ssv_runbook.md) cover local use, recovery and
+the default-stopped job/schedule. Optional Slack sensors also default stopped
+and disabled. G1/G2 are accepted locally for this bounded one-date scope; broader
+history, recurring activation and consumer integration remain separate.
+Spec013 OTC-T01 is the next implementation after review/merge.
+Public API terms acceptance is user-attested; no new permission is inferred.
+Databricks workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and
 [threshold runbook](docs/deployment/reg_sho_thresholds_runbook.md).
 NAAIM is **paused** and its

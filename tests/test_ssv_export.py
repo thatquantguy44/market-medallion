@@ -333,3 +333,16 @@ def test_ssv_ac14_atomic_publish_failure_leaves_no_partial_artifact(
     with pytest.raises(OSError):
         write(tmp_path, manifest, path)
     assert not path.exists() and not list(path.parent.glob(".ssv-export-*"))
+
+
+def test_ssv_ac14_consumer_rejects_repeat_capture_beyond_cutoff(tmp_path, manifest, load):
+    first = load()
+    load()  # Same version, but knowledge of complete membership was observed later.
+    publish(tmp_path, manifest)
+    path = tmp_path.parent / (tmp_path.name + "-export.json")
+    write(tmp_path, manifest, path)
+    value = json.loads(path.read_bytes())
+    value["request"]["as_of"] = first["archived_at"]
+    value["request"]["as_of_sequence"] = first["capture_sequence"]
+    with pytest.raises(ValueError, match="cutoff"):
+        export.validate(value, expected_scopes=["nyse_trf"], output_use="invented_fixture")

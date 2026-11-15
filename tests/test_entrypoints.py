@@ -79,4 +79,5 @@ def test_dagster_job_materializes_fixture(tmp_path):
         "sec_fails_to_deliver_daily_live",
         "fomc_meeting_minutes_weekday_refresh",
         "presidential_research_refresh",
+        "finra_short_sale_volume_weekday_refresh",
     }

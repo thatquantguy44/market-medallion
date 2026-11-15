@@ -245,6 +245,11 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
             _time(p["archived_at"])
             if type(p["capture_sequence"]) is not int or p["capture_sequence"] < 1:
                 raise ValueError("invalid FINRA interchange capture sequence")
+            if request["as_of"] is not None and (_time(p["archived_at"]), p["capture_sequence"]) > (
+                _time(request["as_of"]),
+                sequence or 2**63 - 1,
+            ):
+                raise ValueError("FINRA interchange partition exceeds cutoff")
             for h in ("receipt_sha256",):
                 _hash(p[h])
             clocks.append(p["archived_at"])
@@ -269,8 +274,8 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
             _time(v["retrieved_at"])
         if v["provider_published_at"] is not None:
             _time(v["provider_published_at"])
-        if request["as_of"] is not None and (v["first_seen_at"], v["capture_sequence"]) > (
-            request["as_of"],
+        if request["as_of"] is not None and (_time(v["first_seen_at"]), v["capture_sequence"]) > (
+            _time(request["as_of"]),
             sequence or 2**63 - 1,
         ):
             raise ValueError("FINRA interchange version exceeds cutoff")

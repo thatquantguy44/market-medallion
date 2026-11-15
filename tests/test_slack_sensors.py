@@ -112,6 +112,7 @@ def test_root_exposes_both_stopped_status_sensors_per_implemented_pipeline():
         "sec_fails_to_deliver",
         "reg_sho_thresholds",
         "fomc_meeting_minutes",
+        "finra_short_sale_volume",
     }
     sensors = defs.get_repository_def().sensor_defs
     assert {s.name for s in sensors} == {

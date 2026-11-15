@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "f9a5d3c163c0eba4e92b6ea43f4683e9ec4032cb12ce87d688173ce4b5c8f68e",
-  "next_task": "SSV-T16",
-  "panel_fingerprint": "e4ed655df0e0faae39f53dca6ce01b2417f007b7bc4a8aabdfcc1aa7ce37c205",
-  "review_summary": "Reviewed T15 stopped job/schedule, 21 Dagster tests and 731 FINRA regressions; T16 now owns approved three-TRF conformance and delivery closeout.",
-  "reviewed_at": "2026-11-15T10:01:57.491713+00:00",
-  "reviewed_commit": "2b6fc3bef1c8a554cdedf457348454c211dbc4ac",
+  "document_fingerprint": "962bd304ff6496edfecb97a0b151aace9ff54c3fef76505c661b0ee131a3264a",
+  "next_task": "OTC-T01",
+  "panel_fingerprint": "bf96020096750b2146c734c7058f8f9151b1e2353d0aeaf27889103052db501c",
+  "review_summary": "Reviewed T14\u2013T16 ordered implementation, 1753 offline passes and 92 optional skips; actual three-TRF publication/export/replay/health/CLI evidence and operating runbook; OTC-T01 next after review/merge, all schedules unactivated.",
+  "reviewed_at": "2026-11-15T10:21:33.401580+00:00",
+  "reviewed_commit": "c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95",
   "schema_version": 1,
-  "source_fingerprint": "498e062a649e4f1a632a75c0024784aef6e3398db2a748bf24fd7f8dfb3a6397",
-  "task_file": "specs/spec012/todo.md"
+  "source_fingerprint": "670886d81ab916cf7d7e4ff54f1ecc8d9d1ee37a34c5dcc20d92ac7c0c162ba6",
+  "task_file": "specs/spec013/todo.md"
 }

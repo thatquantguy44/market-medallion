@@ -1,13 +1,12 @@
 # Delivery roadmap — securities-finance research data
 
-**Updated:** 2026-11-13. **Planning horizon:** milestone based, without invented
-completion dates or throughput estimates. Spec011 G2 is accepted for its bounded
-native-source scope and merged through PR #8. Spec012 has approved-use/schema,
-three-TRF registry checks, a pure receipt-bound Decimal JSON parser, exact quantity
-text readback, per-observation ratios and immutable local API-response Bronze
-with sanitized parse/rejection evidence, audited local SQLite, observed changes
-and cutoff membership through a configured CLI/script. Its connector/jobs and
-Specs013–015 remain unimplemented. NAAIM remains paused.
+**Updated:** 2026-11-15. **Planning horizon:** milestone based, without invented
+completion dates. Spec011 bounded G2 is accepted and merged. Spec012 T01–T16
+are implemented with local G1/G2 acceptance for all three selected TRFs on
+2026-11-09: 25,230 real observations, admitted export, exact replay, offline health
+and stopped orchestration. See [acceptance](../../specs/spec012/acceptance.md).
+Its branch awaits review/merge; Spec013 OTC-T01 follows. Wider historical scope,
+recurring activation and consumer integration remain separate. NAAIM stays paused.
 
 ## Priority and backlog relationship
 
@@ -133,8 +132,8 @@ connector; the source-owned contract and gaps determine the final boundary.
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
 | 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete, merged PR #8 | Not started | Deferred | Ten authentic lists and both SEC archives reconcile; current source-build work is Spec012 |
-| 012 | Ready for three-TRF API profile; T01–T13 implemented | Open; local storage/research/replay/typed publication and bounded acquisition and offline health/retention verified | Not started | Not started | Deferred | [673 checks / T13 acceptance](../../specs/spec012/t13_acceptance.md): one real Chicago TRF date, 5,849 rows, verified two-pass collection, replay and Parquet parity. Read-only source/replay health and retention preserve93 files. Next T14 research interchange; broader facility/history and final delivery gates remain open. |
-| 013 | Open | Not started | Not started | Not started | Deferred | Await012; confirm report family and file/API contract |
+| 012 | Accepted for selected three-TRF API profile | Accepted locally: immutable raw, audited versions/Gold and typed coherent publication | Accepted locally for all three TRFs on 2026-11-09 | Not activated | Deferred | [T01–T16 acceptance](../../specs/spec012/acceptance.md): 732 FINRA / 1,753 offline tests, 25,230 real observations, 12,355 research rows, exact export/replay parity, stopped orchestration and runbook. Branch `feat/finra-research-orchestration` awaits review/merge; broader history stays separate. Next Spec013 OTC-T01. |
+| 013 | Open | Not started | Not started | Not started | Deferred | After 012 review/merge: OTC-T01 route/reuse review; confirm bounded report family and file/API contract |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |
 

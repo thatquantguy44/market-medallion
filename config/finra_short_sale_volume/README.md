@@ -18,15 +18,14 @@ provider data requires its applicable approved-use profile with both local-impor
 and transform grants. The selected Query API route uses the existing accepted
 terms/Public credential metadata; an approved local-file route has its separate
 permission evidence. Credentials do not belong in this YAML, request receipts,
-SQLite or logs. No authentication/acquisition adapter consumes them in this slice.
+SQLite or logs. The separate acquisition adapter consumes credentials only after its access/live gates.
 
 Defaults are 20 MiB and 5,000 rows per input. Only complete validated single-page
 date/facility responses publish; a partial page remains audit/Bronze evidence.
 The fixture receipt accompanies `tests/fixtures/finra_short_sale_volume/invented-valid.json`.
 All values there are invented, not provider history. See the
 [local runbook](../../docs/deployment/ssv_local_runbook.md) for actual commands,
-root identity, retry and missing/pending states. Live acquisition,
-research exchange, jobs and alerts remain later tasks. No network probe, service
+root identity, retry and missing/pending states. T12 acquisition uses separate settings; T14 exchange and T15 stopped jobs/optional alerts are implemented. No network probe, service
 startup, `.env` loading or schedule activation occurs through these commands.
 
 T09's `research-gold` command uses the same local config. Supply one or more
@@ -120,7 +119,7 @@ Collection parsing/replay must cover the original profile: defaults are 15000 ro
 and 18000000 bytes; increase local/replay YAML input limits explicitly when needed.
 The existing warehouse version/storage bounds still apply. Publication stays
 explicit. [Runbook](../../docs/deployment/ssv_local_runbook.md#t12-bounded-admitted-acquisition)
-explains journals, incomplete exit2 and recovery. Jobs and alerts remain absent.
+explains journals, incomplete exit2 and recovery. T15 adds separately gated stopped orchestration and optional disabled alerts.
 
 T13 adds offline `health` and `retention-dry-run` using the local YAML above.
 Optional `--policy` selects a separate [operations policy](operations.example.yml).

@@ -1,152 +1,119 @@
-# MarketMedallion — master handoff and current pickup point
+# Project bootstrap and master handoff
 
 Last updated: 2026-11-15.
 
 ## Agent start here
 
-**Next implementation: FINRA SSV-T16 delivery acceptance.** T14 and T15 are implemented locally.
-This panel is the current cross-project handoff. The dated checkpoints below
-retain historical evidence; their old “next” tasks do not override this panel.
-Explicit later user instructions take precedence and must be recorded here.
+**Next implementation: FINRA OTC-T01 source route and reuse contract (Spec013).**
+Spec012 T14 → T15 → T16 are implemented and locally accepted in order on
+`feat/finra-research-orchestration`, created from latest main
+`1daf6b58ed6199fd39dff38f30923d6f55a9b896`. Review/merge this branch before
+starting Spec013 from a fresh latest-main branch. No PR or merge is claimed here.
+This panel owns current priorities; dated checkpoints below retain history.
+Later explicit user instructions take precedence and must be recorded here.
 
-**Status verified:** 2026-11-14 19:35 America/New_York (2026-11-15 00:35 UTC).
-Recheck Git/PR state at pickup; this timestamp is an evidence snapshot, not a
-live service-health claim.
-
-### Objective freshness guard
-
-[Review evidence](handoff_state.json) binds this document and all other tracked
-repository inputs to a reviewed Git snapshot. Run
-`python3 scripts/verify_handoff.py` for committed HEAD or add `--staged` for the
-exact proposed commit. CI checks task status, navigation, known commits, snapshot
-coverage and review age. Code/config/spec changes require a meaningful current-panel
-update; timestamps, comments and history-only edits cannot acknowledge them.
-
-The [daily freshness job](https://github.com/thatquantguy44/market-medallion/actions/workflows/handoff-freshness.yml)
-also publishes current commits/open PRs and fails after seven days without review.
-It starts scheduling once PR #27 is merged. Repair with the staged review workflow
-in the [freshness guide](../development/handoff_freshness.md). The job reports
-objective drift; agents still review priorities and runtime claims themselves.
+**Status verified:** 2026-11-15, America/New_York. Current runtime schedule/service
+health was not rechecked; acceptance is a bounded evidence snapshot.
 
 ### Current work and highest priorities
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 1 | **FINRA SSV-T14 — research interchange** | Implemented and validated on `feat/finra-research-orchestration`; 37 new / 710 FINRA tests pass. | [T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange), [Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff) |
-| 2 | FINRA SSV-T15 — Dagster orchestration | Implemented on the same branch; job/schedule and two optional alert sensors default stopped, with explicit worker activation gates. | [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration) |
-| 3 | FINRA SSV-T16 — acceptance and operating handoff | Active next task on the same branch. Reconcile acceptance IDs, restart/recovery instructions, actual selected coverage and outstanding G1/G2 evidence before declaring delivery complete. | [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff), [delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery) |
-| 4 | Spec013 — FINRA ATS/non-ATS transparency | Planned; package/connector absent. Begin after Spec012 delivery acceptance, with its source/access review and one bounded report type/tier. | [Spec013](../../specs/spec013/README.md), [tasks](../../specs/spec013/todo.md) |
-| 5 | Spec014 — SEC N-PORT | Planned; follows Spec013. | [Spec014](../../specs/spec014/README.md) |
-| 6 | Spec015 — NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
+| 1 | Review the completed Spec012 delivery | T01–T16 implemented; G1/G2 accepted locally for all three selected TRFs on 2026-11-09. Review branch `feat/finra-research-orchestration`; no PR yet. | [Acceptance](../../specs/spec012/acceptance.md), [evidence](../../specs/spec012/evidence/t16_delivery_conformance.json), [runbook](../deployment/ssv_runbook.md) |
+| 2 | **Spec013 OTC-T01 — route and reuse contract** | Next implementation after Spec012 review/merge. Recheck official terms and select one bounded weekly report profile before code/provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
+| 3 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
+| 4 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Repository tooling:** handoff freshness enforcement is implemented in PR #27;
-CI/daily scheduling is verified separately from its source and unit checks.
-
-**Implementation in progress:** T14 → T15 → T16 on
-`feat/finra-research-orchestration`, created from latest `origin/main`
-`1daf6b58ed6199fd39dff38f30923d6f55a9b896`. User authorized all three in order.
-T14 is committed as `2b6fc3b`; T15 is implemented and validated. T16 is next.
-User approved bounded all-three-TRF API checks for 2026-11-09 during T16. No PR yet. GitHub showed no open PRs at the
-verification time, before this documentation update. Verify again before claiming
-work. This change adds the current panel, maintenance rules and automated freshness
-guard; no FINRA implementation task has started.
-
-**Documentation handoff:** [PR #27](https://github.com/thatquantguy44/market-medallion/pull/27),
-branch `docs/master-agent-handoff`, contains the panel, maintenance rules and
-freshness guard. Its current review/merge state should be checked at pickup.
+**Implementation in progress:** none beyond the completed Spec012 branch's
+review/commit closeout. T14 research export and T15 stopped orchestration are
+implemented; T16 records the operating runbook, complete acceptance matrix,
+all-three-TRF one-day conformance and exact Spec013 pickup. Wider history,
+recurring operation and downstream consumer integration remain separate work.
 
 ### Last completed work and commits
 
-**Latest accepted implementation:** FINRA T13 release-aware health and preserve-all
-retention accounting, [PR #26](https://github.com/thatquantguy44/market-medallion/pull/26),
-merged into `main` as [`c53b1e2`](https://github.com/thatquantguy44/market-medallion/commit/c53b1e2ab29294e73953362d03b837e468c77f85).
-Its tree exactly matches tested PR head `c9129e6`. The old
-`feat/finra-health-retention` branch is completed work, not the next build branch.
-
-| Commit | Completed work |
+| Commit / checkpoint | Result |
 | --- | --- |
-| `7b81559` | Add the offline Git-snapshot freshness verifier and staged-state regressions in PR #27. |
-| [`c53b1e2`](https://github.com/thatquantguy44/market-medallion/commit/c53b1e2ab29294e73953362d03b837e468c77f85) | Merge PR #26 / T13 into main. |
-| [`c9129e6`](https://github.com/thatquantguy44/market-medallion/commit/c9129e614b6d777ff5ca907bd379e85c12852870) | Make the journal-corruption regression fixture deterministic; final tested T13 head. |
-| [`4e2fdfb`](https://github.com/thatquantguy44/market-medallion/commit/4e2fdfb9f6c4c4e1fcb6128e9155691a1548b7b6) | Record full T13 regression and acceptance evidence. |
-| [`864ab75`](https://github.com/thatquantguy44/market-medallion/commit/864ab75b374dde1a8a76eecb23ceb47ac34ea726) | Add the master priority panel and mandatory agent maintenance/navigation rules (documentation checkpoint). |
-| `022ca14` | Record T13 operations acceptance and the T14 handoff. |
-| `991e6bd` | Refuse unsafe health lock files and accept policy path strings. |
-| `3b1afd4` | Implement T13 release-aware health and retention dry run. |
-| `12edd0f` | Merge PR #25 / T11 replay and T12 bounded acquisition. |
+| `c53b1e2ab29294e73953362d03b837e468c77f85` / [PR26](https://github.com/thatquantguy44/market-medallion/pull/26) | T13 health/retention merged. |
+| `1daf6b58ed6199fd39dff38f30923d6f55a9b896` / [PR27](https://github.com/thatquantguy44/market-medallion/pull/27) | Master handoff and CI/daily freshness guard merged; base of current branch. |
+| `2b6fc3bef1c8a554cdedf457348454c211dbc4ac` | T14 admitted research interchange,37 new /710 FINRA tests. |
+| `c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95` | T15 stopped job/schedule and 21 Dagster tests;731 FINRA tests. Verified local commit. |
+| T16 local checkpoint | [Acceptance](../../specs/spec012/acceptance.md) and [conformance](../../specs/spec012/evidence/t16_delivery_conformance.json) record the final tests/CLI/source-replay evidence. Resolve its exact commit with the commands below rather than a self-referential SHA. |
 
-**Verification:** [CI run 43628223687](https://github.com/thatquantguy44/market-medallion/actions/runs/43628223687)
-passed **1,750 tests / 3 optional skips**, isolated PostgreSQL contracts, pinned
-skill integrity, Ruff/format and package build for `c9129e6`. T13 adds 47 tests;
-completed local offline regression was 1,661 passed / 92 optional skips. Read-only
-source/replay acceptance reconciles 5 captures and 5,849 versions in each store,
-with all 93 files unchanged. These are recorded checks, not a new live run.
-See [T13 acceptance](../../specs/spec012/t13_acceptance.md) and
-[aggregate evidence](../../specs/spec012/evidence/t13_operations_conformance.json).
-
-The latest commit touching this handoff, including documentation-only changes,
-is always available without making the document refer to its own commit hash:
+The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
+approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
+manual in-process Dagster job succeeded: Carteret 12,349, Chicago 5,849 and
+NYSE 7,032 source rows (25,230 total), with 14 original pages and 3 derived collections.
+The committed publication has 12,355 research rows. Replay reproduces all tables
+and the research artifact except its new publication identity. Read-only health
+and retention preserve 115 source plus 88 replay files. API timing remains UNKNOWN,
+source refresh SUCCESS, replay LOCAL_ONLY, publication PUBLISHED, deletion disabled.
+The final review added a repeat-membership cutoff regression; final export
+coverage is38 tests. See aggregate evidence for full regression/build results.
+No Slack notification or schedule activation occurred. Known external QuantSmith
+checkout drift is unchanged; all 61 pinned guidance Git objects verify.
 
 ```bash
+git status --short --branch
+git log -5 --oneline
+git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
-git log -8 --oneline origin/main
 ```
 
-### Exact next slice: SSV-T16
+### Exact next slice: OTC-T01
 
-Read [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff),
-[T14 acceptance](../../specs/spec012/t14_acceptance.md),
-[T15 acceptance](../../specs/spec012/t15_acceptance.md) and
-[delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery).
-Run the user-approved all-three-TRF 2026-11-09 checks in an isolated source root.
-Validate export/readback, replay, publication and offline health, and map all
-SSV-AC01–15 to deterministic evidence. Complete the operating runbook and update
-registers/roadmap. Advance G1/G2 only after actual selected coverage reconciles.
-Schedules stay stopped; broader history is not implied.
+Read [AGENTS.md](../../AGENTS.md), [pipeline register](../pipelines.md),
+[Spec012 acceptance](../../specs/spec012/acceptance.md),
+[Spec013](../../specs/spec013/README.md), its [data contract](../../specs/spec013/data_contract.md),
+[plan](../../specs/spec013/plan.md) and [T01 task](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract).
+Reconcile current official file/API automation and dataset/general terms, recording
+retention, transforms, internal exports and noncommercial boundaries. Build only
+the source-owned admission/profile checks for the selected bounded weekly report.
+Keep ATS/non-ATS, tiers, reporting lags and grouped participant identities explicit.
+Do not infer Spec013 rights or availability from Spec012's implemented API profile.
+Use `pipelines/finra_otc_transparency/` only when implementing its working slice;
+the package/connector is absent now. Do not implement T02+ without a bounded task.
 
 ### Operating holds and other workstreams
 
 - **NAAIM remains paused by the user.** Do not capture or restart its schedule.
-- Keep acquisition schedules stopped until their separate activation decision.
-  A merged pipeline or delivered Dagster definition is not permission to start it.
-- FINRA: one real Chicago TRF date (2026-11-09) is accepted in isolation; broader
-  selected coverage and G1/G2 remain open. API release timing stays unknown by
-  default; retention is PRESERVE_ALL dry run. ADF/TXT/consolidated/ORF are excluded.
-- FOMC: listed 1990–released-2026 references and Q01–Q03 quality workflow are
-  implemented. Remaining source/OCR review and deliberate recent refreshes are
-  separate bounded work; they do not replace the current FINRA priority.
-- SEC FTD / exchange thresholds: Spec011 bounded native-source delivery is
-  accepted. AAII recurring access and presidential live-source decisions remain
-  separately gated. Use the [master register](../pipelines.md) for package/status
-  detail and the [Dagster register](../deployment/dagster_jobs.md) for job controls.
-- Record current runtime state only after an actual check. Existing acceptance
-  counts and old service/sensor observations do not establish present availability.
+- All acquisition schedules remain unactivated by this work. G3 requires a separate
+  operator decision, current access/calendar/capacity review and actual tick/run.
+- FINRA G1/G2 cover exactly the three TRFs on 2026-11-09. Wider history and other
+  dates remain unacquired. API timing is unknown by default; the reviewed default
+  calendar ends 2026. Retention is PRESERVE_ALL dry run. ADF/TXT/ORF/consolidated
+  and other schema regimes remain excluded. G4 consumer integration is deferred.
+- FOMC listed1990–released2026 minutes and Q01–Q03 quality workflow are implemented.
+  Remaining source/OCR review and deliberate refreshes are separate bounded work.
+- Spec011 SEC FTD/exchange-threshold bounded delivery is accepted. AAII recurring
+  access and presidential live-source decisions remain independently gated.
+- Existing Slack/service observations in historical sections do not prove current
+  availability. Use [job controls](../deployment/dagster_jobs.md) and recheck runtime
+  state before describing a service as healthy/running.
 
 ### Keep this panel current
 
-At the start of implementation, verify the worktree, current main and open PRs;
-then record the bounded task, owner/agent if applicable, branch/base and PR when
-one exists. Preserve unrelated work. At a meaningful checkpoint or before handing
-off, update this panel in place with:
+[Review state](handoff_state.json) binds this document and all other tracked inputs
+to a reviewed Git snapshot. CI runs the checker and a daily job reports stale
+reviews, recent commits and open PRs. It does not invent priorities or runtime facts.
+See [freshness guide](../development/handoff_freshness.md) and
+[workflow](../../.github/workflows/handoff-freshness.yml).
 
-1. Highest priorities and any explicit user change in order or operating holds.
-2. Last completed work, actual commit/merge SHA and linked PR; distinguish completed,
-   in-progress, ready, blocked, planned and paused work.
-3. Tests/CI tied to the checked commit, acceptance evidence and concrete limitations.
-4. Current unfinished work/blockers and the exact next action, files and task IDs.
-5. The verification timestamp; recheck merge status rather than copying a prior claim.
+At implementation start, verify Git/current main/PR state and record the bounded
+scope and active branch/PR. Before handing off, update this panel with actual
+work, commits, tests, blockers and exact pickup; update owning specs/registers too.
+Stage all intended changes, refresh review evidence with a meaningful summary,
+then stage both handoff files and check the exact index:
 
-The panel owns cross-project navigation and current priorities. Specs own
-requirements/tasks; [docs/pipelines.md](../pipelines.md) owns pipeline/package
-status; the [job register](../deployment/dagster_jobs.md) owns operating controls.
-Stage source and handoff changes, then refresh the machine review evidence with
-`python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"`
-and stage both handoff files. `--staged` checks the exact index without changing it.
-See the [freshness guide](../development/handoff_freshness.md) for the complete flow.
+```bash
+python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"
+git add docs/handoffs/project_bootstrap.md docs/handoffs/handoff_state.json
+python3 scripts/verify_handoff.py --staged
+```
 
-Update those owning records when their facts change and link them here. Preserve
-the dated history below; append a dated checkpoint for substantial new evidence.
-Do not rewrite old checkpoints to look current or record secrets/runtime payloads.
+When deliberately advancing to another owning task list, pass its path using
+`--task-file` on refresh. Preserve existing user hooks and dated history below.
+A timestamp/history-only update cannot acknowledge substantive source changes.
 
 ## Historical checkpoints and retained context
 
