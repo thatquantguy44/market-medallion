@@ -147,3 +147,11 @@ They refuse busy writers and corrupt evidence. Limits: `--max-captures`1000,
 `--max-runs`1000 and `--max-events`10000. YAML input byte limits also apply to raw
 captures. See the [operations contract](../../specs/spec012/operations_contract.md)
 and [runbook](../../docs/deployment/ssv_local_runbook.md#t13-offline-health-and-retention-accounting).
+
+T14 adds `export-research --destination FILE --output-use PURPOSE --scope SCOPE`.
+The exact scope must match the current committed publication. Use
+`invented_fixture` for fixture stores, or
+`personal_noncommercial_internal_research` with an explicit `internal_export`
+grant for provider data. Output parent must exist, outside the source root.
+Retries with identical bytes succeed; conflicts refuse without overwriting.
+No local YAML schema changes are required. See [T14 acceptance](../../specs/spec012/t14_acceptance.md).

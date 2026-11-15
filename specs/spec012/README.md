@@ -1,6 +1,6 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T13 implemented for the selected three-TRF Public API profile.
+**Status:** SSV-T01–T14 implemented for the selected three-TRF Public API profile.
 Immutable Bronze, audited SQLite Silver/Gold, revisions/removals and UTC/sequence
 cutoffs feed scope-safe research and explicit typed Parquet publication. A separate
 catalog freezes publication facts and journals COMMITTED/PUBLISHED generations;
@@ -9,7 +9,7 @@ CLI/script includes publication/recovery and verified empty-target replay preser
 original clocks, revisions, membership and audit. T12 adds explicit bounded
 acquisition and verified page collections, with real Chicago TRF conformance for
 5,849 rows on 2026-11-09. T13 adds read-only release-aware health and retention accounting.
-**Next: SSV-T14 research interchange.** Exchange/jobs and
+**Next: SSV-T15 stopped orchestration.** Jobs and
 broader real-source coverage remain open; G1/G2 are not advanced.
 **Reviewed:** 2026-11-14. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
@@ -31,52 +31,20 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 ## Next agent handoff
 
-**Start here:** [T13 acceptance](t13_acceptance.md), [operations contract](operations_contract.md),
-[evidence](evidence/t13_operations_conformance.json) and [SSV-T14](todo.md#ssv-t14--define-and-write-research-interchange).
-T13 is implemented on **`feat/finra-health-retention`**, created from latest main
-`12edd0f` after T11–T12 merged in PR25. Track [PR26](https://github.com/thatquantguy44/market-medallion/pull/26). T01–T13 are implemented; T14–T16,
-broader real complete-partition/history coverage and G1/G2 remain open.
+T14 is implemented and validated on `feat/finra-research-orchestration`, from
+latest main `1daf6b5`. User authorized T14 → T15 → T16 in order; T15 is next.
+[T14 acceptance](t14_acceptance.md) records 37 new / 710 FINRA tests and the
+[wire contract](data_contract.md#ssv-t14-research-interchange-implementation-contract).
+Read [T15](todo.md#ssv-t15--add-stopped-orchestration) and the root guidance before
+adding source-owned Dagster definitions. T13 operations, T12 acquisition, T11
+replay and T10 publication contracts remain authoritative.
 
-Use root [AGENTS.md](../../AGENTS.md), [master handoff](../../docs/handoffs/project_bootstrap.md),
-[plan](plan.md), [data/API contracts](api_contract.md) and [source review](source_review.md).
-Pinned agent-skills188 entries and QuantSmith61 Git guidance objects verify;
-known external checkout drift is unchanged, without refresh or repin.
-
-**Next bounded slice — SSV-T14 / SSV-REQ12 / SSV-AC14:** rights-admitted research
-interchange with its own versioned consumer fixture/readback contract. Preserve
-exact quantity text, matched facility scope/units, raw symbols, source/coverage/
-rights labels and actual capture-time knowledge. Reject disallowed output use
-before writing; exclude private runtime paths, credentials and operational details.
-Use the verified T10 publication boundary rather than a mutable warehouse scan.
-Do not implement a QuantMeridian consumer or enable T15 jobs as part of T14.
-
-T13 `health` reconciles bounded Bronze, terminal warehouse state, source journals
-and every frozen publication generation. A later failed/no-response refresh stays
-visible above valid old Gold; replay alone reports LOCAL_ONLY. Missing/calendar/
-API-timing uncertainty, pending/overdue release, valid empty, stale capture,
-unresolved capture and publication lag/recovery stay separate. The verified2026
-calendar does not extrapolate; the file site's18:00 target is not an API SLA.
-A configurable API deadline needs its own evidence; pre-release empty captures
-do not satisfy it. ADF/TXT/consolidated/ORF remain excluded.
-
-`retention-dry-run` holds all bytes/versions under PRESERVE_ALL, with origin,
-membership, audit, journal, frozen-publication and both-pass collection references.
-There is no apply/delete option or inherited365-day policy. All readers use
-existing nonblocking locks/read transactions, make no HTTP probe and never repair.
-
-**Verified T13:**47 new /673 FINRA checks; full offline1661 passed /92 optional skips. Four actual portable-script checks on
-the existing isolated real Chicago TRF2026-11-09 source/replay stores reconcile
-5 captures,5849 versions and four collection input pages in each; all53 source
-and40 replay files remain unchanged. Release timing is honestly UNKNOWN; source
-refresh is SUCCESS, replay LOCAL_ONLY. No new provider request, Slack message,
-service, schedule or operational-store mutation occurred. NAAIM stays paused.
-
-Use [the portable script](../../scripts/run_finra_short_sale_volume.sh),
-[configuration](../../config/finra_short_sale_volume/README.md) and
-[runbook](../../docs/deployment/ssv_local_runbook.md#t13-offline-health-and-retention-accounting).
-Keep the PR's current-head CI/review status distinct from earlier accepted checks;
-no merge is implied. T12 [acquisition](acquisition_contract.md), T11 [replay](replay_contract.md)
-and T10 [publication](parquet_contract.md) contracts remain authoritative.
+The user also authorized bounded real API validation of all three TRFs for
+2026-11-09 during T16. Use new isolated stores and this project's own environment
+credentials; do not enable any schedule. Existing real acceptance covers Chicago
+TRF only. G1/G2 and expanded coverage remain open until T16 evidence passes.
+NAAIM remains paused. QuantSmith checkout drift is unchanged; all 61 pinned Git
+guidance objects verify, without repin or external checkout modification.
 
 ## Objective and research questions
 

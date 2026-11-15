@@ -278,3 +278,33 @@ captures do not satisfy it. ADF remains excluded, while valid admitted TRF empti
 remain distinct from missing reports. The Equity-specific API terms add no
 dataset-specific retention condition; preserve-all reference accounting is the
 sole dry-run policy. No finite deletion/backup policy is approved here.
+
+## SSV-T14 research interchange implementation contract
+
+`finra-short-sale-volume-research/1` is a bounded canonical JSON file selected
+from one fully verified PUBLISHED T10 generation, with no pending recovery.
+`export-research --destination FILE --output-use PURPOSE --scope SCOPE` checks
+the requested audience and explicit `internal_export` grant before source/output
+I/O. Invented stores use `output-use=invented_fixture`, carry a distinct fixture
+label and never confer provider rights. Expected scope must exactly match the
+publication, including disjoint members. No mutable warehouse query is used.
+
+The artifact contains FINRA attribution/source, restricted use labels, publication
+identity/hash, the trade-date/cutoff request, coverage and current/prior capture
+clocks, research rows and whitelisted version lineage. Quantities and ratios stay
+canonical decimal strings, with shares/unit-1 and method labels. First-seen stays
+actual local capture time; unknown provider publication time stays null. Missing
+reported rows and valid empty remain explicit. Run attempts, access references,
+local paths, raw payloads, credentials and runtime configuration are excluded.
+
+The consumer validates the version, exact expected scope, units, rights labels,
+decimal text, and lineage before use. A separate invented fixture pins the wire
+contract. Output uses an exclusive atomic hard-link publish after private staging
+and readback; an identical retry is idempotent, a conflicting existing file is
+never overwritten. Destinations inside the source store or symlinked parents
+refuse. Source, publication and export byte/row limits are finite and explicit.
+
+Reviewed official [Equity API terms](https://developer.finra.org/specific-terms-equity-data)
+and [production dataset documentation](https://developer.finra.org/docs#reg-sho-daily-short-sale-volume)
+on 2026-11-15. The selected internal-use profile is unchanged; no redistribution
+or downstream application permission is granted by this adapter.

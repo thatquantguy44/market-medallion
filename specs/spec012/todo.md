@@ -280,8 +280,8 @@ unchanged. [Acceptance](t13_acceptance.md) / [contract](operations_contract.md).
 ## SSV-T14 — Define and write research interchange
 
 **Depends:** SSV-T10, SSV-T13; **traces:** SSV-REQ12 / SSV-AC14.
-- [ ] Export only admitted fields with version/scope/units/coverage/source labels.
-- [ ] Provide an invented consumer contract fixture; reject disallowed output use.
+- [x] Export only admitted fields with version/scope/units/coverage/source labels.
+- [x] Provide an invented consumer contract fixture; reject disallowed output use.
 **Verify:** contract/readback test and review for operational details/secrets.
 **Files:** `research_export.py`, `cli.py`, `tests/test_ssv_export.py`, `specs/spec012/data_contract.md`.
 

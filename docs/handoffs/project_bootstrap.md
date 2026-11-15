@@ -4,7 +4,7 @@ Last updated: 2026-11-15.
 
 ## Agent start here
 
-**Next implementation: FINRA SSV-T14 research interchange.** T13 is merged.
+**Next implementation: FINRA SSV-T15 stopped orchestration.** T14 is implemented locally.
 This panel is the current cross-project handoff. The dated checkpoints below
 retain historical evidence; their old “next” tasks do not override this panel.
 Explicit later user instructions take precedence and must be recorded here.
@@ -32,8 +32,8 @@ objective drift; agents still review priorities and runtime claims themselves.
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 1 | **FINRA SSV-T14 — research interchange** | Ready; implementation has not started. Create a fresh branch from current `origin/main`, then build the admitted versioned export and consumer readback fixture. | [T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange), [Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff) |
-| 2 | FINRA SSV-T15 — Dagster orchestration | After T14. Add the source-owned job/resources and a schedule that defaults stopped, with explicit activation tests. | [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration) |
+| 1 | **FINRA SSV-T14 — research interchange** | Implemented and validated on `feat/finra-research-orchestration`; 37 new / 710 FINRA tests pass. | [T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange), [Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff) |
+| 2 | FINRA SSV-T15 — Dagster orchestration | Active next task on the same branch. Add the source-owned job/resources and a schedule that defaults stopped, with explicit activation tests. | [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration) |
 | 3 | FINRA SSV-T16 — acceptance and operating handoff | After T15. Reconcile acceptance IDs, restart/recovery instructions, actual selected coverage and outstanding G1/G2 evidence before declaring delivery complete. | [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff), [delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery) |
 | 4 | Spec013 — FINRA ATS/non-ATS transparency | Planned; package/connector absent. Begin after Spec012 delivery acceptance, with its source/access review and one bounded report type/tier. | [Spec013](../../specs/spec013/README.md), [tasks](../../specs/spec013/todo.md) |
 | 5 | Spec014 — SEC N-PORT | Planned; follows Spec013. | [Spec014](../../specs/spec014/README.md) |
@@ -42,8 +42,11 @@ objective drift; agents still review priorities and runtime claims themselves.
 **Repository tooling:** handoff freshness enforcement is implemented in PR #27;
 CI/daily scheduling is verified separately from its source and unit checks.
 
-**Implementation in progress:** none recorded at this checkpoint. T14 is the
-next bounded task, not work already underway. GitHub showed no open PRs at the
+**Implementation in progress:** T14 → T15 → T16 on
+`feat/finra-research-orchestration`, created from latest `origin/main`
+`1daf6b58ed6199fd39dff38f30923d6f55a9b896`. User authorized all three in order.
+T14 is implemented and validated; T15 is next, then T16.
+User approved bounded all-three-TRF API checks for 2026-11-09 during T16. No PR yet. GitHub showed no open PRs at the
 verification time, before this documentation update. Verify again before claiming
 work. This change adds the current panel, maintenance rules and automated freshness
 guard; no FINRA implementation task has started.
@@ -89,24 +92,15 @@ git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 git log -8 --oneline origin/main
 ```
 
-### Exact next slice: SSV-T14
+### Exact next slice: SSV-T15
 
-Read [AGENTS.md](../../AGENTS.md), the [pipeline register](../pipelines.md),
-[Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff),
-[T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange),
-[data contract](../../specs/spec012/data_contract.md),
-[publication contract](../../specs/spec012/parquet_contract.md) and
-[operations contract](../../specs/spec012/operations_contract.md).
-
-Implement `research_export.py` and its CLI command under
-`src/market_data_pipeline/pipelines/finra_short_sale_volume/`; add the regression
-tests in the repository-level `tests/test_ssv_export.py`. Read the verified T10
-publication boundary.
-Preserve exact quantity text, matched facility scope/units, raw symbols, coverage,
-source/version lineage, actual capture-time knowledge and rights labels. Gate
-output use before writing, and verify an invented consumer fixture/readback.
-Exclude credentials, private runtime paths and operational details from the
-research artifact. T15 jobs and a separate QuantMeridian consumer remain later.
+Read [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration),
+[T14 acceptance](../../specs/spec012/t14_acceptance.md) and the
+[acquisition contract](../../specs/spec012/acquisition_contract.md).
+Implement source-owned `dagster_defs.py`, root composition and stopped launch
+resources. Test missing live flags, execution-time kill switches, bounded
+source-owned retries, publication/export dependencies and default-stopped schedule
+state before T16 acceptance. Do not enable any schedule.
 
 ### Operating holds and other workstreams
 
