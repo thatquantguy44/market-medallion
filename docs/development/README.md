@@ -13,6 +13,7 @@ For a minimal local install, use `pip install -e .`; add the `postgres` or
 `dagster` extras only when needed. The lock targets POSIX development/CI.
 
 ```bash
+.venv/bin/python scripts/verify_dagster_docs.py
 .venv/bin/python -m pytest -q
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
@@ -59,3 +60,12 @@ explicitly requested, bounded smoke runs; never make unit tests require network.
 
 The reserved directories mirror `fred-bronze-to-gold-pipeline`. No code, runtime
 configuration, warehouse files, or credentials have been copied from it.
+
+## Dagster inventory maintenance
+
+[DAGSTER.md](../../DAGSTER.md) is the single job/schedule/sensor master guide.
+Update it in the same change as definitions, launch/config paths or activation
+controls. `scripts/verify_dagster_docs.py` compares its marked inventory tables
+with the actual root composition without instance access or source requests.
+CI runs the checker after installing the pinned optional Dagster dependencies.
+README/AGENTS retain discoverable links; the old deployment register is a pointer.

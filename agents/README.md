@@ -8,7 +8,8 @@ not pipeline data sources or automatic runtime dependencies.
 
 **Task routing starts with the [master handoff](../docs/handoffs/project_bootstrap.md#agent-start-here).**
 It records current priorities, active work, completed commits/PRs and the exact
-next slice. Library guidance supplies execution methods; it does not reprioritize
+next slice.
+For Dagster job inventory and maintenance, read the root [DAGSTER.md](../DAGSTER.md). Library guidance supplies execution methods; it does not reprioritize
 the project. Keep the current panel updated under the root AGENTS.md rules.
 
 | Library | Availability | Pin / configuration | Start here |

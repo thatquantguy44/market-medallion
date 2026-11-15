@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "39c45df33f18cb9112eda42538763b0a42a6ac83bd3ae8369d74b1fc14fc5f12",
+  "document_fingerprint": "b09cc9b8a97bfc8965a59c7a99bb6c33c395e94e4392cf59d61a28f28194378a",
   "next_task": "OTC-T01",
-  "panel_fingerprint": "b134c7bca105f94063339a1bf02484ef1b98d9de260ec739d97e6680f39adc05",
-  "review_summary": "Verified local Dagster UI recovery on port 3030, eight loaded jobs, eight stopped schedules and preserved FOMC-only running alert sensors; no job launch, provider acquisition or metadata reset.",
-  "reviewed_at": "2026-11-15T11:23:30.540334+00:00",
-  "reviewed_commit": "1747018661c1e4e211f9bc15d9ced062ed2ada20",
+  "panel_fingerprint": "3d9c38213dc41f28f0574111c697152593728cc9aef64ca9a0e759675a8d5a11",
+  "review_summary": "Implemented canonical root DAGSTER.md, README/AGENTS maintenance links, compatibility pointer and offline definition/navigation CI guard; 50 new checks and 1827 full passes with 92 optional skips, no runtime or activation changes.",
+  "reviewed_at": "2026-11-15T11:46:41.929097+00:00",
+  "reviewed_commit": "468b72a9f7bcccc339126e446581d8bbb459055b",
   "schema_version": 1,
-  "source_fingerprint": "5bd87bc296943dbd09f2fac68b20d0d5993a50c84d4723c13e5b102d1d7bec80",
+  "source_fingerprint": "e712abba00015ce8014185d1feff1532919d2248c9bab7c5a53e5522347c2a0a",
   "task_file": "specs/spec013/todo.md"
 }

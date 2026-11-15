@@ -16,8 +16,8 @@ as `c53b1e2`; T14–T16 are implemented and locally accepted on
 PR #28 is merged as `eaec327`; Spec013 OTC-T01 is next.
 See [Spec012 acceptance](../specs/spec012/acceptance.md).
 
-The [Dagster job and schedule register](deployment/dagster_jobs.md) is the
-canonical operational inventory.
+The [Dagster master guide](../DAGSTER.md) is the
+single canonical operational inventory.
 
 ## Current build sequence and status
 
@@ -35,14 +35,11 @@ source/OCR/chart flags; no new derivative publication was required.
 See [acceptance](../specs/spec017/1997_2026_acceptance.md) and
 [handoff](handoffs/project_bootstrap.md).
 
-Optional [per-pipeline Slack success/failure alerts](deployment/slack_alerts.md) are
-implemented for the five existing Dagster jobs under [Spec018](../specs/spec018/README.md).
-Each pipeline owns a separate optional alert YAML and stopped-by-default success
-and failure sensors. Independent `slack.on_success`/`slack.on_failure` flags select
-statuses. Both FOMC sensors are locally configured and enabled; real failed and
-successful Dagster runs verified Slack delivery on November 12/13. Other alert
-sensors and all acquisition schedules remain stopped. This adds no connector
-or acquisition schedule and preserves the NAAIM pause.
+Optional [per-pipeline Slack success/failure alerts](deployment/slack_alerts.md)
+use separate pipeline YAML, explicit status flags and environment-only webhook
+secrets. [DAGSTER.md](../DAGSTER.md#alert-sensors) owns the complete sensor/job
+inventory, definition defaults and dated runtime observations. Alert configuration
+does not authorize acquisition or resume NAAIM.
 
 FOMC listed-reference coverage extends from **1990 through released 2026 minutes**
 as of November 13. The archive has 1,081 captures,
@@ -84,7 +81,7 @@ queue is retained but deferred behind this program. NAAIM remains paused.
 | Pipeline ID | Purpose | Status | Package under `src/market_data_pipeline/pipelines/` | Contract / evidence | Next scoped work |
 | --- | --- | --- | --- | --- | --- |
 | `fomc-meeting-minutes` | Official FOMC minutes and action/policy predecessors from 1990 onward | T01–T06 and listed 1990–released-2026 references accepted as of November 13; 21 Dagster batches with health, immutability, restore/replay and Slack success verified; 1,081 captures, 522 text representations, 3,200 PDF pages, 9,790 chunks (8,270 eligible, 1,520 review); unavailable/not-listed and accuracy review remain explicit | [`fomc_meeting_minutes/`](../src/market_data_pipeline/pipelines/fomc_meeting_minutes/); [`scripts/run_fomc.sh`](../scripts/run_fomc.sh) | [Spec017](../specs/spec017/README.md), [acceptance](../specs/spec017/1997_2026_acceptance.md), [evidence](../specs/spec017/evidence/1997_2026_dagster_backfill.json), [runbook](deployment/fomc_runbook.md) | Q01–Q03 offline quality workflow implemented in [PR #19](https://github.com/thatquantguy44/market-medallion/pull/19); [eight-case review/no-native-fix closeout](../specs/spec017/quality_remediation_acceptance.md). Next: additional review, source reconciliation, explicit OCR policy and deliberate recent refreshes; schedules stopped. |
-| `presidential-research-data` | Reviewed political-control and public equity-return research inputs for QuantMeridian PRES | Offline captures, review, observed versions, atomic frozen and fixture bundles, local PRES views, detached replay, health and backup/restore implemented; frozen donor parity verified locally; live acquisition remains blocked | [`presidential_research/`](../src/market_data_pipeline/pipelines/presidential_research/) (local, live sources blocked) | [Spec016](../specs/spec016/README.md), [integration plan](../specs/spec016/plan.md), [tasks](../specs/spec016/todo.md) | Provider refresh and schedule operation require separate source decisions. Schedule defaults stopped; local Dagster code location is currently unreachable, so runtime state is unverified. |
+| `presidential-research-data` | Reviewed political-control and public equity-return research inputs for QuantMeridian PRES | Offline captures, review, observed versions, atomic frozen and fixture bundles, local PRES views, detached replay, health and backup/restore implemented; frozen donor parity verified locally; live acquisition remains blocked | [`presidential_research/`](../src/market_data_pipeline/pipelines/presidential_research/) (local, live sources blocked) | [Spec016](../specs/spec016/README.md), [integration plan](../specs/spec016/plan.md), [tasks](../specs/spec016/todo.md) | Provider refresh and schedule operation require separate source decisions. Schedule defaults stopped; see the [dated Dagster runtime check](../DAGSTER.md#current-local-state) for the latest observed instance state. |
 | `aaii-investor-sentiment` | Weekly investor sentiment shares and bull/bear spread | Implemented locally; recurring acquisition gated | [`aaii/`](../src/market_data_pipeline/pipelines/aaii/) | [Spec 002](../specs/spec002/README.md), [Spec 003](../specs/spec003/README.md), [checkpoint](handoffs/aaii_checkpoint.md), [runbook](deployment/aaii_runbook.md) | Local completion merged; November 10 manual Dagster refresh is healthy. Establish recurring access and production operations before scheduling. |
 | `naaim-exposure-public-delayed` | Three-month-delayed active-manager U.S. equity-market exposure for authorized research | Local Bronze/Silver/delayed-latest slice, manual smoke, health check, stopped-by-user daily Dagster schedule and versioned research export verified; each scheduled run retains 365 days; every output explicitly labels the 3-month provider delay | [`naaim_exposure_public_delayed/`](../src/market_data_pipeline/pipelines/naaim_exposure_public_delayed/) | [Spec 007](../specs/spec007/README.md), [job register](deployment/dagster_jobs.md) | **Paused.** Do not capture or restart the schedule until the user resumes NAAIM. On resumption, automate export after a successful capture, then retain attribution/delay labels. No warehouse or public service is added. |
 | `sec-fails-to-deliver` | Security-level reported outstanding settlement failures | T03–T07 immutable Bronze, SQLite persistence, revisions/withdrawals, cutoff Gold, deterministic replay and coherent typed Parquet implemented; T19 PostgreSQL17.6 parity and T21 Spark4.0.1/Delta4.0.1 parity verified; bounded exact-URL acquisition, no-request health, stopped Dagster and `sec-ftd-research/1` export implemented; real isolated snapshot has 117,025 facts/Gold rows | [`sec_fails_to_deliver/`](../src/market_data_pipeline/pipelines/sec_fails_to_deliver/) | [Spec011](../specs/spec011/README.md), [checkpoint](../specs/spec011/source_review.md), [config](../config/sec_fails_to_deliver/README.md), [runbook](deployment/sec_ftd_runbook.md) | Keep live acquisition/schedule and Databricks target disabled until explicitly configured. T17/G2 bounded delivery is complete and merged through PR #8; Spec012 remains the next securities-finance continuation after the selected FOMC work. Broader history and G3/G4 remain separate. |

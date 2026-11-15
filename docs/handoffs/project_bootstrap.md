@@ -18,25 +18,28 @@ import schedules are STOPPED; only the two FOMC Slack sensors are RUNNING among
 the twelve status sensors. The user-code connection was recovered by restarting
 the existing manual launcher, preserving metadata and stored activation settings.
 No job/source acquisition or schedule activation was performed. See the
-[verified job register](../deployment/dagster_jobs.md#current-local-state).
+[canonical Dagster master guide](../../DAGSTER.md#current-local-state).
 
 ### Current work and highest priorities
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
+| 0 | Dagster canonical documentation cleanup | Implemented locally on `docs/dagster-canonical-register`; review the root guide and offline CI drift check. | [DAGSTER.md](../../DAGSTER.md), [checker](../../scripts/verify_dagster_docs.py) |
 | 1 | **Spec013 OTC-T01 — route and reuse contract** | Ready; implementation not started. Create a fresh latest-main branch and verify current official terms for one bounded weekly report profile before provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Implementation in progress:** none. Spec012 implementation/review is merged;
-OTC-T01 is ready, not started. [Review](../../specs/spec012/branch_review.md)
-records 24 added tests, 756 FINRA checks and 1,777 local full-suite passes / 92
-optional skips. PR #28's final implementation head `d49ea1a` also passed remote
-CI with 1,866 tests / 3 optional skips and handoff freshness. Existing source/replay
-research artifacts are byte-identical, with all 203 store files unchanged. The
-merged acceptance covers all three TRFs on 2026-11-09; broader history, recurring
-activation and consumer integration remain separate. No schedule activation is
-implied by merge, and NAAIM remains paused.
+**Implementation in progress:** Dagster documentation cleanup is implemented
+locally on `docs/dagster-canonical-register`, from main `eaec327` plus preserved
+local handoff/runtime checkpoints `1747018` and `468b72a`. The user requested one
+recognizable canonical inventory tied to README/AGENTS. Root
+[DAGSTER.md](../../DAGSTER.md) now owns the job/schedule/sensor tables, UI access,
+operating controls and dated runtime observation. The old register is a pointer.
+An offline definition/doc/navigation check is wired into CI; 50 new regression
+checks and 1,827 full-suite passes / 92 optional skips verify drift, links and
+no instance/network access. Review this cleanup branch before the next pipeline
+slice; no PR has been created for it. No job definitions, runtime configuration,
+provider behavior or automation activation were changed. OTC-T01 remains ready.
 
 ### Last completed work and commits
 
@@ -99,7 +102,7 @@ the package/connector is absent now. Do not implement T02+ without a bounded tas
 - Spec011 SEC FTD/exchange-threshold bounded delivery is accepted. AAII recurring
   access and presidential live-source decisions remain independently gated.
 - Existing Slack/service observations in historical sections do not prove current
-  availability. Use [job controls](../deployment/dagster_jobs.md) and recheck runtime
+  availability. Use [Dagster job controls](../../DAGSTER.md) and recheck runtime
   state before describing a service as healthy/running.
 
 ### Keep this panel current

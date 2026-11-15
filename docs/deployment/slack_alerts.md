@@ -1,16 +1,12 @@
 # Optional per-pipeline Slack run alerts
 
-Slack alerts are available for the five implemented Dagster jobs. Each pipeline
-owns an independent configuration file and stopped-by-default success/failure sensors. Alerts do
-not require enabling an acquisition schedule. NAAIM acquisition remains paused.
-
-| Pipeline / config folder | Failure sensor | Success sensor | Config-path environment override |
-| --- | --- | --- | --- |
-| `aaii` | `aaii_slack_failure` | `aaii_slack_success` | `AAII_ALERTS_CONFIG` |
-| `naaim_exposure_public_delayed` | `naaim_exposure_public_delayed_slack_failure` | `naaim_exposure_public_delayed_slack_success` | `NAAIM_EXPOSURE_PUBLIC_DELAYED_ALERTS_CONFIG` |
-| `sec_fails_to_deliver` | `sec_fails_to_deliver_slack_failure` | `sec_fails_to_deliver_slack_success` | `SEC_FAILS_TO_DELIVER_ALERTS_CONFIG` |
-| `reg_sho_thresholds` | `reg_sho_thresholds_slack_failure` | `reg_sho_thresholds_slack_success` | `REG_SHO_THRESHOLDS_ALERTS_CONFIG` |
-| `fomc_meeting_minutes` | `fomc_meeting_minutes_slack_failure` | `fomc_meeting_minutes_slack_success` | `FOMC_MEETING_MINUTES_ALERTS_CONFIG` |
+The complete sensor/job inventory and definition defaults live in the
+**[canonical Dagster master guide](../../DAGSTER.md#alert-sensors)**. This page
+owns alert configuration and delivery behavior rather than another job list.
+Each supported pipeline owns optional alert YAML and separate success/failure
+sensors. The default path is `config/<pipeline_name>/alerts.local.yml`; the
+override variable is `<PIPELINE_NAME>_ALERTS_CONFIG` using the uppercase package
+name. Acquisition schedules are independent; NAAIM remains paused.
 
 ## Configure one pipeline
 

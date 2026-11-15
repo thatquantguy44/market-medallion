@@ -42,3 +42,7 @@ For individually selected alternate local inputs:
 Use `python -m market_data_pipeline presidential <command> --help` for exact
 required arguments. See [source access review](source_access_review.md) and
 [acceptance tracker](todo.md) for the exact scope of the frozen-history qualification.
+
+Current job/schedule inventory, UI access and dated instance checks are maintained
+in the root [DAGSTER.md](../../DAGSTER.md). Earlier runtime observations above
+are historical; verify the current UI before relying on them.

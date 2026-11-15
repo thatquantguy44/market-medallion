@@ -28,3 +28,7 @@ include docs/handoffs/handoff_state.json
 
 include .github/workflows/ci.yml
 include .github/workflows/handoff-freshness.yml
+
+include DAGSTER.md
+include AGENTS.md
+include scripts/verify_dagster_docs.py
