@@ -5,11 +5,10 @@ Last updated: 2026-11-15.
 ## Agent start here
 
 **Next implementation: FINRA OTC-T01 source route and reuse contract (Spec013).**
-Spec012 T14 → T15 → T16 are implemented and locally accepted in order on
-`feat/finra-research-orchestration`, created from latest main
-`1daf6b58ed6199fd39dff38f30923d6f55a9b896`. Review/merge this branch before
-starting Spec013 from a fresh latest-main branch. Track [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28),
-open against `main`; no merge has occurred.
+Spec012 T14 → T15 → T16 and the subsequent regression/equivalence review are
+merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as
+`eaec3279dd27c0ee170e78751f234d538d4416b2`. Start Spec013 on a fresh branch from latest
+`origin/main`; the FINRA short-volume delivery's review/merge step is complete.
 This panel owns current priorities; dated checkpoints below retain history.
 Later explicit user instructions take precedence and must be recorded here.
 
@@ -20,20 +19,19 @@ health was not rechecked; acceptance is a bounded evidence snapshot.
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 1 | Review/merge the verified Spec012 branch | T01–T16 and subsequent regression/equivalence review complete locally; G1/G2 accepted locally for all three selected TRFs on 2026-11-09. Track open [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) from `feat/finra-research-orchestration` to `main`; verify latest-head CI and reviews before merge. | [Acceptance](../../specs/spec012/acceptance.md), [evidence](../../specs/spec012/evidence/t16_delivery_conformance.json), [runbook](../deployment/ssv_runbook.md) |
-| 2 | **Spec013 OTC-T01 — route and reuse contract** | Next implementation after Spec012 review/merge. Recheck official terms and select one bounded weekly report profile before code/provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
-| 3 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
-| 4 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
+| 1 | **Spec013 OTC-T01 — route and reuse contract** | Ready; implementation not started. Create a fresh latest-main branch and verify current official terms for one bounded weekly report profile before provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
+| 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
+| 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Implementation in progress:** branch review is complete locally on
-`feat/finra-research-orchestration`, starting from
-`3f0043a4eb6c5d08807cf4ed2eea75023ad37a38`. Fixed the publication/export generation
-race and consumer lineage/membership contradictions. [Review](../../specs/spec012/branch_review.md)
-records 24 added tests, 756 FINRA checks and 1,777 full-suite passes / 92 optional
-skips. Eight fixture equivalence tests and stricter real-artifact readback pass;
-all 203 source/replay files and both research artifact byte streams are unchanged.
-No provider requests, Slack sends or schedule activation occurred. PR #28 owns
-CI/review tracking; recheck its latest head before merge, then use the Spec013 pickup below.
+**Implementation in progress:** none. Spec012 implementation/review is merged;
+OTC-T01 is ready, not started. [Review](../../specs/spec012/branch_review.md)
+records 24 added tests, 756 FINRA checks and 1,777 local full-suite passes / 92
+optional skips. PR #28's final implementation head `d49ea1a` also passed remote
+CI with 1,866 tests / 3 optional skips and handoff freshness. Existing source/replay
+research artifacts are byte-identical, with all 203 store files unchanged. The
+merged acceptance covers all three TRFs on 2026-11-09; broader history, recurring
+activation and consumer integration remain separate. No schedule activation is
+implied by merge, and NAAIM remains paused.
 
 ### Last completed work and commits
 
@@ -45,6 +43,7 @@ CI/review tracking; recheck its latest head before merge, then use the Spec013 p
 | `c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95` | T15 stopped job/schedule and 21 Dagster tests;731 FINRA tests. Verified local commit. |
 | `3f0043a4eb6c5d08807cf4ed2eea75023ad37a38` / T16 | [Acceptance](../../specs/spec012/acceptance.md) and [conformance](../../specs/spec012/evidence/t16_delivery_conformance.json) record the final tests/CLI/source-replay evidence. Resolve its exact commit with the commands below rather than a self-referential SHA. |
 | `9db245ec50c3df6b205a401f942a718ef3664061` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Completed review fixes and 24 added regressions/equivalence tests; 1,777 local passes / 92 optional skips. Branch is pushed; remote checks/reviews are tracked on the PR. |
+| `eaec3279dd27c0ee170e78751f234d538d4416b2` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Merged T14–T16 and reviewed regression/equivalence fixes; Spec013 OTC-T01 is now the next implementation. |
 
 The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
 approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated

@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "26ab3a15b52a0707525ca74fea6441271daeb0416086019021d09e347ea55ba1",
+  "document_fingerprint": "7a4639a262340d2da0ef40ad1b4eaaffa7598898d731c323fd71e468710f1cc2",
   "next_task": "OTC-T01",
-  "panel_fingerprint": "eb0ba55f805201b80e2f1c26bc1ca19e0f05d4ab2c4b8d2148e2844c2dc065d6",
-  "review_summary": "Recorded pushed review commit 9db245e and open PR #28 against main; current-head CI/reviews tracked on the PR, bounded acceptance and stopped activation controls unchanged.",
-  "reviewed_at": "2026-11-15T10:47:48.203293+00:00",
-  "reviewed_commit": "9db245ec50c3df6b205a401f942a718ef3664061",
+  "panel_fingerprint": "5135a2ffe28872d22a87e7b894234f54bd1ea2f36ef10eac4336967e0bdebda2",
+  "review_summary": "Verified PR #28 merged as eaec327; removed the completed review/merge priority and recorded OTC-T01 ready on latest main, with accepted evidence and activation holds unchanged.",
+  "reviewed_at": "2026-11-15T11:06:08.580668+00:00",
+  "reviewed_commit": "eaec3279dd27c0ee170e78751f234d538d4416b2",
   "schema_version": 1,
-  "source_fingerprint": "7035436216aa5aa4a091bb8a356bd5d0ba16ce2a2f0cb190bd096a90eebd8c11",
+  "source_fingerprint": "2e9bfffdfa65ca423589963ab4ad7b0f721109a3e827cf40736a78efc6b7ef5e",
   "task_file": "specs/spec013/todo.md"
 }
