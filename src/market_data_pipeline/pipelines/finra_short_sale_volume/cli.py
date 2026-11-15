@@ -12,6 +12,7 @@ from market_data_pipeline.pipelines.finra_short_sale_volume import (
     publication,
     replay,
     research,
+    research_export,
     source,
 )
 from market_data_pipeline.pipelines.finra_short_sale_volume.acquisition_config import (
@@ -40,6 +41,7 @@ def main(argv=None):
         "audit",
         "history",
         "research-gold",
+        "export-research",
         "publish",
         "published",
         "recover-publication",
@@ -65,6 +67,11 @@ def main(argv=None):
             command.add_argument("--max-files", type=int, default=50000)
             command.add_argument("--max-runs", type=int, default=1000)
             command.add_argument("--max-events", type=int, default=10000)
+        if name == "export-research":
+            command.add_argument("--destination", required=True, type=Path)
+            command.add_argument("--output-use", required=True)
+            command.add_argument("--expected-generation-id")
+            command.add_argument("--scope", action="append", required=True)
         if name == "acquire":
             command.add_argument("--live", action="store_true")
         if name == "replay":
@@ -90,7 +97,7 @@ def main(argv=None):
         if name in ("gold", "research-gold", "publish"):
             command.add_argument("--as-of", type=datetime.fromisoformat)
             command.add_argument("--as-of-sequence", type=int)
-        if name in ("publish", "published", "recover-publication"):
+        if name in ("publish", "published", "recover-publication", "export-research"):
             command.add_argument("--max-rows", type=int, default=250000)
             command.add_argument("--max-bytes", type=int, default=128 * 1024 * 1024)
         if name == "publish":
@@ -214,6 +221,18 @@ def main(argv=None):
                 )
             else:
                 result = publication.recover(config.root, config.manifest, **shared, **options)
+        elif args.command == "export-research":
+            result = research_export.export(
+                config.root,
+                config.manifest,
+                **shared,
+                destination=args.destination,
+                output_use=args.output_use,
+                expected_generation_id=args.expected_generation_id,
+                scopes=args.scope,
+                max_rows=args.max_rows,
+                max_bytes=args.max_bytes,
+            )
         elif args.command == "research-gold":
             result = research.research_gold(
                 config.root,

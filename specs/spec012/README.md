@@ -1,82 +1,62 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T13 implemented for the selected three-TRF Public API profile.
-Immutable Bronze, audited SQLite Silver/Gold, revisions/removals and UTC/sequence
-cutoffs feed scope-safe research and explicit typed Parquet publication. A separate
-catalog freezes publication facts and journals COMMITTED/PUBLISHED generations;
-`parquet/current.json` selects coherent files and database facts. The configured
-CLI/script includes publication/recovery and verified empty-target replay preserving
-original clocks, revisions, membership and audit. T12 adds explicit bounded
-acquisition and verified page collections, with real Chicago TRF conformance for
-5,849 rows on 2026-11-09. T13 adds read-only release-aware health and retention accounting.
-**Next: SSV-T14 research interchange.** Exchange/jobs and
-broader real-source coverage remain open; G1/G2 are not advanced.
-**Reviewed:** 2026-11-14. **Delivery order:** 2 of 5.
+**Status:** SSV-T01–T16 implemented and locally accepted for the selected
+three-TRF Public API profile. [Delivery acceptance](acceptance.md) maps all 15
+acceptance IDs to deterministic tests, policy decisions and real **2026-11-09**
+conformance: Carteret 12,349, Chicago 5,849 and NYSE 7,032 source rows.
+Publication/export/replay reconcile 25,230 observations and 12,355 research rows,
+retaining matched scope, exact quantities, missingness and capture-time knowledge.
+**G1/G2:** accepted locally for that explicit one-day scope. Wider history,
+G3 recurring activation and G4 consumer integration remain separate.
+**Reviewed:** 2026-11-15. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
-**Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`
-(source contract, parser/numeric helpers, Bronze and local SQLite/CLI). The [source review](source_review.md) records the user's
-personal noncommercial scope and Public API terms acknowledgement. The selected
-[API profile](api_contract.md) explicitly amends the file-first plan for JSON and
-page completeness. G0 is ready for the explicit three-TRF profile; TXT, ADF,
-consolidated and ORF scopes stay excluded. [T02 evidence](evidence/t02_source_contract.json)
-records the six-row sample and its limits. [T03 evidence](evidence/t03_parser_conformance.json)
-reconciles its fractional share quantities offline; the
-[API amendment](api_contract.md#ssv-t03-fractional-quantity-amendment) supersedes integer-only normalization.
+**Package:** `src/market_data_pipeline/pipelines/finra_short_sale_volume/`.
 
-Read the [program roadmap](../../docs/securities_finance/README.md),
-[common contract](../../docs/securities_finance/contract.md),
-[source data contract](data_contract.md), [plan](plan.md) and [tasks](todo.md).
-Spec011 delivery precedes this work by priority; its data is not a technical
-dependency of this independent FINRA pipeline. Spec013 follows this delivery.
+Immutable Bronze, audited SQLite versions/membership/Gold, cutoff research and
+exact typed Parquet use one verified publication generation. T11 offline replay,
+T12 bounded two-pass acquisition, T13 offline health/preserve-all retention, T14
+admitted research interchange and T15 stopped Dagster orchestration are implemented.
+The [API profile](api_contract.md) explicitly amends the original TXT-first plan;
+ADF/TXT/ORF/consolidated and other schema regimes remain excluded. The
+[source review](source_review.md) records user-attested personal noncommercial
+Public API terms acceptance. No broader route or distribution right is inferred.
+
+Read the [common contract](../../docs/securities_finance/contract.md),
+[source contract](data_contract.md), [plan](plan.md), [completed tasks](todo.md),
+[runbook](../../docs/deployment/ssv_runbook.md) and
+[conformance evidence](evidence/t16_delivery_conformance.json).
 
 ## Next agent handoff
 
-**Start here:** [T13 acceptance](t13_acceptance.md), [operations contract](operations_contract.md),
-[evidence](evidence/t13_operations_conformance.json) and [SSV-T14](todo.md#ssv-t14--define-and-write-research-interchange).
-T13 is implemented on **`feat/finra-health-retention`**, created from latest main
-`12edd0f` after T11–T12 merged in PR25. Track [PR26](https://github.com/thatquantguy44/market-medallion/pull/26). T01–T13 are implemented; T14–T16,
-broader real complete-partition/history coverage and G1/G2 remain open.
+T14 → T15 → T16 were completed in order on `feat/finra-research-orchestration`,
+from merged main `1daf6b5`. T14 `2b6fc3b` implements the export; T15 `c6b025a`
+implements stopped orchestration. T16 adds all-three-TRF conformance and the
+complete operating handoff. Track open [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28)
+and its latest-head checks/reviews. Review/merge this branch before starting
+Spec013 from fresh latest main.
 
-Use root [AGENTS.md](../../AGENTS.md), [master handoff](../../docs/handoffs/project_bootstrap.md),
-[plan](plan.md), [data/API contracts](api_contract.md) and [source review](source_review.md).
-Pinned agent-skills188 entries and QuantSmith61 Git guidance objects verify;
-known external checkout drift is unchanged, without refresh or repin.
+Final validation: **732 FINRA tests; 1,753 full offline passes; 92 optional
+integration skips**. Ruff lint/format and wheel/sdist build/readback pass.
+A real isolated in-process Dagster job succeeded; six portable CLI checks,
+verified replay, exact table/export parity and health/retention preserve 115
+source plus 88 replay files. UNKNOWN_API_TIMING remains explicit; source refresh
+is SUCCESS and replay LOCAL_ONLY, with PUBLISHED snapshots. No new schedule was
+enabled or Slack sent. [T14](t14_acceptance.md), [T15](t15_acceptance.md) and
+[final acceptance](acceptance.md) keep checkpoint evidence distinct. Known
+QuantSmith checkout drift is unchanged; all 61 pinned Git guidance objects verify.
 
-**Next bounded slice — SSV-T14 / SSV-REQ12 / SSV-AC14:** rights-admitted research
-interchange with its own versioned consumer fixture/readback contract. Preserve
-exact quantity text, matched facility scope/units, raw symbols, source/coverage/
-rights labels and actual capture-time knowledge. Reject disallowed output use
-before writing; exclude private runtime paths, credentials and operational details.
-Use the verified T10 publication boundary rather than a mutable warehouse scan.
-Do not implement a QuantMeridian consumer or enable T15 jobs as part of T14.
+A subsequent [branch review](branch_review.md) fixed publication/export generation
+binding and consumer membership/lineage checks. Current verification is **756
+FINRA tests; 1,777 full offline passes; 92 optional skips**, including eight
+query/export/replay equivalence tests. Accepted real source/replay artifacts are
+reproduced byte for byte with all 203 store files unchanged.
 
-T13 `health` reconciles bounded Bronze, terminal warehouse state, source journals
-and every frozen publication generation. A later failed/no-response refresh stays
-visible above valid old Gold; replay alone reports LOCAL_ONLY. Missing/calendar/
-API-timing uncertainty, pending/overdue release, valid empty, stale capture,
-unresolved capture and publication lag/recovery stay separate. The verified2026
-calendar does not extrapolate; the file site's18:00 target is not an API SLA.
-A configurable API deadline needs its own evidence; pre-release empty captures
-do not satisfy it. ADF/TXT/consolidated/ORF remain excluded.
-
-`retention-dry-run` holds all bytes/versions under PRESERVE_ALL, with origin,
-membership, audit, journal, frozen-publication and both-pass collection references.
-There is no apply/delete option or inherited365-day policy. All readers use
-existing nonblocking locks/read transactions, make no HTTP probe and never repair.
-
-**Verified T13:**47 new /673 FINRA checks; full offline1661 passed /92 optional skips. Four actual portable-script checks on
-the existing isolated real Chicago TRF2026-11-09 source/replay stores reconcile
-5 captures,5849 versions and four collection input pages in each; all53 source
-and40 replay files remain unchanged. Release timing is honestly UNKNOWN; source
-refresh is SUCCESS, replay LOCAL_ONLY. No new provider request, Slack message,
-service, schedule or operational-store mutation occurred. NAAIM stays paused.
-
-Use [the portable script](../../scripts/run_finra_short_sale_volume.sh),
-[configuration](../../config/finra_short_sale_volume/README.md) and
-[runbook](../../docs/deployment/ssv_local_runbook.md#t13-offline-health-and-retention-accounting).
-Keep the PR's current-head CI/review status distinct from earlier accepted checks;
-no merge is implied. T12 [acquisition](acquisition_contract.md), T11 [replay](replay_contract.md)
-and T10 [publication](parquet_contract.md) contracts remain authoritative.
+**Next bounded slice: Spec013 OTC-T01**, resolve current route/reuse/retention/
+transformation/export terms for an explicit weekly ATS/non-ATS report profile.
+See [task](../spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract).
+Its package/connector does not exist. Spec012's rights and three-TRF profile do
+not admit a different report family automatically. NAAIM remains paused and
+acquisition schedules remain unactivated by this delivery.
 
 ## Objective and research questions
 
@@ -148,7 +128,7 @@ extensions, not implicit work in the first run.
 
 ## Requirements and acceptance matrix
 
-Every task/test must cite these stable IDs. **673 focused FINRA tests** include47 T13 health/retention/CLI checks.
+Every task/test must cite these stable IDs. **732 focused FINRA tests** include 38 export and 21 Dagster checks.
 [T13 acceptance](t13_acceptance.md) records offline regression and read-only
 conformance separately from T12 acquisition and broader delivery gates.
 
@@ -227,7 +207,7 @@ The destination YAML's `root` must be absent or empty and disjoint from the sour
 copy the fixture example and choose a new root. See [configuration](../../config/finra_short_sale_volume/README.md)
 and the [local runbook](../../docs/deployment/ssv_local_runbook.md) for implemented
 run, inspection, research, publication and recovery commands. Validation and replay
-make no network request. Acquisition and source-aware health are implemented; interchange/jobs remain later work.
+make no network request. Acquisition and source-aware health are implemented; interchange and stopped orchestration are implemented under T14–T15.
 
 ## Testing, rollout and boundaries
 

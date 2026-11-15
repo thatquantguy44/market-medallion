@@ -247,7 +247,7 @@ or an approved actual local file with traceable provenance and explicit owner
 acceptance of local mode. Fixtures alone do not prove real-source coverage.
 **Evidence:** [acceptance](t12_acceptance.md), [contract](acquisition_contract.md),
 [real conformance](evidence/t12_acquisition_conformance.json).75 new / 626 FINRA
-checks; full offline 1,614 passed /92 optional skips. One Chicago date has5,849
+checks; full offline 1,614 passed /92 optional skips. One Chicago date has 5,849
 rows, verified two-pass collection, offline replay and Parquet parity. Broader
 coverage/G1/G2 remain open. T12a owns planning/config/HTTP/journals; T12b owns
 explicit evidence pages and verified collection promotion; existing ingestion/schema
@@ -280,16 +280,16 @@ unchanged. [Acceptance](t13_acceptance.md) / [contract](operations_contract.md).
 ## SSV-T14 — Define and write research interchange
 
 **Depends:** SSV-T10, SSV-T13; **traces:** SSV-REQ12 / SSV-AC14.
-- [ ] Export only admitted fields with version/scope/units/coverage/source labels.
-- [ ] Provide an invented consumer contract fixture; reject disallowed output use.
+- [x] Export only admitted fields with version/scope/units/coverage/source labels.
+- [x] Provide an invented consumer contract fixture; reject disallowed output use.
 **Verify:** contract/readback test and review for operational details/secrets.
 **Files:** `research_export.py`, `cli.py`, `tests/test_ssv_export.py`, `specs/spec012/data_contract.md`.
 
 ## SSV-T15 — Add stopped orchestration
 
 **Depends:** SSV-T14; **traces:** SSV-NFR03 / SSV-AC15.
-- [ ] Source-owned job/schedule default stopped with explicit activation controls.
-- [ ] Repository composition exposes only the implemented job and tested resources.
+- [x] Source-owned job/schedule default stopped with explicit activation controls.
+- [x] Repository composition exposes only the implemented job and tested resources.
 **Verify:** definition tests prove default-stopped state and missing-live-flag refusal.
 **Files:** `dagster_defs.py`, `tests/test_ssv_dagster.py`,
 `src/market_data_pipeline/orchestration/dagster_defs.py`, `resources/dagster-ssv.yml`.
@@ -297,15 +297,15 @@ unchanged. [Acceptance](t13_acceptance.md) / [contract](operations_contract.md).
 ## SSV-T16 — Close delivery evidence and operating handoff
 
 **Depends:** SSV-T15; **traces:** SSV-NFR03 / SSV-AC15.
-- [ ] Runbook records restart, stop, recovery and known source/rights limits.
-- [ ] Pipeline/job registers and handoff record actual coverage and Spec013 pickup.
-- [ ] Every acceptance ID is tied to recorded deterministic evidence.
+- [x] Runbook records restart, stop, recovery and known source/rights limits.
+- [x] Pipeline/job registers and handoff record actual coverage and Spec013 pickup.
+- [x] Every acceptance ID is tied to recorded deterministic evidence.
 **Verify:** full offline suite, Ruff, package build and AC evidence review.
 **Files:** `docs/deployment/ssv_runbook.md`, `docs/deployment/dagster_jobs.md`,
 `docs/pipelines.md`, `docs/handoffs/project_bootstrap.md`, `specs/spec012/todo.md`.
 
 ### Final delivery checkpoint
 
-- [ ] All SSV-AC01–SSV-AC15 have deterministic evidence and source-policy decisions.
-- [ ] Package/register status is accurate; remaining expansion decisions are explicit.
-- [ ] Schedule remains stopped; Spec013 may begin after acceptance on a fresh branch.
+- [x] All SSV-AC01–SSV-AC15 have deterministic evidence and source-policy decisions.
+- [x] Package/register status is accurate; remaining expansion decisions are explicit.
+- [x] Schedule remains stopped; Spec013 may begin after acceptance on a fresh branch.

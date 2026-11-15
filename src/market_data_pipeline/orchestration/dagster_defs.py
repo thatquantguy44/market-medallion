@@ -18,6 +18,7 @@ from market_data_pipeline.pipelines.aaii.dagster_defs import (
 from market_data_pipeline.pipelines.aaii.dagster_defs import (
     schedule as schedule,
 )
+from market_data_pipeline.pipelines.finra_short_sale_volume.dagster_defs import defs as ssv_defs
 from market_data_pipeline.pipelines.fomc_meeting_minutes.dagster_defs import defs as fomc_defs
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.dagster_defs import (
     defs as naaim_defs,
@@ -29,6 +30,6 @@ from market_data_pipeline.pipelines.reg_sho_thresholds.dagster_defs import defs 
 from market_data_pipeline.pipelines.sec_fails_to_deliver.dagster_defs import defs as sec_ftd_defs
 
 defs = dg.Definitions.merge(
-    aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs, presidential_defs
+    aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs, presidential_defs, ssv_defs
 )
-del aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs, presidential_defs
+del aaii_defs, naaim_defs, sec_ftd_defs, threshold_defs, fomc_defs, presidential_defs, ssv_defs

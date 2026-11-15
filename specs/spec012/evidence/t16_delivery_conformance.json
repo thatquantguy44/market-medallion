@@ -1,0 +1,300 @@
+{
+  "acquisition": {
+    "complete_partitions": 3,
+    "metadata_sha256": "0444c8491e61c5160f4a94e302efc7f4aa0fecc721db5d7e87cf09ac5b244d4f",
+    "network_route": "direct",
+    "planned_partitions": 3,
+    "request_budget_used": 18,
+    "response_bytes": 11119037,
+    "status": "COMPLETE"
+  },
+  "assertions": {
+    "actual_capture_time_preserved": true,
+    "all_three_partitions_complete": true,
+    "provider_publication_unknown": true,
+    "schedules_activated": false,
+    "slack_messages_sent": 0,
+    "source_files_unchanged": 115,
+    "source_files_unchanged_after_cli": 115,
+    "source_replay_research_equal_except_publication": true,
+    "source_replay_tables_equal": true
+  },
+  "capture_inventory": [
+    {
+      "archived_at": "2026-11-15T10:02:38.653404Z",
+      "capture_id": "16b2b15e-1402-4dc0-bc21-85cc61e8003b",
+      "capture_sequence": 1,
+      "payload_sha256": "6edaa7e7a08e0e135b8caa27e951bb682fde6835a7e785a419014253a406b857",
+      "receipt_sha256": "27fb1d0e82963946ca402114e6c909e598c7b5e1910c59b47ef97271df803453"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:39.680324Z",
+      "capture_id": "ab7bd177-83ec-471f-8374-a80e18090ae3",
+      "capture_sequence": 2,
+      "payload_sha256": "e7c25981ab9b85f6a080c4f6890d2a7bbadf5263f8f831e354b2b6c7c3a8b936",
+      "receipt_sha256": "ff18bf510be4aaa72d1df990a26f51cc6bba162d63db55f79875a471a57136c9"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:40.551121Z",
+      "capture_id": "4d3ca5d5-8de8-4683-8ff8-9a9539954b1a",
+      "capture_sequence": 3,
+      "payload_sha256": "5b55cfaa52e8803066d08acf8d36688fead5d516857c6313ecad664e164351c8",
+      "receipt_sha256": "1106bd078044ca0a14f0b52fad0837dbb97431c1004765509a35a1022f65545b"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:41.524335Z",
+      "capture_id": "f49f4339-029e-46c4-b242-856216a9f1b5",
+      "capture_sequence": 4,
+      "payload_sha256": "6edaa7e7a08e0e135b8caa27e951bb682fde6835a7e785a419014253a406b857",
+      "receipt_sha256": "983cdd2e511a3985e22da99751d31bedbf547da35965e22298eb1b64b7854091"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:42.548563Z",
+      "capture_id": "3cd5a6ec-6a5b-44ab-a1c5-8ca378593312",
+      "capture_sequence": 5,
+      "payload_sha256": "e7c25981ab9b85f6a080c4f6890d2a7bbadf5263f8f831e354b2b6c7c3a8b936",
+      "receipt_sha256": "f4afb359bfc20ef0fca6046f02fef8f64400bb602f6197bfdae191a85aa3a496"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:43.371230Z",
+      "capture_id": "3e09f0f9-bd00-4f1c-b186-f3e388beab93",
+      "capture_sequence": 6,
+      "payload_sha256": "5b55cfaa52e8803066d08acf8d36688fead5d516857c6313ecad664e164351c8",
+      "receipt_sha256": "09c72c5f571fe32b97546408860745e2154561df189d917dcc7a4e98d23692c3"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:43.529380Z",
+      "capture_id": "04d6ed20-4611-4121-bce0-1b2f411386e9",
+      "capture_sequence": 7,
+      "payload_sha256": "8026576c39475bae4409948a122c76e9552b4900c01178d9628039d29caffedf",
+      "receipt_sha256": "c02b99c2f7a00271207f444d8e4a7624132dfb271b8f56f05bc0ae86a5059791"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:50.551892Z",
+      "capture_id": "dc621e74-b662-4cba-81f7-16f815f26d3f",
+      "capture_sequence": 8,
+      "payload_sha256": "ebf09aed20fd4b0f11fed33b3bcdb2e85e483c529192e29e0e8994690fb4e958",
+      "receipt_sha256": "1149e6b27b99db0464ea140679f050f066375fa166f59cb5ab191899698f42c0"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:51.243073Z",
+      "capture_id": "adef4721-4496-4b39-9c8d-c1dafab91432",
+      "capture_sequence": 9,
+      "payload_sha256": "0de29395604863914e857ddae8f521085114893c4e0f8c0d1d39f81d987f13fe",
+      "receipt_sha256": "5a669019c8165ccf88736873830045e7b7b04eee9dbd8f27e94001555b671b82"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:52.094040Z",
+      "capture_id": "9b2a3200-4597-412b-acb9-31237ba481e7",
+      "capture_sequence": 10,
+      "payload_sha256": "ebf09aed20fd4b0f11fed33b3bcdb2e85e483c529192e29e0e8994690fb4e958",
+      "receipt_sha256": "ae3703690e21a32b08c953aa81f0d5a574eb15d269c41958cdede5cbd00f89cf"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:52.778751Z",
+      "capture_id": "0632b80e-7317-4cca-a2d0-221e8fa11f64",
+      "capture_sequence": 11,
+      "payload_sha256": "0de29395604863914e857ddae8f521085114893c4e0f8c0d1d39f81d987f13fe",
+      "receipt_sha256": "95dbf4afe189686b4829e824b1f6ff6e5389105f3b016321eaf869af89aef967"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:52.905516Z",
+      "capture_id": "8ed1bcb8-b09e-480a-ab4e-fa18510690c6",
+      "capture_sequence": 12,
+      "payload_sha256": "d9122309a169297850fb5644e74be2b3cd9e94a3463d69c6e209ba4a5ffe6950",
+      "receipt_sha256": "258d74fe73ce1b4d605a06e29080a062c4b367f44a95e30ab26d6483f7bf2757"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:57.018640Z",
+      "capture_id": "868e3bb0-5de9-484b-b45f-adde8d13aaeb",
+      "capture_sequence": 13,
+      "payload_sha256": "8c2a343a42ec75618b132d87ae378372a54448671859e27be71def3cb3da29f7",
+      "receipt_sha256": "9306c58c38465ca4c5448de8d8d516f9f788a82ea60f82c2c09893a954cf6dbf"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:57.890064Z",
+      "capture_id": "563a9d2b-e858-4870-8294-99f48afa59ed",
+      "capture_sequence": 14,
+      "payload_sha256": "eefeb71c1ebda3e2e73f1eaae6fc09961436c50ff529d24049a280346703f55c",
+      "receipt_sha256": "39b6bd08751944c24e3d6e27bbaee6375fba5a9e1284536b21bc4ede89ae51e5"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:58.795563Z",
+      "capture_id": "d5522a7d-fac5-49a7-ba20-9adcbe2431ea",
+      "capture_sequence": 15,
+      "payload_sha256": "8c2a343a42ec75618b132d87ae378372a54448671859e27be71def3cb3da29f7",
+      "receipt_sha256": "c67a8b95a000721124d5546e8f51b3db7e4b7c157c25efffbadfcdb580babce3"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:59.584003Z",
+      "capture_id": "b176c5dc-77e2-47b8-82d0-cc85589fdfd4",
+      "capture_sequence": 16,
+      "payload_sha256": "eefeb71c1ebda3e2e73f1eaae6fc09961436c50ff529d24049a280346703f55c",
+      "receipt_sha256": "41b309395aa9eb9c6daf0e660ecf0958cf10d5c92715e9745b46f2aaa60c396c"
+    },
+    {
+      "archived_at": "2026-11-15T10:02:59.962352Z",
+      "capture_id": "cc26e8f2-328f-4eb6-b7ab-66e524c55520",
+      "capture_sequence": 17,
+      "payload_sha256": "eaf767f272db853240e1d5e139e422f28cfb52895185d5fbdda20381acd0100c",
+      "receipt_sha256": "c7ccc135337ef4cd694b1b9d24a57bef59a689e721f23484abea1ee3584a0854"
+    }
+  ],
+  "check_id": "65f5b085-c5d7-4d20-918d-215b50f2a852",
+  "checked_at": "2026-11-15T10:11:24.294600+00:00",
+  "checks": [
+    {
+      "deletable_bytes": 0,
+      "files_unchanged": 115,
+      "health_status": "UNKNOWN",
+      "inventory_sha256": "68f0005ee56a6dd23bda6e5bbd99d27b7444b56fa186e11a411c7fb08a9685f5",
+      "publication": "PUBLISHED",
+      "rows": [
+        {
+          "committed_rows": 12349,
+          "facility_id": "nasdaq_carteret_trf",
+          "refresh_status": "SUCCESS",
+          "release_status": "UNKNOWN_API_TIMING"
+        },
+        {
+          "committed_rows": 5849,
+          "facility_id": "nasdaq_chicago_trf",
+          "refresh_status": "SUCCESS",
+          "release_status": "UNKNOWN_API_TIMING"
+        },
+        {
+          "committed_rows": 7032,
+          "facility_id": "nyse_trf",
+          "refresh_status": "SUCCESS",
+          "release_status": "UNKNOWN_API_TIMING"
+        }
+      ],
+      "store": "source",
+      "versions": 25230
+    },
+    {
+      "deletable_bytes": 0,
+      "files_unchanged": 88,
+      "health_status": "UNKNOWN",
+      "inventory_sha256": "429745b6289d3def918ef7f9c57c9599aa69f2b529b95ae807e7ea6d74f7a608",
+      "publication": "PUBLISHED",
+      "rows": [
+        {
+          "committed_rows": 12349,
+          "facility_id": "nasdaq_carteret_trf",
+          "refresh_status": "LOCAL_ONLY",
+          "release_status": "UNKNOWN_API_TIMING"
+        },
+        {
+          "committed_rows": 5849,
+          "facility_id": "nasdaq_chicago_trf",
+          "refresh_status": "LOCAL_ONLY",
+          "release_status": "UNKNOWN_API_TIMING"
+        },
+        {
+          "committed_rows": 7032,
+          "facility_id": "nyse_trf",
+          "refresh_status": "LOCAL_ONLY",
+          "release_status": "UNKNOWN_API_TIMING"
+        }
+      ],
+      "store": "replay",
+      "versions": 25230
+    }
+  ],
+  "dagster": {
+    "run_id": "38ab67e4-cc13-4b8a-beab-8a30baa120de",
+    "success": true
+  },
+  "export": {
+    "bytes": 43683087,
+    "contract": "finra-short-sale-volume-research/1",
+    "rights": {
+      "attribution": "FINRA",
+      "data_kind": "PROVIDER",
+      "purpose": "personal_noncommercial_internal_research",
+      "redistribution": "NOT_ADMITTED",
+      "terms_url": "https://developer.finra.org/specific-terms-equity-data"
+    },
+    "rows": 12355,
+    "sha256": "81165f1ae9b1a77b7928698976e8e1bb02ccc8df4798a381178af3b4e28671fc",
+    "versions": 25230
+  },
+  "generation_id": "49235c42-79ea-43fb-90d6-932d145f354e",
+  "manifest_sha256": "2acec3d405230e8f72e367daf6eb6cf0cc8409472eebdbae3f81fea0c53a2535",
+  "portable_cli_checks": [
+    {
+      "command": "validate-config",
+      "exit_code": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "command": "published",
+      "exit_code": 0,
+      "status": "PUBLISHED"
+    },
+    {
+      "command": "recover-publication",
+      "exit_code": 0,
+      "status": "PUBLISHED"
+    },
+    {
+      "command": "export-research",
+      "exit_code": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "command": "health",
+      "exit_code": 2,
+      "status": "UNKNOWN"
+    },
+    {
+      "command": "retention-dry-run",
+      "exit_code": 0,
+      "status": "VERIFIED"
+    }
+  ],
+  "replay": {
+    "capture_inventory_sha256": "36c6996faedd50ed7451c7a33c9a85b8f135034336db77b18b04eff8da1a92ac",
+    "logical_state_sha256": "e7c57fb66901a25358efbb8eae9792cf21020477b0127191a1069095141b30a4",
+    "replayed": 17,
+    "row_counts": {
+      "attempts": 17,
+      "capture_rows": 25230,
+      "captures": 17,
+      "gold": 25230,
+      "partitions": 3,
+      "versions": 25230
+    },
+    "status": "SUCCEEDED"
+  },
+  "row_counts": {
+    "audit": 17,
+    "captures": 17,
+    "coverage": 3,
+    "gold": 25230,
+    "membership": 25230,
+    "research": 12355,
+    "silver": 25230
+  },
+  "schema_id": "finra-ssv-t16-conformance/1",
+  "scopes": [
+    "nasdaq_carteret_trf",
+    "nasdaq_chicago_trf",
+    "nyse_trf"
+  ],
+  "trade_date": "2026-11-09",
+  "verification": {
+    "agent_skills_entries": 188,
+    "focused_finra_tests": 732,
+    "format_files": 329,
+    "full_offline_passed": 1753,
+    "new_dagster_tests": 21,
+    "new_export_tests": 38,
+    "optional_integration_skipped": 92,
+    "package_build": "PASS",
+    "quantsmith_checkout": "KNOWN_REVISION_TREE_DRIFT_UNCHANGED",
+    "quantsmith_pinned_git_objects": 61,
+    "ruff": "PASS"
+  }
+}

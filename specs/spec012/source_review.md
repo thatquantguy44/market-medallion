@@ -40,8 +40,8 @@ I/O. No connector or command consumes this gate until its own implementation.
 | --- | --- | --- |
 | [Dataset overview](https://www.finra.org/finra-data/browse-catalog/short-sale-volume) | Noncommercial use is described as free. | Cost alone does not establish automated loading rights. |
 | [Website terms](https://www.finra.org/terms-of-use), Restrictions (d), (e), (m) | Database creation needs an express exception; bulk extraction and predictive/AI use are restricted. | Website automation and durable TXT-derived loading are not admitted without applicable permission. |
-| [API terms](https://developer.finra.org/finra-api-terms-service), updated March 19, 2026, sections2 and3 | Specific terms control; access requires FINRA-issued credentials and an applicable license. API bulk access is distinguished from other collection methods. | Read with the Equity terms; a website download is not covered merely because an API exists. |
-| [Equity API specific terms](https://developer.finra.org/specific-terms-equity-data), updated December 20, 2022, sections1,2 and6 | The otcMarket group accepts Public/Firm/Organization credentials, permits noncommercial internal use and derived data, and adds no dataset-specific retention condition. | Candidate fit for the selected purpose; all general terms still apply. Public redistribution is outside this selected project scope. |
+| [API terms](https://developer.finra.org/finra-api-terms-service), updated March 19, 2026, sections2 and 3 | Specific terms control; access requires FINRA-issued credentials and an applicable license. API bulk access is distinguished from other collection methods. | Read with the Equity terms; a website download is not covered merely because an API exists. |
+| [Equity API specific terms](https://developer.finra.org/specific-terms-equity-data), updated December 20, 2022, sections1,2 and 6 | The otcMarket group accepts Public/Firm/Organization credentials, permits noncommercial internal use and derived data, and adds no dataset-specific retention condition. | Candidate fit for the selected purpose; all general terms still apply. Public redistribution is outside this selected project scope. |
 | [Getting started](https://developer.finra.org/node/1146) | Individual users can provision Public and Mock credentials; individual use is noncommercial. | The user must obtain and accept their own access. Mock credentials are not production entitlement. |
 | [Fees](https://developer.finra.org/fees) and [Public credentials](https://developer.finra.org/fees/public) | Public credentials have no connection fee; Firm/Organization credentials are paid alternatives. | Paid routes are not selected. |
 | [API FAQ](https://developer.finra.org/support?field_faq_category=471) | Public credentials have a 10GB monthly cap and become inactive on exhaustion. | Future acquisition must budget usage; no upgrade or paid overage is authorized. |
@@ -246,5 +246,16 @@ reporting calendar, daily-file publication target versus unverified API timing,
 and Equity-specific section6 retention boundary. T13 implements read-only health
 and preserve-all retention accounting; T14 interchange is next. [Acceptance](t13_acceptance.md)
 records47 new /673 FINRA checks and four actual offline script commands on the
-existing isolated real Chicago source/replay stores, with93 files unchanged.
+existing isolated real Chicago source/replay stores, with 93 files unchanged.
 No new provider request or expanded source-use right is implied.
+
+## 2026-11-15 bounded delivery checkpoint
+
+The existing Public API terms/internal-research profile is unchanged. Official
+Equity API terms and production dataset documentation were rechecked before
+T14/T15 coding. The user explicitly authorized all three TRFs for 2026-11-09,
+without schedule activation. [Final acceptance](acceptance.md) and
+[evidence](evidence/t16_delivery_conformance.json) record 25,230 source observations,
+exact publication/export/replay, retained originals and stopped orchestration.
+G1/G2 are accepted locally for this explicit date/scope, without granting broader
+history, redistribution, recurring activation or another FINRA report family.

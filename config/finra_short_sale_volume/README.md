@@ -18,15 +18,14 @@ provider data requires its applicable approved-use profile with both local-impor
 and transform grants. The selected Query API route uses the existing accepted
 terms/Public credential metadata; an approved local-file route has its separate
 permission evidence. Credentials do not belong in this YAML, request receipts,
-SQLite or logs. No authentication/acquisition adapter consumes them in this slice.
+SQLite or logs. The separate acquisition adapter consumes credentials only after its access/live gates.
 
 Defaults are 20 MiB and 5,000 rows per input. Only complete validated single-page
 date/facility responses publish; a partial page remains audit/Bronze evidence.
 The fixture receipt accompanies `tests/fixtures/finra_short_sale_volume/invented-valid.json`.
 All values there are invented, not provider history. See the
 [local runbook](../../docs/deployment/ssv_local_runbook.md) for actual commands,
-root identity, retry and missing/pending states. Live acquisition,
-research exchange, jobs and alerts remain later tasks. No network probe, service
+root identity, retry and missing/pending states. T12 acquisition uses separate settings; T14 exchange and T15 stopped jobs/optional alerts are implemented. No network probe, service
 startup, `.env` loading or schedule activation occurs through these commands.
 
 T09's `research-gold` command uses the same local config. Supply one or more
@@ -120,7 +119,7 @@ Collection parsing/replay must cover the original profile: defaults are 15000 ro
 and 18000000 bytes; increase local/replay YAML input limits explicitly when needed.
 The existing warehouse version/storage bounds still apply. Publication stays
 explicit. [Runbook](../../docs/deployment/ssv_local_runbook.md#t12-bounded-admitted-acquisition)
-explains journals, incomplete exit2 and recovery. Jobs and alerts remain absent.
+explains journals, incomplete exit2 and recovery. T15 adds separately gated stopped orchestration and optional disabled alerts.
 
 T13 adds offline `health` and `retention-dry-run` using the local YAML above.
 Optional `--policy` selects a separate [operations policy](operations.example.yml).
@@ -147,3 +146,25 @@ They refuse busy writers and corrupt evidence. Limits: `--max-captures`1000,
 `--max-runs`1000 and `--max-events`10000. YAML input byte limits also apply to raw
 captures. See the [operations contract](../../specs/spec012/operations_contract.md)
 and [runbook](../../docs/deployment/ssv_local_runbook.md#t13-offline-health-and-retention-accounting).
+
+T14 adds `export-research --destination FILE --output-use PURPOSE --scope SCOPE`.
+The exact scope must match the current committed publication. Use
+`invented_fixture` for fixture stores, or
+`personal_noncommercial_internal_research` with an explicit `internal_export`
+grant for provider data. Output parent must exist, outside the source root.
+Retries with identical bytes succeed; conflicts refuse without overwriting.
+No local YAML schema changes are required. See [T14 acceptance](../../specs/spec012/t14_acceptance.md).
+
+T15 adds a [manual Dagster example](../../resources/dagster-ssv.yml),
+`finra_short_sale_volume_job`, and a default-stopped weekday refresh.
+Job `live:true` and `FINRA_SSV_LIVE_ACCESS=true` are required in addition to
+acquisition YAML `live:true`. Scheduled workers require a separate
+`FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`; missing calendar evidence skips.
+Optional export destinations require `internal_export` admission.
+[Alerts](alerts.example.yml) are independently disabled; sensors default stopped.
+See [T15 acceptance](../../specs/spec012/t15_acceptance.md).
+
+Optional `export-research --expected-generation-id UUID` refuses if the current
+publication differs from the requested generation. Dagster always supplies this
+binding. See [branch review](../../specs/spec012/branch_review.md) for regression
+and native-query/publication/export/replay equivalence coverage.

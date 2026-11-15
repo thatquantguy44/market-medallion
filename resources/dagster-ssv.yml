@@ -1,0 +1,13 @@
+# Explicit bounded manual launch. Review local acquisition settings; gates default closed.
+ops:
+  finra_short_sale_volume:
+    config:
+      config_path: config/finra_short_sale_volume/acquisition.local.yml
+      start_date: "2026-11-09"
+      end_date: "2026-11-09"
+      scopes: [listed_trfs]
+      overlap_days: 0
+      live: false
+      scheduled: false
+      export_destination: ""
+      output_use: personal_noncommercial_internal_research

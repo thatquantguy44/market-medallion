@@ -11,7 +11,7 @@ versions/membership/Gold, UTC/sequence cutoffs and a configurable local CLI/scri
 and [T09 research acceptance](t09_acceptance.md) define the implemented layers.
 T10 implements typed local Parquet and coherent publication/recovery. T11 implements
 verified empty-target replay. T12 implements bounded admitted acquisition and
-verified page collections. Downstream exchange and jobs remain unimplemented.
+verified page collections. T14 implements admitted research interchange; T15 adds stopped orchestration. See [delivery acceptance](acceptance.md).
 See [Spec012](README.md) for requirement IDs and the
 [program contract](../../docs/securities_finance/contract.md) for common controls.
 
@@ -30,8 +30,7 @@ six bounded TRF rows and a partition inventory; their raw field/version pairs
 reconcile, but complete partitions and historical observations are not verified. The [API profile](api_contract.md)
 defines the JSON schema/partition amendment, verified mapping and exact decimal quantities.
 The TXT-oriented sections below remain a separate, unadmitted file profile.
-T05 archive/read/parse entrypoints call the gate before filesystem I/O. Future
-acquisition/export adapters must do the same; none exist yet.
+T05 archive/read/parse entrypoints call the gate before filesystem I/O. T12 acquisition and T14 export adapters enforce the same gate before dependent I/O.
 
 ## Evidence register and remaining conformance
 
@@ -150,8 +149,7 @@ T06–T08 persist local per-observation Gold. T09 implements a separate read-onl
 research query with exact disjoint aggregation, prior complete scope dates,
 calendar-day gaps and ratio changes. [Research contract](research_gold_contract.md)
 defines missingness, cutoff, population and rounding behavior. T10 implements
-[typed snapshots and recovery](parquet_contract.md). Research interchange and
-acquisition remain later work. Compute `short_volume / total_volume` and
+[typed snapshots and recovery](parquet_contract.md). T14 interchange and T12 acquisition are implemented behind their own admission gates. Compute `short_volume / total_volume` and
 `short_exempt_volume / total_volume` separately; denominator zero yields null.
 There is no extra exempt addition. An aggregate ratio is ratio of summed counts
 over admitted disjoint files, never the unweighted mean of facility ratios.
@@ -170,9 +168,9 @@ selects one snapshot; readers must not glob all output partitions into history.
 Dry-run retention must explain every referenced capture/version before deletion.
 Provider retention requirements are unresolved and never inherit NAAIM's 365 days.
 
-## Proposed downstream artifact
+## Downstream artifact
 
-`finra-short-sale-volume-research/1` is a proposed file contract, not implemented.
+T14 implements `finra-short-sale-volume-research/1`.
 It contains dataset/scope/facility, requested/observed coverage, trade date, exact decimal
 share quantities, ratio unit, nullable ratio, version token, capture clocks, method version
 and approved-use/source labels. It excludes credentials, local filesystem paths
@@ -206,7 +204,7 @@ schema. T06–T08 store these exact text values inside canonical version documen
 with explicit key/time columns and hashed membership. Ratio text uses the fixed
 T04 method and a capital-E representation independent of ambient context.
 T10 adds verified Parquet parity through the exact-decimal struct described below.
-Research exchange remains later work.
+T14 implements the narrow research exchange defined below.
 
 Python 3.12 [Decimal contexts and conversion](https://docs.python.org/3.12/library/decimal.html)
 define the local arithmetic and exact text behavior. **71 SSV-AC04 tests pass**
@@ -278,3 +276,49 @@ captures do not satisfy it. ADF remains excluded, while valid admitted TRF empti
 remain distinct from missing reports. The Equity-specific API terms add no
 dataset-specific retention condition; preserve-all reference accounting is the
 sole dry-run policy. No finite deletion/backup policy is approved here.
+
+## SSV-T14 research interchange implementation contract
+
+`finra-short-sale-volume-research/1` is a bounded canonical JSON file selected
+from one fully verified PUBLISHED T10 generation, with no pending recovery.
+`export-research --destination FILE --output-use PURPOSE --scope SCOPE` checks
+the requested audience and explicit `internal_export` grant before source/output
+I/O. Invented stores use `output-use=invented_fixture`, carry a distinct fixture
+label and never confer provider rights. Expected scope must exactly match the
+publication, including disjoint members. No mutable warehouse query is used.
+
+The artifact contains FINRA attribution/source, restricted use labels, publication
+identity/hash, the trade-date/cutoff request, coverage and current/prior capture
+clocks, research rows and whitelisted version lineage. Quantities and ratios stay
+canonical decimal strings, with shares/unit-1 and method labels. First-seen stays
+actual local capture time; unknown provider publication time stays null. Missing
+reported rows and valid empty remain explicit. Run attempts, access references,
+local paths, raw payloads, credentials and runtime configuration are excluded.
+
+The consumer validates the version, exact expected scope, units, rights labels,
+decimal text, and lineage before use. A separate invented fixture pins the wire
+contract. Output uses an exclusive atomic hard-link publish after private staging
+and readback; an identical retry is idempotent, a conflicting existing file is
+never overwritten. Destinations inside the source store or symlinked parents
+refuse. Source, publication and export byte/row limits are finite and explicit.
+
+Reviewed official [Equity API terms](https://developer.finra.org/specific-terms-equity-data)
+and [production dataset documentation](https://developer.finra.org/docs#reg-sho-daily-short-sale-volume)
+on 2026-11-15. The selected internal-use profile is unchanged; no redistribution
+or downstream application permission is granted by this adapter.
+
+## Branch-review consumer and generation checks
+
+[Review](branch_review.md) tightens SSV-AC14/15 without changing the wire version.
+The consumer reconstructs latest value/removal membership at each declared
+capture from the exported history; it rejects dropped/invented symbols, stale
+versions, contradictory empty claims and origin clock/receipt/sequence metadata.
+Archive clocks remain canonical UTC, sequence/row indices fit positive int64,
+and raw symbols retain their validated text. Reordered repeats may have a new
+observation row index while retaining the original value-version row index.
+
+`export-research --expected-generation-id UUID` optionally binds the read to
+one expected current generation. Dagster always supplies its just-published ID.
+If another publisher advances the pointer before export reads it, the command/job
+refuses before writing an artifact. After the verified read, the frozen selected
+rows remain coherent even if another publisher subsequently advances the pointer.

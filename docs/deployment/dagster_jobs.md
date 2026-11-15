@@ -1,6 +1,6 @@
 # Dagster job and schedule register
 
-Updated: 2026-11-12, America/New_York. This is the canonical register for
+Updated: 2026-11-15, America/New_York. This is the canonical register for
 Dagster-owned jobs and schedules in MarketMedallion. It complements the
 [pipeline register](../pipelines.md): that register owns source scope and
 delivery status; this document owns operational execution details.
@@ -20,16 +20,31 @@ the root code location on 2026-11-12; no schedule was activated.
 | SEC fails-to-deliver | `sec_fails_to_deliver_job` | `sec_fails_to_deliver_daily_live` | Daily, 08:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured pipeline-owned root; immutable Bronze and coherent Parquet retention are operator-managed | Requires local `acquisition.enabled: true`, declared `SEC_FTD_USER_AGENT`, `SEC_FTD_SCHEDULED_LIVE_ACCESS=true`, `SEC_FTD_CONFIG`, and one exact `SEC_FTD_PARTITION`. |
 | Nasdaq/NYSE Reg SHO thresholds | `reg_sho_threshold_list_job` | `reg_sho_threshold_lists_daily_live` | Weekdays, 23:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured threshold root; immutable Bronze and versioned SQLite state | Requires reviewed provider use, local `acquisition.enabled: true`, `REG_SHO_USER_AGENT`, `REG_SHO_SCHEDULED_LIVE_ACCESS=true`, `REG_SHO_CONFIG`, and one exact `REG_SHO_PARTITION`. |
 | FOMC meeting minutes | `fomc_meeting_minutes_job` | `fomc_meeting_minutes_weekday_refresh` | Weekdays, 17:10 America/New_York | Not activated; definition defaults **stopped** | `data/fomc_meeting_minutes/`; retain originals, revisions, derivatives and operation evidence | Manual runs require explicit `live: true`; scheduled execution additionally requires `FOMC_CONFIG`, `FOMC_OPERATIONS_CONFIG` and `scheduled_live_access: true`. |
+| FINRA daily short-sale volume | `finra_short_sale_volume_job` | `finra_short_sale_volume_weekday_refresh` | Weekdays, 09:15 America/New_York | Definition **STOPPED**; one isolated manual in-process acceptance run, no service activation | Configured independent root; PRESERVE_ALL dry run | Job/YAML live flags plus `FINRA_SSV_LIVE_ACCESS=true`; scheduled workers require `FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`, explicit config/scope and reviewed calendar. |
 
-No other Dagster jobs or schedules are defined in the repository. A schedule
+Presidential research also owns `presidential_rebuild_job` (offline) and
+`presidential_live_fetch_job`, with `presidential_research_refresh` stopped by
+default (Monday 09:00 America/New_York). See [Spec016](../../specs/spec016/README.md)
+for its independent source-review/activation controls.
+
+FINRA T15 adds `finra_short_sale_volume_job` and
+`finra_short_sale_volume_weekday_refresh`, default STOPPED, plus optional stopped
+success/failure Slack sensors. The cadence is weekdays 09:15 America/New_York
+for the previous reviewed reporting date with two calendar days of overlap.
+Worker gates: acquisition YAML and job `live:true`, `FINRA_SSV_LIVE_ACCESS=true`;
+scheduled workers also require `FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`.
+The schedule needs `FINRA_SSV_CONFIG` and explicit comma-separated
+`FINRA_SSV_SCOPES`; optional `FINRA_SSV_OPERATIONS_CONFIG` supplies reviewed
+calendar evidence. Unreviewed years skip. Launch example: [SSV](../../resources/dagster-ssv.yml).
+This records tested definitions, not an observed service activation. A schedule
 being listed or enabled does not establish provider rights, start a persistent
 service, or grant a downstream redistribution right.
 
 ## Optional Slack status sensors
 
-Each of the five implemented pipelines owns `<pipeline_name>_slack_failure` and
+Each of the six pipelines with Slack integration owns `<pipeline_name>_slack_failure` and
 `<pipeline_name>_slack_success` run-status sensors, registered through the root
-code location. All ten default **STOPPED**. YAML flags `slack.on_failure` (default
+code location. All twelve definitions default **STOPPED**. YAML flags `slack.on_failure` (default
 true) and `slack.on_success` (default false) independently select notifications. Each independently reads optional
 `config/<pipeline_name>/alerts.local.yml`; missing/disabled settings send nothing.
 Examples contain environment-variable names rather than webhook secrets. See the
@@ -37,8 +52,8 @@ Examples contain environment-variable names rather than webhook secrets. See the
 cursor/delivery limitations. On 2026-11-12 the user configured FOMC's webhook and
 requested a real Dagster alert test. The manual local service is running on port
 3030. As of 2026-11-13, **both FOMC status sensors are RUNNING**, with both flags
-enabled. The other eight alert sensors and all six acquisition/import schedules
-remain stopped. The FOMC test
+enabled. The other eight existing alert sensors and all six then-registered acquisition/import schedules
+remained stopped at that historical check. FINRA adds two stopped sensor definitions; current runtime state was not rechecked here. The FOMC test
 run `621d5cfc-d83e-46b2-974b-ea189c31b153` failed intentionally before acquisition
 (`preflight_failed`, `live: false`); sensor tick 4 succeeded and logged delivery.
 No provider acquisition or warehouse mutation was performed by that failure test.

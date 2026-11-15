@@ -1,0 +1,64 @@
+{
+  "checks": {
+    "all_published_tables_equal": true,
+    "original_export_bytes_reproduced": true,
+    "provider_requests": 0,
+    "raw_store_bytes_unchanged": true,
+    "schedules_activated": false,
+    "slack_messages": 0,
+    "source_replay_research_equal_except_publication": true,
+    "strict_consumer_accepts_real_artifacts": true
+  },
+  "generation_id": "49235c42-79ea-43fb-90d6-932d145f354e",
+  "implementation_sha256": {
+    "src/market_data_pipeline/pipelines/finra_short_sale_volume/cli.py": "7dff0bb945ae7c8a7101b432b721fda7043fc824642ef083c28a68f737528117",
+    "src/market_data_pipeline/pipelines/finra_short_sale_volume/dagster_defs.py": "4e156bd156828a806d0302c2dd6fb3ad2d9dbb74fadc97efdf3203bafbdd6957",
+    "src/market_data_pipeline/pipelines/finra_short_sale_volume/research_export.py": "ffc83917fd0d73c523f096d7e84fc5e1bff8e505cded2ade0fa350cd8a36738e"
+  },
+  "manifest_sha256": "2acec3d405230e8f72e367daf6eb6cf0cc8409472eebdbae3f81fea0c53a2535",
+  "preserved_stores": [
+    {
+      "files": 115,
+      "inventory_sha256": "68f0005ee56a6dd23bda6e5bbd99d27b7444b56fa186e11a411c7fb08a9685f5",
+      "store": "source"
+    },
+    {
+      "files": 88,
+      "inventory_sha256": "429745b6289d3def918ef7f9c57c9599aa69f2b529b95ae807e7ea6d74f7a608",
+      "store": "replay"
+    }
+  ],
+  "research_rows": 12355,
+  "reviewed_at": "2026-11-15T10:43:05.001456+00:00",
+  "reviewed_base_commit": "3f0043a4eb6c5d08807cf4ed2eea75023ad37a38",
+  "row_counts": {
+    "audit": 17,
+    "captures": 17,
+    "coverage": 3,
+    "gold": 25230,
+    "membership": 25230,
+    "research": 12355,
+    "silver": 25230
+  },
+  "schema_id": "finra-ssv-branch-review-conformance/1",
+  "scopes": [
+    "nasdaq_carteret_trf",
+    "nasdaq_chicago_trf",
+    "nyse_trf"
+  ],
+  "source_conformance": "t16_delivery_conformance.json",
+  "source_conformance_sha256": "3445740833f534733968d4fa909ce2bfdf6db57378a7af25a573cab37cbb08c4",
+  "trade_date": "2026-11-09",
+  "verification": {
+    "added_tests": 24,
+    "dagster_tests": 22,
+    "equivalence_tests": 8,
+    "export_tests": 53,
+    "focused_finra_tests": 756,
+    "format_files": 330,
+    "full_offline_passed": 1777,
+    "optional_integration_skipped": 92,
+    "ruff": "PASS"
+  },
+  "versions": 25230
+}
