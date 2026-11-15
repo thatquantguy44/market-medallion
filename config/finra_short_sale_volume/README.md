@@ -163,3 +163,8 @@ acquisition YAML `live:true`. Scheduled workers require a separate
 Optional export destinations require `internal_export` admission.
 [Alerts](alerts.example.yml) are independently disabled; sensors default stopped.
 See [T15 acceptance](../../specs/spec012/t15_acceptance.md).
+
+Optional `export-research --expected-generation-id UUID` refuses if the current
+publication differs from the requested generation. Dagster always supplies this
+binding. See [branch review](../../specs/spec012/branch_review.md) for regression
+and native-query/publication/export/replay equivalence coverage.

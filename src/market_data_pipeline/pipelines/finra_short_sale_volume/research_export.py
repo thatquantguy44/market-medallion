@@ -35,6 +35,7 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.data.versions import
 from market_data_pipeline.pipelines.finra_short_sale_volume.io.bronze import (
     _admit,
     _clock,
+    _clock_text,
     _identity,
     _read,
     _sync,
@@ -193,7 +194,7 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
         _time(request["as_of"])
     sequence = request["as_of_sequence"]
     if sequence is not None and (
-        request["as_of"] is None or type(sequence) is not int or sequence < 1
+        request["as_of"] is None or type(sequence) is not int or not 1 <= sequence < 2**63
     ):
         raise ValueError("invalid FINRA interchange cutoff")
     if any(
@@ -227,7 +228,12 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
     prior_day = coverage["prior_trade_date"]
     if prior_day is not None:
         gap = (day - _day(prior_day)).days
-        if gap < 1 or coverage["calendar_day_gap"] != gap:
+        if (
+            gap < 1
+            or type(coverage["calendar_day_gap"]) is not int
+            or coverage["calendar_day_gap"] != gap
+            or _day(prior_day) < _day(request["earliest_trade_date"])
+        ):
             raise ValueError("FINRA interchange prior date mismatch")
     elif coverage["calendar_day_gap"] is not None:
         raise ValueError("FINRA interchange prior gap mismatch")
@@ -242,8 +248,8 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
             if p["status"] not in ("COMPLETE", "VALID_EMPTY"):
                 raise ValueError("FINRA interchange partition incomplete")
             _identity(p["capture_id"])
-            _time(p["archived_at"])
-            if type(p["capture_sequence"]) is not int or p["capture_sequence"] < 1:
+            _clock_text(p["archived_at"])
+            if type(p["capture_sequence"]) is not int or not 1 <= p["capture_sequence"] < 2**63:
                 raise ValueError("invalid FINRA interchange capture sequence")
             if request["as_of"] is not None and (_time(p["archived_at"]), p["capture_sequence"]) > (
                 _time(request["as_of"]),
@@ -269,7 +275,7 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
         for h in ("version_id", "payload_sha256", "receipt_sha256", "manifest_sha256"):
             _hash(v[h])
         _identity(v["capture_id"])
-        _time(v["first_seen_at"])
+        _clock_text(v["first_seen_at"])
         if v["retrieved_at"] is not None:
             _time(v["retrieved_at"])
         if v["provider_published_at"] is not None:
@@ -284,7 +290,7 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
         if (
             type(v["removed"]) is not bool
             or type(v["capture_sequence"]) is not int
-            or v["capture_sequence"] < 1
+            or not 1 <= v["capture_sequence"] < 2**63
             or v["ratio_method"] != RATIO_METHOD
             or v["ratio_unit"] != "1"
             or v["transform"] != TRANSFORM
@@ -296,10 +302,12 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
             facility.market_code,
         ):
             raise ValueError("invalid FINRA interchange facility identity")
+        _symbol(v["symbol_raw"])
         if v["removed"]:
             if any(v[n] is not None for n in (*NUMBERS, "source_row")):
                 raise ValueError("invalid FINRA interchange removal")
         else:
+            _source_row(v["source_row"])
             ratios = share_ratios(*(quantity_from_text(v[n]) for n in NUMBERS[:3]))
             if (v["short_share"], v["short_exempt_share"]) != (
                 decimal_text(ratios.short_share),
@@ -307,9 +315,11 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
             ):
                 raise ValueError("invalid FINRA interchange source ratios")
         versions[v["version_id"]] = v
+    selected_versions = _selected_versions(versions, partitions, request["trade_date"], prior_day)
     symbols = set()
     for row in value["rows"]:
         _exact(row, ROW)
+        _symbol(row["symbol_raw"])
         if (
             row["facility_ids"] != facilities
             or row["trade_date"] != request["trade_date"]
@@ -342,7 +352,18 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
                 p = partitions[pkey][c["facility_id"]]
                 if c["capture_id"] != p["capture_id"]:
                     raise ValueError("FINRA interchange capture lineage mismatch")
+                expected = selected_versions.get(
+                    (
+                        request["trade_date"] if key == "components" else prior_day,
+                        c["facility_id"],
+                        row["symbol_raw"],
+                    )
+                )
                 if c["status"] == "REPORTED":
+                    if expected is None or expected["version_id"] != c["version_id"]:
+                        raise ValueError(
+                            "FINRA interchange does not select the latest observed version"
+                        )
                     v = versions.get(c["version_id"])
                     if (
                         v is None
@@ -354,6 +375,19 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
                         != (request["trade_date"] if key == "components" else prior_day)
                     ):
                         raise ValueError("FINRA interchange version lineage mismatch")
+                    _source_row(c["source_row"])
+                    if p["status"] != "COMPLETE" or (v["first_seen_at"], v["capture_sequence"]) > (
+                        p["archived_at"],
+                        p["capture_sequence"],
+                    ):
+                        raise ValueError("FINRA interchange version exceeds observation knowledge")
+                    if v["capture_id"] == p["capture_id"] and (
+                        v["first_seen_at"] != p["archived_at"]
+                        or v["capture_sequence"] != p["capture_sequence"]
+                        or v["receipt_sha256"] != p["receipt_sha256"]
+                        or v["source_row"] != c["source_row"]
+                    ):
+                        raise ValueError("FINRA interchange origin capture metadata mismatch")
                     if any(c[n] != v[n] for n in NUMBERS[:3]):
                         raise ValueError("FINRA interchange quantity lineage mismatch")
                 elif c["status"] != "NO_REPORTED_ROW" or any(
@@ -361,8 +395,60 @@ def _validate(value, *, expected_scopes, output_use, max_rows, max_bytes):
                     for k in ("version_id", "source_capture_id", "source_row", *NUMBERS[:3])
                 ):
                     raise ValueError("FINRA interchange missing row mismatch")
+                if (
+                    c["status"] == "NO_REPORTED_ROW"
+                    and expected is not None
+                    and not expected["removed"]
+                ):
+                    raise ValueError("FINRA interchange absence contradicts observed membership")
         _metrics(row)
+    expected_symbols = {
+        symbol
+        for (trade_date, _, symbol), v in selected_versions.items()
+        if trade_date == request["trade_date"] and not v["removed"]
+    }
+    if symbols != expected_symbols:
+        raise ValueError("FINRA interchange symbol population differs from observed membership")
     return value
+
+
+def _selected_versions(versions, partitions, current_day, prior_day):
+    """Reconstruct membership at each capture from retained value/removal history."""
+    captures = {
+        (trade_date, facility): p
+        for key, trade_date in (
+            ("current_partitions", current_day),
+            ("prior_partitions", prior_day),
+        )
+        for facility, p in partitions[key].items()
+    }
+    selected = {}
+    for v in versions.values():
+        p = captures.get((v["trade_date"], v["facility_id"]))
+        clock = (v["first_seen_at"], v["capture_sequence"])
+        if p is None or clock > (p["archived_at"], p["capture_sequence"]):
+            continue
+        key = (v["trade_date"], v["facility_id"], v["symbol_raw"])
+        old = selected.get(key)
+        old_clock = (old["first_seen_at"], old["capture_sequence"]) if old else None
+        if old_clock == clock:
+            raise ValueError("FINRA interchange contains conflicting version chronology")
+        if old_clock is None or clock > old_clock:
+            selected[key] = v
+    populated = {(d, f) for (d, f, _), v in selected.items() if not v["removed"]}
+    if any((key in populated) != (p["status"] == "COMPLETE") for key, p in captures.items()):
+        raise ValueError("FINRA interchange partition coverage contradicts observed membership")
+    return selected
+
+
+def _symbol(value):
+    if not isinstance(value, str) or not value or not value.isprintable() or value.strip() != value:
+        raise ValueError("invalid FINRA interchange raw symbol")
+
+
+def _source_row(value):
+    if type(value) is not int or not 1 <= value < 2**63:
+        raise ValueError("invalid FINRA interchange source row")
 
 
 def _aggregate(components):
@@ -452,11 +538,14 @@ def export(
     destination,
     output_use,
     scopes,
+    expected_generation_id=None,
     max_rows=DEFAULT_ROWS,
     max_bytes=DEFAULT_BYTES,
 ):
     rights = _gate(manifest, approved_use, operation, output_use)
     limits(max_rows, max_bytes)
+    if expected_generation_id is not None:
+        _identity(expected_generation_id)
     facilities = [f.id for f in select_scopes(scopes)]
     selected = publication.read(
         root,
@@ -468,6 +557,8 @@ def export(
     )
     if selected["state"] != "PUBLISHED" or selected["recovery_required"]:
         raise ValueError("recover FINRA publication before research export")
+    if expected_generation_id is not None and selected["generation_id"] != expected_generation_id:
+        raise ValueError("FINRA expected publication generation is no longer current")
     if selected["request"]["facility_ids"] != facilities:
         raise ValueError("FINRA export scope does not match publication")
     value = _project(selected, rights)

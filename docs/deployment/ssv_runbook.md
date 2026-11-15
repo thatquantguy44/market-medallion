@@ -66,6 +66,13 @@ artifact = read("data/research/ssv-2026-11-09-generation.json",
                 output_use="personal_noncommercial_internal_research")
 ```
 
+For an export tied to a specific publication result, pass
+`--expected-generation-id <generation_id>` from `published`/`publish`. A changed
+current generation refuses before output writes. Dagster always binds export to
+the generation it published; after a race, inspect the current publication and
+retry deliberately. [Branch review](../../specs/spec012/branch_review.md) records
+this regression and stricter consumer membership/lineage checks.
+
 The source-owned Dagster job `finra_short_sale_volume_job` performs acquisition,
 verified end-date publication and optional research export in that order. Use
 [the launch example](../../resources/dagster-ssv.yml) with an exact bounded date

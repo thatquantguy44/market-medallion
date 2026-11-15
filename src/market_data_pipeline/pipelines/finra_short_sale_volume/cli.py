@@ -70,6 +70,7 @@ def main(argv=None):
         if name == "export-research":
             command.add_argument("--destination", required=True, type=Path)
             command.add_argument("--output-use", required=True)
+            command.add_argument("--expected-generation-id")
             command.add_argument("--scope", action="append", required=True)
         if name == "acquire":
             command.add_argument("--live", action="store_true")
@@ -227,6 +228,7 @@ def main(argv=None):
                 **shared,
                 destination=args.destination,
                 output_use=args.output_use,
+                expected_generation_id=args.expected_generation_id,
                 scopes=args.scope,
                 max_rows=args.max_rows,
                 max_bytes=args.max_bytes,

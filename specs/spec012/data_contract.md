@@ -306,3 +306,19 @@ Reviewed official [Equity API terms](https://developer.finra.org/specific-terms-
 and [production dataset documentation](https://developer.finra.org/docs#reg-sho-daily-short-sale-volume)
 on 2026-11-15. The selected internal-use profile is unchanged; no redistribution
 or downstream application permission is granted by this adapter.
+
+## Branch-review consumer and generation checks
+
+[Review](branch_review.md) tightens SSV-AC14/15 without changing the wire version.
+The consumer reconstructs latest value/removal membership at each declared
+capture from the exported history; it rejects dropped/invented symbols, stale
+versions, contradictory empty claims and origin clock/receipt/sequence metadata.
+Archive clocks remain canonical UTC, sequence/row indices fit positive int64,
+and raw symbols retain their validated text. Reordered repeats may have a new
+observation row index while retaining the original value-version row index.
+
+`export-research --expected-generation-id UUID` optionally binds the read to
+one expected current generation. Dagster always supplies its just-published ID.
+If another publisher advances the pointer before export reads it, the command/job
+refuses before writing an artifact. After the verified read, the frozen selected
+rows remain coherent even if another publisher subsequently advances the pointer.

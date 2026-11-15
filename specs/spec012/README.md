@@ -44,6 +44,12 @@ enabled or Slack sent. [T14](t14_acceptance.md), [T15](t15_acceptance.md) and
 [final acceptance](acceptance.md) keep checkpoint evidence distinct. Known
 QuantSmith checkout drift is unchanged; all 61 pinned Git guidance objects verify.
 
+A subsequent [branch review](branch_review.md) fixed publication/export generation
+binding and consumer membership/lineage checks. Current verification is **756
+FINRA tests; 1,777 full offline passes; 92 optional skips**, including eight
+query/export/replay equivalence tests. Accepted real source/replay artifacts are
+reproduced byte for byte with all 203 store files unchanged.
+
 **Next bounded slice: Spec013 OTC-T01**, resolve current route/reuse/retention/
 transformation/export terms for an explicit weekly ATS/non-ATS report profile.
 See [task](../spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract).

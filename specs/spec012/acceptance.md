@@ -94,3 +94,12 @@ No dependency/vendor changes, sibling data/config, real Slack sends or schedule
 activation occurred. Pinned agent-skills 188 entries verify. QuantSmith's checkout
 still has known revision/tree drift; all 61 pinned Git guidance objects verify
 without modifying or repinning that external checkout.
+
+## Subsequent branch review
+
+[Branch review](branch_review.md) records the fixed generation race and consumer
+lineage/membership gaps, 24 additional regressions/equivalence tests, 756 FINRA
+checks and 1,777 full-suite passes / 92 optional skips. The original T16 counts
+above describe its earlier checkpoint. [New offline conformance](evidence/branch_review_conformance.json)
+reproduces the accepted source/replay artifact bytes under the corrected reader,
+with all 203 store files unchanged and no new provider requests or activation.

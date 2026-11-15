@@ -88,6 +88,7 @@ def finra_short_sale_volume(
                 **shared,
                 destination=Path(config.export_destination),
                 output_use=config.output_use,
+                expected_generation_id=published["generation_id"],
                 scopes=config.scopes,
             )
     except (OSError, ValueError, PermissionError, RuntimeError, RecursionError):

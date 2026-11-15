@@ -248,3 +248,23 @@ def test_ssv_ac15_yaml_live_false_blocks_the_actual_source_runner(offline_job, m
     monkeypatch.setattr(module, "load_config", lambda p: replace(cfg, live=False))
     assert not execute().success
     assert script.calls == [] and not cfg.root.exists()
+
+
+def test_ssv_ac15_other_publication_cannot_change_the_job_export_generation(
+    offline_job, tmp_path, monkeypatch
+):
+    original = module.publication.publish
+    generations = []
+
+    def interleaved(*args, **kwargs):
+        first = original(*args, **kwargs)
+        later = original(*args, **kwargs, as_of=datetime(2026, 11, 14, tzinfo=UTC))
+        generations.extend([first["generation_id"], later["generation_id"]])
+        return first
+
+    monkeypatch.setattr(module.publication, "publish", interleaved)
+    path = tmp_path / "research.json"
+    result = execute(export_destination=str(path), output_use="invented_fixture")
+    assert len(generations) == 2 and generations[0] != generations[1]
+    assert not result.success and result.asset_materializations_for_node(ASSET) == []
+    assert not path.exists()

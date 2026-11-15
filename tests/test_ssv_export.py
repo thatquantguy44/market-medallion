@@ -209,6 +209,9 @@ def test_ssv_ac14_cli_portable_export_and_consumer_fixture(tmp_path):
         invoke(config, "publish", "--trade-date", "2026-11-09", "--scope", "nyse_trf").returncode
         == 0
     )
+    generation = json.loads((tmp_path / "local-store/parquet/current.json").read_bytes())[
+        "generation_id"
+    ]
     path = tmp_path / "research.json"
     result = invoke(
         config,
@@ -219,8 +222,24 @@ def test_ssv_ac14_cli_portable_export_and_consumer_fixture(tmp_path):
         "invented_fixture",
         "--scope",
         "nyse_trf",
+        "--expected-generation-id",
+        generation,
     )
     assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["generation_id"] == generation
+    refused = invoke(
+        config,
+        "export-research",
+        "--destination",
+        str(tmp_path / "wrong.json"),
+        "--output-use",
+        "invented_fixture",
+        "--scope",
+        "nyse_trf",
+        "--expected-generation-id",
+        "00000000-0000-4000-8000-000000000001",
+    )
+    assert refused.returncode == 2 and not (tmp_path / "wrong.json").exists()
     assert consume(path)["rows"][0]["symbol_raw"] == "000SYN.A"
     fixture = consume(FIXTURES / "invented-research-v1.json")
     assert fixture["rows"][0]["short_volume"] == "40.1250"
@@ -345,4 +364,117 @@ def test_ssv_ac14_consumer_rejects_repeat_capture_beyond_cutoff(tmp_path, manife
     value["request"]["as_of"] = first["archived_at"]
     value["request"]["as_of_sequence"] = first["capture_sequence"]
     with pytest.raises(ValueError, match="cutoff"):
+        export.validate(value, expected_scopes=["nyse_trf"], output_use="invented_fixture")
+
+
+@pytest.mark.parametrize(
+    "damage",
+    [
+        "version_after_observation",
+        "origin_clock_mismatch",
+        "origin_receipt_mismatch",
+        "empty_reported_partition",
+        "empty_artifact_complete_partition",
+        "source_row_type",
+        "source_symbol_type",
+    ],
+)
+def test_ssv_ac14_consumer_refuses_contradictory_fixture_lineage(damage):
+    from datetime import datetime, timedelta
+
+    value = json.loads((FIXTURES / "invented-research-v1.json").read_bytes())
+    version = value["versions"][0]
+    partition = value["coverage"]["current_partitions"][0]
+    if damage == "version_after_observation":
+        old = datetime.fromisoformat(partition["archived_at"])
+        version["first_seen_at"] = (
+            (old + timedelta(seconds=1)).isoformat(timespec="microseconds").replace("+00:00", "Z")
+        )
+    elif damage == "origin_clock_mismatch":
+        version["capture_sequence"] += 1
+    elif damage == "origin_receipt_mismatch":
+        version["receipt_sha256"] = "f" * 64
+    elif damage == "empty_reported_partition":
+        partition["status"] = "VALID_EMPTY"
+    elif damage == "empty_artifact_complete_partition":
+        value["rows"] = []
+        value["coverage"]["status"] = "VALID_EMPTY"
+    elif damage == "source_row_type":
+        value["rows"][0]["components"][0]["source_row"] = True
+    else:
+        version["symbol_raw"] = value["rows"][0]["symbol_raw"] = 123
+    with pytest.raises(ValueError):
+        export.validate(value, expected_scopes=["nyse_trf"], output_use="invented_fixture")
+
+
+def test_ssv_ac14_expected_generation_refuses_before_writing(tmp_path, manifest, load):
+    from uuid import uuid4
+
+    load()
+    selected = publish(tmp_path, manifest)
+    path = tmp_path.parent / (tmp_path.name + "-bound.json")
+    with pytest.raises(ValueError, match="generation"):
+        write(tmp_path, manifest, path, expected_generation_id=str(uuid4()))
+    assert not path.exists()
+    result = write(tmp_path, manifest, path, expected_generation_id=selected["generation_id"])
+    assert result["generation_id"] == selected["generation_id"]
+
+
+@pytest.mark.parametrize("damage", ["request_sequence", "partition_sequence", "version_sequence"])
+def test_ssv_ac14_consumer_refuses_out_of_range_sequences(damage):
+    value = json.loads((FIXTURES / "invented-research-v1.json").read_bytes())
+    if damage == "request_sequence":
+        value["request"]["as_of"] = "2026-11-14T00:00:00+00:00"
+        value["request"]["as_of_sequence"] = 2**63
+    elif damage == "partition_sequence":
+        value["coverage"]["current_partitions"][0]["capture_sequence"] = 2**63
+    else:
+        value["versions"][0]["capture_sequence"] = 2**63
+    with pytest.raises(ValueError):
+        export.validate(value, expected_scopes=["nyse_trf"], output_use="invented_fixture")
+
+
+@pytest.mark.parametrize(
+    "damage", ["drop_symbol", "phantom_symbol", "stale_version", "prior_coverage"]
+)
+def test_ssv_ac14_consumer_checks_complete_latest_membership(tmp_path, manifest, load, damage):
+    values = [("SYN.A", "40", "5", "100"), ("SYN.B", "20", "0", "100")]
+    if damage == "prior_coverage":
+        load("2026-11-06", values=[("PRIOR_ONLY", "10", "0", "100")])
+    load(values=values)
+    load(values=[("SYN.A", "50", "5", "100"), values[1]])
+    publish(tmp_path, manifest)
+    path = tmp_path.parent / (tmp_path.name + "-membership.json")
+    write(tmp_path, manifest, path)
+    value = json.loads(path.read_bytes())
+    if damage == "prior_coverage":
+        value["coverage"]["prior_partitions"][0]["status"] = "VALID_EMPTY"
+    elif damage == "drop_symbol":
+        value["rows"].pop()
+    elif damage == "phantom_symbol":
+        row = deepcopy(value["rows"][0])
+        row["symbol_raw"] = "NOT_REPORTED"
+        row["status"] = row["null_reason"] = "NO_REPORTED_ROW"
+        row["missing_row_facilities"] = ["nyse_trf"]
+        for n in export.NUMBERS:
+            row[n] = None
+        component = row["components"][0]
+        component["status"] = "NO_REPORTED_ROW"
+        for n in ("version_id", "source_capture_id", "source_row", *export.NUMBERS[:3]):
+            component[n] = None
+        value["rows"].append(row)
+    else:
+        row = next(r for r in value["rows"] if r["symbol_raw"] == "SYN.A")
+        old = next(
+            v for v in value["versions"] if v["symbol_raw"] == "SYN.A" and v["short_volume"] == "40"
+        )
+        component = row["components"][0]
+        component["version_id"] = old["version_id"]
+        component["source_capture_id"] = old["capture_id"]
+        component["source_row"] = old["source_row"]
+        for n in export.NUMBERS[:3]:
+            component[n] = old[n]
+        for n in export.NUMBERS:
+            row[n] = old[n]
+    with pytest.raises(ValueError):
         export.validate(value, expected_scopes=["nyse_trf"], output_use="invented_fixture")
