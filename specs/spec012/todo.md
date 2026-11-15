@@ -288,8 +288,8 @@ unchanged. [Acceptance](t13_acceptance.md) / [contract](operations_contract.md).
 ## SSV-T15 — Add stopped orchestration
 
 **Depends:** SSV-T14; **traces:** SSV-NFR03 / SSV-AC15.
-- [ ] Source-owned job/schedule default stopped with explicit activation controls.
-- [ ] Repository composition exposes only the implemented job and tested resources.
+- [x] Source-owned job/schedule default stopped with explicit activation controls.
+- [x] Repository composition exposes only the implemented job and tested resources.
 **Verify:** definition tests prove default-stopped state and missing-live-flag refusal.
 **Files:** `dagster_defs.py`, `tests/test_ssv_dagster.py`,
 `src/market_data_pipeline/orchestration/dagster_defs.py`, `resources/dagster-ssv.yml`.

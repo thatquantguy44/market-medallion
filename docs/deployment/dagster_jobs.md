@@ -21,7 +21,16 @@ the root code location on 2026-11-12; no schedule was activated.
 | Nasdaq/NYSE Reg SHO thresholds | `reg_sho_threshold_list_job` | `reg_sho_threshold_lists_daily_live` | Weekdays, 23:30 America/New_York | Not instantiated; definition defaults **stopped** | Configured threshold root; immutable Bronze and versioned SQLite state | Requires reviewed provider use, local `acquisition.enabled: true`, `REG_SHO_USER_AGENT`, `REG_SHO_SCHEDULED_LIVE_ACCESS=true`, `REG_SHO_CONFIG`, and one exact `REG_SHO_PARTITION`. |
 | FOMC meeting minutes | `fomc_meeting_minutes_job` | `fomc_meeting_minutes_weekday_refresh` | Weekdays, 17:10 America/New_York | Not activated; definition defaults **stopped** | `data/fomc_meeting_minutes/`; retain originals, revisions, derivatives and operation evidence | Manual runs require explicit `live: true`; scheduled execution additionally requires `FOMC_CONFIG`, `FOMC_OPERATIONS_CONFIG` and `scheduled_live_access: true`. |
 
-No other Dagster jobs or schedules are defined in the repository. A schedule
+FINRA T15 adds `finra_short_sale_volume_job` and
+`finra_short_sale_volume_weekday_refresh`, default STOPPED, plus optional stopped
+success/failure Slack sensors. The cadence is weekdays09:15 America/New_York
+for the previous reviewed reporting date with two calendar days of overlap.
+Worker gates: acquisition YAML and job `live:true`, `FINRA_SSV_LIVE_ACCESS=true`;
+scheduled workers also require `FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`.
+The schedule needs `FINRA_SSV_CONFIG` and explicit comma-separated
+`FINRA_SSV_SCOPES`; optional `FINRA_SSV_OPERATIONS_CONFIG` supplies reviewed
+calendar evidence. Unreviewed years skip. Launch example: [SSV](../../resources/dagster-ssv.yml).
+This records tested definitions, not an observed service activation. A schedule
 being listed or enabled does not establish provider rights, start a persistent
 service, or grant a downstream redistribution right.
 

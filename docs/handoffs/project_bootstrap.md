@@ -4,7 +4,7 @@ Last updated: 2026-11-15.
 
 ## Agent start here
 
-**Next implementation: FINRA SSV-T15 stopped orchestration.** T14 is implemented locally.
+**Next implementation: FINRA SSV-T16 delivery acceptance.** T14 and T15 are implemented locally.
 This panel is the current cross-project handoff. The dated checkpoints below
 retain historical evidence; their old “next” tasks do not override this panel.
 Explicit later user instructions take precedence and must be recorded here.
@@ -33,8 +33,8 @@ objective drift; agents still review priorities and runtime claims themselves.
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
 | 1 | **FINRA SSV-T14 — research interchange** | Implemented and validated on `feat/finra-research-orchestration`; 37 new / 710 FINRA tests pass. | [T14 task](../../specs/spec012/todo.md#ssv-t14--define-and-write-research-interchange), [Spec012 pickup](../../specs/spec012/README.md#next-agent-handoff) |
-| 2 | FINRA SSV-T15 — Dagster orchestration | Active next task on the same branch. Add the source-owned job/resources and a schedule that defaults stopped, with explicit activation tests. | [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration) |
-| 3 | FINRA SSV-T16 — acceptance and operating handoff | After T15. Reconcile acceptance IDs, restart/recovery instructions, actual selected coverage and outstanding G1/G2 evidence before declaring delivery complete. | [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff), [delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery) |
+| 2 | FINRA SSV-T15 — Dagster orchestration | Implemented on the same branch; job/schedule and two optional alert sensors default stopped, with explicit worker activation gates. | [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration) |
+| 3 | FINRA SSV-T16 — acceptance and operating handoff | Active next task on the same branch. Reconcile acceptance IDs, restart/recovery instructions, actual selected coverage and outstanding G1/G2 evidence before declaring delivery complete. | [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff), [delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery) |
 | 4 | Spec013 — FINRA ATS/non-ATS transparency | Planned; package/connector absent. Begin after Spec012 delivery acceptance, with its source/access review and one bounded report type/tier. | [Spec013](../../specs/spec013/README.md), [tasks](../../specs/spec013/todo.md) |
 | 5 | Spec014 — SEC N-PORT | Planned; follows Spec013. | [Spec014](../../specs/spec014/README.md) |
 | 6 | Spec015 — NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
@@ -45,7 +45,7 @@ CI/daily scheduling is verified separately from its source and unit checks.
 **Implementation in progress:** T14 → T15 → T16 on
 `feat/finra-research-orchestration`, created from latest `origin/main`
 `1daf6b58ed6199fd39dff38f30923d6f55a9b896`. User authorized all three in order.
-T14 is implemented and validated; T15 is next, then T16.
+T14 is committed as `2b6fc3b`; T15 is implemented and validated. T16 is next.
 User approved bounded all-three-TRF API checks for 2026-11-09 during T16. No PR yet. GitHub showed no open PRs at the
 verification time, before this documentation update. Verify again before claiming
 work. This change adds the current panel, maintenance rules and automated freshness
@@ -92,15 +92,17 @@ git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 git log -8 --oneline origin/main
 ```
 
-### Exact next slice: SSV-T15
+### Exact next slice: SSV-T16
 
-Read [T15 task](../../specs/spec012/todo.md#ssv-t15--add-stopped-orchestration),
-[T14 acceptance](../../specs/spec012/t14_acceptance.md) and the
-[acquisition contract](../../specs/spec012/acquisition_contract.md).
-Implement source-owned `dagster_defs.py`, root composition and stopped launch
-resources. Test missing live flags, execution-time kill switches, bounded
-source-owned retries, publication/export dependencies and default-stopped schedule
-state before T16 acceptance. Do not enable any schedule.
+Read [T16 task](../../specs/spec012/todo.md#ssv-t16--close-delivery-evidence-and-operating-handoff),
+[T14 acceptance](../../specs/spec012/t14_acceptance.md),
+[T15 acceptance](../../specs/spec012/t15_acceptance.md) and
+[delivery gates](../securities_finance/roadmap.md#gate-definitions-used-for-every-delivery).
+Run the user-approved all-three-TRF 2026-11-09 checks in an isolated source root.
+Validate export/readback, replay, publication and offline health, and map all
+SSV-AC01–15 to deterministic evidence. Complete the operating runbook and update
+registers/roadmap. Advance G1/G2 only after actual selected coverage reconciles.
+Schedules stay stopped; broader history is not implied.
 
 ### Operating holds and other workstreams
 

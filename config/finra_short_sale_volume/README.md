@@ -155,3 +155,12 @@ The exact scope must match the current committed publication. Use
 grant for provider data. Output parent must exist, outside the source root.
 Retries with identical bytes succeed; conflicts refuse without overwriting.
 No local YAML schema changes are required. See [T14 acceptance](../../specs/spec012/t14_acceptance.md).
+
+T15 adds a [manual Dagster example](../../resources/dagster-ssv.yml),
+`finra_short_sale_volume_job`, and a default-stopped weekday refresh.
+Job `live:true` and `FINRA_SSV_LIVE_ACCESS=true` are required in addition to
+acquisition YAML `live:true`. Scheduled workers require a separate
+`FINRA_SSV_SCHEDULED_LIVE_ACCESS=true`; missing calendar evidence skips.
+Optional export destinations require `internal_export` admission.
+[Alerts](alerts.example.yml) are independently disabled; sensors default stopped.
+See [T15 acceptance](../../specs/spec012/t15_acceptance.md).

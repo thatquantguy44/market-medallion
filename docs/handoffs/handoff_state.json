@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "47133a73e508ae4a3185859be0a2dfa652209d5f5b3e134eeb3210598e63af55",
-  "next_task": "SSV-T15",
-  "panel_fingerprint": "7a6c979fc0fcbe6d34645aa402ba8159a2af0822695ce3a9de6c7fc2a6812199",
-  "review_summary": "Reviewed T14 admitted interchange, 37 new export regressions and 710 FINRA tests; T15 next on the user-authorized three-slice branch.",
-  "reviewed_at": "2026-11-15T09:55:13.481703+00:00",
-  "reviewed_commit": "1daf6b58ed6199fd39dff38f30923d6f55a9b896",
+  "document_fingerprint": "f9a5d3c163c0eba4e92b6ea43f4683e9ec4032cb12ce87d688173ce4b5c8f68e",
+  "next_task": "SSV-T16",
+  "panel_fingerprint": "e4ed655df0e0faae39f53dca6ce01b2417f007b7bc4a8aabdfcc1aa7ce37c205",
+  "review_summary": "Reviewed T15 stopped job/schedule, 21 Dagster tests and 731 FINRA regressions; T16 now owns approved three-TRF conformance and delivery closeout.",
+  "reviewed_at": "2026-11-15T10:01:57.491713+00:00",
+  "reviewed_commit": "2b6fc3bef1c8a554cdedf457348454c211dbc4ac",
   "schema_version": 1,
-  "source_fingerprint": "3c7d956082a4668caf272d81241417304f459c941dcace77214ce2db4d425396",
+  "source_fingerprint": "498e062a649e4f1a632a75c0024784aef6e3398db2a748bf24fd7f8dfb3a6397",
   "task_file": "specs/spec012/todo.md"
 }

@@ -1,6 +1,6 @@
 # Spec 012 — FINRA daily short-sale volume
 
-**Status:** SSV-T01–T14 implemented for the selected three-TRF Public API profile.
+**Status:** SSV-T01–T15 implemented for the selected three-TRF Public API profile.
 Immutable Bronze, audited SQLite Silver/Gold, revisions/removals and UTC/sequence
 cutoffs feed scope-safe research and explicit typed Parquet publication. A separate
 catalog freezes publication facts and journals COMMITTED/PUBLISHED generations;
@@ -9,7 +9,7 @@ CLI/script includes publication/recovery and verified empty-target replay preser
 original clocks, revisions, membership and audit. T12 adds explicit bounded
 acquisition and verified page collections, with real Chicago TRF conformance for
 5,849 rows on 2026-11-09. T13 adds read-only release-aware health and retention accounting.
-**Next: SSV-T15 stopped orchestration.** Jobs and
+**Next: SSV-T16 delivery acceptance.** Broader
 broader real-source coverage remain open; G1/G2 are not advanced.
 **Reviewed:** 2026-11-14. **Delivery order:** 2 of 5.
 **Pipeline ID:** `finra-short-sale-volume`.
@@ -31,20 +31,17 @@ dependency of this independent FINRA pipeline. Spec013 follows this delivery.
 
 ## Next agent handoff
 
-T14 is implemented and validated on `feat/finra-research-orchestration`, from
-latest main `1daf6b5`. User authorized T14 → T15 → T16 in order; T15 is next.
-[T14 acceptance](t14_acceptance.md) records 37 new / 710 FINRA tests and the
-[wire contract](data_contract.md#ssv-t14-research-interchange-implementation-contract).
-Read [T15](todo.md#ssv-t15--add-stopped-orchestration) and the root guidance before
-adding source-owned Dagster definitions. T13 operations, T12 acquisition, T11
-replay and T10 publication contracts remain authoritative.
+T14 and T15 are implemented on `feat/finra-research-orchestration` from latest
+main `1daf6b5`. T14 commit `2b6fc3b` has 37 new / 710 FINRA tests.
+[T14 acceptance](t14_acceptance.md) and [T15 acceptance](t15_acceptance.md) define
+the export/job boundaries. T16 delivery evidence and runbook are next.
 
-The user also authorized bounded real API validation of all three TRFs for
-2026-11-09 during T16. Use new isolated stores and this project's own environment
-credentials; do not enable any schedule. Existing real acceptance covers Chicago
-TRF only. G1/G2 and expanded coverage remain open until T16 evidence passes.
-NAAIM remains paused. QuantSmith checkout drift is unchanged; all 61 pinned Git
-guidance objects verify, without repin or external checkout modification.
+The user authorized bounded actual API checks for all three TRFs on 2026-11-09
+using this project's configured credentials, without enabling any schedule. Use
+new isolated stores, verify raw/Gold/publication/export/replay/health and record
+actual coverage before advancing G1/G2. Keep broader history and unknown API
+release timing explicit. NAAIM stays paused. Known QuantSmith checkout drift
+is unchanged; all61 pinned guidance Git objects verify.
 
 ## Objective and research questions
 
