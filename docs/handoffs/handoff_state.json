@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "f24277097bc1cab65f277d79f25afd886d53c488bf3936dbbe688a651fd49636",
-  "next_task": "OTC-T05",
-  "panel_fingerprint": "fe84303becb97d48eeb51c43fc99920b548e710addfde7076e205efa18e5ac26",
-  "review_summary": "Continued Spec013 with OTC-T04 after 041b9be: route/schema/population-scoped source identity, week-scoped label/group keys, explicit unkeyable unknown and parser ambiguity rejection. 35 new/179 OTC tests, 2006 full passes/92 optional skips, lint/format, Dagster parity, 275 links and 191-module package readback pass. Next OTC-T05; no real source/runtime activation.",
-  "reviewed_at": "2026-11-16T00:35:34.649415+00:00",
-  "reviewed_commit": "041b9bee4b8d63dbba5e56ad5aa4e84eafc20781",
+  "document_fingerprint": "0eded803c926f091b1c58322309dd99252d77b5b6fb2637e329a4aa7ac870d40",
+  "next_task": "OTC-T06",
+  "panel_fingerprint": "09fc19301344e632abb7e406a97ed13d72907cb1249d3d023fb231d49536e05b",
+  "review_summary": "Implemented OTC-T05 on the existing branch: immutable exact part/discovery captures, canonical manifest/schema receipts, ordered UTC lineage, verified readers and sanitized negative/parse outcomes. Real clock overrides denied; 63 new/242 OTC tests and 2069 full passes/92 optional skips, lint/format, Dagster parity, 282 links and 194-module package parity pass. Native/isolated-wheel smoke preserves 19 files. Next OTC-T06; no live activation.",
+  "reviewed_at": "2026-11-16T05:47:17.392705+00:00",
+  "reviewed_commit": "568610d8813dd9e304cb4498f30e47a5ed1d4531",
   "schema_version": 1,
-  "source_fingerprint": "010ec497b19031950abb76a3ce04cc0c2c0a5d9bb2cc4299b47977a8640ce348",
+  "source_fingerprint": "7cbea761d341631a9d6ab801af793fd320a4a215408d9062166c8e799a095345",
   "task_file": "specs/spec013/todo.md"
 }

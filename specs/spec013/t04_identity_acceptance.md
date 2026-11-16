@@ -2,7 +2,9 @@
 
 Implemented offline on `feat/finra-otc-contract-parser` after T01–T03 commit
 `041b9bee4b8d63dbba5e56ad5aa4e84eafc20781`. The user asked to continue on this
-branch. This slice closes OTC-REQ04 / OTC-AC04; T05+ remain future work.
+branch. This is the T04 record at `568610d`; it closes OTC-REQ04 / OTC-AC04.
+[Current Spec013 status](README.md#current-implementation-and-pickup) owns later
+work, including the subsequent [T05 Bronze slice](t05_bronze_acceptance.md).
 
 ## Contract and evidence
 

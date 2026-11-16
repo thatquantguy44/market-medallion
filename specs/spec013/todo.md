@@ -1,10 +1,10 @@
 # Tasks — FINRA OTC transparency
 
-**OTC-T01–T04 and fixture Checkpoint A are implemented.** T05–T16 remain not started.
+**OTC-T01–T05 and fixture Checkpoint A are implemented offline.** T06–T16 remain not started.
 See [Checkpoint A](checkpoint_a.md) and [source review](source_review.md). Code paths are relative to
 `src/market_data_pipeline/pipelines/finra_otc_transparency/`. Each is S/M and
 limited to five likely files; split growing tasks before implementation. Commands
-under T01–T03 identify actual tests; later commands remain future targets.
+under T01–T05 identify actual tests; T06+ commands remain future targets.
 
 ## OTC-T01 — Resolve source route and reuse contract
 
@@ -47,9 +47,9 @@ under T01–T03 identify actual tests; later commands remain future targets.
 ## OTC-T05 — Capture bytes and partition completeness
 
 **Depends:** OTC-T03; **traces:** OTC-REQ05 / OTC-AC05.
-- [ ] Preserve payload/discovery metadata, schema/manifest hashes and requested scope.
-- [ ] File/page absence and parser rejection retain receipts with explicit outcomes.
-**Verify:** byte/hash comparison and missing-page negative fixture.
+- [x] Preserve payload/discovery metadata, schema/manifest hashes and requested scope.
+- [x] File/page absence and parser rejection retain receipts with explicit outcomes.
+**Verify:** `.venv/bin/python -m pytest -q tests/test_otc_bronze.py`; [Bronze acceptance](t05_bronze_acceptance.md).
 **Files:** `io/bronze.py`, `tests/test_otc_bronze.py`.
 
 ## OTC-T06 — Deliver the local weekly detail slice

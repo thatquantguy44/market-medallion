@@ -1,7 +1,7 @@
 # Spec 013 — FINRA ATS and non-ATS transparency
 
-**Status:** OTC-T01–T04 implemented offline; fixture Checkpoint A and source-evidence identity pass.
-**Reviewed:** 2026-11-15. **Delivery order:** 3 of 5.
+**Status:** OTC-T01–T05 implemented offline: fixture Checkpoint A, source-evidence identity and immutable Bronze receipts.
+**Reviewed:** 2026-11-16. **Delivery order:** 3 of 5.
 **Pipeline ID:** `finra-otc-transparency`.
 **Package:** `src/market_data_pipeline/pipelines/finra_otc_transparency/`.
 
@@ -19,15 +19,17 @@ six-profile weekly catalog, explicit finite partition selection, strict manifest
 and pure invented ATS/T1 pipe parser. Current [source review](source_review.md)
 selects Public Query API `weeklySummary` as the future candidate; the historical
 file header is fixture evidence only. Other five profile parsers and all real
-source conformance remain pending. No transport, persistence, CLI or Dagster job
-exists. [T04 identity](t04_identity_acceptance.md) preserves supplied IDs and explicit
+source conformance remain pending. No HTTP transport, Silver/Gold warehouse, CLI
+or Dagster job exists. [T04 identity](t04_identity_acceptance.md) preserves supplied IDs and explicit
 name-only/grouped/unknown evidence without inferring firms.
-Next is [OTC-T05 Bronze/coverage](todo.md#otc-t05--capture-bytes-and-partition-completeness).
+[T05 Bronze](t05_bronze_acceptance.md) archives exact bytes/discovery, preserves
+missing/partial/rejected evidence and verifies immutable readback before parsing.
+Next is [OTC-T06 local panel](todo.md#otc-t06--deliver-the-local-weekly-detail-slice).
 
 Run the actual offline checks:
 
 ```bash
-.venv/bin/python -m pytest -q tests/test_otc_manifest.py tests/test_otc_catalog.py tests/test_otc_parser.py tests/test_otc_identity.py
+.venv/bin/python -m pytest -q tests/test_otc_manifest.py tests/test_otc_catalog.py tests/test_otc_parser.py tests/test_otc_identity.py tests/test_otc_bronze.py
 ```
 
 ## Objective and research use

@@ -1,7 +1,7 @@
 # FINRA OTC transparency data contract
 
-**Version:** v1 fixture checkpoint. **Reviewed:** 2026-11-15.
-**Runtime status:** T01–T04 implemented offline; acquisition/storage/jobs absent.
+**Version:** v1 fixture checkpoint. **Reviewed:** 2026-11-16.
+**Runtime status:** T01–T05 offline, including Bronze; acquisition, Silver/Gold warehouse and jobs absent.
 Read [Spec013](README.md) and the
 [program contract](../../docs/securities_finance/contract.md). Normalized names
 and broader schema below remain design decisions; current endpoint conformance is pending.
@@ -93,6 +93,65 @@ All supplied IDs/names and the evidence basis remain inspectable. No name lookup
 fuzzy match, crosswalk, grouping inference, ID coercion or external call occurs.
 The ATS/T1 fixture parser applies this contract to its supplied MPIDs; this does
 not add parsers or real coverage for the other five catalog entries.
+
+## OTC-T05 Bronze contract
+
+Implemented offline; [T05 acceptance](t05_bronze_acceptance.md).
+The helpers are bounded to archive/read/fixture validation.
+Each immutable capture directory owns exact received part bytes, optional exact
+discovery bytes and a canonical, hashed receipt. One explicit partition and
+finite expected-part ledger accompany each capture. Missing, unexpected and
+truncated parts remain visible; `RECEIVED_ALL` describes the submitted ledger,
+not independently established source completeness. Every capture and parse
+outcome retains `membership: UNVERIFIED`. Header-only parsing never proves a
+complete empty provider population.
+
+The receipt retains canonical manifest and schema snapshots/hashes, run/capture
+UUIDs, an aware UTC archive clock, a durable root-local capture sequence, route
+and admission hash, safe public response metadata, byte lengths and SHA-256s.
+Publication time remains null. Source HTTP dates are retained as header text;
+they never become capture/first-seen or publication timestamps. Identical bytes
+in separate captures remain separate events. Retrying one ID is idempotent only
+when its content/lineage is unchanged; conflicts cannot overwrite it.
+
+A shared `.writer.lock` serializes this pipeline root. Sequence reservations are
+immutable and allocated before capture publication; failed writes may leave
+unused reservations. Equal capture clocks remain ordered by sequence; clock
+regressions are rejected. Only invented fixtures can override the archive clock;
+real retention always takes the worker's actual UTC time. A future replay import
+must verify original receipts instead of accepting a bare historical timestamp.
+Captures publish by fsync plus atomic directory rename.
+Incomplete staging directories are not readable captures. Readback verifies
+bytes, receipt hash, ledger, reservation and storage identity without creating a
+root or touching the network. Root/archive-owned symlinks, nonregular files and
+traversal components are rejected; operator-owned parent paths are not a sandbox.
+
+Admission precedes filesystem access. Invented operations require the fixture
+profile. Real retention/read needs explicitly admitted `retain`; validation also
+needs `transform`. No active real grant is shipped. Raw receipt metadata excludes
+cookies/auth headers and query/credential-bearing URLs; only public FINRA HTTPS
+resource identities and bounded allowlisted response headers are retained.
+
+Validation happens after durable raw capture. Missing/partial, HTTP failure,
+unsupported contract/route and parser rejection persist as immutable linked
+outcomes with no invented zero row count. Only the existing invented ATS/T1
+single-file profile is parsed. Multipart and the other five profiles retain raw
+evidence but are not promoted by a guessed parser. Successful results remain
+`PARSED` / `PARSED_EMPTY`, with typed rows and unverified membership for T06 to
+handle under its separate complete local-population contract.
+
+Readback verifies captured descriptor types and hashes independently of current
+parser admission, preserving inspectable bytes for unknown archived versions.
+Current validation still refuses unsupported manifests, schemas and routes; it
+does not silently upgrade a receipt. Part metadata and requested ledgers are
+snapshotted before hashing or waiting for the writer lock. Reservations are bounded to
+100,000 entries, including ignored temporary artifacts.
+
+Defaults bound one capture to 20 MiB, 64 received/expected parts, 10,000 parsed
+rows and 64 KiB of canonical metadata. Byte/row overrides are positive integers
+within hard local ceilings of 64 MiB / 1,000,000 rows. These are local resource
+policies, not provider limits. No HTTP adapter, warehouse, CLI, replay service,
+Gold publication, retention deletion or Dagster definition is introduced.
 
 ## Source inventory and evidence tiers
 
