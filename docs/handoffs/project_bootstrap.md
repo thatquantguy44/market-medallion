@@ -4,12 +4,15 @@ Last updated: 2026-11-16.
 
 ## Agent start here
 
-**Next implementation: Spec013 OTC-T06 local weekly panel.**
+**Next implementation: Spec013 OTC-T06 local weekly panel (in progress).**
 OTC-T01–T03 are committed as `041b9bee4b8d63dbba5e56ad5aa4e84eafc20781` on
 `feat/finra-otc-contract-parser`. The user asked to continue; OTC-T04 is committed as `568610d8813dd9e304cb4498f30e47a5ed1d4531`.
 The user authorized OTC-T05 on this same branch. Raw captures, immutable
 partition/discovery receipts and negative outcomes are implemented offline.
-T06 is next; no source acquisition or orchestration was added.
+T05 is committed as `6cb0376a964aaff5dc618db28c00644c2c637054`. The user authorized
+T06 on this branch; the bounded parser/archive/panel/CLI increments are recorded
+in [the plan](../../specs/spec013/plan.md#t06-bounded-implementation-increments).
+No source acquisition or orchestration is included.
 Spec012 T14 → T15 → T16 and the subsequent regression/equivalence review are
 merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as
 `eaec3279dd27c0ee170e78751f234d538d4416b2`. The user authorized OTC-T01–OTC-T03 in order on a fresh latest-main branch.
@@ -31,9 +34,16 @@ No job/source acquisition or schedule activation was performed. See the
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
 | 0 | **Spec013 OTC-T05 — Bronze bytes and receipts** | Implemented locally on `feat/finra-otc-contract-parser`; [acceptance](../../specs/spec013/t05_bronze_acceptance.md) records immutable captures, safe context and explicit negative outcomes. | [T05](../../specs/spec013/todo.md#otc-t05--capture-bytes-and-partition-completeness), [contract](../../specs/spec013/data_contract.md#otc-t05-bronze-contract) |
-| 1 | Spec013 OTC-T06 — local weekly panel | Next; not started. Build source-owned transactional SQLite and CLI with all six selected fixture profiles and explicit completeness. | [T06](../../specs/spec013/todo.md#otc-t06--deliver-the-local-weekly-detail-slice) |
+| 1 | Spec013 OTC-T06 — local weekly panel | In progress on the same branch. Build source-owned transactional SQLite and CLI with all six selected fixture profiles and explicit completeness. | [T06](../../specs/spec013/todo.md#otc-t06--deliver-the-local-weekly-detail-slice) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
+
+**T06 progress:** six fixture profiles now parse with exact counts and explicit
+identity. Catalog v2 retains the original v1 descriptors; old ATS/T1 outcomes
+revalidate unchanged and the five old candidate schemas remain unsupported.
+**259 OTC tests pass** for this parser/archive increment. Transactional panel and
+CLI implementation/validation are in progress and remain uncommitted in this
+working tree. Real extraction and source conformance remain T12.
 
 **Current implementation:** T01–T03 are committed as `041b9be`; T04 identity as
 `568610d`. The user explicitly continued with T05 on the same branch. It adds

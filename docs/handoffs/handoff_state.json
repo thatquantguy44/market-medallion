@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "0eded803c926f091b1c58322309dd99252d77b5b6fb2637e329a4aa7ac870d40",
+  "document_fingerprint": "e91fd7f01ca2eabc6e0f9167af38edf98efc442b37d6c3467a8206d07617064f",
   "next_task": "OTC-T06",
-  "panel_fingerprint": "09fc19301344e632abb7e406a97ed13d72907cb1249d3d023fb231d49536e05b",
-  "review_summary": "Implemented OTC-T05 on the existing branch: immutable exact part/discovery captures, canonical manifest/schema receipts, ordered UTC lineage, verified readers and sanitized negative/parse outcomes. Real clock overrides denied; 63 new/242 OTC tests and 2069 full passes/92 optional skips, lint/format, Dagster parity, 282 links and 194-module package parity pass. Native/isolated-wheel smoke preserves 19 files. Next OTC-T06; no live activation.",
-  "reviewed_at": "2026-11-16T05:47:17.392705+00:00",
-  "reviewed_commit": "568610d8813dd9e304cb4498f30e47a5ed1d4531",
+  "panel_fingerprint": "633c4bb896f3c93524bfaeb94c0e936afa4dd77685e58fb5420b10b771662f6f",
+  "review_summary": "Reviewed T06 parser/archive increment: six invented profiles, versioned catalog and immutable legacy outcome compatibility; 259 focused OTC tests pass. Transactional local panel/CLI remain active T06 work; no real source conformance or activation.",
+  "reviewed_at": "2026-11-16T09:39:33.026204+00:00",
+  "reviewed_commit": "6cb0376a964aaff5dc618db28c00644c2c637054",
   "schema_version": 1,
-  "source_fingerprint": "7cbea761d341631a9d6ab801af793fd320a4a215408d9062166c8e799a095345",
+  "source_fingerprint": "988e448c802056db52f699ecdf887a9b5a570a2b4f7a2391b76f8d621b7588ac",
   "task_file": "specs/spec013/todo.md"
 }

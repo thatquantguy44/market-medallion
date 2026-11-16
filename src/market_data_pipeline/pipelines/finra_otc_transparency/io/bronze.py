@@ -13,10 +13,11 @@ from pathlib import Path
 from uuid import uuid4
 
 from market_data_pipeline.pipelines.finra_otc_transparency.catalog import (
-    ATS_FIXTURE_SCHEMA,
+    legacy_manifest,
     select_partitions,
 )
 from market_data_pipeline.pipelines.finra_otc_transparency.data.weekly import (
+    FIXTURE_HEADERS,
     ParsedWeekly,
     parse_weekly,
 )
@@ -463,11 +464,12 @@ def validate_capture(root, capture_id, *, approved_use, max_bytes=DEFAULT_BYTES)
             status, reason = "REJECTED", "UNSUPPORTED_ROUTE"
         elif len(capture.parts) != 1:
             status, reason = "REJECTED", "MULTIPART_UNSUPPORTED"
-        elif receipt["schema"]["schema_profile"] != ATS_FIXTURE_SCHEMA:
+        elif receipt["schema"]["schema_profile"] not in FIXTURE_HEADERS:
             status, reason = "REJECTED", "UNSUPPORTED_PROFILE"
         else:
             try:
-                manifest_from_dict(receipt["manifest"])
+                if receipt["manifest"] != legacy_manifest():
+                    manifest_from_dict(receipt["manifest"])
                 (partition,) = select_partitions([receipt["partition"]])
                 if receipt["schema"] != schema_snapshot(partition, receipt["manifest"]):
                     raise ValueError

@@ -17,8 +17,7 @@ from market_data_pipeline.pipelines.finra_otc_transparency.catalog import (
 )
 from market_data_pipeline.pipelines.finra_otc_transparency.data.identity import IDENTITY_VERSION
 from market_data_pipeline.pipelines.finra_otc_transparency.data.weekly import (
-    ATS_FIXTURE_SCHEMA,
-    ATS_HEADER,
+    FIXTURE_HEADERS,
 )
 from market_data_pipeline.pipelines.finra_otc_transparency.manifest import (
     Manifest,
@@ -247,11 +246,12 @@ def schema_snapshot(partition: Partition, manifest: dict) -> dict:
             selected = row
     if selected is None:
         raise ValueError("OTC manifest snapshot does not identify the selected scope")
-    known = selected["schema_profile"] == ATS_FIXTURE_SCHEMA
+    header = FIXTURE_HEADERS.get(selected["schema_profile"])
+    known = header is not None
     return {
         "schema_profile": selected["schema_profile"],
         "profile": selected,
-        "columns": list(ATS_HEADER) if known else None,
+        "columns": list(header) if known else None,
         "encoding": "utf-8" if known else None,
         "delimiter": "|" if known else None,
         "identity_version": IDENTITY_VERSION if known else None,

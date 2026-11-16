@@ -79,6 +79,36 @@ network discovery. The local limits and ownership checks are independent of any
 provider SLA or retention permission. T06 must keep these receipts inspectable
 while adding all six fixture profiles and transactional local publication.
 
+## T06 bounded implementation increments
+
+The user authorized T06 on `feat/finra-otc-contract-parser` on 2026-11-16.
+Keep each increment independently testable before moving to the next:
+
+1. **T06a — six invented profiles:** catalog/manifest, pure weekly parser and
+   profile tests. Reuse the historical ATS fixture grammar across explicit tiers;
+   use a separately named, explicitly invented non-ATS grammar with declared
+   attribution and optional supplied IDs. Never claim current provider schemas.
+2. **T06b — archive integration:** validate new fixture schemas, retain historical
+   v1 descriptors/outcomes, and verify all six through immutable Bronze.
+3. **T06c — transactional local panel:** source-owned SQLite, pipeline and integration
+   tests. A separately archived synthetic discovery assertion binds partition,
+   schema, exact payload SHA and expected row count. Only this fixture evidence
+   may produce COMPLETE_FIXTURE/COMPLETE_EMPTY_FIXTURE. Rows, coverage, terminal
+   attempt and publication selection commit together. Failed/partial/unverified
+   attempts retain old selections and cannot advance a success marker.
+4. **T06d — operator interface:** CLI/module entrypoint and CLI tests, then acceptance,
+   register and handoff. Import one explicit population at a time; inspect requires
+   a bounded explicit population list. JSON uses decimal text for quantities.
+
+Each increment targets at most five implementation/test files; fixture/catalog
+and owning documentation updates accompany the relevant increment. No generic
+warehouse framework or new dependency is introduced. Until T07 implements revision
+and replacement history, a second complete capture for an already published
+partition is recorded as REPLACEMENT_DEFERRED without replacing membership.
+T06 reads select initial complete fixture populations, with explicit attribution
+counts and absent requested populations; venue ratios remain T09, Parquet T10,
+replay T11 and real extraction/conformance T12.
+
 ## Risks and controls
 
 | Risk | Effect | Mitigation |

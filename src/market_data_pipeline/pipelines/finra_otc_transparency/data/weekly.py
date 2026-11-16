@@ -1,4 +1,4 @@
-"""OTC-T03: strict invented ATS/T1 pipe profile; not current live conformance.
+"""OTC-T03/T06: strict invented ATS and non-ATS pipe profiles; not current live conformance.
 
 Header evidence: FINRA file API v0.4, p.10 (2019-01-16):
 https://www.finra.org/sites/default/files/OTC-Transparency-Data-File-Download-API-v04.pdf
@@ -15,6 +15,7 @@ from datetime import date
 
 from market_data_pipeline.pipelines.finra_otc_transparency.catalog import (
     ATS_FIXTURE_SCHEMA,
+    NON_ATS_FIXTURE_SCHEMA,
     Partition,
     iso_date,
     profile_for,
@@ -35,6 +36,12 @@ ATS_HEADER = (
     "lastUpdateDate",
     "totalWeeklyTradeCount",
 )
+
+
+# Deliberately invented extension, NOT the historical/current FINRA non-ATS header.
+# Explicit attribution prevents guessing a group from the participant display name.
+NON_ATS_HEADER = ATS_HEADER + ("firmCRDNumber", "attribution")
+FIXTURE_HEADERS = {ATS_FIXTURE_SCHEMA: ATS_HEADER, NON_ATS_FIXTURE_SCHEMA: NON_ATS_HEADER}
 
 
 @dataclass(frozen=True)
@@ -114,8 +121,9 @@ def parse_weekly(
     if not isinstance(partition, Partition):
         raise ValueError("OTC parser requires an explicit validated partition")
     profile = profile_for(partition.product, partition.tier)
-    if schema_profile != ATS_FIXTURE_SCHEMA or profile.schema_profile != ATS_FIXTURE_SCHEMA:
-        raise ValueError("OTC parser implements only the invented ATS/T1 pipe profile")
+    if schema_profile != profile.schema_profile or schema_profile not in FIXTURE_HEADERS:
+        raise ValueError("OTC parser requires the selected invented weekly profile")
+    header = FIXTURE_HEADERS[schema_profile]
     if any(type(limit) is not int or limit <= 0 for limit in (max_bytes, max_rows)):
         raise ValueError("OTC parser limits must be positive finite integers")
     if not isinstance(payload, bytes) or not payload or len(payload) > max_bytes:
@@ -129,21 +137,22 @@ def parse_weekly(
         reader = csv.reader(
             io.StringIO(text, newline=""), delimiter="|", quotechar='"', strict=True
         )
-        if tuple(next(reader, ())) != ATS_HEADER:
-            raise ValueError("OTC header differs from the pinned ATS/T1 pipe schema")
+        if tuple(next(reader, ())) != header:
+            raise ValueError("OTC header differs from the pinned invented pipe schema")
         for cells in reader:
             if len(rows) >= max_rows:
                 raise ValueError("OTC payload exceeds the configured row budget")
-            if len(cells) != len(ATS_HEADER):
+            if len(cells) != len(header):
                 raise ValueError("OTC record must have exactly the pinned columns")
-            tier, symbol, issue, participant, mpid, shares, update, trades = cells
+            tier, symbol, issue, participant, mpid, shares, update, trades = cells[:8]
+            crd, attribution = cells[8:] if len(header) == 10 else (None, "REPORTED")
             if tier != partition.tier:
                 raise ValueError("OTC row tier differs from the selected population")
             symbol = _text(symbol, "symbol")
             issue = _text(issue, "issue name")
             participant = _text(participant, "participant name")
-            mpid = _text(mpid, "MPID")
-            if any(c.isspace() for token in (symbol, mpid) for c in token):
+            mpid = _text(mpid, "MPID") if schema_profile == ATS_FIXTURE_SCHEMA else (mpid or None)
+            if any(c.isspace() for token in (symbol, mpid or "") for c in token):
                 raise ValueError("OTC symbol/MPID tokens cannot contain whitespace")
             identity = participant_identity(
                 partition=partition,
@@ -151,6 +160,8 @@ def parse_weekly(
                 route="invented_fixture",
                 participant_name_raw=participant,
                 mpid=mpid,
+                firm_crd=crd or None,
+                attribution=attribution,
             )
             rows.append(
                 WeeklyRow(

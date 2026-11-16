@@ -18,8 +18,9 @@ Spec014 SEC N-PORT follows this delivery.
 six-profile weekly catalog, explicit finite partition selection, strict manifest
 and pure invented ATS/T1 pipe parser. Current [source review](source_review.md)
 selects Public Query API `weeklySummary` as the future candidate; the historical
-file header is fixture evidence only. Other five profile parsers and all real
-source conformance remain pending. No HTTP transport, Silver/Gold warehouse, CLI
+file header is fixture evidence only. T06 adds six invented profile parsers under catalog v2; all real
+source conformance remains pending. The non-ATS fixture grammar is deliberately
+invented and does not claim an actual file/API schema. No HTTP transport, Silver/Gold warehouse, CLI
 or Dagster job exists. [T04 identity](t04_identity_acceptance.md) preserves supplied IDs and explicit
 name-only/grouped/unknown evidence without inferring firms.
 [T05 Bronze](t05_bronze_acceptance.md) archives exact bytes/discovery, preserves

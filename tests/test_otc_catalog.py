@@ -39,7 +39,7 @@ def test_all_six_products_and_tiers_have_distinct_scopes_and_truthful_status():
     assert [p.expected_delay_weeks for p in manifest.profiles if p.tier == "T1"] == [2, 2]
     assert all(p.expected_delay_weeks == 4 for p in manifest.profiles if p.tier != "T1")
     implemented = [p for p in manifest.profiles if p.parser_status == "INVENTED_FIXTURE_ONLY"]
-    assert [(p.product, p.tier) for p in implemented] == [("ATS_WEEKLY_DETAIL", "T1")]
+    assert len(implemented) == 6
 
 
 def test_explicit_multiweek_partition_selection_preserves_population_identity():

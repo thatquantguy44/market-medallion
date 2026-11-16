@@ -14,7 +14,8 @@ FINRA T13 merged in [PR #26](https://github.com/thatquantguy44/market-medallion/
 as `c53b1e2`; T14–T16 are implemented and locally accepted on
 `feat/finra-research-orchestration` in [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28).
 PR #28 is merged as `eaec327`; Spec013 OTC-T01–T05 are implemented offline
-on `feat/finra-otc-contract-parser`; OTC-T06 local panel is next.
+on `feat/finra-otc-contract-parser`; OTC-T06 local panel is in progress.
+Its six invented parser profiles use catalog v2; real conformance remains pending.
 See [Spec012 acceptance](../specs/spec012/acceptance.md).
 
 The [Dagster master guide](../DAGSTER.md) is the

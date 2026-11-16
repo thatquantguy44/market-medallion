@@ -305,6 +305,15 @@ def test_catalog_only_profiles_are_explicitly_unsupported_not_bad_data(tmp_path,
     receipt = archive(
         tmp_path / "store", partition=Partition(WEEK.reporting_week_start, product, tier)
     )
+    from market_data_pipeline.pipelines.finra_otc_transparency.catalog import legacy_manifest
+    from market_data_pipeline.pipelines.finra_otc_transparency.io.receipts import schema_snapshot
+
+    # Historical candidate descriptors stay unsupported even after T06 fixtures ship.
+    receipt["manifest"] = legacy_manifest()
+    receipt["schema"] = schema_snapshot(
+        Partition(WEEK.reporting_week_start, product, tier), receipt["manifest"]
+    )
+    reseal(tmp_path / "store/bronze/captures" / receipt["capture_id"] / "receipt.json", receipt)
     result = validate_capture(tmp_path / "store", receipt["capture_id"], approved_use=USE)
     assert result.outcome["reason"] == "UNSUPPORTED_PROFILE"
     assert result.parsed is None and result.outcome["row_count"] is None

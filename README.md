@@ -86,7 +86,8 @@ history, recurring activation and consumer integration remain separate.
 [Spec013 OTC-T01–T05](specs/spec013/README.md) implement route/use admission, six
 weekly populations, one invented ATS/T1 parser, source-evidence identity and
 immutable Bronze/partition receipts. Real acquisition, Silver/Gold publication
-and orchestration remain future work; OTC-T06 local panel is next.
+and orchestration remain future work. OTC-T06 is in progress on the same branch;
+all six invented parser profiles are available under catalog v2.
 Public API terms acceptance is user-attested; no new permission is inferred.
 Databricks workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and

@@ -5,11 +5,12 @@ No API tier alias or live schema conformance is inferred from a file example.
 """
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 
-CATALOG_VERSION = "finra-otc-weekly-catalog/1"
+CATALOG_VERSION = "finra-otc-weekly-catalog/2"
 ATS_FIXTURE_SCHEMA = "finra-otc-ats-weekly-pipe-fixture/1"
+NON_ATS_FIXTURE_SCHEMA = "finra-otc-non-ats-weekly-invented-pipe/1"
 MAX_PARTITIONS = 312  # Local request-planning ceiling, not a provider limit.
 
 
@@ -41,7 +42,7 @@ class ReportProfile:
         }
 
 
-PROFILES = tuple(
+LEGACY_PROFILES = tuple(
     ReportProfile(
         product=product,
         tier=tier,
@@ -65,6 +66,28 @@ PROFILES = tuple(
     )
     for tier in ("T1", "T2", "OTCE")
 )
+
+
+# Immutable historical descriptors remain available for Bronze validation.
+PROFILES = tuple(
+    replace(
+        p,
+        schema_profile=(
+            ATS_FIXTURE_SCHEMA if p.product == "ATS_WEEKLY_DETAIL" else NON_ATS_FIXTURE_SCHEMA
+        ),
+        parser_status="INVENTED_FIXTURE_ONLY",
+    )
+    for p in LEGACY_PROFILES
+)
+
+
+def legacy_manifest() -> dict:
+    return {
+        "source": "finra",
+        "dataset": "finra-otc-transparency",
+        "catalog_version": "finra-otc-weekly-catalog/1",
+        "profiles": [p.to_dict() for p in LEGACY_PROFILES],
+    }
 
 
 def profile_for(product: object, tier: object) -> ReportProfile:
