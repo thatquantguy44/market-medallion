@@ -1,6 +1,6 @@
 # Implementation plan — FINRA OTC transparency
 
-**Status:** OTC-T01–T05 implemented offline, including identity and Bronze; T06+ planned. [todo.md](todo.md) owns task execution status.
+**Status:** OTC-T01–T06 implemented offline, including the six-profile local panel; T07+ planned. [todo.md](todo.md) owns task execution status.
 This source follows Spec012 by delivery priority and precedes Spec014. It has
 no technical dependency on daily short-sale data or a shared provider warehouse.
 
@@ -29,7 +29,7 @@ rights + route evidence -> product/tier/schema inventory -> invented detail pars
 | Slice | Tasks | User-visible or inspectable outcome |
 | --- | --- | --- |
 | A: admitted shape | OTC-T01–OTC-T03 | Implemented: [route/use review](source_review.md), six-profile catalog and one invented ATS/T1 parser; [Checkpoint A](checkpoint_a.md). Live conformance pending. |
-| B: local panel | OTC-T04–OTC-T06 | T04 identity and [T05 immutable Bronze](t05_bronze_acceptance.md) implemented offline; T06 local panel remains planned. |
+| B: local panel | OTC-T04–OTC-T06 | Implemented: identity, [immutable Bronze](t05_bronze_acceptance.md), and [six-profile transactional local panel/CLI](t06_local_panel_acceptance.md). |
 | C: historical truth | OTC-T07–OTC-T09 | Current/as-of membership, delayed availability and scoped features. |
 | D: reproduction | OTC-T10–OTC-T11 | Committed typed snapshot and equivalent archived replay. |
 | E: bounded refresh | OTC-T12–OTC-T13 | Finite correction refresh and release-aware coverage health. |
@@ -76,13 +76,13 @@ and validation orchestration live in `io/bronze.py`. The larger test surface cov
 C03/C05/C06 failure, corruption and concurrency boundaries without introducing a
 shared storage framework or extending the source/API surface. No function runs
 network discovery. The local limits and ownership checks are independent of any
-provider SLA or retention permission. T06 must keep these receipts inspectable
-while adding all six fixture profiles and transactional local publication.
+provider SLA or retention permission. T06 keeps these receipts inspectable while adding all six fixture profiles and
+transactional local publication.
 
 ## T06 bounded implementation increments
 
 The user authorized T06 on `feat/finra-otc-contract-parser` on 2026-11-16.
-Keep each increment independently testable before moving to the next:
+All four increments are implemented and independently verified:
 
 1. **T06a — six invented profiles:** catalog/manifest, pure weekly parser and
    profile tests. Reuse the historical ATS fixture grammar across explicit tiers;

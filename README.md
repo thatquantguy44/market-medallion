@@ -53,7 +53,7 @@ remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
 records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
 stay explicit, with no flags cleared or derivative publication. Recent-year
 refreshes cover new releases/corrections. Acquisition schedules stay stopped;
-NAAIM remains paused; FINRA T01–T16 are implemented with bounded three-TRF delivery acceptance; Spec013 OTC-T01–T05 are implemented offline.
+NAAIM remains paused; FINRA T01–T16 are implemented with bounded three-TRF delivery acceptance; Spec013 OTC-T01–T06 are implemented offline.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
@@ -83,11 +83,12 @@ The [portable script](scripts/run_finra_short_sale_volume.sh),
 the default-stopped job/schedule. Optional Slack sensors also default stopped
 and disabled. G1/G2 are accepted locally for this bounded one-date scope; broader
 history, recurring activation and consumer integration remain separate.
-[Spec013 OTC-T01–T05](specs/spec013/README.md) implement route/use admission, six
-weekly populations, one invented ATS/T1 parser, source-evidence identity and
-immutable Bronze/partition receipts. Real acquisition, Silver/Gold publication
-and orchestration remain future work. OTC-T06 is in progress on the same branch;
-all six invented parser profiles are available under catalog v2.
+[Spec013 OTC-T01–T06](specs/spec013/README.md) implement route/use admission, six
+invented weekly profiles, source-evidence identity, immutable Bronze and a
+transactional local SQLite/CLI panel. [T06 acceptance](specs/spec013/t06_local_panel_acceptance.md)
+records exact counts, explicit synthetic completeness and rollback tests.
+OTC-T07 revisions/replacement membership is next. Real acquisition, derived
+Gold/Parquet and orchestration remain future work.
 Public API terms acceptance is user-attested; no new permission is inferred.
 Databricks workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and

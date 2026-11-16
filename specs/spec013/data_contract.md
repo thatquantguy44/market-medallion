@@ -1,7 +1,7 @@
 # FINRA OTC transparency data contract
 
-**Version:** v1 fixture checkpoint. **Reviewed:** 2026-11-16.
-**Runtime status:** T01–T05 offline, including Bronze; acquisition, Silver/Gold warehouse and jobs absent.
+**Version:** v2 local fixture panel. **Reviewed:** 2026-11-16.
+**Runtime status:** T01–T06 offline, including Bronze and initial SQLite panel/CLI; real acquisition, revision/as-of history, derived Gold/Parquet and jobs remain pending.
 Read [Spec013](README.md) and the
 [program contract](../../docs/securities_finance/contract.md). Normalized names
 and broader schema below remain design decisions; current endpoint conformance is pending.
@@ -19,8 +19,10 @@ disjoint populations: `ATS_WEEKLY_DETAIL` / `NON_ATS_WEEKLY_DETAIL` × `T1`, `T2
 `OTCE`. Scope IDs include product and tier. Documentary expected delays are two
 weeks for T1 and four for the other tiers; these are not release timestamps.
 Each profile retains its review date and source-evidence reference.
-Only ATS/T1 has an implemented invented parser. The other five entries are
-candidates with no parser. All six have `conformance: NOT_CHECKED`.
+Catalog v2 implements invented fixture parsers for all six entries. All six retain
+`conformance: NOT_CHECKED`; no actual provider schema is admitted. Historical
+catalog v1 descriptors remain byte-verifiable; its ATS/T1 parser stays admitted
+and its five candidate schemas remain unsupported.
 
 `select_partitions` accepts a nonempty explicit list of dictionaries containing
 exactly `reporting_week_start`, `product`, `tier`. Weeks are strict ISO Monday
@@ -42,7 +44,7 @@ tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalW
   LF/CRLF syntax produces the same rows. Blank records and wrong column counts
   are errors, including unexpected trailing columns.
 - Product and reporting Monday come from explicit selection context. Every row's
-  tier must be `T1`. Context alone does not verify a real file's provenance.
+  tier must match the explicit selection. Context alone does not verify a real file's provenance.
 - Symbol/name/participant/MPID values are preserved; empty/control-character text
   is rejected. Symbol/MPID tokens cannot contain whitespace. This does not infer
   a legal firm, CRD or a cross-source entity match. T04 defines source-evidence
@@ -62,10 +64,9 @@ tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalW
   Neither parsing nor a 200/empty response can establish complete membership.
 
 [Checkpoint A](checkpoint_a.md) records fixture provenance, tests and exclusions.
-T04 adds source identity below. T05+ add Bronze, persistence, clocks and
-extraction completeness before
-this can become a real weekly panel. The remaining sections describe that full
-contract; they do not claim those later components are implemented.
+T04 identity, T05 Bronze and T06 initial fixture panel are implemented below.
+T07+ add revisions, availability selection, features and real extraction before
+this can become a real weekly research pipeline.
 
 ## OTC-T04 identity contract
 
@@ -91,8 +92,9 @@ route or schema identity rows also cannot pass one population check.
 
 All supplied IDs/names and the evidence basis remain inspectable. No name lookup,
 fuzzy match, crosswalk, grouping inference, ID coercion or external call occurs.
-The ATS/T1 fixture parser applies this contract to its supplied MPIDs; this does
-not add parsers or real coverage for the other five catalog entries.
+The ATS fixtures apply this contract to supplied MPIDs. The T06 non-ATS
+invented grammar additionally exercises CRD, name-only and explicit group evidence.
+No real coverage or longitudinal firm reconciliation is established.
 
 ## OTC-T05 Bronze contract
 
@@ -134,9 +136,9 @@ resource identities and bounded allowlisted response headers are retained.
 
 Validation happens after durable raw capture. Missing/partial, HTTP failure,
 unsupported contract/route and parser rejection persist as immutable linked
-outcomes with no invented zero row count. Only the existing invented ATS/T1
-single-file profile is parsed. Multipart and the other five profiles retain raw
-evidence but are not promoted by a guessed parser. Successful results remain
+outcomes with no invented zero row count. Current v2 invented ATS and non-ATS single-file profiles are parsed; historical
+v1 ATS/T1 remains supported. Multipart and historical candidate/unknown schemas
+retain raw evidence without a guessed parser. Successful results remain
 `PARSED` / `PARSED_EMPTY`, with typed rows and unverified membership for T06 to
 handle under its separate complete local-population contract.
 
@@ -151,7 +153,77 @@ Defaults bound one capture to 20 MiB, 64 received/expected parts, 10,000 parsed
 rows and 64 KiB of canonical metadata. Byte/row overrides are positive integers
 within hard local ceilings of 64 MiB / 1,000,000 rows. These are local resource
 policies, not provider limits. No HTTP adapter, warehouse, CLI, replay service,
-Gold publication, retention deletion or Dagster definition is introduced.
+Gold publication, retention deletion or Dagster definition is introduced by T05.
+
+## OTC-T06 local panel contract
+
+Implemented offline; [acceptance](t06_local_panel_acceptance.md) records all six
+fixture populations and transaction/readback evidence. This closes fixture
+OTC-AC06; selected actual-source conformance is still T12.
+
+ATS fixtures use the existing eight-column grammar across explicit T1/T2/OTCE
+selections. Non-ATS fixtures have a separate, deliberately invented grammar:
+`finra-otc-non-ats-weekly-invented-pipe/1`. Its columns are the eight ATS columns
+followed by `firmCRDNumber|attribution`. MPID/CRD may be empty; attribution is
+explicit REPORTED/AGGREGATED/UNKNOWN. A reported label without IDs forms only a
+week-scoped name key; a group cannot assert firm IDs. Unknown/unkeyable or duplicate
+rows reject the whole partition. These fields are synthetic test inputs, not a
+current or historical FINRA non-ATS file/API schema. All counts/dates/text retain
+the strict T03 grammar. No group is inferred from its display name.
+
+`run_fixture` requires the fixture-only use profile. `--invented-fixture` is the
+CLI acknowledgement; actual data/grants cannot authorize fixture operations.
+A complete local publication additionally requires exact archived canonical
+`finra-otc-fixture-population/1` discovery bytes binding origin, partition,
+schema, expected `file` part, payload SHA and explicit expected row count.
+This synthetic assertion establishes COMPLETE_FIXTURE/COMPLETE_EMPTY_FIXTURE only.
+Bronze membership remains UNVERIFIED and no provider completeness claim is made.
+Missing assertion, mismatched count/hash/scope, partial parts, unsupported captures
+and malformed rows cannot publish. Even header-only needs an explicit empty
+fixture assertion. Quantities are normalized decimal text in SQLite/JSON, beside
+original token text, avoiding int64/float loss. Supplied MPID/CRD stay strings.
+
+`<root>/otc.sqlite3` is source-owned, marked by application/schema/contract IDs.
+`otc_attempts` retains capture/run/clock/sequence/context; `otc_rows` owns exact
+initial panel records; `otc_publications` owns complete partition coverage and the
+selected capture. A separate durable PENDING attempt precedes one transaction
+that inserts rows, coverage/selection and terminal PUBLISHED status. A rollback
+cannot publish any of them; a later transaction records sanitized FAILED status.
+If failure recording also fails, PENDING remains, and `ingest-capture` can resume
+it. Terminal FAILED attempts remain immutable and need a new capture for retry.
+A commit acknowledgement interruption may leave a fully coherent committed
+publication; inspect it before retrying. No external file/current pointer is
+part of T06; the DB/file publication journal remains T10 work.
+
+The existing root writer lock serializes writers; readers use a SQLite read
+transaction and a single consistent selection. Publication seals bind coverage,
+row hashes and immutable capture context. Reads verify these seals/counts without
+parsing Bronze, creating stores, repairing files or probing a network. They expose
+attribution row counts for PROVIDER_ID/SOURCE_ROW_LABEL/AGGREGATED/UNKNOWN and the
+expected delay separately for every requested population. They do not combine
+products/tiers into a ratio or a market-wide total. Missing requested populations
+stay explicit. Current published coverage and latest warehouse attempt are separate;
+a trailing failed/deferred attempt produces a degraded panel when all requested
+populations have publications. The panel is not T13's full raw-capture health
+inventory: a storage failure before PENDING is saved is observable in retained
+Bronze and the nonzero command result, without an invented terminal DB attempt.
+
+T06 admits initial membership only. A different complete capture for an already
+published partition records REPLACEMENT_DEFERRED/T07_REQUIRED without updating
+rows or membership. Identical capture retry verifies the existing committed selection, is idempotent
+and preserves file hashes/mtimes. T07 must implement observed revision/reversion/removal history
+before any later capture can supersede that selection. No as-of query is offered.
+First-seen is actual capture time; reporting/update dates stay date labels and
+unknown publication timestamp stays null. Fixture overrides in the low-level
+archive API remain explicitly synthetic; real retention cannot backdate its clock.
+
+Local limits: up to 10,000 panel rows, 64 MiB of normalized publication/read JSON,
+312 explicitly selected partitions, 256 MiB SQLite file and a five-second DB busy
+timeout. SQLite max-page count prevents growth beyond that file budget. Bronze
+byte/part/metadata limits continue to apply. Database/archive-owned symlinks,
+nonregular files, foreign storage IDs and WAL sidecars are refused. Operator-owned
+parent paths remain trusted. Read-only open never performs hot-journal recovery;
+an interrupted store needing recovery must be handled by an authorized writer.
 
 ## Source inventory and evidence tiers
 

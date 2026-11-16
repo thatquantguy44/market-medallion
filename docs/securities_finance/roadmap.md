@@ -1,11 +1,11 @@
 # Delivery roadmap — securities-finance research data
 
-**Updated:** 2026-11-15. **Planning horizon:** milestone based, without invented
+**Updated:** 2026-11-16. **Planning horizon:** milestone based, without invented
 completion dates. Spec011 bounded G2 is accepted and merged. Spec012 T01–T16
 are implemented with local G1/G2 acceptance for all three selected TRFs on
 2026-11-09: 25,230 real observations, admitted export, exact replay, offline health
 and stopped orchestration. See [acceptance](../../specs/spec012/acceptance.md).
-Its branch is merged in PR #28 (`eaec327`); Spec013 OTC-T01–T05 now cover offline fixture/identity/Bronze checks; OTC-T06 is next. Wider historical scope,
+Its branch is merged in PR #28 (`eaec327`); Spec013 OTC-T01–T06 now cover six offline fixture populations and transactional local SQLite/CLI publication; OTC-T07 is next. Wider historical scope,
 recurring activation and consumer integration remain separate. NAAIM stays paused.
 
 ## Priority and backlog relationship
@@ -132,8 +132,8 @@ connector; the source-owned contract and gaps determine the final boundary.
 | Delivery | G0 | G1 | G2 | G3 | G4 | Current status / next task |
 | --- | --- | --- | --- | --- | --- | --- |
 | 011 | Accepted for bounded operator-attested internal research | T03–T07 SEC persistence/revisions/cutoffs/replay/Parquet, T19/T20 PostgreSQL and T21/T22 Delta complete | T17/G2 complete, merged PR #8 | Not started | Deferred | Ten authentic lists and both SEC archives reconcile; current source-build work is Spec012 |
-| 012 | Accepted for selected three-TRF API profile | Accepted locally: immutable raw, audited versions/Gold and typed coherent publication | Accepted locally for all three TRFs on 2026-11-09 | Not activated | Deferred | [T01–T16 acceptance](../../specs/spec012/acceptance.md): 756 FINRA / 1,777 offline tests after [branch review](../../specs/spec012/branch_review.md), 25,230 real observations, 12,355 research rows, exact export/replay parity, stopped orchestration and runbook. Merged in [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as `eaec327`; broader history stays separate. Spec013 OTC-T01–T05 are implemented offline; OTC-T06 is next. |
-| 013 | Documentary route/use gate implemented; real conformance pending | T01–T05 fixture/identity/Bronze; local panel pending | Not started | Not started | Deferred | [Checkpoint A](../../specs/spec013/checkpoint_a.md): six weekly populations, explicit partitions and one invented ATS/T1 parser. T04 identity and [T05 Bronze](../../specs/spec013/t05_bronze_acceptance.md) are implemented offline; OTC-T06 local panel is next. |
+| 012 | Accepted for selected three-TRF API profile | Accepted locally: immutable raw, audited versions/Gold and typed coherent publication | Accepted locally for all three TRFs on 2026-11-09 | Not activated | Deferred | [T01–T16 acceptance](../../specs/spec012/acceptance.md): 756 FINRA / 1,777 offline tests after [branch review](../../specs/spec012/branch_review.md), 25,230 real observations, 12,355 research rows, exact export/replay parity, stopped orchestration and runbook. Merged in [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as `eaec327`; broader history stays separate. Spec013 OTC-T01–T06 are implemented offline; OTC-T07 is next. |
+| 013 | Documentary route/use gate implemented; real conformance pending | T01–T06 fixture/identity/Bronze and initial six-profile local panel | Not started | Not started | Deferred | [T06 acceptance](../../specs/spec013/t06_local_panel_acceptance.md): six invented populations, exact values/identity, immutable Bronze, transactional SQLite and CLI. Revision/membership history is OTC-T07; real conformance and G1/G2 remain open. |
 | 014 | Open | Not started | Not started | Not started | Deferred | Await013; pin current schema and public availability regime |
 | 015 | Open | Not started | Not started | Not started | Deferred | Await014; inventory overlap and select series/regime |
 

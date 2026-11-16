@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "e91fd7f01ca2eabc6e0f9167af38edf98efc442b37d6c3467a8206d07617064f",
-  "next_task": "OTC-T06",
-  "panel_fingerprint": "633c4bb896f3c93524bfaeb94c0e936afa4dd77685e58fb5420b10b771662f6f",
-  "review_summary": "Reviewed T06 parser/archive increment: six invented profiles, versioned catalog and immutable legacy outcome compatibility; 259 focused OTC tests pass. Transactional local panel/CLI remain active T06 work; no real source conformance or activation.",
-  "reviewed_at": "2026-11-16T09:39:33.026204+00:00",
-  "reviewed_commit": "6cb0376a964aaff5dc618db28c00644c2c637054",
+  "document_fingerprint": "4551695d13284e8fc977b1a82bd8d696bc923d321bd6f711d01f397b16be290f",
+  "next_task": "OTC-T07",
+  "panel_fingerprint": "50b622f109ad4dc090677ab5176350f103ee02bcc8e29322da2bbdd0bccebe1c",
+  "review_summary": "Completed OTC-T06 on the existing branch: six invented profiles, immutable legacy Bronze compatibility, exact SQLite panel with synthetic completeness and atomic data/coverage/attempt selection, bounded read-only inspection and fixture-only CLI. 88 added/330 OTC tests; 2157 full passes/92 optional skips; lint/format, Dagster parity, 199-module package equivalence, native/isolated-wheel immutability and 229 links pass. Successful retries verify committed selection. Next OTC-T07; no provider acquisition or activation.",
+  "reviewed_at": "2026-11-16T09:51:46.488496+00:00",
+  "reviewed_commit": "270914da5b7cbf41e7b1b982c4adcfa994dfa711",
   "schema_version": 1,
-  "source_fingerprint": "988e448c802056db52f699ecdf887a9b5a570a2b4f7a2391b76f8d621b7588ac",
+  "source_fingerprint": "4abbc90e03ee1f0a3a0fc1c0129b113dc42a3d19d5d0b296019c26b97b57630f",
   "task_file": "specs/spec013/todo.md"
 }

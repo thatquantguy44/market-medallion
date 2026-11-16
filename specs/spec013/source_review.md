@@ -72,3 +72,20 @@ syntax yields `PARSED_EMPTY` with **unverified completeness**, not proof that
 FINRA published a complete empty population. Actual route access, payload
 conformance, complete extraction, historical coverage, export and schedules
 remain future work. The first implementation after Checkpoint A is T04 identity.
+
+## T06 fixture expansion review — 2026-11-16
+
+Rechecked the [official landing page](https://www.finra.org/filing-reporting/otc-transparency),
+[Equity Data terms](https://developer.finra.org/specific-terms-equity-data) and
+[v0.4 historical file specification](https://www.finra.org/sites/default/files/OTC-Transparency-Data-File-Download-API-v04.pdf),
+including visual review of printed p.10. The historical non-ATS sample has a
+different header from ATS, no MPID column and an explicit reporting-week field.
+It does not establish a current six-profile payload or stable group classification.
+
+T06 therefore reuses only the invented ATS grammar across explicit tier fixtures
+and names its non-ATS grammar `finra-otc-non-ats-weekly-invented-pipe/1`. The latter
+deliberately adds optional supplied IDs and an explicit invented attribution
+column to exercise T04 identity. It is not a transcription of the historical
+non-ATS header or current Query API. No schema inference, new permission, provider
+data request or agreement acceptance occurs. Real route/schema/grouping and
+extraction conformance remain T12, separately for every selected actual profile.

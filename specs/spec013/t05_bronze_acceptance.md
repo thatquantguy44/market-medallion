@@ -2,8 +2,9 @@
 
 Implemented offline on `feat/finra-otc-contract-parser` after T04 commit
 `568610d8813dd9e304cb4498f30e47a5ed1d4531`, following the user's explicit T05
-continuation. This closes OTC-REQ05 / OTC-AC05. T06 local publication and later
-source conformance remain separate.
+continuation. This is the T05 record at `6cb0376`; it closes OTC-REQ05 / OTC-AC05.
+[Current Spec013 status](README.md#current-implementation-and-pickup) and
+[T06 acceptance](t06_local_panel_acceptance.md) own subsequent work.
 
 **Verified:** 2026-11-16, America/New_York.
 

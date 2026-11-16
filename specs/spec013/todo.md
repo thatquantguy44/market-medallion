@@ -1,10 +1,10 @@
 # Tasks — FINRA OTC transparency
 
-**OTC-T01–T05 and fixture Checkpoint A are implemented offline.** T06–T16 remain not started.
+**OTC-T01–T06 and fixture Checkpoints A/B are implemented offline.** T07–T16 remain not started.
 See [Checkpoint A](checkpoint_a.md) and [source review](source_review.md). Code paths are relative to
 `src/market_data_pipeline/pipelines/finra_otc_transparency/`. Each is S/M and
 limited to five likely files; split growing tasks before implementation. Commands
-under T01–T05 identify actual tests; T06+ commands remain future targets.
+under T01–T06 identify actual tests; T07+ commands remain future targets.
 
 ## OTC-T01 — Resolve source route and reuse contract
 
@@ -55,18 +55,17 @@ under T01–T05 identify actual tests; T06+ commands remain future targets.
 ## OTC-T06 — Deliver the local weekly detail slice
 
 **Depends:** OTC-T04, OTC-T05; **traces:** OTC-REQ06 / OTC-AC06.
-- [ ] Persist one invented complete ATS/non-ATS partition in source-owned SQLite.
-- [ ] Couple data, coverage and run status in a safe transactional publication.
-**Verify:** start with one profile, then parameterize end-to-end readback and
-injected persistence failures over all six selected product/tier profiles
-(ATS and non-ATS × Tier1/Tier2/OTCE). Unsupported profiles keep delivery open
-unless the owner explicitly narrows the selected scope.
+- [x] Persist one invented complete ATS/non-ATS partition in source-owned SQLite.
+- [x] Couple data, coverage and run status in a safe transactional publication.
+**Verify:** `.venv/bin/python -m pytest -q tests/test_otc_profiles.py tests/test_otc_pipeline.py tests/test_otc_cli.py`; all six profiles cover readback and injected persistence failures.
+[Local panel acceptance](t06_local_panel_acceptance.md) closes fixture OTC-AC06;
+selected real-profile conformance remains T12. The [bounded increments](plan.md#t06-bounded-implementation-increments) separate profiles/archive/panel/CLI.
 **Files:** `pipeline.py`, `io/warehouse.py`, `cli.py`, `__main__.py`, `tests/test_otc_pipeline.py`.
 
 ### Checkpoint B — Local inspectable panel
 
-- [ ] Reporting week/tier/product and attribution coverage survive the complete flow.
-- [ ] No source claim implies short direction, lending inventory or market-wide totals.
+- [x] Reporting week/tier/product and attribution coverage survive the complete flow.
+- [x] No source claim implies short direction, lending inventory or market-wide totals.
 
 ## OTC-T07 — Implement immutable revisions and replacement membership
 

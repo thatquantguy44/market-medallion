@@ -1,6 +1,6 @@
 # Spec 013 — FINRA ATS and non-ATS transparency
 
-**Status:** OTC-T01–T05 implemented offline: fixture Checkpoint A, source-evidence identity and immutable Bronze receipts.
+**Status:** OTC-T01–T06 implemented offline: six invented profiles, identity, immutable Bronze and transactional SQLite/CLI panel.
 **Reviewed:** 2026-11-16. **Delivery order:** 3 of 5.
 **Pipeline ID:** `finra-otc-transparency`.
 **Package:** `src/market_data_pipeline/pipelines/finra_otc_transparency/`.
@@ -14,23 +14,31 @@ Spec014 SEC N-PORT follows this delivery.
 
 ## Current implementation and pickup
 
-[Checkpoint A](checkpoint_a.md) records the delivered route/use admission,
-six-profile weekly catalog, explicit finite partition selection, strict manifest
-and pure invented ATS/T1 pipe parser. Current [source review](source_review.md)
-selects Public Query API `weeklySummary` as the future candidate; the historical
-file header is fixture evidence only. T06 adds six invented profile parsers under catalog v2; all real
-source conformance remains pending. The non-ATS fixture grammar is deliberately
-invented and does not claim an actual file/API schema. No HTTP transport, Silver/Gold warehouse, CLI
-or Dagster job exists. [T04 identity](t04_identity_acceptance.md) preserves supplied IDs and explicit
-name-only/grouped/unknown evidence without inferring firms.
-[T05 Bronze](t05_bronze_acceptance.md) archives exact bytes/discovery, preserves
-missing/partial/rejected evidence and verifies immutable readback before parsing.
-Next is [OTC-T06 local panel](todo.md#otc-t06--deliver-the-local-weekly-detail-slice).
+[Checkpoint A](checkpoint_a.md) records the initial route/use admission and
+invented ATS/T1 parser. [T04 identity](t04_identity_acceptance.md) preserves supplied
+IDs and explicit name-only/grouped/unknown evidence without inferring firms.
+[T05 Bronze](t05_bronze_acceptance.md) retains exact bytes and explicit negative
+outcomes. [T06 local panel](t06_local_panel_acceptance.md) adds all six invented
+ATS/non-ATS × T1/T2/OTCE profiles, transactional SQLite publication and the local CLI.
+Catalog v2 preserves read/validation compatibility with captured v1 descriptors.
+The non-ATS grammar is explicitly invented, with attribution/ID fields; it is
+not an actual FINRA file/API schema. Every real profile remains NOT_CHECKED.
+
+A separate archived synthetic assertion binds the selected partition, schema,
+payload SHA and row count. It can establish COMPLETE_FIXTURE or
+COMPLETE_EMPTY_FIXTURE only. Raw parsing/received-all and a header-only file alone
+remain UNVERIFIED. Reads expose published population coverage and the latest
+warehouse attempt separately; missing requested populations stay missing.
+
+Next is [OTC-T07 revisions and replacement membership](todo.md#otc-t07--implement-immutable-revisions-and-replacement-membership).
+Until then, a new complete capture for an already published partition is retained
+as REPLACEMENT_DEFERRED. No real acquisition, as-of/revision history, derived venue
+ratios, Parquet, replay service or Dagster job is implemented.
 
 Run the actual offline checks:
 
 ```bash
-.venv/bin/python -m pytest -q tests/test_otc_manifest.py tests/test_otc_catalog.py tests/test_otc_parser.py tests/test_otc_identity.py tests/test_otc_bronze.py
+.venv/bin/python -m pytest -q tests/test_otc_*.py
 ```
 
 ## Objective and research use
@@ -111,7 +119,7 @@ Only then add stopped Dagster definitions. No schedule runs during specification
 | OTC-REQ12: Export a scoped research file. | OTC-AC14: Artifact preserves delay, population, attribution coverage and rights; no secrets/raw operational paths appear. | OTC-T14 |
 | OTC-NFR03: Keep manual control and truthful handoff. | OTC-AC15: Source-owned schedule defaults stopped; evidence/runbook/registers identify actual implemented coverage. | OTC-T15, OTC-T16 |
 
-## Full architecture and package layout (T04+ pending)
+## Implemented and planned package layout
 
 Use the repository's Python 3.12 baseline, pure typed transforms, SQLite first
 and existing Parquet support. File and optional admitted API acquisition feed
@@ -124,6 +132,7 @@ pipelines/finra_otc_transparency/
   source.py                    # bounded discovery and transfer
   data/weekly.py               # typed provider-profile parser
   data/identity.py             # scoped evidence, no name-based entity merge
+  data/panel.py                # synthetic membership and exact local records
   data/gold.py                 # complete-population research features
   io/bronze.py / warehouse.py / parquet.py
   pipeline.py / replay.py / operations.py / research_export.py
@@ -154,19 +163,33 @@ Existing verification commands remain available:
 .venv/bin/python -m build --no-isolation
 ```
 
-These future commands are design targets, absent until tasks implement them:
+These local commands are implemented and use invented data only. Run once into
+an empty root, then inspect or retry with `ingest-capture`:
 
 ```bash
 .venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency validate --manifest manifests/finra-otc-transparency.yml
-.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency run --input tests/fixtures/finra_otc_transparency/weekly.txt --root data/otc-demo
-.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency check --root data/otc-demo
-.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency replay --source-root data/otc-demo --root data/otc-replay
+.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency run \
+  --invented-fixture --manifest manifests/finra-otc-transparency.yml \
+  --input tests/fixtures/finra_otc_transparency/ats_t1_weekly.txt \
+  --root data/otc-fixture-demo --week 2026-10-19 \
+  --product ATS_WEEKLY_DETAIL --tier T1 --expected-rows 3
+.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency inspect \
+  --invented-fixture --root data/otc-fixture-demo \
+  --partition 2026-10-19:ATS_WEEKLY_DETAIL:T1
 ```
 
-No current command should be extended to silently redirect to FINRA. The later
-fetch command must require bounded reporting weeks, product/tier selections and
-a use profile. Check/replay never fetch. Counts and coverage are reported with
-their population and publication delay, including when some tiers are pending.
+`--expected-rows` is an explicit synthetic complete-population assertion, not a
+provider claim. Omit it for an UNVERIFIED nonpublished attempt. `--expected-rows 0`
+can admit an explicitly invented empty fixture. Repeat `--partition` to inspect
+multiple explicit populations; no implicit all/history selection exists. Exact
+counts are decimal JSON text with the original count tokens beside them.
+Exit 0 means VALID/PUBLISHED/COMPLETE_FIXTURE; exit 2 means an explicit
+nonpublished/degraded/partial fixture outcome; exit 1 means a sanitized local
+operation error. Argument errors use argparse exit 2.
+
+Check, replay and fetch commands are still future targets. No existing AAII/other
+pipeline command redirects to OTC. T12 will require bounded reporting weeks,
+product/tier selections, admitted route/use and independently verified extraction.
 
 ## Testing and operational boundaries
 
