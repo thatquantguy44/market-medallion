@@ -1,0 +1,66 @@
+# OTC-T02 catalog only: no access grant or actual source coverage.
+# Evidence: specs/spec013/source_review.md
+source: finra
+dataset: finra-otc-transparency
+catalog_version: finra-otc-weekly-catalog/1
+profiles:
+- product: ATS_WEEKLY_DETAIL
+  tier: T1
+  scope_id: finra-otc:weekly:ATS_WEEKLY_DETAIL:T1
+  schema_profile: finra-otc-ats-weekly-pipe-fixture/1
+  summary_code: ATS_W_SMBL_FIRM
+  expected_delay_weeks: 2
+  parser_status: INVENTED_FIXTURE_ONLY
+  conformance: NOT_CHECKED
+  reviewed_on: '2026-11-15'
+  evidence: specs/spec013/source_review.md
+- product: ATS_WEEKLY_DETAIL
+  tier: T2
+  scope_id: finra-otc:weekly:ATS_WEEKLY_DETAIL:T2
+  schema_profile: finra-otc-ats-weekly-pipe-candidate/1
+  summary_code: ATS_W_SMBL_FIRM
+  expected_delay_weeks: 4
+  parser_status: NOT_IMPLEMENTED
+  conformance: NOT_CHECKED
+  reviewed_on: '2026-11-15'
+  evidence: specs/spec013/source_review.md
+- product: ATS_WEEKLY_DETAIL
+  tier: OTCE
+  scope_id: finra-otc:weekly:ATS_WEEKLY_DETAIL:OTCE
+  schema_profile: finra-otc-ats-weekly-pipe-candidate/1
+  summary_code: ATS_W_SMBL_FIRM
+  expected_delay_weeks: 4
+  parser_status: NOT_IMPLEMENTED
+  conformance: NOT_CHECKED
+  reviewed_on: '2026-11-15'
+  evidence: specs/spec013/source_review.md
+- product: NON_ATS_WEEKLY_DETAIL
+  tier: T1
+  scope_id: finra-otc:weekly:NON_ATS_WEEKLY_DETAIL:T1
+  schema_profile: finra-otc-non-ats-weekly-pipe-candidate/1
+  summary_code: OTC_W_SMBL_FIRM
+  expected_delay_weeks: 2
+  parser_status: NOT_IMPLEMENTED
+  conformance: NOT_CHECKED
+  reviewed_on: '2026-11-15'
+  evidence: specs/spec013/source_review.md
+- product: NON_ATS_WEEKLY_DETAIL
+  tier: T2
+  scope_id: finra-otc:weekly:NON_ATS_WEEKLY_DETAIL:T2
+  schema_profile: finra-otc-non-ats-weekly-pipe-candidate/1
+  summary_code: OTC_W_SMBL_FIRM
+  expected_delay_weeks: 4
+  parser_status: NOT_IMPLEMENTED
+  conformance: NOT_CHECKED
+  reviewed_on: '2026-11-15'
+  evidence: specs/spec013/source_review.md
+- product: NON_ATS_WEEKLY_DETAIL
+  tier: OTCE
+  scope_id: finra-otc:weekly:NON_ATS_WEEKLY_DETAIL:OTCE
+  schema_profile: finra-otc-non-ats-weekly-pipe-candidate/1
+  summary_code: OTC_W_SMBL_FIRM
+  expected_delay_weeks: 4
+  parser_status: NOT_IMPLEMENTED
+  conformance: NOT_CHECKED
+  reviewed_on: '2026-11-15'
+  evidence: specs/spec013/source_review.md

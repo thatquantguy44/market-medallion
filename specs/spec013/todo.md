@@ -1,39 +1,40 @@
 # Tasks — FINRA OTC transparency
 
-All tasks are **not started**. Proposed code paths are relative to
+**OTC-T01–T03 and fixture Checkpoint A are implemented.** T04–T16 remain not started.
+See [Checkpoint A](checkpoint_a.md) and [source review](source_review.md). Code paths are relative to
 `src/market_data_pipeline/pipelines/finra_otc_transparency/`. Each is S/M and
-limited to five likely files; split growing tasks before implementation. Test
-commands below identify future targets, not tests already delivered.
+limited to five likely files; split growing tasks before implementation. Commands
+under T01–T03 identify actual tests; later commands remain future targets.
 
 ## OTC-T01 — Resolve source route and reuse contract
 
 **Depends:** Spec012 delivery; **traces:** OTC-REQ01 / OTC-AC01.
-- [ ] Reconcile documented download automation with general/dataset/API terms.
-- [ ] Record retention, transforms, exports and non-commercial use boundaries.
-- [ ] Deny unadmitted real-data acquisition/export in the future use profile.
-**Verify:** documentary review and offline admitted/denied profile tests.
+- [x] Reconcile documented download automation with general/dataset/API terms.
+- [x] Record retention, transforms, exports and non-commercial use boundaries.
+- [x] Deny unadmitted real-data acquisition/export in the future use profile.
+**Verify:** `.venv/bin/python -m pytest -q tests/test_otc_manifest.py`; documentary [review](source_review.md).
 **Files:** `specs/spec013/data_contract.md`, `manifest.py`, `tests/test_otc_manifest.py`.
 
 ## OTC-T02 — Define products, tiers and requested partitions
 
 **Depends:** OTC-T01; **traces:** OTC-REQ02 / OTC-AC02.
-- [ ] Inventory weekly ATS/non-ATS detail with schema/coverage identifiers.
-- [ ] Exclude overlapping summaries/monthly/blocks from the detail population.
-**Verify:** finite partition tests reject duplicate/overlapping or unknown selections.
+- [x] Inventory weekly ATS/non-ATS detail with schema/coverage identifiers.
+- [x] Exclude overlapping summaries/monthly/blocks from the detail population.
+**Verify:** `.venv/bin/python -m pytest -q tests/test_otc_catalog.py`; finite selection and strict manifest cases pass.
 **Files:** `catalog.py`, `manifest.py`, `manifests/finra-otc-transparency.yml`, `tests/test_otc_catalog.py`.
 
 ## OTC-T03 — Parse an invented weekly profile
 
 **Depends:** OTC-T02; **traces:** OTC-REQ03 / OTC-AC03.
-- [ ] Declare literal headers, delimiter, encoding, dates/counts and context source.
-- [ ] Cover valid, empty, malformed, duplicate and changed-schema examples.
+- [x] Declare literal headers, delimiter, encoding, dates/counts and context source.
+- [x] Cover valid, empty, malformed, duplicate and changed-schema examples.
 **Verify:** `.venv/bin/python -m pytest -q tests/test_otc_parser.py`.
 **Files:** `data/weekly.py`, `tests/test_otc_parser.py`, up to three invented fixtures.
 
 ### Checkpoint A — Current contract and source shape
 
-- [ ] Current transfer/use evidence is distinct from old documentation examples.
-- [ ] Pure fixture parser passes and no live extraction or schedule is active.
+- [x] Current transfer/use evidence is distinct from old documentation examples.
+- [x] Pure fixture parser passes and no live extraction or schedule is active.
 
 ## OTC-T04 — Preserve attribution and identity basis
 

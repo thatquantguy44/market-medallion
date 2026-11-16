@@ -1,0 +1,4 @@
+tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalWeeklyShareQuantity|lastUpdateDate|totalWeeklyTradeCount
+T1|ZXQ.A|Invented Café Class A|EXAMPLE ALPHA ATS|A0A1|9007199254740993|2026-11-09|42
+T1|ZXQ.A|Invented Café Class A|EXAMPLE BETA ATS|0007|12345678901234567890|2026-11-09|100
+T1|ZZZ$B|Invented Zero B|EXAMPLE ALPHA ATS|A0A1|0|2026-11-09|0

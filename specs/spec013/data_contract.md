@@ -1,9 +1,69 @@
 # FINRA OTC transparency data contract
 
-**Version:** proposed v1. **Reviewed:** 2026-11-03. **Runtime status:** absent.
+**Version:** v1 fixture checkpoint. **Reviewed:** 2026-11-15.
+**Runtime status:** T01–T03 implemented offline; acquisition/storage/jobs absent.
 Read [Spec013](README.md) and the
 [program contract](../../docs/securities_finance/contract.md). Normalized names
-and schema below are design decisions; current endpoint conformance is pending.
+and broader schema below remain design decisions; current endpoint conformance is pending.
+
+## Implemented T01–T03 contract
+
+[Current route/use review](source_review.md) reconciles website, API and equity
+terms independently of Spec012. The pure approved-use gate denies absent,
+wrong-dataset, mock, unaccepted, unlisted and commercial/public operations.
+Public `weeklySummary` is the future candidate, not an enabled source. Local
+real files require independent provider permission. No active use grant ships.
+
+The versioned [manifest](../../manifests/finra-otc-transparency.yml) enumerates six
+disjoint populations: `ATS_WEEKLY_DETAIL` / `NON_ATS_WEEKLY_DETAIL` × `T1`, `T2`,
+`OTCE`. Scope IDs include product and tier. Documentary expected delays are two
+weeks for T1 and four for the other tiers; these are not release timestamps.
+Each profile retains its review date and source-evidence reference.
+Only ATS/T1 has an implemented invented parser. The other five entries are
+candidates with no parser. All six have `conformance: NOT_CHECKED`.
+
+`select_partitions` accepts a nonempty explicit list of dictionaries containing
+exactly `reporting_week_start`, `product`, `tier`. Weeks are strict ISO Monday
+labels; no holiday/Tuesdays are rewritten. Up to 312 distinct partitions may be
+selected under a smaller caller budget. This is a local planning ceiling, not a
+provider limit or admitted historical range. Duplicates, tier aliases, summaries,
+monthly and block products are rejected.
+
+### ATS/T1 invented pipe profile
+
+`finra-otc-ats-weekly-pipe-fixture/1` uses the literal v0.4 ATS file sample header,
+not the differently shaped Query API response. Fields, in order:
+
+```text
+tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalWeeklyShareQuantity|lastUpdateDate|totalWeeklyTradeCount
+```
+
+- Strict UTF-8 without BOM, `|` delimiter, CSV double-quote quoting/escaping;
+  LF/CRLF syntax produces the same rows. Blank records and wrong column counts
+  are errors, including unexpected trailing columns.
+- Product and reporting Monday come from explicit selection context. Every row's
+  tier must be `T1`. Context alone does not verify a real file's provenance.
+- Symbol/name/participant/MPID values are preserved; empty/control-character text
+  is rejected. Symbol/MPID tokens cannot contain whitespace. This does not infer
+  firm identity, CRD or a cross-period identity key; T04 owns that work.
+- Counts are exact nonnegative integers plus original token text, never float.
+  Missing/decimal/signed/exponent/grouped values are rejected. At most 38 ASCII
+  digits is a local fixture-profile bound, not a verified provider maximum.
+- `lastUpdateDate` is a strict ISO date. Initial publication date and CRD remain
+  null because this file supplies neither. No midnight/publication/first-seen
+  timestamp is invented.
+- Duplicate `(symbol_raw, MPID)` within the selected partition rejects the whole
+  parse, including conflicting names/quantities. New bytes require revalidation.
+- Defaults bound payload to 2,000,000 bytes and 10,000 rows; overrides must be
+  positive finite integers. No process-global CSV or HTTP settings are modified.
+- Output retains schema, partition, SHA-256 and immutable typed rows. Header-only
+  syntax produces `PARSED_EMPTY`; every result has `completeness: UNVERIFIED`.
+  Neither parsing nor a 200/empty response can establish complete membership.
+
+[Checkpoint A](checkpoint_a.md) records fixture provenance, tests and exclusions.
+T04+ add identity, Bronze, persistence, clocks and extraction completeness before
+this can become a real weekly panel. The remaining sections describe that full
+contract; they do not claim those later components are implemented.
 
 ## Source inventory and evidence tiers
 

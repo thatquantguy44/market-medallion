@@ -1,9 +1,9 @@
 # Spec 013 — FINRA ATS and non-ATS transparency
 
-**Status:** Comprehensive implementation proposal; connector/package/jobs absent.
-**Reviewed:** 2026-11-03. **Delivery order:** 3 of 5.
+**Status:** OTC-T01–T03 implemented offline; Checkpoint A passes for the invented ATS/T1 profile.
+**Reviewed:** 2026-11-15. **Delivery order:** 3 of 5.
 **Pipeline ID:** `finra-otc-transparency`.
-**Proposed package:** `src/market_data_pipeline/pipelines/finra_otc_transparency/`.
+**Package:** `src/market_data_pipeline/pipelines/finra_otc_transparency/`.
 
 Read the [program roadmap](../../docs/securities_finance/README.md),
 [common contract](../../docs/securities_finance/contract.md),
@@ -11,6 +11,22 @@ Read the [program roadmap](../../docs/securities_finance/README.md),
 Spec012 must reach its delivery checkpoint before implementation here. This is
 a priority dependency, not a requirement to read its daily short-sale records.
 Spec014 SEC N-PORT follows this delivery.
+
+## Current implementation and pickup
+
+[Checkpoint A](checkpoint_a.md) records the delivered route/use admission,
+six-profile weekly catalog, explicit finite partition selection, strict manifest
+and pure invented ATS/T1 pipe parser. Current [source review](source_review.md)
+selects Public Query API `weeklySummary` as the future candidate; the historical
+file header is fixture evidence only. Other five profile parsers and all real
+source conformance remain pending. No transport, persistence, CLI or Dagster job
+exists. Next is [OTC-T04 participant identity](todo.md#otc-t04--preserve-attribution-and-identity-basis).
+
+Run the actual offline checks:
+
+```bash
+.venv/bin/python -m pytest -q tests/test_otc_manifest.py tests/test_otc_catalog.py tests/test_otc_parser.py
+```
 
 ## Objective and research use
 
@@ -54,7 +70,7 @@ terms must be reconciled before any durable bulk collection or downstream reuse.
 The guide's automation description does not resolve every retention, derived
 measure, publication or commercial-use permission. OTC-T01 records the route-
 specific decision. No provider contact, account registration, live bulk download
-or source-derived predictive model is authorized by this documentation change.
+or source-derived predictive model is part of this fixture implementation.
 
 ## Scope and delivery layers
 
@@ -90,7 +106,7 @@ Only then add stopped Dagster definitions. No schedule runs during specification
 | OTC-REQ12: Export a scoped research file. | OTC-AC14: Artifact preserves delay, population, attribution coverage and rights; no secrets/raw operational paths appear. | OTC-T14 |
 | OTC-NFR03: Keep manual control and truthful handoff. | OTC-AC15: Source-owned schedule defaults stopped; evidence/runbook/registers identify actual implemented coverage. | OTC-T15, OTC-T16 |
 
-## Proposed architecture and package layout
+## Full architecture and package layout (T04+ pending)
 
 Use the repository's Python 3.12 baseline, pure typed transforms, SQLite first
 and existing Parquet support. File and optional admitted API acquisition feed

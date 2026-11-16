@@ -4,11 +4,13 @@ Last updated: 2026-11-15.
 
 ## Agent start here
 
-**Next implementation: FINRA OTC-T01 source route and reuse contract (Spec013).**
+**Next implementation: Spec013 OTC-T04 participant identity.**
+OTC-T01–T03 are implemented locally on `feat/finra-otc-contract-parser`.
 Spec012 T14 → T15 → T16 and the subsequent regression/equivalence review are
 merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as
-`eaec3279dd27c0ee170e78751f234d538d4416b2`. Start Spec013 on a fresh branch from latest
-`origin/main`; the FINRA short-volume delivery's review/merge step is complete.
+`eaec3279dd27c0ee170e78751f234d538d4416b2`. The user authorized OTC-T01–OTC-T03 in order on a fresh latest-main branch.
+The branch starts at `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`, the merged
+[Dagster cleanup PR #29](https://github.com/thatquantguy44/market-medallion/pull/29).
 This panel owns current priorities; dated checkpoints below retain history.
 Later explicit user instructions take precedence and must be recorded here.
 
@@ -24,39 +26,40 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | Dagster canonical documentation cleanup | Implemented and published on `docs/dagster-canonical-register`; [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) is open. Check current-head CI/review before merge. | [DAGSTER.md](../../DAGSTER.md), [checker](../../scripts/verify_dagster_docs.py) |
-| 1 | **Spec013 OTC-T01 — route and reuse contract** | Ready; implementation not started. Create a fresh latest-main branch and verify current official terms for one bounded weekly report profile before provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
+| 0 | **Spec013 OTC-T01–OTC-T03 — admitted shape** | Implemented locally on `feat/finra-otc-contract-parser`; review [Checkpoint A](../../specs/spec013/checkpoint_a.md). 144 focused tests pass; no live conformance or runtime adapter. | [Tasks](../../specs/spec013/todo.md), [contract](../../specs/spec013/data_contract.md) |
+| 1 | Spec013 OTC-T04 — participant identity | Next after the authorized T01–T03 checkpoint; not started. | [T04](../../specs/spec013/todo.md#otc-t04--preserve-attribution-and-identity-basis) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Current delivery:** Dagster documentation cleanup is implemented in `5a1578c`
-on `docs/dagster-canonical-register`, from main `eaec327` plus preserved
-local handoff/runtime checkpoints `1747018` and `468b72a`. The user requested one
-recognizable canonical inventory tied to README/AGENTS. Root
-[DAGSTER.md](../../DAGSTER.md) now owns the job/schedule/sensor tables, UI access,
-operating controls and dated runtime observation. The old register is a pointer.
-An offline definition/doc/navigation check is wired into CI; 50 new regression
-checks and 1,827 full-suite passes / 92 optional skips verify drift, links and
-no instance/network access. The user requested publication;
-[PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) is open against
-`main`. Review current-head CI and the root guide/guard before merge and the next
-pipeline slice; opening the PR does not imply acceptance or merge. Source/wheel
-readback verifies all 185 runtime modules and changed packaged files; lint, format,
-inventory and handoff checks pass. No job definitions, runtime configuration,
-provider behavior or automation activation were changed. OTC-T01 remains ready.
+**Current implementation:** The user authorized OTC-T01 through OTC-T03 on a
+fresh latest-main branch. The source-owned package now implements independent
+route/use admission, six dated/evidence-linked weekly product/tier contracts, strict local manifest
+loading, finite explicit Monday partitions and one pure invented ATS/T1 pipe
+parser. It preserves exact integer/token text, IDs, date precision, payload hash
+and population context. Empty syntax remains UNVERIFIED completeness. See
+[Checkpoint A](../../specs/spec013/checkpoint_a.md), [source review](../../specs/spec013/source_review.md)
+and [tasks](../../specs/spec013/todo.md). No transport, storage, CLI, export or
+Dagster definition was added. All actual provider conformance/coverage remains
+pending; no account terms were accepted. NAAIM stays paused. No PR exists for
+this branch yet. Verification: **144 new OTC tests; 1,971 full offline passes /
+92 existing optional skips**. Ruff lint/format and canonical Dagster parity pass;
+source/wheel builds and all-190-module byte readback pass, including the OTC
+manifest and three fixtures in the source archive. Resolve the delivered commit
+with `git log -1 -- specs/spec013/checkpoint_a.md`; committed freshness is checked
+before handoff.
 
 ### Last completed work and commits
 
 | Commit / checkpoint | Result |
 | --- | --- |
 | `c53b1e2ab29294e73953362d03b837e468c77f85` / [PR26](https://github.com/thatquantguy44/market-medallion/pull/26) | T13 health/retention merged. |
-| `1daf6b58ed6199fd39dff38f30923d6f55a9b896` / [PR27](https://github.com/thatquantguy44/market-medallion/pull/27) | Master handoff and CI/daily freshness guard merged; base of current branch. |
+| `1daf6b58ed6199fd39dff38f30923d6f55a9b896` / [PR27](https://github.com/thatquantguy44/market-medallion/pull/27) | Master handoff and CI/daily freshness guard merged. |
 | `2b6fc3bef1c8a554cdedf457348454c211dbc4ac` | T14 admitted research interchange,37 new /710 FINRA tests. |
 | `c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95` | T15 stopped job/schedule and 21 Dagster tests;731 FINRA tests. Verified local commit. |
 | `3f0043a4eb6c5d08807cf4ed2eea75023ad37a38` / T16 | [Acceptance](../../specs/spec012/acceptance.md) and [conformance](../../specs/spec012/evidence/t16_delivery_conformance.json) record the final tests/CLI/source-replay evidence. Resolve its exact commit with the commands below rather than a self-referential SHA. |
 | `9db245ec50c3df6b205a401f942a718ef3664061` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Completed review fixes and 24 added regressions/equivalence tests; 1,777 local passes / 92 optional skips. Branch is pushed; remote checks/reviews are tracked on the PR. |
 | `eaec3279dd27c0ee170e78751f234d538d4416b2` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Merged T14–T16 and reviewed regression/equivalence fixes; Spec013 OTC-T01 is now the next implementation. |
-| `5a1578c11cbcaefe7d19524259a844fdfb0f9ff6` / [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) | Canonical root Dagster guide, README/AGENTS maintenance contract and offline definition/navigation CI guard; 1,827 local passes / 92 optional skips. PR is open; confirm current-head CI/review before merge. |
+| `5a1578c11cbcaefe7d19524259a844fdfb0f9ff6` / [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) | Canonical root Dagster guide, README/AGENTS maintenance contract and offline definition/navigation CI guard; 1,827 local passes / 92 optional skips. Merged through PR #29 as `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`; this is the OTC branch base. |
 
 The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
 approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
@@ -79,19 +82,19 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: OTC-T01
+### Exact next slice: OTC-T04
 
 Read [AGENTS.md](../../AGENTS.md), [pipeline register](../pipelines.md),
-[Spec012 acceptance](../../specs/spec012/acceptance.md),
-[Spec013](../../specs/spec013/README.md), its [data contract](../../specs/spec013/data_contract.md),
-[plan](../../specs/spec013/plan.md) and [T01 task](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract).
-Reconcile current official file/API automation and dataset/general terms, recording
-retention, transforms, internal exports and noncommercial boundaries. Build only
-the source-owned admission/profile checks for the selected bounded weekly report.
-Keep ATS/non-ATS, tiers, reporting lags and grouped participant identities explicit.
-Do not infer Spec013 rights or availability from Spec012's implemented API profile.
-Use `pipelines/finra_otc_transparency/` only when implementing its working slice;
-the package/connector is absent now. Do not implement T02+ without a bounded task.
+[Spec013](../../specs/spec013/README.md), [Checkpoint A](../../specs/spec013/checkpoint_a.md),
+[source review](../../specs/spec013/source_review.md), [data contract](../../specs/spec013/data_contract.md)
+and [T04](../../specs/spec013/todo.md#otc-t04--preserve-attribution-and-identity-basis).
+Build evidence-scoped participant identity for supplied MPID/CRD, name-only,
+aggregated and unknown attribution. Test renames/ambiguity without inventing
+firm matches. Keep the one implemented ATS/T1 fixture parser distinct from the
+five catalog-only profiles and from the candidate Public `weeklySummary` route.
+T05 Bronze and T06 local publication follow; all six selected populations must
+reach that later fixture acceptance. Actual transport/conformance remains T12.
+Do not inherit Spec012 rights, first-seen times, schemas or source coverage.
 
 ### Operating holds and other workstreams
 

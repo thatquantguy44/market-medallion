@@ -1,6 +1,6 @@
 # Implementation plan — FINRA OTC transparency
 
-**Status:** proposed, 2026-11-03. [todo.md](todo.md) owns task execution status.
+**Status:** Slice A / OTC-T01–T03 implemented offline, 2026-11-15; later slices planned. [todo.md](todo.md) owns task execution status.
 This source follows Spec012 by delivery priority and precedes Spec014. It has
 no technical dependency on daily short-sale data or a shared provider warehouse.
 
@@ -28,7 +28,7 @@ rights + route evidence -> product/tier/schema inventory -> invented detail pars
 
 | Slice | Tasks | User-visible or inspectable outcome |
 | --- | --- | --- |
-| A: admitted shape | OTC-T01–OTC-T03 | Route/use record and deterministic weekly profile fixtures. |
+| A: admitted shape | OTC-T01–OTC-T03 | Implemented: [route/use review](source_review.md), six-profile catalog and one invented ATS/T1 parser; [Checkpoint A](checkpoint_a.md). Live conformance pending. |
 | B: local panel | OTC-T04–OTC-T06 | Audited week/tier/product detail with honest participant identity. |
 | C: historical truth | OTC-T07–OTC-T09 | Current/as-of membership, delayed availability and scoped features. |
 | D: reproduction | OTC-T10–OTC-T11 | Committed typed snapshot and equivalent archived replay. |
