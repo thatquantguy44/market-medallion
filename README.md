@@ -53,7 +53,7 @@ remediation gate. [Closeout](specs/spec017/quality_remediation_acceptance.md)
 records the bounded no-native-fix result: source-damaged HTML and OCR/chart work
 stay explicit, with no flags cleared or derivative publication. Recent-year
 refreshes cover new releases/corrections. Acquisition schedules stay stopped;
-NAAIM remains paused; FINRA T01–T16 are implemented with bounded three-TRF delivery acceptance; Spec013 OTC-T01–T03 are implemented offline.
+NAAIM remains paused; FINRA T01–T16 are implemented with bounded three-TRF delivery acceptance; Spec013 OTC-T01–T04 are implemented offline.
 
 **Next source-build program:** [Securities-finance research data](docs/securities_finance/README.md),
 with full specs, plans, tasks and roadmap for **SEC FTD + Reg SHO history →
@@ -83,9 +83,10 @@ The [portable script](scripts/run_finra_short_sale_volume.sh),
 the default-stopped job/schedule. Optional Slack sensors also default stopped
 and disabled. G1/G2 are accepted locally for this bounded one-date scope; broader
 history, recurring activation and consumer integration remain separate.
-[Spec013 OTC-T01–T03](specs/spec013/checkpoint_a.md) now implement route/use admission,
-six weekly product/tier populations and one pure invented ATS/T1 parser. Real
-acquisition, storage and orchestration remain future work; OTC-T04 identity is next.
+[Spec013 OTC-T01–T04](specs/spec013/README.md) implement route/use admission, six
+weekly product/tier populations, one invented ATS/T1 parser and evidence-scoped
+participant identity. Real acquisition, storage and orchestration remain future
+work; OTC-T05 Bronze/coverage is next.
 Public API terms acceptance is user-attested; no new permission is inferred.
 Databricks workspace activation remains disabled. See the
 [SEC FTD runbook](docs/deployment/sec_ftd_runbook.md) and

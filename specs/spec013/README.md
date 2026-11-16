@@ -1,6 +1,6 @@
 # Spec 013 — FINRA ATS and non-ATS transparency
 
-**Status:** OTC-T01–T03 implemented offline; Checkpoint A passes for the invented ATS/T1 profile.
+**Status:** OTC-T01–T04 implemented offline; fixture Checkpoint A and source-evidence identity pass.
 **Reviewed:** 2026-11-15. **Delivery order:** 3 of 5.
 **Pipeline ID:** `finra-otc-transparency`.
 **Package:** `src/market_data_pipeline/pipelines/finra_otc_transparency/`.
@@ -20,12 +20,14 @@ and pure invented ATS/T1 pipe parser. Current [source review](source_review.md)
 selects Public Query API `weeklySummary` as the future candidate; the historical
 file header is fixture evidence only. Other five profile parsers and all real
 source conformance remain pending. No transport, persistence, CLI or Dagster job
-exists. Next is [OTC-T04 participant identity](todo.md#otc-t04--preserve-attribution-and-identity-basis).
+exists. [T04 identity](t04_identity_acceptance.md) preserves supplied IDs and explicit
+name-only/grouped/unknown evidence without inferring firms.
+Next is [OTC-T05 Bronze/coverage](todo.md#otc-t05--capture-bytes-and-partition-completeness).
 
 Run the actual offline checks:
 
 ```bash
-.venv/bin/python -m pytest -q tests/test_otc_manifest.py tests/test_otc_catalog.py tests/test_otc_parser.py
+.venv/bin/python -m pytest -q tests/test_otc_manifest.py tests/test_otc_catalog.py tests/test_otc_parser.py tests/test_otc_identity.py
 ```
 
 ## Objective and research use

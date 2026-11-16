@@ -19,6 +19,11 @@ from market_data_pipeline.pipelines.finra_otc_transparency.catalog import (
     iso_date,
     profile_for,
 )
+from market_data_pipeline.pipelines.finra_otc_transparency.data.identity import (
+    ParticipantIdentity,
+    participant_identity,
+    require_unique_participants,
+)
 
 ATS_HEADER = (
     "tierIdentifier",
@@ -38,15 +43,25 @@ class WeeklyRow:
     tier_raw: str
     symbol_raw: str
     issue_name_raw: str
-    participant_name_raw: str
-    mpid: str
+    identity: ParticipantIdentity
     weekly_shares: int
     weekly_trades: int
     weekly_shares_text: str
     weekly_trades_text: str
     provider_update_date: date
     provider_initial_publication_date: date | None = None
-    firm_crd: str | None = None
+
+    @property
+    def participant_name_raw(self) -> str | None:
+        return self.identity.participant_name_raw
+
+    @property
+    def mpid(self) -> str | None:
+        return self.identity.mpid
+
+    @property
+    def firm_crd(self) -> str | None:
+        return self.identity.firm_crd
 
 
 @dataclass(frozen=True)
@@ -109,7 +124,7 @@ def parse_weekly(
         text = payload.decode("utf-8")
     except UnicodeError:
         raise ValueError("OTC fixture profile requires strict UTF-8 without a BOM") from None
-    rows, seen = [], set()
+    rows = []
     try:
         reader = csv.reader(
             io.StringIO(text, newline=""), delimiter="|", quotechar='"', strict=True
@@ -130,18 +145,20 @@ def parse_weekly(
             mpid = _text(mpid, "MPID")
             if any(c.isspace() for token in (symbol, mpid) for c in token):
                 raise ValueError("OTC symbol/MPID tokens cannot contain whitespace")
-            key = (symbol, mpid)
-            if key in seen:
-                raise ValueError("duplicate OTC security/MPID key in selected partition")
-            seen.add(key)
+            identity = participant_identity(
+                partition=partition,
+                schema_profile=schema_profile,
+                route="invented_fixture",
+                participant_name_raw=participant,
+                mpid=mpid,
+            )
             rows.append(
                 WeeklyRow(
                     partition=partition,
                     tier_raw=tier,
                     symbol_raw=symbol,
                     issue_name_raw=issue,
-                    participant_name_raw=participant,
-                    mpid=mpid,
+                    identity=identity,
                     weekly_shares=_count(shares, "weekly shares"),
                     weekly_trades=_count(trades, "weekly trades"),
                     weekly_shares_text=shares,
@@ -151,4 +168,5 @@ def parse_weekly(
             )
     except csv.Error:
         raise ValueError("malformed OTC delimited record") from None
+    require_unique_participants((row.symbol_raw, row.identity) for row in rows)
     return ParsedWeekly(partition, schema_profile, hashlib.sha256(payload).hexdigest(), tuple(rows))

@@ -1,6 +1,6 @@
 # Tasks — FINRA OTC transparency
 
-**OTC-T01–T03 and fixture Checkpoint A are implemented.** T04–T16 remain not started.
+**OTC-T01–T04 and fixture Checkpoint A are implemented.** T05–T16 remain not started.
 See [Checkpoint A](checkpoint_a.md) and [source review](source_review.md). Code paths are relative to
 `src/market_data_pipeline/pipelines/finra_otc_transparency/`. Each is S/M and
 limited to five likely files; split growing tasks before implementation. Commands
@@ -39,9 +39,9 @@ under T01–T03 identify actual tests; later commands remain future targets.
 ## OTC-T04 — Preserve attribution and identity basis
 
 **Depends:** OTC-T03; **traces:** OTC-REQ04 / OTC-AC04.
-- [ ] Model supplied MPID/CRD, name-only, grouped and unknown identities explicitly.
-- [ ] Prevent a display-name rename from silently merging unrelated participants.
-**Verify:** changed-name, missing-ID and ambiguous-label cases preserve uncertainty.
+- [x] Model supplied MPID/CRD, name-only, grouped and unknown identities explicitly.
+- [x] Prevent a display-name rename from silently merging unrelated participants.
+**Verify:** `.venv/bin/python -m pytest -q tests/test_otc_identity.py`; [identity acceptance](t04_identity_acceptance.md).
 **Files:** `data/identity.py`, `data/weekly.py`, `tests/test_otc_identity.py`.
 
 ## OTC-T05 — Capture bytes and partition completeness

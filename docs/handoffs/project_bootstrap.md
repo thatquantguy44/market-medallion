@@ -4,8 +4,10 @@ Last updated: 2026-11-15.
 
 ## Agent start here
 
-**Next implementation: Spec013 OTC-T04 participant identity.**
-OTC-T01–T03 are implemented locally on `feat/finra-otc-contract-parser`.
+**Next implementation: Spec013 OTC-T05 Bronze bytes and partition receipts.**
+OTC-T01–T03 are committed as `041b9bee4b8d63dbba5e56ad5aa4e84eafc20781` on
+`feat/finra-otc-contract-parser`. The user asked to continue; OTC-T04 is implemented
+on the same branch with evidence-scoped identity and parser ambiguity checks.
 Spec012 T14 → T15 → T16 and the subsequent regression/equivalence review are
 merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as
 `eaec3279dd27c0ee170e78751f234d538d4416b2`. The user authorized OTC-T01–OTC-T03 in order on a fresh latest-main branch.
@@ -26,27 +28,27 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec013 OTC-T01–OTC-T03 — admitted shape** | Implemented locally on `feat/finra-otc-contract-parser`; review [Checkpoint A](../../specs/spec013/checkpoint_a.md). 144 focused tests pass; no live conformance or runtime adapter. | [Tasks](../../specs/spec013/todo.md), [contract](../../specs/spec013/data_contract.md) |
-| 1 | Spec013 OTC-T04 — participant identity | Next after the authorized T01–T03 checkpoint; not started. | [T04](../../specs/spec013/todo.md#otc-t04--preserve-attribution-and-identity-basis) |
+| 0 | **Spec013 OTC-T04 — participant identity** | Implemented locally on `feat/finra-otc-contract-parser`; review [T04 acceptance](../../specs/spec013/t04_identity_acceptance.md). Source-ID/name/group/unknown evidence stays explicit; no firm crosswalk. | [T04](../../specs/spec013/todo.md#otc-t04--preserve-attribution-and-identity-basis), [contract](../../specs/spec013/data_contract.md#otc-t04-identity-contract) |
+| 1 | Spec013 OTC-T05 — Bronze and receipts | Next; not started. Preserve exact bytes and explicit missing/rejected/partial completeness before normalization. | [T05](../../specs/spec013/todo.md#otc-t05--capture-bytes-and-partition-completeness) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Current implementation:** The user authorized OTC-T01 through OTC-T03 on a
-fresh latest-main branch. The source-owned package now implements independent
-route/use admission, six dated/evidence-linked weekly product/tier contracts, strict local manifest
-loading, finite explicit Monday partitions and one pure invented ATS/T1 pipe
-parser. It preserves exact integer/token text, IDs, date precision, payload hash
-and population context. Empty syntax remains UNVERIFIED completeness. See
-[Checkpoint A](../../specs/spec013/checkpoint_a.md), [source review](../../specs/spec013/source_review.md)
-and [tasks](../../specs/spec013/todo.md). No transport, storage, CLI, export or
-Dagster definition was added. All actual provider conformance/coverage remains
-pending; no account terms were accepted. NAAIM stays paused. No PR exists for
-this branch yet. Verification: **144 new OTC tests; 1,971 full offline passes /
-92 existing optional skips**. Ruff lint/format and canonical Dagster parity pass;
-source/wheel builds and all-190-module byte readback pass, including the OTC
-manifest and three fixtures in the source archive. Resolve the delivered commit
-with `git log -1 -- specs/spec013/checkpoint_a.md`; committed freshness is checked
-before handoff.
+**Current implementation:** The initial T01–T03 request is committed as `041b9be`
+and passed 144 OTC / 1,971 full offline tests with 92 optional skips. The user then
+requested continuation. T04 now adds deterministic versioned participant keys
+scoped by route/schema/population. Supplied MPID/CRD and names stay inspectable;
+name-only/grouped keys are week scoped, unknown is unkeyable, and duplicate or
+mixed-context identities reject the partition. The ATS/T1 fixture parser applies
+this gate without adding another profile. See [T04 acceptance](../../specs/spec013/t04_identity_acceptance.md).
+No transport, storage, CLI, export, job, live conformance, account acceptance or
+source coverage is added. NAAIM stays paused. No PR exists for this branch yet.
+T04 verification: **35 new identity / 179 OTC tests; 2,006 full offline passes /
+92 existing optional skips**. Ruff lint/format, canonical Dagster parity, 275 local
+links, 191-module source/wheel byte readback and isolated wheel smoke pass. A
+missing backend temporary JSON caused one build failure; an unchanged retry
+passed. The full suite completed after slow dependency/migration file reads.
+No dependencies or runtime state were rewritten. Resolve the delivered
+commit with `git log -1 -- specs/spec013/t04_identity_acceptance.md`.
 
 ### Last completed work and commits
 
@@ -60,6 +62,7 @@ before handoff.
 | `9db245ec50c3df6b205a401f942a718ef3664061` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Completed review fixes and 24 added regressions/equivalence tests; 1,777 local passes / 92 optional skips. Branch is pushed; remote checks/reviews are tracked on the PR. |
 | `eaec3279dd27c0ee170e78751f234d538d4416b2` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Merged T14–T16 and reviewed regression/equivalence fixes; Spec013 OTC-T01 is now the next implementation. |
 | `5a1578c11cbcaefe7d19524259a844fdfb0f9ff6` / [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) | Canonical root Dagster guide, README/AGENTS maintenance contract and offline definition/navigation CI guard; 1,827 local passes / 92 optional skips. Merged through PR #29 as `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`; this is the OTC branch base. |
+| `041b9bee4b8d63dbba5e56ad5aa4e84eafc20781` | Spec013 OTC-T01–T03: route/use admission, dated six-profile catalog and pure invented ATS/T1 parser; 144 OTC / 1,971 full offline passes, 92 optional skips and source/wheel readback. |
 
 The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
 approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
@@ -82,19 +85,20 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: OTC-T04
+### Exact next slice: OTC-T05
 
-Read [AGENTS.md](../../AGENTS.md), [pipeline register](../pipelines.md),
-[Spec013](../../specs/spec013/README.md), [Checkpoint A](../../specs/spec013/checkpoint_a.md),
+Read [AGENTS.md](../../AGENTS.md), [Spec013](../../specs/spec013/README.md),
+[Checkpoint A](../../specs/spec013/checkpoint_a.md), [T04 acceptance](../../specs/spec013/t04_identity_acceptance.md),
 [source review](../../specs/spec013/source_review.md), [data contract](../../specs/spec013/data_contract.md)
-and [T04](../../specs/spec013/todo.md#otc-t04--preserve-attribution-and-identity-basis).
-Build evidence-scoped participant identity for supplied MPID/CRD, name-only,
-aggregated and unknown attribution. Test renames/ambiguity without inventing
-firm matches. Keep the one implemented ATS/T1 fixture parser distinct from the
-five catalog-only profiles and from the candidate Public `weeklySummary` route.
-T05 Bronze and T06 local publication follow; all six selected populations must
-reach that later fixture acceptance. Actual transport/conformance remains T12.
-Do not inherit Spec012 rights, first-seen times, schemas or source coverage.
+and [T05](../../specs/spec013/todo.md#otc-t05--capture-bytes-and-partition-completeness).
+Archive immutable exact bytes, source-owned discovery/partition receipts, scope
+and schema/manifest hashes. Missing/rejected/partial inputs retain outcomes before
+normalization; header-only syntax alone cannot prove complete-empty membership.
+Keep the one implemented ATS/T1 fixture parser distinct from five catalog-only
+profiles and the candidate Public Query API route. T06 local publication later
+requires all six fixture populations. Actual extraction/conformance remains T12.
+Local validation/replay must make no provider probe. Do not inherit Spec012
+rights, schemas, actual first-seen clocks or source coverage.
 
 ### Operating holds and other workstreams
 

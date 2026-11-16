@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "6f5dce02ac689ee0256f63b6453e8e50f64ff1004fe21036deb27679844de319",
-  "next_task": "OTC-T04",
-  "panel_fingerprint": "172123bbb066efa48bfc10958437bb8447e6bc426479b42306fdbdf8478a81b1",
-  "review_summary": "Implemented Spec013 OTC-T01\u2013T03 on latest-main 1c256bf: official independent route/use review, denied/admitted profiles, six dated evidence-linked detail populations, bounded Monday partitions and invented ATS/T1 parser. 144 new tests and 1971 full offline passes/92 optional skips; lint/format, Dagster parity, 190-module package readback pass. Next OTC-T04; no provider/runtime activation.",
-  "reviewed_at": "2026-11-15T17:21:47.921724+00:00",
-  "reviewed_commit": "1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a",
+  "document_fingerprint": "f24277097bc1cab65f277d79f25afd886d53c488bf3936dbbe688a651fd49636",
+  "next_task": "OTC-T05",
+  "panel_fingerprint": "fe84303becb97d48eeb51c43fc99920b548e710addfde7076e205efa18e5ac26",
+  "review_summary": "Continued Spec013 with OTC-T04 after 041b9be: route/schema/population-scoped source identity, week-scoped label/group keys, explicit unkeyable unknown and parser ambiguity rejection. 35 new/179 OTC tests, 2006 full passes/92 optional skips, lint/format, Dagster parity, 275 links and 191-module package readback pass. Next OTC-T05; no real source/runtime activation.",
+  "reviewed_at": "2026-11-16T00:35:34.649415+00:00",
+  "reviewed_commit": "041b9bee4b8d63dbba5e56ad5aa4e84eafc20781",
   "schema_version": 1,
-  "source_fingerprint": "d0eaa9c6dd23668a2fbf54dc7ac9814af131a93e355f4d46e3a7da10813a3eee",
+  "source_fingerprint": "010ec497b19031950abb76a3ce04cc0c2c0a5d9bb2cc4299b47977a8640ce348",
   "task_file": "specs/spec013/todo.md"
 }

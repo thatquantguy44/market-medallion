@@ -1,7 +1,7 @@
 # FINRA OTC transparency data contract
 
 **Version:** v1 fixture checkpoint. **Reviewed:** 2026-11-15.
-**Runtime status:** T01–T03 implemented offline; acquisition/storage/jobs absent.
+**Runtime status:** T01–T04 implemented offline; acquisition/storage/jobs absent.
 Read [Spec013](README.md) and the
 [program contract](../../docs/securities_finance/contract.md). Normalized names
 and broader schema below remain design decisions; current endpoint conformance is pending.
@@ -45,7 +45,8 @@ tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalW
   tier must be `T1`. Context alone does not verify a real file's provenance.
 - Symbol/name/participant/MPID values are preserved; empty/control-character text
   is rejected. Symbol/MPID tokens cannot contain whitespace. This does not infer
-  firm identity, CRD or a cross-period identity key; T04 owns that work.
+  a legal firm, CRD or a cross-source entity match. T04 defines source-evidence
+  keys separately below.
 - Counts are exact nonnegative integers plus original token text, never float.
   Missing/decimal/signed/exponent/grouped values are rejected. At most 38 ASCII
   digits is a local fixture-profile bound, not a verified provider maximum.
@@ -61,9 +62,37 @@ tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalW
   Neither parsing nor a 200/empty response can establish complete membership.
 
 [Checkpoint A](checkpoint_a.md) records fixture provenance, tests and exclusions.
-T04+ add identity, Bronze, persistence, clocks and extraction completeness before
+T04 adds source identity below. T05+ add Bronze, persistence, clocks and
+extraction completeness before
 this can become a real weekly panel. The remaining sections describe that full
 contract; they do not claim those later components are implemented.
+
+## OTC-T04 identity contract
+
+Implemented offline; [acceptance and limits](t04_identity_acceptance.md).
+
+Participant keys identify source evidence, not a reconciled legal firm. The
+identity version includes route, schema and product/tier scope in a deterministic
+SHA-256 key. A supplied MPID is the primary source identifier; otherwise a
+supplied CRD is used. ID kind and raw identifier are part of the key, preserving
+leading zeros. A changed display name under the same supplied identifier keeps
+that source key while retaining the new label and any supplied CRD separately.
+This does not prove a permanent cross-period firm/ownership match.
+
+Without an ID, a nonempty reported label uses `SOURCE_ROW_LABEL`, scoped to its
+reporting week as well as route/schema/population. Changed labels create distinct
+keys; repeated labels across weeks do not silently establish firm continuity.
+`AGGREGATED` requires an explicit source classification and a nonempty bucket
+label, not a guess from an English name; bucket keys are week scoped and never
+stand for individual firms. Contradictory firm IDs on grouped/unknown attribution
+are rejected. `UNKNOWN` has no participant key; attempts to admit unknown or
+ambiguous duplicate `(symbol, participant_key)` rows fail closed. Mixed partition,
+route or schema identity rows also cannot pass one population check.
+
+All supplied IDs/names and the evidence basis remain inspectable. No name lookup,
+fuzzy match, crosswalk, grouping inference, ID coercion or external call occurs.
+The ATS/T1 fixture parser applies this contract to its supplied MPIDs; this does
+not add parsers or real coverage for the other five catalog entries.
 
 ## Source inventory and evidence tiers
 
@@ -93,10 +122,10 @@ supplies reporting week and product when the file does not contain them.
 | `product` | enum | `ATS_WEEKLY_DETAIL` or `NON_ATS_WEEKLY_DETAIL`; totals/monthly/blocks use other datasets. |
 | `tier` | enum | Verified Tier1/Tier2/OTCE map, retained alongside raw provider code. |
 | `symbol_raw`, `issue_name_raw` | string | Preserve spelling/suffix/case; name is descriptive. |
-| `participant_name_raw` | string | Original attribution label, including grouped/un-attributed labels. |
+| `participant_name_raw` | string or null | Original attribution label, including grouped/un-attributed labels. |
 | `mpid` | string or null | Supplied identifier only, never inferred from name. |
 | `firm_crd` | string or null | Preserve source identifier if a verified route supplies it. |
-| `participant_key` | string | Route/profile-scoped stable token with explicit evidence basis. |
+| `participant_key` | string or null | Versioned source-evidence token; unknown is unkeyable and quarantined, never a shared fake firm. |
 | `identity_basis` | enum | `PROVIDER_ID`, `SOURCE_ROW_LABEL`, `AGGREGATED`, `UNKNOWN`. |
 | `weekly_shares`, `weekly_trades` | integer | Nonnegative lossless counts; missing is not zero. |
 | `provider_update_date` | date or null | Date-only provider evidence, not a timestamp. |

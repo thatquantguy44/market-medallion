@@ -3,7 +3,9 @@
 Implemented locally **2026-11-15** on `feat/finra-otc-contract-parser`, from
 latest main `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a` (merged Dagster PR #29).
 This accepts the **offline fixture checkpoint**, not a complete pipeline or
-actual provider coverage. T04–T16 remain future work; no PR exists for this branch.
+actual provider coverage. This is the T01–T03 checkpoint at `041b9be`;
+[current Spec013 status](README.md#current-implementation-and-pickup) owns later work,
+including the subsequent [T04 identity slice](t04_identity_acceptance.md).
 
 | Requirement / acceptance | Delivered evidence |
 | --- | --- |
