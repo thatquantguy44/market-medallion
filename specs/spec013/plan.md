@@ -109,6 +109,36 @@ T06 reads select initial complete fixture populations, with explicit attribution
 counts and absent requested populations; venue ratios remain T09, Parquet T10,
 replay T11 and real extraction/conformance T12.
 
+## T07 bounded implementation increments
+
+The user authorized T07 on `feat/finra-otc-contract-parser` on 2026-11-16,
+starting at `c9263d5`. Keep the implementation fixture-only and split as follows:
+
+1. **T07a — pure version semantics:** `data/versions.py` and unit characterization.
+   Normalize explicit semantic fields; transport/run/capture metadata never enters
+   content identity. Original count tokens stay in capture membership, so a
+   formatting-only token change need not create a value version. Reversions and
+   reappearances have new occurrence IDs, even when their content hash repeats.
+2. **T07b — storage boundary:** retain a frozen, invented T06 warehouse/receipt
+   fixture; isolate its read protocol and introduce explicit SQLite contract v2.
+   Read v1 unchanged; refuse v1 writes until an explicit fixture-only migration.
+3. **T07c — atomic history:** append versions, removal tombstones and complete
+   membership snapshots with terminal attempts in one transaction. Incomplete
+   attempts never replace membership. Reject out-of-order successful population
+   replacement using original capture sequence. Test all six profiles and faults.
+4. **T07d — migration and inspection:** explicit `migrate-warehouse`, bounded
+   `history`, and snapshot cutoffs (aware UTC plus optional equal-clock sequence).
+   Validate old publications against retained Bronze before seeding v2, preserve
+   all legacy table rows/attempts and raw files, and do not automatically process
+   old deferred captures. Explicit re-ingestion creates v2 transformation evidence.
+
+Each increment targets at most five implementation/test files plus owning docs.
+The v2 tables have a separate namespace; immutable legacy tables remain available
+for inspection and migration audit. Migration is transactional and idempotent.
+Read-only inspection does not migrate, repair, parse Bronze or probe a network.
+T08 retains the broader date/availability/holiday contract work; T09 features,
+T10 Parquet, T11 replay and T12 real source extraction remain out of scope.
+
 ## Risks and controls
 
 | Risk | Effect | Mitigation |

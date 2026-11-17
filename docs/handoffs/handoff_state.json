@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "4551695d13284e8fc977b1a82bd8d696bc923d321bd6f711d01f397b16be290f",
+  "document_fingerprint": "cbd2d37ffd0b948406413699c7731d8f779738f6201a1577e3b54870e3c7df3b",
   "next_task": "OTC-T07",
-  "panel_fingerprint": "50b622f109ad4dc090677ab5176350f103ee02bcc8e29322da2bbdd0bccebe1c",
-  "review_summary": "Completed OTC-T06 on the existing branch: six invented profiles, immutable legacy Bronze compatibility, exact SQLite panel with synthetic completeness and atomic data/coverage/attempt selection, bounded read-only inspection and fixture-only CLI. 88 added/330 OTC tests; 2157 full passes/92 optional skips; lint/format, Dagster parity, 199-module package equivalence, native/isolated-wheel immutability and 229 links pass. Successful retries verify committed selection. Next OTC-T07; no provider acquisition or activation.",
-  "reviewed_at": "2026-11-16T09:51:46.488496+00:00",
-  "reviewed_commit": "270914da5b7cbf41e7b1b982c4adcfa994dfa711",
+  "panel_fingerprint": "3b928b260e17a01f5864b592b30cca619140303ad5d67608c1941bc88770fa96",
+  "review_summary": "Implemented OTC-T07 fixture-only v2 engine, immutable revisions/reversions/removals, complete replacement membership, explicit source-verified v1 migration, bounded as-of/history CLI and preserved legacy integrity. 424 OTC tests and lint pass, including all-six replacement faults and nine reproduced integrity regressions. Full/native/package closeout remains active OTC-T07; no source acquisition or activation.",
+  "reviewed_at": "2026-11-17T04:58:19.150955+00:00",
+  "reviewed_commit": "c9263d5eddbe556dfaa27b7840edd524e5d569ad",
   "schema_version": 1,
-  "source_fingerprint": "4abbc90e03ee1f0a3a0fc1c0129b113dc42a3d19d5d0b296019c26b97b57630f",
+  "source_fingerprint": "39e75687f70096054478ad077acd8807157f1001c80d0b34af0af896af8cd787",
   "task_file": "specs/spec013/todo.md"
 }

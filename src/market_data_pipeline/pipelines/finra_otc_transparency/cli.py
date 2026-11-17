@@ -37,7 +37,7 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="command", required=True)
     validate = commands.add_parser("validate", help="Validate the current fixture manifest")
     validate.add_argument("--manifest", type=Path, required=True)
-    for name in ("run", "ingest-capture", "inspect"):
+    for name in ("run", "ingest-capture", "inspect", "history", "migrate-warehouse"):
         command = commands.add_parser(name)
         command.add_argument("--root", type=Path, required=True)
         command.add_argument(
@@ -66,6 +66,8 @@ def main(argv=None):
         elif name == "ingest-capture":
             command.add_argument("--capture-id", required=True)
             command.add_argument("--max-bytes", type=int, default=DEFAULT_BYTES)
+        elif name == "migrate-warehouse":
+            command.add_argument("--max-captures", type=int, default=1000)
         else:
             command.add_argument(
                 "--partition",
@@ -73,7 +75,12 @@ def main(argv=None):
                 required=True,
                 help="Explicit WEEK:PRODUCT:TIER; repeat for bounded multi-population selection",
             )
-            command.add_argument("--max-rows", type=int, default=10000)
+            if name == "history":
+                command.add_argument("--max-versions", type=int, default=10000)
+            else:
+                command.add_argument("--max-rows", type=int, default=10000)
+            command.add_argument("--as-of")
+            command.add_argument("--as-of-sequence", type=int)
     args = parser.parse_args(argv)
     try:
         if args.command == "validate":
@@ -107,6 +114,10 @@ def main(argv=None):
             value = pipeline.publish_capture(
                 args.root, args.capture_id, approved_use=fixture_use(), max_bytes=args.max_bytes
             )
+        elif args.command == "migrate-warehouse":
+            value = pipeline.migrate_warehouse(
+                args.root, approved_use=fixture_use(), max_captures=args.max_captures
+            )
         else:
             selections = []
             for token in args.partition:
@@ -116,16 +127,35 @@ def main(argv=None):
                 selections.append(
                     dict(zip(("reporting_week_start", "product", "tier"), fields, strict=True))
                 )
-            value = pipeline.inspect_panel(
-                args.root,
-                partitions=select_partitions(selections),
-                approved_use=fixture_use(),
-                max_rows=args.max_rows,
-            )
+            selected = select_partitions(selections)
+            if args.command == "history":
+                value = pipeline.observation_history(
+                    args.root,
+                    partitions=selected,
+                    approved_use=fixture_use(),
+                    max_versions=args.max_versions,
+                    as_of=args.as_of,
+                    as_of_sequence=args.as_of_sequence,
+                )
+                value["status"] = "HISTORY"
+            else:
+                value = pipeline.inspect_panel(
+                    args.root,
+                    partitions=selected,
+                    approved_use=fixture_use(),
+                    max_rows=args.max_rows,
+                    as_of=args.as_of,
+                    as_of_sequence=args.as_of_sequence,
+                )
     except (ValueError, OSError, sqlite3.Error):
         print(
             json.dumps({"status": "ERROR", "error": "OTC_LOCAL_OPERATION_FAILED"}), file=sys.stderr
         )
         return 1
     print(json.dumps(value, ensure_ascii=False, sort_keys=True))
-    return 0 if value["status"] in ("VALID", "PUBLISHED", "COMPLETE_FIXTURE") else 2
+    return (
+        0
+        if value["status"]
+        in ("VALID", "PUBLISHED", "COMPLETE_FIXTURE", "MIGRATED", "ALREADY_CURRENT", "HISTORY")
+        else 2
+    )

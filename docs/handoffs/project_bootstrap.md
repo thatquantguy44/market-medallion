@@ -4,7 +4,7 @@ Last updated: 2026-11-16.
 
 ## Agent start here
 
-**Next implementation: Spec013 OTC-T07 revisions and replacement membership.**
+**Next implementation: Spec013 OTC-T07 revisions and replacement membership (in progress).**
 The user authorized OTC-T06 on `feat/finra-otc-contract-parser` after T05
 `6cb0376a964aaff5dc618db28c00644c2c637054`. T06 is implemented and accepted
 for all six invented populations; [acceptance](../../specs/spec013/t06_local_panel_acceptance.md)
@@ -34,9 +34,20 @@ No job/source acquisition or schedule activation was performed. See the
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
 | 0 | **Spec013 OTC-T06 — local weekly panel** | Implemented locally on `feat/finra-otc-contract-parser`; [acceptance](../../specs/spec013/t06_local_panel_acceptance.md) covers six invented profiles, exact values, explicit fixture membership, transactions and CLI. | [T06](../../specs/spec013/todo.md#otc-t06--deliver-the-local-weekly-detail-slice), [contract](../../specs/spec013/data_contract.md#otc-t06-local-panel-contract) |
-| 1 | Spec013 OTC-T07 — revisions and membership | Next; not started. Add immutable normalized versions and complete replacement membership with an explicit warehouse/transform migration. | [T07](../../specs/spec013/todo.md#otc-t07--implement-immutable-revisions-and-replacement-membership) |
+| 1 | Spec013 OTC-T07 — revisions and membership | Authorized and in progress on this branch; see the bounded T07 plan. Add immutable normalized versions and complete replacement membership with an explicit warehouse/transform migration. | [T07](../../specs/spec013/todo.md#otc-t07--implement-immutable-revisions-and-replacement-membership) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
+
+**Active T07 scope:** the user authorized continuation after `c9263d5`; the
+[bounded plan](../../specs/spec013/plan.md#t07-bounded-implementation-increments)
+separates pure semantics, storage, history and explicit migration/inspection.
+T07's v2 version/membership engine, explicit migration, history and cutoff CLI
+are implemented. **424 OTC tests pass** and repository lint passes. Legacy v1
+readback remains available, with an explicit migration required before writing;
+all retained legacy table hashes are checked after migration. Full regression,
+native/package equivalence and final T07 acceptance are pending. T06 remains the
+last accepted slice until that closeout. Read-only GitHub checks still show main
+at `1c256bf` and no PR for this local branch.
 
 **Current implementation:** T01–T06 are implemented offline on this branch.
 T06 adds `data/panel.py`, `pipeline.py`, `io/warehouse.py`, `cli.py` and module

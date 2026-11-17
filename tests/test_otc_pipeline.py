@@ -67,12 +67,12 @@ def test_complete_fixture_readback_preserves_scope_exact_counts_and_coverage(tmp
     assert first["first_seen_at"] > "2026-10-19"
     assert first["schema_profile"] == profile.schema_profile
     with sqlite3.connect(root / "otc.sqlite3") as db:
-        assert db.execute("select count(*) from otc_rows").fetchone()[0] == 3
-        assert db.execute("select status from otc_attempts").fetchone()[0] == "PUBLISHED"
+        assert db.execute("select count(*) from otc2_members").fetchone()[0] == 3
+        assert db.execute("select status from otc2_attempts").fetchone()[0] == "PUBLISHED"
 
 
 @pytest.mark.parametrize("profile", PROFILES, ids=lambda p: p.product + "-" + p.tier)
-@pytest.mark.parametrize("boundary", ["rows", "coverage", "status", "commit"])
+@pytest.mark.parametrize("boundary", ["rows", "membership", "coverage", "status", "commit"])
 def test_persistence_failures_never_publish_rows_membership_or_success(
     tmp_path, monkeypatch, profile, boundary
 ):
@@ -96,15 +96,19 @@ def test_persistence_failures_never_publish_rows_membership_or_success(
     else:
         statements = {
             "rows": (
-                "CREATE TRIGGER fail BEFORE INSERT ON otc_rows "
+                "CREATE TRIGGER fail BEFORE INSERT ON otc2_versions "
                 "BEGIN SELECT RAISE(ABORT,'rows'); END"
             ),
+            "membership": (
+                "CREATE TRIGGER fail BEFORE INSERT ON otc2_members "
+                "BEGIN SELECT RAISE(ABORT,'membership'); END"
+            ),
             "coverage": (
-                "CREATE TRIGGER fail BEFORE INSERT ON otc_publications "
+                "CREATE TRIGGER fail BEFORE INSERT ON otc2_snapshots "
                 "BEGIN SELECT RAISE(ABORT,'coverage'); END"
             ),
             "status": (
-                "CREATE TRIGGER fail BEFORE UPDATE OF status ON otc_attempts "
+                "CREATE TRIGGER fail BEFORE UPDATE OF status ON otc2_attempts "
                 "WHEN NEW.status='PUBLISHED' BEGIN SELECT RAISE(ABORT,'status'); END"
             ),
         }
@@ -117,8 +121,8 @@ def test_persistence_failures_never_publish_rows_membership_or_success(
     assert panel["partitions"][0]["publication"] is None
     assert panel["partitions"][0]["latest_attempt"]["status"] == "FAILED"
     with sqlite3.connect(root / "otc.sqlite3") as db:
-        assert db.execute("select count(*) from otc_rows").fetchone()[0] == 0
-        assert db.execute("select count(*) from otc_publications").fetchone()[0] == 0
+        assert db.execute("select count(*) from otc2_members").fetchone()[0] == 0
+        assert db.execute("select count(*) from otc2_snapshots").fetchone()[0] == 0
     assert len(list((root / "bronze/captures").iterdir())) == 2
 
 
@@ -142,7 +146,7 @@ def test_six_disjoint_populations_are_selected_without_combining_denominators(tm
             }
 
 
-@pytest.mark.parametrize("mode", ["unverified", "partial", "bad_count", "rejected", "replacement"])
+@pytest.mark.parametrize("mode", ["unverified", "partial", "bad_count", "rejected"])
 def test_later_nonpublishable_attempt_keeps_old_publication_and_visible_failure(tmp_path, mode):
     root = tmp_path / "panel"
     first = run(root)
@@ -267,13 +271,11 @@ def test_corrupt_coverage_cannot_be_read_as_a_complete_panel(tmp_path, field, va
     root = tmp_path / "panel"
     run(root)
     with sqlite3.connect(root / "otc.sqlite3") as db:
-        capture, raw = db.execute(
-            "SELECT capture_id,coverage_json FROM otc_publications"
-        ).fetchone()
+        capture, raw = db.execute("SELECT capture_id,record_json FROM otc2_snapshots").fetchone()
         coverage = json.loads(raw)
-        coverage[field] = value
+        coverage["coverage"][field] = value
         db.execute(
-            "UPDATE otc_publications SET coverage_json=? WHERE capture_id=?",
+            "UPDATE otc2_snapshots SET record_json=? WHERE capture_id=?",
             (json.dumps(coverage), capture),
         )
     with pytest.raises(ValueError):
@@ -322,12 +324,16 @@ def test_concurrent_writers_publish_one_initial_population(tmp_path):
     root = tmp_path / "panel"
     with ThreadPoolExecutor(max_workers=4) as pool:
         results = list(pool.map(lambda _: run(root), range(4)))
-    assert sorted(r["status"] for r in results) == ["PUBLISHED"] + ["REPLACEMENT_DEFERRED"] * 3
+    assert any(r["status"] == "PUBLISHED" for r in results)
+    assert all(r["status"] in ("PUBLISHED", "OUT_OF_ORDER") for r in results)
     panel = inspect(root, [PROFILES[0]])
     assert len(panel["rows"]) == 3
     with sqlite3.connect(root / "otc.sqlite3") as db:
-        assert db.execute("SELECT count(*) FROM otc_attempts").fetchone()[0] == 4
-        assert db.execute("SELECT count(*) FROM otc_publications").fetchone()[0] == 1
+        assert db.execute("SELECT count(*) FROM otc2_attempts").fetchone()[0] == 4
+        assert db.execute("SELECT count(*) FROM otc2_versions").fetchone()[0] == 3
+        assert panel["partitions"][0]["publication"]["capture_sequence"] == max(
+            r["capture_sequence"] for r in results
+        )
 
 
 def test_reader_cannot_see_half_publication_and_pending_attempt_can_resume(tmp_path, monkeypatch):
@@ -365,11 +371,11 @@ def test_inconsistent_warehouse_records_fail_readback_without_repair(tmp_path, t
     run(root)
     with sqlite3.connect(root / "otc.sqlite3") as db:
         if target == "row":
-            db.execute("UPDATE otc_rows SET row_json='{}'")
+            db.execute("UPDATE otc2_versions SET record_json='{}'")
         elif target == "status":
-            db.execute("UPDATE otc_attempts SET status='PENDING'")
+            db.execute("UPDATE otc2_attempts SET status='PENDING'")
         else:
-            db.execute("UPDATE otc_attempts SET context_json='[]'")
+            db.execute("UPDATE otc2_attempts SET context_json='[]'")
     before = (root / "otc.sqlite3").read_bytes()
     with pytest.raises(ValueError):
         inspect(root, [PROFILES[0]])
@@ -392,9 +398,9 @@ def test_successful_retry_verifies_existing_publication_before_reporting_success
     result = run(root)
     with sqlite3.connect(root / "otc.sqlite3") as db:
         if corruption == "row":
-            db.execute("DELETE FROM otc_rows WHERE symbol_raw=?", ("ZXQ.A",))
+            db.execute("DELETE FROM otc2_members WHERE symbol_raw=?", ("ZXQ.A",))
         else:
-            db.execute("DELETE FROM otc_publications")
+            db.execute("DELETE FROM otc2_snapshots")
     before = (root / "otc.sqlite3").read_bytes()
     with pytest.raises(ValueError):
         publish_capture(root, result["capture_id"], approved_use=USE)

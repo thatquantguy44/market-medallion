@@ -87,7 +87,8 @@ history, recurring activation and consumer integration remain separate.
 invented weekly profiles, source-evidence identity, immutable Bronze and a
 transactional local SQLite/CLI panel. [T06 acceptance](specs/spec013/t06_local_panel_acceptance.md)
 records exact counts, explicit synthetic completeness and rollback tests.
-OTC-T07 revisions/replacement membership is next. Real acquisition, derived
+OTC-T07 revisions/replacement membership is in final validation on this branch.
+Real acquisition, derived
 Gold/Parquet and orchestration remain future work.
 Public API terms acceptance is user-attested; no new permission is inferred.
 Databricks workspace activation remains disabled. See the

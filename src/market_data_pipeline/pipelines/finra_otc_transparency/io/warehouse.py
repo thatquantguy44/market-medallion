@@ -15,11 +15,11 @@ from market_data_pipeline.pipelines.finra_otc_transparency.catalog import (
     Partition,
     select_partitions,
 )
-from market_data_pipeline.pipelines.finra_otc_transparency.data.panel import ORIGIN, PANEL
 from market_data_pipeline.pipelines.finra_otc_transparency.io.bronze import _base, _locked, _root
 from market_data_pipeline.pipelines.finra_otc_transparency.io.receipts import digest, encoded
 
-CONTRACT = "finra-otc-sqlite/1"
+LEGACY_CONTRACT = "finra-otc-sqlite/1"
+CONTRACT = "finra-otc-sqlite/2"
 APPLICATION_ID = 0x4F544331
 MAX_ROWS = 10000
 MAX_DB_BYTES = 256 * 1024 * 1024
@@ -72,10 +72,10 @@ def _safe_database(path, *, empty=False):
 
 
 @contextmanager
-def _connection(root, *, write=False):
+def _connection(root, *, write=False, create=False, allow_legacy=False):
     path = root / "otc.sqlite3"
     created = False
-    if write and not path.exists() and not path.is_symlink():
+    if write and create and not path.exists() and not path.is_symlink():
         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
         os.close(fd)
         created = True
@@ -99,20 +99,33 @@ def _connection(root, *, write=False):
                 db.execute("BEGIN IMMEDIATE")
                 for statement in _SCHEMA:
                     db.execute(statement)
+                from market_data_pipeline.pipelines.finra_otc_transparency.io.history import SCHEMA
+
+                for statement in SCHEMA:
+                    db.execute(statement)
                 db.execute("INSERT INTO otc_metadata VALUES (?)", (CONTRACT,))
                 db.execute(f"PRAGMA application_id={APPLICATION_ID}")
-                db.execute("PRAGMA user_version=1")
+                db.execute("PRAGMA user_version=2")
                 db.execute("COMMIT")
             except BaseException:
                 db.close()
                 path.unlink()
                 raise
-        if (
-            db.execute("PRAGMA application_id").fetchone()[0] != APPLICATION_ID
-            or db.execute("PRAGMA user_version").fetchone()[0] != 1
-            or [r[0] for r in db.execute("SELECT contract FROM otc_metadata")] != [CONTRACT]
-        ):
+        version = db.execute("PRAGMA user_version").fetchone()[0]
+        contract = [r[0] for r in db.execute("SELECT contract FROM otc_metadata")]
+        if db.execute("PRAGMA application_id").fetchone()[0] != APPLICATION_ID or (
+            version,
+            contract,
+        ) not in ((1, [LEGACY_CONTRACT]), (2, [CONTRACT])):
             raise ValueError("OTC warehouse storage identity mismatch")
+        if write and version == 1 and not allow_legacy:
+            raise ValueError("OTC warehouse requires explicit migrate-warehouse before writing")
+        if version == 2:
+            from market_data_pipeline.pipelines.finra_otc_transparency.io.migration import (
+                verify_legacy,
+            )
+
+            verify_legacy(db)
         if not write:
             db.execute("PRAGMA query_only=ON")
         yield db
@@ -140,6 +153,7 @@ def _attempt(row):
         row["context_sha256"] != digest(value)
         or value.get("capture_id") != row["capture_id"]
         or value.get("capture_sequence") != row["capture_sequence"]
+        or ("captured_at" in row.keys() and value.get("captured_at") != row["captured_at"])
         or (value.get("reporting_week_start"), value.get("product"), value.get("tier"))
         != (row["week"], row["product"], row["tier"])
     ):
@@ -147,126 +161,38 @@ def _attempt(row):
     return {**value, "status": row["status"], "reason": row["reason"]}
 
 
+def require_current(root):
+    from pathlib import Path
+
+    root = Path(root)
+    if (root / "otc.sqlite3").exists() or (root / "otc.sqlite3").is_symlink():
+        _base(_root(root))
+        with _connection(root) as db:
+            if db.execute("PRAGMA user_version").fetchone()[0] != 2:
+                raise ValueError("OTC warehouse requires explicit migrate-warehouse before writing")
+
+
 def persist(root, result, *, status, reason, coverage, rows):
-    """Private normalized boundary, called only after verified fixture admission."""
-    receipt = result.receipt
+    from market_data_pipeline.pipelines.finra_otc_transparency.io import history
+
     root = _root(root)
     _base(root)
-    if receipt["admission"]["route"] != "invented_fixture" or len(rows) > MAX_ROWS:
-        raise ValueError("OTC local panel accepts at most 10000 invented fixture rows")
-    rows = sorted(rows, key=lambda r: (r["symbol_raw"], r["participant_key"]))
+    if result.receipt["admission"]["route"] != "invented_fixture" or len(rows) > MAX_ROWS:
+        raise ValueError("OTC panel accepts at most 10000 invented rows")
     if len(encoded(rows)) > 64 * 1024 * 1024:
-        raise ValueError("OTC normalized fixture exceeds its 64 MiB publication bound")
-    scope = receipt["partition"]
-    key = (scope["reporting_week_start"], scope["product"], scope["tier"])
-    context = {
-        **scope,
-        "capture_id": receipt["capture_id"],
-        "run_id": receipt["run_id"],
-        "capture_sequence": receipt["capture_sequence"],
-        "captured_at": receipt["captured_at"],
-        "receipt_sha256": receipt["receipt_sha256"],
-        "origin": ORIGIN,
-        "row_count": result.outcome["row_count"],
-        "schema_profile": receipt["schema"]["schema_profile"],
-    }
-    capture_id = receipt["capture_id"]
-    with _locked(root), _connection(root, write=True) as db:
-        old = _attempt(
-            db.execute("SELECT * FROM otc_attempts WHERE capture_id=?", (capture_id,)).fetchone()
+        raise ValueError("OTC normalized publication exceeds 64 MiB")
+    with _locked(root), _connection(root, write=True, create=True) as db:
+        return history.persist(
+            db, result, status=status, reason=reason, coverage=coverage, rows=rows
         )
-        if old is not None:
-            if old["receipt_sha256"] != receipt["receipt_sha256"]:
-                raise ValueError("OTC immutable attempt identity conflict")
-            if old["status"] != "PENDING":
-                if old["status"] == "PUBLISHED":
-                    panel = inspect(root, partitions=select_partitions([scope]))
-                    selected = panel["partitions"][0]["publication"]
-                    if selected is None or selected["capture_id"] != capture_id:
-                        raise ValueError("OTC successful attempt has no verified publication")
-                return old
-        else:
-            db.execute("BEGIN IMMEDIATE")
-            db.execute(
-                "INSERT INTO otc_attempts VALUES (?,?,?,?,?,?,?,?,?)",
-                (
-                    capture_id,
-                    receipt["capture_sequence"],
-                    *key,
-                    "PENDING",
-                    None,
-                    encoded(context).decode(),
-                    digest(context),
-                ),
-            )
-            _commit(db)
-        try:
-            db.execute("BEGIN IMMEDIATE")
-            previous = db.execute(
-                "SELECT capture_id FROM otc_publications WHERE week=? AND product=? AND tier=?", key
-            ).fetchone()
-            if status == "PUBLISHED" and previous is not None:
-                status, reason = "REPLACEMENT_DEFERRED", "T07_REQUIRED"
-            if status == "PUBLISHED":
-                if coverage is None:
-                    raise ValueError("OTC publication requires explicit fixture coverage")
-                db.executemany(
-                    "INSERT INTO otc_rows VALUES (?,?,?,?)",
-                    [
-                        (capture_id, r["symbol_raw"], r["participant_key"], encoded(r).decode())
-                        for r in rows
-                    ],
-                )
-                db.execute(
-                    "INSERT INTO otc_publications VALUES (?,?,?,?,?,?,?)",
-                    (
-                        capture_id,
-                        *key,
-                        encoded(coverage).decode(),
-                        digest(rows),
-                        digest(
-                            {
-                                "capture_id": capture_id,
-                                "receipt_sha256": receipt["receipt_sha256"],
-                                "coverage": coverage,
-                                "rows_sha256": digest(rows),
-                            }
-                        ),
-                    ),
-                )
-            db.execute(
-                "UPDATE otc_attempts SET status=?,reason=? WHERE capture_id=?",
-                (status, reason, capture_id),
-            )
-            _commit(db)
-        except Exception:
-            if db.in_transaction:
-                db.execute("ROLLBACK")
-            # A failed terminal write can leave PENDING; it can never create success.
-            try:
-                db.execute("BEGIN IMMEDIATE")
-                db.execute(
-                    "UPDATE otc_attempts SET status='FAILED',reason='PERSISTENCE_ERROR' "
-                    "WHERE capture_id=? AND status='PENDING'",
-                    (capture_id,),
-                )
-                _commit(db)
-            except sqlite3.Error:
-                if db.in_transaction:
-                    db.execute("ROLLBACK")
-            raise
-    return {**context, "status": status, "reason": reason}
 
 
-def inspect(root, *, partitions, max_rows=MAX_ROWS):
-    """Read one coherent DB snapshot; no creation, raw parsing, repairs or network."""
-    if type(max_rows) is not int or not 1 <= max_rows <= MAX_ROWS:
-        raise ValueError("OTC panel read limit must be in 1..10000")
-    if not isinstance(partitions, (tuple, list)) or any(
+def selection(partitions):
+    if not isinstance(partitions, (list, tuple)) or any(
         not isinstance(p, Partition) for p in partitions
     ):
         raise ValueError("OTC inspect requires explicit validated partitions")
-    selection = select_partitions(
+    return select_partitions(
         [
             {
                 "reporting_week_start": p.reporting_week_start.isoformat(),
@@ -276,85 +202,21 @@ def inspect(root, *, partitions, max_rows=MAX_ROWS):
             for p in partitions
         ]
     )
+
+
+def inspect(root, *, partitions, max_rows=MAX_ROWS, as_of=None, as_of_sequence=None):
+    from market_data_pipeline.pipelines.finra_otc_transparency.io import history_read, legacy
+
+    if type(max_rows) is not int or not 1 <= max_rows <= MAX_ROWS:
+        raise ValueError("OTC panel read limit must be in 1..10000")
+    selected = selection(partitions)
+    cutoff = history_read.cutoff(as_of, as_of_sequence)
     root = _root(root)
     _base(root)
-    items, rows = [], []
-    total_bytes = 0
     with _connection(root) as db:
         db.execute("BEGIN")
-        for partition in selection:
-            scope = {
-                "reporting_week_start": partition.reporting_week_start.isoformat(),
-                "product": partition.product,
-                "tier": partition.tier,
-            }
-            key = (scope["reporting_week_start"], scope["product"], scope["tier"])
-            latest = _attempt(
-                db.execute(
-                    "SELECT * FROM otc_attempts WHERE week=? AND product=? AND tier=? "
-                    "ORDER BY capture_sequence DESC LIMIT 1",
-                    key,
-                ).fetchone()
-            )
-            publication = db.execute(
-                "SELECT * FROM otc_publications WHERE week=? AND product=? AND tier=?", key
-            ).fetchone()
-            selected = None
-            if publication is not None:
-                capture_id = publication["capture_id"]
-                attempt = _attempt(
-                    db.execute(
-                        "SELECT * FROM otc_attempts WHERE capture_id=?", (capture_id,)
-                    ).fetchone()
-                )
-                coverage = _record(publication["coverage_json"])
-                records = db.execute(
-                    "SELECT row_json FROM otc_rows WHERE capture_id=? "
-                    "ORDER BY symbol_raw,participant_key LIMIT ?",
-                    (capture_id, max_rows - len(rows) + 1),
-                ).fetchall()
-                total_bytes += sum(len(r[0].encode("utf-8")) for r in records)
-                if total_bytes > 64 * 1024 * 1024:
-                    raise ValueError("OTC panel exceeds its 64 MiB normalized read budget")
-                population = [_record(r[0], 64 * 1024 * 1024) for r in records]
-                if len(rows) + len(population) > max_rows:
-                    raise ValueError("OTC panel exceeds the requested row budget")
-                if (
-                    attempt is None
-                    or attempt["status"] != "PUBLISHED"
-                    or coverage["row_count"] != len(population)
-                    or publication["rows_sha256"] != digest(population)
-                    or publication["publication_sha256"]
-                    != digest(
-                        {
-                            "capture_id": capture_id,
-                            "receipt_sha256": attempt["receipt_sha256"],
-                            "coverage": coverage,
-                            "rows_sha256": publication["rows_sha256"],
-                        }
-                    )
-                ):
-                    raise ValueError("OTC publication rows, coverage or terminal status mismatch")
-                selected = {**attempt, "coverage": coverage}
-                rows.extend(population)
-            items.append({"partition": scope, "publication": selected, "latest_attempt": latest})
-        db.execute("ROLLBACK")
-    published = sum(item["publication"] is not None for item in items)
-    if not published:
-        status = "UNAVAILABLE_FIXTURE"
-    elif published < len(items):
-        status = "PARTIAL_FIXTURE"
-    elif any(
-        item["latest_attempt"]["capture_id"] != item["publication"]["capture_id"] for item in items
-    ):
-        status = "DEGRADED_FIXTURE"
-    else:
-        status = "COMPLETE_FIXTURE"
-    return {
-        "format": PANEL,
-        "origin": ORIGIN,
-        "source_conformance": "NOT_CHECKED",
-        "status": status,
-        "partitions": items,
-        "rows": rows,
-    }
+        if db.execute("PRAGMA user_version").fetchone()[0] == 1:
+            if as_of is not None or as_of_sequence is not None:
+                raise ValueError("OTC historical inspection requires explicit migration")
+            return legacy.inspect(db, selected, max_rows)
+        return history_read.inspect(db, selected, max_rows, cutoff)

@@ -15,7 +15,9 @@ as `c53b1e2`; T14–T16 are implemented and locally accepted on
 `feat/finra-research-orchestration` in [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28).
 PR #28 is merged as `eaec327`; Spec013 OTC-T01–T06 are implemented offline
 on `feat/finra-otc-contract-parser`; OTC-T07 revision/membership history is next.
-All six invented profiles publish to the local SQLite panel; real conformance remains pending.
+All six invented profiles publish to the local SQLite panel. T07 version/replacement
+engine and explicit v1-to-v2 migration are implemented on this branch; final
+regression/native/package acceptance is in progress. Real conformance remains pending.
 See [Spec012 acceptance](../specs/spec012/acceptance.md).
 
 The [Dagster master guide](../DAGSTER.md) is the

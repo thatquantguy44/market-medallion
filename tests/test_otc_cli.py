@@ -119,3 +119,69 @@ def test_read_error_is_sanitized_and_never_creates_a_store(tmp_path):
     assert result.returncode == 1
     assert json.loads(result.stderr)["error"] == "OTC_LOCAL_OPERATION_FAILED"
     assert "SECRET" not in result.stderr and not (tmp_path / "SECRET").exists()
+
+
+def test_cli_history_and_equal_clock_cutoff_are_explicit_and_bounded(tmp_path):
+    root = tmp_path / "panel"
+    args = [
+        "run",
+        "--invented-fixture",
+        "--manifest",
+        MANIFEST,
+        "--root",
+        root,
+        "--input",
+        FIXTURE,
+        "--week",
+        "2026-10-19",
+        "--product",
+        "ATS_WEEKLY_DETAIL",
+        "--tier",
+        "T1",
+        "--expected-rows",
+        "3",
+    ]
+    first = invoke(*args)
+    assert first.returncode == 0, first.stderr
+    first_value = json.loads(first.stdout)
+    second = invoke(*args)
+    assert second.returncode == 0, second.stderr
+    common = [
+        "--invented-fixture",
+        "--root",
+        root,
+        "--partition",
+        "2026-10-19:ATS_WEEKLY_DETAIL:T1",
+    ]
+    history = invoke("history", *common)
+    assert history.returncode == 0, history.stderr
+    assert len(json.loads(history.stdout)["versions"]) == 3
+    past = invoke(
+        "inspect",
+        *common,
+        "--as-of",
+        first_value["captured_at"],
+        "--as-of-sequence",
+        first_value["capture_sequence"],
+    )
+    assert past.returncode == 0, past.stderr
+    assert (
+        json.loads(past.stdout)["partitions"][0]["publication"]["capture_id"]
+        == first_value["capture_id"]
+    )
+    assert invoke("history", *common, "--max-versions", "2").returncode == 1
+
+
+def test_cli_migration_keeps_real_fixture_legacy_evidence_and_is_idempotent(tmp_path):
+    from test_otc_migration import legacy_tables, restore_legacy
+
+    root = tmp_path / "old"
+    restore_legacy(root)
+    before = legacy_tables(root)
+    result = invoke("migrate-warehouse", "--invented-fixture", "--root", root)
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["seeded_snapshots"] == 1
+    assert legacy_tables(root) == before
+    repeat = invoke("migrate-warehouse", "--invented-fixture", "--root", root)
+    assert repeat.returncode == 0, repeat.stderr
+    assert json.loads(repeat.stdout)["status"] == "ALREADY_CURRENT"

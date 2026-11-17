@@ -34,9 +34,13 @@ def _fixture(approved_use):
 def publish_capture(
     root: Path | str, capture_id: str, *, approved_use: object, max_bytes: int = DEFAULT_BYTES
 ) -> dict:
-    from market_data_pipeline.pipelines.finra_otc_transparency.io.warehouse import persist
+    from market_data_pipeline.pipelines.finra_otc_transparency.io.warehouse import (
+        persist,
+        require_current,
+    )
 
     _fixture(approved_use)
+    require_current(root)
     result = validate_capture(root, capture_id, approved_use=approved_use, max_bytes=max_bytes)
     capture = read_capture(root, capture_id, approved_use=approved_use, max_bytes=max_bytes)
     status, reason, coverage, rows = prepare(capture, result)
@@ -63,6 +67,9 @@ def run_fixture(
     API cannot admit real files/API responses or establish provider completeness.
     """
     _fixture(approved_use)
+    from market_data_pipeline.pipelines.finra_otc_transparency.io.warehouse import require_current
+
+    require_current(root)
     limits(max_bytes, max_rows)
     if max_rows > 10000:
         raise ValueError("OTC local panel supports at most 10000 rows")
@@ -101,8 +108,38 @@ def inspect_panel(
     partitions: list[Partition] | tuple[Partition, ...],
     approved_use: object,
     max_rows: int = 10000,
+    as_of=None,
+    as_of_sequence=None,
 ) -> dict:
     from market_data_pipeline.pipelines.finra_otc_transparency.io.warehouse import inspect
 
     _fixture(approved_use)
-    return inspect(root, partitions=partitions, max_rows=max_rows)
+    return inspect(
+        root, partitions=partitions, max_rows=max_rows, as_of=as_of, as_of_sequence=as_of_sequence
+    )
+
+
+def observation_history(
+    root, *, partitions, approved_use, max_versions=10000, as_of=None, as_of_sequence=None
+):
+    from market_data_pipeline.pipelines.finra_otc_transparency.io import history_read, warehouse
+
+    _fixture(approved_use)
+    if type(max_versions) is not int or not 1 <= max_versions <= 100000:
+        raise ValueError("OTC version read budget must be in 1..100000")
+    selected = warehouse.selection(partitions)
+    bound = history_read.cutoff(as_of, as_of_sequence)
+    root = warehouse._root(root)
+    warehouse._base(root)
+    with warehouse._connection(root) as db:
+        db.execute("BEGIN")
+        if db.execute("PRAGMA user_version").fetchone()[0] != 2:
+            raise ValueError("OTC history requires explicit migration")
+        return history_read.history(db, selected, max_versions, bound)
+
+
+def migrate_warehouse(root, *, approved_use, max_captures=1000):
+    from market_data_pipeline.pipelines.finra_otc_transparency.io.migration import migrate
+
+    _fixture(approved_use)
+    return migrate(root, approved_use=approved_use, max_captures=max_captures)
