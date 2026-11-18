@@ -1,0 +1,1 @@
+tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalWeeklyShareQuantity|lastUpdateDate|totalWeeklyTradeCount

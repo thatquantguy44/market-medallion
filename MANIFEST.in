@@ -10,6 +10,9 @@ recursive-include notebooks *.py
 
 include scripts/verify_quantsmith.py
 
+include scripts/verify_spec013_t07.py
+recursive-include specs/spec013/evidence *.json
+
 include scripts/verify_spec011_sec_samples.py
 include scripts/verify_spec011_threshold_samples.py
 recursive-include specs/spec011/evidence *.json
@@ -32,3 +35,6 @@ include .github/workflows/handoff-freshness.yml
 include DAGSTER.md
 include AGENTS.md
 include scripts/verify_dagster_docs.py
+
+include scripts/provision_postgres_warehouses.py
+recursive-include specs/spec019/evidence *.json

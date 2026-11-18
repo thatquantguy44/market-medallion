@@ -168,3 +168,34 @@ Optional `export-research --expected-generation-id UUID` refuses if the current
 publication differs from the requested generation. Dagster always supplies this
 binding. See [branch review](../../specs/spec012/branch_review.md) for regression
 and native-query/publication/export/replay equivalence coverage.
+
+## Native PostgreSQL primary
+
+[Spec019 cutover](../../specs/spec019/evidence/pg_t05_finra.json) migrates the
+accepted three-TRF source root into schema `finra_short_sale_volume` in
+`additional_market_data`, effective role `finra_ssv_writer`. The ignored current
+`pipeline.local.yml` names that same retained root; `postgres.local.yml` contains
+only documented connection fields and a password environment reference;
+[postgres.example.yml](postgres.example.yml) shows the required shape. The
+[warehouse register](../../docs/deployment/postgres_warehouses.md) records all
+pipeline targets. Export the named password or use the existing portable script:
+
+```bash
+./scripts/run_finra_short_sale_volume.sh migrate-postgres \
+  --config config/finra_short_sale_volume/pipeline.local.yml \
+  --postgres-config config/finra_short_sale_volume/postgres.local.yml
+```
+
+This is an explicit, idempotent warehouse migration. Source-use admission precedes
+I/O; native COPY, count/content/order checks and transaction commit precede durable
+primary binding. A conflicting/nonempty target is refused, and an interrupted
+commit-to-binding can reconcile/retry. It does not accept inline passwords,
+acquire sources, delete old SQLite/raw files or enable scheduling.
+
+After binding, every existing root-based CLI/Dagster storage operation uses PG
+and requires the named password environment variable. Recovery SQLite files are
+not a fallback. Current values, cutoffs, frozen publication and recovery retain
+their contracts; the internal native attempt ordinal is excluded from logical
+replay state. Health stays DEGRADED as before migration and PRESERVE_ALL deletion
+is disabled. Explicit replay can still build a separate SQLite recovery artifact;
+select PG for that rebuilt root only through a separate verified migration.

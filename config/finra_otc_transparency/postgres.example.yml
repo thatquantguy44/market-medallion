@@ -1,0 +1,11 @@
+# Storage-only primary target. No source/job activation or inline secrets.
+postgres:
+  connect_timeout: 15
+  database: additional_market_data
+  host: 127.0.0.1
+  password_env: AAII_POSTGRES_PASSWORD
+  port: 55438
+  role: finra_otc_writer
+  schema: finra_otc_transparency
+  sslmode: prefer
+  user: market_data

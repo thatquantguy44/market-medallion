@@ -241,7 +241,12 @@ def retention_dry_run(root, manifest, *, approved_use, operation, policy=None, *
                 held.add("FROZEN_PUBLICATION")
             elif parts[0] == "parquet":
                 held.add("PUBLICATION_CATALOG_AND_POINTER")
-            elif row["path"] in {"warehouse.json", "acquisition.json", "parquet.json"}:
+            elif row["path"] in {
+                "warehouse.json",
+                "acquisition.json",
+                "parquet.json",
+                ".postgres-primary.json",
+            }:
                 held.add("STORE_IDENTITY")
             elif row["path"] == "replay.json":
                 held.add("REPLAY_PROVENANCE")

@@ -1,0 +1,4 @@
+tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalWeeklyShareQuantity|lastUpdateDate|totalWeeklyTradeCount|firmCRDNumber|attribution
+T1|ZZZ$B|Invented Company|Invented Named Firm||12345678901234567890|2026-11-09|00042|00123|REPORTED
+T1|ZZZ$B|Invented Company|Invented Unidentified Label||7|2026-11-09|1||REPORTED
+T1|ZZZ$B|Invented Company|Invented Group||0|2026-11-09|0||AGGREGATED

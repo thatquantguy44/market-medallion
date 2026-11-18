@@ -32,3 +32,6 @@ config/naaim-delayed.yml
 /config/reg_sho_thresholds/*.local.yml
 
 /config/finra_short_sale_volume/*.local.yml
+
+/config/finra_otc_transparency/*.local.yml
+/config/presidential_research/*.local.yml

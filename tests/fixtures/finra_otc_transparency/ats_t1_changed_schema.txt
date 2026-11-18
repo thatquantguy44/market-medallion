@@ -1,0 +1,2 @@
+tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalWeeklyShares|lastUpdateDate|totalWeeklyTradeCount
+T1|ZXQ.A|Invented Changed A|EXAMPLE ALPHA ATS|A0A1|10|2026-11-09|1

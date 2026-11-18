@@ -52,6 +52,12 @@ Each pipeline owns its implementation under
 only implemented definitions. Provider transforms/storage remain callable without
 Dagster; see [the orchestration decision](docs/development/adr001-dagster.md).
 
+Actual PostgreSQL primary targets, roles and configuration status are recorded
+in the [warehouse register](docs/deployment/postgres_warehouses.md). Its migration
+status is separate from these job definitions and stored activation states. A FINRA, OTC, presidential or NAAIM root
+explicitly bound to PostgreSQL requires its configured password environment
+variable in the worker and fails closed rather than using retained SQLite/JSON files.
+
 ## Schedules
 
 These are **code defaults**, checked against the definitions. Cron uses the
@@ -125,6 +131,12 @@ control delivery independently. Webhooks remain in environment variables.
 setup, cursor behavior and failure handling; that guide does not own the inventory.
 
 ## Current local state
+
+**2026-11-18 check:** the local UI was unavailable for read-only state verification.
+No worker restart, job launch or activation was performed. PostgreSQL primary
+selectors are configured in the private `.env`; all activation flags are unchanged.
+Current instance activation state is unverified. The previous successful observation
+below is historical.
 
 **Last observed: 2026-11-15 06:23 America/New_York.** The local UI responded at
 <http://127.0.0.1:3030> and all eight explicit jobs were loaded. All eight

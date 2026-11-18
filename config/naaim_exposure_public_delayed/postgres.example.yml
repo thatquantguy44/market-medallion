@@ -1,0 +1,11 @@
+# Storage-only retained migration target. NAAIM remains paused.
+postgres:
+  host: 127.0.0.1
+  port: 55438
+  database: additional_market_data
+  user: market_data
+  role: naaim_writer
+  schema: naaim_exposure_public_delayed
+  password_env: AAII_POSTGRES_PASSWORD
+  sslmode: prefer
+  connect_timeout: 15

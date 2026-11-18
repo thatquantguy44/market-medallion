@@ -1,5 +1,11 @@
 # Reg SHO threshold-list configuration
 
+
+**Local PostgreSQL primary:** the user-selected migration into `additional_market_data`
+is verified under [Spec019](../../specs/spec019/README.md). See the
+[warehouse/schema/role register](../../docs/deployment/postgres_warehouses.md) for
+actual local config paths and migration evidence; checked-in example names remain illustrative.
+
 This folder configures the source-owned Nasdaq/NYSE threshold pipeline. Copy
 `pipeline.example.yml` to ignored `pipeline.local.yml`, choose a durable empty
 root, and add only explicitly selected provider/market/date partitions. Relative

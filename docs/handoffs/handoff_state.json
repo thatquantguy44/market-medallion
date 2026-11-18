@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "da39417069a2dfdea01699d9eefdc16bc2dad304ee62161da14fd74dc964ad76",
-  "next_task": "OTC-T01",
-  "panel_fingerprint": "604c72e465589b5bbc0ad736f4df0f0b1c3b6f19d401509a806dc2ccc40556d6",
-  "review_summary": "Opened PR #29 for canonical Dagster guide and offline CI inventory/navigation guard; implementation 5a1578c and local 1827-pass validation are recorded, with current-head remote CI/review required before merge. OTC-T01 remains next; no activation changes.",
-  "reviewed_at": "2026-11-15T15:33:17.044369+00:00",
-  "reviewed_commit": "5a1578c11cbcaefe7d19524259a844fdfb0f9ff6",
+  "document_fingerprint": "2ee09d3fd04b2c945e2ae2efd2136e7c048cb42a0cbef94c2a13f09bfb9dabf5",
+  "next_task": "OTC-T08",
+  "panel_fingerprint": "06c333960ccee4e248ecc99f29d9f5cf73f6906ada17c4b409ae961f7f8e12c4",
+  "review_summary": "Reviewed publication of complete OTC T01-T07 and PostgreSQL consolidation branch: initial head df382f4 pushed, PR30 open against unchanged main; recorded tracking/PR facts and preserved acceptance evidence and source holds",
+  "reviewed_at": "2026-11-18T10:01:26.471644+00:00",
+  "reviewed_commit": "df382f49d9b44525bcba3d5616524c5bbc78dd9a",
   "schema_version": 1,
-  "source_fingerprint": "e712abba00015ce8014185d1feff1532919d2248c9bab7c5a53e5522347c2a0a",
+  "source_fingerprint": "65f991ed989cbfcd1b9943be6d4794ecd487f446db9be28b50273aafc214eed2",
   "task_file": "specs/spec013/todo.md"
 }

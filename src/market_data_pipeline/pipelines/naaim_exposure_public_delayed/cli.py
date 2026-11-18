@@ -41,7 +41,26 @@ def main(argv=None) -> int:
         "--research-use-reference",
         help="nonsecret reference to permission for the downstream research display",
     )
+    parser.add_argument(
+        "--migrate-postgres",
+        type=Path,
+        metavar="CONFIG",
+        help="offline explicit PG primary migration",
+    )
     arguments = parser.parse_args(argv)
+    if arguments.migrate_postgres:
+        if arguments.check or arguments.export_research or arguments.permission_reference:
+            parser.error("--migrate-postgres cannot be combined with capture/check/export")
+        from market_data_pipeline.shared.postgres import load_settings
+
+        from .postgres import migrate
+
+        print(
+            json.dumps(
+                migrate(arguments.root, load_settings(arguments.migrate_postgres)), sort_keys=True
+            )
+        )
+        return 0
     if arguments.check and arguments.export_research:
         parser.error("--check and --export-research cannot be combined")
     if arguments.check:

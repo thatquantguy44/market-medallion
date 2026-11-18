@@ -321,3 +321,10 @@ This provider-discovery slice is complete when the following are true:
 - [NAAIM Exposure Index methodology and public-delay notice](https://naaim.org/programs/naaim-exposure-index/)
 - [NAAIM Exposure Index FAQs](https://naaim.org/programs/naaim-exposure-index/faqs/)
 - [NAAIM Exposure Index subscription and redistribution terms](https://members.naaim.org/ap/Membership/Application/GrZAe6L1)
+
+## User-authorized PostgreSQL primary consolidation
+
+The later Spec019 authorization supersedes this document's original no-warehouse
+scope for local primary storage only. [Native PG acceptance](postgres_primary_contract.md)
+preserves the existing 131 delayed versions and research boundary. Acquisition
+and schedule remain paused; no new provider entitlement or public service is implied.

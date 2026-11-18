@@ -1,0 +1,122 @@
+{
+  "existing_sec_threshold_pg_tests": 5,
+  "native_connection_tests": 13,
+  "offline_regression": {
+    "passed": 2262,
+    "skipped": 94
+  },
+  "pg_checks_in_disposable_database": 18,
+  "records": {
+    "provisioning": {
+      "applied": true,
+      "database": "additional_market_data",
+      "schemas": [
+        {
+          "owner": "aaii_writer",
+          "schema": "aaii",
+          "tables": 5
+        },
+        {
+          "owner": "finra_otc_writer",
+          "schema": "finra_otc_transparency",
+          "tables": 0
+        },
+        {
+          "owner": "finra_ssv_writer",
+          "schema": "finra_short_sale_volume",
+          "tables": 0
+        },
+        {
+          "owner": "fomc_writer",
+          "schema": "fomc_meeting_minutes",
+          "tables": 29
+        },
+        {
+          "owner": "naaim_writer",
+          "schema": "naaim_exposure_public_delayed",
+          "tables": 0
+        },
+        {
+          "owner": "presidential_writer",
+          "schema": "presidential_research",
+          "tables": 0
+        },
+        {
+          "owner": "reg_sho_writer",
+          "schema": "reg_sho_thresholds",
+          "tables": 0
+        },
+        {
+          "owner": "sec_ftd_writer",
+          "schema": "sec_ftd",
+          "tables": 0
+        }
+      ]
+    },
+    "reg_sho_thresholds-migration": {
+      "counts": {
+        "audit": 10,
+        "coverage": 10,
+        "membership": 408
+      },
+      "pipeline": "reg_sho_thresholds",
+      "replay_status": "SUCCEEDED",
+      "schema": "reg_sho_thresholds",
+      "source_files_unchanged": 39,
+      "writer": "reg_sho_writer"
+    },
+    "restore-verification": {
+      "counts": {
+        "aaii.aaii_gold_latest": 2048,
+        "aaii.aaii_silver_versions": 2048,
+        "aaii.pipeline_dataset_contract": 1,
+        "aaii.pipeline_identity": 1,
+        "aaii.pipeline_runs": 5,
+        "fomc_meeting_minutes.bronze_capture_objects": 1081,
+        "fomc_meeting_minutes.bronze_captures": 1081,
+        "fomc_meeting_minutes.bronze_dependencies": 446,
+        "fomc_meeting_minutes.bronze_dependency_checks": 322,
+        "fomc_meeting_minutes.bronze_dependency_state": 1,
+        "fomc_meeting_minutes.bronze_document_links": 6778,
+        "fomc_meeting_minutes.bronze_inventory_discovery": 30,
+        "fomc_meeting_minutes.bronze_inventory_links": 990,
+        "fomc_meeting_minutes.bronze_object_state": 1,
+        "fomc_meeting_minutes.bronze_objects": 1081,
+        "fomc_meeting_minutes.bronze_schema_migrations": 3,
+        "fomc_meeting_minutes.catalog_state": 1,
+        "fomc_meeting_minutes.chunk_catalogs": 30,
+        "fomc_meeting_minutes.chunk_sets": 522,
+        "fomc_meeting_minutes.chunk_state": 1,
+        "fomc_meeting_minutes.chunks": 9790,
+        "fomc_meeting_minutes.inventory_documents": 14100,
+        "fomc_meeting_minutes.inventory_entries": 16822,
+        "fomc_meeting_minutes.inventory_meetings": 11122,
+        "fomc_meeting_minutes.inventory_pages": 990,
+        "fomc_meeting_minutes.inventory_runs": 30,
+        "fomc_meeting_minutes.operation_records": 2565,
+        "fomc_meeting_minutes.operation_runs": 39,
+        "fomc_meeting_minutes.operation_state": 1,
+        "fomc_meeting_minutes.text_capture_links": 522,
+        "fomc_meeting_minutes.text_catalogs": 30,
+        "fomc_meeting_minutes.text_extractions": 522,
+        "fomc_meeting_minutes.text_state": 1,
+        "fomc_meeting_minutes.text_units": 4018
+      },
+      "status": "RESTORED_AND_COUNTS_MATCH",
+      "tables": 34
+    },
+    "sec_fails_to_deliver-migration": {
+      "counts": {
+        "audit": 4,
+        "coverage": 4,
+        "facts": 117025
+      },
+      "pipeline": "sec_fails_to_deliver",
+      "replay_status": "SUCCEEDED",
+      "schema": "sec_ftd",
+      "source_files_unchanged": 30,
+      "writer": "sec_ftd_writer"
+    }
+  },
+  "verified_date": "2026-11-17"
+}

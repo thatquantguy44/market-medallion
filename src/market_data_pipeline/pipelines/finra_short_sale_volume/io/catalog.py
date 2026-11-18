@@ -97,7 +97,16 @@ def connect(root, manifest, *, approved_use, operation, create=False):
     )
     directory = root / "parquet"
     binding = root / "parquet.json"
-    if create and not directory.exists() and not directory.is_symlink():
+    from market_data_pipeline.shared.postgres import binding as primary_binding
+
+    primary = primary_binding(root, "finra_short_sale_volume")
+    if primary is not None and create:
+        from market_data_pipeline.pipelines.finra_short_sale_volume.io.postgres import (
+            initialize_catalog,
+        )
+
+        initialize_catalog(root, manifest, kind, expected)
+    elif create and not directory.exists() and not directory.is_symlink():
         if binding.exists() or binding.is_symlink():
             raise ValueError("FINRA bound publication catalog is missing")
         identity = dict(expected, catalog_id=str(uuid4()))
@@ -116,6 +125,25 @@ def connect(root, manifest, *, approved_use, operation, create=False):
                 },
             )
         _put(binding, encoded(identity))
+    if directory.is_symlink() or not directory.is_dir():
+        raise ValueError("FINRA publication directory is unsafe")
+    for name in (".staging", "snapshots"):
+        if (directory / name).is_symlink() or not (directory / name).is_dir():
+            raise ValueError("FINRA publication directory is unsafe")
+    identity = _json(directory / "identity.json")
+    _identity(identity.get("catalog_id"))
+    if (
+        set(identity) != set(expected) | {"catalog_id"}
+        or any(identity[k] != v for k, v in expected.items())
+        or _json(binding) != identity
+    ):
+        raise ValueError("FINRA publication identity mismatch")
+    if primary is not None:
+        from market_data_pipeline.pipelines.finra_short_sale_volume.io.postgres import connection
+
+        with connection(root, manifest, kind, create=create, publication=True) as database:
+            yield database
+        return
     path = directory / "catalog.sqlite"
     if directory.is_symlink() or path.is_symlink() or not path.is_file():
         raise ValueError("FINRA bound publication catalog is missing or unsafe")
@@ -125,14 +153,6 @@ def connect(root, manifest, *, approved_use, operation, create=False):
     for suffix in ("-journal", "-wal", "-shm"):
         if path.with_name(path.name + suffix).is_symlink():
             raise ValueError("FINRA publication SQLite sidecar is unsafe")
-    identity = _json(directory / "identity.json")
-    _identity(identity.get("catalog_id"))
-    if (
-        set(identity) != set(expected) | {"catalog_id"}
-        or any(identity[k] != v for k, v in expected.items())
-        or _json(binding) != identity
-    ):
-        raise ValueError("FINRA publication identity mismatch")
     connection = None
     try:
         connection = sqlite3.connect(

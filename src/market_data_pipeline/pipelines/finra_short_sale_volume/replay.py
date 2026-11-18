@@ -28,6 +28,7 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.data.snapshot import
 from market_data_pipeline.pipelines.finra_short_sale_volume.data.versions import TRANSFORM
 from market_data_pipeline.pipelines.finra_short_sale_volume.io import bronze, replay_archive
 from market_data_pipeline.pipelines.finra_short_sale_volume.io import warehouse as store
+from market_data_pipeline.pipelines.finra_short_sale_volume.io.schema import ATTEMPT_COLUMNS
 from market_data_pipeline.shared.files import writer_lock
 
 CONTRACT = "finra-ssv-replay/1"
@@ -54,10 +55,13 @@ def _state(db, max_rows, max_bytes):
         size += row[1]
     if count > max_rows or size > max_bytes:
         raise ValueError("FINRA replay state row/byte budget exceeded")
-    result = {
-        name: [dict(r) for r in db.execute(f"SELECT * FROM {name} ORDER BY {order}")]
-        for name, order in TABLES.items()
-    }
+    result = {}
+    for name, order in TABLES.items():
+        columns = ATTEMPT_COLUMNS if name == "attempts" else "*"
+        result[name] = [
+            dict(r) for r in db.execute(f"SELECT {columns} FROM {name} ORDER BY {order}")
+        ]
+
     size = len(encoded(result))
     if size > max_bytes:
         raise ValueError("FINRA replay state byte budget exceeded")

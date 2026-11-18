@@ -24,7 +24,9 @@ normalized manifest's 1936 provider boundary remains unchanged for historical
 receipt/ID compatibility and local legacy reads; it is not the operating scope.
 
 The local file uses the existing `additional_market_data` database on
-`127.0.0.1:55438`, login `market_data`, `role: null` and the dedicated FOMC schema.
+`127.0.0.1:55438`, login `market_data`, effective `role: fomc_writer` and the dedicated FOMC schema.
+The dedicated role was provisioned during [Spec019 consolidation](../../specs/spec019/README.md);
+the example config remains illustrative.
 It references the existing password environment-variable name. Password values
 never belong in YAML, logs or Git. The example keeps generic port 55432 and
 `FOMC_POSTGRES_PASSWORD`. No other pipeline's configuration/tables are imported.

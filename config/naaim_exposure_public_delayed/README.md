@@ -28,3 +28,23 @@ ignored `alerts.local.yml` when needed; see the
 settings make no request; credentials stay in the named environment variable.
 The pipeline's success/failure sensors default stopped. Set `slack.on_success` and
 `slack.on_failure` independently; defaults are false/true respectively.
+
+## PostgreSQL primary
+
+The retained operative root `data/naaim-exposure-public-delayed` is bound to
+`additional_market_data.naaim_exposure_public_delayed`, role `naaim_writer`.
+Copy/use `postgres.example.yml` as ignored `postgres.local.yml`; supply its
+password environment variable to CLI/workers. The existing launcher exports this
+project's private `.env`. NAAIM remains paused.
+
+```bash
+.venv/bin/python -m market_data_pipeline.pipelines.naaim_exposure_public_delayed --root data/naaim-exposure-public-delayed --migrate-postgres config/naaim_exposure_public_delayed/postgres.local.yml
+```
+
+This migration is offline and retryable, preserves raw/recovery files and activates
+no capture/schedule. Reads, writes, health, export and retention use native PG
+after binding and refuse without it. `silver/versions.json` is retained recovery
+evidence. `gold/latest.json` is a derivative; a failed file publication can be
+retried while PG remains authoritative. Applied retention commits the PG retained
+state before removing expired files; a crash may leave extra held files.
+See [native contract](../../specs/spec007/postgres_primary_contract.md).

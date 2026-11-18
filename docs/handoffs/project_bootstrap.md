@@ -1,138 +1,136 @@
 # Project bootstrap and master handoff
 
-Last updated: 2026-11-15.
+Last updated: 2026-11-18.
 
 ## Agent start here
 
-**Next implementation: FINRA OTC-T01 source route and reuse contract (Spec013).**
-Spec012 T14 → T15 → T16 and the subsequent regression/equivalence review are
-merged through [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as
-`eaec3279dd27c0ee170e78751f234d538d4416b2`. Start Spec013 on a fresh branch from latest
-`origin/main`; the FINRA short-volume delivery's review/merge step is complete.
-This panel owns current priorities; dated checkpoints below retain history.
-Later explicit user instructions take precedence and must be recorded here.
-
-**Status verified:** 2026-11-15 06:23 EST. Local Dagster UI is responding at
-<http://127.0.0.1:3030>, with all eight explicit jobs loaded. All eight acquisition/
-import schedules are STOPPED; only the two FOMC Slack sensors are RUNNING among
-the twelve status sensors. The user-code connection was recovered by restarting
-the existing manual launcher, preserving metadata and stored activation settings.
-No job/source acquisition or schedule activation was performed. See the
-[canonical Dagster master guide](../../DAGSTER.md#current-local-state).
+**Next implementation: OTC-T08 — reporting and availability clocks (planned, not started).**
+PostgreSQL primary consolidation is complete.
+The user authorized every existing pipeline to use `additional_market_data` as its
+primary warehouse. All Spec019 PG-T01–PG-T11 tasks are accepted locally. Read
+[acceptance](../../specs/spec019/acceptance.md) and the
+[warehouse register](../deployment/postgres_warehouses.md) for evidence and exact
+schema/writer/root/config mappings. Active branch: `feat/postgres-pipeline-consolidation`.
+The user authorized commit/push/PR publication on 2026-11-18. Branch is pushed
+and tracks `origin/feat/postgres-pipeline-consolidation`; [PR #30](https://github.com/thatquantguy44/market-medallion/pull/30)
+is open against `main`. No merge was performed.
 
 ### Current work and highest priorities
 
-| Order | Work | Status and next action | Canonical task / entrypoint |
+| Order | Work | Status and exact pickup | Owner |
 | --- | --- | --- | --- |
-| 0 | Dagster canonical documentation cleanup | Implemented and published on `docs/dagster-canonical-register`; [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) is open. Check current-head CI/review before merge. | [DAGSTER.md](../../DAGSTER.md), [checker](../../scripts/verify_dagster_docs.py) |
-| 1 | **Spec013 OTC-T01 — route and reuse contract** | Ready; implementation not started. Create a fresh latest-main branch and verify current official terms for one bounded weekly report profile before provider I/O. | [T01](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract), [Spec013](../../specs/spec013/README.md) |
-| 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
-| 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
-
-**Current delivery:** Dagster documentation cleanup is implemented in `5a1578c`
-on `docs/dagster-canonical-register`, from main `eaec327` plus preserved
-local handoff/runtime checkpoints `1747018` and `468b72a`. The user requested one
-recognizable canonical inventory tied to README/AGENTS. Root
-[DAGSTER.md](../../DAGSTER.md) now owns the job/schedule/sensor tables, UI access,
-operating controls and dated runtime observation. The old register is a pointer.
-An offline definition/doc/navigation check is wired into CI; 50 new regression
-checks and 1,827 full-suite passes / 92 optional skips verify drift, links and
-no instance/network access. The user requested publication;
-[PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) is open against
-`main`. Review current-head CI and the root guide/guard before merge and the next
-pipeline slice; opening the PR does not imply acceptance or merge. Source/wheel
-readback verifies all 185 runtime modules and changed packaged files; lint, format,
-inventory and handoff checks pass. No job definitions, runtime configuration,
-provider behavior or automation activation were changed. OTC-T01 remains ready.
+| — | Spec019 PostgreSQL primary consolidation | Complete: all eight primaries, retained migrations, exact restored backup and operating selectors verified. | [Acceptance](../../specs/spec019/acceptance.md) |
+| 0 | Spec013 OTC-T08 reporting and availability clocks | Not started. Characterize holiday/null/date-only/cutoff behavior before changing semantics; preserve documentary tier delay and capture first-seen. | [Task](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
+| 1 | Spec014 SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
+| 2 | Spec015 NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
 
 ### Last completed work and commits
 
-| Commit / checkpoint | Result |
+| Checkpoint | Verified local commit |
 | --- | --- |
-| `c53b1e2ab29294e73953362d03b837e468c77f85` / [PR26](https://github.com/thatquantguy44/market-medallion/pull/26) | T13 health/retention merged. |
-| `1daf6b58ed6199fd39dff38f30923d6f55a9b896` / [PR27](https://github.com/thatquantguy44/market-medallion/pull/27) | Master handoff and CI/daily freshness guard merged; base of current branch. |
-| `2b6fc3bef1c8a554cdedf457348454c211dbc4ac` | T14 admitted research interchange,37 new /710 FINRA tests. |
-| `c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95` | T15 stopped job/schedule and 21 Dagster tests;731 FINRA tests. Verified local commit. |
-| `3f0043a4eb6c5d08807cf4ed2eea75023ad37a38` / T16 | [Acceptance](../../specs/spec012/acceptance.md) and [conformance](../../specs/spec012/evidence/t16_delivery_conformance.json) record the final tests/CLI/source-replay evidence. Resolve its exact commit with the commands below rather than a self-referential SHA. |
-| `9db245ec50c3df6b205a401f942a718ef3664061` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Completed review fixes and 24 added regressions/equivalence tests; 1,777 local passes / 92 optional skips. Branch is pushed; remote checks/reviews are tracked on the PR. |
-| `eaec3279dd27c0ee170e78751f234d538d4416b2` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Merged T14–T16 and reviewed regression/equivalence fixes; Spec013 OTC-T01 is now the next implementation. |
-| `5a1578c11cbcaefe7d19524259a844fdfb0f9ff6` / [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) | Canonical root Dagster guide, README/AGENTS maintenance contract and offline definition/navigation CI guard; 1,827 local passes / 92 optional skips. PR is open; confirm current-head CI/review before merge. |
+| OTC T07 implementation / closeout | `7935bd15d8e83dd06dce4b2e13b08a7c38130708` / `73780722c7aaa133408776bbf5a904913ed5929e` |
+| PG foundation, roles, SEC/threshold native migrations | `0900c7de6d19dd5eb290e38630374c4e13587195` |
+| FINRA native adapter / real cutover | `f953d293024952a31cfa9c7c72722a751b8a4746` / `c8f7152359bd61e442c1b8842b353302ec651d53` |
+| OTC empty native primary | `b1702dcdaad9050407970f0076677df8925065d1` |
+| Presidential native primary and retained migration | `11700e7c53cd82659eb7f2da4ff42b8412a08cbe` |
+| NAAIM native primary and retained migration | `55ac940bf5c5d68e3c18d232fcca127e9a9d3933` |
+| Final operating acceptance | Resolve with `git log -1 -- specs/spec019/acceptance.md`; never invent a self-referential SHA. |
 
-The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
-approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
-manual in-process Dagster job succeeded: Carteret 12,349, Chicago 5,849 and
-NYSE 7,032 source rows (25,230 total), with 14 original pages and 3 derived collections.
-The committed publication has 12,355 research rows. Replay reproduces all tables
-and the research artifact except its new publication identity. Read-only health
-and retention preserve 115 source plus 88 replay files. API timing remains UNKNOWN,
-source refresh SUCCESS, replay LOCAL_ONLY, publication PUBLISHED, deletion disabled.
-T16 added a repeat-membership cutoff regression and had 38 export tests at that
-checkpoint; the subsequent branch review above expands current coverage. See its
-linked evidence for current regression/build results.
-No Slack notification or schedule activation occurred. Known external QuantSmith
-checkout drift is unchanged; all 61 pinned guidance Git objects verify.
+`origin/main` remains `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`, verified through
+current `ls-remote` and already an ancestor of HEAD. A repeat fetch encountered
+unrelated invalid local ref `refs/heads/docs/finra-merged-handoff 2`; no ref was
+removed/repaired. An explicit push succeeded without ref repair. The published
+implementation checkpoint is `df382f49d9b44525bcba3d5616524c5bbc78dd9a`; PR #30
+includes the preceding OTC T01–T07 work and Spec019 consolidation. This handoff
+publication update follows on the same tracked branch.
 
-```bash
-git status --short --branch
-git log -5 --oneline
-git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
-git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
-```
+### Accepted PostgreSQL operating state
 
-### Exact next slice: OTC-T01
+All eight configured primaries share `127.0.0.1:55438/additional_market_data` and
+separate owned schemas/effective writer roles. Shared login `market_data` is an
+administrator, not a restricted reader; passwords remain only in this project's
+private environment. Each writer is NOLOGIN/non-superuser with no cross-pipeline
+schema access. Existing AAII reader grants remain unchanged.
 
-Read [AGENTS.md](../../AGENTS.md), [pipeline register](../pipelines.md),
-[Spec012 acceptance](../../specs/spec012/acceptance.md),
-[Spec013](../../specs/spec013/README.md), its [data contract](../../specs/spec013/data_contract.md),
-[plan](../../specs/spec013/plan.md) and [T01 task](../../specs/spec013/todo.md#otc-t01--resolve-source-route-and-reuse-contract).
-Reconcile current official file/API automation and dataset/general terms, recording
-retention, transforms, internal exports and noncommercial boundaries. Build only
-the source-owned admission/profile checks for the selected bounded weekly report.
-Keep ATS/non-ATS, tiers, reporting lags and grouped participant identities explicit.
-Do not infer Spec013 rights or availability from Spec012's implemented API profile.
-Use `pipelines/finra_otc_transparency/` only when implementing its working slice;
-the package/connector is absent now. Do not implement T02+ without a bounded task.
+AAII/FOMC retain their original 34 table counts. SEC FTD has 117,025 facts and
+four audit/coverage records; thresholds have 408 memberships and ten audits/
+coverage records. FINRA short volume has 25,230 versions/memberships, 17 captures/
+attempts, three TRF partitions and the same frozen publication. Presidential has
+3,903 facts/memberships, three captures and two publication-journal records with
+the unchanged frozen bundle. NAAIM has 131 delayed versions, one retained raw
+capture/snapshot/event and identical current/latest values. OTC is initialized
+empty: zero captures/versions/memberships and no invented operative data. Source
+hashes/mtimes are unchanged: SEC30, thresholds39, FINRA115, presidential65, NAAIM8.
+All first-seen clocks, sequence, exact values, revision/reversion and publication
+semantics are retained. See per-source Spec019 evidence for hashes and counts.
 
-### Operating holds and other workstreams
+Bound roots use native PostgreSQL for reads/writes/history and fail closed when
+PG is absent; retained SQLite/JSON files are recovery evidence. NAAIM health/export/
+retention also use PG; its local latest file is derivative. Private `.env` selectors
+now name the accepted PG configs/roots. Activation flags remain unchanged and no
+worker was restarted. No provider request, job launch, Slack message, operative
+retention deletion or schedule activation occurred. FINRA health remains DEGRADED;
+NAAIM remains capture_stale and explicitly paused. Migration is not a source refresh.
+
+### Current verification and backup
+
+**Publication:** [PR #30](https://github.com/thatquantguy44/market-medallion/pull/30) is open.
+Check its current head/checks before merging; no automatic merge or deployment
+is authorized by the publication request. Final pushed SHA is the PR head and
+`git rev-parse HEAD`, rather than a self-referential value in this document.
+
+Full offline regression: **2,263 passes / 206 optional skips**. All **201 actual
+PostgreSQL integration cases** pass in disposable storage (119 consolidation/SEC/
+threshold and 82 AAII/FOMC), plus twelve shared settings/binding cases. Six native
+CLI cases pass while importing exclusively from the built wheel. All **209 runtime
+Python modules** match source/sdist/wheel bytes; private configs are excluded.
+Ruff lint/format, focused Dagster checks and canonical inventory (eight jobs/eight
+schedules/twelve sensors) pass. Temporary validation databases were removed.
+
+Both ignored backup folders are retained under `data/backups/`: pre-change
+`postgres-consolidation-2026-11-17` and final `postgres-consolidation-2026-11-18-final`.
+The final 225,443,684-byte custom dump was actually restored: all **78 tables** match
+row hashes/counts/owners. Roles omit password hashes. Final backup also verifies
+all writer boundaries and unchanged original AAII/FOMC counts. See
+[restore evidence](../../specs/spec019/evidence/pg_t11_backup.json).
+
+**Runtime check 2026-11-18:** local Dagster UI unavailable for read-only verification.
+Current stored activation state is unverified; no restart was performed. The last
+successful observation (2026-11-15 06:23 EST: eight stopped acquisition/import
+schedules; only two FOMC Slack sensors running) is historical. Consult
+[DAGSTER.md](../../DAGSTER.md#current-local-state) before runtime work.
+
+### Exact next slice: OTC-T08
+
+Read Spec013 README/data contract/todo, T07 acceptance and native PG contract.
+T01–T07 remain fixture-only across ATS/non-ATS × T1/T2/OTCE. All real profile
+conformance stays NOT_CHECKED, Bronze membership UNVERIFIED, non-ATS grammar/
+completeness synthetic. Preserve legacy v1 readback/explicit migration, native PG
+identity, exact integer tokens, revisions/removals and equal-clock capture order.
+T08 must separate reporting, documentary availability and capture first-seen;
+cutoffs never claim historical provider vintages or operator processing history.
+T09 features/Checkpoint C remain open. No new source access is authorized.
+
+At implementation start record bounded scope and branch/PR here. Reuse source-owned
+packages and offline fixtures. Do not restart Spec001's CFTC-first plan. QuantSmith
+checkout drift remains: all 61 pinned Git guidance objects verified read-only;
+agent-skills pin verifies 188 entries. Do not repin vendored guidance here.
+
+### Operating holds and freshness
 
 - **NAAIM remains paused by the user.** Do not capture or restart its schedule.
-- All acquisition schedules remain unactivated by this work. G3 requires a separate
-  operator decision, current access/calendar/capacity review and actual tick/run.
-- FINRA G1/G2 cover exactly the three TRFs on 2026-11-09. Wider history and other
-  dates remain unacquired. API timing is unknown by default; the reviewed default
-  calendar ends 2026. Retention is PRESERVE_ALL dry run. ADF/TXT/ORF/consolidated
-  and other schema regimes remain excluded. G4 consumer integration is deferred.
-- FOMC listed1990–released2026 minutes and Q01–Q03 quality workflow are implemented.
-  Remaining source/OCR review and deliberate refreshes are separate bounded work.
-- Spec011 SEC FTD/exchange-threshold bounded delivery is accepted. AAII recurring
-  access and presidential live-source decisions remain independently gated.
-- Existing Slack/service observations in historical sections do not prove current
-  availability. Use [Dagster job controls](../../DAGSTER.md) and recheck runtime
-  state before describing a service as healthy/running.
+- All source access/recurring activation gates remain separate. FINRA G1/G2 cover
+  only the three TRFs on 2026-11-09; broader history/G3/G4 remain open. ADF/TXT/
+  ORF/consolidated are excluded; API timing is unknown; default calendar ends 2026.
+- FINRA retention stays PRESERVE_ALL with deletion disabled. Do not infer current
+  runtime health from dated checkpoints or activate automation while updating docs.
 
 ### Keep this panel current
 
-[Review state](handoff_state.json) binds this document and all other tracked inputs
-to a reviewed Git snapshot. CI runs the checker and a daily job reports stale
-reviews, recent commits and open PRs. It does not invent priorities or runtime facts.
-See [freshness guide](../development/handoff_freshness.md) and
-[workflow](../../.github/workflows/handoff-freshness.yml).
-
-At implementation start, verify Git/current main/PR state and record the bounded
-scope and active branch/PR. Before handing off, update this panel with actual
-work, commits, tests, blockers and exact pickup; update owning specs/registers too.
-Stage all intended changes, refresh review evidence with a meaningful summary,
-then stage both handoff files and check the exact index:
-
-```bash
-python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"
-git add docs/handoffs/project_bootstrap.md docs/handoffs/handoff_state.json
-python3 scripts/verify_handoff.py --staged
-```
-
-When deliberately advancing to another owning task list, pass its path using
-`--task-file` on refresh. Preserve existing user hooks and dated history below.
-A timestamp/history-only update cannot acknowledge substantive source changes.
+After changing this panel, stage intended files, run `python3 scripts/verify_handoff.py
+--refresh --task-file specs/spec013/todo.md --summary "Describe the actual review"`,
+stage the panel/state JSON, then run `python3 scripts/verify_handoff.py --staged`.
+Preserve dated history below. Check HEAD and clean status before handing off.
 
 ## Historical checkpoints and retained context
 

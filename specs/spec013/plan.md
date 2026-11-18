@@ -1,6 +1,6 @@
 # Implementation plan — FINRA OTC transparency
 
-**Status:** proposed, 2026-11-03. [todo.md](todo.md) owns task execution status.
+**Status:** OTC-T01–T07 implemented offline, including the six-profile versioned local panel; T08+ planned. [todo.md](todo.md) owns task execution status.
 This source follows Spec012 by delivery priority and precedes Spec014. It has
 no technical dependency on daily short-sale data or a shared provider warehouse.
 
@@ -28,9 +28,9 @@ rights + route evidence -> product/tier/schema inventory -> invented detail pars
 
 | Slice | Tasks | User-visible or inspectable outcome |
 | --- | --- | --- |
-| A: admitted shape | OTC-T01–OTC-T03 | Route/use record and deterministic weekly profile fixtures. |
-| B: local panel | OTC-T04–OTC-T06 | Audited week/tier/product detail with honest participant identity. |
-| C: historical truth | OTC-T07–OTC-T09 | Current/as-of membership, delayed availability and scoped features. |
+| A: admitted shape | OTC-T01–OTC-T03 | Implemented: [route/use review](source_review.md), six-profile catalog and one invented ATS/T1 parser; [Checkpoint A](checkpoint_a.md). Live conformance pending. |
+| B: local panel | OTC-T04–OTC-T06 | Implemented: identity, [immutable Bronze](t05_bronze_acceptance.md), and [six-profile transactional local panel/CLI](t06_local_panel_acceptance.md). |
+| C: historical truth | OTC-T07–OTC-T09 | T07 fixture revisions/removals and capture-cutoff membership implemented; T08 clock refinement and T09 features remain pending. |
 | D: reproduction | OTC-T10–OTC-T11 | Committed typed snapshot and equivalent archived replay. |
 | E: bounded refresh | OTC-T12–OTC-T13 | Finite correction refresh and release-aware coverage health. |
 | F: handoff | OTC-T14–OTC-T16 | Admitted research artifact, stopped job, runbook and AC evidence. |
@@ -67,6 +67,82 @@ If a stable identifier is absent, preserve route-scoped labels and disclose
 limited longitudinal identity. A source providing ambiguous duplicate labels
 needs an explicit disambiguation contract or an unavailable result, not a
 synthetic firm merge. Keep a dated schema/terms record with each admitted route.
+
+## T05 implementation boundary
+
+Keep the raw-byte/receipt contract, reader and linked validation outcome coherent
+in this slice. Pure metadata lives in `io/receipts.py`; atomic filesystem storage
+and validation orchestration live in `io/bronze.py`. The larger test surface covers
+C03/C05/C06 failure, corruption and concurrency boundaries without introducing a
+shared storage framework or extending the source/API surface. No function runs
+network discovery. The local limits and ownership checks are independent of any
+provider SLA or retention permission. T06 keeps these receipts inspectable while adding all six fixture profiles and
+transactional local publication.
+
+## T06 bounded implementation increments
+
+The user authorized T06 on `feat/finra-otc-contract-parser` on 2026-11-16.
+All four increments are implemented and independently verified:
+
+1. **T06a — six invented profiles:** catalog/manifest, pure weekly parser and
+   profile tests. Reuse the historical ATS fixture grammar across explicit tiers;
+   use a separately named, explicitly invented non-ATS grammar with declared
+   attribution and optional supplied IDs. Never claim current provider schemas.
+2. **T06b — archive integration:** validate new fixture schemas, retain historical
+   v1 descriptors/outcomes, and verify all six through immutable Bronze.
+3. **T06c — transactional local panel:** source-owned SQLite, pipeline and integration
+   tests. A separately archived synthetic discovery assertion binds partition,
+   schema, exact payload SHA and expected row count. Only this fixture evidence
+   may produce COMPLETE_FIXTURE/COMPLETE_EMPTY_FIXTURE. Rows, coverage, terminal
+   attempt and publication selection commit together. Failed/partial/unverified
+   attempts retain old selections and cannot advance a success marker.
+4. **T06d — operator interface:** CLI/module entrypoint and CLI tests, then acceptance,
+   register and handoff. Import one explicit population at a time; inspect requires
+   a bounded explicit population list. JSON uses decimal text for quantities.
+
+Each increment targets at most five implementation/test files; fixture/catalog
+and owning documentation updates accompany the relevant increment. No generic
+warehouse framework or new dependency is introduced. Until T07 implements revision
+and replacement history, a second complete capture for an already published
+partition is recorded as REPLACEMENT_DEFERRED without replacing membership.
+T06 reads select initial complete fixture populations, with explicit attribution
+counts and absent requested populations; venue ratios remain T09, Parquet T10,
+replay T11 and real extraction/conformance T12.
+
+## T07 bounded implementation increments
+
+The user authorized T07 on `feat/finra-otc-contract-parser` on 2026-11-16,
+starting at `c9263d5`. Keep the implementation fixture-only and split as follows:
+
+1. **T07a — pure version semantics:** `data/versions.py` and unit characterization.
+   Normalize explicit semantic fields; transport/run/capture metadata never enters
+   content identity. Original count tokens stay in capture membership, so a
+   formatting-only token change need not create a value version. Reversions and
+   reappearances have new occurrence IDs, even when their content hash repeats.
+2. **T07b — storage boundary:** retain a frozen, invented T06 warehouse/receipt
+   fixture; isolate its read protocol and introduce explicit SQLite contract v2.
+   Read v1 unchanged; refuse v1 writes until an explicit fixture-only migration.
+3. **T07c — atomic history:** append versions, removal tombstones and complete
+   membership snapshots with terminal attempts in one transaction. Incomplete
+   attempts never replace membership. Reject out-of-order successful population
+   replacement using original capture sequence. Test all six profiles and faults.
+4. **T07d — migration and inspection:** explicit `migrate-warehouse`, bounded
+   `history`, and snapshot cutoffs (aware UTC plus optional equal-clock sequence).
+   Validate old publications against retained Bronze before seeding v2, preserve
+   all legacy table rows/attempts and raw files, and do not automatically process
+   old deferred captures. Explicit re-ingestion creates v2 transformation evidence.
+
+Each increment targets at most five implementation/test files plus owning docs.
+The v2 tables have a separate namespace; immutable legacy tables remain available
+for inspection and migration audit. Migration is transactional and idempotent.
+Read-only inspection does not migrate, repair, parse Bronze or probe a network.
+T08 retains the broader date/availability/holiday contract work; T09 features,
+T10 Parquet, T11 replay and T12 real source extraction remain out of scope.
+
+T07 acceptance closeout on 2026-11-17 verifies 424 OTC / 2,251 full offline tests,
+92 optional skips, exact 204-module source/sdist/wheel inventory and 159 identical
+source/wheel CLI results. [Acceptance](t07_revisions_acceptance.md) and
+[evidence](evidence/t07_closeout.json) own the detailed results. T08 is next.
 
 ## Risks and controls
 

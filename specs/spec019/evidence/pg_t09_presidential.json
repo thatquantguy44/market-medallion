@@ -1,0 +1,20 @@
+{
+  "status": "MIGRATED",
+  "schema": "presidential_research",
+  "role": "presidential_writer",
+  "root": "/Users/joshualutkemuller/Documents/Quant Sandbox/pipelines/market-medallion/data/presidential_research",
+  "counts": {
+    "metadata": 1,
+    "captures": 3,
+    "facts": 3903,
+    "capture_facts": 3903,
+    "publication_journal": 2
+  },
+  "observed_rows": 3903,
+  "observed_sha256": "4e477b307805266af93200d4dcc2b9e709838e696c7746b195acfea64532c7d2",
+  "publication_catalog_sha256": "0da65cf34978d77aebd396e5b4601cb18b9e1554b2ad3c196dd51beeafb94e90",
+  "snapshot_id": "8815e2a9a2f2ea250dbb717ef411828a9c0d5a73a01a2a00c6b0f3d94fbde2c7",
+  "source_files_unchanged": 65,
+  "native_pg_tests_passed": 16,
+  "provider_requests": 0
+}

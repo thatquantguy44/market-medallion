@@ -67,6 +67,9 @@ def _parser():
     def config(command):
         command.add_argument("--config", type=Path, default=_config_default())
 
+    pg = commands.add_parser("migrate-postgres", help="explicitly migrate the retained primary")
+    workspace(pg)
+    pg.add_argument("--postgres-config", required=True, type=Path)
     init = commands.add_parser("init", help="create an empty workspace directory")
     workspace(init)
     imported = commands.add_parser(
@@ -236,7 +239,13 @@ def main(argv=None):
     args = _parser().parse_args(argv)
     try:
         command = args.command
-        if command == "init":
+        if command == "migrate-postgres":
+            from market_data_pipeline.shared.postgres import load_settings
+
+            from .postgres import migrate
+
+            _print(migrate(args.workspace, load_settings(args.postgres_config)))
+        elif command == "init":
             if args.workspace.is_symlink():
                 raise ValueError("Workspace cannot be a symlink.")
             args.workspace.mkdir(parents=True, exist_ok=True)

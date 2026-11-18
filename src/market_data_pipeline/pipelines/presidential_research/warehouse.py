@@ -1,4 +1,4 @@
-"""Source-owned, offline observed-version SQLite and typed Parquet storage.
+"""Source-owned, offline observed-version warehouse and typed Parquet storage.
 
 This is an admission-time history, not a provider real-time vintage database.
 """
@@ -52,32 +52,7 @@ def _decimal(value):
         raise ValueError("Decimal cannot be stored exactly in decimal128(38,18).") from exc
 
 
-def _database(root, *, create):
-    silver = _safe_child(Path(root), "silver")
-    if create:
-        silver.mkdir(mode=0o700, exist_ok=True)
-    db = _safe_child(silver, "presidential.sqlite3")
-    exists = db.exists()
-    if exists and not db.is_file():
-        raise ValueError("Invalid presidential warehouse file.")
-    if not exists and not create:
-        raise ValueError("Presidential warehouse is unavailable.")
-    connection = (
-        sqlite3.connect(db.as_uri() + ("?mode=rw" if create else "?mode=ro"), uri=True)
-        if exists
-        else sqlite3.connect(db)
-    )
-    connection.execute("PRAGMA foreign_keys = ON")
-    if exists:
-        try:
-            row = connection.execute("SELECT value FROM metadata WHERE key = 'schema'").fetchone()
-            if row is None or row[0] != _SCHEMA:
-                raise ValueError("Unsupported warehouse schema.")
-        except (sqlite3.Error, ValueError) as exc:
-            connection.close()
-            raise ValueError("Invalid presidential warehouse identity.") from exc
-        return connection
-    connection.executescript("""
+_DDL = """
         CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS captures (
           capture_id TEXT PRIMARY KEY, capture_sequence INTEGER UNIQUE NOT NULL,
@@ -103,7 +78,41 @@ def _database(root, *, create):
           FOREIGN KEY(capture_id) REFERENCES captures(capture_id),
           FOREIGN KEY(version_id) REFERENCES facts(version_id)
         );
-    """)
+    """
+
+
+def _database(root, *, create):
+    from market_data_pipeline.shared.postgres import binding
+
+    from .postgres import PIPELINE, open_primary
+
+    if binding(root, PIPELINE) is not None:
+        return open_primary(root, write=create)
+    silver = _safe_child(Path(root), "silver")
+    if create:
+        silver.mkdir(mode=0o700, exist_ok=True)
+    db = _safe_child(silver, "presidential.sqlite3")
+    exists = db.exists()
+    if exists and not db.is_file():
+        raise ValueError("Invalid presidential warehouse file.")
+    if not exists and not create:
+        raise ValueError("Presidential warehouse is unavailable.")
+    connection = (
+        sqlite3.connect(db.as_uri() + ("?mode=rw" if create else "?mode=ro"), uri=True)
+        if exists
+        else sqlite3.connect(db)
+    )
+    connection.execute("PRAGMA foreign_keys = ON")
+    if exists:
+        try:
+            row = connection.execute("SELECT value FROM metadata WHERE key = 'schema'").fetchone()
+            if row is None or row[0] != _SCHEMA:
+                raise ValueError("Unsupported warehouse schema.")
+        except (sqlite3.Error, ValueError) as exc:
+            connection.close()
+            raise ValueError("Invalid presidential warehouse identity.") from exc
+        return connection
+    connection.executescript(_DDL)
     connection.execute("INSERT INTO metadata VALUES ('schema', ?)", (_SCHEMA,))
     connection.commit()
     return connection
@@ -388,7 +397,7 @@ def observed_as_of(root, cutoff: datetime, *, capture_sequence=None):
                 FROM (SELECT *, ROW_NUMBER() OVER (
                     PARTITION BY source_id, fact_type, fact_key ORDER BY capture_sequence DESC
                 ) AS rank FROM facts WHERE first_seen_at <= ?
-                    AND (? IS NULL OR capture_sequence <= ?))
+                    AND (CAST(? AS BIGINT) IS NULL OR capture_sequence <= ?))
                 WHERE rank = 1 ORDER BY source_id, fact_type, fact_key""",
                 (cutoff_string, capture_sequence, capture_sequence),
             ).fetchall()

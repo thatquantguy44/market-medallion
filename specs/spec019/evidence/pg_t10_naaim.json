@@ -1,0 +1,26 @@
+{
+  "status": "MIGRATED",
+  "schema": "naaim_exposure_public_delayed",
+  "role": "naaim_writer",
+  "root": "data/naaim-exposure-public-delayed",
+  "counts": {
+    "versions": 131,
+    "retained_captures": 1,
+    "capture_events": 1,
+    "latest": 1,
+    "retention_journal": 0
+  },
+  "ordered_versions_sha256": "a8371f311d877765731d83357a11498fb071aac1ecf7703a2ccb0774ef81608d",
+  "current_research_sha256": "d65b715f3ddf08dc9b6b2432681ebc6f0bb465c455aa9ceabd5c1d586ccce99c",
+  "latest_sha256": "a28daa46072ad78d1f92990194f542672a784b0cbddb8d18b6c844fcb777c6b4",
+  "source_files_unchanged": 8,
+  "missing_raw_capture_ids": [],
+  "health_reasons": [
+    "capture_stale"
+  ],
+  "native_pg_tests_passed": 22,
+  "provider_delay_months": 3,
+  "acquisition_paused": true,
+  "provider_requests": 0,
+  "retention_deletions": 0
+}
