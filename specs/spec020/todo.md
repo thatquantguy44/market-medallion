@@ -1,20 +1,27 @@
 # Tasks — ICI weekly ETF and mutual fund flows
 
-**Status:** ICI-T01–T04 planned, not started. This is the first offline checkpoint for [Spec 020](README.md) on `feat/ici-weekly-flows-foundation`. Paths under `src/market_data_pipeline/pipelines/ici_weekly_flows/` are proposed. Each task is a small, reviewable change; split it if the likely file count exceeds five. Test commands are targets, not passed results.
+**Status:** ICI-T01 documentary review and pure admission are implemented offline;
+the real-data permission decision is blocked pending source-owner evidence.
+ICI-T02–T04 are not started. This is the first offline checkpoint for
+[Spec 020](README.md) on `feat/ici-weekly-flows-foundation`. Paths under
+`src/market_data_pipeline/pipelines/ici_weekly_flows/` are source-owned.
+Each task is a small, reviewable change; split it if the likely file count
+exceeds five. T02–T04 test commands are future targets.
 
 ## ICI-T01 — Decide source rights and enforce admission
 
 **Depends:** none. **Traces:** REQ-01, NFR-02, AC-01.
 
-- [ ] Record a dated matrix for the exact ETF and mutual fund routes, permission/subscription basis, storage, internal use, retention, attribution and prohibited uses. Name the approving source owner.
-- [ ] Define a pure source-use profile that rejects missing/unsupported operation grants before any future file acquisition or export. Keep credential material out of the manifest and logs.
-- [ ] Distinguish fixture-only development from an authorized operator-supplied file and later automated retrieval. A public release page is not treated as blanket permission.
+- [x] Record a [dated source/use matrix](source_review.md) for both weekly routes, published permission limits and unresolved operation grants.
+- [ ] Name the approving source owner and record a nonsecret ICI agreement/permission reference with permitted operations for each series. No such evidence is currently supplied.
+- [x] Define a pure source-use profile that rejects missing/unsupported operation grants before any future file acquisition or export. Keep credential material out of the manifest and logs.
+- [x] Distinguish fixture-only development from an authorized operator-supplied file and later automated retrieval. A public release page is not treated as blanket permission.
 
-**Verify:** documentary review against ICI's current [permissions](https://www.ici.org/permissions) and [copyright policy](https://www.ici.org/copyright-and-linking-policies); future focused test `.venv/bin/python -m pytest -q tests/test_ici_manifest.py` proves missing/disallowed grants fail without HTTP.
+**Verify:** documentary review against ICI's current [permissions](https://www.ici.org/permissions) and [copyright policy](https://www.ici.org/copyright-and-linking-policies); `.venv/bin/python -m pytest -q tests/test_ici_manifest.py` passes 18 offline cases, including missing/disallowed grants and no-I/O checks. Ruff lint/format and source/wheel builds pass; the ICI package files are present in the wheel.
 
 **Likely files:** `specs/spec020/source_review.md`, `pipelines/ici_weekly_flows/manifest.py`, `tests/test_ici_manifest.py` (and package `__init__.py` if needed).
 
-**Gate:** If authorization is unresolved, record BLOCKED for real artifacts and stop dependent source work; pure admission and invented negative fixtures may be completed.
+**Gate:** BLOCKED for real artifacts and T02 pending an approving source owner and operation-specific permission evidence. The validator does not independently verify ICI rights, and no real-use profile is shipped.
 
 ## ICI-T02 — Pin both source artifact shapes
 
