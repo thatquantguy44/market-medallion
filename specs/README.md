@@ -31,6 +31,7 @@ see the [securities-finance program](../docs/securities_finance/README.md).
 | [016](spec016/README.md) | presidential-research-data | Draft multi-repository port and complete PRES integration contract/plan; target package, bundle publication and consumer additions absent. |
 | [017](spec017/README.md) | fomc-meeting-minutes | T01–T06 and listed 1990–released-2026 references accepted as of November 13: 1,081 captures, 522 text representations and 9,790 chunks (8,270 eligible, 1,520 review); 21 Dagster batches, restore/replay and Slack success verified. [Q01–Q03 offline quality workflow accepted](spec017/quality_remediation_acceptance.md): deterministic report, eight-case source review and bounded no-native-fix assessment; all flags stay explicit. Next: additional review, source reconciliation and explicit OCR policy. Deliberate recent refreshes; unavailable/not-listed claims and optional embeddings remain separate. |
 | [018](spec018/README.md) | pipeline-slack-alerts | Optional pipeline-owned alert YAML and stopped Dagster success/failure sensors for the five existing jobs. Credentials, live delivery and activation remain operator-configured. |
+| [020](spec020/README.md) | ici-weekly-etf-fund-flows | Draft requirements for separate ICI weekly estimated ETF net issuance and long-term mutual fund flows. Source rights, artifact schema and historical coverage remain gates; no connector or priority change. |
 
 ## Presidential pipeline integration planning
 
