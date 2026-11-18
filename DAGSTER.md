@@ -54,9 +54,9 @@ Dagster; see [the orchestration decision](docs/development/adr001-dagster.md).
 
 Actual PostgreSQL primary targets, roles and configuration status are recorded
 in the [warehouse register](docs/deployment/postgres_warehouses.md). Its migration
-status is separate from these job definitions and stored activation states. A FINRA root
+status is separate from these job definitions and stored activation states. A FINRA, OTC, presidential or NAAIM root
 explicitly bound to PostgreSQL requires its configured password environment
-variable in the worker and fails closed rather than using retained SQLite files.
+variable in the worker and fails closed rather than using retained SQLite/JSON files.
 
 ## Schedules
 

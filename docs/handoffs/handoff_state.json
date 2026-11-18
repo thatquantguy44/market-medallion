@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "f55b714cf68432e71098ee38f1db4983050c5969951addd9afe9bf3aafe54283",
-  "next_task": "PG-T10",
-  "panel_fingerprint": "0687649a642ab0187f91f65807e42be44200c5fa7796018d12a7c4b756e11a49",
-  "review_summary": "Reviewed native presidential primary: 16 actual PG checks including database and publication rollback, 43 focused legacy and 53 Dagster/docs checks; exact 3903-fact retained migration and 65 unchanged source files; NAAIM remains paused",
-  "reviewed_at": "2026-11-18T05:06:32.121565+00:00",
-  "reviewed_commit": "b1702dcdaad9050407970f0076677df8925065d1",
+  "document_fingerprint": "e57f326930f0cf5697ac8090d6642e3f545d3e7396a56539664399a6b50d092b",
+  "next_task": "PG-T11",
+  "panel_fingerprint": "6848a215166de538b689d1d87c46bd2c3b1c488e0fc5bb3f666bd864ca772f27",
+  "review_summary": "Reviewed NAAIM native primary: 22 actual PG cases, 18 legacy cases, 131 combined native checks and 2263 offline passes; retained 131-version exact parity, eight unchanged files, no acquisition/retention deletion or resume",
+  "reviewed_at": "2026-11-18T05:16:56.560600+00:00",
+  "reviewed_commit": "11700e7c53cd82659eb7f2da4ff42b8412a08cbe",
   "schema_version": 1,
-  "source_fingerprint": "3ad2a5e46571c7c7dd1d325d4e16ff6eda8c87631dc0fb3dccd6cd24eed7388b",
+  "source_fingerprint": "d036358647501ac6690593a62c3c57b154dc81d7e738dc3582d3bad54cb762e4",
   "task_file": "specs/spec019/todo.md"
 }

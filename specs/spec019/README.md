@@ -1,6 +1,6 @@
 # Spec019 — PostgreSQL primary warehouses for every existing pipeline
 
-**Status:** foundation and native SEC/threshold primary migrations complete; FINRA short-volume primary cutover complete; OTC native empty primary accepted; presidential primary migrated; NAAIM remains in progress.
+**Status:** foundation and native SEC/threshold primary migrations complete; FINRA short-volume primary cutover complete; OTC native empty primary accepted; presidential primary migrated; NAAIM retained primary migrated; final operating acceptance in progress.
 **User decision:** 2026-11-17, America/New_York. Include every existing pipeline;
 PostgreSQL is the primary warehouse, not an additional reporting copy.
 **Branch:** `feat/postgres-pipeline-consolidation`, based on T07 closeout
@@ -31,7 +31,7 @@ Only this repository's retained stores and existing PostgreSQL service are used.
 | `finra_short_sale_volume` | PostgreSQL primary migrated | `finra_short_sale_volume` | `finra_ssv_writer` | New provider-owned PG adapter |
 | `finra_otc_transparency` | PostgreSQL empty operative primary | `finra_otc_transparency` | `finra_otc_writer` | New provider-owned PG adapter; no invented production observations |
 | `presidential_research` | PostgreSQL primary migrated | `presidential_research` | `presidential_writer` | New provider-owned PG adapter; preserve publication contracts |
-| `naaim_exposure_public_delayed` | JSON files | `naaim_exposure_public_delayed` | `naaim_writer` | New provider-owned PG adapter; offline retained-state migration only |
+| `naaim_exposure_public_delayed` | PostgreSQL primary migrated | `naaim_exposure_public_delayed` | `naaim_writer` | New provider-owned PG adapter; offline retained-state migration only |
 
 Build order: backup/access foundation → existing SEC/threshold adapters → FINRA
 warehouse/catalog → OTC → presidential → NAAIM → end-to-end cutover verification.

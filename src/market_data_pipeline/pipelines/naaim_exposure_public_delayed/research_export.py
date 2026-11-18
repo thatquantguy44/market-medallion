@@ -16,6 +16,8 @@ from pathlib import Path
 from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline import (
     ATTRIBUTION,
     DELAY_METADATA,
+    _versions,
+    read_latest,
 )
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
 
@@ -61,7 +63,7 @@ def _decimal_text(value: object) -> str:
 
 def _current_versions(root: Path) -> list[dict[str, str]]:
     try:
-        versions = json.loads((root / "silver" / "versions.json").read_text())
+        versions = _versions(root / "silver" / "versions.json")
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError("NAAIM Silver versions are unavailable") from exc
     if not isinstance(versions, list) or not versions:
@@ -91,7 +93,7 @@ def _current_versions(root: Path) -> list[dict[str, str]]:
 
 def _verify_gold(root: Path, observations: list[dict[str, str]]) -> None:
     try:
-        gold = json.loads((root / "gold" / "latest.json").read_text())
+        gold = read_latest(root)
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError("NAAIM Gold latest output is unavailable") from exc
     latest = observations[-1]

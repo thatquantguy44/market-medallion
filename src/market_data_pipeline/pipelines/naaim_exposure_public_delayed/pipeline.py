@@ -17,6 +17,7 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.source import 
 )
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
 from market_data_pipeline.shared.http import NetworkConfig
+from market_data_pipeline.shared.postgres import binding
 
 ATTRIBUTION = "Source: NAAIM Exposure Index® (National Association of Active Investment Managers)."
 DELAY_METADATA = {
@@ -56,12 +57,25 @@ def _serialize(observation: Exposure) -> dict[str, str]:
 
 
 def _versions(path: Path) -> list[dict]:
+    from .postgres import PIPELINE, versions
+
+    if binding(path.parent.parent, PIPELINE) is not None:
+        return versions(path.parent.parent)
     if not path.exists():
         return []
     value = json.loads(path.read_text())
     if not isinstance(value, list):
         raise ValueError("NAAIM Silver versions must be a list")
     return value
+
+
+def read_latest(root):
+    from .postgres import PIPELINE, latest
+
+    root = Path(root)
+    if binding(root, PIPELINE) is not None:
+        return latest(root)
+    return json.loads((root / "gold/latest.json").read_text())
 
 
 def _append_versions(
@@ -119,6 +133,12 @@ def ingest(
     run_id = uuid.uuid4().hex
     root = Path(root)
     with writer_lock(root):
+        from .postgres import PIPELINE, connection, publish
+
+        primary = binding(root, PIPELINE) is not None
+        if primary:
+            with connection(root):
+                pass
         bronze = root / "bronze" / capture_id
         bronze.mkdir(parents=True, exist_ok=True)
         raw_path = bronze / "payload.html"
@@ -164,23 +184,27 @@ def ingest(
             "observations": [_serialize(row) for row in observations],
         }
         atomic_json(silver / f"{capture_id}.json", snapshot)
-        versions_path = silver / "versions.json"
-        versions = _versions(versions_path)
-        inserted_versions = _append_versions(versions, observations, capture_id, captured_utc)
-        atomic_json(versions_path, versions)
         latest = max(observations, key=lambda row: row.as_of_date)
+        gold_value = {
+            "as_of_date": latest.as_of_date,
+            "attribution": ATTRIBUTION,
+            **DELAY_METADATA,
+            "metric": "naaim_number",
+            "value": str(latest.naaim_number),
+        }
+        if primary:
+            inserted_versions = publish(
+                root, observations, capture_id, captured_utc, run_id, gold_value
+            )
+        else:
+            versions_path = silver / "versions.json"
+            versions = _versions(versions_path)
+            inserted_versions = _append_versions(versions, observations, capture_id, captured_utc)
+            atomic_json(versions_path, versions)
         gold = root / "gold"
         gold.mkdir(parents=True, exist_ok=True)
-        atomic_json(
-            gold / "latest.json",
-            {
-                "as_of_date": latest.as_of_date,
-                "attribution": ATTRIBUTION,
-                **DELAY_METADATA,
-                "metric": "naaim_number",
-                "value": str(latest.naaim_number),
-            },
-        )
+        atomic_json(gold / "latest.json", gold_value)
+
     return {
         **DELAY_METADATA,
         "latest_as_of_date": latest.as_of_date,

@@ -61,9 +61,9 @@
 
 ## PG-T10 — Implement and migrate retained NAAIM PostgreSQL primary
 
-- [ ] Add typed source-owned retained-capture/version/latest storage and config.
-- [ ] Migrate only retained source evidence with unchanged first-seen and delay labels.
-- [ ] Verify read/write/revision/rollback/no-fallback behavior; keep capture/schedule paused.
+- [x] Add typed source-owned retained-capture/version/latest storage and config.
+- [x] Migrate only retained source evidence with unchanged first-seen and delay labels.
+- [x] Verify read/write/revision/rollback/no-fallback behavior; keep capture/schedule paused.
 **Verify:** actual isolated PG tests and offline retained-file parity.
 
 ## PG-T11 — Final primary cutover and operating acceptance

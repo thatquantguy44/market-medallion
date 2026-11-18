@@ -29,3 +29,12 @@ writes/revisions/reversions, all write/commit failure boundaries, no-file-fallba
 export and health, retention dry run/apply/rollback, CLI and explicit migration
 failure/retry. The retained 131-version store and source file SHA/mtimes must
 remain unchanged except for the new binding marker.
+
+**Acceptance:** 22 actual PG tests pass: exact high-precision decimals, revisions/
+reversions, four database rejections, four write boundaries, commit rejection,
+derived-file recovery, no-legacy-file reads/export/health/retention, retention
+rollback/apply, CLI, missing-raw reporting and committed-unbound migration retry.
+The 18 existing offline NAAIM checks pass. [Operative evidence](../spec019/evidence/pg_t10_naaim.json)
+reconciles 131 versions, one retained raw capture/snapshot, one event and latest;
+all eight original files retain hashes/mtimes. Health still reports capture_stale;
+no provider request or retention deletion occurred and NAAIM remains paused.

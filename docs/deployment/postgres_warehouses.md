@@ -14,7 +14,7 @@ local `additional_market_data` database at `127.0.0.1:55438`.
 | FINRA short volume | `finra_short_sale_volume` | `finra_ssv_writer` | Migrated: 25,230 versions, three selected TRF partitions and original frozen publication. |
 | FINRA OTC | `finra_otc_transparency` | `finra_otc_writer` | Native empty primary initialized; 50 PG checks; no real or invented operative observations. |
 | Presidential research | `presidential_research` | `presidential_writer` | Migrated: 3,903 facts and memberships, three captures and two publication-journal records. |
-| NAAIM delayed | `naaim_exposure_public_delayed` | `naaim_writer` | Namespace provisioned; offline migration pending; acquisition remains paused. |
+| NAAIM delayed | `naaim_exposure_public_delayed` | `naaim_writer` | Migrated: 131 delayed versions, retained capture/event/latest; acquisition remains paused. |
 
 The shared login is the existing **administrator** `market_data`. It can assume
 all writer roles; an operator session using that login is not least-privilege.
@@ -104,3 +104,15 @@ The same `data/presidential_research` root is bound to `presidential_writer`;
 ignored `config/presidential_research/postgres.local.yml` documents its target.
 Sixteen actual PG tests verify revisions, transaction/publication failure recovery,
 CLI and backup/restore with no SQLite present. No live refresh occurred.
+
+## NAAIM delayed native primary
+
+[PG-T10 evidence](../../specs/spec019/evidence/pg_t10_naaim.json) reconciles all
+131 versions, exact ordered/current values, capture-time first-seen and delayed
+latest metadata. One retained raw capture/snapshot and event are present; no
+missing raw reference is invented. Eight original files preserve hashes/mtimes.
+The same `data/naaim-exposure-public-delayed` root is bound to `naaim_writer`;
+ignored `config/naaim_exposure_public_delayed/postgres.local.yml` documents the
+target/environment reference. All 22 native tests and 18 existing NAAIM tests
+pass. Health remains **capture_stale**; the user pause remains. Migration performs
+no retention deletion, provider acquisition or schedule activation.

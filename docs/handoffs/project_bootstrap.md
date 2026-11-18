@@ -4,7 +4,7 @@ Last updated: 2026-11-18.
 
 ## Agent start here
 
-**Next implementation: PG-T10 retained NAAIM PostgreSQL primary (in progress).**
+**Next implementation: PG-T11 final PostgreSQL operating acceptance (in progress).**
 The user authorized every existing pipeline to use `additional_market_data` as
 its **primary PostgreSQL warehouse**, superseding immediate OTC-T08 work.
 [Spec019](../../specs/spec019/README.md), [plan](../../specs/spec019/plan.md) and
@@ -31,7 +31,7 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec019 PG-T10 — NAAIM primary** | PG-T01–T09 complete; presidential 3,903 facts migrated with exact frozen parity. Next retained NAAIM native adapter/offline migration, then final operating acceptance. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
+| 0 | **Spec019 PG-T11 — operating acceptance** | PG-T01–T10 complete; all eight primary targets configured. Next final native/offline checks, package/launch verification and database backup. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
 | — | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
 | 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Deferred behind user-authorized Spec019, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
@@ -130,7 +130,7 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: PG-T10
+### Exact next slice: PG-T11
 
 PG-T01–T03 are complete: eight owned schemas/writers are provisioned with isolation
 and existing AAII reader ACLs verified. The pre-change database/roles backup was
@@ -179,13 +179,21 @@ All 65 original files preserve hashes/mtimes; frozen publication and observed-as
 results match exactly. See [PG-T09 evidence](../../specs/spec019/evidence/pg_t09_presidential.json).
 OTC commit is `b1702dc`; resolve the presidential checkpoint with `git log -1 --
 specs/spec016/postgres_primary_contract.md`. No push/PR/merge is part of this work.
-Next implement PG-T10 under its [native contract](../../specs/spec007/postgres_primary_contract.md):
-source-owned native NAAIM retained capture/version/latest tables, transactional
-writes/retention, export/health and offline 131-version migration. Original JSON
-is recovery only after binding. Preserve missing raw-reference facts explicitly,
-all delay labels/first-seen and the user's pause. Only NAAIM still lacks the
-completed native adapter/migration. Then PG-T11 verifies every operative launch
-path/role/schema, full offline/native regression, build and final backup.
+PG-T10 is complete: native NAAIM ingestion, health/export and transactional
+retention pass 22 actual PG checks and 18 existing NAAIM checks. The retained
+primary has 131 exact versions, one capture/event and the same latest delayed
+metadata; all eight original files preserve hashes/mtimes. Missing raw references:
+none. See [PG-T10 evidence](../../specs/spec019/evidence/pg_t10_naaim.json).
+Health remains capture_stale; no retention deletion/provider request occurred.
+NAAIM remains paused. PostgreSQL is now authoritative for every configured primary.
+Presidential checkpoint is `11700e7`; resolve the NAAIM checkpoint with `git log -1
+-- specs/spec007/postgres_primary_contract.md`. No push/PR/merge occurs.
+Next PG-T11: finish all actual native checks, validate every operative root/config/
+role and worker environment, package parity and final full database backup/restore.
+Full offline regression already passes **2,263 tests / 206 optional skips**.
+A current `ls-remote` confirms origin main is still `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`,
+already an ancestor of HEAD. A repeated fetch encountered an unrelated invalid
+local ref `refs/heads/docs/finra-merged-handoff 2`; no local ref was deleted/repaired.
 No provider request, schedule activation or NAAIM resume is authorized here.
 
 ### Operating holds and other workstreams

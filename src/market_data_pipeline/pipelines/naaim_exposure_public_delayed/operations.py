@@ -13,8 +13,11 @@ from market_data_pipeline.pipelines.naaim_exposure_public_delayed.pipeline impor
     ATTRIBUTION,
     DELAY_METADATA,
     _append_versions,
+    _versions,
+    read_latest,
 )
 from market_data_pipeline.shared.files import atomic_json, utc_timestamp, writer_lock
+from market_data_pipeline.shared.postgres import binding
 
 
 def _read_json(path: Path):
@@ -22,6 +25,10 @@ def _read_json(path: Path):
 
 
 def _capture_events(root: Path) -> list[dict]:
+    from .postgres import PIPELINE, events
+
+    if binding(root, PIPELINE) is not None:
+        return events(root)
     receipt_paths = sorted((root / "captures").glob("*.json"))
     if not receipt_paths:
         receipt_paths = sorted((root / "bronze").glob("*/receipt.json"))
@@ -53,7 +60,15 @@ def _capture_events(root: Path) -> list[dict]:
 
 def _snapshot_observations(path: Path, capture_id: str) -> list[Exposure]:
     try:
-        snapshot = _read_json(path)
+        from .postgres import PIPELINE
+        from .postgres import snapshot as native_snapshot
+
+        root = path.parent.parent
+        snapshot = (
+            native_snapshot(root, capture_id)
+            if binding(root, PIPELINE) is not None
+            else _read_json(path)
+        )
         if snapshot["capture_id"] != capture_id or not isinstance(snapshot["observations"], list):
             raise ValueError("invalid snapshot")
         return [
@@ -117,28 +132,40 @@ def retain_captures(root: Path, *, now=None, retention_days=365, apply=False) ->
             )
 
         if apply:
+            from .postgres import PIPELINE, replace_retained
+
+            primary = binding(root, PIPELINE) is not None
+            latest_value = None
+            if versions:
+                latest = max(versions, key=lambda version: version["as_of_date"])
+                latest_value = {
+                    "as_of_date": latest["as_of_date"],
+                    "attribution": ATTRIBUTION,
+                    **DELAY_METADATA,
+                    "metric": "naaim_number",
+                    "value": latest["values"]["naaim_number"],
+                }
+            record = {
+                "at": utc_timestamp(now),
+                "expired_capture_ids": expired_capture_ids,
+                "expired_run_ids": [event["run_id"] for event in expired],
+                "retention_days": retention_days,
+            }
+            if primary:
+                replace_retained(root, versions, active, latest_value, record)
             for event in expired:
-                event["path"].unlink()
+                event["path"].unlink(missing_ok=True)
             for capture_id in expired_capture_ids:
                 bronze = root / "bronze" / capture_id
                 snapshot = root / "silver" / f"{capture_id}.json"
                 if bronze.exists():
                     shutil.rmtree(bronze)
                 snapshot.unlink(missing_ok=True)
-            atomic_json(root / "silver" / "versions.json", versions)
+            if not primary:
+                atomic_json(root / "silver" / "versions.json", versions)
             latest_path = root / "gold" / "latest.json"
-            if versions:
-                latest = max(versions, key=lambda version: version["as_of_date"])
-                atomic_json(
-                    latest_path,
-                    {
-                        "as_of_date": latest["as_of_date"],
-                        "attribution": ATTRIBUTION,
-                        **DELAY_METADATA,
-                        "metric": "naaim_number",
-                        "value": latest["values"]["naaim_number"],
-                    },
-                )
+            if latest_value is not None:
+                atomic_json(latest_path, latest_value)
             else:
                 latest_path.unlink(missing_ok=True)
             log = root / "operations" / "retention"
@@ -200,7 +227,7 @@ def health_report(root: Path, *, now=None, max_capture_age_days=14) -> dict:
     else:
         versions_path = root / "silver" / "versions.json"
         try:
-            versions = _read_json(versions_path)
+            versions = _versions(versions_path)
             if not isinstance(versions, list):
                 raise ValueError("versions must be a list")
             version_count = len(versions)
@@ -210,7 +237,7 @@ def health_report(root: Path, *, now=None, max_capture_age_days=14) -> dict:
 
     latest_as_of_date = None
     try:
-        published = _read_json(root / "gold" / "latest.json")
+        published = read_latest(root)
         if (
             published["attribution"] != ATTRIBUTION
             or published["delayed_public_display"] is not True
