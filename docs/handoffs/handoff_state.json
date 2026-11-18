@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "2ee09d3fd04b2c945e2ae2efd2136e7c048cb42a0cbef94c2a13f09bfb9dabf5",
-  "next_task": "OTC-T08",
-  "panel_fingerprint": "06c333960ccee4e248ecc99f29d9f5cf73f6906ada17c4b409ae961f7f8e12c4",
-  "review_summary": "Reviewed publication of complete OTC T01-T07 and PostgreSQL consolidation branch: initial head df382f4 pushed, PR30 open against unchanged main; recorded tracking/PR facts and preserved acceptance evidence and source holds",
-  "reviewed_at": "2026-11-18T10:01:26.471644+00:00",
-  "reviewed_commit": "df382f49d9b44525bcba3d5616524c5bbc78dd9a",
+  "document_fingerprint": "780bbd04beaa4102816d7bc5eb71f0aa07244b3017eab116268150471c13ebd5",
+  "next_task": "ICI-T01",
+  "panel_fingerprint": "0788e871bdacffc957e0af7c5f3595107b5a013d98031ea436f44d759fc1b0d2",
+  "review_summary": "Recorded draft PR 32 and user-attested access to both ICI series; reviewed pending agreement rights, prior code checks and unchanged T01 blocker.",
+  "reviewed_at": "2026-11-18T22:14:31.813086+00:00",
+  "reviewed_commit": "466f2f06223ee27eba945c2ac3bd1ddf1d0e57d9",
   "schema_version": 1,
-  "source_fingerprint": "65f991ed989cbfcd1b9943be6d4794ecd487f446db9be28b50273aafc214eed2",
-  "task_file": "specs/spec013/todo.md"
+  "source_fingerprint": "43df623da021ee534f6f084c6c351e184cc52feb4330bb5c6fc8f576c319cd22",
+  "task_file": "specs/spec020/todo.md"
 }

@@ -4,13 +4,23 @@ Last updated: 2026-11-18.
 
 ## Agent start here
 
-**Next implementation: OTC-T08 — reporting and availability clocks (planned, not started).**
+**Next implementation: ICI-T01 — weekly flows source rights and offline
+admission on `feat/ici-weekly-flows-foundation`.** Documentary review and
+the pure admission guard are implemented; the approving source owner and ICI
+permission evidence remain unresolved, so real-data work and T02 are blocked.
+The user stated access covers both weekly series, without an agreement reference
+or operation-specific terms. [Draft PR #32](https://github.com/thatquantguy44/market-medallion/pull/32)
+is open against `main`; the reviewed code commit is
+`466f2f06223ee27eba945c2ac3bd1ddf1d0e57d9`. GitHub reported the PR mergeable
+at the latest read. No merge was performed.
+OTC-T08 remains the standing next source-build task after this bounded work.
 PostgreSQL primary consolidation is complete.
 The user authorized every existing pipeline to use `additional_market_data` as its
 primary warehouse. All Spec019 PG-T01–PG-T11 tasks are accepted locally. Read
 [acceptance](../../specs/spec019/acceptance.md) and the
 [warehouse register](../deployment/postgres_warehouses.md) for evidence and exact
-schema/writer/root/config mappings. Active branch: `feat/postgres-pipeline-consolidation`.
+schema/writer/root/config mappings. Spec019's recorded work branch was
+`feat/postgres-pipeline-consolidation`; the current ICI work branch is named above.
 The user authorized commit/push/PR publication on 2026-11-18. Branch is pushed
 and tracks `origin/feat/postgres-pipeline-consolidation`; [PR #30](https://github.com/thatquantguy44/market-medallion/pull/30)
 is open against `main`. No merge was performed.
@@ -20,7 +30,8 @@ is open against `main`. No merge was performed.
 | Order | Work | Status and exact pickup | Owner |
 | --- | --- | --- | --- |
 | — | Spec019 PostgreSQL primary consolidation | Complete: all eight primaries, retained migrations, exact restored backup and operating selectors verified. | [Acceptance](../../specs/spec019/acceptance.md) |
-| 0 | Spec013 OTC-T08 reporting and availability clocks | Not started. Characterize holiday/null/date-only/cutoff behavior before changing semantics; preserve documentary tier delay and capture first-seen. | [Task](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
+| Active | Spec020 ICI-T01 source/use admission | [Source review](../../specs/spec020/source_review.md) and pure guard implemented offline; 18 focused tests, Ruff lint/format and source/wheel build pass. User-attested access to both series; source owner/agreement and allowed operations pending. No ICI request, file, parser or live-use profile. Continue at [T01](../../specs/spec020/todo.md#ici-t01--decide-source-rights-and-enforce-admission); [draft PR #32](https://github.com/thatquantguy44/market-medallion/pull/32) is open. | `feat/ici-weekly-flows-foundation` |
+| 0 | Spec013 OTC-T08 reporting and availability clocks | Standing next source-build task, not started. Characterize holiday/null/date-only/cutoff behavior before changing semantics; preserve documentary tier delay and capture first-seen. | [Task](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 1 | Spec014 SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 2 | Spec015 NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
 
@@ -100,7 +111,16 @@ successful observation (2026-11-15 06:23 EST: eight stopped acquisition/import
 schedules; only two FOMC Slack sensors running) is historical. Consult
 [DAGSTER.md](../../DAGSTER.md#current-local-state) before runtime work.
 
-### Exact next slice: OTC-T08
+### Exact next slice: ICI-T01
+
+The remaining T01 gate is a named source owner and a nonsecret ICI agreement or
+permission reference that specifies permitted operations separately for ETF and
+mutual fund data. Keep the current fixture-only decision until this is supplied.
+The source review and pure admission guard are present on the ICI work branch;
+T02 artifact conformance and every real-data operation remain blocked. No ICI
+request, credential, file import, export or schedule activation was performed.
+
+**Standing next source-build slice: OTC-T08.**
 
 Read Spec013 README/data contract/todo, T07 acceptance and native PG contract.
 T01–T07 remain fixture-only across ATS/non-ATS × T1/T2/OTCE. All real profile
@@ -128,7 +148,7 @@ agent-skills pin verifies 188 entries. Do not repin vendored guidance here.
 ### Keep this panel current
 
 After changing this panel, stage intended files, run `python3 scripts/verify_handoff.py
---refresh --task-file specs/spec013/todo.md --summary "Describe the actual review"`,
+--refresh --task-file specs/spec020/todo.md --summary "Describe the actual review"`,
 stage the panel/state JSON, then run `python3 scripts/verify_handoff.py --staged`.
 Preserve dated history below. Check HEAD and clean status before handing off.
 

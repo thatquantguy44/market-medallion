@@ -5,6 +5,11 @@
 **Proposed source-owned package:** `src/market_data_pipeline/pipelines/ici_weekly_flows/`.
 This proposal does not change the current Spec013 OTC-T08 implementation priority or resume NAAIM.
 
+**T01 status:** [source/use review](source_review.md) and a pure offline admission
+gate are present on `feat/ici-weekly-flows-foundation`; real-data rights and
+source-owner sign-off remain pending. See the [first plan](plan.md) and
+[task list](todo.md). No ICI data acquisition or publication is implemented.
+
 ## Request, use case, and research question
 
 Add an ICI flow pipeline to MarketMedallion so a local researcher can query what ICI reported for a given week, fund type and category, and what the pipeline had actually observed by a chosen cutoff.
