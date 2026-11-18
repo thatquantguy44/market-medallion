@@ -2,8 +2,10 @@
 
 Reviewed: 2026-11-18 UTC. **Decision: fixture-only; real-data admission blocked.**
 This is a documentary review, not an ICI license determination or a source-data
-capture. No user-specific agreement, subscription, permission letter or authorized
-source file has been provided or verified. No ICI observation file was requested.
+capture. The user stated that access covers both weekly ETF and mutual fund
+series, but has not supplied an agreement reference or operation-specific terms.
+No user-specific agreement, subscription, permission letter or authorized source
+file has been provided or verified. No ICI observation file was requested.
 
 ## Official evidence
 
@@ -41,7 +43,7 @@ I/O. Credentials and agreement text belong outside this repository.
 | --- | --- | --- |
 | Approving source/data owner | Unassigned | Name the person or team authorized to review this project's ICI rights. |
 | Agreement / permission reference | Not supplied | Record a nonsecret evidence ID and where the agreement is held privately. |
-| Covered series | Not established | Identify ETF, mutual fund, or both explicitly. |
+| Covered series | User-attested access to both; agreement scope unverified | Confirm both are named in the applicable agreement or permission. |
 | Local storage and retention | Not established | Verify warehouse/raw retention and backup scope, not just personal storage. |
 | Automated access | Not established | Record exact permitted route, frequency, authentication and rate limits before a downloader exists. |
 | Transform and internal sharing | Not established | Record approved derivative use, audience, attribution and export restrictions. |

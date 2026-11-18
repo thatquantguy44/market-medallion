@@ -8,6 +8,11 @@ Last updated: 2026-11-18.
 admission on `feat/ici-weekly-flows-foundation`.** Documentary review and
 the pure admission guard are implemented; the approving source owner and ICI
 permission evidence remain unresolved, so real-data work and T02 are blocked.
+The user stated access covers both weekly series, without an agreement reference
+or operation-specific terms. [Draft PR #32](https://github.com/thatquantguy44/market-medallion/pull/32)
+is open against `main`; the reviewed code commit is
+`466f2f06223ee27eba945c2ac3bd1ddf1d0e57d9`. GitHub reported the PR mergeable
+at the latest read. No merge was performed.
 OTC-T08 remains the standing next source-build task after this bounded work.
 PostgreSQL primary consolidation is complete.
 The user authorized every existing pipeline to use `additional_market_data` as its
@@ -25,7 +30,7 @@ is open against `main`. No merge was performed.
 | Order | Work | Status and exact pickup | Owner |
 | --- | --- | --- | --- |
 | — | Spec019 PostgreSQL primary consolidation | Complete: all eight primaries, retained migrations, exact restored backup and operating selectors verified. | [Acceptance](../../specs/spec019/acceptance.md) |
-| Active | Spec020 ICI-T01 source/use admission | [Source review](../../specs/spec020/source_review.md) and pure guard implemented offline; 18 focused tests, Ruff lint/format and source/wheel build pass. Source owner/agreement evidence pending; no ICI request, file, parser or live-use profile. Continue at [T01](../../specs/spec020/todo.md#ici-t01--decide-source-rights-and-enforce-admission). | `feat/ici-weekly-flows-foundation` |
+| Active | Spec020 ICI-T01 source/use admission | [Source review](../../specs/spec020/source_review.md) and pure guard implemented offline; 18 focused tests, Ruff lint/format and source/wheel build pass. User-attested access to both series; source owner/agreement and allowed operations pending. No ICI request, file, parser or live-use profile. Continue at [T01](../../specs/spec020/todo.md#ici-t01--decide-source-rights-and-enforce-admission); [draft PR #32](https://github.com/thatquantguy44/market-medallion/pull/32) is open. | `feat/ici-weekly-flows-foundation` |
 | 0 | Spec013 OTC-T08 reporting and availability clocks | Standing next source-build task, not started. Characterize holiday/null/date-only/cutoff behavior before changing semantics; preserve documentary tier delay and capture first-seen. | [Task](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 1 | Spec014 SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 2 | Spec015 NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |

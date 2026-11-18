@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "87c2072c0d70462d652204238e9d295ebe971b7209402c364e19d4eeffefba3b",
+  "document_fingerprint": "780bbd04beaa4102816d7bc5eb71f0aa07244b3017eab116268150471c13ebd5",
   "next_task": "ICI-T01",
-  "panel_fingerprint": "e7d87bd3f7766d835b32f1172e2e8cdf53924c4126e8f113d58b633450af24f7",
-  "review_summary": "Reviewed ICI-T01 source rights, admission code, 18 focused tests, lint and package build; real-data work remains blocked pending source-owner permission evidence.",
-  "reviewed_at": "2026-11-18T21:38:30.778396+00:00",
-  "reviewed_commit": "f0d5276d05d6e074cecdd2f404fad714669b941b",
+  "panel_fingerprint": "0788e871bdacffc957e0af7c5f3595107b5a013d98031ea436f44d759fc1b0d2",
+  "review_summary": "Recorded draft PR 32 and user-attested access to both ICI series; reviewed pending agreement rights, prior code checks and unchanged T01 blocker.",
+  "reviewed_at": "2026-11-18T22:14:31.813086+00:00",
+  "reviewed_commit": "466f2f06223ee27eba945c2ac3bd1ddf1d0e57d9",
   "schema_version": 1,
-  "source_fingerprint": "cbef5d889dd01e3e9b9244534179d4da6044b4422a5bf3641e9841a73553d999",
+  "source_fingerprint": "43df623da021ee534f6f084c6c351e184cc52feb4330bb5c6fc8f576c319cd22",
   "task_file": "specs/spec020/todo.md"
 }
