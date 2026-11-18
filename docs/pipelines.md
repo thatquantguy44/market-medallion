@@ -2,12 +2,11 @@
 
 Updated: 2026-11-18, America/New_York.
 
-**Current cross-pipeline priority:** [Spec019 PostgreSQL primary consolidation](../specs/spec019/README.md),
-explicitly selected by the user on 2026-11-17 before OTC-T08. AAII/FOMC and the
-newly migrated SEC FTD/threshold stores now use the same `additional_market_data`
-database; FINRA short volume is also migrated; OTC has an empty native primary; presidential history is migrated; NAAIM retained history is migrated. All eight primaries are configured. The
-[warehouse register](deployment/postgres_warehouses.md) owns actual schemas, roles and config paths.
-
+**Current cross-pipeline status:** [Spec019 PostgreSQL primary consolidation](../specs/spec019/acceptance.md)
+is complete for all eight existing pipelines. Retained histories share
+`additional_market_data`; OTC has an empty native primary and NAAIM remains paused.
+The [warehouse register](deployment/postgres_warehouses.md) owns actual schemas,
+roles and config paths. Next planned source work is Spec013 OTC-T08.
 
 This is the master index for **pipeline ownership, implementation status and
 next work**. It tracks all concrete pipelines/candidates currently recorded in

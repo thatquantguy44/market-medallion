@@ -1,6 +1,6 @@
 # Spec019 — PostgreSQL primary warehouses for every existing pipeline
 
-**Status:** foundation and native SEC/threshold primary migrations complete; FINRA short-volume primary cutover complete; OTC native empty primary accepted; presidential primary migrated; NAAIM retained primary migrated; final operating acceptance in progress.
+**Status:** complete and accepted locally; all eight configured primary warehouses use PostgreSQL. See [acceptance](acceptance.md).
 **User decision:** 2026-11-17, America/New_York. Include every existing pipeline;
 PostgreSQL is the primary warehouse, not an additional reporting copy.
 **Branch:** `feat/postgres-pipeline-consolidation`, based on T07 closeout

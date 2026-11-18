@@ -1,0 +1,71 @@
+{
+  "database": "additional_market_data",
+  "pipelines": [
+    {
+      "pipeline": "aaii",
+      "config": "config/config.yaml",
+      "schema": "aaii",
+      "role": "aaii_writer",
+      "primary": "postgres"
+    },
+    {
+      "pipeline": "fomc_meeting_minutes",
+      "config": "config/fomc_meeting_minutes/pipeline.local.yml",
+      "schema": "fomc_meeting_minutes",
+      "role": "fomc_writer",
+      "primary": "postgres"
+    },
+    {
+      "pipeline": "sec_fails_to_deliver",
+      "config": "config/sec_fails_to_deliver/pipeline.local.yml",
+      "schema": "sec_ftd",
+      "role": "sec_ftd_writer",
+      "primary": "postgres"
+    },
+    {
+      "pipeline": "reg_sho_thresholds",
+      "config": "config/reg_sho_thresholds/pipeline.local.yml",
+      "schema": "reg_sho_thresholds",
+      "role": "reg_sho_writer",
+      "primary": "postgres"
+    },
+    {
+      "pipeline": "finra_short_sale_volume",
+      "root": "/Users/joshualutkemuller/Documents/Quant Sandbox/pipelines/market-medallion/data/finra_short_sale_volume/t16/65f5b085-c5d7-4d20-918d-215b50f2a852/source",
+      "schema": "finra_short_sale_volume",
+      "role": "finra_ssv_writer",
+      "primary": "postgres",
+      "binding_verified": true
+    },
+    {
+      "pipeline": "finra_otc_transparency",
+      "root": "data/postgres-primary/finra_otc_transparency",
+      "schema": "finra_otc_transparency",
+      "role": "finra_otc_writer",
+      "primary": "postgres",
+      "binding_verified": true
+    },
+    {
+      "pipeline": "presidential_research",
+      "root": "data/presidential_research",
+      "schema": "presidential_research",
+      "role": "presidential_writer",
+      "primary": "postgres",
+      "binding_verified": true
+    },
+    {
+      "pipeline": "naaim_exposure_public_delayed",
+      "root": "data/naaim-exposure-public-delayed",
+      "schema": "naaim_exposure_public_delayed",
+      "role": "naaim_writer",
+      "primary": "postgres",
+      "binding_verified": true
+    }
+  ],
+  "private_env_selectors_configured": true,
+  "private_env_activation_flags_unchanged": true,
+  "worker_restarted": false,
+  "local_dagster_ui": "UNAVAILABLE_2026-11-18",
+  "provider_requests": 0,
+  "schedule_activations": 0
+}

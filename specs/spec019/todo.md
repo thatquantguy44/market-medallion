@@ -68,8 +68,8 @@
 
 ## PG-T11 — Final primary cutover and operating acceptance
 
-- [ ] Verify every pipeline's future CLI/Dagster writes select its PG primary.
-- [ ] Preserve all existing activation controls; update canonical DAGSTER.md as needed.
-- [ ] Record eight target schemas/roles, backups, parity and recovery evidence.
-- [ ] Full offline/PG checks, Ruff, package and handoff validation pass.
+- [x] Verify every pipeline's future CLI/Dagster writes select its PG primary.
+- [x] Preserve all existing activation controls; update canonical DAGSTER.md as needed.
+- [x] Record eight target schemas/roles, backups, parity and recovery evidence.
+- [x] Full offline/PG checks, Ruff, package and handoff validation pass.
 **Verify:** per-pipeline operating checks, role isolation and source-preservation manifest.

@@ -4,238 +4,122 @@ Last updated: 2026-11-18.
 
 ## Agent start here
 
-**Next implementation: PG-T11 final PostgreSQL operating acceptance (in progress).**
-The user authorized every existing pipeline to use `additional_market_data` as
-its **primary PostgreSQL warehouse**, superseding immediate OTC-T08 work.
-[Spec019](../../specs/spec019/README.md), [plan](../../specs/spec019/plan.md) and
-[task list](../../specs/spec019/todo.md) own this work. Active branch:
-`feat/postgres-pipeline-consolidation`, based on completed T07 closeout
-`73780722c7aaa133408776bbf5a904913ed5929e`. No PR exists for this new local branch.
-
-T07 is accepted offline: implementation `7935bd1`, closeout `7378072`, 424 OTC /
-2,251 full passes, 92 optional skips, 204-module package parity and 159 identical
-native/wheel CLI results. Source main was freshly fetched at `1c256bf` before
-this new branch. OTC-T08 remains the next OTC task but is deferred during the
-new explicitly authorized PostgreSQL workstream. Existing history, source holds
-and NAAIM's pause remain in force.
-
-**Runtime last observed:** 2026-11-15 06:23 EST. Local Dagster UI responded at
-<http://127.0.0.1:3030>, with all eight explicit jobs loaded. All eight acquisition/
-import schedules are STOPPED; only the two FOMC Slack sensors are RUNNING among
-the twelve status sensors. The user-code connection was recovered by restarting
-the existing manual launcher, preserving metadata and stored activation settings.
-No job/source acquisition or schedule activation was performed. See the
-[canonical Dagster master guide](../../DAGSTER.md#current-local-state).
+**PostgreSQL primary consolidation is complete. Next planned slice: Spec013 OTC-T08.**
+The user authorized every existing pipeline to use `additional_market_data` as its
+primary warehouse. All Spec019 PG-T01–PG-T11 tasks are accepted locally. Read
+[acceptance](../../specs/spec019/acceptance.md) and the
+[warehouse register](../deployment/postgres_warehouses.md) for evidence and exact
+schema/writer/root/config mappings. Active branch: `feat/postgres-pipeline-consolidation`.
+No push, PR or merge was performed.
 
 ### Current work and highest priorities
 
-| Order | Work | Status and next action | Canonical task / entrypoint |
+| Order | Work | Status and exact pickup | Owner |
 | --- | --- | --- | --- |
-| 0 | **Spec019 PG-T11 — operating acceptance** | PG-T01–T10 complete; all eight primary targets configured. Next final native/offline checks, package/launch verification and database backup. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
-| — | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
-| 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Deferred behind user-authorized Spec019, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
-| 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
-| 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
-
-**Closeout scope:** the user authorized T07 closeout on 2026-11-17, continuing
-`7935bd1`. The four existing Spec013 documentation drafts were reconciled with
-verified results. This closeout adds reproducible offline CLI verification,
-acceptance evidence and owning spec/register/handoff updates. No runtime behavior
-fix was needed and no T08 implementation was included.
-
-**Current implementation:** T01–T07 are implemented offline. All six invented
-ATS/non-ATS × T1/T2/OTCE profiles retain catalog v2 and old v1 descriptor/outcome
-readback. Non-ATS grammar and completeness assertions remain explicitly synthetic;
-all real profile conformance stays NOT_CHECKED and Bronze membership UNVERIFIED.
-T07 separates semantic content from capture metadata, appends immutable value/
-removal occurrences, and atomically couples complete replacement membership,
-coverage and terminal success. Exact original integer tokens remain in membership.
-Repeats retain value first-seen; corrections, reversions and revival append new
-occurrences. Incomplete captures cannot remove rows or imply zero volume.
-
-New stores use `finra-otc-sqlite/2` and `finra-otc-membership/2`. Read-only v1
-inspection remains supported; writes require explicit migration. Migration verifies
-selected legacy rows against Bronze and preserves all old tables, terminal
-attempts and raw files. Deferred captures require explicit v2 ingestion. Bounded
-current/as-of/history CLI uses original capture sequence for equal-clock ties;
-older complete captures cannot supersede newer membership. Capture cutoffs under
-the current transform do not claim historical provider publication or operator
-processing-time history. T08 refines clocks; T09 features and Checkpoint C remain open.
-
-**Verification (2026-11-17):** **424 OTC tests**, **2,251 full offline passes /
-92 existing optional skips**. Ruff lint/format and canonical Dagster inventory
-(8 jobs, 8 schedules, 12 sensors) pass. Source/sdist/wheel byte inventory matches
-all **204 runtime modules**. The [CLI checker](../../scripts/verify_spec013_t07.py)
-exercises eight captures/seven snapshots/eleven occurrences per profile, plus
-frozen v1 migration. An isolated wheel matches **159 exact JSON results**; reads
-and immutable retries preserve hashes/mtimes for all **270 fixture-store files**.
-All socket connections are denied in child CLI checks. Equal-clock, partial and
-transaction-fault/corruption evidence is detailed in the linked T07 acceptance.
-
-The agent-skills pin verifies (188 entries). The configured external QuantSmith
-checkout still fails the revision/tree pin check; all 61 pinned Git guidance
-objects independently hash-verify and were used read-only. No library repin occurs.
-No real source observation, provider request, schedule/job activation, Slack
-message, external warehouse write or NAAIM resume occurred. A separate user-requested
-read-only PostgreSQL access check found AAII/FOMC configs at localhost:55438,
-database `additional_market_data`; the initial connection was refused. The existing container was subsequently
-observed Up/healthy; current grants and contents still need verification as the
-new consolidation work begins. No database or role was changed.
-
-Before committing the closeout, run the staged handoff refresh/check described
-below; after committing verify HEAD and a clean working tree. Resolve its final
-SHA with `git log -1 -- specs/spec013/t07_revisions_acceptance.md` rather than a
-self-referential commit ID. No push, PR or merge is part of this local closeout.
+| — | Spec019 PostgreSQL primary consolidation | Complete: all eight primaries, retained migrations, exact restored backup and operating selectors verified. | [Acceptance](../../specs/spec019/acceptance.md) |
+| 0 | Spec013 OTC-T08 reporting and availability clocks | Not started. Characterize holiday/null/date-only/cutoff behavior before changing semantics; preserve documentary tier delay and capture first-seen. | [Task](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
+| 1 | Spec014 SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
+| 2 | Spec015 NY Fed primary dealers | Planned; follows Spec014. | [Spec015](../../specs/spec015/README.md) |
 
 ### Last completed work and commits
 
-| Commit / checkpoint | Result |
+| Checkpoint | Verified local commit |
 | --- | --- |
-| `c53b1e2ab29294e73953362d03b837e468c77f85` / [PR26](https://github.com/thatquantguy44/market-medallion/pull/26) | T13 health/retention merged. |
-| `1daf6b58ed6199fd39dff38f30923d6f55a9b896` / [PR27](https://github.com/thatquantguy44/market-medallion/pull/27) | Master handoff and CI/daily freshness guard merged. |
-| `2b6fc3bef1c8a554cdedf457348454c211dbc4ac` | T14 admitted research interchange,37 new /710 FINRA tests. |
-| `c6b025a4c87f794cb4a7222bf1ec3f818c5f2d95` | T15 stopped job/schedule and 21 Dagster tests;731 FINRA tests. Verified local commit. |
-| `3f0043a4eb6c5d08807cf4ed2eea75023ad37a38` / T16 | [Acceptance](../../specs/spec012/acceptance.md) and [conformance](../../specs/spec012/evidence/t16_delivery_conformance.json) record the final tests/CLI/source-replay evidence. Resolve its exact commit with the commands below rather than a self-referential SHA. |
-| `9db245ec50c3df6b205a401f942a718ef3664061` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Completed review fixes and 24 added regressions/equivalence tests; 1,777 local passes / 92 optional skips. Branch is pushed; remote checks/reviews are tracked on the PR. |
-| `eaec3279dd27c0ee170e78751f234d538d4416b2` / [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) | Merged T14–T16 and reviewed regression/equivalence fixes; Spec013 OTC-T01 is now the next implementation. |
-| `5a1578c11cbcaefe7d19524259a844fdfb0f9ff6` / [PR #29](https://github.com/thatquantguy44/market-medallion/pull/29) | Canonical root Dagster guide, README/AGENTS maintenance contract and offline definition/navigation CI guard; 1,827 local passes / 92 optional skips. Merged through PR #29 as `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`; this is the OTC branch base. |
-| `041b9bee4b8d63dbba5e56ad5aa4e84eafc20781` | Spec013 OTC-T01–T03: route/use admission, dated six-profile catalog and pure invented ATS/T1 parser; 144 OTC / 1,971 full offline passes, 92 optional skips and source/wheel readback. |
-| `568610d8813dd9e304cb4498f30e47a5ed1d4531` | OTC-T04 source-evidence identity and ambiguity rejection: 35 new / 179 OTC tests, 2,006 full passes / 92 optional skips and 191-module source/wheel parity. |
-| `6cb0376a964aaff5dc618db28c00644c2c637054` | OTC-T05 immutable raw/discovery receipts, verified negative outcomes and actual UTC lineage; 63 added /242 OTC tests, 2,069 full passes /92 optional skips. |
-| `270914d` | OTC-T06 parser/archive increment: all six invented profiles, catalog v2 and retained v1 outcome compatibility; 259 OTC tests. Final T06 panel/CLI acceptance above owns current counts. |
-| `c9263d5eddbe556dfaa27b7840edd524e5d569ad` | OTC-T06 transactional six-profile local panel/CLI; 330 OTC / 2,157 full passes, 92 optional skips. |
-| `7935bd15d8e83dd06dce4b2e13b08a7c38130708` | OTC-T07 immutable versions, complete replacement membership, explicit v1 migration and history/cutoff CLI; closeout above verifies 424 OTC / 2,251 full passes and isolated wheel equivalence. |
-| `73780722c7aaa133408776bbf5a904913ed5929e` | T07 fixture acceptance closeout, 2,251 offline passes and isolated wheel equivalence. |
-| `0900c7de6d19dd5eb290e38630374c4e13587195` | PostgreSQL foundation, restored 34-table backup, eight writer/schema boundaries and native SEC/threshold primary migrations. |
-| `f953d293024952a31cfa9c7c72722a751b8a4746` | Native FINRA warehouse/catalog fixture adapter; 19 actual PG cases and 767 FINRA/shared offline passes. |
+| OTC T07 implementation / closeout | `7935bd15d8e83dd06dce4b2e13b08a7c38130708` / `73780722c7aaa133408776bbf5a904913ed5929e` |
+| PG foundation, roles, SEC/threshold native migrations | `0900c7de6d19dd5eb290e38630374c4e13587195` |
+| FINRA native adapter / real cutover | `f953d293024952a31cfa9c7c72722a751b8a4746` / `c8f7152359bd61e442c1b8842b353302ec651d53` |
+| OTC empty native primary | `b1702dcdaad9050407970f0076677df8925065d1` |
+| Presidential native primary and retained migration | `11700e7c53cd82659eb7f2da4ff42b8412a08cbe` |
+| NAAIM native primary and retained migration | `55ac940bf5c5d68e3c18d232fcca127e9a9d3933` |
+| Final operating acceptance | Resolve with `git log -1 -- specs/spec019/acceptance.md`; never invent a self-referential SHA. |
 
-The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
-approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
-manual in-process Dagster job succeeded: Carteret 12,349, Chicago 5,849 and
-NYSE 7,032 source rows (25,230 total), with 14 original pages and 3 derived collections.
-The committed publication has 12,355 research rows. Replay reproduces all tables
-and the research artifact except its new publication identity. Read-only health
-and retention preserve 115 source plus 88 replay files. API timing remains UNKNOWN,
-source refresh SUCCESS, replay LOCAL_ONLY, publication PUBLISHED, deletion disabled.
-T16 added a repeat-membership cutoff regression and had 38 export tests at that
-checkpoint; the subsequent branch review above expands current coverage. See its
-linked evidence for current regression/build results.
-No Slack notification or schedule activation occurred. Known external QuantSmith
-checkout drift is unchanged; all 61 pinned guidance Git objects verify.
+`origin/main` remains `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`, verified through
+current `ls-remote` and already an ancestor of HEAD. A repeat fetch encountered
+unrelated invalid local ref `refs/heads/docs/finra-merged-handoff 2`; no ref was
+removed/repaired. No upstream/PR exists for this local consolidation branch.
 
-```bash
-git status --short --branch
-git log -5 --oneline
-git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
-git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
-```
+### Accepted PostgreSQL operating state
 
-### Exact next slice: PG-T11
+All eight configured primaries share `127.0.0.1:55438/additional_market_data` and
+separate owned schemas/effective writer roles. Shared login `market_data` is an
+administrator, not a restricted reader; passwords remain only in this project's
+private environment. Each writer is NOLOGIN/non-superuser with no cross-pipeline
+schema access. Existing AAII reader grants remain unchanged.
 
-PG-T01–T03 are complete: eight owned schemas/writers are provisioned with isolation
-and existing AAII reader ACLs verified. The pre-change database/roles backup was
-restored to a disposable validation database; all 34 existing AAII/FOMC table
-counts match. SEC FTD and threshold native replay migrated 117,025 facts and 408
-membership records with exact logical audit/coverage/value/clock parity; all 69
-source files retain hashes/mtimes. Local PG configs select dedicated roles and
-new `data/postgres-primary/` roots. FOMC now selects `fomc_writer` after ownership
-transfer. No provider request or schedule activation occurred.
+AAII/FOMC retain their original 34 table counts. SEC FTD has 117,025 facts and
+four audit/coverage records; thresholds have 408 memberships and ten audits/
+coverage records. FINRA short volume has 25,230 versions/memberships, 17 captures/
+attempts, three TRF partitions and the same frozen publication. Presidential has
+3,903 facts/memberships, three captures and two publication-journal records with
+the unchanged frozen bundle. NAAIM has 131 delayed versions, one retained raw
+capture/snapshot/event and identical current/latest values. OTC is initialized
+empty: zero captures/versions/memberships and no invented operative data. Source
+hashes/mtimes are unchanged: SEC30, thresholds39, FINRA115, presidential65, NAAIM8.
+All first-seen clocks, sequence, exact values, revision/reversion and publication
+semantics are retained. See per-source Spec019 evidence for hashes and counts.
 
-The new provider-independent `shared/postgres.py` foundation has explicit durable
-primary binding, environment-only secrets, native connections and consistent
-transactions. Thirteen settings/binding/native transaction tests pass in the
-dedicated disposable PG database; five existing SEC/threshold PG tests pass.
-Full offline foundation regression: **2,262 passed / 94 optional skips**
-(including the two new PG checks, which passed separately). All **18** native
-foundation/SEC/threshold checks pass in the disposable validation database.
-Source-owned provider schemas/adapters remain separate. The FINRA native adapter
-fixture increment is now implemented: 19 actual PG checks cover new writes,
-cutoffs, stable retry order, four warehouse rollback boundaries, seven publication
-recovery boundaries, no SQLite fallback and corruption refusal. Existing FINRA/
-shared offline regression: 767 passes / 21 optional PG skips; those PG checks pass
-separately. See [native contract](../../specs/spec012/postgres_primary_contract.md).
-PG-T05 completion now verifies strict settings/CLI migration, read-only health/
-retention, explicit PG-source recovery replay and sanitized connection failure.
-The actual retained three-TRF root is now a PostgreSQL primary: 25,230 versions,
-17 capture/attempts, three current partitions and the same frozen publication.
-All 115 original file hashes/mtimes stay unchanged; only the new binding is added.
-Current values and publication hashes match exactly; health partitions match and
-remain DEGRADED, retention preserves everything without deletion. See
-[PG-T05 evidence](../../specs/spec019/evidence/pg_t05_finra.json). All 24 native
-FINRA / 14 shared primary tests and 92 existing CLI/replay/operations checks pass.
-OTC PG-T06/T07 are complete: 50 actual PG checks pass across six profiles,
-including 30 write/commit rollback boundaries, v1 migration, equal-clock sequence,
-corruption/outage refusal, CLI and reads/writes with no SQLite file. Existing OTC
-offline regression remains 424 passes. The operative namespace is initialized
-empty via `finra_otc_writer`: zero captures, versions, snapshots or membership.
-[PG-T07 evidence](../../specs/spec019/evidence/pg_t07_otc.json) records the root and
-counts. No invented data is loaded; real OTC conformance stays NOT_CHECKED.
-PG-T08/09 are complete: 16 actual PG checks verify revisions/cutoffs, retries,
-SQL/commit rollback, four publication failure/recovery boundaries, CLI, no-file
-reads and portable backup/restore. Existing focused presidential regression has
-43 passes; Dagster/docs checks pass. The operative `presidential_writer` primary
-now holds exactly 3,903 facts/memberships, three captures and two journal records.
-All 65 original files preserve hashes/mtimes; frozen publication and observed-as-of
-results match exactly. See [PG-T09 evidence](../../specs/spec019/evidence/pg_t09_presidential.json).
-OTC commit is `b1702dc`; resolve the presidential checkpoint with `git log -1 --
-specs/spec016/postgres_primary_contract.md`. No push/PR/merge is part of this work.
-PG-T10 is complete: native NAAIM ingestion, health/export and transactional
-retention pass 22 actual PG checks and 18 existing NAAIM checks. The retained
-primary has 131 exact versions, one capture/event and the same latest delayed
-metadata; all eight original files preserve hashes/mtimes. Missing raw references:
-none. See [PG-T10 evidence](../../specs/spec019/evidence/pg_t10_naaim.json).
-Health remains capture_stale; no retention deletion/provider request occurred.
-NAAIM remains paused. PostgreSQL is now authoritative for every configured primary.
-Presidential checkpoint is `11700e7`; resolve the NAAIM checkpoint with `git log -1
--- specs/spec007/postgres_primary_contract.md`. No push/PR/merge occurs.
-Next PG-T11: finish all actual native checks, validate every operative root/config/
-role and worker environment, package parity and final full database backup/restore.
-Full offline regression already passes **2,263 tests / 206 optional skips**.
-A current `ls-remote` confirms origin main is still `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`,
-already an ancestor of HEAD. A repeated fetch encountered an unrelated invalid
-local ref `refs/heads/docs/finra-merged-handoff 2`; no local ref was deleted/repaired.
-No provider request, schedule activation or NAAIM resume is authorized here.
+Bound roots use native PostgreSQL for reads/writes/history and fail closed when
+PG is absent; retained SQLite/JSON files are recovery evidence. NAAIM health/export/
+retention also use PG; its local latest file is derivative. Private `.env` selectors
+now name the accepted PG configs/roots. Activation flags remain unchanged and no
+worker was restarted. No provider request, job launch, Slack message, operative
+retention deletion or schedule activation occurred. FINRA health remains DEGRADED;
+NAAIM remains capture_stale and explicitly paused. Migration is not a source refresh.
 
-### Operating holds and other workstreams
+### Current verification and backup
+
+Full offline regression: **2,263 passes / 206 optional skips**. All **201 actual
+PostgreSQL integration cases** pass in disposable storage (119 consolidation/SEC/
+threshold and 82 AAII/FOMC), plus twelve shared settings/binding cases. Six native
+CLI cases pass while importing exclusively from the built wheel. All **209 runtime
+Python modules** match source/sdist/wheel bytes; private configs are excluded.
+Ruff lint/format, focused Dagster checks and canonical inventory (eight jobs/eight
+schedules/twelve sensors) pass. Temporary validation databases were removed.
+
+Both ignored backup folders are retained under `data/backups/`: pre-change
+`postgres-consolidation-2026-11-17` and final `postgres-consolidation-2026-11-18-final`.
+The final 225,443,684-byte custom dump was actually restored: all **78 tables** match
+row hashes/counts/owners. Roles omit password hashes. Final backup also verifies
+all writer boundaries and unchanged original AAII/FOMC counts. See
+[restore evidence](../../specs/spec019/evidence/pg_t11_backup.json).
+
+**Runtime check 2026-11-18:** local Dagster UI unavailable for read-only verification.
+Current stored activation state is unverified; no restart was performed. The last
+successful observation (2026-11-15 06:23 EST: eight stopped acquisition/import
+schedules; only two FOMC Slack sensors running) is historical. Consult
+[DAGSTER.md](../../DAGSTER.md#current-local-state) before runtime work.
+
+### Exact next bounded slice: OTC-T08
+
+Read Spec013 README/data contract/todo, T07 acceptance and native PG contract.
+T01–T07 remain fixture-only across ATS/non-ATS × T1/T2/OTCE. All real profile
+conformance stays NOT_CHECKED, Bronze membership UNVERIFIED, non-ATS grammar/
+completeness synthetic. Preserve legacy v1 readback/explicit migration, native PG
+identity, exact integer tokens, revisions/removals and equal-clock capture order.
+T08 must separate reporting, documentary availability and capture first-seen;
+cutoffs never claim historical provider vintages or operator processing history.
+T09 features/Checkpoint C remain open. No new source access is authorized.
+
+At implementation start record bounded scope and branch/PR here. Reuse source-owned
+packages and offline fixtures. Do not restart Spec001's CFTC-first plan. QuantSmith
+checkout drift remains: all 61 pinned Git guidance objects verified read-only;
+agent-skills pin verifies 188 entries. Do not repin vendored guidance here.
+
+### Operating holds and freshness
 
 - **NAAIM remains paused by the user.** Do not capture or restart its schedule.
-- All acquisition schedules remain unactivated by this work. G3 requires a separate
-  operator decision, current access/calendar/capacity review and actual tick/run.
-- FINRA G1/G2 cover exactly the three TRFs on 2026-11-09. Wider history and other
-  dates remain unacquired. API timing is unknown by default; the reviewed default
-  calendar ends 2026. Retention is PRESERVE_ALL dry run. ADF/TXT/ORF/consolidated
-  and other schema regimes remain excluded. G4 consumer integration is deferred.
-- FOMC listed1990–released2026 minutes and Q01–Q03 quality workflow are implemented.
-  Remaining source/OCR review and deliberate refreshes are separate bounded work.
-- Spec011 SEC FTD/exchange-threshold bounded delivery is accepted. AAII recurring
-  access and presidential live-source decisions remain independently gated.
-- Existing Slack/service observations in historical sections do not prove current
-  availability. Use [Dagster job controls](../../DAGSTER.md) and recheck runtime
-  state before describing a service as healthy/running.
+- All source access/recurring activation gates remain separate. FINRA G1/G2 cover
+  only the three TRFs on 2026-11-09; broader history/G3/G4 remain open. ADF/TXT/
+  ORF/consolidated are excluded; API timing is unknown; default calendar ends 2026.
+- FINRA retention stays PRESERVE_ALL with deletion disabled. Do not infer current
+  runtime health from dated checkpoints or activate automation while updating docs.
 
 ### Keep this panel current
 
-[Review state](handoff_state.json) binds this document and all other tracked inputs
-to a reviewed Git snapshot. CI runs the checker and a daily job reports stale
-reviews, recent commits and open PRs. It does not invent priorities or runtime facts.
-See [freshness guide](../development/handoff_freshness.md) and
-[workflow](../../.github/workflows/handoff-freshness.yml).
-
-At implementation start, verify Git/current main/PR state and record the bounded
-scope and active branch/PR. Before handing off, update this panel with actual
-work, commits, tests, blockers and exact pickup; update owning specs/registers too.
-Stage all intended changes, refresh review evidence with a meaningful summary,
-then stage both handoff files and check the exact index:
-
-```bash
-python3 scripts/verify_handoff.py --refresh --summary "Describe the actual review"
-git add docs/handoffs/project_bootstrap.md docs/handoffs/handoff_state.json
-python3 scripts/verify_handoff.py --staged
-```
-
-When deliberately advancing to another owning task list, pass its path using
-`--task-file` on refresh. Preserve existing user hooks and dated history below.
-A timestamp/history-only update cannot acknowledge substantive source changes.
+After changing this panel, stage intended files, run `python3 scripts/verify_handoff.py
+--refresh --task-file specs/spec013/todo.md --summary "Describe the actual review"`,
+stage the panel/state JSON, then run `python3 scripts/verify_handoff.py --staged`.
+Preserve dated history below. Check HEAD and clean status before handing off.
 
 ## Historical checkpoints and retained context
 

@@ -1,0 +1,20 @@
+{
+  "status": "RESTORED_ALL_TABLE_COUNTS_HASHES_OWNERS_MATCH",
+  "tables": 78,
+  "schemas": {
+    "aaii": "aaii_writer",
+    "fomc_meeting_minutes": "fomc_writer",
+    "sec_ftd": "sec_ftd_writer",
+    "reg_sho_thresholds": "reg_sho_writer",
+    "finra_short_sale_volume": "finra_ssv_writer",
+    "finra_otc_transparency": "finra_otc_writer",
+    "presidential_research": "presidential_writer",
+    "naaim_exposure_public_delayed": "naaim_writer"
+  },
+  "database": "additional_market_data",
+  "archive_bytes": 225443684,
+  "archive_sha256": "5580fb7a6ec67af7784e4340a44413725b974d508ff4f4bfd8734ff880ec8057",
+  "original_aaii_fomc_tables_unchanged": 34,
+  "writer_isolation_verified": true,
+  "validation_database_dropped": true
+}

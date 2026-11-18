@@ -132,6 +132,12 @@ setup, cursor behavior and failure handling; that guide does not own the invento
 
 ## Current local state
 
+**2026-11-18 check:** the local UI was unavailable for read-only state verification.
+No worker restart, job launch or activation was performed. PostgreSQL primary
+selectors are configured in the private `.env`; all activation flags are unchanged.
+Current instance activation state is unverified. The previous successful observation
+below is historical.
+
 **Last observed: 2026-11-15 06:23 America/New_York.** The local UI responded at
 <http://127.0.0.1:3030> and all eight explicit jobs were loaded. All eight
 acquisition/import schedules were STOPPED. Only the two FOMC Slack sensors were

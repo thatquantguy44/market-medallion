@@ -116,3 +116,27 @@ ignored `config/naaim_exposure_public_delayed/postgres.local.yml` documents the
 target/environment reference. All 22 native tests and 18 existing NAAIM tests
 pass. Health remains **capture_stale**; the user pause remains. Migration performs
 no retention deletion, provider acquisition or schedule activation.
+
+## Final operating acceptance
+
+[Spec019 acceptance](../../specs/spec019/acceptance.md) completes all eight
+primaries. Private `.env` selectors now name `MARKET_MEDALLION_CONFIG`, `FOMC_CONFIG`,
+`SEC_FTD_CONFIG`, `REG_SHO_CONFIG`, `FINRA_SSV_CONFIG` and `PRES_WORKSPACE` for the
+accepted configs/roots above; `NAAIM_DELAYED_ROOT` retains its bound root. The
+existing local launcher exports this file. Activation flags remain unchanged and
+no worker was restarted. Direct CLI users must export the named password variable.
+The local Dagster UI was unavailable for a fresh state check; no live state is
+inferred from the historical stopped-schedule checkpoint.
+
+The final ignored backup folder is
+`data/backups/postgres-consolidation-2026-11-18-final/`: full custom database dump,
+password-free roles and exact restore evidence. All **78 tables** match restored
+row hashes/counts/owners; the 34 original AAII/FOMC table counts remain unchanged.
+All writer-isolation checks pass. Temporary validation databases were removed.
+See [backup evidence](../../specs/spec019/evidence/pg_t11_backup.json).
+
+Verification: 2,263 offline passes (206 optional skips), 201 actual PostgreSQL
+integration cases plus twelve shared settings/binding cases, six isolated-wheel
+CLI cases, and 209-module source/sdist/wheel byte parity. Ruff and canonical
+Dagster inventory checks pass. FINRA health remains DEGRADED, NAAIM capture_stale;
+OTC real data/conformance is absent. No acquisition, deletion or activation occurred.

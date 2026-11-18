@@ -103,9 +103,11 @@ capture checks for updates to that delayed feed. Read the observation's
 not current-week positioning. CLI output, Gold latest and Dagster metadata
 include an explicit delay label and `provider_delay_months: 3`.
 
-**PostgreSQL consolidation:** the user selected primary PostgreSQL storage for
-all existing pipelines under [Spec019](specs/spec019/README.md). AAII/FOMC, FINRA short volume and
-newly migrated SEC FTD/Reg SHO histories share `additional_market_data`; OTC also has an empty native primary; presidential history is migrated; NAAIM retained history is migrated. All eight primaries are configured; final operating acceptance is in progress. See the [schema/role/config register](docs/deployment/postgres_warehouses.md).
+**PostgreSQL consolidation:** all eight existing pipelines now use
+`additional_market_data` as their configured primary warehouse. Retained histories
+are migrated, OTC is initialized empty, and NAAIM remains paused. See the
+[schema/role/config register](docs/deployment/postgres_warehouses.md) and
+[acceptance evidence](specs/spec019/acceptance.md).
 
 ## Pipeline organization
 
