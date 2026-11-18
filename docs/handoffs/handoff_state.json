@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "27c12c0d3e8e33aef56df8e5760c7363d568844f3fd3eaf1b2addbac522cc830",
-  "next_task": "PG-T04",
-  "panel_fingerprint": "f34b1c4df5bc58ce1a3d439e6a96d259bbf3a3b37cc9a41961abddbe6dd84dbf",
-  "review_summary": "Verified PostgreSQL-primary scope, restored 34-table backup, provisioned eight isolated writer schemas, migrated exact SEC/threshold histories without changing 69 source files, tested FOMC writer and explicit primary-binding foundation; 2262 offline passes and 18 dedicated PostgreSQL checks. Next PG-T04 FINRA adapter.",
-  "reviewed_at": "2026-11-18T03:43:55.581721+00:00",
-  "reviewed_commit": "73780722c7aaa133408776bbf5a904913ed5929e",
+  "document_fingerprint": "e072638a9262b4969ec771a38b6604fb2a79bac8ea6e768fc69b84212289aa0f",
+  "next_task": "PG-T05",
+  "panel_fingerprint": "1b80d566afc88f845a0a24a973fa8c93e7693379032f034dbfe9561a92ad2498",
+  "review_summary": "Verified native FINRA warehouse/catalog fixture adapter: 19 actual PostgreSQL cases, 767 FINRA/shared offline passes, exact values/cutoffs/retry ordering, no SQLite fallback, corruption refusal and all publication recovery phases. Next PG-T05 CLI, operational/replay parity and retained three-TRF cutover.",
+  "reviewed_at": "2026-11-18T04:04:44.366312+00:00",
+  "reviewed_commit": "0900c7de6d19dd5eb290e38630374c4e13587195",
   "schema_version": 1,
-  "source_fingerprint": "e843b94247850f10daec1520f83a609682ed4eb67afe87b9eff4939c0418cdb6",
+  "source_fingerprint": "5161b1a064b3b13a88aa73f8f22b22c14d05ba992f68f068e2cbd0d9dbe66202",
   "task_file": "specs/spec019/todo.md"
 }

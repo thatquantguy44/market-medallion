@@ -22,13 +22,14 @@
 
 ## PG-T04 — Characterize FINRA short-volume primary boundaries
 
-- [ ] Pin warehouse/catalog/identity/publication invariants with offline fixtures.
-- [ ] Define provider-owned PG schema/config and atomic migration boundaries.
+- [x] Pin warehouse/catalog/identity/publication invariants with offline fixtures.
+- [x] Define provider-owned PG schema/config and atomic migration boundaries.
 **Verify:** fixture parity and failure expectations before implementation.
 
 ## PG-T05 — Implement and cut over FINRA short-volume PostgreSQL
 
-- [ ] Add native warehouse/catalog transactions and explicit backend selection.
+- [x] Add native warehouse/catalog transactions and explicit backend selection.
+  Fixture/native adapter increment is implemented; CLI, operational/replay checks and retained migration remain below.
 - [ ] Verify actual PG revisions, reads, cutoffs and publication failure recovery.
 - [ ] Migrate accepted three-TRF history and bind PG after exact parity.
 **Verify:** focused PG tests and retained-source equivalence; split implementation into bounded increments.

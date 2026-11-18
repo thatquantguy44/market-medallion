@@ -264,3 +264,31 @@ def connect(settings, *, read_only=False):
         yield Connection(raw)
     finally:
         raw.close()
+
+
+def schema_fingerprint(db, schema):
+    """Fingerprint native relation/column/constraint/index/view/trigger definitions."""
+    statements = (
+        "SELECT c.relname,c.relkind,a.attname,a.attnum,"
+        "format_type(a.atttypid,a.atttypmod),a.attnotnull,a.attidentity,a.attgenerated,"
+        "pg_get_expr(d.adbin,d.adrelid) "
+        "FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace "
+        "JOIN pg_attribute a ON a.attrelid=c.oid AND a.attnum>0 AND NOT a.attisdropped "
+        "LEFT JOIN pg_attrdef d ON d.adrelid=c.oid AND d.adnum=a.attnum "
+        "WHERE n.nspname=? AND c.relkind IN ('r','p','v','m') ORDER BY c.relname,a.attnum",
+        "SELECT c.relname,k.conname,k.contype,pg_get_constraintdef(k.oid) "
+        "FROM pg_constraint k JOIN pg_class c ON c.oid=k.conrelid "
+        "JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=? "
+        "ORDER BY c.relname,k.conname",
+        "SELECT indexname,indexdef FROM pg_indexes WHERE schemaname=? ORDER BY indexname",
+        "SELECT viewname,definition FROM pg_views WHERE schemaname=? ORDER BY viewname",
+        "SELECT c.relname,t.tgname,pg_get_triggerdef(t.oid) FROM pg_trigger t "
+        "JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace "
+        "WHERE n.nspname=? AND NOT t.tgisinternal ORDER BY c.relname,t.tgname",
+    )
+    statements += (
+        "SELECT sequencename,data_type::text,start_value,min_value,max_value,"
+        "increment_by,cycle,cache_size FROM pg_sequences WHERE schemaname=? ORDER BY sequencename",
+    )
+    shape = [[tuple(row) for row in db.execute(statement, (schema,))] for statement in statements]
+    return hashlib.sha256(json.dumps(shape, separators=(",", ":")).encode()).hexdigest()

@@ -87,12 +87,8 @@ def connect(root, manifest, *, approved_use, operation, create=False):
                 {"identity.json": encoded(identity), "ssv.sqlite": initial.serialize()},
             )
         _put(binding, encoded(identity))
-    db = directory / "ssv.sqlite"
-    if directory.is_symlink() or db.is_symlink() or not db.is_file():
-        raise ValueError("FINRA bound warehouse is missing or unsafe")
-    for suffix in ("-journal", "-wal", "-shm"):
-        if db.with_name(db.name + suffix).is_symlink():
-            raise ValueError("FINRA SQLite sidecar is unsafe")
+    if directory.is_symlink() or not directory.is_dir():
+        raise ValueError("FINRA warehouse directory is unsafe")
     identity = _json(directory / "identity.json")
     _identity(identity.get("warehouse_id"))
     if _json(binding) != identity:
@@ -106,6 +102,20 @@ def connect(root, manifest, *, approved_use, operation, create=False):
         identity[k] != v for k, v in expected.items()
     ):
         raise ValueError("FINRA warehouse identity mismatch")
+    from market_data_pipeline.shared.postgres import binding
+
+    if binding(root, "finra_short_sale_volume") is not None:
+        from market_data_pipeline.pipelines.finra_short_sale_volume.io.postgres import connection
+
+        with connection(root, manifest, kind, create=create) as database:
+            yield database
+        return
+    db = directory / "ssv.sqlite"
+    if directory.is_symlink() or db.is_symlink() or not db.is_file():
+        raise ValueError("FINRA bound warehouse is missing or unsafe")
+    for suffix in ("-journal", "-wal", "-shm"):
+        if db.with_name(db.name + suffix).is_symlink():
+            raise ValueError("FINRA SQLite sidecar is unsafe")
     connection = None
     try:
         connection = sqlite3.connect(
