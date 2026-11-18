@@ -36,14 +36,14 @@
 
 ## PG-T06 — Characterize OTC PostgreSQL primary boundaries
 
-- [ ] Pin T07 versions/membership/migration/history behavior on fixtures.
-- [ ] Define native PG configuration, identity and explicit migration.
+- [x] Pin T07 versions/membership/migration/history behavior on fixtures.
+- [x] Define native PG configuration, identity and explicit migration.
 **Verify:** all-six-profile PostgreSQL acceptance expectations.
 
 ## PG-T07 — Implement OTC PostgreSQL primary
 
-- [ ] Add native PG transactions, consistent cutoffs and no-fallback binding.
-- [ ] Verify all-six fixture parity and rollback; initialize empty operational namespace.
+- [x] Add native PG transactions, consistent cutoffs and no-fallback binding.
+- [x] Verify all-six fixture parity and rollback; initialize empty operational namespace.
 **Verify:** actual isolated PG tests; operational schema contains no invented observations.
 
 ## PG-T08 — Characterize presidential PostgreSQL boundaries

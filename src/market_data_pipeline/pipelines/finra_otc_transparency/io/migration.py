@@ -25,6 +25,14 @@ def migrate(root, *, approved_use, max_captures=1000):
     root = store._root(root)
     store._base(root)
     with store._locked(root), store._connection(root, write=True, allow_legacy=True) as db:
+        if getattr(db, "backend", None) == "postgres":
+            from market_data_pipeline.pipelines.finra_otc_transparency.io.postgres import CONTRACT
+
+            return {
+                "status": "ALREADY_CURRENT",
+                "warehouse_contract": CONTRACT,
+                "logical_contract": store.CONTRACT,
+            }
         if db.execute("PRAGMA user_version").fetchone()[0] == 2:
             return {"status": "ALREADY_CURRENT", "warehouse_contract": store.CONTRACT}
         db.execute("BEGIN IMMEDIATE")

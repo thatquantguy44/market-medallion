@@ -105,8 +105,7 @@ include an explicit delay label and `provider_delay_months: 3`.
 
 **PostgreSQL consolidation:** the user selected primary PostgreSQL storage for
 all existing pipelines under [Spec019](specs/spec019/README.md). AAII/FOMC, FINRA short volume and
-newly migrated SEC FTD/Reg SHO histories share `additional_market_data`; three
-new provider adapters remain pending. See the [schema/role/config register](docs/deployment/postgres_warehouses.md).
+newly migrated SEC FTD/Reg SHO histories share `additional_market_data`; OTC also has an empty native primary; presidential and NAAIM adapters remain. See the [schema/role/config register](docs/deployment/postgres_warehouses.md).
 
 ## Pipeline organization
 

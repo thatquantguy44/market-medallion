@@ -4,7 +4,7 @@ Last updated: 2026-11-17.
 
 ## Agent start here
 
-**Next implementation: PG-T06 OTC PostgreSQL primary characterization (in progress).**
+**Next implementation: PG-T08/PG-T09 presidential PostgreSQL primary (in progress).**
 The user authorized every existing pipeline to use `additional_market_data` as
 its **primary PostgreSQL warehouse**, superseding immediate OTC-T08 work.
 [Spec019](../../specs/spec019/README.md), [plan](../../specs/spec019/plan.md) and
@@ -31,7 +31,7 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec019 PG-T06 — OTC primary characterization** | PG-T01–T05 complete; FINRA native primary migrated. Next OTC native fixture contract and empty operative primary, then presidential/NAAIM. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
+| 0 | **Spec019 PG-T08/09 — presidential primary** | PG-T01–T07 complete; OTC native empty primary accepted. Next presidential fixture contract/native adapter/migration, then NAAIM. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
 | — | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
 | 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Deferred behind user-authorized Spec019, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
@@ -130,7 +130,7 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: PG-T06
+### Exact next slice: PG-T08/PG-T09
 
 PG-T01–T03 are complete: eight owned schemas/writers are provisioned with isolation
 and existing AAII reader ACLs verified. The pre-change database/roles backup was
@@ -163,10 +163,17 @@ Current values and publication hashes match exactly; health partitions match and
 remain DEGRADED, retention preserves everything without deletion. See
 [PG-T05 evidence](../../specs/spec019/evidence/pg_t05_finra.json). All 24 native
 FINRA / 14 shared primary tests and 92 existing CLI/replay/operations checks pass.
-Next characterize and implement OTC's PG primary without loading invented records
-into the empty operative schema; then presidential and NAAIM. These three empty
-schemas still do not have completed primary adapters or migrated records. Do not claim those four
-empty schemas have migrated data or working PG primary adapters yet.
+OTC PG-T06/T07 are complete: 50 actual PG checks pass across six profiles,
+including 30 write/commit rollback boundaries, v1 migration, equal-clock sequence,
+corruption/outage refusal, CLI and reads/writes with no SQLite file. Existing OTC
+offline regression remains 424 passes. The operative namespace is initialized
+empty via `finra_otc_writer`: zero captures, versions, snapshots or membership.
+[PG-T07 evidence](../../specs/spec019/evidence/pg_t07_otc.json) records the root and
+counts. No invented data is loaded; real OTC conformance stays NOT_CHECKED.
+Next PG-T08/09 pins presidential publication/replay/backup boundaries, adds a
+source-owned native adapter, then migrates the retained 3,903 facts. Only the
+presidential and NAAIM operative schemas still lack adapters/migrated records.
+No provider request, schedule activation or NAAIM resume is authorized here.
 
 ### Operating holds and other workstreams
 

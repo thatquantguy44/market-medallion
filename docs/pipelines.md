@@ -5,7 +5,7 @@ Updated: 2026-11-17, America/New_York.
 **Current cross-pipeline priority:** [Spec019 PostgreSQL primary consolidation](../specs/spec019/README.md),
 explicitly selected by the user on 2026-11-17 before OTC-T08. AAII/FOMC and the
 newly migrated SEC FTD/threshold stores now use the same `additional_market_data`
-database; FINRA short volume is also migrated; three new native adapters remain pending. The
+database; FINRA short volume is also migrated; OTC has an empty native primary; presidential/NAAIM adapters remain. The
 [warehouse register](deployment/postgres_warehouses.md) owns actual schemas, roles and config paths.
 
 
@@ -178,3 +178,6 @@ operational status and next task. Keep dataset grain, date basis, access policy
 and revisions source-specific. An absent package stays explicitly absent; avoid
 placeholder connectors that make planned sources look implemented. Future
 manifests/resources/fixtures remain source-scoped in their existing directories.
+
+Spec019 OTC storage update: the [native PG primary contract](../specs/spec013/postgres_primary_contract.md)
+is accepted with 50 actual PG checks. Operative OTC observations remain zero.

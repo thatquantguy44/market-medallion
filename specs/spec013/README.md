@@ -239,3 +239,7 @@ as short selling, institution accumulation, borrow demand or a dealer's lending
 inventory. Review paid APIs, broader retention/use, extra products, derived
 concentration methodology, production deployment and cross-source joins before
 expansion. Keep NAAIM paused and other pipeline runtime configuration independent.
+
+Native PostgreSQL primary storage is accepted under [Spec019 PG-T07](postgres_primary_contract.md):
+50 native checks pass; the operative namespace is initialized with zero observations.
+T08 and real source conformance remain open.

@@ -1,0 +1,27 @@
+{
+  "status": {
+    "status": "INITIALIZED",
+    "warehouse": "postgres",
+    "captures": 0,
+    "versions": 0,
+    "snapshots": 0
+  },
+  "root": "data/postgres-primary/finra_otc_transparency",
+  "schema": "finra_otc_transparency",
+  "role": "finra_otc_writer",
+  "counts": {
+    "otc_metadata": 1,
+    "otc_attempts": 0,
+    "otc_publications": 0,
+    "otc_rows": 0,
+    "otc2_attempts": 0,
+    "otc2_versions": 0,
+    "otc2_snapshots": 0,
+    "otc2_members": 0,
+    "otc2_migrations": 0
+  },
+  "source_conformance": "NOT_CHECKED",
+  "provider_requests": 0,
+  "invented_operational_observations": 0,
+  "native_pg_tests_passed": 50
+}

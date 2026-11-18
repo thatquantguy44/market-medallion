@@ -133,7 +133,10 @@ def observation_history(
     warehouse._base(root)
     with warehouse._connection(root) as db:
         db.execute("BEGIN")
-        if db.execute("PRAGMA user_version").fetchone()[0] != 2:
+        if (
+            getattr(db, "backend", None) != "postgres"
+            and db.execute("PRAGMA user_version").fetchone()[0] != 2
+        ):
             raise ValueError("OTC history requires explicit migration")
         return history_read.history(db, selected, max_versions, bound)
 

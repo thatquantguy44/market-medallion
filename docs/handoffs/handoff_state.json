@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "5c150c89d5ebbbd161bc791b94283daa170ecb7eaecbd502a9ecdaca787d09ad",
-  "next_task": "PG-T06",
-  "panel_fingerprint": "38ceb88afa95319d5199b4ffc163ecc028cc9ea042d5ef117cb333b7d1e91de8",
-  "review_summary": "Completed FINRA PostgreSQL primary cutover: exact three-TRF25230-row/current/frozen parity, 115 original file hashes/mtimes unchanged, existing DEGRADED health preserved and retention disabled; verified CLI, no fallback, operational/replay behavior, 24 native FINRA plus 14 shared PG cases and 92 existing focused regressions. Next PG-T06 OTC.",
-  "reviewed_at": "2026-11-18T04:30:27.320007+00:00",
-  "reviewed_commit": "f953d293024952a31cfa9c7c72722a751b8a4746",
+  "document_fingerprint": "422931b869031be94aba62535b3f6e7bdcb33ddbdc4c0ee126aa51b22b6f5f4f",
+  "next_task": "PG-T08",
+  "panel_fingerprint": "0fdca4a370d54354d0394ab64ac4bb5d5fe8052fc7956df6118868ceb4858e0c",
+  "review_summary": "Reviewed native OTC primary across all six profiles: 50 actual PG tests, 424 existing offline tests, empty operative schema verified through dedicated writer; no source requests or activation",
+  "reviewed_at": "2026-11-18T04:56:48.143640+00:00",
+  "reviewed_commit": "c8f7152359bd61e442c1b8842b353302ec651d53",
   "schema_version": 1,
-  "source_fingerprint": "e2f35e1c5d0065aedc4aabd6ea6927c00371204341a2d7b2195ec190c4582933",
+  "source_fingerprint": "a56b5217be601e9df6c2508553b49ba2bf6256e9f76b403f048f3b400cd1f990",
   "task_file": "specs/spec019/todo.md"
 }

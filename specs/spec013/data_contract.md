@@ -396,3 +396,10 @@ Unknown fields remain null; missing rows are distinguished from no trading.
 Credentials, raw payloads, operational paths and internal permission documents
 are excluded. QuantMeridian admission and display require its separate consumer
 specification; no sibling repository changes are part of this pipeline delivery.
+
+## Native primary backend
+
+[PostgreSQL primary contract](postgres_primary_contract.md) preserves the T07 logical
+warehouse, immutable legacy seals, exact tokens and capture cutoffs. Explicit root
+binding selects native relational tables with no SQLite fallback. The operative
+OTC primary is empty and grants no real source access.

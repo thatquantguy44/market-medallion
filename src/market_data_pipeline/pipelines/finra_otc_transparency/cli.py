@@ -37,7 +37,19 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="command", required=True)
     validate = commands.add_parser("validate", help="Validate the current fixture manifest")
     validate.add_argument("--manifest", type=Path, required=True)
-    for name in ("run", "ingest-capture", "inspect", "history", "migrate-warehouse"):
+    initialize = commands.add_parser(
+        "init-postgres", help="Initialize empty PG storage; no observations"
+    )
+    initialize.add_argument("--root", type=Path, required=True)
+    initialize.add_argument("--postgres-config", type=Path, required=True)
+    for name in (
+        "run",
+        "ingest-capture",
+        "inspect",
+        "history",
+        "migrate-warehouse",
+        "migrate-postgres",
+    ):
         command = commands.add_parser(name)
         command.add_argument("--root", type=Path, required=True)
         command.add_argument(
@@ -68,6 +80,8 @@ def main(argv=None):
             command.add_argument("--max-bytes", type=int, default=DEFAULT_BYTES)
         elif name == "migrate-warehouse":
             command.add_argument("--max-captures", type=int, default=1000)
+        elif name == "migrate-postgres":
+            command.add_argument("--postgres-config", type=Path, required=True)
         else:
             command.add_argument(
                 "--partition",
@@ -90,6 +104,19 @@ def main(argv=None):
                 "source_conformance": "NOT_CHECKED",
                 "profiles": [p.to_dict() for p in manifest.profiles],
             }
+        elif args.command in ("init-postgres", "migrate-postgres"):
+            from market_data_pipeline.pipelines.finra_otc_transparency.io.postgres import (
+                initialize_empty,
+                migrate,
+            )
+            from market_data_pipeline.shared.postgres import load_settings
+
+            settings = load_settings(args.postgres_config)
+            value = (
+                initialize_empty(args.root, settings)
+                if args.command == "init-postgres"
+                else migrate(args.root, settings, approved_use=fixture_use())
+            )
         elif args.command == "run":
             limits(args.max_bytes, args.max_rows)
             if args.max_rows > 10000:
@@ -156,6 +183,15 @@ def main(argv=None):
     return (
         0
         if value["status"]
-        in ("VALID", "PUBLISHED", "COMPLETE_FIXTURE", "MIGRATED", "ALREADY_CURRENT", "HISTORY")
+        in (
+            "VALID",
+            "PUBLISHED",
+            "COMPLETE_FIXTURE",
+            "MIGRATED",
+            "ALREADY_CURRENT",
+            "HISTORY",
+            "INITIALIZED",
+            "ALREADY_PRIMARY",
+        )
         else 2
     )

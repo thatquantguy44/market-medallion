@@ -12,7 +12,7 @@ local `additional_market_data` database at `127.0.0.1:55438`.
 | SEC FTD | `sec_ftd` | `sec_ftd_writer` | Migrated: 117,025 facts, four coverage/audit records. |
 | Reg SHO thresholds | `reg_sho_thresholds` | `reg_sho_writer` | Migrated: 408 membership records, ten coverage/audit records. |
 | FINRA short volume | `finra_short_sale_volume` | `finra_ssv_writer` | Migrated: 25,230 versions, three selected TRF partitions and original frozen publication. |
-| FINRA OTC | `finra_otc_transparency` | `finra_otc_writer` | Empty namespace provisioned; native adapter pending; no real source observations. |
+| FINRA OTC | `finra_otc_transparency` | `finra_otc_writer` | Native empty primary initialized; 50 PG checks; no real or invented operative observations. |
 | Presidential research | `presidential_research` | `presidential_writer` | Namespace provisioned; native adapter/migration pending. |
 | NAAIM delayed | `naaim_exposure_public_delayed` | `naaim_writer` | Namespace provisioned; offline migration pending; acquisition remains paused. |
 
@@ -86,3 +86,11 @@ and 14 shared primary tests pass; 92 existing CLI/replay/operations tests pass.
 Health partition results are exactly unchanged and remain **DEGRADED**; this
 migration is not a new successful source refresh. Retention remains PRESERVE_ALL
 with deletion disabled. No acquisition, Slack or schedule activation occurred.
+
+## OTC native primary
+
+[PG-T07 evidence](../../specs/spec019/evidence/pg_t07_otc.json) verifies the empty
+operative root `data/postgres-primary/finra_otc_transparency`. Its ignored
+`config/finra_otc_transparency/postgres.local.yml` selects `finra_otc_writer`.
+Native migration/empty initialization and six-profile fixture transactions pass
+50 actual PG checks. No real profile conformance or source access is implied.

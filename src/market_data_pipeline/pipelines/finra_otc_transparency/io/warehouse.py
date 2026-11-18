@@ -73,6 +73,14 @@ def _safe_database(path, *, empty=False):
 
 @contextmanager
 def _connection(root, *, write=False, create=False, allow_legacy=False):
+    from market_data_pipeline.shared.postgres import binding
+
+    if binding(root, "finra_otc_transparency") is not None:
+        from market_data_pipeline.pipelines.finra_otc_transparency.io.postgres import connection
+
+        with connection(root, write=write) as database:
+            yield database
+        return
     path = root / "otc.sqlite3"
     created = False
     if write and create and not path.exists() and not path.is_symlink():
@@ -165,6 +173,12 @@ def require_current(root):
     from pathlib import Path
 
     root = Path(root)
+    from market_data_pipeline.shared.postgres import binding
+
+    if binding(root, "finra_otc_transparency") is not None:
+        _base(_root(root))
+        with _connection(root):
+            return
     if (root / "otc.sqlite3").exists() or (root / "otc.sqlite3").is_symlink():
         _base(_root(root))
         with _connection(root) as db:
@@ -215,7 +229,10 @@ def inspect(root, *, partitions, max_rows=MAX_ROWS, as_of=None, as_of_sequence=N
     _base(root)
     with _connection(root) as db:
         db.execute("BEGIN")
-        if db.execute("PRAGMA user_version").fetchone()[0] == 1:
+        if (
+            getattr(db, "backend", None) != "postgres"
+            and db.execute("PRAGMA user_version").fetchone()[0] == 1
+        ):
             if as_of is not None or as_of_sequence is not None:
                 raise ValueError("OTC historical inspection requires explicit migration")
             return legacy.inspect(db, selected, max_rows)
