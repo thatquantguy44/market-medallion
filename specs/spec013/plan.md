@@ -1,6 +1,6 @@
 # Implementation plan — FINRA OTC transparency
 
-**Status:** OTC-T01–T06 implemented offline, including the six-profile local panel; T07+ planned. [todo.md](todo.md) owns task execution status.
+**Status:** OTC-T01–T07 implemented offline, including the six-profile versioned local panel; T08+ planned. [todo.md](todo.md) owns task execution status.
 This source follows Spec012 by delivery priority and precedes Spec014. It has
 no technical dependency on daily short-sale data or a shared provider warehouse.
 
@@ -30,7 +30,7 @@ rights + route evidence -> product/tier/schema inventory -> invented detail pars
 | --- | --- | --- |
 | A: admitted shape | OTC-T01–OTC-T03 | Implemented: [route/use review](source_review.md), six-profile catalog and one invented ATS/T1 parser; [Checkpoint A](checkpoint_a.md). Live conformance pending. |
 | B: local panel | OTC-T04–OTC-T06 | Implemented: identity, [immutable Bronze](t05_bronze_acceptance.md), and [six-profile transactional local panel/CLI](t06_local_panel_acceptance.md). |
-| C: historical truth | OTC-T07–OTC-T09 | Current/as-of membership, delayed availability and scoped features. |
+| C: historical truth | OTC-T07–OTC-T09 | T07 fixture revisions/removals and capture-cutoff membership implemented; T08 clock refinement and T09 features remain pending. |
 | D: reproduction | OTC-T10–OTC-T11 | Committed typed snapshot and equivalent archived replay. |
 | E: bounded refresh | OTC-T12–OTC-T13 | Finite correction refresh and release-aware coverage health. |
 | F: handoff | OTC-T14–OTC-T16 | Admitted research artifact, stopped job, runbook and AC evidence. |
@@ -138,6 +138,11 @@ for inspection and migration audit. Migration is transactional and idempotent.
 Read-only inspection does not migrate, repair, parse Bronze or probe a network.
 T08 retains the broader date/availability/holiday contract work; T09 features,
 T10 Parquet, T11 replay and T12 real source extraction remain out of scope.
+
+T07 acceptance closeout on 2026-11-17 verifies 424 OTC / 2,251 full offline tests,
+92 optional skips, exact 204-module source/sdist/wheel inventory and 159 identical
+source/wheel CLI results. [Acceptance](t07_revisions_acceptance.md) and
+[evidence](evidence/t07_closeout.json) own the detailed results. T08 is next.
 
 ## Risks and controls
 

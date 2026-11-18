@@ -1,22 +1,29 @@
 # Project bootstrap and master handoff
 
-Last updated: 2026-11-16.
+Last updated: 2026-11-17.
 
 ## Agent start here
 
-**Next implementation: Spec013 OTC-T07 revisions and replacement membership (in progress).**
-The user authorized OTC-T06 on `feat/finra-otc-contract-parser` after T05
-`6cb0376a964aaff5dc618db28c00644c2c637054`. T06 is implemented and accepted
-for all six invented populations; [acceptance](../../specs/spec013/t06_local_panel_acceptance.md)
-records the source-owned SQLite/CLI panel and explicit synthetic completeness.
-The parser/archive increment is `270914d`. Real extraction, source conformance,
-historical revisions and orchestration remain future slices.
+**Next implementation: Spec013 OTC-T08 reporting and availability clocks (planned; deferred during PostgreSQL consolidation planning).**
+OTC-T01–T07 are implemented and accepted offline on
+`feat/finra-otc-contract-parser`. T07 implementation is
+`7935bd15d8e83dd06dce4b2e13b08a7c38130708`; [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md)
+and [evidence](../../specs/spec013/evidence/t07_closeout.json) close the
+user-authorized 2026-11-17 regression/native/package review. T08 has not started.
+
+**New user priority (2026-11-17):** after this separate T07 closeout commit,
+include every existing pipeline in the same `additional_market_data` PostgreSQL
+database, using separate schemas and writer roles. SEC FTD/Reg SHO already have
+adapters; FINRA short volume, OTC, presidential research and NAAIM need new ones.
+Draft Spec019 and a bounded migration plan before implementation; preserve all
+source history and NAAIM's pause. This supersedes beginning OTC-T08 immediately.
 
 The branch starts at `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`, merged
 [Dagster PR #29](https://github.com/thatquantguy44/market-medallion/pull/29).
-Read-only GitHub checks on 2026-11-16 confirm main remains at this base and no
-PR exists for the OTC branch. The branch has no upstream and remains local.
-Spec012 T14–T16 and review are merged through
+A fresh origin/main fetch on 2026-11-17 confirms that same base; the implementation
+branch is six commits ahead and zero behind before the closeout commit. Read-only
+GitHub search found no PR for this branch. It has no upstream and remains local.
+Spec012 T14–T16 are merged through
 [PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as `eaec327`.
 This panel owns current priorities; dated checkpoints below retain history.
 Later explicit user instructions take precedence and must be recorded here.
@@ -33,54 +40,60 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec013 OTC-T06 — local weekly panel** | Implemented locally on `feat/finra-otc-contract-parser`; [acceptance](../../specs/spec013/t06_local_panel_acceptance.md) covers six invented profiles, exact values, explicit fixture membership, transactions and CLI. | [T06](../../specs/spec013/todo.md#otc-t06--deliver-the-local-weekly-detail-slice), [contract](../../specs/spec013/data_contract.md#otc-t06-local-panel-contract) |
-| 1 | Spec013 OTC-T07 — revisions and membership | Authorized and in progress on this branch; see the bounded T07 plan. Add immutable normalized versions and complete replacement membership with an explicit warehouse/transform migration. | [T07](../../specs/spec013/todo.md#otc-t07--implement-immutable-revisions-and-replacement-membership) |
+| 0 | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
+| 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Next bounded implementation, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
-**Active T07 scope:** the user authorized continuation after `c9263d5`; the
-[bounded plan](../../specs/spec013/plan.md#t07-bounded-implementation-increments)
-separates pure semantics, storage, history and explicit migration/inspection.
-T07's v2 version/membership engine, explicit migration, history and cutoff CLI
-are implemented. **424 OTC tests pass** and repository lint passes. Legacy v1
-readback remains available, with an explicit migration required before writing;
-all retained legacy table hashes are checked after migration. Full regression,
-native/package equivalence and final T07 acceptance are pending. T06 remains the
-last accepted slice until that closeout. Read-only GitHub checks still show main
-at `1c256bf` and no PR for this local branch.
+**Closeout scope:** the user authorized T07 closeout on 2026-11-17, continuing
+`7935bd1`. The four existing Spec013 documentation drafts were reconciled with
+verified results. This closeout adds reproducible offline CLI verification,
+acceptance evidence and owning spec/register/handoff updates. No runtime behavior
+fix was needed and no T08 implementation was included.
 
-**Current implementation:** T01–T06 are implemented offline on this branch.
-T06 adds `data/panel.py`, `pipeline.py`, `io/warehouse.py`, `cli.py` and module
-entrypoint. All six invented ATS/non-ATS × T1/T2/OTCE profiles parse under catalog
-v2; old v1 descriptors/outcomes remain inspectable. The non-ATS grammar is
-explicitly synthetic, with supplied IDs/name/group classification; no actual
-provider schema conformance is inferred. Synthetic discovery binds exact payload
-SHA, partition/schema and explicit row count. It alone admits COMPLETE_FIXTURE /
-COMPLETE_EMPTY_FIXTURE; Bronze membership remains UNVERIFIED.
+**Current implementation:** T01–T07 are implemented offline. All six invented
+ATS/non-ATS × T1/T2/OTCE profiles retain catalog v2 and old v1 descriptor/outcome
+readback. Non-ATS grammar and completeness assertions remain explicitly synthetic;
+all real profile conformance stays NOT_CHECKED and Bronze membership UNVERIFIED.
+T07 separates semantic content from capture metadata, appends immutable value/
+removal occurrences, and atomically couples complete replacement membership,
+coverage and terminal success. Exact original integer tokens remain in membership.
+Repeats retain value first-seen; corrections, reversions and revival append new
+occurrences. Incomplete captures cannot remove rows or imply zero volume.
 
-SQLite rows, coverage, selected capture and PUBLISHED attempt commit together.
-PENDING precedes publication; failed writes cannot advance selection. Readers see
-one coherent snapshot and separate published coverage/latest warehouse attempt.
-Terminal attempts are immutable; a new complete capture for an already published
-partition is REPLACEMENT_DEFERRED until T07. Exact quantity text, IDs, reporting
-labels, expected delay, attribution counts and actual first-seen survive readback.
-No real source observations, HTTP adapter, venue-ratio features, Parquet, replay,
-job, schedule, Slack or NAAIM runtime change is included. NAAIM remains paused.
+New stores use `finra-otc-sqlite/2` and `finra-otc-membership/2`. Read-only v1
+inspection remains supported; writes require explicit migration. Migration verifies
+selected legacy rows against Bronze and preserves all old tables, terminal
+attempts and raw files. Deferred captures require explicit v2 ingestion. Bounded
+current/as-of/history CLI uses original capture sequence for equal-clock ties;
+older complete captures cannot supersede newer membership. Capture cutoffs under
+the current transform do not claim historical provider publication or operator
+processing-time history. T08 refines clocks; T09 features and Checkpoint C remain open.
 
-**Verification:** 88 added tests / **330 OTC tests**; **2,157 full offline passes /
-92 existing optional skips**. Ruff/format and canonical Dagster inventory pass.
-The native CLI publishes six populations/18 rows; all 33 file hashes/mtimes stay
-unchanged across capture retries and inspection. A rejected refresh retains all
-18 selected rows and reports degraded state. Four actual retained T05 synthetic
-captures revalidate unchanged across all 19 original files. Transaction failures
-cover all six profiles, plus concurrency, interrupted PENDING resume, consistent
-reader snapshots and corrupt metadata/unsafe-storage refusal. The agent-skills
-pin and all 61 QuantSmith Git guidance objects verify; known external checkout
-drift is unchanged. Source/wheel readback verifies all 199 runtime modules; an
-isolated wheel reproduces the 18-row panel and immutable retries with all 38 files
-unchanged. All 229 local documentation links/anchors verify. Staged/committed
-handoff checks are completed before handing off.
-Resolve the final T06 commit with `git log -1 -- specs/spec013/t06_local_panel_acceptance.md`.
+**Verification (2026-11-17):** **424 OTC tests**, **2,251 full offline passes /
+92 existing optional skips**. Ruff lint/format and canonical Dagster inventory
+(8 jobs, 8 schedules, 12 sensors) pass. Source/sdist/wheel byte inventory matches
+all **204 runtime modules**. The [CLI checker](../../scripts/verify_spec013_t07.py)
+exercises eight captures/seven snapshots/eleven occurrences per profile, plus
+frozen v1 migration. An isolated wheel matches **159 exact JSON results**; reads
+and immutable retries preserve hashes/mtimes for all **270 fixture-store files**.
+All socket connections are denied in child CLI checks. Equal-clock, partial and
+transaction-fault/corruption evidence is detailed in the linked T07 acceptance.
+
+The agent-skills pin verifies (188 entries). The configured external QuantSmith
+checkout still fails the revision/tree pin check; all 61 pinned Git guidance
+objects independently hash-verify and were used read-only. No library repin occurs.
+No real source observation, provider request, schedule/job activation, Slack
+message, external warehouse write or NAAIM resume occurred. A separate user-requested
+read-only PostgreSQL access check found AAII/FOMC configs at localhost:55438,
+database `additional_market_data`; the initial connection was refused. The existing container was subsequently
+observed Up/healthy; current grants and contents still need verification as the
+new consolidation work begins. No database or role was changed.
+
+Before committing the closeout, run the staged handoff refresh/check described
+below; after committing verify HEAD and a clean working tree. Resolve its final
+SHA with `git log -1 -- specs/spec013/t07_revisions_acceptance.md` rather than a
+self-referential commit ID. No push, PR or merge is part of this local closeout.
 
 ### Last completed work and commits
 
@@ -98,6 +111,8 @@ Resolve the final T06 commit with `git log -1 -- specs/spec013/t06_local_panel_a
 | `568610d8813dd9e304cb4498f30e47a5ed1d4531` | OTC-T04 source-evidence identity and ambiguity rejection: 35 new / 179 OTC tests, 2,006 full passes / 92 optional skips and 191-module source/wheel parity. |
 | `6cb0376a964aaff5dc618db28c00644c2c637054` | OTC-T05 immutable raw/discovery receipts, verified negative outcomes and actual UTC lineage; 63 added /242 OTC tests, 2,069 full passes /92 optional skips. |
 | `270914d` | OTC-T06 parser/archive increment: all six invented profiles, catalog v2 and retained v1 outcome compatibility; 259 OTC tests. Final T06 panel/CLI acceptance above owns current counts. |
+| `c9263d5eddbe556dfaa27b7840edd524e5d569ad` | OTC-T06 transactional six-profile local panel/CLI; 330 OTC / 2,157 full passes, 92 optional skips. |
+| `7935bd15d8e83dd06dce4b2e13b08a7c38130708` | OTC-T07 immutable versions, complete replacement membership, explicit v1 migration and history/cutoff CLI; closeout above verifies 424 OTC / 2,251 full passes and isolated wheel equivalence. |
 
 The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
 approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
@@ -120,33 +135,26 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: OTC-T07
+### Exact next slice: OTC-T08
 
 Read [AGENTS.md](../../AGENTS.md), [Spec013](../../specs/spec013/README.md),
-[T04 identity](../../specs/spec013/t04_identity_acceptance.md),
-[T05 Bronze](../../specs/spec013/t05_bronze_acceptance.md),
-[T06 local panel acceptance](../../specs/spec013/t06_local_panel_acceptance.md),
+[T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md),
 [data contract](../../specs/spec013/data_contract.md) and
-[T07](../../specs/spec013/todo.md#otc-t07--implement-immutable-revisions-and-replacement-membership).
+[T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks).
 
-Build immutable observation versions and authoritative complete replacement
-membership, including corrections, reversions and removals. Separate normalized
-content identity from transport/run/capture metadata; preserve exact quantity
-text, raw participant evidence and actual observed first-seen. Exercise all six
-fixture populations, same/changed/reverted/removed rows, partial replacement
-refusal and equal-clock ordering by the original durable capture sequence.
-Do not infer zero volume from absence or silently merge labels across weeks.
+Separate reporting labels, provider publication/update dates, nullable aware
+publication timestamps, documentary tier-specific expected delay and actual
+capture/first-seen clocks. Characterize holiday weeks, null publication time,
+date-only updates and cutoff ordering with offline fixtures before changing data
+semantics. Never backdate backfill first-seen to reporting Monday or derive a
+publication timestamp from a date/delay. Preserve T07 immutable occurrences,
+complete membership, explicit legacy migration, original sequence and raw lineage.
 
-The initial `finra-otc-sqlite/1` panel stores one immutable selected population per
-partition; further complete captures are deliberately REPLACEMENT_DEFERRED.
-Design and verify an explicit warehouse-contract/transform-version migration.
-Preserve old rows, coverage, terminal attempts and deferred capture evidence;
-never silently overwrite them to reinterpret an older success. Reuse the root
-writer lock and original Bronze sequence; keep raw receipts and v1/v2 descriptor
-readback unchanged. Split growing work into bounded increments before coding.
-T08 refines clock/as-of behavior, T09 venue metrics, T10 typed publication and T11
-replay. Actual HTTP extraction/conformance remains T12 through shared run-scoped
-HTTP after source admission. No live activation or NAAIM resume is implied.
+T08 is the next planned coding slice, not work completed by this closeout. Keep
+T09 ratios/features, T10 typed publication, T11 ordered replay, T12 actual source
+conformance/acquisition and later orchestration separate. No live activation or
+NAAIM resume is implied. The current branch remains local with no PR; recheck Git/
+remote status before beginning another implementation increment.
 
 ### Operating holds and other workstreams
 

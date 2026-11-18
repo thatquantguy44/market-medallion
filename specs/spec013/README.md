@@ -1,7 +1,7 @@
 # Spec 013 — FINRA ATS and non-ATS transparency
 
-**Status:** OTC-T01–T06 implemented offline: six invented profiles, identity, immutable Bronze and transactional SQLite/CLI panel.
-**Reviewed:** 2026-11-16. **Delivery order:** 3 of 5.
+**Status:** OTC-T01–T07 implemented offline: six invented profiles, identity, immutable Bronze, versioned SQLite membership and local CLI.
+**Reviewed:** 2026-11-17. **Delivery order:** 3 of 5.
 **Pipeline ID:** `finra-otc-transparency`.
 **Package:** `src/market_data_pipeline/pipelines/finra_otc_transparency/`.
 
@@ -30,10 +30,16 @@ COMPLETE_EMPTY_FIXTURE only. Raw parsing/received-all and a header-only file alo
 remain UNVERIFIED. Reads expose published population coverage and the latest
 warehouse attempt separately; missing requested populations stay missing.
 
-Next is [OTC-T07 revisions and replacement membership](todo.md#otc-t07--implement-immutable-revisions-and-replacement-membership).
-Until then, a new complete capture for an already published partition is retained
-as REPLACEMENT_DEFERRED. No real acquisition, as-of/revision history, derived venue
-ratios, Parquet, replay service or Dagster job is implemented.
+[T07 revisions](t07_revisions_acceptance.md) adds append-only value occurrences,
+complete replacement membership, explicit v1-to-v2 warehouse migration and bounded
+history/as-of readers. Repeated values keep their original first-seen; corrections,
+reversions and authoritative removals append history. Incomplete attempts cannot
+replace membership. Catalog/schema versions and warehouse versions are independent.
+
+Next is [OTC-T08 reporting and availability clocks](todo.md#otc-t08--separate-reporting-and-availability-clocks).
+Real acquisition, provider vintages, venue-ratio features, Parquet, replay service
+and Dagster jobs remain pending. Cutoffs describe observed capture knowledge under
+the current transform; they do not reconstruct historical provider publication.
 
 Run the actual offline checks:
 
@@ -132,9 +138,12 @@ pipelines/finra_otc_transparency/
   source.py                    # bounded discovery and transfer
   data/weekly.py               # typed provider-profile parser
   data/identity.py             # scoped evidence, no name-based entity merge
+  data/versions.py             # semantic content and immutable occurrences
   data/panel.py                # synthetic membership and exact local records
   data/gold.py                 # complete-population research features
-  io/bronze.py / warehouse.py / parquet.py
+  io/bronze.py / warehouse.py / history.py / history_read.py
+  io/legacy.py / migration.py   # preserved v1 reader and explicit v2 migration
+  io/parquet.py                # pending T10
   pipeline.py / replay.py / operations.py / research_export.py
   cli.py / __main__.py / dagster_defs.py
 tests/fixtures/finra_otc_transparency/  # invented data only
@@ -186,6 +195,26 @@ counts are decimal JSON text with the original count tokens beside them.
 Exit 0 means VALID/PUBLISHED/COMPLETE_FIXTURE; exit 2 means an explicit
 nonpublished/degraded/partial fixture outcome; exit 1 means a sanitized local
 operation error. Argument errors use argparse exit 2.
+
+For a retained **T06/v1** fixture root, run the explicit migration before any new
+import. It verifies the old selected publications against their raw bytes and
+preserves all legacy tables and attempts. Read-only inspection never migrates:
+
+```bash
+.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency migrate-warehouse \
+  --invented-fixture --root data/otc-fixture-demo
+.venv/bin/python -m market_data_pipeline.pipelines.finra_otc_transparency history \
+  --invented-fixture --root data/otc-fixture-demo \
+  --partition 2026-10-19:ATS_WEEKLY_DETAIL:T1 --max-versions 10000
+```
+
+`inspect` and `history` accept an aware `--as-of` timestamp and optional
+`--as-of-sequence` from a run's original capture metadata. Sequence breaks equal
+clock ties; omitted sequence includes all captures at that timestamp. Source dates
+are not valid timestamp cutoffs. An old deferred capture is processed only through
+an explicit `ingest-capture`; its original v1 terminal attempt remains unchanged.
+A complete capture arriving behind newer accepted membership is OUT_OF_ORDER and
+cannot retroactively replace it. Full ordered archived replay remains T11.
 
 Check, replay and fetch commands are still future targets. No existing AAII/other
 pipeline command redirects to OTC. T12 will require bounded reporting weeks,

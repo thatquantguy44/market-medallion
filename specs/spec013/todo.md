@@ -1,10 +1,10 @@
 # Tasks — FINRA OTC transparency
 
-**OTC-T01–T06 and fixture Checkpoints A/B are implemented offline.** T07–T16 remain not started.
+**OTC-T01–T07 and fixture Checkpoints A/B are implemented offline.** T08–T16 remain not started.
 See [Checkpoint A](checkpoint_a.md) and [source review](source_review.md). Code paths are relative to
 `src/market_data_pipeline/pipelines/finra_otc_transparency/`. Each is S/M and
 limited to five likely files; split growing tasks before implementation. Commands
-under T01–T06 identify actual tests; T07+ commands remain future targets.
+under T01–T07 identify actual tests; T08+ commands remain future targets.
 
 ## OTC-T01 — Resolve source route and reuse contract
 
@@ -70,10 +70,13 @@ selected real-profile conformance remains T12. The [bounded increments](plan.md#
 ## OTC-T07 — Implement immutable revisions and replacement membership
 
 **Depends:** OTC-T06; **traces:** OTC-REQ07 / OTC-AC07.
-- [ ] Identical captures are idempotent; corrections/reversions remain distinct.
-- [ ] Row removals require a complete replacement, and retain cutoff lineage.
-**Verify:** same/changed/reverted/removed fixtures, partial-replacement refusal
-and equal-clock captures ordered by the persisted common-C06 sequence.
+- [x] Identical captures are idempotent; corrections/reversions remain distinct.
+- [x] Row removals require a complete replacement, and retain cutoff lineage.
+**Verify:** `.venv/bin/python -m pytest -q tests/test_otc_versions.py tests/test_otc_migration.py tests/test_otc_history_integrity.py`; all-six revisions/removals, incomplete replacement refusal, exact equivalence, equal-clock ordering, transactional faults and legacy migration.
+[Acceptance](t07_revisions_acceptance.md) records the 2026-11-17 closeout:
+424 OTC / 2,251 full offline passes, 92 optional skips and 159 identical native/wheel
+CLI results. Scope remains fixture-only; [evidence](evidence/t07_closeout.json)
+preserves the counts and current/as-of lineage checks.
 **Files:** `io/warehouse.py`, `pipeline.py`, `tests/test_otc_versions.py`.
 
 ## OTC-T08 — Separate reporting and availability clocks

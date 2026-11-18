@@ -2,8 +2,9 @@
 
 Implemented offline on `feat/finra-otc-contract-parser`, continuing the user-selected
 branch after T05 `6cb0376a964aaff5dc618db28c00644c2c637054`. The parser/archive
-increment is committed as `270914d`; resolve the final panel commit with
-`git log -1 -- specs/spec013/t06_local_panel_acceptance.md`.
+increment is committed as `270914d`; this is the T06 panel record at
+`c9263d5eddbe556dfaa27b7840edd524e5d569ad`. [Current status](README.md#current-implementation-and-pickup)
+and [T07 acceptance](t07_revisions_acceptance.md) own subsequent history/migration behavior.
 
 **Verified:** 2026-11-16, America/New_York. This closes the **fixture portion of
 OTC-REQ06 / OTC-AC06 and Checkpoint B** for all six selected populations.

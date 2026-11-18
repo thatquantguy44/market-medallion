@@ -1,0 +1,82 @@
+{
+  "acceptance": "OTC-AC07_FIXTURE_ONLY",
+  "implementation_commit": "7935bd15d8e83dd06dce4b2e13b08a7c38130708",
+  "legacy_tables_preserved": true,
+  "legacy_versions": 4,
+  "network_connections": "DENIED_IN_CLI_CHILDREN",
+  "origin": "INVENTED_FIXTURE",
+  "profiles": [
+    {
+      "captures": 8,
+      "current_rows": 3,
+      "product": "ATS_WEEKLY_DETAIL",
+      "removals": 3,
+      "snapshots": 7,
+      "tier": "T1",
+      "versions": 11
+    },
+    {
+      "captures": 8,
+      "current_rows": 3,
+      "product": "ATS_WEEKLY_DETAIL",
+      "removals": 3,
+      "snapshots": 7,
+      "tier": "T2",
+      "versions": 11
+    },
+    {
+      "captures": 8,
+      "current_rows": 3,
+      "product": "ATS_WEEKLY_DETAIL",
+      "removals": 3,
+      "snapshots": 7,
+      "tier": "OTCE",
+      "versions": 11
+    },
+    {
+      "captures": 8,
+      "current_rows": 3,
+      "product": "NON_ATS_WEEKLY_DETAIL",
+      "removals": 3,
+      "snapshots": 7,
+      "tier": "T1",
+      "versions": 11
+    },
+    {
+      "captures": 8,
+      "current_rows": 3,
+      "product": "NON_ATS_WEEKLY_DETAIL",
+      "removals": 3,
+      "snapshots": 7,
+      "tier": "T2",
+      "versions": 11
+    },
+    {
+      "captures": 8,
+      "current_rows": 3,
+      "product": "NON_ATS_WEEKLY_DETAIL",
+      "removals": 3,
+      "snapshots": 7,
+      "tier": "OTCE",
+      "versions": 11
+    }
+  ],
+  "read_retry_files_unchanged": 270,
+  "source_conformance": "NOT_CHECKED",
+  "timezone": "America/New_York",
+  "verification": {
+    "dagster_inventory": {
+      "jobs": 8,
+      "schedules": 8,
+      "sensors": 12
+    },
+    "offline_passed": 2251,
+    "optional_skipped": 92,
+    "otc_tests": 424,
+    "ruff_format": "PASS",
+    "ruff_lint": "PASS",
+    "runtime_modules_source_sdist_wheel_equal": 204
+  },
+  "verified_date": "2026-11-17",
+  "wheel_comparisons": 159
+}

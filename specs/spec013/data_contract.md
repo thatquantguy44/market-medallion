@@ -1,7 +1,9 @@
 # FINRA OTC transparency data contract
 
-**Version:** v2 local fixture panel. **Reviewed:** 2026-11-16.
-**Runtime status:** T01–T06 offline, including Bronze and initial SQLite panel/CLI; real acquisition, revision/as-of history, derived Gold/Parquet and jobs remain pending.
+**Version:** v3 local fixture revisions. **Reviewed:** 2026-11-17.
+**Runtime status:** T01–T07 offline, including Bronze, immutable SQLite versions,
+complete replacement membership, explicit migration and bounded history/cutoffs.
+T08 clock refinement, real acquisition, derived Gold/Parquet and jobs remain pending.
 Read [Spec013](README.md) and the
 [program contract](../../docs/securities_finance/contract.md). Normalized names
 and broader schema below remain design decisions; current endpoint conformance is pending.
@@ -64,9 +66,9 @@ tierIdentifier|issueSymbolIdentifier|issueName|marketParticipantName|MPID|totalW
   Neither parsing nor a 200/empty response can establish complete membership.
 
 [Checkpoint A](checkpoint_a.md) records fixture provenance, tests and exclusions.
-T04 identity, T05 Bronze and T06 initial fixture panel are implemented below.
-T07+ add revisions, availability selection, features and real extraction before
-this can become a real weekly research pipeline.
+T04 identity, T05 Bronze, T06 initial fixture panel and T07 revision/membership
+history are implemented below. T08+ refine availability clocks and add features
+and real extraction before this becomes a real weekly research pipeline.
 
 ## OTC-T04 identity contract
 
@@ -224,6 +226,41 @@ byte/part/metadata limits continue to apply. Database/archive-owned symlinks,
 nonregular files, foreign storage IDs and WAL sidecars are refused. Operator-owned
 parent paths remain trusted. Read-only open never performs hot-journal recovery;
 an interrupted store needing recovery must be handled by an authorized writer.
+
+## OTC-T07 immutable revisions and membership contract
+
+Implemented offline; [T07 acceptance](t07_revisions_acceptance.md) closes fixture
+OTC-REQ07/OTC-AC07 for all six profiles. The T06 behavior above describes the
+preserved v1 protocol; current new stores use `finra-otc-sqlite/2` and transform
+`finra-otc-membership/2`, independently of catalog/schema versions.
+
+Semantic content excludes capture/run/transport metadata and original integer
+formatting. Exact count tokens remain in each complete membership snapshot.
+Repeated values retain the same occurrence and first-seen; corrections, reversions
+and revival after removal append immutable occurrences with the original capture
+clock/sequence. Source labels, identity evidence and dates remain semantic content.
+Only a complete fixture replacement can remove membership; removal appends null
+content with state REMOVED and never means zero volume. Partial/unverified/
+rejected attempts cannot advance complete selection. A complete capture behind
+newer accepted membership is OUT_OF_ORDER, without retroactive replacement.
+
+`otc2_attempts`, `otc2_versions`, `otc2_snapshots`, `otc2_members` and
+`otc2_migrations` hold the v2 state. Occurrences, complete membership, coverage and
+terminal publication commit together after durable PENDING. Raw receipts,
+legacy tables and terminal attempts remain immutable. Read-only v1 inspection
+never upgrades; writes require explicit fixture-only `migrate-warehouse`.
+Migration revalidates selected legacy rows against Bronze, seeds only original
+selected publications and retains hashes of all old table contents. Deferred
+captures are reconsidered only by explicit v2 ingestion, preserving the old result.
+
+Current/as-of readers select observed captures using aware UTC and optional
+original sequence for equal-clock ties. They expose value and membership lineage
+separately, validate seals and use one consistent read transaction. These cutoffs
+are capture knowledge under the current transform, not provider vintages or
+processing-time history. Reporting/update dates remain dates and publication time
+stays null. T08 retains broader release/date/holiday work. Retained/read history
+is capped at 100,000 occurrences (default read 10,000); legacy migration caps at
+1,000 attempts. Existing T06 row/byte/database limits remain in force.
 
 ## Source inventory and evidence tiers
 

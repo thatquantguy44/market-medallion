@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "cbd2d37ffd0b948406413699c7731d8f779738f6201a1577e3b54870e3c7df3b",
-  "next_task": "OTC-T07",
-  "panel_fingerprint": "3b928b260e17a01f5864b592b30cca619140303ad5d67608c1941bc88770fa96",
-  "review_summary": "Implemented OTC-T07 fixture-only v2 engine, immutable revisions/reversions/removals, complete replacement membership, explicit source-verified v1 migration, bounded as-of/history CLI and preserved legacy integrity. 424 OTC tests and lint pass, including all-six replacement faults and nine reproduced integrity regressions. Full/native/package closeout remains active OTC-T07; no source acquisition or activation.",
-  "reviewed_at": "2026-11-17T04:58:19.150955+00:00",
-  "reviewed_commit": "c9263d5eddbe556dfaa27b7840edd524e5d569ad",
+  "document_fingerprint": "1303cf54d7c0da82ee3c4735e4c545d9504bdac1a28cddebe98c5b8af1d59b99",
+  "next_task": "OTC-T08",
+  "panel_fingerprint": "6abc61e423ba141ece030bf445a408ad39af0d20303570cfaa6f25fe641d9119",
+  "review_summary": "Closed T07 fixture revisions/membership acceptance: 2251 offline passes, 424 OTC tests, 204-module package parity and 159 exact native/wheel CLI results; reconciled existing drafts and recorded new user PostgreSQL consolidation priority.",
+  "reviewed_at": "2026-11-18T03:17:11.847866+00:00",
+  "reviewed_commit": "7935bd15d8e83dd06dce4b2e13b08a7c38130708",
   "schema_version": 1,
-  "source_fingerprint": "39e75687f70096054478ad077acd8807157f1001c80d0b34af0af896af8cd787",
+  "source_fingerprint": "66710abd686f45366656fa8eae4cd35f827771b8f5d75aa83bbcfaad2f9624ef",
   "task_file": "specs/spec013/todo.md"
 }
