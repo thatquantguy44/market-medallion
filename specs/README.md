@@ -1,8 +1,13 @@
 # Specification index
 
+
+**Current user priority (2026-11-17):** [Spec019](spec019/README.md) makes the
+existing `additional_market_data` PostgreSQL database the primary warehouse for
+every implemented pipeline. This precedes OTC-T08; NAAIM remains paused.
+
 Updated: 2026-11-12. Numbers identify documents, not automatic build priority.
 FOMC T01–T05 are accepted for the bounded 1990-onward foundation; current pickup is
-[FOMC-T06 bounded acquisition/operations](spec017/todo.md#fomc-t06--bounded-acquisition-and-operations-next).
+[FOMC-T06 bounded acquisition/operations](spec017/todo.md#fomc-t06--bounded-acquisition-and-operations-complete-for-the-1990-batch).
 The remaining securities-finance order is **011 → 012 → 013 → 014 → 015**;
 see the [securities-finance program](../docs/securities_finance/README.md).
 

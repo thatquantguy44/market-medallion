@@ -52,6 +52,10 @@ Each pipeline owns its implementation under
 only implemented definitions. Provider transforms/storage remain callable without
 Dagster; see [the orchestration decision](docs/development/adr001-dagster.md).
 
+Actual PostgreSQL primary targets, roles and configuration status are recorded
+in the [warehouse register](docs/deployment/postgres_warehouses.md). Its migration
+status is separate from these job definitions and stored activation states.
+
 ## Schedules
 
 These are **code defaults**, checked against the definitions. Cron uses the

@@ -162,3 +162,21 @@ Databricks workspace publication was not run. Both checked-in acquisition
 settings and the local sample config are disabled after capture; every schedule
 remains stopped, and NAAIM remains paused. No cloud object or production database
 was provisioned.
+
+## PostgreSQL primary migration — 2026-11-17
+
+The user selected [Spec019](../spec019/README.md) consolidation into the existing
+`additional_market_data` database before further OTC work. Native replay adapters
+now migrate the accepted local histories into schema `sec_ftd` as
+`sec_ftd_writer` and schema `reg_sho_thresholds` as `reg_sho_writer`.
+Readback exactly matches **117,025 facts / four audit and coverage records** and
+**408 threshold membership / ten audit and coverage records**, including original
+values, capture ordering and first-seen. All 30 SEC and 39 threshold source files
+retain hashes/mtimes. Destination publication identity is new; old publication
+evidence remains retained. Local runtime configs explicitly select PostgreSQL
+and new source-owned roots, with no SQLite fallback.
+
+[Checkpoint evidence](../spec019/evidence/pg_t01_t03.json) and the
+[warehouse register](../../docs/deployment/postgres_warehouses.md) record actual
+roles/configs/backup verification. No source acquisition, access-policy change,
+activation or source-history deletion occurs in this migration.

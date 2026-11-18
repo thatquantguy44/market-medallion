@@ -2,6 +2,13 @@
 
 Updated: 2026-11-17, America/New_York.
 
+**Current cross-pipeline priority:** [Spec019 PostgreSQL primary consolidation](../specs/spec019/README.md),
+explicitly selected by the user on 2026-11-17 before OTC-T08. AAII/FOMC and the
+newly migrated SEC FTD/threshold stores now use the same `additional_market_data`
+database; four new native adapters remain pending. The
+[warehouse register](deployment/postgres_warehouses.md) owns actual schemas, roles and config paths.
+
+
 This is the master index for **pipeline ownership, implementation status and
 next work**. It tracks all concrete pipelines/candidates currently recorded in
 this repository. The [research roadmap](roadmap.md) retains source-selection

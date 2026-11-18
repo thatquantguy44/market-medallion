@@ -35,3 +35,6 @@ include .github/workflows/handoff-freshness.yml
 include DAGSTER.md
 include AGENTS.md
 include scripts/verify_dagster_docs.py
+
+include scripts/provision_postgres_warehouses.py
+recursive-include specs/spec019/evidence *.json

@@ -4,29 +4,20 @@ Last updated: 2026-11-17.
 
 ## Agent start here
 
-**Next implementation: Spec013 OTC-T08 reporting and availability clocks (planned; deferred during PostgreSQL consolidation planning).**
-OTC-T01–T07 are implemented and accepted offline on
-`feat/finra-otc-contract-parser`. T07 implementation is
-`7935bd15d8e83dd06dce4b2e13b08a7c38130708`; [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md)
-and [evidence](../../specs/spec013/evidence/t07_closeout.json) close the
-user-authorized 2026-11-17 regression/native/package review. T08 has not started.
+**Next implementation: PG-T04 FINRA short-volume PostgreSQL primary characterization (in progress).**
+The user authorized every existing pipeline to use `additional_market_data` as
+its **primary PostgreSQL warehouse**, superseding immediate OTC-T08 work.
+[Spec019](../../specs/spec019/README.md), [plan](../../specs/spec019/plan.md) and
+[task list](../../specs/spec019/todo.md) own this work. Active branch:
+`feat/postgres-pipeline-consolidation`, based on completed T07 closeout
+`73780722c7aaa133408776bbf5a904913ed5929e`. No PR exists for this new local branch.
 
-**New user priority (2026-11-17):** after this separate T07 closeout commit,
-include every existing pipeline in the same `additional_market_data` PostgreSQL
-database, using separate schemas and writer roles. SEC FTD/Reg SHO already have
-adapters; FINRA short volume, OTC, presidential research and NAAIM need new ones.
-Draft Spec019 and a bounded migration plan before implementation; preserve all
-source history and NAAIM's pause. This supersedes beginning OTC-T08 immediately.
-
-The branch starts at `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`, merged
-[Dagster PR #29](https://github.com/thatquantguy44/market-medallion/pull/29).
-A fresh origin/main fetch on 2026-11-17 confirms that same base; the implementation
-branch is six commits ahead and zero behind before the closeout commit. Read-only
-GitHub search found no PR for this branch. It has no upstream and remains local.
-Spec012 T14–T16 are merged through
-[PR #28](https://github.com/thatquantguy44/market-medallion/pull/28) as `eaec327`.
-This panel owns current priorities; dated checkpoints below retain history.
-Later explicit user instructions take precedence and must be recorded here.
+T07 is accepted offline: implementation `7935bd1`, closeout `7378072`, 424 OTC /
+2,251 full passes, 92 optional skips, 204-module package parity and 159 identical
+native/wheel CLI results. Source main was freshly fetched at `1c256bf` before
+this new branch. OTC-T08 remains the next OTC task but is deferred during the
+new explicitly authorized PostgreSQL workstream. Existing history, source holds
+and NAAIM's pause remain in force.
 
 **Runtime last observed:** 2026-11-15 06:23 EST. Local Dagster UI responded at
 <http://127.0.0.1:3030>, with all eight explicit jobs loaded. All eight acquisition/
@@ -40,8 +31,9 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
-| 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Next bounded implementation, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
+| 0 | **Spec019 PG-T04 — FINRA primary adapter** | PG-T01–T03 complete; next characterize FINRA warehouse/catalog primary behavior, then implement and migrate. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
+| — | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
+| 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Deferred behind user-authorized Spec019, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
 | 3 | Spec015 — NY Fed primary dealers | Planned; follows Spec014 delivery acceptance. | [Spec015](../../specs/spec015/README.md) |
 
@@ -135,26 +127,28 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: OTC-T08
+### Exact next slice: PG-T04
 
-Read [AGENTS.md](../../AGENTS.md), [Spec013](../../specs/spec013/README.md),
-[T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md),
-[data contract](../../specs/spec013/data_contract.md) and
-[T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks).
+PG-T01–T03 are complete: eight owned schemas/writers are provisioned with isolation
+and existing AAII reader ACLs verified. The pre-change database/roles backup was
+restored to a disposable validation database; all 34 existing AAII/FOMC table
+counts match. SEC FTD and threshold native replay migrated 117,025 facts and 408
+membership records with exact logical audit/coverage/value/clock parity; all 69
+source files retain hashes/mtimes. Local PG configs select dedicated roles and
+new `data/postgres-primary/` roots. FOMC now selects `fomc_writer` after ownership
+transfer. No provider request or schedule activation occurred.
 
-Separate reporting labels, provider publication/update dates, nullable aware
-publication timestamps, documentary tier-specific expected delay and actual
-capture/first-seen clocks. Characterize holiday weeks, null publication time,
-date-only updates and cutoff ordering with offline fixtures before changing data
-semantics. Never backdate backfill first-seen to reporting Monday or derive a
-publication timestamp from a date/delay. Preserve T07 immutable occurrences,
-complete membership, explicit legacy migration, original sequence and raw lineage.
-
-T08 is the next planned coding slice, not work completed by this closeout. Keep
-T09 ratios/features, T10 typed publication, T11 ordered replay, T12 actual source
-conformance/acquisition and later orchestration separate. No live activation or
-NAAIM resume is implied. The current branch remains local with no PR; recheck Git/
-remote status before beginning another implementation increment.
+The new provider-independent `shared/postgres.py` foundation has explicit durable
+primary binding, environment-only secrets, native connections and consistent
+transactions. Thirteen settings/binding/native transaction tests pass in the
+dedicated disposable PG database; five existing SEC/threshold PG tests pass.
+Full offline foundation regression: **2,262 passed / 94 optional skips**
+(including the two new PG checks, which passed separately). All **18** native
+foundation/SEC/threshold checks pass in the disposable validation database.
+Source-owned provider schemas/adapters remain separate. Next characterize and
+implement FINRA short-volume warehouse plus publication catalog under PG-T04/T05;
+then OTC, presidential and NAAIM in the Spec019 order. Do not claim those four
+empty schemas have migrated data or working PG primary adapters yet.
 
 ### Operating holds and other workstreams
 

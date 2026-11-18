@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "1303cf54d7c0da82ee3c4735e4c545d9504bdac1a28cddebe98c5b8af1d59b99",
-  "next_task": "OTC-T08",
-  "panel_fingerprint": "6abc61e423ba141ece030bf445a408ad39af0d20303570cfaa6f25fe641d9119",
-  "review_summary": "Closed T07 fixture revisions/membership acceptance: 2251 offline passes, 424 OTC tests, 204-module package parity and 159 exact native/wheel CLI results; reconciled existing drafts and recorded new user PostgreSQL consolidation priority.",
-  "reviewed_at": "2026-11-18T03:17:11.847866+00:00",
-  "reviewed_commit": "7935bd15d8e83dd06dce4b2e13b08a7c38130708",
+  "document_fingerprint": "27c12c0d3e8e33aef56df8e5760c7363d568844f3fd3eaf1b2addbac522cc830",
+  "next_task": "PG-T04",
+  "panel_fingerprint": "f34b1c4df5bc58ce1a3d439e6a96d259bbf3a3b37cc9a41961abddbe6dd84dbf",
+  "review_summary": "Verified PostgreSQL-primary scope, restored 34-table backup, provisioned eight isolated writer schemas, migrated exact SEC/threshold histories without changing 69 source files, tested FOMC writer and explicit primary-binding foundation; 2262 offline passes and 18 dedicated PostgreSQL checks. Next PG-T04 FINRA adapter.",
+  "reviewed_at": "2026-11-18T03:43:55.581721+00:00",
+  "reviewed_commit": "73780722c7aaa133408776bbf5a904913ed5929e",
   "schema_version": 1,
-  "source_fingerprint": "66710abd686f45366656fa8eae4cd35f827771b8f5d75aa83bbcfaad2f9624ef",
-  "task_file": "specs/spec013/todo.md"
+  "source_fingerprint": "e843b94247850f10daec1520f83a609682ed4eb67afe87b9eff4939c0418cdb6",
+  "task_file": "specs/spec019/todo.md"
 }
