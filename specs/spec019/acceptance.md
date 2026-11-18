@@ -4,7 +4,8 @@ Accepted locally on 2026-11-18, America/New_York, branch
 `feat/postgres-pipeline-consolidation`. All eight implemented pipelines use the
 existing `127.0.0.1:55438/additional_market_data` database as their configured
 primary warehouse. [The operating register](../../docs/deployment/postgres_warehouses.md)
-owns the schema/writer/config/root mapping. No push, PR or merge was performed.
+owns the schema/writer/config/root mapping. Implementation and local cutover completed
+before the separately authorized publication below.
 
 ## Retained data and operating boundaries
 
@@ -73,3 +74,13 @@ no local ref was deleted or repaired. This did not prevent verification/commits.
 Spec019 is complete. The next bounded planned implementation is Spec013 OTC-T08
 (reporting/availability clocks); it was not started during consolidation. Preserve
 all source gates, the NAAIM pause, exact integer tokens and capture-time semantics.
+
+## Publication
+
+The user authorized committing/pushing all branch work and opening a PR on
+2026-11-18. [PR #30](https://github.com/thatquantguy44/market-medallion/pull/30)
+is open from `feat/postgres-pipeline-consolidation` into `main`, including the
+preceding OTC T01–T07 work. Initial published head:
+`df382f49d9b44525bcba3d5616524c5bbc78dd9a`. This publication handoff update follows
+on the same tracked branch; inspect the PR for its final head/checks. No merge,
+provider request, activation or deployment was performed.

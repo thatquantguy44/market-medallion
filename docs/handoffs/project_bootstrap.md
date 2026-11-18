@@ -11,7 +11,9 @@ primary warehouse. All Spec019 PG-T01–PG-T11 tasks are accepted locally. Read
 [acceptance](../../specs/spec019/acceptance.md) and the
 [warehouse register](../deployment/postgres_warehouses.md) for evidence and exact
 schema/writer/root/config mappings. Active branch: `feat/postgres-pipeline-consolidation`.
-No push, PR or merge was performed.
+The user authorized commit/push/PR publication on 2026-11-18. Branch is pushed
+and tracks `origin/feat/postgres-pipeline-consolidation`; [PR #30](https://github.com/thatquantguy44/market-medallion/pull/30)
+is open against `main`. No merge was performed.
 
 ### Current work and highest priorities
 
@@ -37,7 +39,10 @@ No push, PR or merge was performed.
 `origin/main` remains `1c256bf75fdf4fe1863346fee1b6f0bde6a8f85a`, verified through
 current `ls-remote` and already an ancestor of HEAD. A repeat fetch encountered
 unrelated invalid local ref `refs/heads/docs/finra-merged-handoff 2`; no ref was
-removed/repaired. No upstream/PR exists for this local consolidation branch.
+removed/repaired. An explicit push succeeded without ref repair. The published
+implementation checkpoint is `df382f49d9b44525bcba3d5616524c5bbc78dd9a`; PR #30
+includes the preceding OTC T01–T07 work and Spec019 consolidation. This handoff
+publication update follows on the same tracked branch.
 
 ### Accepted PostgreSQL operating state
 
@@ -68,6 +73,11 @@ retention deletion or schedule activation occurred. FINRA health remains DEGRADE
 NAAIM remains capture_stale and explicitly paused. Migration is not a source refresh.
 
 ### Current verification and backup
+
+**Publication:** [PR #30](https://github.com/thatquantguy44/market-medallion/pull/30) is open.
+Check its current head/checks before merging; no automatic merge or deployment
+is authorized by the publication request. Final pushed SHA is the PR head and
+`git rev-parse HEAD`, rather than a self-referential value in this document.
 
 Full offline regression: **2,263 passes / 206 optional skips**. All **201 actual
 PostgreSQL integration cases** pass in disposable storage (119 consolidation/SEC/

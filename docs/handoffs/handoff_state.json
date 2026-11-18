@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "c3870836338f44c523222ca9307224e20bb53ed19db1341c94bdd5711ec95dae",
+  "document_fingerprint": "2ee09d3fd04b2c945e2ae2efd2136e7c048cb42a0cbef94c2a13f09bfb9dabf5",
   "next_task": "OTC-T08",
-  "panel_fingerprint": "15cb2000bdf3e30529a4a77cfdf84c914278a5095f739cb4b53d4b7942f18151",
-  "review_summary": "Accepted all eight PostgreSQL primaries: 2263 offline passes, 201 actual PG integration cases plus shared checks, 6 wheel CLI cases, 209-module package parity, 78-table restored hashes/counts/owners and writer isolation; source holds preserved, OTC-T08 next",
-  "reviewed_at": "2026-11-18T05:50:24.310806+00:00",
-  "reviewed_commit": "ff1f27eb6a9a06a8f611e9c849c00671e0109c08",
+  "panel_fingerprint": "06c333960ccee4e248ecc99f29d9f5cf73f6906ada17c4b409ae961f7f8e12c4",
+  "review_summary": "Reviewed publication of complete OTC T01-T07 and PostgreSQL consolidation branch: initial head df382f4 pushed, PR30 open against unchanged main; recorded tracking/PR facts and preserved acceptance evidence and source holds",
+  "reviewed_at": "2026-11-18T10:01:26.471644+00:00",
+  "reviewed_commit": "df382f49d9b44525bcba3d5616524c5bbc78dd9a",
   "schema_version": 1,
-  "source_fingerprint": "9233cc5ea9b3e65b1f4bcf73d12c1302527518bb4f96abaa0a59cc2c08d56e5c",
+  "source_fingerprint": "65f991ed989cbfcd1b9943be6d4794ecd487f446db9be28b50273aafc214eed2",
   "task_file": "specs/spec013/todo.md"
 }
