@@ -1,6 +1,6 @@
 # PostgreSQL primary warehouse consolidation
 
-**Verified checkpoint:** 2026-11-17, America/New_York.
+**Verified checkpoint:** 2026-11-18, America/New_York.
 [Spec019](../../specs/spec019/README.md) owns the user-authorized migration of all
 existing pipelines to PostgreSQL primary storage. The target is the existing
 local `additional_market_data` database at `127.0.0.1:55438`.
@@ -13,7 +13,7 @@ local `additional_market_data` database at `127.0.0.1:55438`.
 | Reg SHO thresholds | `reg_sho_thresholds` | `reg_sho_writer` | Migrated: 408 membership records, ten coverage/audit records. |
 | FINRA short volume | `finra_short_sale_volume` | `finra_ssv_writer` | Migrated: 25,230 versions, three selected TRF partitions and original frozen publication. |
 | FINRA OTC | `finra_otc_transparency` | `finra_otc_writer` | Native empty primary initialized; 50 PG checks; no real or invented operative observations. |
-| Presidential research | `presidential_research` | `presidential_writer` | Namespace provisioned; native adapter/migration pending. |
+| Presidential research | `presidential_research` | `presidential_writer` | Migrated: 3,903 facts and memberships, three captures and two publication-journal records. |
 | NAAIM delayed | `naaim_exposure_public_delayed` | `naaim_writer` | Namespace provisioned; offline migration pending; acquisition remains paused. |
 
 The shared login is the existing **administrator** `market_data`. It can assume
@@ -94,3 +94,13 @@ operative root `data/postgres-primary/finra_otc_transparency`. Its ignored
 `config/finra_otc_transparency/postgres.local.yml` selects `finra_otc_writer`.
 Native migration/empty initialization and six-profile fixture transactions pass
 50 actual PG checks. No real profile conformance or source access is implied.
+
+## Presidential native primary
+
+[PG-T09 evidence](../../specs/spec019/evidence/pg_t09_presidential.json) verifies
+all 3,903 facts and the unchanged frozen publication/observed-as-of results. All
+65 original files preserve hashes/mtimes; the original SQLite is recovery only.
+The same `data/presidential_research` root is bound to `presidential_writer`;
+ignored `config/presidential_research/postgres.local.yml` documents its target.
+Sixteen actual PG tests verify revisions, transaction/publication failure recovery,
+CLI and backup/restore with no SQLite present. No live refresh occurred.

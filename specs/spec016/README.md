@@ -227,3 +227,6 @@ as causal/predictive evidence.
   checked against the registered SHA-256 digests; no pin was changed.
 - This historical evidence validates the original inspection and donor baseline;
   current implementation checks are recorded in [acceptance](acceptance.md).
+
+The user-authorized [Spec019 native PG primary migration](postgres_primary_contract.md)
+is complete for the retained frozen store; source access and consumer contracts remain separately scoped.

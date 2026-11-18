@@ -380,9 +380,11 @@ def publish_baseline(root, capture_id, review_id, *, profile_id, created_at: dat
 
 
 def _warehouse_journal(root, snapshot_id, status, *, only_existing=False):
-    """Update the SQLite journal while the caller holds the source writer lock."""
+    """Update the primary journal while the caller holds the source writer lock."""
     database = _safe_child(_safe_child(root, "silver"), "presidential.sqlite3")
-    if only_existing and not database.is_file():
+    from market_data_pipeline.shared.postgres import binding
+
+    if only_existing and not database.is_file() and binding(root, "presidential_research") is None:
         return
     connection = _database(root, create=True)
     try:

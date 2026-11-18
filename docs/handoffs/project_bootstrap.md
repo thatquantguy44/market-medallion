@@ -1,10 +1,10 @@
 # Project bootstrap and master handoff
 
-Last updated: 2026-11-17.
+Last updated: 2026-11-18.
 
 ## Agent start here
 
-**Next implementation: PG-T08/PG-T09 presidential PostgreSQL primary (in progress).**
+**Next implementation: PG-T10 retained NAAIM PostgreSQL primary (in progress).**
 The user authorized every existing pipeline to use `additional_market_data` as
 its **primary PostgreSQL warehouse**, superseding immediate OTC-T08 work.
 [Spec019](../../specs/spec019/README.md), [plan](../../specs/spec019/plan.md) and
@@ -31,7 +31,7 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec019 PG-T08/09 — presidential primary** | PG-T01–T07 complete; OTC native empty primary accepted. Next presidential fixture contract/native adapter/migration, then NAAIM. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
+| 0 | **Spec019 PG-T10 — NAAIM primary** | PG-T01–T09 complete; presidential 3,903 facts migrated with exact frozen parity. Next retained NAAIM native adapter/offline migration, then final operating acceptance. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
 | — | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
 | 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Deferred behind user-authorized Spec019, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
@@ -130,7 +130,7 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: PG-T08/PG-T09
+### Exact next slice: PG-T10
 
 PG-T01–T03 are complete: eight owned schemas/writers are provisioned with isolation
 and existing AAII reader ACLs verified. The pre-change database/roles backup was
@@ -170,9 +170,22 @@ offline regression remains 424 passes. The operative namespace is initialized
 empty via `finra_otc_writer`: zero captures, versions, snapshots or membership.
 [PG-T07 evidence](../../specs/spec019/evidence/pg_t07_otc.json) records the root and
 counts. No invented data is loaded; real OTC conformance stays NOT_CHECKED.
-Next PG-T08/09 pins presidential publication/replay/backup boundaries, adds a
-source-owned native adapter, then migrates the retained 3,903 facts. Only the
-presidential and NAAIM operative schemas still lack adapters/migrated records.
+PG-T08/09 are complete: 16 actual PG checks verify revisions/cutoffs, retries,
+SQL/commit rollback, four publication failure/recovery boundaries, CLI, no-file
+reads and portable backup/restore. Existing focused presidential regression has
+43 passes; Dagster/docs checks pass. The operative `presidential_writer` primary
+now holds exactly 3,903 facts/memberships, three captures and two journal records.
+All 65 original files preserve hashes/mtimes; frozen publication and observed-as-of
+results match exactly. See [PG-T09 evidence](../../specs/spec019/evidence/pg_t09_presidential.json).
+OTC commit is `b1702dc`; resolve the presidential checkpoint with `git log -1 --
+specs/spec016/postgres_primary_contract.md`. No push/PR/merge is part of this work.
+Next implement PG-T10 under its [native contract](../../specs/spec007/postgres_primary_contract.md):
+source-owned native NAAIM retained capture/version/latest tables, transactional
+writes/retention, export/health and offline 131-version migration. Original JSON
+is recovery only after binding. Preserve missing raw-reference facts explicitly,
+all delay labels/first-seen and the user's pause. Only NAAIM still lacks the
+completed native adapter/migration. Then PG-T11 verifies every operative launch
+path/role/schema, full offline/native regression, build and final backup.
 No provider request, schedule activation or NAAIM resume is authorized here.
 
 ### Operating holds and other workstreams

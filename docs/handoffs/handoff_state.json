@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "422931b869031be94aba62535b3f6e7bdcb33ddbdc4c0ee126aa51b22b6f5f4f",
-  "next_task": "PG-T08",
-  "panel_fingerprint": "0fdca4a370d54354d0394ab64ac4bb5d5fe8052fc7956df6118868ceb4858e0c",
-  "review_summary": "Reviewed native OTC primary across all six profiles: 50 actual PG tests, 424 existing offline tests, empty operative schema verified through dedicated writer; no source requests or activation",
-  "reviewed_at": "2026-11-18T04:56:48.143640+00:00",
-  "reviewed_commit": "c8f7152359bd61e442c1b8842b353302ec651d53",
+  "document_fingerprint": "f55b714cf68432e71098ee38f1db4983050c5969951addd9afe9bf3aafe54283",
+  "next_task": "PG-T10",
+  "panel_fingerprint": "0687649a642ab0187f91f65807e42be44200c5fa7796018d12a7c4b756e11a49",
+  "review_summary": "Reviewed native presidential primary: 16 actual PG checks including database and publication rollback, 43 focused legacy and 53 Dagster/docs checks; exact 3903-fact retained migration and 65 unchanged source files; NAAIM remains paused",
+  "reviewed_at": "2026-11-18T05:06:32.121565+00:00",
+  "reviewed_commit": "b1702dcdaad9050407970f0076677df8925065d1",
   "schema_version": 1,
-  "source_fingerprint": "a56b5217be601e9df6c2508553b49ba2bf6256e9f76b403f048f3b400cd1f990",
+  "source_fingerprint": "3ad2a5e46571c7c7dd1d325d4e16ff6eda8c87631dc0fb3dccd6cd24eed7388b",
   "task_file": "specs/spec019/todo.md"
 }

@@ -48,15 +48,15 @@
 
 ## PG-T08 — Characterize presidential PostgreSQL boundaries
 
-- [ ] Pin observation/version/membership and publication/export/backup behavior.
-- [ ] Define PG primary and derivative-file boundary without weakening publication seals.
+- [x] Pin observation/version/membership and publication/export/backup behavior.
+- [x] Define PG primary and derivative-file boundary without weakening publication seals.
 **Verify:** frozen reconstruction expectations and migration parity design.
 
 ## PG-T09 — Implement and migrate presidential PostgreSQL primary
 
-- [ ] Add native adapter and explicit PG configuration without live-source changes.
-- [ ] Preserve observed-as-of, exact values, revision lineage and publication recovery.
-- [ ] Migrate retained frozen reconstruction with exact readback equivalence.
+- [x] Add native adapter and explicit PG configuration without live-source changes.
+- [x] Preserve observed-as-of, exact values, revision lineage and publication recovery.
+- [x] Migrate retained frozen reconstruction with exact readback equivalence.
 **Verify:** actual isolated PG tests and retained-store parity; split into bounded increments.
 
 ## PG-T10 — Implement and migrate retained NAAIM PostgreSQL primary
