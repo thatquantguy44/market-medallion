@@ -1,11 +1,11 @@
 {
-  "document_fingerprint": "e57f326930f0cf5697ac8090d6642e3f545d3e7396a56539664399a6b50d092b",
-  "next_task": "PG-T11",
-  "panel_fingerprint": "6848a215166de538b689d1d87c46bd2c3b1c488e0fc5bb3f666bd864ca772f27",
-  "review_summary": "Reviewed NAAIM native primary: 22 actual PG cases, 18 legacy cases, 131 combined native checks and 2263 offline passes; retained 131-version exact parity, eight unchanged files, no acquisition/retention deletion or resume",
-  "reviewed_at": "2026-11-18T05:16:56.560600+00:00",
-  "reviewed_commit": "11700e7c53cd82659eb7f2da4ff42b8412a08cbe",
+  "document_fingerprint": "c3870836338f44c523222ca9307224e20bb53ed19db1341c94bdd5711ec95dae",
+  "next_task": "OTC-T08",
+  "panel_fingerprint": "15cb2000bdf3e30529a4a77cfdf84c914278a5095f739cb4b53d4b7942f18151",
+  "review_summary": "Accepted all eight PostgreSQL primaries: 2263 offline passes, 201 actual PG integration cases plus shared checks, 6 wheel CLI cases, 209-module package parity, 78-table restored hashes/counts/owners and writer isolation; source holds preserved, OTC-T08 next",
+  "reviewed_at": "2026-11-18T05:50:24.310806+00:00",
+  "reviewed_commit": "ff1f27eb6a9a06a8f611e9c849c00671e0109c08",
   "schema_version": 1,
-  "source_fingerprint": "d036358647501ac6690593a62c3c57b154dc81d7e738dc3582d3bad54cb762e4",
-  "task_file": "specs/spec019/todo.md"
+  "source_fingerprint": "9233cc5ea9b3e65b1f4bcf73d12c1302527518bb4f96abaa0a59cc2c08d56e5c",
+  "task_file": "specs/spec013/todo.md"
 }

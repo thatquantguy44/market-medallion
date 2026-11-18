@@ -4,7 +4,8 @@ Last updated: 2026-11-18.
 
 ## Agent start here
 
-**PostgreSQL primary consolidation is complete. Next planned slice: Spec013 OTC-T08.**
+**Next implementation: OTC-T08 — reporting and availability clocks (planned, not started).**
+PostgreSQL primary consolidation is complete.
 The user authorized every existing pipeline to use `additional_market_data` as its
 primary warehouse. All Spec019 PG-T01–PG-T11 tasks are accepted locally. Read
 [acceptance](../../specs/spec019/acceptance.md) and the
@@ -89,7 +90,7 @@ successful observation (2026-11-15 06:23 EST: eight stopped acquisition/import
 schedules; only two FOMC Slack sensors running) is historical. Consult
 [DAGSTER.md](../../DAGSTER.md#current-local-state) before runtime work.
 
-### Exact next bounded slice: OTC-T08
+### Exact next slice: OTC-T08
 
 Read Spec013 README/data contract/todo, T07 acceptance and native PG contract.
 T01–T07 remain fixture-only across ATS/non-ATS × T1/T2/OTCE. All real profile
