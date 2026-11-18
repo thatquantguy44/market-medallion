@@ -29,9 +29,9 @@
 ## PG-T05 — Implement and cut over FINRA short-volume PostgreSQL
 
 - [x] Add native warehouse/catalog transactions and explicit backend selection.
-  Fixture/native adapter increment is implemented; CLI, operational/replay checks and retained migration remain below.
-- [ ] Verify actual PG revisions, reads, cutoffs and publication failure recovery.
-- [ ] Migrate accepted three-TRF history and bind PG after exact parity.
+  Native CLI, read-only health/retention, recovery replay and retained three-TRF cutover are verified.
+- [x] Verify actual PG revisions, reads, cutoffs and publication failure recovery.
+- [x] Migrate accepted three-TRF history and bind PG after exact parity.
 **Verify:** focused PG tests and retained-source equivalence; split implementation into bounded increments.
 
 ## PG-T06 — Characterize OTC PostgreSQL primary boundaries

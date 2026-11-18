@@ -34,6 +34,7 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="command", required=True)
     for name in (
         "validate-config",
+        "migrate-postgres",
         "run",
         "ingest-capture",
         "gold",
@@ -53,6 +54,8 @@ def main(argv=None):
     ):
         command = commands.add_parser(name)
         command.add_argument("--config", required=True, type=Path)
+        if name == "migrate-postgres":
+            command.add_argument("--postgres-config", required=True, type=Path)
         if name in ("acquisition-plan", "acquire", "health"):
             command.add_argument("--start-date", required=True)
             command.add_argument("--end-date", required=True)
@@ -138,6 +141,13 @@ def main(argv=None):
                 "max_bytes": config.max_bytes,
                 "max_rows": config.max_rows,
             }
+        elif args.command == "migrate-postgres":
+            from market_data_pipeline.pipelines.finra_short_sale_volume.io.postgres import migrate
+            from market_data_pipeline.shared.postgres import load_settings
+
+            result = migrate(
+                config.root, load_settings(args.postgres_config), config.manifest, **shared
+            )
         elif args.command in ("health", "retention-dry-run"):
             options = dict(
                 policy=operations.load_policy(args.policy) if args.policy else None,

@@ -1,8 +1,9 @@
 # FINRA short-volume PostgreSQL primary contract
 
-**Status:** native warehouse/catalog fixture increment implemented under
-[Spec019 PG-T04/T05](../spec019/todo.md). Real retained-history cutover, CLI
-migration and operational/replay verification remain pending in the next increment.
+**Status:** native warehouse/catalog primary implemented and retained-history
+cutover accepted under [Spec019 PG-T04/T05](../spec019/todo.md), verified
+2026-11-17. [Evidence](../spec019/evidence/pg_t05_finra.json) records the actual
+three-TRF migration and 115 unchanged source files.
 
 The source-owned `io/postgres.py` adapter uses PostgreSQL relational tables for
 identity, attempts, captures, versions, capture membership and current partitions.
@@ -39,7 +40,10 @@ transaction/journal boundaries and every existing file-pointer recovery phase.
 The native fixture suite checks lossless migration, new revisions/cutoffs,
 SQLite-file independence, unavailable-primary refusal, original retry ordering,
 metadata/schema corruption, migration rollback/retry, four warehouse rollback
-boundaries and all seven publication failure/recovery stages. The source-owned
-CLI/operating runbook and actual retained migration will be recorded before the
-primary cutover is accepted. Provider API rights, limits, clocks and activation
+boundaries and all seven publication failure/recovery stages. The source-owned CLI `migrate-postgres --config ... --postgres-config ...`
+selects only a fully verified primary and sanitizes connection failures. Health
+and retention remain read-only, classify the binding as store identity, and
+PG-source replay projects original logical audit fields without its internal
+ordinal. Explicit recovery replay may create a separate SQLite recovery artifact;
+it never repoints or changes the bound operational PG primary. Provider API rights, limits, clocks and activation
 gates are unchanged; all acquisition schedules stay stopped.

@@ -102,9 +102,9 @@ def connect(root, manifest, *, approved_use, operation, create=False):
         identity[k] != v for k, v in expected.items()
     ):
         raise ValueError("FINRA warehouse identity mismatch")
-    from market_data_pipeline.shared.postgres import binding
+    from market_data_pipeline.shared.postgres import binding as primary_binding
 
-    if binding(root, "finra_short_sale_volume") is not None:
+    if primary_binding(root, "finra_short_sale_volume") is not None:
         from market_data_pipeline.pipelines.finra_short_sale_volume.io.postgres import connection
 
         with connection(root, manifest, kind, create=create) as database:

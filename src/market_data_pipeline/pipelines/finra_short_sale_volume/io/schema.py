@@ -1,6 +1,12 @@
 """SSV-AC06 SQLite contract: facts and full partition membership commit together."""
 
 CONTRACT = "finra-ssv-sqlite/1"
+ATTEMPT_COLUMNS = (
+    "attempt_id,capture_id,run_id,trade_date,facility_id,archived_at,"
+    "capture_sequence,started_at,completed_at,status,error_code,profile"
+)
+
+
 SCHEMA = """
 PRAGMA user_version=1;
 CREATE TABLE identity (body TEXT NOT NULL);

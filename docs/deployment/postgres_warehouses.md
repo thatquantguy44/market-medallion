@@ -11,7 +11,7 @@ local `additional_market_data` database at `127.0.0.1:55438`.
 | FOMC minutes | `fomc_meeting_minutes` | `fomc_writer` | Existing PostgreSQL; schema/objects and local config now use dedicated writer. |
 | SEC FTD | `sec_ftd` | `sec_ftd_writer` | Migrated: 117,025 facts, four coverage/audit records. |
 | Reg SHO thresholds | `reg_sho_thresholds` | `reg_sho_writer` | Migrated: 408 membership records, ten coverage/audit records. |
-| FINRA short volume | `finra_short_sale_volume` | `finra_ssv_writer` | Namespace provisioned; native primary adapter/migration pending. |
+| FINRA short volume | `finra_short_sale_volume` | `finra_ssv_writer` | Migrated: 25,230 versions, three selected TRF partitions and original frozen publication. |
 | FINRA OTC | `finra_otc_transparency` | `finra_otc_writer` | Empty namespace provisioned; native adapter pending; no real source observations. |
 | Presidential research | `presidential_research` | `presidential_writer` | Namespace provisioned; native adapter/migration pending. |
 | NAAIM delayed | `naaim_exposure_public_delayed` | `naaim_writer` | Namespace provisioned; offline migration pending; acquisition remains paused. |
@@ -32,6 +32,10 @@ PUBLIC grants were added. Passwords remain in this project's private environment
   `data/postgres-primary/sec_fails_to_deliver` root and schema `sec_ftd`.
 - Thresholds: ignored `config/reg_sho_thresholds/pipeline.local.yml` → new
   `data/postgres-primary/reg_sho_thresholds` root and matching schema.
+- FINRA short volume: ignored `config/finra_short_sale_volume/pipeline.local.yml`
+  selects the accepted T16 source root, now explicitly bound to PostgreSQL.
+  `config/finra_short_sale_volume/postgres.local.yml` names its writer/schema and
+  password environment reference. The old SQLite files remain recovery evidence.
 
 SEC/threshold local configs explicitly select `warehouse: postgres`, reference the
 shared password environment variable and keep acquisition disabled. There is no
@@ -66,3 +70,19 @@ The [master handoff](../handoffs/project_bootstrap.md#agent-start-here) and owni
 Spec019 tasks identify the next unfinished adapter. [DAGSTER.md](../../DAGSTER.md)
 remains the only job/schedule/sensor inventory; PostgreSQL availability does not
 activate automation or resume NAAIM.
+
+## FINRA native primary cutover
+
+[PG-T05 evidence](../../specs/spec019/evidence/pg_t05_finra.json) records exact
+current and frozen publication hashes before/after migration. All **115** original
+files retain hashes/mtimes; only `.postgres-primary.json` was added. Native tables
+preserve 25,230 value versions/membership rows, 17 capture/attempt records, three
+partitions and the original frozen publication catalog. Native audit insertion
+order is explicit, so retries preserve the original durable sequence.
+
+The CLI migration, new writes/cutoffs, no-SQLite-fallback behavior, native health/
+retention and PG-source recovery replay are verified. All 24 native FINRA tests
+and 14 shared primary tests pass; 92 existing CLI/replay/operations tests pass.
+Health partition results are exactly unchanged and remain **DEGRADED**; this
+migration is not a new successful source refresh. Retention remains PRESERVE_ALL
+with deletion disabled. No acquisition, Slack or schedule activation occurred.

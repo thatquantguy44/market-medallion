@@ -23,7 +23,7 @@ from market_data_pipeline.pipelines.finra_short_sale_volume.io.bronze import (
     _publish_directory,
     _put,
 )
-from market_data_pipeline.pipelines.finra_short_sale_volume.io.schema import SCHEMA
+from market_data_pipeline.pipelines.finra_short_sale_volume.io.schema import ATTEMPT_COLUMNS, SCHEMA
 from market_data_pipeline.shared.postgres import (
     Connection,
     Settings,
@@ -56,12 +56,6 @@ def catalog_sql(statement):
     for name in CATALOG_TABLES:
         statement = re.sub(r"\b" + name + r"\b", "publication_" + name, statement)
     return statement.replace("length(CAST(body AS BLOB))", "octet_length(body)")
-
-
-ATTEMPT_COLUMNS = (
-    "attempt_id,capture_id,run_id,trade_date,facility_id,archived_at,"
-    "capture_sequence,started_at,completed_at,status,error_code,profile"
-)
 
 
 class WarehouseConnection(Connection):
@@ -227,7 +221,7 @@ def _verify_copy(db, source, tables, *, publication=False):
     return values
 
 
-def migrate(root, settings, manifest, *, approved_use, operation, fault=lambda phase: None):
+def _migrate(root, settings, manifest, *, approved_use, operation, fault=lambda phase: None):
     kind = _admit(manifest, approved_use, operation, {"fixture", "transform"})
     root = Path(root)
     selected = binding(root, PIPELINE)
@@ -343,3 +337,14 @@ def initialize_catalog(root, manifest, kind, expected):
             _put(marker, encoded(value))
         elif _json(marker) != value:
             raise ValueError("FINRA PostgreSQL catalog marker differs")
+
+
+def migrate(root, settings, manifest, *, approved_use, operation, fault=lambda phase: None):
+    try:
+        return _migrate(
+            root, settings, manifest, approved_use=approved_use, operation=operation, fault=fault
+        )
+    except psycopg.Error:
+        raise ValueError(
+            "FINRA PostgreSQL primary migration failed; source remains retained"
+        ) from None

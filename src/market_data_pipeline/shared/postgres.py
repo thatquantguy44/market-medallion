@@ -292,3 +292,24 @@ def schema_fingerprint(db, schema):
     )
     shape = [[tuple(row) for row in db.execute(statement, (schema,))] for statement in statements]
     return hashlib.sha256(json.dumps(shape, separators=(",", ":")).encode()).hexdigest()
+
+
+def load_settings(path):
+    """Read an operator-selected settings file without accepting inline secrets."""
+    import yaml
+
+    from market_data_pipeline.shared.yaml import UniqueLoader
+
+    try:
+        value = yaml.load(Path(path).read_text(), Loader=UniqueLoader)
+        if (
+            not isinstance(value, dict)
+            or set(value) != {"postgres"}
+            or not isinstance(value["postgres"], dict)
+        ):
+            raise ValueError
+        return Settings(**value["postgres"])
+    except (OSError, ValueError, TypeError, yaml.YAMLError, RecursionError):
+        raise ValueError(
+            "Invalid PostgreSQL settings file; use documented environment-only fields"
+        ) from None

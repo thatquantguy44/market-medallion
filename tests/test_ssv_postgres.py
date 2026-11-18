@@ -202,3 +202,124 @@ def test_native_migration_preserves_equal_capture_attempt_insertion_order(
     assert len(before) == 3
     migrate(tmp_path, native_settings, manifest)
     assert audits(tmp_path, manifest) == before
+
+
+def test_native_cli_migrates_primary_and_retries_original_capture(tmp_path, native_settings):
+    import json
+    from dataclasses import asdict
+
+    import yaml
+    from test_ssv_cli import config_file, invoke
+    from test_ssv_parser import FIXTURES
+
+    config = config_file(tmp_path)
+    loaded = invoke(
+        config,
+        "run",
+        "--input",
+        str(FIXTURES / "invented-valid.json"),
+        "--receipt",
+        str(FIXTURES / "invented-valid.receipt.json"),
+    )
+    assert loaded.returncode == 0, loaded.stderr
+    original = json.loads(loaded.stdout)
+    postgres = tmp_path / "postgres.yml"
+    postgres.write_text(yaml.safe_dump({"postgres": asdict(native_settings)}))
+    selected = invoke(config, "migrate-postgres", "--postgres-config", str(postgres))
+    assert selected.returncode == 0, selected.stderr
+    assert json.loads(selected.stdout)["status"] == "MIGRATED"
+    again = invoke(config, "ingest-capture", "--capture-id", original["capture_id"])
+    assert again.returncode == 0 and json.loads(again.stdout) == original
+    assert (
+        invoke(config, "publish", "--trade-date", "2026-11-09", "--scope", "nyse_trf").returncode
+        == 0
+    )
+    assert not (tmp_path / "local-store/parquet/catalog.sqlite").exists()
+
+
+def test_native_health_and_retention_are_read_only_and_keep_primary_binding(
+    tmp_path, native_settings, manifest
+):
+    from test_ssv_operations import health
+
+    from market_data_pipeline.pipelines.finra_short_sale_volume import operations
+
+    root = tmp_path / "source"
+    ingest(root, manifest)
+    prior = health(root, manifest)
+    migrate(root, native_settings, manifest)
+    before = {
+        str(p.relative_to(root)): (p.read_bytes(), p.stat().st_mtime_ns)
+        for p in root.rglob("*")
+        if p.is_file()
+    }
+    current = health(root, manifest)
+    retained = operations.retention_dry_run(root, manifest, **OPTIONS)
+    assert current["partitions"] == prior["partitions"]
+    assert retained["version_count"] == 2
+    marker = next(row for row in retained["files"] if row["path"] == ".postgres-primary.json")
+    assert marker["action"] == "KEEP" and "STORE_IDENTITY" in marker["reasons"]
+    assert {
+        str(p.relative_to(root)): (p.read_bytes(), p.stat().st_mtime_ns)
+        for p in root.rglob("*")
+        if p.is_file()
+    } == before
+
+
+def test_native_primary_replays_new_pg_only_history_into_explicit_recovery_target(
+    tmp_path, native_settings, manifest
+):
+    from test_ssv_parser import FIXTURES
+
+    from market_data_pipeline.pipelines.finra_short_sale_volume import replay
+
+    root = tmp_path / "source"
+    ingest(root, manifest)
+    migrate(root, native_settings, manifest)
+    import json
+
+    values = json.loads((FIXTURES / "invented-valid.json").read_bytes())
+    values[0]["shortParQuantity"] = 41
+    changed = json.dumps(values).encode()
+    ingest(root, manifest, payload=changed, clock=NOW + timedelta(seconds=1))
+    assert gold(root, manifest)["rows"][0]["short_volume"] == "41"
+    result = replay.replay(root, tmp_path / "recovery", manifest, **OPTIONS)
+    assert result["status"] == "SUCCEEDED"
+    assert gold(tmp_path / "recovery", manifest)["rows"] == gold(root, manifest)["rows"]
+
+
+def test_native_cli_connection_failure_is_sanitized_and_does_not_bind(tmp_path, native_settings):
+    from dataclasses import asdict
+
+    import yaml
+    from test_ssv_cli import config_file, invoke
+    from test_ssv_parser import FIXTURES
+
+    config = config_file(tmp_path)
+    assert (
+        invoke(
+            config,
+            "run",
+            "--input",
+            str(FIXTURES / "invented-valid.json"),
+            "--receipt",
+            str(FIXTURES / "invented-valid.receipt.json"),
+        ).returncode
+        == 0
+    )
+    postgres = tmp_path / "unavailable.yml"
+    postgres.write_text(yaml.safe_dump({"postgres": asdict(native_settings) | {"port": 1}}))
+    result = invoke(config, "migrate-postgres", "--postgres-config", str(postgres))
+    assert result.returncode == 2 and "Traceback" not in result.stderr
+    assert str(tmp_path) not in result.stderr
+    assert binding(tmp_path / "local-store", "finra_short_sale_volume") is None
+
+
+def test_native_symbol_order_matches_original_binary_order(
+    tmp_path, native_settings, manifest, load
+):
+    symbols = ["A", "A.A", "AA", "A-A", "A/A", "a", "Z"]
+    load(values=[(name, "10", "0", "20") for name in symbols])
+    original = gold(tmp_path, manifest)
+    migrate(tmp_path, native_settings, manifest)
+    assert gold(tmp_path, manifest)["rows"] == original["rows"]

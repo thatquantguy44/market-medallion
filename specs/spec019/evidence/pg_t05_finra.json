@@ -1,0 +1,64 @@
+{
+  "existing_cli_replay_operations_checks": 92,
+  "gold_rows": {
+    "nasdaq_carteret_trf": 12349,
+    "nasdaq_chicago_trf": 5849,
+    "nyse_trf": 7032
+  },
+  "gold_sha256": "67cde7cfd96be0056919bf400307fd847d643d689c38970f00506f6ba5144143",
+  "health_partitions_equal": true,
+  "health_status": "DEGRADED",
+  "native_finra_pg_checks": 24,
+  "new_binding_files": 1,
+  "publication_sha256": "bcf47800214a5477b4a7627138fbf28d4835c0a41cec9a8cb46a2c501f868cee",
+  "retention_deletion_enabled": false,
+  "retention_versions": 25230,
+  "schema": "finra_short_sale_volume",
+  "shared_primary_pg_checks": 14,
+  "source_files_unchanged": 115,
+  "status": "MIGRATED",
+  "tables": {
+    "attempt_insertion_order": {
+      "count": 17,
+      "sha256": "cd84f4a80ad8a6143850fa11f6e5933e823bac0bb213f4a2400379b9fcb21d38"
+    },
+    "attempts": {
+      "count": 17,
+      "sha256": "8678e2549b80713ddae27d451cd6b84ab3f2fe7ea610bedd03311181c78a5143"
+    },
+    "capture_rows": {
+      "count": 25230,
+      "sha256": "d04a45c28aef594c9724061252cb64af62a49cf9619b8e09da714ea51f4e2c18"
+    },
+    "captures": {
+      "count": 17,
+      "sha256": "5abc55e90236f63dcb841fd2b4b3102c1e5a5551400fd1e0f3449b8b1f0cdfd6"
+    },
+    "identity": {
+      "count": 1,
+      "sha256": "a7f77b65612cdbfe5648c2abb5c690c22218ee3d47fe8ffb678178feeb98232f"
+    },
+    "partitions": {
+      "count": 3,
+      "sha256": "b25d78698bd0bb2effbdebcc677494d8bacf63a7c10ea2c6e4d1bae5cee64c10"
+    },
+    "publication_generations": {
+      "count": 1,
+      "sha256": "7eb1431c16d663e601ce4bb56c985d75fe4e9b3ebf0f7d12736878818a819fb6"
+    },
+    "publication_identity": {
+      "count": 1,
+      "sha256": "e28b80e131e364f7af628c969c5a62f9425da85b26047c93b183b565a8ecbb00"
+    },
+    "publication_snapshot_rows": {
+      "count": 88082,
+      "sha256": "e646659a12a0cc89e1b92974e4f1e1a4d3ec1c48132eb825b586d8cf3c4c8bfc"
+    },
+    "versions": {
+      "count": 25230,
+      "sha256": "d7b5415abb9d9e8e57765c26057ac48c65408b0ac4a6d7ad276e3ea2949baf55"
+    }
+  },
+  "verified_date": "2026-11-17",
+  "writer": "finra_ssv_writer"
+}

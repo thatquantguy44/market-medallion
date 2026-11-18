@@ -1,0 +1,12 @@
+# Explicit PostgreSQL primary migration target; no inline credentials.
+# Provision the dedicated schema/writer first. This file activates no source/job.
+postgres:
+  host: 127.0.0.1
+  port: 55438
+  database: additional_market_data
+  user: market_data
+  role: finra_ssv_writer
+  schema: finra_short_sale_volume
+  password_env: AAII_POSTGRES_PASSWORD
+  sslmode: prefer
+  connect_timeout: 15

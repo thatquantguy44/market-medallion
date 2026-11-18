@@ -152,3 +152,21 @@ def test_native_postgres_reader_keeps_one_coherent_snapshot(native_settings):
         assert reader.execute("SELECT count(*) FROM observations").fetchone()[0] == 1
         reader.commit()
         assert reader.execute("SELECT count(*) FROM observations").fetchone()[0] == 2
+
+
+def test_settings_file_accepts_only_documented_fields_and_rejects_duplicate_keys(tmp_path):
+    import yaml
+
+    from market_data_pipeline.shared.postgres import load_settings
+
+    path = tmp_path / "postgres.yml"
+    value = {"postgres": asdict(settings())}
+    path.write_text(yaml.safe_dump(value))
+    assert load_settings(path) == settings()
+    value["postgres"]["password"] = "invented-secret-never-log"
+    path.write_text(yaml.safe_dump(value))
+    with pytest.raises(ValueError):
+        load_settings(path)
+    path.write_text("postgres: {}\npostgres: {}\n")
+    with pytest.raises(ValueError):
+        load_settings(path)

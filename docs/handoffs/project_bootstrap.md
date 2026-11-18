@@ -4,7 +4,7 @@ Last updated: 2026-11-17.
 
 ## Agent start here
 
-**Next implementation: PG-T05 FINRA short-volume PostgreSQL primary completion (in progress).**
+**Next implementation: PG-T06 OTC PostgreSQL primary characterization (in progress).**
 The user authorized every existing pipeline to use `additional_market_data` as
 its **primary PostgreSQL warehouse**, superseding immediate OTC-T08 work.
 [Spec019](../../specs/spec019/README.md), [plan](../../specs/spec019/plan.md) and
@@ -31,7 +31,7 @@ No job/source acquisition or schedule activation was performed. See the
 
 | Order | Work | Status and next action | Canonical task / entrypoint |
 | --- | --- | --- | --- |
-| 0 | **Spec019 PG-T05 — FINRA primary completion** | PG-T01–T04 complete; native FINRA fixture adapter implemented, with CLI/operations/replay checks and real retained cutover next. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
+| 0 | **Spec019 PG-T06 — OTC primary characterization** | PG-T01–T05 complete; FINRA native primary migrated. Next OTC native fixture contract and empty operative primary, then presidential/NAAIM. Active branch `feat/postgres-pipeline-consolidation`. | [Spec019](../../specs/spec019/README.md) |
 | — | **Spec013 OTC-T07 — revisions and membership** | Accepted offline; implementation `7935bd1`, followed by the bounded closeout. All six fixture populations preserve repeats, corrections, reversions, removals and explicit migration. | [T07 acceptance](../../specs/spec013/t07_revisions_acceptance.md) |
 | 1 | **Spec013 OTC-T08 — reporting and availability clocks** | Deferred behind user-authorized Spec019, not started. Preserve dates/timestamps, documentary tier delay and capture first-seen; characterize holiday/null/date-only/cutoff behavior. | [T08](../../specs/spec013/todo.md#otc-t08--separate-reporting-and-availability-clocks) |
 | 2 | Spec014 — SEC N-PORT | Planned; follows Spec013 delivery acceptance. | [Spec014](../../specs/spec014/README.md) |
@@ -105,6 +105,9 @@ self-referential commit ID. No push, PR or merge is part of this local closeout.
 | `270914d` | OTC-T06 parser/archive increment: all six invented profiles, catalog v2 and retained v1 outcome compatibility; 259 OTC tests. Final T06 panel/CLI acceptance above owns current counts. |
 | `c9263d5eddbe556dfaa27b7840edd524e5d569ad` | OTC-T06 transactional six-profile local panel/CLI; 330 OTC / 2,157 full passes, 92 optional skips. |
 | `7935bd15d8e83dd06dce4b2e13b08a7c38130708` | OTC-T07 immutable versions, complete replacement membership, explicit v1 migration and history/cutoff CLI; closeout above verifies 424 OTC / 2,251 full passes and isolated wheel equivalence. |
+| `73780722c7aaa133408776bbf5a904913ed5929e` | T07 fixture acceptance closeout, 2,251 offline passes and isolated wheel equivalence. |
+| `0900c7de6d19dd5eb290e38630374c4e13587195` | PostgreSQL foundation, restored 34-table backup, eight writer/schema boundaries and native SEC/threshold primary migrations. |
+| `f953d293024952a31cfa9c7c72722a751b8a4746` | Native FINRA warehouse/catalog fixture adapter; 19 actual PG cases and 767 FINRA/shared offline passes. |
 
 The user authorized a fresh branch and T14,T15,T16 in order, then explicitly
 approved bounded FINRA API checks for all three TRFs on 2026-11-09. An isolated
@@ -127,7 +130,7 @@ git log -1 --format='%h %cs %s' -- specs/spec012/acceptance.md
 git log -1 --format='%h %cs %s' -- docs/handoffs/project_bootstrap.md
 ```
 
-### Exact next slice: PG-T05
+### Exact next slice: PG-T06
 
 PG-T01–T03 are complete: eight owned schemas/writers are provisioned with isolation
 and existing AAII reader ACLs verified. The pre-change database/roles backup was
@@ -151,8 +154,18 @@ cutoffs, stable retry order, four warehouse rollback boundaries, seven publicati
 recovery boundaries, no SQLite fallback and corruption refusal. Existing FINRA/
 shared offline regression: 767 passes / 21 optional PG skips; those PG checks pass
 separately. See [native contract](../../specs/spec012/postgres_primary_contract.md).
-Next complete CLI migration, health/retention/replay projection and retained
-three-TRF cutover under PG-T05; then OTC, presidential and NAAIM in Spec019 order. Do not claim those four
+PG-T05 completion now verifies strict settings/CLI migration, read-only health/
+retention, explicit PG-source recovery replay and sanitized connection failure.
+The actual retained three-TRF root is now a PostgreSQL primary: 25,230 versions,
+17 capture/attempts, three current partitions and the same frozen publication.
+All 115 original file hashes/mtimes stay unchanged; only the new binding is added.
+Current values and publication hashes match exactly; health partitions match and
+remain DEGRADED, retention preserves everything without deletion. See
+[PG-T05 evidence](../../specs/spec019/evidence/pg_t05_finra.json). All 24 native
+FINRA / 14 shared primary tests and 92 existing CLI/replay/operations checks pass.
+Next characterize and implement OTC's PG primary without loading invented records
+into the empty operative schema; then presidential and NAAIM. These three empty
+schemas still do not have completed primary adapters or migrated records. Do not claim those four
 empty schemas have migrated data or working PG primary adapters yet.
 
 ### Operating holds and other workstreams
